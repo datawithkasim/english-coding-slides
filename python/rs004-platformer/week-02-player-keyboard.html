@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W2 — Player + Keyboard</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 2</div>
+
+<div class="slide active center-all"><div class="pill">Week 2</div><div class="emoji">🏃</div>
+<h1>Player +<br>Keyboard</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);"><code>pygame.Rect</code> + arrow keys</p>
+<p class="bilingual">플레이어 + 키보드 이동</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>Rect</code> = a box on screen</h2>
+<pre>player = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">500</span>, <span class="num">50</span>, <span class="num">50</span>)
+<span class="com">#                x    y   w   h</span></pre>
+<p style="margin-top:1em">4 numbers: position + size. Pygame's box helper.</p>
+<p class="bilingual">위치 + 크기 = 박스</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Draw the player</h2>
+<pre>RED = (<span class="num">220</span>, <span class="num">50</span>, <span class="num">50</span>)
+player = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">500</span>, <span class="num">50</span>, <span class="num">50</span>)
+
+<span class="com"># in game loop</span>
+pygame.draw.<span class="fn">rect</span>(screen, RED, player)</pre>
+<p style="margin-top:1em">Pass <code>player</code> to <code>draw.rect()</code>. Done!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>get_pressed()</code> = held keys</h2>
+<pre>keys = pygame.key.<span class="fn">get_pressed</span>()
+
+<span class="kw">if</span> keys[pygame.K_LEFT]:
+    player.x -= PLAYER_SPEED
+<span class="kw">if</span> keys[pygame.K_RIGHT]:
+    player.x += PLAYER_SPEED</pre>
+<p style="margin-top:1em">Smooth movement: keys checked <span class="sub">every frame</span>.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>Rect</code> properties</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6em;margin-top:1em;font-family:monospace;font-size:clamp(16px,2.7vmin,22px)">
+<div class="varbox"><span class="name">.x</span><span class="val">left edge</span></div>
+<div class="varbox"><span class="name">.y</span><span class="val">top edge</span></div>
+<div class="varbox"><span class="name">.width</span><span class="val">box width</span></div>
+<div class="varbox"><span class="name">.bottom</span><span class="val">y + height</span></div>
+</div>
+<p class="center" style="margin-top:1em">Change <code>.x</code> → moves left/right.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Full week 2 setup</h2>
+<pre>PLAYER_SPEED = <span class="num">5</span>
+player = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">500</span>, <span class="num">50</span>, <span class="num">50</span>)
+
+<span class="kw">while</span> running:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+
+    keys = pygame.key.<span class="fn">get_pressed</span>()
+    <span class="kw">if</span> keys[pygame.K_LEFT]:  player.x -= PLAYER_SPEED
+    <span class="kw">if</span> keys[pygame.K_RIGHT]: player.x += PLAYER_SPEED
+
+    screen.<span class="fn">fill</span>(SKY)
+    pygame.draw.<span class="fn">rect</span>(screen, RED, player)
+    pygame.display.<span class="fn">flip</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre></div>
+
+<div class="slide"><div class="pill">Tune it</div><h2>Speed feels matter</h2>
+<pre>PLAYER_SPEED = <span class="num">3</span>   <span class="com"># slow → frustrating</span>
+PLAYER_SPEED = <span class="num">5</span>   <span class="com"># 👍 just right</span>
+PLAYER_SPEED = <span class="num">15</span>  <span class="com"># too fast → can't aim</span></pre>
+<p style="margin-top:1em">Change one number, change the whole feel.</p></div>
+
+<div class="slide"><div class="pill">Challenge</div><h2>Stop at edges</h2>
+<pre><span class="kw">if</span> keys[pygame.K_LEFT] <span class="kw">and</span> player.x &gt; <span class="num">0</span>:
+    player.x -= PLAYER_SPEED
+<span class="kw">if</span> keys[pygame.K_RIGHT] <span class="kw">and</span> player.right &lt; WIDTH:
+    player.x += PLAYER_SPEED</pre>
+<p style="margin-top:1em">Use <code>.right</code> for right-edge check. Player stays on screen.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Move the hero ⬅️➡️</h2>
+<ul class="check-list">
+<li>Make a 50×50 player <code>Rect</code></li>
+<li>Move with LEFT/RIGHT arrow keys</li>
+<li>Pick a <code>PLAYER_SPEED</code> that feels right</li>
+<li>Bonus: stop at screen edges</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🏃</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Hero moves!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: gravity + jumping.</p>
+<p class="bilingual">다음 주: 중력과 점프</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,31 +1,20 @@
 # 📚 English Coding — Slide Library
 
-10-minute teaching slide decks, one per lesson, for every English Coding course. 1:1 (square) format. Big text. Animated visualizations. ESL-friendly.
+10-minute teaching slide decks, one per lesson, for every English Coding text-based course. 1:1 (square) format. Big text. Animated visualizations. ESL-friendly.
 
 **Live site:** [datawithkasim.github.io/english-coding-slides](https://datawithkasim.github.io/english-coding-slides)
 
-## Tracks
+## Library
 
-| Track | Courses |
-|---|---|
-| 🐍 **Replit / Python** | RS001 Text Adventure · RS002 Pokédex · RS003 Pygame Turret · RS004 Platformer |
-| 🎨 **Web Development** | WEB001 CSS · WEB002 JavaScript · WEB003 Portfolio |
-| 🤖 **AI Coding** | AI001 Replit Agent |
+**64 decks · 8 courses · 8 weeks each**
 
-Each course has 8 weekly lessons. Each lesson has its own slide deck.
+| Track | Courses | Status |
+|---|---|---|
+| 🐍 **Replit / Python** | RS001 Text Adventure · RS002 Pokédex · RS003 Pygame Turret · RS004 Platformer | ✅ Complete |
+| 🎨 **Web Development** | WEB001 CSS · WEB002 JavaScript · WEB003 Portfolio | ✅ Complete |
+| 🤖 **AI Coding** | AI001 Replit Agent | ✅ Complete |
 
-## Status
-
-| Course | Weeks done |
-|---|---|
-| RS001 — Text Adventure | ✅ All 8 |
-| RS002 — Pokédex | ⏳ — |
-| RS003 — Pygame Turret | ⏳ — |
-| RS004 — Platformer | ⏳ — |
-| WEB001 — CSS | ⏳ — |
-| WEB002 — JavaScript | ⏳ — |
-| WEB003 — Portfolio | ⏳ — |
-| AI001 — AI Coding | ⏳ — |
+Each course = 8 weekly lessons. Each lesson = its own slide deck.
 
 ## How to use
 
@@ -39,26 +28,31 @@ Each course has 8 weekly lessons. Each lesson has its own slide deck.
 ```
 english-coding-slides/
 ├── assets/
-│   ├── style.css   ← shared styles
-│   └── deck.js     ← shared nav + animations
+│   ├── style.css   ← shared styles + animations
+│   └── deck.js     ← shared nav + JS-driven animations (picker, dice, combine)
 ├── python/
-│   ├── rs001-text-adventure/
-│   │   ├── week-01-variables.html
-│   │   ├── week-02-lists.html
-│   │   └── ...
-│   ├── rs002-pokedex/
-│   ├── rs003-pygame-turret/
-│   └── rs004-platformer/
+│   ├── rs001-text-adventure/   8 weeks
+│   ├── rs002-pokedex/          8 weeks
+│   ├── rs003-pygame-turret/    8 weeks
+│   └── rs004-platformer/       8 weeks
 ├── webdev/
-│   ├── web001-css/
-│   ├── web002-javascript/
-│   └── web003-portfolio/
+│   ├── web001-css/             8 weeks
+│   ├── web002-javascript/      8 weeks
+│   └── web003-portfolio/       8 weeks
 ├── ai-coding/
-│   └── ai001-replit-agent/
+│   └── ai001-replit-agent/     8 weeks
 └── index.html
 ```
 
-## Bilingual
+## Pedagogy
 
-English-first (ESL students learn the English coding terms). Korean glosses where useful.
-영어 중심 + 한국어 보조 설명.
+- **English-first** — ESL students learn the English coding terms
+- **Bilingual key points** — Korean glosses on important concepts
+- **One concept per deck** — matches one weekly lesson
+- **10-12 slides** — fits a 10-minute teaching segment
+- **Story-driven** — each course threads a single project end-to-end
+- **Animated visualizations** — list iteration, random.choice picker, dice rolls, combined for+random viz
+
+## Brand
+
+Apricot (`#ff7849`) + Plum (`#6b4ee6`). Cream background. Dracula-inspired code blocks.

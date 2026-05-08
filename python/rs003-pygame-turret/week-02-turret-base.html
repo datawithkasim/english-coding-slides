@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W2 — Turret Base</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 2</div>
+
+<div class="slide active center-all"><div class="pill">Week 2</div><div class="emoji">📦</div>
+<h1>Draw<br>Turret Base</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Shapes + constants + screen center</p>
+<p class="bilingual">터렛 베이스 만들기</p></div>
+
+<div class="slide"><div class="pill">Coordinates</div><h2>Screen is a grid 📐</h2>
+<div style="background:#1e1e2e;color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);line-height:1.6">
+<div>(0,0) ────────────► X +</div>
+<div>│</div>
+<div>│   ┌─────────┐</div>
+<div>│   │  pixel  │</div>
+<div>│   │ (x, y)  │</div>
+<div>│   └─────────┘</div>
+<div>│</div>
+<div>▼ Y +</div>
+</div>
+<p class="center" style="margin-top:.6em">Y goes <span class="sub">DOWN</span>! (not up like math class)</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's a <span class="sub">constant</span>?</h2>
+<pre>WIDTH = <span class="num">800</span>
+HEIGHT = <span class="num">600</span>
+CENTER_X = WIDTH // <span class="num">2</span></pre>
+<p style="margin-top:1em">A value you <span class="sub">don't change</span>. ALL CAPS by tradition.</p>
+<p style="margin-top:.4em"><code>//</code> = integer divide (no decimal).</p>
+<p class="bilingual">상수 = 변하지 않는 값</p></div>
+
+<div class="slide"><div class="pill">Why constants?</div><h2>Change one place, fix everywhere</h2>
+<pre><span class="com"># BAD: magic numbers everywhere</span>
+pygame.draw.<span class="fn">rect</span>(screen, color, (<span class="num">400</span>, <span class="num">580</span>, <span class="num">60</span>, <span class="num">20</span>))
+
+<span class="com"># GOOD: named</span>
+CENTER_X = WIDTH // <span class="num">2</span>
+pygame.draw.<span class="fn">rect</span>(screen, color, (CENTER_X, <span class="num">580</span>, <span class="num">60</span>, <span class="num">20</span>))</pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Draw a rectangle</h2>
+<pre>pygame.draw.<span class="fn">rect</span>(screen, color, rect)</pre>
+<p style="margin-top:1em">Need 3 things:</p>
+<ul style="margin-top:.5em">
+<li><code>screen</code> — where to draw</li>
+<li><code>color</code> — RGB tuple</li>
+<li><code>rect</code> — <code>(x, y, width, height)</code></li>
+</ul></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Turret base in middle</h2>
+<pre>WIDTH = <span class="num">800</span>
+HEIGHT = <span class="num">600</span>
+BASE_W = <span class="num">80</span>
+BASE_H = <span class="num">40</span>
+CENTER_X = WIDTH // <span class="num">2</span>
+
+base_rect = (CENTER_X - BASE_W//<span class="num">2</span>,
+             HEIGHT - BASE_H,
+             BASE_W, BASE_H)
+
+pygame.draw.<span class="fn">rect</span>(screen, (<span class="num">100</span>,<span class="num">100</span>,<span class="num">100</span>), base_rect)</pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Circles too</h2>
+<pre>pygame.draw.<span class="fn">circle</span>(screen, color, (cx, cy), radius)</pre>
+<p style="margin-top:1em">Center at <code>(cx, cy)</code>, size = <code>radius</code> pixels.</p>
+<p class="bilingual">동그라미 그리기</p></div>
+
+<div class="slide"><div class="pill">⚠️ Mistake</div><h2>Forgot <code>flip()</code></h2>
+<pre>screen.<span class="fn">fill</span>(...)
+pygame.draw.<span class="fn">rect</span>(...)
+<span class="com"># forgot pygame.display.flip()</span></pre>
+<p style="margin-top:1em">Without <code>flip()</code> nothing shows on screen!</p>
+<p style="margin-top:.4em">Always call it after drawing each frame.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build the base 🔧</h2>
+<ul class="check-list">
+<li>Define <code>WIDTH</code>, <code>HEIGHT</code>, <code>CENTER_X</code> constants</li>
+<li>Draw a rectangle base at the bottom-center</li>
+<li>Try a circle on top of the base</li>
+<li>Pick a color you like!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🔧</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Base built!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: add the gun (with functions).</p>
+<p class="bilingual">다음 주: 총 추가</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

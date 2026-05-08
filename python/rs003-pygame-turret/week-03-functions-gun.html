@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W3 — Functions + Gun</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 3</div>
+
+<div class="slide active center-all"><div class="pill">Week 3</div><div class="emoji">🔫</div>
+<h1>Add the<br>Gun</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Functions group code</p>
+<p class="bilingual">총 추가 + 함수</p></div>
+
+<div class="slide"><div class="pill">Problem</div><h2>Game loop getting big 😅</h2>
+<pre><span class="kw">while</span> running:
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># base</span>
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># gun barrel</span>
+    pygame.draw.<span class="fn">circle</span>(...)  <span class="com"># gun head</span>
+    pygame.draw.<span class="fn">line</span>(...)  <span class="com"># gun aim line</span></pre>
+<p style="margin-top:1em">Hard to read. Let's group it!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's a <code>function</code>?</h2>
+<p class="big">A reusable <span class="sub">block of code</span> with a name.</p>
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">draw_turret</span>():
+    pygame.draw.<span class="fn">rect</span>(...)
+    pygame.draw.<span class="fn">circle</span>(...)
+    pygame.draw.<span class="fn">line</span>(...)</pre>
+<p style="margin-top:.6em"><code>def</code> = "define". Group lines under one name.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Define + call</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
+    pygame.draw.<span class="fn">rect</span>(screen, GREY, base_rect)
+    pygame.draw.<span class="fn">rect</span>(screen, GREY, barrel_rect)
+    pygame.draw.<span class="fn">circle</span>(screen, GREY, (cx, cy), <span class="num">15</span>)
+
+<span class="kw">while</span> running:
+    screen.<span class="fn">fill</span>(SKY)
+    <span class="fn">draw_turret</span>()  <span class="com"># 1 line!</span>
+    pygame.display.<span class="fn">flip</span>()</pre></div>
+
+<div class="slide"><div class="pill">Why?</div><h2>Big wins 🏆</h2>
+<ul class="check-list">
+<li>Game loop is short and clear</li>
+<li>Change turret style once → done</li>
+<li>Reuse the function in any frame</li>
+<li>Code reads like English: "draw turret"</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>One object = many parts</h2>
+<div style="background:white;border:3px solid var(--accent);border-radius:14px;padding:1em;margin-top:1em">
+<div style="text-align:center;font-family:monospace;font-weight:700;color:var(--accent-2)">turret =</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6em;margin-top:.6em">
+<div class="opt-card"><div class="ico">⬛</div><div class="name">base</div></div>
+<div class="opt-card"><div class="ico">▬</div><div class="name">barrel</div></div>
+<div class="opt-card"><div class="ico">⚫</div><div class="name">tip</div></div>
+</div></div>
+<p class="center" style="margin-top:.8em">3 shapes = 1 turret.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Don't forget</div><h2>Indent matters</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># inside</span>
+pygame.draw.<span class="fn">circle</span>(...)  <span class="com"># 🚫 outside!</span></pre>
+<p style="margin-top:1em">4 spaces = inside the function. No spaces = outside.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Define ≠ run</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
+    ...
+<span class="com"># nothing happens — never called</span>
+
+<span class="fn">draw_turret</span>()  <span class="com"># now it runs!</span></pre>
+<p style="margin-top:1em">Need <code>()</code> to actually <span class="sub">call</span> the function.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Refactor with functions 🛠️</h2>
+<ul class="check-list">
+<li>Make a <code>draw_turret()</code> function</li>
+<li>Inside: draw base + barrel + circle on top</li>
+<li>Call <code>draw_turret()</code> in your game loop</li>
+<li>See how short the loop becomes!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🔫</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Turret complete!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: move the gun left/right.</p>
+<p class="bilingual">다음 주: 키보드 이동</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

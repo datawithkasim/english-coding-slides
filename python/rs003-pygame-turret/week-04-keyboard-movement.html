@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W4 — Move the Gun</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 4</div>
+
+<div class="slide active center-all"><div class="pill">Week 4</div><div class="emoji">⌨️</div>
+<h1>Move<br>Left / Right</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Keyboard input + position variables</p>
+<p class="bilingual">건 좌우 이동</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>X-axis = left ↔ right</h2>
+<div style="background:#1e1e2e;color:white;padding:1.2em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.6vmin,22px);text-align:center;line-height:2">
+<div>← x decreases  ──  x increases →</div>
+<div style="font-size:2em;margin:.3em 0">🔫</div>
+<div style="color:var(--com)">x = position</div>
+</div>
+<p class="center" style="margin-top:.8em">Change <code>x</code> → moves left/right.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Detect key presses</h2>
+<pre>keys = pygame.key.<span class="fn">get_pressed</span>()
+
+<span class="kw">if</span> keys[pygame.K_LEFT]:
+    gun_x = gun_x - <span class="num">5</span>
+<span class="kw">if</span> keys[pygame.K_RIGHT]:
+    gun_x = gun_x + <span class="num">5</span></pre>
+<p style="margin-top:1em">Each frame: check if arrow keys are <span class="sub">held down</span>.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Speed as a constant</h2>
+<pre>GUN_SPEED = <span class="num">5</span>
+
+<span class="kw">if</span> keys[pygame.K_LEFT]:
+    gun_x = gun_x - GUN_SPEED
+<span class="kw">if</span> keys[pygame.K_RIGHT]:
+    gun_x = gun_x + GUN_SPEED</pre>
+<p style="margin-top:1em">Easy to tune — change one value, gun feels different!</p></div>
+
+<div class="slide"><div class="pill">Two parts</div><h2>Base stays, gun moves</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">⬛</div><div class="name">Base</div><div class="ex">FIXED at center</div></div>
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">🔫</div><div class="name" style="color:var(--accent)">Gun</div><div class="ex">moves with arrow keys</div></div>
+</div>
+<p style="margin-top:1em">Use <span class="sub">two variables</span>: <code>BASE_X</code> (constant), <code>gun_x</code> (changes).</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Full setup</h2>
+<pre>WIDTH = <span class="num">800</span>
+GUN_SPEED = <span class="num">5</span>
+BASE_X = WIDTH // <span class="num">2</span>
+gun_x = BASE_X  <span class="com"># start at center</span>
+
+<span class="kw">while</span> running:
+    keys = pygame.key.<span class="fn">get_pressed</span>()
+    <span class="kw">if</span> keys[pygame.K_LEFT]:  gun_x -= GUN_SPEED
+    <span class="kw">if</span> keys[pygame.K_RIGHT]: gun_x += GUN_SPEED
+
+    <span class="fn">draw_turret</span>(gun_x)
+    pygame.display.<span class="fn">flip</span>()</pre></div>
+
+<div class="slide"><div class="pill">Tip</div><h2>Pass <code>gun_x</code> to function</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_turret</span>(x):
+    pygame.draw.<span class="fn">rect</span>(screen, GREY, base_rect)  <span class="com"># fixed</span>
+    pygame.draw.<span class="fn">rect</span>(screen, GREY,
+        (x, y, BARREL_W, BARREL_H))  <span class="com"># uses x!</span></pre>
+<p style="margin-top:1em">Function takes <code>x</code>, draws gun there.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2><code>+=</code> and <code>-=</code> shortcuts</h2>
+<pre>gun_x = gun_x + <span class="num">5</span>   <span class="com"># long way</span>
+gun_x += <span class="num">5</span>           <span class="com"># short way</span>
+
+gun_x = gun_x - <span class="num">5</span>
+gun_x -= <span class="num">5</span></pre>
+<p style="margin-top:1em">Both work the same. <code>+=</code> is faster to type.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Move the gun ⬅️➡️</h2>
+<ul class="check-list">
+<li>Add <code>GUN_SPEED</code> constant</li>
+<li>Make <code>gun_x</code> variable, start at center</li>
+<li>Use arrow keys to update <code>gun_x</code></li>
+<li>Pass <code>gun_x</code> to <code>draw_turret()</code></li>
+<li>Try changing <code>GUN_SPEED</code> — feel the difference!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">⌨️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Gun moves!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: stop it from going off-screen.</p>
+<p class="bilingual">다음 주: 이동 범위 제한</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

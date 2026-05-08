@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB002 W5 — Conditionals</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB002 · JavaScript · Week 5</div>
+
+<div class="slide active center-all"><div class="pill">Week 5</div><div class="emoji">🤔</div>
+<h1>Check<br>Answers</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);"><code>if / else</code> + comparisons</p>
+<p class="bilingual">정답 판단</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>If this, do that</h2>
+<pre><span class="kw">if</span> (guess === <span style="color:#bd93f9">7</span>) {
+  <span class="fn">alert</span>(<span style="color:#f1fa8c">"Correct! 🎉"</span>);
+} <span class="kw">else</span> {
+  <span class="fn">alert</span>(<span style="color:#f1fa8c">"Wrong, try again."</span>);
+}</pre>
+<p style="margin-top:1em">Two paths. Code chooses based on the test.</p>
+<p class="bilingual">조건에 따라 다른 행동</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Three or more paths: <code>else if</code></h2>
+<pre><span class="kw">if</span> (guess &lt; <span style="color:#bd93f9">7</span>) {
+  msg = <span style="color:#f1fa8c">"Bigger!"</span>;
+} <span class="kw">else if</span> (guess &gt; <span style="color:#bd93f9">7</span>) {
+  msg = <span style="color:#f1fa8c">"Smaller!"</span>;
+} <span class="kw">else</span> {
+  msg = <span style="color:#f1fa8c">"Got it! 🎉"</span>;
+}</pre>
+<p style="margin-top:1em">Top to bottom. <span class="sub">First match wins</span>.</p></div>
+
+<div class="slide"><div class="pill">Comparisons</div><h2>Operators</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6em;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,20px)">
+<div class="varbox"><span class="name">===</span><span class="val">equal</span></div>
+<div class="varbox"><span class="name">!==</span><span class="val">not equal</span></div>
+<div class="varbox"><span class="name">&gt;</span><span class="val">greater than</span></div>
+<div class="varbox"><span class="name">&lt;</span><span class="val">less than</span></div>
+<div class="varbox"><span class="name">&gt;=</span><span class="val">≥</span></div>
+<div class="varbox"><span class="name">&lt;=</span><span class="val">≤</span></div>
+</div></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Combine with <code>&amp;&amp;</code> and <code>||</code></h2>
+<pre><span class="com">// both must be true</span>
+<span class="kw">if</span> (age &gt;= <span style="color:#bd93f9">10</span> &amp;&amp; age &lt;= <span style="color:#bd93f9">12</span>)
+
+<span class="com">// either works</span>
+<span class="kw">if</span> (color === <span style="color:#f1fa8c">"red"</span> || color === <span style="color:#f1fa8c">"blue"</span>)</pre>
+<p style="margin-top:1em"><code>&amp;&amp;</code> = AND. <code>||</code> = OR.</p>
+<p class="bilingual">&amp;&amp; = 그리고, || = 또는</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Hidden number game</h2>
+<pre><span class="kw">let</span> secret = <span style="color:#bd93f9">7</span>;
+
+document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#check"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+  <span class="kw">let</span> guess = <span class="fn">Number</span>(document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#g"</span>).value);
+  <span class="kw">let</span> result = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#result"</span>);
+
+  <span class="kw">if</span> (guess === secret) {
+    result.textContent = <span style="color:#f1fa8c">"Correct! 🎉"</span>;
+  } <span class="kw">else if</span> (guess &lt; secret) {
+    result.textContent = <span style="color:#f1fa8c">"Try bigger"</span>;
+  } <span class="kw">else</span> {
+    result.textContent = <span style="color:#f1fa8c">"Try smaller"</span>;
+  }
+});</pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Track tries</h2>
+<pre><span class="kw">let</span> tries = <span style="color:#bd93f9">0</span>;
+
+<span class="com">// inside the click function:</span>
+tries = tries + <span style="color:#bd93f9">1</span>;
+<span class="kw">if</span> (guess === secret) {
+  result.textContent = <span style="color:#f1fa8c">"Got it in "</span> + tries + <span style="color:#f1fa8c">" tries!"</span>;
+}</pre>
+<p style="margin-top:1em">Counter outside the function so it persists between clicks.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2><code>===</code> not <code>=</code></h2>
+<pre><span class="com">// 🚫 sets value (always true)</span>
+<span class="kw">if</span> (x = <span style="color:#bd93f9">5</span>) ...
+
+<span class="com">// ✅ compares</span>
+<span class="kw">if</span> (x === <span style="color:#bd93f9">5</span>) ...</pre>
+<p style="margin-top:1em">Common bug. Always 3 equals to compare in JS.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build the game 🎯</h2>
+<ul class="check-list">
+<li>Number 1-100 hidden in <code>secret</code></li>
+<li>Input + button to guess</li>
+<li>Use <code>if/else if/else</code> for bigger/smaller/correct</li>
+<li>Bonus: count tries → show on win</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🤔</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Logic locked!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: arrays + loops.</p>
+<p class="bilingual">다음 주: 배열과 반복문</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

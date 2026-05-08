@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W7 — Enemies + Game Over</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">👹</div>
+<h1>Enemies +<br>Game Over</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Patrol + collision + restart</p>
+<p class="bilingual">적 + 게임 오버</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Enemies need <span class="sub">behavior</span></h2>
+<p class="big">Walk left, hit edge, walk right, repeat.</p>
+<div style="background:var(--code-bg);color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.7">
+<div>👹 →→→→ 🚧 stops</div>
+<div>👹 ←←←←← turns around</div>
+</div></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>class</code> = blueprint</h2>
+<pre><span class="kw">class</span> <span class="fn">Enemy</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, x, y, range_x):
+        self.rect = pygame.<span class="fn">Rect</span>(x, y, <span class="num">40</span>, <span class="num">40</span>)
+        self.start_x = x
+        self.range_x = range_x
+        self.direction = <span class="num">1</span>
+        self.speed = <span class="num">2</span></pre>
+<p style="margin-top:1em">Each enemy = an object with its own state.</p>
+<p class="bilingual">클래스 = 적 만드는 틀</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Patrol logic</h2>
+<pre>    <span class="kw">def</span> <span class="fn">update</span>(self):
+        self.rect.x += self.direction * self.speed
+
+        <span class="kw">if</span> self.rect.x &gt; self.start_x + self.range_x:
+            self.direction = -<span class="num">1</span>
+        <span class="kw">if</span> self.rect.x &lt; self.start_x:
+            self.direction = <span class="num">1</span></pre>
+<p style="margin-top:1em">Hits boundary → flip direction. Like ping-pong!</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Game state machine</h2>
+<pre>game_state = <span class="str">"playing"</span>
+
+<span class="kw">if</span> game_state == <span class="str">"playing"</span>:
+    <span class="kw">for</span> enemy <span class="kw">in</span> enemies:
+        enemy.<span class="fn">update</span>()
+        <span class="kw">if</span> player.<span class="fn">colliderect</span>(enemy.rect):
+            game_state = <span class="str">"gameover"</span></pre>
+<p style="margin-top:1em">One variable tracks the current screen.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Game over screen</h2>
+<pre><span class="kw">elif</span> game_state == <span class="str">"gameover"</span>:
+    text = font.<span class="fn">render</span>(<span class="str">"Game Over - Press R"</span>,
+                        <span class="kw">True</span>, WHITE)
+    screen.<span class="fn">blit</span>(text, (<span class="num">200</span>, <span class="num">300</span>))
+
+    <span class="kw">if</span> keys[pygame.K_r]:
+        player.x, player.y = start_x, start_y
+        score = <span class="num">0</span>
+        game_state = <span class="str">"playing"</span></pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Stomp from above 👟</h2>
+<pre><span class="kw">if</span> player.<span class="fn">colliderect</span>(enemy.rect):
+    <span class="kw">if</span> velocity_y &gt; <span class="num">0</span>:
+        <span class="com"># landed on top — defeat!</span>
+        enemies.<span class="fn">remove</span>(enemy)
+        velocity_y = JUMP_STRENGTH // <span class="num">2</span>
+    <span class="kw">else</span>:
+        game_state = <span class="str">"gameover"</span></pre>
+<p style="margin-top:1em">Falling onto enemy = bounce + defeat. Otherwise = die.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>State machine 📊</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">🎮</div><div class="name" style="color:var(--accent)">"playing"</div><div class="ex">player moves, enemies patrol</div></div>
+<div class="opt-card" style="border:3px solid var(--accent-2)"><div class="ico">💀</div><div class="name" style="color:var(--accent-2)">"gameover"</div><div class="ex">show text, wait for R</div></div>
+</div>
+<p class="center" style="margin-top:1em">Game = collection of <span class="sub">states</span>.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add danger 👹</h2>
+<ul class="check-list">
+<li>Build <code>Enemy</code> class with patrol</li>
+<li>Make 3 enemies in a list</li>
+<li>Add <code>game_state</code> variable</li>
+<li>On collision → <code>"gameover"</code></li>
+<li>R key → restart</li>
+<li>Bonus: stomp-from-above defeat</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">👹</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Stakes raised!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: multi-level final game!</p>
+<p class="bilingual">다음 주: 최종 멀티레벨</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

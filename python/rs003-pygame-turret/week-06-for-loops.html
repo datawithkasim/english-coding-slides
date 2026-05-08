@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W6 — For Loops</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 6</div>
+
+<div class="slide active center-all"><div class="pill">Week 6</div><div class="emoji">🔁</div>
+<h1>For Loops —<br>Draw Many</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Repeat to draw patterns</p>
+<p class="bilingual">반복으로 여러 객체</p></div>
+
+<div class="slide"><div class="pill">Problem</div><h2>Drawing 10 stars</h2>
+<pre>pygame.draw.<span class="fn">circle</span>(screen, YELLOW, (<span class="num">50</span>, <span class="num">50</span>), <span class="num">5</span>)
+pygame.draw.<span class="fn">circle</span>(screen, YELLOW, (<span class="num">100</span>, <span class="num">50</span>), <span class="num">5</span>)
+pygame.draw.<span class="fn">circle</span>(screen, YELLOW, (<span class="num">150</span>, <span class="num">50</span>), <span class="num">5</span>)
+<span class="com"># ... 7 more lines 😩</span></pre>
+<p style="margin-top:1em">Repetitive! There's a better way.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's a <code>for</code> loop?</h2>
+<p class="big">Repeat code <span class="sub">N times</span>.</p>
+<pre style="margin-top:1em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(<span class="str">"⭐"</span>)</pre>
+<p style="margin-top:.6em">Prints ⭐ exactly 10 times.</p>
+<p class="bilingual">N번 반복</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2><code>range(5)</code> step-through</h2>
+<div class="viz viz-5">
+<div class="iter-row">
+<div class="iter-item">0</div><div class="iter-item">1</div>
+<div class="iter-item">2</div><div class="iter-item">3</div>
+<div class="iter-item">4</div>
+</div>
+<div class="var-row"><span class="label">i = </span><span class="var-vals">
+<span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span><span class="var-val">4</span>
+</span></div>
+<div class="output-box">
+<div class="out-label">▸ Output</div>
+<div class="out-line">step 0</div><div class="out-line">step 1</div>
+<div class="out-line">step 2</div><div class="out-line">step 3</div>
+<div class="out-line">step 4</div></div>
+</div>
+<p class="center" style="margin-top:.5em"><code>range(5)</code> = 0,1,2,3,4 (stops <em>before</em> 5)</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Use loop variable for position</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    x = <span class="num">50</span> + i * <span class="num">60</span>
+    pygame.draw.<span class="fn">circle</span>(screen, YELLOW, (x, <span class="num">50</span>), <span class="num">5</span>)</pre>
+<p style="margin-top:1em">Each loop, <code>i</code> changes → <code>x</code> changes → new position!</p>
+<p style="margin-top:.4em">Stars at: 50, 110, 170, 230, ...</p></div>
+
+<div class="slide"><div class="pill">In your game</div><h2>Draw the ground</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):
+    x = i * <span class="num">40</span>
+    pygame.draw.<span class="fn">rect</span>(screen, BROWN,
+        (x, GROUND_Y, <span class="num">38</span>, <span class="num">10</span>))</pre>
+<p style="margin-top:1em">20 small bricks across the screen → looks like ground.</p></div>
+
+<div class="slide"><div class="pill">In your game</div><h2>Draw 5 targets</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    target_x = <span class="num">100</span> + i * <span class="num">120</span>
+    pygame.draw.<span class="fn">circle</span>(screen, RED,
+        (target_x, <span class="num">100</span>), <span class="num">20</span>)</pre>
+<p style="margin-top:1em">5 targets, evenly spaced. Easy to add more!</p></div>
+
+<div class="slide"><div class="pill">⚠️ Mistake</div><h2><code>range(5)</code> stops <span class="sub">before</span> 5</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):  <span class="com"># i = 0,1,2,3,4 (5 numbers!)</span>
+    <span class="fn">print</span>(i)</pre>
+<p style="margin-top:1em">5 iterations, but the last <code>i</code> is 4. Always.</p>
+<p class="bilingual">range(5) → 0,1,2,3,4</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Use a loop 🔁</h2>
+<ul class="check-list">
+<li>Draw 10 stars in a row using <code>for</code></li>
+<li>Or 20 ground bricks</li>
+<li>Use <code>i * spacing</code> for x position</li>
+<li>Try changing the count!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🔁</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Patterns!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: split into more functions.</p>
+<p class="bilingual">다음 주: 여러 함수</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

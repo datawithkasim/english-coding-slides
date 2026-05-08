@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W8 — Multi-Level Final</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 8</div>
+
+<div class="slide active center-all"><div class="pill">Week 8</div><div class="emoji">🏆</div>
+<h1>Multi-Level<br>Platformer</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">3+ levels · finish zones · victory</p>
+<p class="bilingual">멀티 레벨 최종 프로젝트</p></div>
+
+<div class="slide"><div class="pill">Goal</div><h2>3 levels of fun 🎮</h2>
+<ul class="check-list">
+<li>3+ unique levels</li>
+<li>Coins in each level</li>
+<li>2+ enemies per level</li>
+<li>Finish zone advances level</li>
+<li>HUD: level + score</li>
+<li>Game over + restart</li>
+<li>Victory screen!</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>All levels in one list</h2>
+<pre>LEVELS = [
+    {
+        <span class="str">"platforms"</span>: [(<span class="num">0</span>,<span class="num">550</span>,<span class="num">800</span>,<span class="num">50</span>), ...],
+        <span class="str">"coins"</span>: [(<span class="num">220</span>,<span class="num">410</span>), ...],
+        <span class="str">"enemies"</span>: [(<span class="num">300</span>,<span class="num">530</span>,<span class="num">100</span>)],
+        <span class="str">"finish"</span>: (<span class="num">700</span>,<span class="num">500</span>,<span class="num">50</span>,<span class="num">50</span>),
+    },
+    <span class="com"># level 2 + 3...</span>
+]</pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2><code>load_level()</code> function</h2>
+<pre><span class="kw">def</span> <span class="fn">load_level</span>(idx):
+    data = LEVELS[idx]
+    platforms = [pygame.<span class="fn">Rect</span>(*p) <span class="kw">for</span> p <span class="kw">in</span> data[<span class="str">"platforms"</span>]]
+    coins = [pygame.<span class="fn">Rect</span>(c[<span class="num">0</span>], c[<span class="num">1</span>], <span class="num">20</span>, <span class="num">20</span>) <span class="kw">for</span> c <span class="kw">in</span> data[<span class="str">"coins"</span>]]
+    enemies = [<span class="fn">Enemy</span>(*e) <span class="kw">for</span> e <span class="kw">in</span> data[<span class="str">"enemies"</span>]]
+    finish = pygame.<span class="fn">Rect</span>(*data[<span class="str">"finish"</span>])
+    <span class="kw">return</span> platforms, coins, enemies, finish</pre>
+<p style="margin-top:.6em">One function loads a whole level.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Advance to next level</h2>
+<pre><span class="kw">if</span> player.<span class="fn">colliderect</span>(finish):
+    current_level += <span class="num">1</span>
+    <span class="kw">if</span> current_level &lt; <span class="fn">len</span>(LEVELS):
+        platforms, coins, enemies, finish = <span class="fn">load_level</span>(current_level)
+        player.x, player.y = start_x, start_y
+    <span class="kw">else</span>:
+        game_state = <span class="str">"victory"</span></pre></div>
+
+<div class="slide"><div class="pill">3 game states</div><h2>State machine grew</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🎮</div><div class="name">playing</div></div>
+<div class="opt-card"><div class="ico">💀</div><div class="name">gameover</div></div>
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">🏆</div><div class="name" style="color:var(--accent)">victory</div></div>
+</div></div>
+
+<div class="slide"><div class="pill">8 weeks!</div><h2>What you built 🚀</h2>
+<ul class="check-list" style="font-size:clamp(15px,2.5vmin,20px)">
+<li>W1 — game window</li>
+<li>W2 — player + keys</li>
+<li>W3 — gravity + jump</li>
+<li>W4 — platforms</li>
+<li>W5 — level design</li>
+<li>W6 — coins + score</li>
+<li>W7 — enemies + game over</li>
+<li>W8 — multi-level + victory!</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Bonus ideas</div><h2>Make it yours 🎨</h2>
+<ul class="check-list">
+<li>Sprite images instead of squares</li>
+<li>Background music with <code>pygame.mixer</code></li>
+<li>Power-ups (double jump, speed boost)</li>
+<li>Boss fight at level 3</li>
+<li>Save best score to a file</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Ship the platformer 🏆</h2>
+<ul class="check-list">
+<li>Design 3 levels on paper</li>
+<li>Build <code>LEVELS</code> data structure</li>
+<li>Implement <code>load_level()</code></li>
+<li>Finish zone → next level</li>
+<li>Victory screen on level 3 complete</li>
+<li>Play through &amp; tune!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🏆</div>
+<h1 style="font-size:clamp(40px,7vmin,70px)">RS004 done!</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Real game. Real levels. Real you.</p>
+<p class="bilingual">완성!</p>
+<div class="fruit-row" style="margin-top:1em;font-size:clamp(34px,6vmin,56px)">
+<span>🏃</span><span>🪙</span><span>👹</span><span>🏆</span></div></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

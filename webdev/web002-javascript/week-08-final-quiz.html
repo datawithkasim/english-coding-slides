@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB002 W8 — Final Quiz</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB002 · JavaScript · Week 8</div>
+
+<div class="slide active center-all"><div class="pill">Week 8</div><div class="emoji">🏆</div>
+<h1>Quiz<br>App</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Combine everything</p>
+<p class="bilingual">대화형 퀴즈 앱</p></div>
+
+<div class="slide"><div class="pill">Goal</div><h2>What it does 🎯</h2>
+<ul class="check-list">
+<li>5+ multiple-choice questions</li>
+<li>Show one at a time</li>
+<li>+1 score for right answer</li>
+<li>Final score after last question</li>
+<li>Restart button</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Question = an <span class="sub">object</span></h2>
+<pre><span class="kw">let</span> q = {
+  q: <span style="color:#f1fa8c">"Capital of Korea?"</span>,
+  choices: [<span style="color:#f1fa8c">"Tokyo"</span>, <span style="color:#f1fa8c">"Seoul"</span>, <span style="color:#f1fa8c">"Beijing"</span>],
+  answer: <span style="color:#bd93f9">1</span>
+};</pre>
+<p style="margin-top:1em">Object = labeled values. Like a tiny dictionary.</p>
+<p class="bilingual">키-값 묶음</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Array of question objects</h2>
+<pre><span class="kw">let</span> questions = [
+  { q: <span style="color:#f1fa8c">"Capital of Korea?"</span>,
+    choices: [<span style="color:#f1fa8c">"Tokyo"</span>, <span style="color:#f1fa8c">"Seoul"</span>, <span style="color:#f1fa8c">"Beijing"</span>],
+    answer: <span style="color:#bd93f9">1</span> },
+  { q: <span style="color:#f1fa8c">"2 + 2 = ?"</span>,
+    choices: [<span style="color:#f1fa8c">"3"</span>, <span style="color:#f1fa8c">"4"</span>, <span style="color:#f1fa8c">"5"</span>],
+    answer: <span style="color:#bd93f9">1</span> }
+];</pre></div>
+
+<div class="slide"><div class="pill">HTML</div><h2>The page</h2>
+<pre>&lt;h2 id=<span style="color:#f1fa8c">"q"</span>&gt;&lt;/h2&gt;
+&lt;button id=<span style="color:#f1fa8c">"opt1"</span>&gt;&lt;/button&gt;
+&lt;button id=<span style="color:#f1fa8c">"opt2"</span>&gt;&lt;/button&gt;
+&lt;button id=<span style="color:#f1fa8c">"opt3"</span>&gt;&lt;/button&gt;
+&lt;p id=<span style="color:#f1fa8c">"score"</span>&gt;Score: 0&lt;/p&gt;</pre></div>
+
+<div class="slide"><div class="pill">Logic</div><h2>Show one question</h2>
+<pre><span class="kw">let</span> current = <span style="color:#bd93f9">0</span>;
+<span class="kw">let</span> score = <span style="color:#bd93f9">0</span>;
+
+<span class="kw">function</span> <span class="fn">showQuestion</span>() {
+  <span class="kw">let</span> q = questions[current];
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#q"</span>).textContent = q.q;
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt1"</span>).textContent = q.choices[<span style="color:#bd93f9">0</span>];
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt2"</span>).textContent = q.choices[<span style="color:#bd93f9">1</span>];
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt3"</span>).textContent = q.choices[<span style="color:#bd93f9">2</span>];
+}</pre></div>
+
+<div class="slide"><div class="pill">Logic</div><h2>Check answer</h2>
+<pre><span class="kw">function</span> <span class="fn">check</span>(chosen) {
+  <span class="kw">if</span> (chosen === questions[current].answer) {
+    score = score + <span style="color:#bd93f9">1</span>;
+  }
+  current = current + <span style="color:#bd93f9">1</span>;
+  <span class="kw">if</span> (current &lt; questions.length) {
+    <span class="fn">showQuestion</span>();
+  } <span class="kw">else</span> {
+    document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#q"</span>).textContent = <span style="color:#f1fa8c">"Done!"</span>;
+  }
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#score"</span>).textContent = <span style="color:#f1fa8c">"Score: "</span> + score;
+}</pre></div>
+
+<div class="slide"><div class="pill">Wire it up</div><h2>Connect buttons</h2>
+<pre>document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt1"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, () =&gt; <span class="fn">check</span>(<span style="color:#bd93f9">0</span>));
+document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt2"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, () =&gt; <span class="fn">check</span>(<span style="color:#bd93f9">1</span>));
+document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#opt3"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, () =&gt; <span class="fn">check</span>(<span style="color:#bd93f9">2</span>));
+
+<span class="fn">showQuestion</span>();  <span class="com">// start!</span></pre></div>
+
+<div class="slide"><div class="pill">8 weeks!</div><h2>Look how far 🚀</h2>
+<ul class="check-list" style="font-size:clamp(15px,2.5vmin,20px)">
+<li>W1 — first JS</li>
+<li>W2 — DOM</li>
+<li>W3 — events</li>
+<li>W4 — input</li>
+<li>W5 — conditionals</li>
+<li>W6 — arrays + loops</li>
+<li>W7 — functions</li>
+<li>W8 — full app!</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build the quiz 🏆</h2>
+<ul class="check-list">
+<li>5+ questions in <code>questions</code> array</li>
+<li>Each: q, choices, answer index</li>
+<li><code>showQuestion()</code> + <code>check()</code> functions</li>
+<li>Wire buttons with addEventListener</li>
+<li>Add restart button (bonus!)</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🏆</div>
+<h1 style="font-size:clamp(40px,7vmin,70px)">WEB002 done!</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Real interactive web app.</p>
+<p class="bilingual">완성!</p>
+<div class="fruit-row" style="margin-top:1em;font-size:clamp(34px,6vmin,56px)">
+<span>⚡</span><span>🧠</span><span>🏆</span><span>🌐</span></div></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

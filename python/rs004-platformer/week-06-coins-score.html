@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W6 — Coins + Score</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 6</div>
+
+<div class="slide active center-all"><div class="pill">Week 6</div><div class="emoji">🪙</div>
+<h1>Coins +<br>Score</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Collectibles + text rendering</p>
+<p class="bilingual">동전 + 점수 시스템</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Coins = list of Rects</h2>
+<pre>coins = [
+    pygame.<span class="fn">Rect</span>(<span class="num">180</span>, <span class="num">410</span>, <span class="num">20</span>, <span class="num">20</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">380</span>, <span class="num">340</span>, <span class="num">20</span>, <span class="num">20</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">580</span>, <span class="num">280</span>, <span class="num">20</span>, <span class="num">20</span>),
+]
+score = <span class="num">0</span></pre>
+<p style="margin-top:1em">Same pattern as platforms — easy to extend.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Pickup logic</h2>
+<pre><span class="kw">for</span> coin <span class="kw">in</span> coins[:]:
+    <span class="kw">if</span> player.<span class="fn">colliderect</span>(coin):
+        coins.<span class="fn">remove</span>(coin)
+        score += <span class="num">1</span></pre>
+<p style="margin-top:1em">Touch coin → remove it from list, +1 score. ✨</p>
+<p style="margin-top:.4em"><code>coins[:]</code> = a copy (safe to remove during loop).</p></div>
+
+<div class="slide"><div class="pill">⚠️ Bug</div><h2>Don't mutate while looping!</h2>
+<pre><span class="com"># 🚫 weird behavior</span>
+<span class="kw">for</span> coin <span class="kw">in</span> coins:
+    coins.<span class="fn">remove</span>(coin)
+
+<span class="com"># ✅ loop a copy</span>
+<span class="kw">for</span> coin <span class="kw">in</span> coins[:]:
+    coins.<span class="fn">remove</span>(coin)</pre>
+<p style="margin-top:1em">The <code>[:]</code> trick saves you from skipped items.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Draw coins as circles</h2>
+<pre>GOLD = (<span class="num">255</span>, <span class="num">215</span>, <span class="num">0</span>)
+
+<span class="kw">for</span> coin <span class="kw">in</span> coins:
+    pygame.draw.<span class="fn">circle</span>(screen, GOLD, coin.center, <span class="num">10</span>)</pre>
+<p style="margin-top:1em"><code>coin.center</code> = midpoint of the Rect. Handy!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Show score with <code>pygame.font</code></h2>
+<pre>font = pygame.font.<span class="fn">SysFont</span>(<span class="kw">None</span>, <span class="num">36</span>)
+
+<span class="com"># in game loop</span>
+text = font.<span class="fn">render</span>(<span class="str">f"Score: {score}"</span>, <span class="kw">True</span>, BLACK)
+screen.<span class="fn">blit</span>(text, (<span class="num">10</span>, <span class="num">10</span>))</pre>
+<p style="margin-top:1em">Render text → blit (paste) onto screen at <code>(10, 10)</code>.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>render</code> → <code>blit</code></h2>
+<div style="background:var(--code-bg);color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.7">
+<div>1. font.render(text, smooth, color)</div>
+<div style="font-size:1.5em">⬇️</div>
+<div>creates a text image</div>
+<div style="font-size:1.5em">⬇️</div>
+<div>2. screen.blit(image, position)</div>
+</div></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>HUD = corner display</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_hud</span>():
+    text = font.<span class="fn">render</span>(<span class="str">f"Score: {score}"</span>, <span class="kw">True</span>, BLACK)
+    screen.<span class="fn">blit</span>(text, (<span class="num">10</span>, <span class="num">10</span>))
+
+<span class="com"># in loop</span>
+<span class="fn">draw_hud</span>()</pre>
+<p style="margin-top:1em">Always draw HUD <span class="sub">last</span> — on top of everything.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add coins + score 🪙</h2>
+<ul class="check-list">
+<li>List of coin Rects (5+)</li>
+<li>Loop coins[:], remove + score on collision</li>
+<li>Draw each coin as a gold circle</li>
+<li>Render score in top-left</li>
+<li>Add 1 coin only reachable by jump 🏆</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🪙</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Cha-ching!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: enemies + game over.</p>
+<p class="bilingual">다음 주: 적 + 게임 오버</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

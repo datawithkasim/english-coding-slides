@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W7 — Multiple Functions</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">🧩</div>
+<h1>Many<br>Functions</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Split your code into pieces</p>
+<p class="bilingual">여러 함수로 나누기</p></div>
+
+<div class="slide"><div class="pill">Big idea</div><h2>One function per <span class="sub">job</span></h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">⬛</div><div class="name">draw_ground</div></div>
+<div class="opt-card"><div class="ico">🔫</div><div class="name">draw_turret</div></div>
+<div class="opt-card"><div class="ico">🎯</div><div class="name">draw_marker</div></div>
+</div>
+<p class="big center" style="margin-top:1em">Each function does <span class="sub">one thing</span> well.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Three functions</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_ground</span>():
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):
+        x = i * <span class="num">40</span>
+        pygame.draw.<span class="fn">rect</span>(screen, BROWN, (x, <span class="num">580</span>, <span class="num">38</span>, <span class="num">10</span>))
+
+<span class="kw">def</span> <span class="fn">draw_turret</span>(x):
+    pygame.draw.<span class="fn">rect</span>(screen, GREY, (x, <span class="num">540</span>, <span class="num">20</span>, <span class="num">40</span>))
+
+<span class="kw">def</span> <span class="fn">draw_marker</span>(x):
+    pygame.draw.<span class="fn">circle</span>(screen, RED, (x + <span class="num">10</span>, <span class="num">100</span>), <span class="num">10</span>)</pre></div>
+
+<div class="slide"><div class="pill">Tidy loop</div><h2>Game loop becomes simple</h2>
+<pre><span class="kw">while</span> running:
+    screen.<span class="fn">fill</span>(SKY)
+
+    <span class="fn">draw_ground</span>()
+    <span class="fn">draw_turret</span>(gun_x)
+    <span class="fn">draw_marker</span>(gun_x)
+
+    pygame.display.<span class="fn">flip</span>()</pre>
+<p style="margin-top:1em">Reads like English: draw ground, draw turret, draw marker.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Functions <span class="sub">share data</span></h2>
+<pre><span class="fn">draw_turret</span>(gun_x)
+<span class="fn">draw_marker</span>(gun_x)  <span class="com"># same gun_x!</span></pre>
+<p style="margin-top:1em">Marker tracks gun → both use the same <code>gun_x</code> value.</p>
+<p class="bilingual">두 함수가 같은 위치를 공유</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Position-aware marker</h2>
+<div style="background:#1e1e2e;color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.7">
+<div>      🎯 ← marker tracks gun</div>
+<div>           │</div>
+<div>           ▼</div>
+<div>      🔫 ← gun moves with arrow keys</div>
+</div>
+<p class="center" style="margin-top:.6em">Marker x = gun x. Move gun → marker follows.</p></div>
+
+<div class="slide"><div class="pill">Why split?</div><h2>Wins of multi-function code</h2>
+<ul class="check-list">
+<li>Easier to read</li>
+<li>Easier to debug — find the broken function</li>
+<li>Each function can be tested alone</li>
+<li>Reuse in different game modes</li>
+</ul></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Order of drawing</h2>
+<pre><span class="fn">draw_turret</span>()
+<span class="fn">draw_ground</span>()  <span class="com"># 🚫 ground covers turret!</span></pre>
+<p style="margin-top:1em">Pygame draws <span class="sub">on top</span> of previous. Background first, foreground last.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Split your code 🧩</h2>
+<ul class="check-list">
+<li>Make <code>draw_ground()</code> with a for loop</li>
+<li>Make <code>draw_turret(x)</code> taking position</li>
+<li>Add <code>draw_marker(x)</code> that follows the gun</li>
+<li>Game loop calls all 3 in order</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🧩</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Clean code!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: combine everything into the final game.</p>
+<p class="bilingual">다음 주: 최종 프로젝트</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

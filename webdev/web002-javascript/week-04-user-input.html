@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB002 W4 — User Input</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB002 · JavaScript · Week 4</div>
+
+<div class="slide active center-all"><div class="pill">Week 4</div><div class="emoji">⌨️</div>
+<h1>User<br>Input</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Talking to <code>&lt;input&gt;</code> boxes</p>
+<p class="bilingual">입력 상자와 대화</p></div>
+
+<div class="slide"><div class="pill">Tool</div><h2>The <code>&lt;input&gt;</code> tag</h2>
+<pre>&lt;input <span style="color:#50fa7b">id</span>=<span style="color:#f1fa8c">"nameBox"</span>
+       <span style="color:#50fa7b">type</span>=<span style="color:#f1fa8c">"text"</span>
+       <span style="color:#50fa7b">placeholder</span>=<span style="color:#f1fa8c">"Your name"</span>&gt;</pre>
+<p style="margin-top:1em">A box where users can type. Always self-closing.</p></div>
+
+<div class="slide"><div class="pill">Tool</div><h2>Get the value with <code>.value</code></h2>
+<pre><span class="kw">let</span> name = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#nameBox"</span>).value;
+<span class="fn">console.log</span>(name);</pre>
+<p style="margin-top:1em"><code>.value</code> = whatever the user typed.</p>
+<p class="bilingual">.value로 입력값 가져오기</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Greet with their name</h2>
+<pre>&lt;input id=<span style="color:#f1fa8c">"nameBox"</span> placeholder=<span style="color:#f1fa8c">"Name"</span>&gt;
+&lt;button id=<span style="color:#f1fa8c">"greetBtn"</span>&gt;Greet&lt;/button&gt;
+&lt;h1 id=<span style="color:#f1fa8c">"output"</span>&gt;&lt;/h1&gt;
+
+&lt;script&gt;
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#greetBtn"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+    <span class="kw">let</span> name = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#nameBox"</span>).value;
+    document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#output"</span>).textContent = <span style="color:#f1fa8c">"Hi, "</span> + name;
+  });
+&lt;/script&gt;</pre></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Empty input check</h2>
+<pre><span class="kw">if</span> (name === <span style="color:#f1fa8c">""</span>) {
+    <span class="fn">alert</span>(<span style="color:#f1fa8c">"Please enter your name!"</span>);
+} <span class="kw">else</span> {
+    output.textContent = <span style="color:#f1fa8c">"Hi, "</span> + name;
+}</pre>
+<p style="margin-top:1em">Validate before using. No empty greetings!</p>
+<p class="bilingual">빈 값 처리</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>===</code> = strict equal</h2>
+<pre>name === <span style="color:#f1fa8c">""</span>     <span class="com">// strict (recommended)</span>
+name == <span style="color:#f1fa8c">""</span>      <span class="com">// loose (avoid)</span></pre>
+<p style="margin-top:1em">Three equals = "exactly the same". Use this in JS!</p>
+<p class="bilingual">JS에서는 ===를 쓰세요</p></div>
+
+<div class="slide"><div class="pill">Input types</div><h2>Different input types</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6em;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,20px)">
+<div class="varbox"><span class="name">type="text"</span><span class="val">letters</span></div>
+<div class="varbox"><span class="name">type="number"</span><span class="val">numbers only</span></div>
+<div class="varbox"><span class="name">type="email"</span><span class="val">email</span></div>
+<div class="varbox"><span class="name">type="password"</span><span class="val">hidden •••</span></div>
+</div></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Numbers come as <span class="sub">strings</span></h2>
+<pre><span class="kw">let</span> raw = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#age"</span>).value;
+<span class="com">// raw = "12" — a STRING, not a number!</span>
+
+<span class="kw">let</span> age = <span class="fn">Number</span>(raw);
+<span class="com">// age = 12 — now a number ✅</span></pre>
+<p style="margin-top:1em">Wrap with <code>Number()</code> for math.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Intro generator ✍️</h2>
+<ul class="check-list">
+<li>2 inputs: name + age</li>
+<li>Button to "Generate intro"</li>
+<li>Show: "Hi, [name]! You're [age]."</li>
+<li>Warn if either field is empty</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">⌨️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Talking to users!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: check answers with <code>if</code>.</p>
+<p class="bilingual">다음 주: 조건문</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

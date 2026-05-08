@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS002 W4 — Validation</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS002 · Pokédex · Week 4</div>
+
+<div class="slide active center-all"><div class="pill">Week 4</div><div class="emoji">🛡️</div>
+<h1>Catch Bad<br>Picks</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);"><code>if/else</code> + <code>in / not in</code></p>
+<p class="bilingual">입력값 검증</p></div>
+
+<div class="slide"><div class="pill">Problem</div><h2>What if trainer types nonsense?</h2>
+<div class="bubble-card you" style="margin:1em 0">"banana"</div>
+<div class="bubble-card computer">😵 banana isn't a Pokémon...</div>
+<p style="margin-top:1em">Need to handle this safely!</p></div>
+
+<div class="slide"><div class="pill">Tool 1</div><h2><code>in</code> — is it in the list?</h2>
+<pre>pokemon = [<span class="str">"pikachu"</span>, <span class="str">"charmander"</span>]
+
+<span class="fn">print</span>(<span class="str">"pikachu"</span> <span class="kw">in</span> pokemon)
+<span class="fn">print</span>(<span class="str">"banana"</span> <span class="kw">in</span> pokemon)</pre>
+<div class="output-box" style="margin-top:1em"><div class="out-label">▸ Output</div>
+<div style="opacity:1"><span style="color:var(--fn)">True</span></div>
+<div style="opacity:1"><span style="color:var(--kw)">False</span></div></div></div>
+
+<div class="slide"><div class="pill">Tool 2</div><h2><code>not in</code> — is it missing?</h2>
+<pre><span class="kw">if</span> choice <span class="kw">not in</span> pokemon:
+    <span class="fn">print</span>(<span class="str">"That's not a real Pokémon!"</span>)</pre>
+<p style="margin-top:1em">Opposite of <code>in</code>. Use to <span class="sub">reject</span> bad input.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>if / else</code> = two paths</h2>
+<pre><span class="kw">if</span> choice <span class="kw">in</span> pokemon:
+    <span class="fn">print</span>(<span class="str">f"Caught {choice}!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Try a real Pokémon name."</span>)</pre>
+<p style="margin-top:1em">Valid → catch! Invalid → tell trainer.</p>
+<p class="bilingual">if = 만약, else = 아니면</p></div>
+
+<div class="slide"><div class="pill">Better</div><h2>Ask again with <code>while</code></h2>
+<pre>choice = <span class="fn">input</span>(<span class="str">"Pick: "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">while</span> choice <span class="kw">not in</span> pokemon:
+    <span class="fn">print</span>(<span class="str">"Not a Pokémon. Try again."</span>)
+    choice = <span class="fn">input</span>(<span class="str">"Pick: "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="fn">print</span>(<span class="str">f"You caught {choice}!"</span>)</pre>
+<p style="margin-top:.6em">Loop keeps asking until input is valid.</p></div>
+
+<div class="slide"><div class="pill">Live demo</div><h2>What players see</h2>
+<div class="output-box" style="font-size:clamp(15px,2.6vmin,22px)">
+<div class="out-label">▸ Game</div>
+<div style="opacity:1;color:var(--str)">Pick: <span style="color:white">banana</span></div>
+<div style="opacity:1">Not a Pokémon. Try again.</div>
+<div style="opacity:1;color:var(--str)">Pick: <span style="color:white">PIKACHU</span></div>
+<div style="opacity:1">You caught pikachu! ✅</div></div></div>
+
+<div class="slide"><div class="pill">Why?</div><h2>Why validate?</h2>
+<ul class="check-list">
+<li>Game doesn't crash</li>
+<li>Clear feedback for trainer</li>
+<li>Feels professional 💼</li>
+<li>Pokémon Centre approved 🏥</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add safety 🛡️</h2>
+<ul class="check-list">
+<li>Use <code>if/else</code> for valid + invalid</li>
+<li>Or use <code>while not in</code> to keep asking</li>
+<li>Test with bad input!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🛡️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Bulletproof!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: real Pokémon stats with dictionaries.</p>
+<p class="bilingual">다음 주: 딕셔너리로 진짜 데이터</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB002 W3 — Events</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB002 · JavaScript · Week 3</div>
+
+<div class="slide active center-all"><div class="pill">Week 3</div><div class="emoji">🖱️</div>
+<h1>Events —<br>React to User</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">click · hover · keypress</p>
+<p class="bilingual">사용자 행동에 반응</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's an event?</h2>
+<p class="big">Something the user <span class="sub">does</span> on the page.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🖱️</div><div class="name">click</div></div>
+<div class="opt-card"><div class="ico">⌨️</div><div class="name">keydown</div></div>
+<div class="opt-card"><div class="ico">👆</div><div class="name">mouseover</div></div>
+</div></div>
+
+<div class="slide"><div class="pill">Tool</div><h2><code>addEventListener</code></h2>
+<pre>document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#btn"</span>)
+        .<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+            <span class="fn">alert</span>(<span style="color:#f1fa8c">"Clicked!"</span>);
+        });</pre>
+<p style="margin-top:1em">"When this element gets <code>click</code>, run this function."</p></div>
+
+<div class="slide"><div class="pill">Compare</div><h2><code>onclick</code> vs <code>addEventListener</code></h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">📝</div><div class="name">onclick</div><div class="ex">in HTML attribute<br>1 handler only</div></div>
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">⚡</div><div class="name" style="color:var(--accent)">addEventListener</div><div class="ex">in JS<br>many handlers OK</div></div>
+</div>
+<p style="margin-top:1em">Modern way = <code>addEventListener</code>.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Build a counter</h2>
+<pre>&lt;h1&gt;Score: &lt;span id=<span style="color:#f1fa8c">"score"</span>&gt;0&lt;/span&gt;&lt;/h1&gt;
+&lt;button id=<span style="color:#f1fa8c">"plus"</span>&gt;+1&lt;/button&gt;
+
+&lt;script&gt;
+  <span class="kw">let</span> score = <span style="color:#bd93f9">0</span>;
+  <span class="kw">let</span> scoreEl = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#score"</span>);
+
+  document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#plus"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+    score = score + <span style="color:#bd93f9">1</span>;
+    scoreEl.textContent = score;
+  });
+&lt;/script&gt;</pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Add a reset</h2>
+<pre>document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#reset"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+    score = <span style="color:#bd93f9">0</span>;
+    scoreEl.textContent = score;
+});</pre>
+<p style="margin-top:1em">Two buttons, same <code>score</code> variable.</p></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Stop at zero</h2>
+<pre>document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#minus"</span>).<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, <span class="kw">function</span>() {
+    <span class="kw">if</span> (score &gt; <span style="color:#bd93f9">0</span>) {
+        score = score - <span style="color:#bd93f9">1</span>;
+        scoreEl.textContent = score;
+    }
+});</pre>
+<p style="margin-top:1em">Add <code>if</code> → only decrease when score &gt; 0.</p></div>
+
+<div class="slide"><div class="pill">More events</div><h2>Other events to try</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6em;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,20px)">
+<div class="varbox"><span class="name">"click"</span><span class="val">mouse click</span></div>
+<div class="varbox"><span class="name">"mouseover"</span><span class="val">hover in</span></div>
+<div class="varbox"><span class="name">"keydown"</span><span class="val">key pressed</span></div>
+<div class="varbox"><span class="name">"submit"</span><span class="val">form sent</span></div>
+</div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a counter ➕➖</h2>
+<ul class="check-list">
+<li>+1, -1, reset buttons</li>
+<li>Use <code>addEventListener</code> for each</li>
+<li>Stop score going below 0 with <code>if</code></li>
+<li>Bonus: change color when score &gt; 10</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🖱️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Reactive!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: get input from user.</p>
+<p class="bilingual">다음 주: 사용자 입력</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

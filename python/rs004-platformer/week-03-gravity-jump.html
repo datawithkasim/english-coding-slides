@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W3 — Gravity + Jump</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 3</div>
+
+<div class="slide active center-all"><div class="pill">Week 3</div><div class="emoji">🪂</div>
+<h1>Gravity<br>+ Jump</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Velocity + on_ground state</p>
+<p class="bilingual">중력과 점프</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's <span class="sub">velocity</span>?</h2>
+<p class="big">How <span class="sub">fast</span> &amp; which way the player moves.</p>
+<div style="background:var(--code-bg);color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,22px);text-align:center">
+<div>velocity_y = -5  → moving UP ⬆️</div>
+<div>velocity_y = 0   → not moving</div>
+<div>velocity_y = +5  → moving DOWN ⬇️</div>
+</div>
+<p class="bilingual center" style="margin-top:.6em">속도 = 방향 + 빠르기</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Gravity = velocity goes <span class="sub">up</span> each frame</h2>
+<pre>GRAVITY = <span class="num">0.7</span>
+velocity_y = <span class="num">0</span>
+
+<span class="kw">while</span> running:
+    velocity_y += GRAVITY     <span class="com"># +0.7 every frame</span>
+    player.y += velocity_y    <span class="com"># move down</span></pre>
+<p style="margin-top:1em">Each frame falls a little faster. Like real gravity!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Jump = sudden <span class="sub">negative</span> velocity</h2>
+<pre>JUMP_STRENGTH = -<span class="num">14</span>
+
+<span class="kw">if</span> event.type == pygame.KEYDOWN:
+    <span class="kw">if</span> event.key == pygame.K_SPACE:
+        velocity_y = JUMP_STRENGTH</pre>
+<p style="margin-top:1em">Negative = up. Then gravity slows the rise → falls back down.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>on_ground</code> — only jump when standing</h2>
+<pre>on_ground = <span class="kw">True</span>
+
+<span class="kw">if</span> event.key == pygame.K_SPACE <span class="kw">and</span> on_ground:
+    velocity_y = JUMP_STRENGTH
+    on_ground = <span class="kw">False</span></pre>
+<p style="margin-top:1em">Stops infinite jumping in mid-air.</p>
+<p class="bilingual">바닥에 있을 때만 점프 가능</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Stop at the floor</h2>
+<pre><span class="kw">if</span> player.y &gt;= HEIGHT - <span class="num">50</span>:
+    player.y = HEIGHT - <span class="num">50</span>
+    velocity_y = <span class="num">0</span>
+    on_ground = <span class="kw">True</span></pre>
+<p style="margin-top:1em">Hit floor → snap to floor, reset velocity, can jump again.</p></div>
+
+<div class="slide"><div class="pill">Tune</div><h2>Find the fun feel 🎮</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="varbox"><span class="name">GRAVITY</span><span class="val">0.7</span></div>
+<div class="varbox"><span class="name">JUMP_STRENGTH</span><span class="val">-14</span></div>
+</div>
+<ul class="check-list" style="margin-top:1em">
+<li>High gravity + low jump = sluggish</li>
+<li>Low gravity + high jump = floaty</li>
+<li>Moon mode: gravity 0.2 + jump -8 ✨</li>
+</ul></div>
+
+<div class="slide"><div class="pill">⚠️ Tricky</div><h2>KEYDOWN vs get_pressed</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">⌨️</div><div class="name">KEYDOWN</div><div class="ex">fires ONCE per press<br>good for jump</div></div>
+<div class="opt-card"><div class="ico">⏬</div><div class="name">get_pressed</div><div class="ex">fires while held<br>good for movement</div></div>
+</div>
+<p class="center" style="margin-top:1em">Use the right one for each control!</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Make it jump 🪂</h2>
+<ul class="check-list">
+<li>Add <code>GRAVITY</code>, <code>JUMP_STRENGTH</code>, <code>velocity_y</code></li>
+<li>Apply gravity each frame</li>
+<li>Stop at the floor</li>
+<li>Jump on SPACE — only if on ground</li>
+<li>Tune values until it feels good!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🪂</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Player jumps!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: platforms!</p>
+<p class="bilingual">다음 주: 플랫폼 충돌</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

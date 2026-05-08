@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 W5 — Limit Range</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Week 5</div>
+
+<div class="slide active center-all"><div class="pill">Week 5</div><div class="emoji">🚧</div>
+<h1>Stay<br>On Screen</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Min / max + conditionals</p>
+<p class="bilingual">이동 범위 제한</p></div>
+
+<div class="slide"><div class="pill">Problem</div><h2>Gun escapes! 🏃</h2>
+<div style="background:#1e1e2e;color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,22px);text-align:center">
+<div>┌─────────screen─────────┐</div>
+<div>│                        │ 🔫 ←off screen!</div>
+<div>└────────────────────────┘</div>
+</div>
+<p class="center" style="margin-top:1em">Hold right too long → gun disappears off the edge.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Min &amp; max values</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">⬅️</div><div class="name" style="color:var(--accent)">MIN</div><div class="ex">smallest allowed x</div></div>
+<div class="opt-card" style="border:3px solid var(--accent-2)"><div class="ico">➡️</div><div class="name" style="color:var(--accent-2)">MAX</div><div class="ex">biggest allowed x</div></div>
+</div>
+<p class="big center" style="margin-top:1em">Gun must stay between MIN and MAX.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Define limits</h2>
+<pre>WIDTH = <span class="num">800</span>
+GUN_W = <span class="num">20</span>
+
+MIN_X = <span class="num">0</span>
+MAX_X = WIDTH - GUN_W</pre>
+<p style="margin-top:1em">MAX is <code>WIDTH - GUN_W</code> so gun's <span class="sub">right edge</span> stays inside.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Block movement at edges</h2>
+<pre><span class="kw">if</span> keys[pygame.K_LEFT] <span class="kw">and</span> gun_x &gt; MIN_X:
+    gun_x -= GUN_SPEED
+
+<span class="kw">if</span> keys[pygame.K_RIGHT] <span class="kw">and</span> gun_x &lt; MAX_X:
+    gun_x += GUN_SPEED</pre>
+<p style="margin-top:1em">Only move if there's <span class="sub">room</span>. Combined with <code>and</code>!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Comparison operators</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6em;margin-top:1em;font-family:monospace;font-size:clamp(17px,2.8vmin,24px)">
+<div class="varbox"><span class="name">&gt;</span><span class="val">greater than</span></div>
+<div class="varbox"><span class="name">&lt;</span><span class="val">less than</span></div>
+<div class="varbox"><span class="name">&gt;=</span><span class="val">greater or equal</span></div>
+<div class="varbox"><span class="name">&lt;=</span><span class="val">less or equal</span></div>
+</div></div>
+
+<div class="slide"><div class="pill">Alternative</div><h2>Clamp after moving</h2>
+<pre><span class="kw">if</span> keys[pygame.K_LEFT]:  gun_x -= GUN_SPEED
+<span class="kw">if</span> keys[pygame.K_RIGHT]: gun_x += GUN_SPEED
+
+<span class="com"># clamp to range</span>
+<span class="kw">if</span> gun_x &lt; MIN_X: gun_x = MIN_X
+<span class="kw">if</span> gun_x &gt; MAX_X: gun_x = MAX_X</pre>
+<p style="margin-top:1em">Move first, then snap back if out of bounds.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Off-by-one</div><h2>Watch the edge</h2>
+<pre>MAX_X = WIDTH       <span class="com"># 🚫 gun's right edge goes off</span>
+MAX_X = WIDTH - GUN_W  <span class="com"># ✅ stays inside</span></pre>
+<p style="margin-top:1em">Pixel positions start at the <span class="sub">left edge</span> of the gun.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Lock the gun on screen 🚧</h2>
+<ul class="check-list">
+<li>Define <code>MIN_X</code> and <code>MAX_X</code></li>
+<li>Add <code>and gun_x &gt; MIN_X</code> to left key</li>
+<li>Add <code>and gun_x &lt; MAX_X</code> to right key</li>
+<li>Test holding arrow keys at the edges!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🚧</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Locked in!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: for loops to draw patterns.</p>
+<p class="bilingual">다음 주: for 루프로 패턴</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

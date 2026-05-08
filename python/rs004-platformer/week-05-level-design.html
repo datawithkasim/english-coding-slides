@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W5 — Level Design</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 5</div>
+
+<div class="slide active center-all"><div class="pill">Week 5</div><div class="emoji">🗺️</div>
+<h1>Level<br>Design</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Data → playable level</p>
+<p class="bilingual">레벨 디자인</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Level = data</h2>
+<pre>LEVEL_1 = [
+    (<span class="num">0</span>, <span class="num">550</span>, <span class="num">800</span>, <span class="num">50</span>),
+    (<span class="num">150</span>, <span class="num">450</span>, <span class="num">120</span>, <span class="num">20</span>),
+    (<span class="num">350</span>, <span class="num">380</span>, <span class="num">100</span>, <span class="num">20</span>),
+    (<span class="num">550</span>, <span class="num">320</span>, <span class="num">100</span>, <span class="num">20</span>),
+    (<span class="num">700</span>, <span class="num">220</span>, <span class="num">100</span>, <span class="num">20</span>),
+]</pre>
+<p style="margin-top:1em">Tuples = simple position+size. Easy to edit!</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Build Rects from data</h2>
+<pre><span class="kw">def</span> <span class="fn">build_level</span>(level_data):
+    <span class="kw">return</span> [pygame.<span class="fn">Rect</span>(*p) <span class="kw">for</span> p <span class="kw">in</span> level_data]
+
+platforms = <span class="fn">build_level</span>(LEVEL_1)</pre>
+<p style="margin-top:1em"><code>*p</code> unpacks the tuple → <code>(x, y, w, h)</code> args.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Level design rules 📐</h2>
+<ul class="check-list">
+<li>Vertical gap ≤ jump height</li>
+<li>Horizontal gap ≤ run + jump distance</li>
+<li>Start clearly visible</li>
+<li>Goal at the top or far right</li>
+</ul>
+<p style="margin-top:1em">Sketch on <span class="sub">paper</span> first. Always.</p></div>
+
+<div class="slide"><div class="pill">Tip</div><h2>Reset on fall-off</h2>
+<pre>start_x, start_y = <span class="num">100</span>, <span class="num">500</span>
+player = pygame.<span class="fn">Rect</span>(start_x, start_y, <span class="num">50</span>, <span class="num">50</span>)
+
+<span class="kw">if</span> player.y &gt; HEIGHT:
+    player.x = start_x
+    player.y = start_y
+    velocity_y = <span class="num">0</span></pre>
+<p style="margin-top:1em">Player falls past screen → respawn at start. No game over yet!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Constants for spacing</h2>
+<pre>STEP_X = <span class="num">200</span>  <span class="com"># horizontal gap</span>
+STEP_Y = <span class="num">70</span>   <span class="com"># vertical climb</span></pre>
+<p style="margin-top:1em">Tune the whole level by changing 2 numbers.</p>
+<p class="bilingual">간격을 한 번에 조정</p></div>
+
+<div class="slide"><div class="pill">Tip</div><h2>Test it like a player</h2>
+<ul class="check-list">
+<li>Can you reach every platform?</li>
+<li>Is there a "right path"?</li>
+<li>Are there shortcuts? Fun!</li>
+<li>Where do players fall?</li>
+</ul>
+<p style="margin-top:1em">Play your own level. <span class="sub">Then</span> tune.</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Don't make it impossible</h2>
+<pre><span class="com"># 🚫 too far apart</span>
+(<span class="num">100</span>, <span class="num">500</span>, ...),
+(<span class="num">700</span>, <span class="num">100</span>, ...),  <span class="com"># can't reach!</span></pre>
+<p style="margin-top:1em">If you can't make the jump → lower the next platform OR move it closer.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Design your level 🗺️</h2>
+<ul class="check-list">
+<li>Sketch on paper first (7+ platforms)</li>
+<li>Convert to <code>LEVEL_1</code> tuple list</li>
+<li>Use <code>build_level()</code> function</li>
+<li>Set <code>start_x</code>, <code>start_y</code> + fall-off respawn</li>
+<li>Mark a "goal" on the top platform</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🗺️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Level built!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: coins + score!</p>
+<p class="bilingual">다음 주: 동전 + 점수</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

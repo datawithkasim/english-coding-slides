@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W1 — Game Window</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 1</div>
+
+<div class="slide active center-all"><div class="pill">Week 1</div><div class="emoji">🪟</div>
+<h1>Setup &amp;<br>Game Window</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Pygame + game loop</p>
+<p class="bilingual">Pygame 설정과 게임 윈도우</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Mario-style platformer 🍄</h2><div class="emoji">🏃‍♂️🪙🐢</div>
+<p class="big">8 weeks. Gravity, platforms, coins, enemies, multi-level!</p>
+<p class="bilingual">8주 동안 멀티레벨 플랫포머</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>The <span class="sub">game loop</span> — 3 jobs</h2>
+<div style="background:var(--code-bg);color:white;padding:1.2em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,22px);text-align:center;line-height:2">
+<div>1. Handle events ⌨️</div>
+<div style="font-size:1.5em">⬇️</div>
+<div>2. Update state 🔁</div>
+<div style="font-size:1.5em">⬇️</div>
+<div>3. Draw frame 🎨</div>
+<div style="font-size:1.4em;color:var(--accent)">⤴ 60×/sec</div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Open the window</h2>
+<pre><span class="kw">import</span> pygame
+pygame.<span class="fn">init</span>()
+
+WIDTH, HEIGHT = <span class="num">800</span>, <span class="num">600</span>
+screen = pygame.display.<span class="fn">set_mode</span>((WIDTH, HEIGHT))
+pygame.display.<span class="fn">set_caption</span>(<span class="str">"My Platformer"</span>)
+clock = pygame.time.<span class="fn">Clock</span>()</pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The full loop</h2>
+<pre>running = <span class="kw">True</span>
+<span class="kw">while</span> running:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+
+    screen.<span class="fn">fill</span>((<span class="num">135</span>, <span class="num">206</span>, <span class="num">235</span>))  <span class="com"># sky blue</span>
+    pygame.display.<span class="fn">flip</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)
+
+pygame.<span class="fn">quit</span>()</pre></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>RGB colors = 3 numbers</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card" style="background:rgb(135,206,235);color:#1a1a2e"><div class="ico">☀️</div><div class="name">Sky</div><div class="ex">(135,206,235)</div></div>
+<div class="opt-card" style="background:rgb(95,60,30);color:white"><div class="ico">🟫</div><div class="name" style="color:white">Dirt</div><div class="ex" style="color:white">(95,60,30)</div></div>
+<div class="opt-card" style="background:rgb(220,50,50);color:white"><div class="ico">🟥</div><div class="name" style="color:white">Player</div><div class="ex" style="color:white">(220,50,50)</div></div>
+</div>
+<p class="center" style="margin-top:.8em">Each 0-255: red, green, blue.</p></div>
+
+<div class="slide"><div class="pill">Why 60 FPS?</div><h2><code>clock.tick(60)</code></h2>
+<p>Locks the loop to <span class="sub">60 frames per second</span>.</p>
+<ul class="check-list" style="margin-top:.5em">
+<li>Smooth animation</li>
+<li>Same speed on slow/fast computers</li>
+<li>Standard for 2D games</li>
+</ul></div>
+
+<div class="slide"><div class="pill">⚠️ Don't forget</div><h2>Three musts</h2>
+<ul class="check-list">
+<li><code>pygame.init()</code> — start engine</li>
+<li><code>pygame.QUIT</code> handler — close window</li>
+<li><code>pygame.display.flip()</code> — show frame</li>
+</ul>
+<p style="margin-top:1em">Miss any → game won't behave right.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Open your world 🪟</h2>
+<ul class="check-list">
+<li>800×600 sky-blue window</li>
+<li>X button closes window</li>
+<li>FPS locked to 60</li>
+<li>Try changing background color</li>
+<li>Try a 1024×768 window</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🪟</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">World ready!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: spawn the player.</p>
+<p class="bilingual">다음 주: 플레이어 캐릭터</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS004 W4 — Platforms</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS004 · Platformer · Week 4</div>
+
+<div class="slide active center-all"><div class="pill">Week 4</div><div class="emoji">🟫</div>
+<h1>Platforms<br>+ Collision</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);"><code>colliderect()</code> + landing</p>
+<p class="bilingual">플랫폼 충돌</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Platforms = list of Rects</h2>
+<pre>platforms = [
+    pygame.<span class="fn">Rect</span>(<span class="num">0</span>, <span class="num">550</span>, <span class="num">800</span>, <span class="num">50</span>),     <span class="com"># ground</span>
+    pygame.<span class="fn">Rect</span>(<span class="num">200</span>, <span class="num">450</span>, <span class="num">120</span>, <span class="num">20</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">400</span>, <span class="num">350</span>, <span class="num">120</span>, <span class="num">20</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">600</span>, <span class="num">250</span>, <span class="num">120</span>, <span class="num">20</span>),
+]</pre>
+<p style="margin-top:1em">Each: <code>(x, y, width, height)</code>.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>colliderect()</code> — overlap check</h2>
+<pre>player = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">500</span>, <span class="num">50</span>, <span class="num">50</span>)
+platform = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">540</span>, <span class="num">200</span>, <span class="num">20</span>)
+
+<span class="kw">if</span> player.<span class="fn">colliderect</span>(platform):
+    <span class="fn">print</span>(<span class="str">"touching!"</span>)</pre>
+<p style="margin-top:1em">Two boxes overlap → <code>True</code>.</p></div>
+
+<div class="slide"><div class="pill">Tricky</div><h2>Land only when <span class="sub">falling</span></h2>
+<pre><span class="kw">for</span> plat <span class="kw">in</span> platforms:
+    <span class="kw">if</span> player.<span class="fn">colliderect</span>(plat) <span class="kw">and</span> velocity_y &gt; <span class="num">0</span>:
+        player.bottom = plat.top
+        velocity_y = <span class="num">0</span>
+        on_ground = <span class="kw">True</span></pre>
+<p style="margin-top:1em">Only land if <span class="sub">moving down</span>. Otherwise can pass through from below.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Snap to top</h2>
+<div style="background:var(--code-bg);color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.6">
+<div>player falling 🟥</div>
+<div>     ⬇️ touches platform</div>
+<div>┌────platform────┐</div>
+<div>│                │</div>
+<div>└────────────────┘</div>
+<div style="color:var(--accent)">player.bottom = plat.top  ✅</div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Each frame: gravity → check</h2>
+<pre>velocity_y += GRAVITY
+player.y += velocity_y
+on_ground = <span class="kw">False</span>
+
+<span class="kw">for</span> plat <span class="kw">in</span> platforms:
+    <span class="kw">if</span> player.<span class="fn">colliderect</span>(plat) <span class="kw">and</span> velocity_y &gt; <span class="num">0</span>:
+        player.bottom = plat.top
+        velocity_y = <span class="num">0</span>
+        on_ground = <span class="kw">True</span></pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Draw all platforms</h2>
+<pre>BROWN = (<span class="num">95</span>, <span class="num">60</span>, <span class="num">30</span>)
+
+<span class="kw">for</span> plat <span class="kw">in</span> platforms:
+    pygame.draw.<span class="fn">rect</span>(screen, BROWN, plat)</pre>
+<p style="margin-top:1em">Loop through list → draw each one. <code>for</code> loop wins again!</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Set <code>on_ground = False</code> first</h2>
+<pre>on_ground = <span class="kw">False</span>            <span class="com"># reset</span>
+
+<span class="kw">for</span> plat <span class="kw">in</span> platforms:
+    <span class="kw">if</span> ...:
+        on_ground = <span class="kw">True</span>     <span class="com"># landed!</span></pre>
+<p style="margin-top:1em">Otherwise <code>on_ground</code> stays True after walking off a platform!</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add platforms 🟫</h2>
+<ul class="check-list">
+<li>Make a <code>platforms</code> list with 4 Rects</li>
+<li>Apply gravity every frame</li>
+<li>For each platform: check <code>colliderect</code></li>
+<li>Snap player to <code>plat.top</code> when landing</li>
+<li>Place 5 platforms — make all reachable!</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🟫</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Platforms work!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: design fun levels.</p>
+<p class="bilingual">다음 주: 레벨 디자인</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB003 W6 — Dark Mode</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB003 · Portfolio · Week 6</div>
+
+<div class="slide active center-all"><div class="pill">Week 6</div><div class="emoji">🌙</div>
+<h1>Dark Mode<br>Toggle</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">JS + CSS classes</p>
+<p class="bilingual">JavaScript로 다크 모드</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Dark mode = a class swap</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card" style="background:white"><div class="ico">☀️</div><div class="name">Light</div><div class="ex">no class</div></div>
+<div class="opt-card" style="background:#1a1a1a;color:white"><div class="ico">🌙</div><div class="name" style="color:white">Dark</div><div class="ex" style="color:#aaa">body.dark</div></div>
+</div>
+<p class="big center" style="margin-top:1em">Add/remove <code>.dark</code> on body. Done.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>CSS — two themes</h2>
+<pre>body {
+  background-color: <span style="color:#bd93f9">var(--background)</span>;
+  color: <span style="color:#bd93f9">var(--text)</span>;
+  transition: background <span style="color:#bd93f9">0.3s</span>, color <span style="color:#bd93f9">0.3s</span>;
+}
+
+body.dark {
+  background-color: <span style="color:#bd93f9">#1a1a1a</span>;
+  color: <span style="color:#bd93f9">#f0f0f0</span>;
+}
+body.dark .project-card {
+  background: <span style="color:#bd93f9">#2a2a2a</span>;
+}</pre></div>
+
+<div class="slide"><div class="pill">Tool</div><h2><code>classList.toggle()</code></h2>
+<pre>document.body.classList.<span class="fn">toggle</span>(<span style="color:#f1fa8c">"dark"</span>);</pre>
+<p style="margin-top:1em">Class on? → remove it. Class off? → add it.</p>
+<p class="bilingual">한 줄로 토글</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Toggle button</h2>
+<pre>&lt;button id=<span style="color:#f1fa8c">"darkBtn"</span>&gt;Dark Mode&lt;/button&gt;
+
+&lt;script&gt;
+  <span class="kw">const</span> btn = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#darkBtn"</span>);
+
+  btn.<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"click"</span>, () =&gt; {
+    document.body.classList.<span class="fn">toggle</span>(<span style="color:#f1fa8c">"dark"</span>);
+
+    <span class="kw">if</span> (document.body.classList.<span class="fn">contains</span>(<span style="color:#f1fa8c">"dark"</span>)) {
+      btn.textContent = <span style="color:#f1fa8c">"Light Mode"</span>;
+    } <span class="kw">else</span> {
+      btn.textContent = <span style="color:#f1fa8c">"Dark Mode"</span>;
+    }
+  });
+&lt;/script&gt;</pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2>Remember user choice</h2>
+<pre><span class="com">// when toggling, save it</span>
+localStorage.<span class="fn">setItem</span>(<span style="color:#f1fa8c">"theme"</span>,
+  document.body.classList.<span class="fn">contains</span>(<span style="color:#f1fa8c">"dark"</span>) ? <span style="color:#f1fa8c">"dark"</span> : <span style="color:#f1fa8c">"light"</span>);
+
+<span class="com">// on page load, restore it</span>
+<span class="kw">if</span> (localStorage.<span class="fn">getItem</span>(<span style="color:#f1fa8c">"theme"</span>) === <span style="color:#f1fa8c">"dark"</span>) {
+  document.body.classList.<span class="fn">add</span>(<span style="color:#f1fa8c">"dark"</span>);
+}</pre>
+<p style="margin-top:.6em">User's choice <span class="sub">sticks</span> on refresh!</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>localStorage</code></h2>
+<p class="big">A <span class="sub">tiny database</span> in the browser.</p>
+<ul class="check-list" style="margin-top:.6em">
+<li>Saves text values</li>
+<li>Survives page refresh</li>
+<li>Per site (each domain has its own)</li>
+</ul>
+<p class="bilingual center" style="margin-top:.6em">새로고침 후에도 기억</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Test all sections</h2>
+<p>After adding dark mode, check:</p>
+<ul class="check-list" style="margin-top:.6em">
+<li>Card backgrounds — readable in dark?</li>
+<li>Borders — still visible?</li>
+<li>Hero — text contrast OK?</li>
+<li>Links — colored enough to see?</li>
+</ul></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add the toggle 🌙</h2>
+<ul class="check-list">
+<li>Dark mode button somewhere visible</li>
+<li>CSS for <code>body.dark</code> + cards in dark</li>
+<li>JS toggles class + button text</li>
+<li>Bonus: localStorage to remember</li>
+<li>Submit BOTH light + dark screenshots</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">🌙</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Day &amp; night!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: contact form + smooth scroll.</p>
+<p class="bilingual">다음 주: 연락처 폼</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

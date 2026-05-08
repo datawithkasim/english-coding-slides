@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB003 W7 — Form + Smooth Scroll</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">WEB003 · Portfolio · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">📬</div>
+<h1>Contact Form<br>+ Smooth Scroll</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Form handling + UX polish</p>
+<p class="bilingual">연락처 폼 + 부드러운 스크롤</p></div>
+
+<div class="slide"><div class="pill">Tool</div><h2><code>&lt;form&gt;</code> tag</h2>
+<pre>&lt;form id=<span style="color:#f1fa8c">"contactForm"</span>&gt;
+  &lt;input type=<span style="color:#f1fa8c">"text"</span> id=<span style="color:#f1fa8c">"name"</span>
+         placeholder=<span style="color:#f1fa8c">"Name"</span> required&gt;
+
+  &lt;textarea id=<span style="color:#f1fa8c">"msg"</span>
+            placeholder=<span style="color:#f1fa8c">"Message"</span> required&gt;&lt;/textarea&gt;
+
+  &lt;button type=<span style="color:#f1fa8c">"submit"</span>&gt;Send&lt;/button&gt;
+&lt;/form&gt;</pre>
+<p style="margin-top:.6em"><code>required</code> = browser blocks empty submit.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>submit</code> event</h2>
+<pre>document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#contactForm"</span>)
+  .<span class="fn">addEventListener</span>(<span style="color:#f1fa8c">"submit"</span>, <span class="kw">function</span>(event) {
+    event.<span class="fn">preventDefault</span>();   <span class="com">// stop reload</span>
+
+    <span class="kw">let</span> name = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#name"</span>).value;
+    <span class="kw">let</span> msg  = document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#msg"</span>).value;
+
+    <span class="fn">console.log</span>(name, msg);
+    <span class="com">// show thank-you message</span>
+  });</pre></div>
+
+<div class="slide"><div class="pill">Why</div><h2><code>preventDefault()</code> ?</h2>
+<p>By default, forms <span class="sub">reload the page</span> on submit.</p>
+<p style="margin-top:.6em">For a fancy site → don't want that. Stop it with <code>preventDefault()</code>.</p>
+<p class="bilingual" style="margin-top:.6em">기본 새로고침 막기</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Show thanks, hide form</h2>
+<pre>&lt;p id=<span style="color:#f1fa8c">"thanks"</span> style=<span style="color:#f1fa8c">"display:none"</span>&gt;
+  Thanks! Got your message.
+&lt;/p&gt;
+
+<span class="com">// in submit handler</span>
+document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#contactForm"</span>).style.display = <span style="color:#f1fa8c">"none"</span>;
+document.<span class="fn">querySelector</span>(<span style="color:#f1fa8c">"#thanks"</span>).style.display = <span style="color:#f1fa8c">"block"</span>;</pre></div>
+
+<div class="slide"><div class="pill">Form CSS</div><h2>Tidy form layout</h2>
+<pre>form {
+  display: <span style="color:#bd93f9">flex</span>;
+  flex-direction: <span style="color:#bd93f9">column</span>;
+  gap: <span style="color:#bd93f9">var(--s2)</span>;
+  max-width: <span style="color:#bd93f9">400px</span>;
+}
+input, textarea {
+  padding: <span style="color:#bd93f9">var(--s2)</span>;
+  font-size: <span style="color:#bd93f9">16px</span>;
+  border-radius: <span style="color:#bd93f9">8px</span>;
+  border: <span style="color:#bd93f9">1px solid #ccc</span>;
+}</pre></div>
+
+<div class="slide"><div class="pill">Bonus</div><h2><code>scroll-behavior: smooth</code></h2>
+<pre>html {
+  scroll-behavior: <span style="color:#bd93f9">smooth</span>;
+}</pre>
+<p style="margin-top:1em">One line. Now nav clicks animate smoothly to each section. ✨</p>
+<p class="bilingual">한 줄로 부드러운 스크롤</p></div>
+
+<div class="slide"><div class="pill">⚠️ Watch</div><h2>Email isn't actually sent!</h2>
+<p>This form just <span class="sub">prints to console</span>. To really email →</p>
+<ul class="check-list" style="margin-top:.6em">
+<li>Use Formspree.io (free)</li>
+<li>Or Netlify Forms (free)</li>
+<li>Or <code>mailto:</code> link (simplest)</li>
+</ul>
+<p style="margin-top:.6em">For class: console.log is enough.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Add the form 📬</h2>
+<ul class="check-list">
+<li>Form with name + message fields</li>
+<li>Submit handler with <code>preventDefault()</code></li>
+<li>Hide form, show thanks message</li>
+<li>Add <code>scroll-behavior: smooth</code></li>
+<li>Test nav clicks smooth-scroll</li>
+</ul></div>
+
+<div class="slide center-all"><div class="emoji">📬</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Almost there!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: final polish &amp; publish.</p>
+<p class="bilingual">다음 주: 최종 공개</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>
