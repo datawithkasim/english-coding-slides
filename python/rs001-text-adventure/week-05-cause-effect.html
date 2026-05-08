@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 5 — Cause &amp; Effect</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 5</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 5</div>
+    <div class="emoji">⚡</div>
+    <h1>Cause<br>&amp; Effect</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);"><code>if</code> / <code>else</code> + enemies</p>
+    <p class="bilingual">선택이 결과를 만들어요</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">Big idea</div>
+    <h2>Choices create different stories 📖</h2>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 1em;">
+      <div class="opt-card">
+        <div class="ico">⚔️</div>
+        <div class="name">Diamond mine</div>
+        <div class="ex">→ find a sword</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">🐉</div>
+        <div class="name">Dark cave</div>
+        <div class="ex">→ meet a dragon!</div>
+      </div>
+    </div>
+    <p class="big center" style="margin-top: 1em;">Same game. <span class="sub">Different outcome</span>.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">Concept 1</div>
+    <h2><code>if</code> / <code>else</code> — two paths</h2>
+<pre><span class="kw">if</span> choice == <span class="str">"diamond mine"</span>:
+    <span class="fn">print</span>(<span class="str">"You find a sword!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Nothing here..."</span>)</pre>
+    <p style="margin-top: 1em;"><code>if</code> = first path. <code>else</code> = backup path.</p>
+    <p class="bilingual">if = 만약, else = 아니면</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2>Many paths: <code>if / elif / else</code></h2>
+<pre><span class="kw">if</span> choice == locations[<span class="num">0</span>]:
+    <span class="fn">print</span>(<span class="str">"diamond mine — find a sword!"</span>)
+<span class="kw">elif</span> choice == locations[<span class="num">1</span>]:
+    <span class="fn">print</span>(<span class="str">"gold mine — find gold!"</span>)
+<span class="kw">elif</span> choice == locations[<span class="num">2</span>]:
+    <span class="fn">print</span>(<span class="str">"dark cave — a dragon!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"blocked cave — try again"</span>)</pre>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">How it flows</div>
+    <h2>Python checks top → bottom</h2>
+    <div style="margin-top: 1em;">
+      <div class="iter-row" style="flex-direction:column; gap: .4em; align-items:stretch;">
+        <div class="iter-item" style="background:white; color:var(--ink); border:2px solid var(--accent); text-align:left;">if choice == "diamond mine":  <span style="color:var(--fn);">match? ✅</span></div>
+        <div class="iter-item" style="background:white; color:#aaa; border:2px solid #eee; text-align:left;">elif choice == "gold mine":  <span>skip</span></div>
+        <div class="iter-item" style="background:white; color:#aaa; border:2px solid #eee; text-align:left;">elif choice == "dark cave":  <span>skip</span></div>
+        <div class="iter-item" style="background:white; color:#aaa; border:2px solid #eee; text-align:left;">else:  <span>skip</span></div>
+      </div>
+    </div>
+    <p class="center" style="margin-top: 1em;">First match wins. The rest are <span class="sub">skipped</span>.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Enemy data</div>
+    <h2>Enemies in a list 🐉</h2>
+<pre>enemies = [<span class="str">"dragon"</span>, <span class="str">"goblin"</span>, <span class="str">"slime"</span>]
+<span class="fn">print</span>(<span class="str">f"A wild {enemies[0]} appears!"</span>)</pre>
+    <div class="output-box" style="margin-top: 1em;">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1;">A wild dragon appears!</div>
+    </div>
+    <p style="margin-top: .8em;">Enemy info lives in a list — easy to add more!</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">Together</div>
+    <h2>Choice → enemy</h2>
+<pre><span class="kw">if</span> choice == <span class="str">"dark cave"</span>:
+    <span class="fn">print</span>(<span class="str">f"You meet a {enemies[0]}!"</span>)
+<span class="kw">elif</span> choice == <span class="str">"gold mine"</span>:
+    <span class="fn">print</span>(<span class="str">f"You meet a {enemies[1]}!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"It's quiet..."</span>)</pre>
+    <p style="margin-top: 1em;">Player's choice → which enemy shows up. ⚔️</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">⚠️ Order matters</div>
+    <h2>First match wins</h2>
+<pre><span class="kw">if</span> hp &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"alive"</span>)
+<span class="kw">elif</span> hp &gt; <span class="num">50</span>:  <span class="com"># 🚫 never runs!</span>
+    <span class="fn">print</span>(<span class="str">"healthy"</span>)</pre>
+    <p style="margin-top: 1em;">If <code>hp = 80</code>, both are true — but only the first runs.</p>
+    <p style="margin-top: .3em;">Put the <span class="sub">most specific</span> case first.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Predict</div>
+    <h2>What prints?</h2>
+<pre>choice = <span class="str">"gold mine"</span>
+
+<span class="kw">if</span> choice == <span class="str">"diamond mine"</span>:
+    <span class="fn">print</span>(<span class="str">"💎"</span>)
+<span class="kw">elif</span> choice == <span class="str">"gold mine"</span>:
+    <span class="fn">print</span>(<span class="str">"🪙"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"❓"</span>)</pre>
+    <p class="big center sub" style="margin-top: 1em;">→ 🪙</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Build branching paths 🌳</h2>
+    <ul class="check-list">
+      <li>Make an <code>enemies</code> list</li>
+      <li>Use <code>if / elif / else</code> for each location</li>
+      <li>Each path → different enemy or item</li>
+      <li>Test all 4 choices!</li>
+    </ul>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide center-all">
+    <div class="emoji">⚡</div>
+    <h1 style="font-size: clamp(36px, 6.5vmin, 60px);">Story branches!</h1>
+    <p class="big" style="margin-top: .5em; color: var(--accent-2);">Next week: fight or think — strategy choices.</p>
+    <p class="bilingual">다음 주: 전략 선택</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 11</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

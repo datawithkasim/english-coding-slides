@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 4 — Input Validation</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 4</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 4</div>
+    <div class="emoji">🛡️</div>
+    <h1>Catch Bad<br>Choices</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);"><code>in</code> &amp; <code>not in</code></p>
+    <p class="bilingual">잘못된 입력 막기</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">The problem</div>
+    <h2>What if player types nonsense?</h2>
+    <div class="bubble-card you" style="margin: 1em 0;">"banana"</div>
+    <div class="bubble-card computer">😵 ...what?</div>
+    <p style="margin-top: 1em;">"banana" isn't a location. Game breaks!</p>
+    <p class="bilingual">존재하지 않는 답을 입력하면?</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">Concept 1</div>
+    <h2><code>in</code> — is it inside the list?</h2>
+<pre>locations = [<span class="str">"diamond mine"</span>, <span class="str">"gold mine"</span>]
+
+<span class="fn">print</span>(<span class="str">"gold mine"</span> <span class="kw">in</span> locations)
+<span class="fn">print</span>(<span class="str">"banana"</span> <span class="kw">in</span> locations)</pre>
+    <div class="output-box" style="margin-top: 1em;">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1;"><span style="color:var(--fn);">True</span></div>
+      <div style="opacity:1;"><span style="color:var(--kw);">False</span></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2><code>not in</code> — is it missing?</h2>
+<pre>locations = [<span class="str">"diamond mine"</span>, <span class="str">"gold mine"</span>]
+
+<span class="kw">if</span> <span class="str">"banana"</span> <span class="kw">not in</span> locations:
+    <span class="fn">print</span>(<span class="str">"That's not a real place!"</span>)</pre>
+    <p style="margin-top: 1em;"><code>not in</code> = opposite of <code>in</code>.</p>
+    <p class="bilingual">목록에 없으면 True</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">In your game</div>
+    <h2>Reject bad answers</h2>
+<pre>locations = [<span class="str">"diamond mine"</span>, <span class="str">"gold mine"</span>,
+             <span class="str">"dark cave"</span>, <span class="str">"blocked cave"</span>]
+
+choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">if</span> choice <span class="kw">not in</span> locations:
+    <span class="fn">print</span>(<span class="str">"Try again — pick a real place!"</span>)</pre>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Better still</div>
+    <h2>Give them another chance</h2>
+<pre>choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">while</span> choice <span class="kw">not in</span> locations:
+    <span class="fn">print</span>(<span class="str">"Not a real place. Try again."</span>)
+    choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()</pre>
+    <p style="margin-top: 1em;"><code>while</code> keeps asking until input is valid.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">Concept 3</div>
+    <h2>Default value when empty</h2>
+<pre>name = <span class="fn">input</span>(<span class="str">"Name? "</span>).<span class="fn">strip</span>()
+
+<span class="kw">if</span> name == <span class="str">""</span>:
+    name = <span class="str">"unknown traveler"</span>
+
+<span class="fn">print</span>(<span class="str">f"Hello, {name}!"</span>)</pre>
+    <p style="margin-top: 1em;">Empty input → use a backup. Game never breaks. 🛡️</p>
+    <p class="bilingual">기본값으로 게임을 안전하게</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">Live demo</div>
+    <h2>What happens on bad input</h2>
+    <div class="output-box" style="font-size: clamp(15px, 2.6vmin, 22px);">
+      <div class="out-label">▸ Game</div>
+      <div style="opacity:1; color: var(--str);">Where? <span style="color:white;">banana</span></div>
+      <div style="opacity:1;">Not a real place. Try again.</div>
+      <div style="opacity:1; color: var(--str);">Where? <span style="color:white;">DIAMOND MINE</span></div>
+      <div style="opacity:1;">You go to the diamond mine! ✅</div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Why validate?</div>
+    <h2>Why bother?</h2>
+    <ul class="check-list">
+      <li>Game doesn't crash on weird input</li>
+      <li>Player gets clear feedback</li>
+      <li>Hacker-proof — no surprises</li>
+      <li>Feels professional 💼</li>
+    </ul>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Add safety to your game 🛡️</h2>
+    <ul class="check-list">
+      <li>If choice <code>not in locations</code> → tell player</li>
+      <li>Use <code>while</code> to ask again</li>
+      <li>If name is <code>""</code> → use <code>"hero"</code></li>
+      <li>Test with weird inputs!</li>
+    </ul>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide center-all">
+    <div class="emoji">🛡️</div>
+    <h1 style="font-size: clamp(36px, 6.5vmin, 60px);">Bulletproof!</h1>
+    <p class="big" style="margin-top: .5em; color: var(--accent-2);">Next week: cause &amp; effect — choices change the world.</p>
+    <p class="bilingual">다음 주: 원인과 결과</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 11</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 7 — Random &amp; Probability</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 7</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 7</div>
+    <div class="emoji">🎲</div>
+    <h1>Random<br>&amp; Probability</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);"><code>random.choice()</code> + reward lists</p>
+    <p class="bilingual">확률과 랜덤성</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">Why?</div>
+    <h2>Surprise = fun 🎉</h2>
+    <p class="big">Same input → <span class="sub">different result</span> every time.</p>
+    <div class="bubble-card you" style="margin: 1em 0;">"open chest"</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em;">
+      <div class="opt-card"><div class="ico">⚔️</div><div class="name">sword</div></div>
+      <div class="opt-card"><div class="ico">🛡️</div><div class="name">shield</div></div>
+      <div class="opt-card"><div class="ico">💎</div><div class="name">gem</div></div>
+    </div>
+    <p class="bilingual center" style="margin-top: 1em;">매번 다른 결과 → 더 재밌어요!</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide center-all">
+    <div class="pill">Concept 1</div>
+    <h2 style="text-align:center;">What is <code>random</code>?</h2>
+    <div class="emoji">🎲</div>
+    <p class="big"><span class="sub">random</span> picks something <em>by chance</em>.</p>
+    <p style="margin-top: .3em;">Like rolling a dice or pulling a card.</p>
+    <p class="bilingual">무작위로 고르기</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide center-all">
+    <div class="pill">First step</div>
+    <h2>Get the random tool</h2>
+    <p class="big">Add this line at the <span class="sub">top</span>:</p>
+<pre style="margin-top: .8em; text-align:left;"><span class="kw">import</span> random</pre>
+    <p style="margin-top: 1em;">Now you can use <code>random.choice()</code>.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2><code>random.choice()</code></h2>
+    <p>Pick <span class="sub">ONE</span> item from a list:</p>
+<pre><span class="kw">import</span> random
+
+rewards = [<span class="str">"sword"</span>, <span class="str">"shield"</span>, <span class="str">"gem"</span>, <span class="str">"potion"</span>]
+
+prize = random.<span class="fn">choice</span>(rewards)
+<span class="fn">print</span>(<span class="str">f"You found a {prize}!"</span>)</pre>
+    <p style="margin-top: .8em;">Output: <code>You found a sword!</code> ... or <code>shield</code> ... 🎰</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Watch it!</div>
+    <h2><code>random.choice()</code> — live!</h2>
+    <p style="margin-bottom: .6em;">Computer spins, picks one:</p>
+    <div class="picker" id="picker1" data-picker>
+      <div class="pickrow">
+        <div class="pkitem" data-v="sword">"sword"</div>
+        <div class="pkitem" data-v="shield">"shield"</div>
+        <div class="pkitem" data-v="gem">"gem"</div>
+        <div class="pkitem" data-v="potion">"potion"</div>
+      </div>
+      <div class="pkresult"><span class="arrow">prize = </span><span class="val"></span></div>
+    </div>
+    <p class="center" style="margin-top: .8em;">Different every time! 🎲</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">In your game</div>
+    <h2>Random enemy encounter 🐉</h2>
+<pre><span class="kw">import</span> random
+
+enemies = [<span class="str">"dragon"</span>, <span class="str">"goblin"</span>, <span class="str">"slime"</span>]
+
+enemy = random.<span class="fn">choice</span>(enemies)
+<span class="fn">print</span>(<span class="str">f"A wild {enemy} appears!"</span>)</pre>
+    <p style="margin-top: 1em;">Each play of your game = new enemy. 🌀</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">Combine</div>
+    <h2>Random + <code>if</code> for outcomes</h2>
+<pre>enemy = random.<span class="fn">choice</span>(enemies)
+
+<span class="kw">if</span> enemy == <span class="str">"dragon"</span>:
+    <span class="fn">print</span>(<span class="str">"🔥 Tough fight!"</span>)
+<span class="kw">elif</span> enemy == <span class="str">"goblin"</span>:
+    <span class="fn">print</span>(<span class="str">"😈 Sneaky..."</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"🟢 Easy!"</span>)</pre>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Concept 3</div>
+    <h2>Win &amp; lose states</h2>
+<pre>game_over = <span class="kw">False</span>
+game_win = <span class="kw">False</span>
+
+enemy = random.<span class="fn">choice</span>(enemies)
+<span class="kw">if</span> enemy == <span class="str">"dragon"</span> <span class="kw">and</span> <span class="str">"sword"</span> <span class="kw">not in</span> backpack:
+    game_over = <span class="kw">True</span></pre>
+    <p style="margin-top: 1em;">Track if player has <span class="sub">won</span> or <span class="sub">lost</span>.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="pill">Backpack idea</div>
+    <h2>Reward = put in backpack</h2>
+<pre>backpack = []
+
+prize = random.<span class="fn">choice</span>(rewards)
+backpack.<span class="fn">append</span>(prize)
+
+<span class="fn">print</span>(<span class="str">f"You got: {prize}"</span>)
+<span class="fn">print</span>(<span class="str">f"Backpack: {backpack}"</span>)</pre>
+    <p style="margin-top: 1em;"><code>.append()</code> adds to the list. 🎒</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide">
+    <div class="pill">⚠️ Common bug</div>
+    <h2>Forgetting <code>import</code></h2>
+<pre>prize = random.<span class="fn">choice</span>(rewards)
+<span class="com"># NameError: name 'random' is not defined</span></pre>
+    <p style="margin-top: 1em;">Always add <code>import random</code> at the <span class="sub">top</span>!</p>
+    <p class="bilingual">맨 위에 import 잊지 마세요</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Add randomness 🎰</h2>
+    <ul class="check-list">
+      <li>Add <code>import random</code> at top</li>
+      <li>Make a <code>rewards</code> list</li>
+      <li>Use <code>random.choice(rewards)</code> for chest loot</li>
+      <li>Make different enemies appear randomly</li>
+      <li>Test your game 5 times — each play different!</li>
+    </ul>
+  </div>
+
+  <!-- 13 -->
+  <div class="slide center-all">
+    <div class="emoji">🎲</div>
+    <h1 style="font-size: clamp(36px, 6.5vmin, 60px);">Game feels alive!</h1>
+    <p class="big" style="margin-top: .5em; color: var(--accent-2);">Next week: multiple endings + final showdown.</p>
+    <p class="bilingual">다음 주: 여러 엔딩</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 13</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

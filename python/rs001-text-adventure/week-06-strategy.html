@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 6 — Fight or Think</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 6</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 6</div>
+    <div class="emoji">⚔️🤔</div>
+    <h1>Fight or<br>Think?</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);">Strategy choice + decision trees</p>
+    <p class="bilingual">전략 선택</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">Big idea</div>
+    <h2>One problem, many solutions</h2>
+    <div class="bubble-card computer" style="margin: 1em 0;">A dragon blocks your path!</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em; margin-top: 1em;">
+      <div class="opt-card"><div class="ico">⚔️</div><div class="name">Fight</div></div>
+      <div class="opt-card"><div class="ico">🏃</div><div class="name">Run</div></div>
+      <div class="opt-card"><div class="ico">🤝</div><div class="name">Talk</div></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">Concept 1</div>
+    <h2>Action list</h2>
+<pre>actions = [<span class="str">"fight"</span>, <span class="str">"run"</span>, <span class="str">"talk"</span>]</pre>
+    <p style="margin-top: 1em;">A list of <span class="sub">verbs</span> — what player CAN do.</p>
+    <p style="margin-top: .3em;">Like a menu in a fighting game. 🎮</p>
+    <p class="bilingual">행동 목록</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Get player's action</h2>
+<pre>actions = [<span class="str">"fight"</span>, <span class="str">"run"</span>, <span class="str">"talk"</span>]
+
+action = <span class="fn">input</span>(<span class="str">"What do you do? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">while</span> action <span class="kw">not in</span> actions:
+    <span class="fn">print</span>(<span class="str">"Pick: fight, run, or talk."</span>)
+    action = <span class="fn">input</span>(<span class="str">"What do you do? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()</pre>
+    <p style="margin-top: .8em;">Same validation pattern from week 4! ♻️</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">Decision tree</div>
+    <h2>Branch on action ⚔️🏃🤝</h2>
+<pre><span class="kw">if</span> action == <span class="str">"fight"</span>:
+    <span class="fn">print</span>(<span class="str">"You swing your sword!"</span>)
+<span class="kw">elif</span> action == <span class="str">"run"</span>:
+    <span class="fn">print</span>(<span class="str">"You escape... but lose your gold."</span>)
+<span class="kw">elif</span> action == <span class="str">"talk"</span>:
+    <span class="fn">print</span>(<span class="str">"The dragon listens. New friend?"</span>)</pre>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2>What is a <span class="sub">decision tree</span>?</h2>
+    <div style="margin-top: 1em; text-align:center; font-size: clamp(18px, 3vmin, 26px); line-height: 2;">
+      <div>🐉 dragon appears</div>
+      <div style="font-size:1.2em;">⬇️</div>
+      <div style="display:flex; justify-content:space-around; gap:.5em;">
+        <span style="background: var(--accent); color:white; padding: .3em .6em; border-radius: 10px;">⚔️ fight</span>
+        <span style="background: var(--accent-2); color:white; padding: .3em .6em; border-radius: 10px;">🏃 run</span>
+        <span style="background: var(--fn); color: var(--ink); padding: .3em .6em; border-radius: 10px;">🤝 talk</span>
+      </div>
+      <div style="font-size:1.2em;">⬇️</div>
+      <div style="opacity: .7; font-size: .85em;">3 different stories</div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">Reuse pattern</div>
+    <h2>Same recipe, new context 🍱</h2>
+    <ul class="check-list">
+      <li>Week 2 — make a <span class="sub">list</span></li>
+      <li>Week 3 — clean input <code>.lower().strip()</code></li>
+      <li>Week 4 — validate with <code>not in</code></li>
+      <li>Week 5 — branch with <code>if / elif</code></li>
+    </ul>
+    <p style="margin-top: 1em;">Now reuse all 4 — but for <span class="sub">actions</span> instead of locations.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">⚠️ Order matters</div>
+    <h2>Most specific first</h2>
+<pre><span class="com"># 🚫 BAD: 'run' matches 'runner' too?</span>
+<span class="kw">if</span> <span class="str">"run"</span> <span class="kw">in</span> action: ...
+
+<span class="com"># ✅ GOOD: exact match</span>
+<span class="kw">if</span> action == <span class="str">"run"</span>: ...</pre>
+    <p style="margin-top: 1em;">Use <code>==</code> for exact comparisons in this game.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Build the action menu ⚔️</h2>
+    <ul class="check-list">
+      <li>Make <code>actions = [...]</code></li>
+      <li>Ask &amp; clean input</li>
+      <li>Validate with <code>while not in</code></li>
+      <li>Branch with <code>if / elif / elif</code></li>
+      <li>Each action → unique result</li>
+    </ul>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide center-all">
+    <div class="emoji">🌳</div>
+    <h1 style="font-size: clamp(36px, 6.5vmin, 60px);">Decision tree mastered!</h1>
+    <p class="big" style="margin-top: .5em; color: var(--accent-2);">Next week: random surprises 🎲</p>
+    <p class="bilingual">다음 주: 확률과 랜덤성</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 10</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

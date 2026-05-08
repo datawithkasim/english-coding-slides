@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 8 — Multiple Endings</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 8</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 8</div>
+    <div class="emoji">🏆</div>
+    <h1>Multiple<br>Endings</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);">Knowledge-based logic + final game</p>
+    <p class="bilingual">논리, 이해, 여러 엔딩</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">Random vs logic</div>
+    <h2>Two ways to decide</h2>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 1em;">
+      <div class="opt-card" style="background: #fff5ee; border: 3px solid var(--accent);">
+        <div class="ico">🎲</div>
+        <div class="name" style="color:var(--accent);">Luck</div>
+        <div class="ex">random.choice()</div>
+      </div>
+      <div class="opt-card" style="background: #ede8fc; border: 3px solid var(--accent-2);">
+        <div class="ico">🧠</div>
+        <div class="name" style="color:var(--accent-2);">Knowledge</div>
+        <div class="ex">if "key" in backpack</div>
+      </div>
+    </div>
+    <p style="margin-top: 1em;">Today: ending depends on <span class="sub">what player has done</span>.</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">Concept 1</div>
+    <h2>Check the backpack</h2>
+<pre>backpack = [<span class="str">"sword"</span>, <span class="str">"key"</span>]
+
+<span class="kw">if</span> <span class="str">"key"</span> <span class="kw">in</span> backpack:
+    <span class="fn">print</span>(<span class="str">"You unlock the chest!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Locked. Find a key first."</span>)</pre>
+    <p style="margin-top: 1em;">Result depends on <span class="sub">player's items</span>. Not luck!</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2>Parallel lists</h2>
+<pre>questions = [<span class="str">"Capital of Korea?"</span>, <span class="str">"2 + 2?"</span>]
+answers   = [<span class="str">"seoul"</span>, <span class="str">"4"</span>]</pre>
+    <p style="margin-top: 1em;">Two lists, <span class="sub">same length</span>. Index 0 in one matches index 0 in the other.</p>
+    <p class="bilingual">두 리스트가 인덱스로 짝</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">How they pair up</div>
+    <h2>Pair by index</h2>
+    <div style="margin-top: 1em;">
+      <div class="iter-row">
+        <div class="iter-item" style="background: var(--accent); color:white;">"Capital of Korea?"</div>
+        <div class="iter-item" style="background: var(--accent); color:white;">"2 + 2?"</div>
+      </div>
+      <div style="text-align:center; font-size: 2em; margin: .3em 0;">⬇️</div>
+      <div class="iter-row">
+        <div class="iter-item" style="background: var(--accent-2); color:white;">"seoul"</div>
+        <div class="iter-item" style="background: var(--accent-2); color:white;">"4"</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top: 1em;">questions[0] pairs with answers[0].</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Quiz with parallel lists</h2>
+<pre>player = <span class="fn">input</span>(<span class="str">f"{questions[0]} "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">if</span> player == answers[<span class="num">0</span>]:
+    <span class="fn">print</span>(<span class="str">"Correct! 🏆"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Wrong. Try harder."</span>)</pre>
+    <p style="margin-top: 1em;">Match player input to the answer at <span class="sub">same index</span>.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">Final endings</div>
+    <h2>3 endings based on choices</h2>
+<pre><span class="kw">if</span> <span class="str">"map"</span> <span class="kw">in</span> backpack <span class="kw">and</span> <span class="str">"sword"</span> <span class="kw">in</span> backpack:
+    <span class="fn">print</span>(<span class="str">"🏆 Hero ending!"</span>)
+<span class="kw">elif</span> <span class="str">"map"</span> <span class="kw">in</span> backpack:
+    <span class="fn">print</span>(<span class="str">"🗺️ Explorer ending"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"😴 Lost in the cave..."</span>)</pre>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">Concept 3</div>
+    <h2>Combine: <code>and</code> / <code>or</code></h2>
+<pre><span class="com"># both must be true</span>
+<span class="kw">if</span> <span class="str">"key"</span> <span class="kw">in</span> backpack <span class="kw">and</span> <span class="str">"map"</span> <span class="kw">in</span> backpack:
+
+<span class="com"># either is enough</span>
+<span class="kw">if</span> <span class="str">"sword"</span> <span class="kw">in</span> backpack <span class="kw">or</span> <span class="str">"shield"</span> <span class="kw">in</span> backpack:</pre>
+    <p style="margin-top: 1em;"><code>and</code> = both. <code>or</code> = one or both.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Game flow</div>
+    <h2>Full structure</h2>
+<pre>area = <span class="str">"chapter 1"</span>
+<span class="kw">while</span> area == <span class="str">"chapter 1"</span>:
+    <span class="com"># player makes choices...</span>
+    <span class="kw">if</span> won_chapter:
+        area = <span class="str">"chapter 2"</span>
+
+<span class="kw">if</span> game_over: <span class="fn">print</span>(<span class="str">"Game Over!"</span>)
+<span class="kw">if</span> game_win:  <span class="fn">print</span>(<span class="str">"You win!"</span>)</pre>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="pill">All 8 weeks</div>
+    <h2>Look how far you came! 🚀</h2>
+    <ul class="check-list" style="font-size: clamp(15px, 2.5vmin, 20px);">
+      <li>Variables + input (week 1)</li>
+      <li>Lists + index (week 2)</li>
+      <li>Clean input (week 3)</li>
+      <li>Validation (week 4)</li>
+      <li>If / else cause &amp; effect (week 5)</li>
+      <li>Decision trees (week 6)</li>
+      <li>Random surprises (week 7)</li>
+      <li>Logic + endings (this week!)</li>
+    </ul>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Finish your game 🎮</h2>
+    <ul class="check-list">
+      <li>Use <code>if "item" in backpack</code> for endings</li>
+      <li>Combine with <code>and</code> / <code>or</code></li>
+      <li>Make at least <span class="sub">2 different endings</span></li>
+      <li>Add a final <code>print</code> for victory!</li>
+    </ul>
+  </div>
+
+  <!-- 12 -->
+  <div class="slide center-all">
+    <div class="emoji">🏆</div>
+    <h1 style="font-size: clamp(40px, 7vmin, 70px);">You finished<br>RS001!</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);">You built a complete Python game. 🎉</p>
+    <p class="bilingual">완성된 게임을 만들었어요!</p>
+    <div class="fruit-row" style="margin-top: 1em; font-size: clamp(34px, 6vmin, 56px);">
+      <span>⚔️</span><span>🐉</span><span>💎</span><span>🏰</span>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 12</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

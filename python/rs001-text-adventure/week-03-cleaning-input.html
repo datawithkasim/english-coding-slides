@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS001 Week 3 — Cleaning Player Input</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · Week 3</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Week 3</div>
+    <div class="emoji">🧼</div>
+    <h1>Cleaning<br>Player Input</h1>
+    <p class="big" style="margin-top: .8em; color: var(--accent-2);"><code>.strip()</code> &amp; <code>.lower()</code></p>
+    <p class="bilingual">플레이어 입력 정리하기</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill">The problem</div>
+    <h2>Players type messy text</h2>
+    <div class="bubble-card you" style="margin: 1.5em 0;">"  Gold Mine  "</div>
+    <div class="bubble-card computer">😕 "Gold Mine" ≠ "gold mine"</div>
+    <p style="margin-top: 1em;">Extra spaces. Big letters. Computer thinks it's different!</p>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">Concept 1</div>
+    <h2><code>.strip()</code> — remove spaces</h2>
+<pre>name = <span class="str">"  Kasim  "</span>
+clean = name.<span class="fn">strip</span>()
+<span class="fn">print</span>(clean)</pre>
+    <div class="output-box" style="margin-top: 1em;">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1;">Kasim</div>
+    </div>
+    <p style="margin-top: .8em;">Strips off blank space at start and end.</p>
+    <p class="bilingual">앞뒤 공백 제거</p>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill">Concept 2</div>
+    <h2><code>.lower()</code> — make lowercase</h2>
+<pre>choice = <span class="str">"GOLD MINE"</span>
+small = choice.<span class="fn">lower</span>()
+<span class="fn">print</span>(small)</pre>
+    <div class="output-box" style="margin-top: 1em;">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1;">gold mine</div>
+    </div>
+    <p style="margin-top: .8em;">Big letters → small letters.</p>
+    <p class="bilingual">대문자 → 소문자</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">Why?</div>
+    <h2>Computer is picky 🤖</h2>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 1em;">
+      <div class="varbox">
+        <span class="name">"Gold Mine"</span>
+        <span class="val">≠</span>
+      </div>
+      <div class="varbox" style="border-color: var(--accent-2);">
+        <span class="name" style="color:var(--accent-2);">"gold mine"</span>
+        <span class="val">≠</span>
+      </div>
+    </div>
+    <p style="margin-top: 1em;">Same word to humans. <span class="sub">Different</span> to Python!</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <div class="pill">Combine!</div>
+    <h2>Chain them together</h2>
+<pre>choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()</pre>
+    <p style="margin-top: 1em;">One line:</p>
+    <ul style="margin-top: .5em;">
+      <li>Get player input</li>
+      <li><code>.lower()</code> → small letters</li>
+      <li><code>.strip()</code> → no spaces</li>
+    </ul>
+    <p class="big sub" style="margin-top: 1em;">Always clean! ✨</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill">Live test</div>
+    <h2>Watch the cleaning 🧽</h2>
+    <div style="margin-top: 1em;">
+      <div class="bubble-card you">"  Diamond Mine  "</div>
+      <div style="text-align:center; font-size:2em; margin: .3em 0;">⬇️ <code>.lower()</code></div>
+      <div class="bubble-card you">"  diamond mine  "</div>
+      <div style="text-align:center; font-size:2em; margin: .3em 0;">⬇️ <code>.strip()</code></div>
+      <div class="bubble-card you" style="background: var(--accent); color: white;">"diamond mine" ✅</div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <div class="pill">In your game</div>
+    <h2>Match player choice to list</h2>
+<pre>locations = [<span class="str">"diamond mine"</span>, <span class="str">"gold mine"</span>,
+             <span class="str">"dark cave"</span>, <span class="str">"blocked cave"</span>]
+
+choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="kw">if</span> choice == locations[<span class="num">0</span>]:
+    <span class="fn">print</span>(<span class="str">"You go to the diamond mine!"</span>)</pre>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <div class="pill">Result</div>
+    <h2>All these work the same now ✅</h2>
+    <ul class="check-list">
+      <li><code>"diamond mine"</code></li>
+      <li><code>"Diamond Mine"</code></li>
+      <li><code>"DIAMOND MINE"</code></li>
+      <li><code>"  Diamond Mine  "</code></li>
+    </ul>
+    <p style="margin-top: 1em;">All become <code>"diamond mine"</code> after cleaning. 🧼</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <div class="pill">⚠️ Order matters</div>
+    <h2>Method order</h2>
+<pre><span class="com"># works:</span>
+choice = <span class="fn">input</span>(<span class="str">"? "</span>).<span class="fn">lower</span>().<span class="fn">strip</span>()
+
+<span class="com"># also works:</span>
+choice = <span class="fn">input</span>(<span class="str">"? "</span>).<span class="fn">strip</span>().<span class="fn">lower</span>()</pre>
+    <p style="margin-top: 1em;">Both are fine here. Each method runs left → right.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Clean &amp; check 🧪</h2>
+    <ul class="check-list">
+      <li>Ask "Where will you go?"</li>
+      <li>Clean input with <code>.lower().strip()</code></li>
+      <li>If choice == <code>locations[0]</code> → print "You go to diamond mine!"</li>
+      <li>Test typing it with weird capitals + spaces</li>
+    </ul>
+  </div>
+
+  <!-- 12 -->
+  <div class="slide center-all">
+    <div class="emoji">🧼</div>
+    <h1 style="font-size: clamp(36px, 6.5vmin, 60px);">Clean input!</h1>
+    <p class="big" style="margin-top: .5em; color: var(--accent-2);">Next week: catch invalid input.</p>
+    <p class="bilingual">다음 주: 잘못된 입력 막기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="previous slide">‹</button>
+    <span class="counter" id="counter">1 / 12</span>
+    <button id="next" aria-label="next slide">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
