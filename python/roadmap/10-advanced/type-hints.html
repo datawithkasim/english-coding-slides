@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Type hints — Python Roadmap</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Stage 10 · Advanced Python · Type hints</div>
+
+  <!-- 1: Title -->
+  <div class="slide active center-all">
+    <div class="pill ">10.7</div>
+    <div class="emoji">🧙</div>
+    <h1>Type hints</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Stage 10 · Advanced Python</p>
+  </div>
+
+  <!-- 2: Why care -->
+  <div class="slide">
+    <div class="pill">Why</div>
+    <h2>Why this matters</h2>
+    <p class="big" style="margin-top:.4em">Optional annotations that describe types. Python itself ignores them — tools (mypy, pyright, IDEs) use them.</p>
+  </div>
+
+  <!-- 3: Concept -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <h2>What is it?</h2>
+    <div class="topic-grid" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">name: type</div><div class="desc">param hints</div></div>
+      <div class="topic-chip"><div class="head">-&gt; type</div><div class="desc">return hint</div></div>
+    </div>
+    <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Optional annotations that describe types. Python itself ignores them — tools (mypy, pyright, IDEs) use them.</p>
+  </div>
+
+  <!-- 4: Code -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Example</h2>
+<pre>def greet(name: str, age: int = 0) -&gt; str:
+    return f&#x27;{name} is {age}&#x27;
+
+from typing import Optional, List, Dict
+x: List[int] = [1, 2, 3]
+y: Optional[str] = None</pre>
+  </div>
+
+  <!-- 5: Core points -->
+  <div class="slide">
+    <div class="pill">Core</div>
+    <h2>Core points</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">name: type</div><div class="desc">param hints</div></div>
+      <div class="topic-chip"><div class="head">-&gt; type</div><div class="desc">return hint</div></div>
+      <div class="topic-chip"><div class="head">Optional[X]</div><div class="desc">X or None</div></div>
+    </div>
+  </div>
+
+  <!-- 6: More -->
+  <div class="slide">
+    <div class="pill">More</div>
+    <h2>Going deeper</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">List Dict Tuple</div><div class="desc">from typing</div></div>
+      <div class="topic-chip"><div class="head">3.9+</div><div class="desc">list dict directly</div></div>
+      <div class="topic-chip"><div class="head">Union[A,B] or A|B</div><div class="desc">either type</div></div>
+    </div>
+  </div>
+
+  <!-- 7: Edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas + pitfalls</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">name: type</div><div class="edesc">param hints</div></div>
+      <div class="edge-card"><div class="ehead">-&gt; type</div><div class="edesc">return hint</div></div>
+      <div class="edge-card"><div class="ehead">Optional[X]</div><div class="edesc">X or None</div></div>
+      <div class="edge-card"><div class="ehead">List Dict Tuple</div><div class="edesc">from typing</div></div>
+      <div class="edge-card"><div class="ehead">3.9+</div><div class="edesc">list dict directly</div></div>
+    </div>
+  </div>
+
+  <!-- 8: Debug — buggy code -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong with this code?</h2>
+    <div class="debug-box">
+      <div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">def greet(name: str, age: int = 0) -&gt; str:
+    return f&#x27;{name} is {age}&#x27;
+
+from typing improt Optional, List, Dict
+x: List[int] = [1, 2, 3]
+y: Optional[str] = None</pre>
+    </div>
+    <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
+  </div>
+
+  <!-- 9: Debug reveal -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug</h2>
+    <div class="debug-reveal"><b>Bug:</b> Typo: keyword is <code>import</code>, not <code>improt</code>. Python raises <code>SyntaxError</code>.</div>
+    <div class="debug-box" style="margin-top:.7em">
+      <div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em">def greet(name: str, age: int = 0) -&gt; str:
+    return f&#x27;{name} is {age}&#x27;
+
+from typing import Optional, List, Dict
+x: List[int] = [1, 2, 3]
+y: Optional[str] = None</pre>
+    </div>
+  </div>
+
+  <!-- MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 1 of 7</div>
+    <div class="q">Which best describes <b>Type hints</b>?</div>
+    <div class="opts">
+      <button class="opt">Optional annotations that describe types. Python itself ignores them — tools (mypy, pyright, IDEs) use them.</button>
+      <button class="opt">A deprecated alias for the name: type statement, removed in Python 3.</button>
+      <button class="opt">A Python 2-only feature; modern code uses something else.</button>
+      <button class="opt">A built-in keyword reserved for class definitions only.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Key fact: name: type.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 2 of 7</div>
+    <div class="q">Which is TRUE about <b>Type hints</b>?</div>
+    <div class="opts">
+      <button class="opt">name: type — param hints</button>
+      <button class="opt">It only works on Python 2.7 and earlier.</button>
+      <button class="opt">It cannot be combined with any other feature.</button>
+      <button class="opt">It must be declared at the top of every file.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 3 of 7</div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">def greet(name: str, age: int = 0) -&gt; str:
+    return f&#x27;{name} is {age}&#x27;
+
+from typing improt Optional, List, Dict
+x: List[int] = [1, 2, 3]
+y: Optional[str] = None</pre></div>
+    <div class="opts">
+      <button class="opt">Typo: keyword is import, not improt. Python raises SyntaxError.</button>
+      <button class="opt">Nothing — the code is correct as-is.</button>
+      <button class="opt">Missing <code>import sys</code> at the top.</button>
+      <button class="opt">The variable was never declared with <code>let</code>.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 4 -->
+  <div class="slide mcq" data-correct="0" data-explain="-&gt; type: return hint">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 4 of 7</div>
+    <div class="q">Which is the correct description of <code>-&gt; type</code> in Type hints?</div>
+    <div class="opts">
+      <button class="opt">-&gt; type → return hint</button>
+      <button class="opt">-&gt; type → something completely unrelated</button>
+      <button class="opt">-&gt; type is reserved and cannot be used in user code</button>
+      <button class="opt">-&gt; type works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 5 -->
+  <div class="slide mcq" data-correct="0" data-explain="Optional[X]: X or None">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 5 of 7</div>
+    <div class="q">Which is the correct description of <code>Optional[X]</code> in Type hints?</div>
+    <div class="opts">
+      <button class="opt">Optional[X] → X or None</button>
+      <button class="opt">Optional[X] → something completely unrelated</button>
+      <button class="opt">Optional[X] is reserved and cannot be used in user code</button>
+      <button class="opt">Optional[X] works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 6 -->
+  <div class="slide mcq" data-correct="0" data-explain="List Dict Tuple: from typing">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 6 of 7</div>
+    <div class="q">Which is the correct description of <code>List Dict Tuple</code> in Type hints?</div>
+    <div class="opts">
+      <button class="opt">List Dict Tuple → from typing</button>
+      <button class="opt">List Dict Tuple → something completely unrelated</button>
+      <button class="opt">List Dict Tuple is reserved and cannot be used in user code</button>
+      <button class="opt">List Dict Tuple works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 7 -->
+  <div class="slide mcq" data-correct="0" data-explain="3.9+: list dict directly">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 7 of 7</div>
+    <div class="q">Which is the correct description of <code>3.9+</code> in Type hints?</div>
+    <div class="opts">
+      <button class="opt">3.9+ → list dict directly</button>
+      <button class="opt">3.9+ → something completely unrelated</button>
+      <button class="opt">3.9+ is reserved and cannot be used in user code</button>
+      <button class="opt">3.9+ works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- MCQ score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 7</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- Related -->
+  <div class="slide">
+    <div class="pill purple">Related</div>
+    <h2>What next?</h2>
+    <p style="margin-top:.6em;font-size:clamp(15px,2.5vmin,19px);line-height:1.7">
+      <a href="../13-quality/mypy.html">mypy</a> · <a href="protocols.html">protocols</a> · <a href="../09-oop/dataclasses.html">dataclasses</a>
+    </p>
+    <p style="margin-top:1em;font-size:clamp(13px,2vmin,16px);opacity:.7">
+      <a href="../index.html" style="color:var(--accent);text-decoration:none">← all topics</a>
+      &nbsp;·&nbsp;
+      <a href="../../../all-slides.html" style="color:var(--accent);text-decoration:none">🗂 master library</a>
+      &nbsp;·&nbsp;
+      <a href="../../roadmap-mega.html" style="color:var(--accent);text-decoration:none">overview deck →</a>
+    </p>
+  </div>
+
+  <!-- Coding practice (LAST per request) -->
+  <div class="slide">
+    <div class="pill">💻 Practice</div>
+    <h2>Coding practice</h2>
+    <div class="practice-task">Extend the example: add one more case that uses <b>Type hints</b> in a different way. Print the result.</div>
+    <div class="debug-box">
+      <div class="debug-tag fix" style="background:var(--accent-2)">starter</div>
+<pre style="margin-top:.4em">def greet(name: str, age: int = 0) -&gt; str:
+    return f&#x27;{name} is {age}&#x27;
+
+from typing import Optional, List, Dict
+x: List[int] = [1, 2, 3]
+y: Optional[str] = None
+
+# Your turn: extend the example below this line.
+</pre>
+    </div>
+    <p class="practice-hint">Open your editor. Save as <code>practice.py</code>. Run it. Iterate.</p>
+  </div>
+
+  <!-- Close -->
+  <div class="slide center-all">
+    <div class="emoji">🧙</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Type hints</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Done. Next topic →</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="prev">‹</button>
+    <span class="counter" id="counter">1 / N</span>
+    <button id="next" aria-label="next">›</button>
+  </div>
+</div>
+<script src="../../../assets/deck.js"></script>
+</body>
+</html>

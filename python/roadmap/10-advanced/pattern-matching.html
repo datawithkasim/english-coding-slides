@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pattern matching (match/case) — Python Roadmap</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Stage 10 · Advanced Python · Pattern matching (match/case)</div>
+
+  <!-- 1: Title -->
+  <div class="slide active center-all">
+    <div class="pill ">10.9</div>
+    <div class="emoji">🧙</div>
+    <h1>Pattern matching (match/case)</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Stage 10 · Advanced Python</p>
+  </div>
+
+  <!-- 2: Why care -->
+  <div class="slide">
+    <div class="pill">Why</div>
+    <h2>Why this matters</h2>
+    <p class="big" style="margin-top:.4em">Like switch in other languages, but with destructuring. Match lists, tuples, dicts, classes, all in one syntax.</p>
+  </div>
+
+  <!-- 3: Concept -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <h2>What is it?</h2>
+    <div class="topic-grid" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">match x:</div><div class="desc">switch</div></div>
+      <div class="topic-chip"><div class="head">case pat:</div><div class="desc">branch</div></div>
+    </div>
+    <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Like switch in other languages, but with destructuring. Match lists, tuples, dicts, classes, all in one syntax.</p>
+  </div>
+
+  <!-- 4: Code -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Example</h2>
+<pre>match cmd.split():
+    case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
+        bye()
+    case [&#x27;go&#x27;, direction]:
+        move(direction)
+    case [&#x27;take&#x27;, *items] if items:
+        pickup(items)</pre>
+  </div>
+
+  <!-- 5: Core points -->
+  <div class="slide">
+    <div class="pill">Core</div>
+    <h2>Core points</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">match x:</div><div class="desc">switch</div></div>
+      <div class="topic-chip"><div class="head">case pat:</div><div class="desc">branch</div></div>
+      <div class="topic-chip"><div class="head">|</div><div class="desc">OR patterns</div></div>
+    </div>
+  </div>
+
+  <!-- 6: More -->
+  <div class="slide">
+    <div class="pill">More</div>
+    <h2>Going deeper</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">*rest</div><div class="desc">rest pattern</div></div>
+      <div class="topic-chip"><div class="head">if guard</div><div class="desc">extra condition</div></div>
+      <div class="topic-chip"><div class="head">3.10+</div><div class="desc">newer feature</div></div>
+    </div>
+  </div>
+
+  <!-- 7: Edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas + pitfalls</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">match x:</div><div class="edesc">switch</div></div>
+      <div class="edge-card"><div class="ehead">case pat:</div><div class="edesc">branch</div></div>
+      <div class="edge-card"><div class="ehead">|</div><div class="edesc">OR patterns</div></div>
+      <div class="edge-card"><div class="ehead">*rest</div><div class="edesc">rest pattern</div></div>
+      <div class="edge-card"><div class="ehead">if guard</div><div class="edesc">extra condition</div></div>
+    </div>
+  </div>
+
+  <!-- 8: Debug — buggy code -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong with this code?</h2>
+    <div class="debug-box">
+      <div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">match cmd.split():
+  case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
+        bye()
+    case [&#x27;go&#x27;, direction]:
+        move(direction)
+    case [&#x27;take&#x27;, *items] if items:
+        pickup(items)</pre>
+    </div>
+    <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
+  </div>
+
+  <!-- 9: Debug reveal -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug</h2>
+    <div class="debug-reveal"><b>Bug:</b> <code>IndentationError</code>. The indented line uses 2 spaces instead of 4. Python is strict — keep indentation consistent (PEP 8 says 4 spaces).</div>
+    <div class="debug-box" style="margin-top:.7em">
+      <div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em">match cmd.split():
+    case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
+        bye()
+    case [&#x27;go&#x27;, direction]:
+        move(direction)
+    case [&#x27;take&#x27;, *items] if items:
+        pickup(items)</pre>
+    </div>
+  </div>
+
+  <!-- MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 1 of 7</div>
+    <div class="q">Which best describes <b>Pattern matching (match/case)</b>?</div>
+    <div class="opts">
+      <button class="opt">Like switch in other languages, but with destructuring. Match lists, tuples, dicts, classes, all in one syntax.</button>
+      <button class="opt">A deprecated alias for the match x: statement, removed in Python 3.</button>
+      <button class="opt">A Python 2-only feature; modern code uses something else.</button>
+      <button class="opt">A built-in keyword reserved for class definitions only.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Key fact: match x:.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 2 of 7</div>
+    <div class="q">Which is TRUE about <b>Pattern matching (match/case)</b>?</div>
+    <div class="opts">
+      <button class="opt">match x: — switch</button>
+      <button class="opt">It only works on Python 2.7 and earlier.</button>
+      <button class="opt">It cannot be combined with any other feature.</button>
+      <button class="opt">It must be declared at the top of every file.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 3 of 7</div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">match cmd.split():
+  case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
+        bye()
+    case [&#x27;go&#x27;, direction]:
+        move(direction)
+    case [&#x27;take&#x27;, *items] if items:
+        pickup(items)</pre></div>
+    <div class="opts">
+      <button class="opt">IndentationError. The indented line uses 2 spaces instead of 4. Python is strict — keep indentation consistent (PEP 8 says 4 spaces).</button>
+      <button class="opt">Nothing — the code is correct as-is.</button>
+      <button class="opt">Missing <code>import sys</code> at the top.</button>
+      <button class="opt">The variable was never declared with <code>let</code>.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 4 -->
+  <div class="slide mcq" data-correct="0" data-explain="case pat:: branch">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 4 of 7</div>
+    <div class="q">Which is the correct description of <code>case pat:</code> in Pattern matching (match/case)?</div>
+    <div class="opts">
+      <button class="opt">case pat: → branch</button>
+      <button class="opt">case pat: → something completely unrelated</button>
+      <button class="opt">case pat: is reserved and cannot be used in user code</button>
+      <button class="opt">case pat: works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 5 -->
+  <div class="slide mcq" data-correct="0" data-explain="|: OR patterns">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 5 of 7</div>
+    <div class="q">Which is the correct description of <code>|</code> in Pattern matching (match/case)?</div>
+    <div class="opts">
+      <button class="opt">| → OR patterns</button>
+      <button class="opt">| → something completely unrelated</button>
+      <button class="opt">| is reserved and cannot be used in user code</button>
+      <button class="opt">| works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 6 -->
+  <div class="slide mcq" data-correct="0" data-explain="*rest: rest pattern">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 6 of 7</div>
+    <div class="q">Which is the correct description of <code>*rest</code> in Pattern matching (match/case)?</div>
+    <div class="opts">
+      <button class="opt">*rest → rest pattern</button>
+      <button class="opt">*rest → something completely unrelated</button>
+      <button class="opt">*rest is reserved and cannot be used in user code</button>
+      <button class="opt">*rest works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 7 -->
+  <div class="slide mcq" data-correct="0" data-explain="if guard: extra condition">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 7 of 7</div>
+    <div class="q">Which is the correct description of <code>if guard</code> in Pattern matching (match/case)?</div>
+    <div class="opts">
+      <button class="opt">if guard → extra condition</button>
+      <button class="opt">if guard → something completely unrelated</button>
+      <button class="opt">if guard is reserved and cannot be used in user code</button>
+      <button class="opt">if guard works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- MCQ score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 7</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- Related -->
+  <div class="slide">
+    <div class="pill purple">Related</div>
+    <h2>What next?</h2>
+    <p style="margin-top:.6em;font-size:clamp(15px,2.5vmin,19px);line-height:1.7">
+      <a href="../02-control-flow/if-elif-else.html">if elif else</a> · <a href="../03-data-structures/tuples.html">tuples</a> · <a href="../09-oop/classes.html">classes</a>
+    </p>
+    <p style="margin-top:1em;font-size:clamp(13px,2vmin,16px);opacity:.7">
+      <a href="../index.html" style="color:var(--accent);text-decoration:none">← all topics</a>
+      &nbsp;·&nbsp;
+      <a href="../../../all-slides.html" style="color:var(--accent);text-decoration:none">🗂 master library</a>
+      &nbsp;·&nbsp;
+      <a href="../../roadmap-mega.html" style="color:var(--accent);text-decoration:none">overview deck →</a>
+    </p>
+  </div>
+
+  <!-- Coding practice (LAST per request) -->
+  <div class="slide">
+    <div class="pill">💻 Practice</div>
+    <h2>Coding practice</h2>
+    <div class="practice-task">Combine this with a feature from a previous topic (lists, dicts, or loops). Build something tiny that prints something useful.</div>
+    <div class="debug-box">
+      <div class="debug-tag fix" style="background:var(--accent-2)">starter</div>
+<pre style="margin-top:.4em">match cmd.split():
+    case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
+        bye()
+    case [&#x27;go&#x27;, direction]:
+        move(direction)
+    case [&#x27;take&#x27;, *items] if items:
+        pickup(items)
+
+# Your turn: extend the example below this line.
+</pre>
+    </div>
+    <p class="practice-hint">Open your editor. Save as <code>practice.py</code>. Run it. Iterate.</p>
+  </div>
+
+  <!-- Close -->
+  <div class="slide center-all">
+    <div class="emoji">🧙</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Pattern matching (match/case)</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Done. Next topic →</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="prev">‹</button>
+    <span class="counter" id="counter">1 / N</span>
+    <button id="next" aria-label="next">›</button>
+  </div>
+</div>
+<script src="../../../assets/deck.js"></script>
+</body>
+</html>

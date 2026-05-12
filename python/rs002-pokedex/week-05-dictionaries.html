@@ -78,5 +78,60 @@
 <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: functions to reuse code.</p>
 <p class="bilingual">다음 주: 함수로 재사용</p></div>
 
-<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+
+
+
+<!-- INJECTED-EXTRAS-START -->
+<div class="slide"><div class="pill">⚠ Edge cases</div><h2>Gotchas + pitfalls</h2>
+<div class="edge-grid">
+      <div class="edge-card"><div class="ehead">KeyError on missing key</div><div class="edesc"><code>d['x']</code> raises KeyError if 'x' missing. Use <code>d.get('x', default)</code> for safety.</div></div>
+      <div class="edge-card"><div class="ehead">Keys must hash</div><div class="edesc">Strings, ints, tuples ok. Lists and dicts can't be keys.</div></div>
+      <div class="edge-card"><div class="ehead">Insertion order kept</div><div class="edesc">Since Python 3.7, dicts remember the order you added items in.</div></div>
+      <div class="edge-card"><div class="ehead">Looping iterates keys</div><div class="edesc">Default <code>for k in d</code> = keys only. Use <code>.items()</code> for pairs.</div></div>
+</div></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">pikachu = {
+  &quot;name&quot;: &quot;pikachu&quot;,
+    &quot;hp&quot;: 35,
+    &quot;attack&quot;: 55,
+    &quot;type&quot;: &quot;electric&quot;
+}</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> Inconsistent indentation. Python raises <code>IndentationError</code>. The body of a block must use the same number of spaces — convention is 4.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">pikachu = {
+    &quot;name&quot;: &quot;pikachu&quot;,
+    &quot;hp&quot;: 35,
+    &quot;attack&quot;: 55,
+    &quot;type&quot;: &quot;electric&quot;
+}</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="pikachu[&#x27;name&#x27;] looks up the key &#x27;name&#x27; → &quot;pikachu&quot;"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 5</div><div class="q">In the example, what does <code>pikachu['name']</code> evaluate to?</div><div class="opts"><button class="opt">pikachu</button>
+<button class="opt">35</button>
+<button class="opt">55</button>
+<button class="opt">electric</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Python uses `from MODULE import NAME` — note the order."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 5</div><div class="q">In the example, which line imports <code>pikachu</code> from <code>data.py</code>?</div><div class="opts"><button class="opt"><code>from data import pikachu</code></button>
+<button class="opt"><code>import pikachu from data</code></button>
+<button class="opt"><code>include data.pikachu</code></button>
+<button class="opt"><code>require('data')</code></button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Curly braces { } with key: value pairs separate by commas."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 5</div><div class="q">In the example, which character pair creates a dict?</div><div class="opts"><button class="opt"><code>{ }</code></button>
+<button class="opt"><code>[ ]</code></button>
+<button class="opt"><code>( )</code></button>
+<button class="opt"><code>&lt; &gt;</code></button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Square brackets [ ] create a list."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 4 of 5</div><div class="q">In the example, which character pair creates a list?</div><div class="opts"><button class="opt"><code>[ ]</code></button>
+<button class="opt"><code>{ }</code></button>
+<button class="opt"><code>( )</code></button>
+<button class="opt"><code>&lt; &gt;</code></button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 5 of 5</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">p = {&#x27;name&#x27;: &#x27;pika&#x27;, &#x27;hp&#x27;: 35}
+print(p[&#x27;type&#x27;])</pre></div><div class="opts"><button class="opt">The key &#x27;type&#x27; was never added to the dict. p[&#x27;type&#x27;] raises KeyError. Use p.get(&#x27;type&#x27;, &#x27;unknown&#x27;) for a safe default.</button>
+<button class="opt">Nothing — works as written.</button>
+<button class="opt">Missing <code>import sys</code>.</button>
+<button class="opt">Variable not declared with <code>let</code>.</button></div><div class="qfeedback"></div></div>
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 5</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+<div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Build a small dictionary that holds 3 of your favorite things (game, food, song, whatever) and print each one on its own line.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em">favs = {
+    &#x27;game&#x27;: &#x27;___&#x27;,
+    &#x27;food&#x27;: &#x27;___&#x27;,
+    &#x27;song&#x27;: &#x27;___&#x27;,
+}
+
+# Print each key + value
+for k, v in favs.items():
+    pass  # print(f&#x27;{k}: {v}&#x27;)</pre></div><p class="practice-hint">Open your editor. Save as <code>practice.py</code> (or <code>.html</code>). Run it. Iterate.</p></div>
+<!-- INJECTED-EXTRAS-END -->
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button></div>
 </div><script src="../../assets/deck.js"></script></body></html>

@@ -417,13 +417,15 @@ ul li { margin-bottom: .35em; }
   font-weight: 600;
   position: relative;
   margin: 1em auto;
-  max-width: 80%;
+  max-width: 72%;
   text-align: center;
 }
+.bubble-card.you { padding-left: 3.2em; }
+.bubble-card.computer { padding-right: 3.2em; }
 .bubble-card.you::before {
   content: "💻";
   position: absolute;
-  left: -1.5em;
+  left: .35em;
   top: 50%;
   transform: translateY(-50%);
   font-size: 2em;
@@ -431,7 +433,7 @@ ul li { margin-bottom: .35em; }
 .bubble-card.computer::before {
   content: "🤖";
   position: absolute;
-  right: -1.5em;
+  right: .35em;
   top: 50%;
   transform: translateY(-50%);
   font-size: 2em;
@@ -948,4 +950,247 @@ ul li { margin-bottom: .35em; }
   0%, 12% { opacity: 0; transform: translateX(-8px); }
   16%, 92% { opacity: 1; transform: none; }
   96%, 100% { opacity: 0; }
+}
+
+/* === Roadmap MEGA deck components === */
+
+/* progress bar showing current stage 1-8 */
+.stage-bar {
+  display: flex; gap: .35em; justify-content: center;
+  padding: 0 0 1em 0; flex-wrap: wrap;
+}
+.stage-bar .step {
+  width: clamp(24px, 4.6vmin, 42px); height: 7px;
+  border-radius: 4px;
+  background: var(--soft);
+  transition: background .2s;
+}
+.stage-bar .step.done { background: var(--accent); opacity: .85; }
+.stage-bar .step.current {
+  background: var(--accent-2);
+  box-shadow: 0 0 0 3px rgba(107,78,230,.18);
+}
+.stage-bar .num {
+  font-size: clamp(11px, 1.9vmin, 15px);
+  color: var(--ink); opacity: .55; font-weight: 700;
+  font-family: monospace;
+}
+
+/* stage header slides — big numerals */
+.stage-header { text-align: center; }
+.stage-header .num {
+  font-size: clamp(80px, 18vmin, 180px);
+  color: var(--accent); font-weight: 800; line-height: 1;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: -.04em;
+  text-shadow: 4px 4px 0 var(--soft);
+}
+.stage-header .stage-label {
+  font-size: clamp(13px, 2.2vmin, 18px); letter-spacing: .2em;
+  color: var(--ink); opacity: .55; font-weight: 800;
+  text-transform: uppercase; margin-top: .4em;
+}
+.stage-header h1 {
+  margin-top: .2em;
+  font-size: clamp(42px, 7vmin, 70px);
+}
+
+/* topic grid — 2 or 3 cols of topic chips */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8em;
+  margin-top: .6em;
+}
+.topic-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.topic-chip {
+  background: white;
+  border: 2px solid var(--soft);
+  border-radius: 14px;
+  padding: .8em 1em;
+  box-shadow: 0 4px 0 var(--soft);
+  text-align: left;
+  font-size: clamp(13px, 2.2vmin, 17px);
+}
+.topic-chip .head {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 800; color: var(--accent);
+  font-size: clamp(15px, 2.5vmin, 19px);
+  margin-bottom: .25em;
+}
+.topic-chip .desc { color: var(--ink); opacity: .75; }
+.topic-chip.purple { border-color: var(--accent-2); }
+.topic-chip.purple .head { color: var(--accent-2); }
+
+/* "you are here" callout — links roadmap stage to our courses */
+.you-are-here {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white; border-radius: 16px; padding: 1em 1.2em;
+  margin: .8em 0;
+  font-size: clamp(15px, 2.5vmin, 21px); font-weight: 700;
+  box-shadow: 0 6px 0 rgba(0,0,0,.1);
+}
+.you-are-here .label {
+  font-size: .8em; opacity: .85; letter-spacing: .1em;
+  text-transform: uppercase; display: block; margin-bottom: .2em;
+}
+.you-are-here a { color: white; text-decoration: underline; }
+
+/* mini-code chip — used for code references inline */
+.code-chip {
+  background: var(--code-bg); color: var(--fn);
+  font-family: "JetBrains Mono", monospace;
+  font-size: .9em; padding: .1em .4em; border-radius: 5px;
+  font-weight: 700;
+}
+
+/* ============ MCQ Quiz ============ */
+.mcq .q {
+  font-size: clamp(17px, 2.8vmin, 22px);
+  margin-bottom: .8em;
+  line-height: 1.35;
+}
+.mcq .opts {
+  display: flex; flex-direction: column; gap: .45em;
+  margin-top: .4em;
+}
+.mcq .opt {
+  text-align: left; width: 100%;
+  padding: .65em .9em;
+  border-radius: 10px;
+  border: 2px solid var(--soft);
+  background: white;
+  font: inherit; font-size: clamp(14px, 2.3vmin, 17px);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .12s;
+  font-family: inherit;
+}
+.mcq .opt:hover:not(.disabled) {
+  border-color: var(--accent);
+  background: rgba(255,120,73,.06);
+}
+.mcq .opt.disabled { cursor: default; opacity: .6; }
+.mcq .opt.right {
+  border-color: #2bb673;
+  background: rgba(43,182,115,.12);
+  opacity: 1;
+  font-weight: 600;
+}
+.mcq .opt.wrong {
+  border-color: #d33;
+  background: rgba(221,51,51,.08);
+  opacity: 1;
+}
+.mcq .opt code, .mcq .opt pre {
+  font-family: "JetBrains Mono", monospace;
+  font-size: .92em;
+}
+.mcq .qfeedback {
+  margin-top: .8em;
+  padding: .6em .9em;
+  border-radius: 8px;
+  font-size: clamp(13px, 2vmin, 16px);
+  display: none;
+  line-height: 1.4;
+}
+.mcq .qfeedback.show { display: block; }
+.mcq .qfeedback.good { background: rgba(43,182,115,.12); color: #1a6e44; border: 1px solid #2bb673; }
+.mcq .qfeedback.bad  { background: rgba(221,51,51,.08); color: #8b2a2a; border: 1px solid #d33; }
+.mcq .qmeta {
+  font-size: 11px; letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .55;
+  margin-bottom: .2em;
+}
+
+.mcq-score .score-val {
+  font-size: clamp(56px, 10vmin, 96px);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin: .3em 0;
+}
+.mcq-score .score-msg {
+  font-size: clamp(16px, 2.6vmin, 20px);
+  opacity: .85;
+  margin-top: .3em;
+}
+.quiz-reset {
+  margin-top: .8em;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: .35em .9em;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.quiz-reset:hover { background: var(--accent); color: white; }
+
+/* ============ Edge cases + Debug slides ============ */
+.edge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .6em;
+  margin-top: .4em;
+}
+.edge-card {
+  background: rgba(255,120,73,.06);
+  border-left: 4px solid var(--accent);
+  padding: .65em .8em;
+  border-radius: 6px;
+}
+.edge-card .ehead {
+  font-weight: 700;
+  font-size: clamp(14px, 2.3vmin, 17px);
+  color: var(--accent);
+  margin-bottom: .2em;
+}
+.edge-card .edesc {
+  font-size: clamp(13px, 2vmin, 15px);
+  opacity: .85;
+  line-height: 1.35;
+}
+
+.debug-box {
+  background: var(--code-bg);
+  border-radius: 8px;
+  padding: 1em;
+  position: relative;
+}
+.debug-tag {
+  position: absolute; top: -10px; left: 12px;
+  background: #d33; color: white;
+  padding: .15em .6em; border-radius: 999px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .08em;
+}
+.debug-tag.fix { background: #2bb673; }
+.debug-reveal {
+  margin-top: .7em;
+  padding: .7em .9em;
+  background: rgba(43,182,115,.1);
+  border-left: 4px solid #2bb673;
+  border-radius: 6px;
+  font-size: clamp(13px, 2.1vmin, 16px);
+  line-height: 1.4;
+}
+
+/* ============ Practice slide ============ */
+.practice-task {
+  background: rgba(107,78,230,.08);
+  border-left: 4px solid var(--accent-2);
+  padding: .9em 1em;
+  border-radius: 8px;
+  margin-bottom: .6em;
+  font-size: clamp(15px, 2.5vmin, 18px);
+  line-height: 1.4;
+}
+.practice-hint {
+  margin-top: .5em;
+  font-size: clamp(12px, 1.9vmin, 14px);
+  opacity: .65;
+  font-style: italic;
 }

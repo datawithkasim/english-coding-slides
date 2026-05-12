@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Context managers — Python Roadmap</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Stage 10 · Advanced Python · Context managers</div>
+
+  <!-- 1: Title -->
+  <div class="slide active center-all">
+    <div class="pill ">10.4</div>
+    <div class="emoji">🧙</div>
+    <h1>Context managers</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Stage 10 · Advanced Python</p>
+  </div>
+
+  <!-- 2: Why care -->
+  <div class="slide">
+    <div class="pill">Why</div>
+    <h2>Why this matters</h2>
+    <p class="big" style="margin-top:.4em">Objects with __enter__ + __exit__. Used with with statement. Handle setup + teardown safely.</p>
+  </div>
+
+  <!-- 3: Concept -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <h2>What is it?</h2>
+    <div class="topic-grid" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">__enter__</div><div class="desc">setup</div></div>
+      <div class="topic-chip"><div class="head">__exit__</div><div class="desc">teardown · runs even on errors</div></div>
+    </div>
+    <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Objects with __enter__ + __exit__. Used with with statement. Handle setup + teardown safely.</p>
+  </div>
+
+  <!-- 4: Code -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Example</h2>
+<pre>from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    start = time.perf_counter()
+    yield
+    print(time.perf_counter() - start)
+
+with timer():
+    slow_work()</pre>
+  </div>
+
+  <!-- 5: Core points -->
+  <div class="slide">
+    <div class="pill">Core</div>
+    <h2>Core points</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">__enter__</div><div class="desc">setup</div></div>
+      <div class="topic-chip"><div class="head">__exit__</div><div class="desc">teardown · runs even on errors</div></div>
+      <div class="topic-chip"><div class="head">with stmt</div><div class="desc">uses them</div></div>
+    </div>
+  </div>
+
+  <!-- 6: More -->
+  <div class="slide">
+    <div class="pill">More</div>
+    <h2>Going deeper</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">@contextmanager</div><div class="desc">decorator helper</div></div>
+      <div class="topic-chip"><div class="head">nested</div><div class="desc">with a, b:</div></div>
+      <div class="topic-chip"><div class="head">examples</div><div class="desc">open · locks · transactions</div></div>
+    </div>
+  </div>
+
+  <!-- 7: Edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas + pitfalls</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">__enter__</div><div class="edesc">setup</div></div>
+      <div class="edge-card"><div class="ehead">__exit__</div><div class="edesc">teardown · runs even on errors</div></div>
+      <div class="edge-card"><div class="ehead">with stmt</div><div class="edesc">uses them</div></div>
+      <div class="edge-card"><div class="ehead">@contextmanager</div><div class="edesc">decorator helper</div></div>
+      <div class="edge-card"><div class="ehead">nested</div><div class="edesc">with a, b:</div></div>
+    </div>
+  </div>
+
+  <!-- 8: Debug — buggy code -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong with this code?</h2>
+    <div class="debug-box">
+      <div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    start = time.perf_counter()
+    yield
+    pirnt(time.perf_counter() - start)
+
+with timer():
+    slow_work()</pre>
+    </div>
+    <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
+  </div>
+
+  <!-- 9: Debug reveal -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug</h2>
+    <div class="debug-reveal"><b>Bug:</b> Typo: <code>pirnt</code> is not defined. Python raises <code>NameError</code>. Spell built-in functions exactly.</div>
+    <div class="debug-box" style="margin-top:.7em">
+      <div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em">from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    start = time.perf_counter()
+    yield
+    print(time.perf_counter() - start)
+
+with timer():
+    slow_work()</pre>
+    </div>
+  </div>
+
+  <!-- MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 1 of 7</div>
+    <div class="q">Which best describes <b>Context managers</b>?</div>
+    <div class="opts">
+      <button class="opt">Objects with __enter__ + __exit__. Used with with statement. Handle setup + teardown safely.</button>
+      <button class="opt">A deprecated alias for the __enter__ statement, removed in Python 3.</button>
+      <button class="opt">A Python 2-only feature; modern code uses something else.</button>
+      <button class="opt">A built-in keyword reserved for class definitions only.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Key fact: __enter__.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 2 of 7</div>
+    <div class="q">Which is TRUE about <b>Context managers</b>?</div>
+    <div class="opts">
+      <button class="opt">__enter__ — setup</button>
+      <button class="opt">It only works on Python 2.7 and earlier.</button>
+      <button class="opt">It cannot be combined with any other feature.</button>
+      <button class="opt">It must be declared at the top of every file.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 3 of 7</div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    start = time.perf_counter()
+    yield
+    pirnt(time.perf_counter() - start)
+
+with timer():
+    slow_work()</pre></div>
+    <div class="opts">
+      <button class="opt">Typo: pirnt is not defined. Python raises NameError. Spell built-in functions exactly.</button>
+      <button class="opt">Nothing — the code is correct as-is.</button>
+      <button class="opt">Missing <code>import sys</code> at the top.</button>
+      <button class="opt">The variable was never declared with <code>let</code>.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 4 -->
+  <div class="slide mcq" data-correct="0" data-explain="__exit__: teardown · runs even on errors">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 4 of 7</div>
+    <div class="q">Which is the correct description of <code>__exit__</code> in Context managers?</div>
+    <div class="opts">
+      <button class="opt">__exit__ → teardown · runs even on errors</button>
+      <button class="opt">__exit__ → something completely unrelated</button>
+      <button class="opt">__exit__ is reserved and cannot be used in user code</button>
+      <button class="opt">__exit__ works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 5 -->
+  <div class="slide mcq" data-correct="0" data-explain="with stmt: uses them">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 5 of 7</div>
+    <div class="q">Which is the correct description of <code>with stmt</code> in Context managers?</div>
+    <div class="opts">
+      <button class="opt">with stmt → uses them</button>
+      <button class="opt">with stmt → something completely unrelated</button>
+      <button class="opt">with stmt is reserved and cannot be used in user code</button>
+      <button class="opt">with stmt works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 6 -->
+  <div class="slide mcq" data-correct="0" data-explain="@contextmanager: decorator helper">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 6 of 7</div>
+    <div class="q">Which is the correct description of <code>@contextmanager</code> in Context managers?</div>
+    <div class="opts">
+      <button class="opt">@contextmanager → decorator helper</button>
+      <button class="opt">@contextmanager → something completely unrelated</button>
+      <button class="opt">@contextmanager is reserved and cannot be used in user code</button>
+      <button class="opt">@contextmanager works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 7 -->
+  <div class="slide mcq" data-correct="0" data-explain="nested: with a, b:">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 7 of 7</div>
+    <div class="q">Which is the correct description of <code>nested</code> in Context managers?</div>
+    <div class="opts">
+      <button class="opt">nested → with a, b:</button>
+      <button class="opt">nested → something completely unrelated</button>
+      <button class="opt">nested is reserved and cannot be used in user code</button>
+      <button class="opt">nested works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- MCQ score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 7</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- Related -->
+  <div class="slide">
+    <div class="pill purple">Related</div>
+    <h2>What next?</h2>
+    <p style="margin-top:.6em;font-size:clamp(15px,2.5vmin,19px);line-height:1.7">
+      <a href="../07-file-io/with-statement.html">with statement</a> · <a href="decorators.html">decorators</a> · <span style="opacity:.5">exceptions</span>
+    </p>
+    <p style="margin-top:1em;font-size:clamp(13px,2vmin,16px);opacity:.7">
+      <a href="../index.html" style="color:var(--accent);text-decoration:none">← all topics</a>
+      &nbsp;·&nbsp;
+      <a href="../../../all-slides.html" style="color:var(--accent);text-decoration:none">🗂 master library</a>
+      &nbsp;·&nbsp;
+      <a href="../../roadmap-mega.html" style="color:var(--accent);text-decoration:none">overview deck →</a>
+    </p>
+  </div>
+
+  <!-- Coding practice (LAST per request) -->
+  <div class="slide">
+    <div class="pill">💻 Practice</div>
+    <h2>Coding practice</h2>
+    <div class="practice-task">Reproduce the example by typing — no copy/paste. Then change one thing and predict the output before running.</div>
+    <div class="debug-box">
+      <div class="debug-tag fix" style="background:var(--accent-2)">starter</div>
+<pre style="margin-top:.4em">from contextlib import contextmanager
+
+@contextmanager
+def timer():
+    start = time.perf_counter()
+    yield
+    print(time.perf_counter() - start)
+
+with timer():
+    slow_work()
+
+# Your turn: extend the example below this line.
+</pre>
+    </div>
+    <p class="practice-hint">Open your editor. Save as <code>practice.py</code>. Run it. Iterate.</p>
+  </div>
+
+  <!-- Close -->
+  <div class="slide center-all">
+    <div class="emoji">🧙</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Context managers</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Done. Next topic →</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="prev">‹</button>
+    <span class="counter" id="counter">1 / N</span>
+    <button id="next" aria-label="next">›</button>
+  </div>
+</div>
+<script src="../../../assets/deck.js"></script>
+</body>
+</html>

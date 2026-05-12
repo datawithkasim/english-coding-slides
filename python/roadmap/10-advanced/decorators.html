@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decorators — Python Roadmap</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Stage 10 · Advanced Python · Decorators</div>
+
+  <!-- 1: Title -->
+  <div class="slide active center-all">
+    <div class="pill ">10.3</div>
+    <div class="emoji">🧙</div>
+    <h1>Decorators</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Stage 10 · Advanced Python</p>
+  </div>
+
+  <!-- 2: Why care -->
+  <div class="slide">
+    <div class="pill">Why</div>
+    <h2>Why this matters</h2>
+    <p class="big" style="margin-top:.4em">Functions that wrap functions. @name above def applies a decorator. Used for caching, logging, auth, retries.</p>
+  </div>
+
+  <!-- 3: Concept -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <h2>What is it?</h2>
+    <div class="topic-grid" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">@name</div><div class="desc">syntax</div></div>
+      <div class="topic-chip"><div class="head">function in, function out</div><div class="desc">concept</div></div>
+    </div>
+    <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Functions that wrap functions. @name above def applies a decorator. Used for caching, logging, auth, retries.</p>
+  </div>
+
+  <!-- 4: Code -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Example</h2>
+<pre>def log(fn):
+    def wrapper(*args, **kw):
+        print(f&#x27;calling {fn.__name__}&#x27;)
+        return fn(*args, **kw)
+    return wrapper
+
+@log
+def attack(target): ...</pre>
+  </div>
+
+  <!-- 5: Core points -->
+  <div class="slide">
+    <div class="pill">Core</div>
+    <h2>Core points</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">@name</div><div class="desc">syntax</div></div>
+      <div class="topic-chip"><div class="head">function in, function out</div><div class="desc">concept</div></div>
+      <div class="topic-chip"><div class="head">functools.wraps</div><div class="desc">preserve metadata</div></div>
+    </div>
+  </div>
+
+  <!-- 6: More -->
+  <div class="slide">
+    <div class="pill">More</div>
+    <h2>Going deeper</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">with args</div><div class="desc">extra wrapper layer</div></div>
+      <div class="topic-chip"><div class="head">class decorators</div><div class="desc">also possible</div></div>
+      <div class="topic-chip"><div class="head">examples: @cache @property</div><div class="desc">common</div></div>
+    </div>
+  </div>
+
+  <!-- 7: Edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas + pitfalls</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">@name</div><div class="edesc">syntax</div></div>
+      <div class="edge-card"><div class="ehead">function in, function out</div><div class="edesc">concept</div></div>
+      <div class="edge-card"><div class="ehead">functools.wraps</div><div class="edesc">preserve metadata</div></div>
+      <div class="edge-card"><div class="ehead">with args</div><div class="edesc">extra wrapper layer</div></div>
+      <div class="edge-card"><div class="ehead">class decorators</div><div class="edesc">also possible</div></div>
+    </div>
+  </div>
+
+  <!-- 8: Debug — buggy code -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong with this code?</h2>
+    <div class="debug-box">
+      <div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">def log(fn):
+    def wrapper(*args, **kw):
+        pirnt(f&#x27;calling {fn.__name__}&#x27;)
+        return fn(*args, **kw)
+    return wrapper
+
+@log
+def attack(target): ...</pre>
+    </div>
+    <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
+  </div>
+
+  <!-- 9: Debug reveal -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug</h2>
+    <div class="debug-reveal"><b>Bug:</b> Typo: <code>pirnt</code> is not defined. Python raises <code>NameError</code>. Spell built-in functions exactly.</div>
+    <div class="debug-box" style="margin-top:.7em">
+      <div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em">def log(fn):
+    def wrapper(*args, **kw):
+        print(f&#x27;calling {fn.__name__}&#x27;)
+        return fn(*args, **kw)
+    return wrapper
+
+@log
+def attack(target): ...</pre>
+    </div>
+  </div>
+
+  <!-- MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 1 of 7</div>
+    <div class="q">Which best describes <b>Decorators</b>?</div>
+    <div class="opts">
+      <button class="opt">Functions that wrap functions. @name above def applies a decorator. Used for caching, logging, auth, retries.</button>
+      <button class="opt">A deprecated alias for the @name statement, removed in Python 3.</button>
+      <button class="opt">A Python 2-only feature; modern code uses something else.</button>
+      <button class="opt">A built-in keyword reserved for class definitions only.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Key fact: @name.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 2 of 7</div>
+    <div class="q">Which is TRUE about <b>Decorators</b>?</div>
+    <div class="opts">
+      <button class="opt">@name — syntax</button>
+      <button class="opt">It only works on Python 2.7 and earlier.</button>
+      <button class="opt">It cannot be combined with any other feature.</button>
+      <button class="opt">It must be declared at the top of every file.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 3 of 7</div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">def log(fn):
+    def wrapper(*args, **kw):
+        pirnt(f&#x27;calling {fn.__name__}&#x27;)
+        return fn(*args, **kw)
+    return wrapper
+
+@log
+def attack(target): ...</pre></div>
+    <div class="opts">
+      <button class="opt">Typo: pirnt is not defined. Python raises NameError. Spell built-in functions exactly.</button>
+      <button class="opt">Nothing — the code is correct as-is.</button>
+      <button class="opt">Missing <code>import sys</code> at the top.</button>
+      <button class="opt">The variable was never declared with <code>let</code>.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 4 -->
+  <div class="slide mcq" data-correct="0" data-explain="function in, function out: concept">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 4 of 7</div>
+    <div class="q">Which is the correct description of <code>function in, function out</code> in Decorators?</div>
+    <div class="opts">
+      <button class="opt">function in, function out → concept</button>
+      <button class="opt">function in, function out → something completely unrelated</button>
+      <button class="opt">function in, function out is reserved and cannot be used in user code</button>
+      <button class="opt">function in, function out works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 5 -->
+  <div class="slide mcq" data-correct="0" data-explain="functools.wraps: preserve metadata">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 5 of 7</div>
+    <div class="q">Which is the correct description of <code>functools.wraps</code> in Decorators?</div>
+    <div class="opts">
+      <button class="opt">functools.wraps → preserve metadata</button>
+      <button class="opt">functools.wraps → something completely unrelated</button>
+      <button class="opt">functools.wraps is reserved and cannot be used in user code</button>
+      <button class="opt">functools.wraps works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 6 -->
+  <div class="slide mcq" data-correct="0" data-explain="with args: extra wrapper layer">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 6 of 7</div>
+    <div class="q">Which is the correct description of <code>with args</code> in Decorators?</div>
+    <div class="opts">
+      <button class="opt">with args → extra wrapper layer</button>
+      <button class="opt">with args → something completely unrelated</button>
+      <button class="opt">with args is reserved and cannot be used in user code</button>
+      <button class="opt">with args works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 7 -->
+  <div class="slide mcq" data-correct="0" data-explain="class decorators: also possible">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 7 of 7</div>
+    <div class="q">Which is the correct description of <code>class decorators</code> in Decorators?</div>
+    <div class="opts">
+      <button class="opt">class decorators → also possible</button>
+      <button class="opt">class decorators → something completely unrelated</button>
+      <button class="opt">class decorators is reserved and cannot be used in user code</button>
+      <button class="opt">class decorators works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- MCQ score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 7</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- Related -->
+  <div class="slide">
+    <div class="pill purple">Related</div>
+    <h2>What next?</h2>
+    <p style="margin-top:.6em;font-size:clamp(15px,2.5vmin,19px);line-height:1.7">
+      <a href="../04-functions/closures.html">closures</a> · <a href="functools.html">functools</a> · <a href="../04-functions/args-kwargs.html">args kwargs</a>
+    </p>
+    <p style="margin-top:1em;font-size:clamp(13px,2vmin,16px);opacity:.7">
+      <a href="../index.html" style="color:var(--accent);text-decoration:none">← all topics</a>
+      &nbsp;·&nbsp;
+      <a href="../../../all-slides.html" style="color:var(--accent);text-decoration:none">🗂 master library</a>
+      &nbsp;·&nbsp;
+      <a href="../../roadmap-mega.html" style="color:var(--accent);text-decoration:none">overview deck →</a>
+    </p>
+  </div>
+
+  <!-- Coding practice (LAST per request) -->
+  <div class="slide">
+    <div class="pill">💻 Practice</div>
+    <h2>Coding practice</h2>
+    <div class="practice-task">Combine this with a feature from a previous topic (lists, dicts, or loops). Build something tiny that prints something useful.</div>
+    <div class="debug-box">
+      <div class="debug-tag fix" style="background:var(--accent-2)">starter</div>
+<pre style="margin-top:.4em">def log(fn):
+    def wrapper(*args, **kw):
+        print(f&#x27;calling {fn.__name__}&#x27;)
+        return fn(*args, **kw)
+    return wrapper
+
+@log
+def attack(target): ...
+
+# Your turn: extend the example below this line.
+</pre>
+    </div>
+    <p class="practice-hint">Open your editor. Save as <code>practice.py</code>. Run it. Iterate.</p>
+  </div>
+
+  <!-- Close -->
+  <div class="slide center-all">
+    <div class="emoji">🧙</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Decorators</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Done. Next topic →</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="prev">‹</button>
+    <span class="counter" id="counter">1 / N</span>
+    <button id="next" aria-label="next">›</button>
+  </div>
+</div>
+<script src="../../../assets/deck.js"></script>
+</body>
+</html>

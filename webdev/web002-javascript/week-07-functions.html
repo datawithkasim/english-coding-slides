@@ -91,5 +91,68 @@
 <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: build a quiz app!</p>
 <p class="bilingual">다음 주: 최종 퀴즈 앱</p></div>
 
-<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button></div>
+
+
+
+<!-- INJECTED-EXTRAS-START -->
+<div class="slide"><div class="pill">⚠ Edge cases</div><h2>Gotchas + pitfalls</h2>
+<div class="edge-grid">
+      <div class="edge-card"><div class="ehead">Mutable default trap</div><div class="edesc">Never use <code>def f(x=[])</code>. Use <code>x=None</code> + check inside.</div></div>
+      <div class="edge-card"><div class="ehead">Forgot return?</div><div class="edesc">No return statement = returns None. Easy to miss when tired.</div></div>
+      <div class="edge-card"><div class="ehead">self first</div><div class="edesc">Inside a class method, first param is always <code>self</code> — Python passes it automatically.</div></div>
+      <div class="edge-card"><div class="ehead">Don&#x27;t shadow builtins</div><div class="edesc">Avoid <code>list = [1,2,3]</code> — you just broke <code>list()</code> for the rest of the file.</div></div>
+</div></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">&lt;input id=&quot;a&quot; type=&quot;number&quot;&gt;
+&lt;input id=&quot;b&quot; type=&quot;number&quot;&gt;
+&lt;button onclick=&quot;showSum()&quot;&gt;Add&lt;/button&gt;
+&lt;p id=&quot;result&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  function add(x, y) { return x + y; }
+
+  function showSum() {
+  let a = Number(document.querySelector(&quot;#a&quot;).value);
+    let b = Number(document.querySelector(&quot;#b&quot;).value);
+    document.querySelector(&quot;#result&quot;).textContent = add(a, b);
+  }
+&lt;/script&gt;</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> Inconsistent indentation. Python raises <code>IndentationError</code>. The body of a block must use the same number of spaces — convention is 4.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">&lt;input id=&quot;a&quot; type=&quot;number&quot;&gt;
+&lt;input id=&quot;b&quot; type=&quot;number&quot;&gt;
+&lt;button onclick=&quot;showSum()&quot;&gt;Add&lt;/button&gt;
+&lt;p id=&quot;result&quot;&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  function add(x, y) { return x + y; }
+
+  function showSum() {
+    let a = Number(document.querySelector(&quot;#a&quot;).value);
+    let b = Number(document.querySelector(&quot;#b&quot;).value);
+    document.querySelector(&quot;#result&quot;).textContent = add(a, b);
+  }
+&lt;/script&gt;</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="The lesson title says it: Functions —Reuse"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Functions —Reuse</button>
+<button class="opt">List comprehensions</button>
+<button class="opt">Decorators and metaclasses</button>
+<button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">def greet(name):
+print(f&#x27;Hi, {name}&#x27;)
+
+greet(&#x27;Kasim&#x27;)</pre></div><div class="opts"><button class="opt">The print line is not indented inside the function. Python raises IndentationError. Function bodies must be indented 4 spaces.</button>
+<button class="opt">Nothing — works as written.</button>
+<button class="opt">Missing <code>import sys</code>.</button>
+<button class="opt">Variable not declared with <code>let</code>.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Functions</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
+<button class="opt">Code compiles.</button>
+<button class="opt">It looks neat in the editor.</button>
+<button class="opt">The IDE shows no red squiggles.</button></div><div class="qfeedback"></div></div>
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+<div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Write a function that takes a name and returns a greeting. Call it 3 times with different names.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em">def greet(name):
+    return f&#x27;Hello, {name}!&#x27;
+
+# Call it with 3 different names
+print(greet(&#x27;___&#x27;))
+print(greet(&#x27;___&#x27;))
+print(greet(&#x27;___&#x27;))</pre></div><p class="practice-hint">Open your editor. Save as <code>practice.py</code> (or <code>.html</code>). Run it. Iterate.</p></div>
+<!-- INJECTED-EXTRAS-END -->
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
 </div><script src="../../assets/deck.js"></script></body></html>

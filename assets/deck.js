@@ -125,6 +125,84 @@
     runCycle();
   };
 
+  // === MCQ Quiz support ===
+  // Each .mcq slide has data-correct="N" + .opt buttons.
+  // Score tracked per-deck in window.__quizState.
+  window.__quizState = window.__quizState || { score: 0, answered: 0, total: 0 };
+
+  function initQuiz() {
+    const mcqs = document.querySelectorAll('.mcq');
+    window.__quizState.total = mcqs.length;
+    mcqs.forEach(m => {
+      const correct = parseInt(m.dataset.correct, 10);
+      const opts = m.querySelectorAll('.opt');
+      const feedback = m.querySelector('.qfeedback');
+      opts.forEach((opt, idx) => {
+        opt.addEventListener('click', () => {
+          if (m.dataset.done === '1') return;
+          m.dataset.done = '1';
+          opts.forEach(o => o.classList.add('disabled'));
+          if (idx === correct) {
+            opt.classList.add('right');
+            window.__quizState.score++;
+            if (feedback) {
+              feedback.classList.add('show', 'good');
+              feedback.innerHTML = '✓ Correct! ' + (m.dataset.explain || '');
+            }
+          } else {
+            opt.classList.add('wrong');
+            opts[correct].classList.add('right');
+            if (feedback) {
+              feedback.classList.add('show', 'bad');
+              feedback.innerHTML = '✗ Not quite. ' + (m.dataset.explain || '');
+            }
+          }
+          window.__quizState.answered++;
+        });
+      });
+    });
+
+    // Score slide: refresh on view
+    const scoreSlide = document.querySelector('.mcq-score');
+    if (scoreSlide) {
+      const update = () => {
+        const s = window.__quizState;
+        const val = scoreSlide.querySelector('.score-val');
+        const msg = scoreSlide.querySelector('.score-msg');
+        if (val) val.textContent = `${s.score} / ${s.total}`;
+        if (msg) {
+          const pct = s.total ? Math.round(s.score / s.total * 100) : 0;
+          if (pct >= 80)      msg.textContent = '🔥 Mastered it!';
+          else if (pct >= 50) msg.textContent = '👍 Good effort. Review the misses.';
+          else                msg.textContent = "📖 Re-read the slides. You'll get it.";
+        }
+      };
+      // Update whenever the score slide becomes visible
+      const obs = new MutationObserver(() => {
+        if (scoreSlide.classList.contains('active')) update();
+      });
+      obs.observe(scoreSlide, { attributes: true, attributeFilter: ['class'] });
+      update();
+    }
+
+    // Reset button (any)
+    document.querySelectorAll('.quiz-reset').forEach(b => {
+      b.addEventListener('click', () => {
+        window.__quizState = { score: 0, answered: 0, total: mcqs.length };
+        mcqs.forEach(m => {
+          delete m.dataset.done;
+          m.querySelectorAll('.opt').forEach(o => o.classList.remove('disabled','right','wrong'));
+          const fb = m.querySelector('.qfeedback');
+          if (fb) { fb.classList.remove('show','good','bad'); fb.innerHTML = ''; }
+        });
+        if (scoreSlide) {
+          const val = scoreSlide.querySelector('.score-val');
+          if (val) val.textContent = `0 / ${mcqs.length}`;
+        }
+      });
+    });
+  }
+
   // auto-init: any element with data-picker / data-dice / data-combine
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-picker]').forEach(el => window.startPicker(el.id));
@@ -134,5 +212,6 @@
       window.startDice(el.id, a, b);
     });
     document.querySelectorAll('[data-combine]').forEach(el => window.startCombine(el.id));
+    initQuiz();
   });
 })();

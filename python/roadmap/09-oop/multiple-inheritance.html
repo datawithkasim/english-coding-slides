@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Multiple Inheritance + MRO — Python Roadmap</title>
+<link rel="stylesheet" href="../../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Stage 9 · Object-Oriented Programming · Multiple Inheritance + MRO</div>
+
+  <!-- 1: Title -->
+  <div class="slide active center-all">
+    <div class="pill ">9.7</div>
+    <div class="emoji">🏗️</div>
+    <h1>Multiple Inheritance + MRO</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Stage 9 · Object-Oriented Programming</p>
+  </div>
+
+  <!-- 2: Why care -->
+  <div class="slide">
+    <div class="pill">Why</div>
+    <h2>Why this matters</h2>
+    <p class="big" style="margin-top:.4em">Python supports multiple parents. Order matters — MRO (Method Resolution Order) decides which method wins.</p>
+  </div>
+
+  <!-- 3: Concept -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <h2>What is it?</h2>
+    <div class="topic-grid" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">class D(B, C)</div><div class="desc">syntax</div></div>
+      <div class="topic-chip"><div class="head">MRO</div><div class="desc">Method Resolution Order</div></div>
+    </div>
+    <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Python supports multiple parents. Order matters — MRO (Method Resolution Order) decides which method wins.</p>
+  </div>
+
+  <!-- 4: Code -->
+  <div class="slide">
+    <div class="pill">Code</div>
+    <h2>Example</h2>
+<pre>class A:
+    def hi(self): return &#x27;A&#x27;
+class B(A):
+    def hi(self): return &#x27;B&#x27;
+class C(A):
+    def hi(self): return &#x27;C&#x27;
+class D(B, C): pass
+
+D().hi()       # &#x27;B&#x27;
+D.__mro__</pre>
+  </div>
+
+  <!-- 5: Core points -->
+  <div class="slide">
+    <div class="pill">Core</div>
+    <h2>Core points</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">class D(B, C)</div><div class="desc">syntax</div></div>
+      <div class="topic-chip"><div class="head">MRO</div><div class="desc">Method Resolution Order</div></div>
+      <div class="topic-chip"><div class="head">__mro__</div><div class="desc">see the order</div></div>
+    </div>
+  </div>
+
+  <!-- 6: More -->
+  <div class="slide">
+    <div class="pill">More</div>
+    <h2>Going deeper</h2>
+    <div class="topic-grid three" style="margin-top:.4em">
+      <div class="topic-chip"><div class="head">C3 linearization</div><div class="desc">the algorithm</div></div>
+      <div class="topic-chip"><div class="head">mixins</div><div class="desc">common pattern</div></div>
+      <div class="topic-chip"><div class="head">diamond problem</div><div class="desc">avoided by MRO</div></div>
+    </div>
+  </div>
+
+  <!-- 7: Edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas + pitfalls</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">class D(B, C)</div><div class="edesc">syntax</div></div>
+      <div class="edge-card"><div class="ehead">MRO</div><div class="edesc">Method Resolution Order</div></div>
+      <div class="edge-card"><div class="ehead">__mro__</div><div class="edesc">see the order</div></div>
+      <div class="edge-card"><div class="ehead">C3 linearization</div><div class="edesc">the algorithm</div></div>
+      <div class="edge-card"><div class="ehead">mixins</div><div class="edesc">common pattern</div></div>
+    </div>
+  </div>
+
+  <!-- 8: Debug — buggy code -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong with this code?</h2>
+    <div class="debug-box">
+      <div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">class A:
+    def hi(self): retrun &#x27;A&#x27;
+class B(A):
+    def hi(self): return &#x27;B&#x27;
+class C(A):
+    def hi(self): return &#x27;C&#x27;
+class D(B, C): pass
+
+D().hi()       # &#x27;B&#x27;
+D.__mro__</pre>
+    </div>
+    <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
+  </div>
+
+  <!-- 9: Debug reveal -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug</h2>
+    <div class="debug-reveal"><b>Bug:</b> Typo: keyword is <code>return</code>. <code>retrun</code> is treated as a variable name → NameError.</div>
+    <div class="debug-box" style="margin-top:.7em">
+      <div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em">class A:
+    def hi(self): return &#x27;A&#x27;
+class B(A):
+    def hi(self): return &#x27;B&#x27;
+class C(A):
+    def hi(self): return &#x27;C&#x27;
+class D(B, C): pass
+
+D().hi()       # &#x27;B&#x27;
+D.__mro__</pre>
+    </div>
+  </div>
+
+  <!-- MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 1 of 7</div>
+    <div class="q">Which best describes <b>Multiple Inheritance + MRO</b>?</div>
+    <div class="opts">
+      <button class="opt">Python supports multiple parents. Order matters — MRO (Method Resolution Order) decides which method wins.</button>
+      <button class="opt">A deprecated alias for the class D(B, C) statement, removed in Python 3.</button>
+      <button class="opt">A Python 2-only feature; modern code uses something else.</button>
+      <button class="opt">A built-in keyword reserved for class definitions only.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Key fact: class D(B, C).">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 2 of 7</div>
+    <div class="q">Which is TRUE about <b>Multiple Inheritance + MRO</b>?</div>
+    <div class="opts">
+      <button class="opt">class D(B, C) — syntax</button>
+      <button class="opt">It only works on Python 2.7 and earlier.</button>
+      <button class="opt">It cannot be combined with any other feature.</button>
+      <button class="opt">It must be declared at the top of every file.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 3 of 7</div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">class A:
+    def hi(self): retrun &#x27;A&#x27;
+class B(A):
+    def hi(self): return &#x27;B&#x27;
+class C(A):
+    def hi(self): return &#x27;C&#x27;
+class D(B, C): pass
+
+D().hi()       # &#x27;B&#x27;
+D.__mro__</pre></div>
+    <div class="opts">
+      <button class="opt">Typo: keyword is return. retrun is treated as a variable name → NameError.</button>
+      <button class="opt">Nothing — the code is correct as-is.</button>
+      <button class="opt">Missing <code>import sys</code> at the top.</button>
+      <button class="opt">The variable was never declared with <code>let</code>.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 4 -->
+  <div class="slide mcq" data-correct="0" data-explain="MRO: Method Resolution Order">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 4 of 7</div>
+    <div class="q">Which is the correct description of <code>MRO</code> in Multiple Inheritance + MRO?</div>
+    <div class="opts">
+      <button class="opt">MRO → Method Resolution Order</button>
+      <button class="opt">MRO → something completely unrelated</button>
+      <button class="opt">MRO is reserved and cannot be used in user code</button>
+      <button class="opt">MRO works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 5 -->
+  <div class="slide mcq" data-correct="0" data-explain="__mro__: see the order">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 5 of 7</div>
+    <div class="q">Which is the correct description of <code>__mro__</code> in Multiple Inheritance + MRO?</div>
+    <div class="opts">
+      <button class="opt">__mro__ → see the order</button>
+      <button class="opt">__mro__ → something completely unrelated</button>
+      <button class="opt">__mro__ is reserved and cannot be used in user code</button>
+      <button class="opt">__mro__ works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 6 -->
+  <div class="slide mcq" data-correct="0" data-explain="C3 linearization: the algorithm">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 6 of 7</div>
+    <div class="q">Which is the correct description of <code>C3 linearization</code> in Multiple Inheritance + MRO?</div>
+    <div class="opts">
+      <button class="opt">C3 linearization → the algorithm</button>
+      <button class="opt">C3 linearization → something completely unrelated</button>
+      <button class="opt">C3 linearization is reserved and cannot be used in user code</button>
+      <button class="opt">C3 linearization works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+  <!-- MCQ 7 -->
+  <div class="slide mcq" data-correct="0" data-explain="mixins: common pattern">
+    <div class="pill purple">📝 Quiz</div>
+    <div class="qmeta">Question 7 of 7</div>
+    <div class="q">Which is the correct description of <code>mixins</code> in Multiple Inheritance + MRO?</div>
+    <div class="opts">
+      <button class="opt">mixins → common pattern</button>
+      <button class="opt">mixins → something completely unrelated</button>
+      <button class="opt">mixins is reserved and cannot be used in user code</button>
+      <button class="opt">mixins works only in async functions</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- MCQ score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 7</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- Related -->
+  <div class="slide">
+    <div class="pill purple">Related</div>
+    <h2>What next?</h2>
+    <p style="margin-top:.6em;font-size:clamp(15px,2.5vmin,19px);line-height:1.7">
+      <a href="inheritance.html">inheritance</a> · <a href="abstract-classes.html">abstract classes</a> · <span style="opacity:.5">composition</span>
+    </p>
+    <p style="margin-top:1em;font-size:clamp(13px,2vmin,16px);opacity:.7">
+      <a href="../index.html" style="color:var(--accent);text-decoration:none">← all topics</a>
+      &nbsp;·&nbsp;
+      <a href="../../../all-slides.html" style="color:var(--accent);text-decoration:none">🗂 master library</a>
+      &nbsp;·&nbsp;
+      <a href="../../roadmap-mega.html" style="color:var(--accent);text-decoration:none">overview deck →</a>
+    </p>
+  </div>
+
+  <!-- Coding practice (LAST per request) -->
+  <div class="slide">
+    <div class="pill">💻 Practice</div>
+    <h2>Coding practice</h2>
+    <div class="practice-task">Reproduce the example by typing — no copy/paste. Then change one thing and predict the output before running.</div>
+    <div class="debug-box">
+      <div class="debug-tag fix" style="background:var(--accent-2)">starter</div>
+<pre style="margin-top:.4em">class A:
+    def hi(self): return &#x27;A&#x27;
+class B(A):
+    def hi(self): return &#x27;B&#x27;
+class C(A):
+    def hi(self): return &#x27;C&#x27;
+class D(B, C): pass
+
+D().hi()       # &#x27;B&#x27;
+D.__mro__
+
+# Your turn: extend the example below this line.
+</pre>
+    </div>
+    <p class="practice-hint">Open your editor. Save as <code>practice.py</code>. Run it. Iterate.</p>
+  </div>
+
+  <!-- Close -->
+  <div class="slide center-all">
+    <div class="emoji">🏗️</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Multiple Inheritance + MRO</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Done. Next topic →</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev" aria-label="prev">‹</button>
+    <span class="counter" id="counter">1 / N</span>
+    <button id="next" aria-label="next">›</button>
+  </div>
+</div>
+<script src="../../../assets/deck.js"></script>
+</body>
+</html>
