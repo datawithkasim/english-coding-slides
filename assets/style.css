@@ -19,23 +19,23 @@
 
 html, body {
   height: 100%;
-  background: #2a2a3e;
+  background: var(--bg);
   font-family: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
 
+/* Stage fills the entire viewport on every screen size so presentation
+   doesn't require resizing the window. The old fixed 1:1 + 900px cap design
+   left dark bands on projectors and phones alike. */
 .stage {
   position: relative;
-  width: min(96vmin, 900px);
-  aspect-ratio: 1 / 1;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* dynamic vh accounts for mobile browser chrome */
   background: var(--bg);
-  border-radius: 24px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,.4);
 }
 
 .slide {
@@ -49,14 +49,25 @@ html, body {
 .slide.active { display: flex; animation: fade .25s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-h1 { font-size: clamp(48px, 8.5vmin, 88px); line-height: 1.05; margin-bottom: .25em; }
-h2 { font-size: clamp(34px, 6vmin, 60px); line-height: 1.1; margin-bottom: .5em; color: var(--accent-2); }
-p, li { font-size: clamp(20px, 3.4vmin, 30px); line-height: 1.5; }
+/* Sizing strategy: clamp(min, scaler, max).
+   Scaler uses min(vmin, vw/1.4) so big landscape projectors grow text
+   beyond the old vmin-only ceiling without making portrait phones huge.
+   Caps raised so a 1920×1080 projector shows ~120px headings instead of
+   the old pinched 88px. */
+h1 { font-size: clamp(40px, min(9vmin, 6.5vw), 140px); line-height: 1.05; margin-bottom: .25em; }
+h2 { font-size: clamp(28px, min(6.2vmin, 4.5vw), 96px); line-height: 1.1; margin-bottom: .5em; color: var(--accent-2); }
+p, li { font-size: clamp(18px, min(3.6vmin, 2.4vw), 44px); line-height: 1.5; }
 .sub { color: var(--accent); font-weight: 700; }
-.big { font-size: clamp(22px, 3.8vmin, 34px); font-weight: 600; }
+.big { font-size: clamp(20px, min(4vmin, 2.8vw), 52px); font-weight: 600; }
 .center { text-align: center; }
 .center-all { justify-content: center; align-items: center; text-align: center; }
-.emoji { font-size: clamp(56px, 11vmin, 110px); margin-bottom: .15em; line-height: 1; }
+.emoji { font-size: clamp(56px, min(12vmin, 9vw), 180px); margin-bottom: .15em; line-height: 1; }
+
+/* Cap line length inside slides so paragraphs on wide projectors don't
+   stretch into 1900px run-on lines. Code blocks are exempt — they need
+   to display full source width when possible. */
+.slide > h1, .slide > h2, .slide > p, .slide > .big, .slide > ul, .slide > ol { max-width: min(1400px, 92%); }
+.slide.center-all > h1, .slide.center-all > h2, .slide.center-all > p, .slide.center-all > .big { margin-left: auto; margin-right: auto; }
 
 code {
   font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
@@ -73,11 +84,12 @@ pre {
   padding: 1em 1.3em;
   border-radius: 14px;
   font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
-  font-size: clamp(16px, 2.7vmin, 24px);
+  font-size: clamp(14px, min(2.9vmin, 2vw), 36px);
   line-height: 1.55;
   overflow: hidden;
   white-space: pre;
   margin-top: .3em;
+  max-width: min(1600px, 96%);
 }
 pre code { background: transparent; padding: 0; color: inherit; font-size: 1em; }
 .kw  { color: var(--kw); }
@@ -93,7 +105,7 @@ pre code { background: transparent; padding: 0; color: inherit; font-size: 1em; 
   background: var(--accent);
   color: white;
   font-weight: 700;
-  font-size: clamp(14px, 2.3vmin, 20px);
+  font-size: clamp(13px, min(2.4vmin, 1.6vw), 28px);
   margin-bottom: .8em;
   width: fit-content;
   letter-spacing: .04em;
@@ -1193,4 +1205,50 @@ ul li { margin-bottom: .35em; }
   font-size: clamp(12px, 1.9vmin, 14px);
   opacity: .65;
   font-style: italic;
+}
+
+/* ============ Narrow-viewport adaptations ============
+   Stage already fills 100vw/100vh at every size. These rules only restack
+   side-by-side components that can't fit a narrow width.
+*/
+
+@media (max-width: 600px) {
+  .slide { padding: 5vw; }
+  /* Side-by-side compare → stacked on phones */
+  .compare-row {
+    grid-template-columns: 1fr !important;
+    display: grid;
+    gap: .6em;
+  }
+  /* Options that show 3 across become 2 */
+  .opt-grid { grid-template-columns: 1fr 1fr; gap: 3vw; }
+  .opt-grid.two { grid-template-columns: 1fr; }
+  /* Vocab table — collapse 3-column grid to a 2-column term+gloss stack */
+  .vocab-table {
+    grid-template-columns: auto 1fr !important;
+    gap: .4em .8em;
+  }
+  .vocab-table .ko {
+    grid-column: 2 / -1;
+    font-size: .9em;
+    opacity: .85;
+  }
+  /* Edge cards stack on narrow */
+  .edge-grid { grid-template-columns: 1fr; }
+  /* Code blocks scroll horizontally rather than overflow */
+  pre { overflow-x: auto; white-space: pre; }
+  /* Nav buttons hug the bottom edge */
+  .nav { bottom: 12px; }
+}
+
+@media (max-width: 420px) {
+  .slide { padding: 4vw; }
+  .opt-grid { grid-template-columns: 1fr; }
+  h1 { font-size: clamp(36px, 9vw, 56px); }
+  h2 { font-size: clamp(26px, 7vw, 42px); }
+  pre { font-size: clamp(13px, 3.6vw, 18px); }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .slide { padding: 2vh 3vw; }
 }
