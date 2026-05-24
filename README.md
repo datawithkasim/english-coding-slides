@@ -1,58 +1,58 @@
-# 📚 English Coding — Slide Library
+# 📚 잉글리시 코딩 — 수업 슬라이드 라이브러리
 
-10-minute teaching slide decks, one per lesson, for every English Coding text-based course. 1:1 (square) format. Big text. Animated visualizations. ESL-friendly.
+매 수업용 10분 분량 슬라이드 모음. 잉글리시 코딩의 모든 텍스트 기반 코스용. 1:1 정사각 포맷. 큰 글씨. 움직이는 시각 자료. ESL(영어 학습자) 친화.
 
-**Live site:** [datawithkasim.github.io/english-coding-slides](https://datawithkasim.github.io/english-coding-slides)
+**라이브 사이트:** [datawithkasim.github.io/english-coding-slides](https://datawithkasim.github.io/english-coding-slides)
 
-## Library
+## 라이브러리
 
-**64 decks · 8 courses · 8 weeks each**
+**총 64개 슬라이드 · 8개 코스 · 코스당 8주차**
 
-| Track | Courses | Status |
+| 트랙 | 코스 | 상태 |
 |---|---|---|
-| 🐍 **Replit / Python** | RS001 Text Adventure · RS002 Pokédex · RS003 Pygame Turret · RS004 Platformer | ✅ Complete |
-| 🎨 **Web Development** | WEB001 CSS · WEB002 JavaScript · WEB003 Portfolio | ✅ Complete |
-| 🤖 **AI Coding** | AI001 Replit Agent | ✅ Complete |
+| 🐍 **Replit / Python** | RS001 텍스트 어드벤처 · RS002 포켓도감 · RS003 Pygame 터렛 · RS004 플랫포머 | ✅ 완료 |
+| 🎨 **웹 개발** | WEB001 CSS · WEB002 JavaScript · WEB003 포트폴리오 | ✅ 완료 |
+| 🤖 **AI 코딩** | AI001 Replit Agent | ✅ 완료 |
 
-Each course = 8 weekly lessons. Each lesson = its own slide deck.
+각 코스 = 8주 차 수업. 한 주차 = 한 슬라이드 덱.
 
-## How to use
+## 사용 방법
 
-- Open `index.html` (or the live site) → pick a course → pick a week
-- Use ← / → arrows, Space, or PageUp/Down to navigate
-- Home / End jump to first / last slide
-- Square 1:1 format auto-fits any screen — works on iPad, classroom screens, projectors
+- `index.html` (또는 라이브 사이트) 열기 → 코스 선택 → 주차 선택
+- ← / → 방향키, Space, PageUp / PageDown 으로 이동
+- Home / End 로 첫 / 마지막 슬라이드 이동
+- 1:1 정사각 포맷 자동 맞춤 — 아이패드, 교실 모니터, 프로젝터 모두 가능
 
-## Structure
+## 구조
 
 ```
 english-coding-slides/
 ├── assets/
-│   ├── style.css   ← shared styles + animations
-│   └── deck.js     ← shared nav + JS-driven animations (picker, dice, combine)
+│   ├── style.css   ← 공용 스타일 + 애니메이션
+│   └── deck.js     ← 공용 내비게이션 + JS 애니메이션 (picker, dice, combine)
 ├── python/
-│   ├── rs001-text-adventure/   8 weeks
-│   ├── rs002-pokedex/          8 weeks
-│   ├── rs003-pygame-turret/    8 weeks
-│   └── rs004-platformer/       8 weeks
+│   ├── rs001-text-adventure/   8주차
+│   ├── rs002-pokedex/          8주차
+│   ├── rs003-pygame-turret/    8주차
+│   └── rs004-platformer/       8주차
 ├── webdev/
-│   ├── web001-css/             8 weeks
-│   ├── web002-javascript/      8 weeks
-│   └── web003-portfolio/       8 weeks
+│   ├── web001-css/             8주차
+│   ├── web002-javascript/      8주차
+│   └── web003-portfolio/       8주차
 ├── ai-coding/
-│   └── ai001-replit-agent/     8 weeks
+│   └── ai001-replit-agent/     8주차
 └── index.html
 ```
 
-## Pedagogy
+## 교육 원칙
 
-- **English-first** — ESL students learn the English coding terms
-- **Bilingual key points** — Korean glosses on important concepts
-- **One concept per deck** — matches one weekly lesson
-- **10-12 slides** — fits a 10-minute teaching segment
-- **Story-driven** — each course threads a single project end-to-end
-- **Animated visualizations** — list iteration, random.choice picker, dice rolls, combined for+random viz
+- **영어 우선** — ESL 학생이 영어 코딩 용어 자연스럽게 익히도록
+- **이중 언어 핵심 포인트** — 중요한 개념은 한국어 해설 함께
+- **한 덱 = 한 개념** — 한 주차 수업 한 덱
+- **10~12장** — 10분 분량 수업에 맞춤
+- **스토리 중심** — 코스 하나가 하나의 프로젝트로 끝까지 이어짐
+- **움직이는 시각 자료** — 리스트 순회, random.choice 픽커, 주사위, for + random 결합 시각화
 
-## Brand
+## 브랜드
 
-Apricot (`#ff7849`) + Plum (`#6b4ee6`). Cream background. Dracula-inspired code blocks.
+Apricot (`#ff7849`) + Plum (`#6b4ee6`). 크림 배경. Dracula 스타일 코드 블록.
