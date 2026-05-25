@@ -322,7 +322,7 @@ OVERRIDES = {
 # ----------------------------------------------------------------------
 # Each entry: list of (term, english_meaning, korean_gloss) tuples.
 # 3-4 terms per week. Tier 3 (domain-specific) only.
-# Korean glosses follow the canonical brand form (잉글리시 코딩 house style).
+# Korean glosses follow the canonical brand form (영어코딩 house style).
 # Glossary page (glossary.html) is the source of truth for rs001;
 # remaining courses are authored here and should be mirrored into the
 # glossary page on the next cleanup pass.

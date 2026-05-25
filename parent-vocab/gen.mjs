@@ -50,7 +50,7 @@ function page(c) {
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>${esc(c.code)} 어휘 — 잉글리시 코딩</title>
+<title>${esc(c.code)} 어휘 — 영어코딩</title>
 <style>
   @page { size: A4; margin: 14mm 12mm 16mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -96,7 +96,7 @@ function page(c) {
 </head>
 <body>
   <div class="cover">
-    <div class="brand">📚 잉글리시 코딩</div>
+    <div class="brand">📚 영어코딩</div>
     <h1>${esc(c.code)} · ${esc(c.title)}</h1>
     <div class="blurb">${esc(c.track)} — ${esc(c.blurb)}</div>
     <div class="note">
@@ -106,7 +106,7 @@ function page(c) {
     </div>
   </div>
   ${groups}
-  <footer>잉글리시 코딩 · <b>english-coding.co.uk</b> · ${esc(c.code)} 어휘 목록</footer>
+  <footer>영어코딩 · <b>english-coding.co.uk</b> · ${esc(c.code)} 어휘 목록</footer>
 </body>
 </html>`;
 }
