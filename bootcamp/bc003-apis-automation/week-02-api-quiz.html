@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 2 — API Quiz App</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 2 · Day 34 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 2</div>
+    <div class="emoji">❓</div>
+    <h1>API<br>Quiz App</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">fetch</span> + <span class="sub">score</span> trivia.</p>
+    <p class="bilingual">API에서 퀴즈 받아 점수 세는 앱</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you turn a response into a Python dict?</div>
+      <details><summary>Show answer</summary><div class="ans">Call <code>.json()</code> on the response.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this look like?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>q = <span class="str">"What&amp;#039;s 2+2?"</span>
+<span class="fn">print</span>(q)
+<span class="kw">import</span> html
+<span class="fn">print</span>(html.<span class="fn">unescape</span>(q))</pre>
+      <details><summary>Reveal output</summary><div class="ans">What&amp;#039;s 2+2? → What's 2+2?</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">trivia API</span>
+      <span class="gloss">server that returns quiz questions</span>
+      <span class="ko">퀴즈 API</span>
+
+      <span class="term">results</span>
+      <span class="gloss">list of questions inside JSON</span>
+      <span class="ko">결과 리스트</span>
+
+      <span class="term">unescape</span>
+      <span class="gloss">turn HTML codes back to letters</span>
+      <span class="ko">문자 디코딩</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Shape of the data 📦</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">data</span><span class="val">dict</span></div>
+      <div class="varbox"><span class="name">results</span><span class="val">list of dicts</span></div>
+      <div class="varbox"><span class="name">each Q</span><span class="val">{question, correct…}</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Outer dict → list → each Q dict.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One trivia round</h2>
+<pre><span class="kw">import</span> requests, html
+url  = <span class="str">"https://opentdb.com/api.php?amount=5"</span>
+data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+score = <span class="num">0</span>
+<span class="kw">for</span> q <span class="kw">in</span> data[<span class="str">"results"</span>]:
+    text = html.<span class="fn">unescape</span>(q[<span class="str">"question"</span>])
+    ans  = <span class="fn">input</span>(text + <span class="str">" "</span>)
+    <span class="kw">if</span> ans == q[<span class="str">"correct_answer"</span>]:
+        score += <span class="num">1</span>
+<span class="fn">print</span>(<span class="str">f"Score: {score}/5"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Score: 3/5</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Loop through results</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">results[0]</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">q</span><span class="val">{question, correct}</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">q["question"]</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">unescape</span><span class="val">"What's 2+2?"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># compare answer →</span> <span class="out">score += 1</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Score after each round</h2>
+<pre>score = <span class="num">0</span>
+<span class="com"># Q1 right, Q2 wrong, Q3 right</span></pre>
+    <div class="trace-grid">
+      <div class="cell head">round</div>
+      <div class="cell head">correct?</div>
+      <div class="cell head">score</div>
+
+      <div class="cell">1</div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>HTML codes show in text</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">print</span>(q[<span class="str">"question"</span>])</pre>
+        <p style="margin-top:.4em;font-size:.85em">"What&amp;#039;s …" — ugly.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">print</span>(html.<span class="fn">unescape</span>(q[<span class="str">"question"</span>]))</pre>
+        <p style="margin-top:.4em;font-size:.85em">"What's …" — clean.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Empty results list</h2>
+<pre>data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+q    = data[<span class="str">"results"</span>][<span class="num">0</span>]</pre>
+    <div class="err">IndexError: list index out of range</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Server returned 0 results. Check <code>if data["results"]:</code> before indexing.</p>
+      <p class="bilingual">빈 리스트 인덱싱 금지 — 먼저 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Escaped characters print</h2>
+<pre>text = q[<span class="str">"question"</span>]
+<span class="fn">print</span>(text)</pre>
+    <div class="err">Output: What&amp;quot;s up?  (raw HTML codes)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Import <code>html</code>, wrap with <code>html.unescape(text)</code>.</p>
+      <p class="bilingual">HTML 코드는 unescape로 풀기</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Off-by-one Q count</h2>
+<pre>url = <span class="str">"https://opentdb.com/api.php?amount=5"</span>
+data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    q = data[<span class="str">"results"</span>][i]</pre>
+    <div class="err">IndexError on i = 5</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">5 questions = index 0..4. Use <code>range(5)</code> or loop the list directly.</p>
+      <p class="bilingual">리스트 길이는 amount와 같음 — range 맞추기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>score = <span class="num">0</span>
+<span class="kw">for</span> q <span class="kw">in</span> data[<span class="str">"______"</span>]:
+    text = html.<span class="fn">______</span>(q[<span class="str">"question"</span>])
+    ans  = <span class="fn">input</span>(text)
+    <span class="kw">if</span> ans == q[<span class="str">"correct_answer"</span>]:
+        score ___ <span class="num">1</span></pre>
+    <p style="margin-top:.6em">Goal: loop, clean text, add to score.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — give feedback</h2>
+<pre><span class="kw">if</span> ans.<span class="fn">lower</span>() == q[<span class="str">"correct_answer"</span>].<span class="fn">______</span>():
+    <span class="fn">print</span>(<span class="str">"✓ Right!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">f"✗ Was: {____}"</span>)</pre>
+    <p style="margin-top:.6em">Case-insensitive + show correct answer.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>data["results"]</code> is…</div>
+      <div class="opts">
+        <details><summary>A. a string</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. a list of dicts</summary><div class="ans">✓ Each item is a question.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>html.unescape("&amp;amp;")</code> →</div>
+      <div class="opts">
+        <details><summary>A. &amp;</summary><div class="ans">✓ Turns the code back.</div></details>
+        <details><summary>B. amp</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I loop over <span class="blank"></span> and add 1 to <span class="blank"></span> when the answer matches."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the quiz ❓</h2>
+    <ul class="check-list">
+      <li>GET 5 questions from opentdb</li>
+      <li>Loop the results list</li>
+      <li>Unescape each question</li>
+      <li>Track score and print at end</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Pick category from URL params (<code>category=9</code>).</div>
+      <div class="item"><span class="lvl">★★</span>Show running score after every answer.</div>
+      <div class="item"><span class="lvl">★★★</span>Save high score to a file <code>scores.txt</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do we use <code>html.unescape</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — unescape 쓰는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Loop the<br>list of results.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: API keys and secrets — weather alerts.</p>
+    <p class="bilingual">다음 주: API 키와 환경 변수</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 7 — Study Cafes Site</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 7 · Day 87 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 7</div>
+    <div class="emoji">☕</div>
+    <h1>Study Cafes<br>Site</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">serve</span> + <span class="sub">deploy</span> a real Flask site.</p>
+    <p class="bilingual">스터디카페 목록 사이트 — Flask로 배포까지</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you detect ball-brick collision in turtle?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>ball.distance(brick) &lt; radius</code> — small overlap counts as hit.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What URL serves this?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">from</span> flask <span class="kw">import</span> Flask
+app = <span class="fn">Flask</span>(__name__)
+
+<span class="com">@app.route("/cafes")</span>
+<span class="kw">def</span> <span class="fn">cafes</span>():
+    <span class="kw">return</span> <span class="str">"List of cafes"</span></pre>
+      <details><summary>Reveal output</summary><div class="ans">Open <code>localhost:5000/cafes</code> → "List of cafes".</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">route</span>
+      <span class="gloss">URL → function</span>
+      <span class="ko">라우트</span>
+
+      <span class="term">template</span>
+      <span class="gloss">HTML file Flask renders</span>
+      <span class="ko">템플릿</span>
+
+      <span class="term">deploy</span>
+      <span class="gloss">put site on the internet</span>
+      <span class="ko">배포</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Request → response 📨</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">browser</span><span class="val">GET /cafes</span></div>
+      <div class="varbox"><span class="name">Flask</span><span class="val">runs cafes()</span></div>
+      <div class="varbox"><span class="name">browser</span><span class="val">shows HTML</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">URL maps to a Python function.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Cafe list page</h2>
+<pre><span class="kw">from</span> flask <span class="kw">import</span> Flask, render_template
+app = <span class="fn">Flask</span>(__name__)
+
+cafes = [
+    {<span class="str">"name"</span>: <span class="str">"Toz"</span>, <span class="str">"wifi"</span>: <span class="kw">True</span>},
+    {<span class="str">"name"</span>: <span class="str">"Hapjeong"</span>, <span class="str">"wifi"</span>: <span class="kw">True</span>},
+]
+
+<span class="com">@app.route("/")</span>
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"index.html"</span>,
+                          cafes=cafes)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Loop in template</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">cafes list</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">{% for c in cafes %}</span><span class="val">iterate</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">c.name</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">{{ c.name }}</span><span class="val">printed</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># browser →</span> <span class="out">&lt;li&gt;Toz&lt;/li&gt; &lt;li&gt;Hapjeong&lt;/li&gt;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>URL → function</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">URL</div>
+      <div class="cell head">route</div>
+      <div class="cell head">function</div>
+
+      <div class="cell">/</div>
+      <div class="cell">@app.route("/")</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">home()</span></details></div>
+
+      <div class="cell">/cafes</div>
+      <div class="cell">@app.route("/cafes")</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">cafes()</span></details></div>
+
+      <div class="cell">/add</div>
+      <div class="cell">@app.route("/add")</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">add()</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Template not found</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>render_template(<span class="str">"index.html"</span>)
+<span class="com"># index.html is in root</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">TemplateNotFound</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="com"># move to templates/index.html</span>
+render_template(<span class="str">"index.html"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Flask looks in <code>templates/</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — DB seed missing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Empty list</h2>
+<pre><span class="com">@app.route("/cafes")</span>
+<span class="kw">def</span> <span class="fn">cafes</span>():
+    rows = Cafe.<span class="fn">query</span>.<span class="fn">all</span>()
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"cafes.html"</span>,
+                           cafes=rows)</pre>
+    <div class="err">Page loads, but shows zero cafes</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">DB is empty. Add a seed: <code>db.session.add(Cafe(name="Toz"))</code>, then <code>db.session.commit()</code>.</p>
+      <p class="bilingual">DB가 비어있음 — seed 데이터 추가 후 commit</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — form validation -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Form lets blanks through</h2>
+<pre>name = request.form[<span class="str">"name"</span>]
+db.session.<span class="fn">add</span>(<span class="fn">Cafe</span>(name=name))</pre>
+    <div class="err">User submits empty name — saved as ""</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Validate before save: <code>if not name.strip(): return "Name required", 400</code>.</p>
+      <p class="bilingual">저장 전 빈 값 체크 (.strip()로 공백만도 차단)</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — env var on deploy -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Crash on deploy</h2>
+<pre>app.run(debug=<span class="kw">True</span>)</pre>
+    <div class="err">Host says: gunicorn missing PORT env var</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Don't call <code>app.run()</code> in production. Use a <code>Procfile</code>: <code>web: gunicorn app:app</code>.</p>
+      <p class="bilingual">배포: app.run() 대신 gunicorn 사용 (Procfile)</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> flask <span class="kw">import</span> Flask, ____
+
+app = <span class="fn">Flask</span>(__name__)
+
+<span class="com">@app.route("____")</span>
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"____.html"</span>,
+                           cafes=cafes)</pre>
+    <p style="margin-top:.6em">Goal: import render_template, route "/", pass cafes.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — add form route</h2>
+<pre><span class="com">@app.route("/add", methods=["GET", "____"])</span>
+<span class="kw">def</span> <span class="fn">add</span>():
+    <span class="kw">if</span> request.method == <span class="str">"____"</span>:
+        name = request.form[<span class="str">"name"</span>]
+        cafes.<span class="fn">append</span>({<span class="str">"name"</span>: ____})
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"____"</span>)
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"add.html"</span>)</pre>
+    <p style="margin-top:.6em">POST → save, GET → show form.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Flask looks for templates in…</div>
+      <div class="opts">
+        <details><summary>A. <code>templates/</code></summary><div class="ans">✓ Default folder.</div></details>
+        <details><summary>B. <code>html/</code></summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>render_template("a.html", x=5)</code> means…</div>
+      <div class="opts">
+        <details><summary>A. x is shown as 5</summary><div class="ans">✓ Use <code>{{ x }}</code> in template.</div></details>
+        <details><summary>B. x = file name</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"When a user visits <span class="blank"></span>, Flask runs my <span class="blank"></span> and returns rendered HTML."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it ☕</h2>
+    <ul class="check-list">
+      <li>Flask app with <code>/</code> and <code>/add</code> routes</li>
+      <li>Show list of cafes (name, wifi, power)</li>
+      <li>Form to add a cafe</li>
+      <li>Deploy free on Render or Railway</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Filter by district (강남, 홍대, …).</div>
+      <div class="item"><span class="lvl">★★</span>Add a SQLite DB instead of in-memory list.</div>
+      <div class="item"><span class="lvl">★★★</span>Use Bootstrap or Tailwind for nice cards.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does <code>@app.route("/x")</code> do?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — @app.route("/x")가 하는 일?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">You shipped<br>a live site.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Todo app — CRUD operations.</p>
+    <p class="bilingual">다음 주: Todo 앱 — CRUD 작업</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

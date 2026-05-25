@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 3 — Weather Alert</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 3 · Day 35 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 3</div>
+    <div class="emoji">🌦️</div>
+    <h1>Weather<br>Alert</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">use</span> + <span class="sub">hide</span> an API key.</p>
+    <p class="bilingual">API 키로 날씨 받기 — 키는 비밀로</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you loop over a list of dicts from JSON?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>for q in data["results"]:</code> — each item is a dict.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What status code?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>url = <span class="str">"https://api.openweathermap.org/data/2.5/weather"</span>
+<span class="com"># no API key sent</span>
+r = requests.<span class="fn">get</span>(url + <span class="str">"?q=Seoul"</span>)
+<span class="fn">print</span>(r.status_code)</pre>
+      <details><summary>Reveal output</summary><div class="ans">401 — unauthorized. No key = no data.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">API key</span>
+      <span class="gloss">your password to the API</span>
+      <span class="ko">API 키</span>
+
+      <span class="term">env var</span>
+      <span class="gloss">hidden value outside your code</span>
+      <span class="ko">환경 변수</span>
+
+      <span class="term">secret</span>
+      <span class="gloss">never share, never commit</span>
+      <span class="ko">비밀</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Key lives outside code 🔑</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">.env file</span><span class="val">KEY=abc123</span></div>
+      <div class="varbox"><span class="name">code</span><span class="val">os.getenv("KEY")</span></div>
+      <div class="varbox"><span class="name">GitHub</span><span class="val">never sees it</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Code is public. Keys are private.</p>
+    <p class="bilingual" style="text-align:center">코드는 공개, 키는 비공개</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Print a warning</h2>
+<pre><span class="kw">import</span> requests, os
+key  = os.<span class="fn">getenv</span>(<span class="str">"OWM_KEY"</span>)
+url  = <span class="str">"https://api.openweathermap.org/data/2.5/weather"</span>
+data = requests.<span class="fn">get</span>(url, params={<span class="str">"q"</span>:<span class="str">"Seoul"</span>, <span class="str">"appid"</span>:key}).<span class="fn">json</span>()
+main = data[<span class="str">"weather"</span>][<span class="num">0</span>][<span class="str">"main"</span>]
+<span class="kw">if</span> main <span class="kw">in</span> [<span class="str">"Rain"</span>, <span class="str">"Snow"</span>]:
+    <span class="fn">print</span>(<span class="str">f"⚠️ {main} in Seoul — bring umbrella"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output (rainy day)</div>
+      <div style="opacity:1">⚠️ Rain in Seoul — bring umbrella</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Real SMS needs grown-ups 📵</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">today</span><span class="val">print to console</span></div>
+      <div class="varbox"><span class="name">real SMS</span><span class="val">paid service + parent</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">SMS APIs (Twilio) need a paid account + phone setup. We just print.</p>
+    <p class="bilingual" style="text-align:center">진짜 문자는 유료 + 부모님 허락 필요 — 오늘은 출력만</p>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which prints "alert"?</h2>
+<pre><span class="kw">if</span> main <span class="kw">in</span> [<span class="str">"Rain"</span>, <span class="str">"Snow"</span>]:
+    <span class="fn">print</span>(<span class="str">"alert"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"ok"</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">main</div>
+      <div class="cell head">in list?</div>
+      <div class="cell head">print</div>
+
+      <div class="cell">Rain</div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">alert</span></details></div>
+
+      <div class="cell">Clear</div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">ok</span></details></div>
+
+      <div class="cell">Snow</div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">alert</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Don't paste the key</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>key = <span class="str">"abc123-MYSECRET"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Key in code = leaked on GitHub.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>key = os.<span class="fn">getenv</span>(<span class="str">"OWM_KEY"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Reads from <code>.env</code>, never committed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Key pasted in code</h2>
+<pre>key = <span class="str">"a1b2c3-real-secret-key"</span>
+url = <span class="str">f"…&amp;appid={key}"</span></pre>
+    <div class="err">Risk: anyone who reads the file gets your key</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Move key to <code>.env</code>. Add <code>.env</code> to <code>.gitignore</code>. Use <code>os.getenv("OWM_KEY")</code>.</p>
+      <p class="bilingual">키는 코드에 직접 쓰지 말기 — .env 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>401 Unauthorized</h2>
+<pre>r = requests.<span class="fn">get</span>(url, params={<span class="str">"q"</span>:<span class="str">"Seoul"</span>})
+<span class="fn">print</span>(r.status_code)</pre>
+    <div class="err">Status: 401 — key missing or wrong</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>"appid": key</code> to params. Check the key string is correct.</p>
+      <p class="bilingual">401 = 키 없음/틀림 — appid 파라미터 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>City name typo</h2>
+<pre>params = {<span class="str">"q"</span>:<span class="str">"Soul"</span>, <span class="str">"appid"</span>:key}
+r = requests.<span class="fn">get</span>(url, params=params)</pre>
+    <div class="err">404 — city not found</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use English city name: <code>"Seoul"</code> (not "Soul"). Check API docs.</p>
+      <p class="bilingual">도시 이름은 영어 정확히</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> os, requests
+key = os.<span class="fn">______</span>(<span class="str">"OWM_KEY"</span>)
+params = {<span class="str">"q"</span>:<span class="str">"Busan"</span>, <span class="str">"appid"</span>:_____}
+data = requests.<span class="fn">get</span>(url, params=params).<span class="fn">______</span>()</pre>
+    <p style="margin-top:.6em">Goal: read key from env, send with request.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — many cities</h2>
+<pre>cities = [<span class="str">"Seoul"</span>, <span class="str">"Busan"</span>, <span class="str">"Jeju"</span>]
+<span class="kw">for</span> city <span class="kw">in</span> _____:
+    params = {<span class="str">"q"</span>:_____, <span class="str">"appid"</span>:key}
+    main = requests.<span class="fn">get</span>(url, params=params).<span class="fn">json</span>()[<span class="str">"weather"</span>][<span class="num">0</span>][<span class="str">"main"</span>]
+    <span class="fn">print</span>(<span class="str">f"{city}: {main}"</span>)</pre>
+    <p style="margin-top:.6em">Check 3 cities, print each.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Where should API keys live?</div>
+      <div class="opts">
+        <details><summary>A. In the code file</summary><div class="ans">Nope — that leaks.</div></details>
+        <details><summary>B. In <code>.env</code></summary><div class="ans">✓ Hidden, never committed.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Status code <code>401</code> means…</div>
+      <div class="opts">
+        <details><summary>A. unauthorized (bad/no key)</summary><div class="ans">✓ Check your key.</div></details>
+        <details><summary>B. server is down</summary><div class="ans">Nope — that's 500.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I keep my API key in <span class="blank"></span> and read it with <span class="blank"></span> in my code."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the alert 🌦️</h2>
+    <ul class="check-list">
+      <li>Put key in <code>.env</code></li>
+      <li>Read with <code>os.getenv</code></li>
+      <li>GET weather for your city</li>
+      <li>Print warning if Rain or Snow</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Include temp in the alert message.</div>
+      <div class="item"><span class="lvl">★★</span>Add wind warning if speed &gt; 10 m/s.</div>
+      <div class="item"><span class="lvl">★★★</span>Loop 5 cities; print only the rainy ones.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why don't we paste API keys in code?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — API 키를 코드에 안 쓰는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Keys live in<br>env vars.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: sports score tracker.</p>
+    <p class="bilingual">다음 주: 스포츠 점수 알리미</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

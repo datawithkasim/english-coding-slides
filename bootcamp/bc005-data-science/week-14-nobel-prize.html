@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 14 — Nobel Prize Analysis</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 14 · Day 78 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 14</div>
+    <div class="emoji">🏅</div>
+    <h1>Nobel Prize<br>Analysis</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">explore</span> + <span class="sub">visualize</span> 120 years of data.</p>
+    <p class="bilingual">노벨상 120년 데이터 — 탐색과 시각화</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What is a residual?</div>
+      <details><summary>Show answer</summary><div class="ans">Actual minus predicted — how far each point sits from the line.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Which result is bigger?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>df.groupby(<span class="str">"country"</span>)[<span class="str">"prize"</span>].count()
+df.groupby(<span class="str">"country"</span>)[<span class="str">"prize_money"</span>].sum()</pre>
+      <details><summary>Reveal</summary><div class="ans">Count = how many prizes; sum = total money. Different questions.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 EDA words</h2>
+    <div class="vocab-table">
+      <span class="term">EDA</span>
+      <span class="gloss">exploratory data analysis</span>
+      <span class="ko">탐색적 분석</span>
+
+      <span class="term">count vs sum</span>
+      <span class="gloss">how many vs how much</span>
+      <span class="ko">개수 vs 합계</span>
+
+      <span class="term">value_counts</span>
+      <span class="gloss">tally unique values fast</span>
+      <span class="ko">값별 개수</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Ask 4 questions</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">who</span><span class="val">winners by country</span></div>
+      <div class="varbox"><span class="name">when</span><span class="val">prizes by year</span></div>
+      <div class="varbox"><span class="name">what</span><span class="val">prizes by category</span></div>
+      <div class="varbox"><span class="name">how old</span><span class="val">age at award</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Pick a question. Group. Plot. Repeat.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Top countries</h2>
+<pre>df = pd.read_csv(<span class="str">"nobel.csv"</span>)
+
+top = df[<span class="str">"country"</span>]\
+    .value_counts()\
+    .head(<span class="num">10</span>)\
+    .reset_index()
+
+fig = px.bar(top,
+    x=<span class="str">"country"</span>,
+    y=<span class="str">"count"</span>,
+    title=<span class="str">"Most Nobel Prizes"</span>)
+fig.show()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">USA, UK, Germany, France, …</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Filter → group → plot</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">df</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">filter</span><span class="val">year &gt;= 1990</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">groupby</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">"category"</span><span class="val">.count()</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">summary</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">px.bar</span><span class="val">visual story</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which method fits?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Question</div>
+      <div class="cell head">Column</div>
+      <div class="cell head">Method</div>
+      <div class="cell head">Hint</div>
+
+      <div class="cell">how many prizes</div>
+      <div class="cell">country</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">.count() / value_counts</span></details></div>
+      <div class="cell">tally</div>
+
+      <div class="cell">total money</div>
+      <div class="cell">prize_money</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">.sum()</span></details></div>
+      <div class="cell">add up</div>
+
+      <div class="cell">avg age</div>
+      <div class="cell">age</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">.mean()</span></details></div>
+      <div class="cell">average</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>NaN hides facts</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>df.groupby(<span class="str">"country"</span>)\
+  [<span class="str">"age"</span>].mean()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Some ages are NaN — silently skipped.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>df = df.dropna(subset=[<span class="str">"age"</span>])
+df.groupby(<span class="str">"country"</span>)[<span class="str">"age"</span>].mean()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Decide before grouping.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — count vs sum -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong agg</h2>
+<pre><span class="com"># "how many prizes per country"</span>
+df.groupby(<span class="str">"country"</span>)[<span class="str">"year"</span>].sum()</pre>
+    <div class="err">Got sum of year values (huge numbers)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">"How many" = <code>.count()</code> or <code>.size()</code>, not sum.</p>
+      <p class="bilingual">개수는 count, 합계는 sum</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — year filter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — year filter</h2>
+<pre>df_recent = df[df.year &gt; <span class="str">"2000"</span>]</pre>
+    <div class="err">String compare — wrong rows kept</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use int: <code>df[df.year &gt; 2000]</code>. Confirm dtype with <code>df.dtypes</code>.</p>
+      <p class="bilingual">숫자 비교는 따옴표 빼고</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — missing values -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — missing data</h2>
+<pre>df[<span class="str">"birth_country"</span>].value_counts().head()</pre>
+    <div class="err">Total = 800, but DataFrame has 1000 rows</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>value_counts</code> drops NaN by default. Add <code>dropna=False</code> to include them.</p>
+      <p class="bilingual">value_counts 기본은 NaN 제외</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>by_cat = df.groupby(<span class="str">"category"</span>)\
+            .____()\
+            .reset_index(name=<span class="str">"prizes"</span>)
+fig = px._____(by_cat,
+    x=<span class="str">"category"</span>,
+    y=<span class="str">"prizes"</span>)
+fig.show()</pre>
+    <p style="margin-top:.6em">Goal: number of prizes per category, bar chart.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — age trends</h2>
+<pre>df = df.dropna(subset=[<span class="str">"____"</span>])
+by_decade = df.groupby(df.year // ___ * ___)\
+              [<span class="str">"age"</span>].____()
+plt.plot(by_decade)
+plt.show()</pre>
+    <p style="margin-top:.6em">Goal: mean winner age per decade.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. "How many prizes per country?" — use…</div>
+      <div class="opts">
+        <details><summary>A. .sum()</summary><div class="ans">Nope — that adds numbers.</div></details>
+        <details><summary>B. .count() / value_counts</summary><div class="ans">✓ Tally.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Default behavior of <code>value_counts</code> on NaN?</div>
+      <div class="opts">
+        <details><summary>A. Includes</summary><div class="ans">Nope — drops by default.</div></details>
+        <details><summary>B. Drops them</summary><div class="ans">✓ Use <code>dropna=False</code> to include.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I asked <span class="blank"></span>, grouped by <span class="blank"></span>, and visualized with <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Explore the prizes 🏅</h2>
+    <ul class="check-list">
+      <li>Load <code>nobel.csv</code></li>
+      <li>Top 10 countries by prize count</li>
+      <li>Number of prizes per category</li>
+      <li>Mean age of winners per decade</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Share of female winners over time.</div>
+      <div class="item"><span class="lvl">★★</span>Youngest + oldest winners — names and ages.</div>
+      <div class="item"><span class="lvl">★★★</span>Choropleth map by country (plotly).</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>when do you choose <code>.count()</code> vs <code>.sum()</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — count vs sum 선택 기준?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Data<br>tells a story.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: t-test — is the difference real?</p>
+    <p class="bilingual">다음 주: t-검정 — 차이가 진짜?</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

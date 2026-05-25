@@ -93,16 +93,9 @@ c(); c(); c()   # 1 2 3</pre>
     <h2>What's wrong with this code?</h2>
     <div class="debug-box">
       <div class="debug-tag">buggy</div>
-<pre style="margin-top:.4em">def counter():
-    n = 0
-    def tick():
-        nonlocal n
-        n += 1
-        retrun n
-    return tick
-
-c = counter()
-c(); c(); c()   # 1 2 3</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre>
     </div>
     <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
   </div>
@@ -111,24 +104,17 @@ c(); c(); c()   # 1 2 3</pre>
   <div class="slide">
     <div class="pill">🐛 Debug</div>
     <h2>The bug</h2>
-    <div class="debug-reveal"><b>Bug:</b> Typo: keyword is <code>return</code>. <code>retrun</code> is treated as a variable name → NameError.</div>
+    <div class="debug-reveal"><b>Bug:</b> <code>.append()</code> changes the list in place and returns <code>None</code>. Reassigning makes <code>nums</code> become <code>None</code>. Just call <code>nums.append(4)</code>.</div>
     <div class="debug-box" style="margin-top:.7em">
       <div class="debug-tag fix">fixed</div>
-<pre style="margin-top:.4em">def counter():
-    n = 0
-    def tick():
-        nonlocal n
-        n += 1
-        return n
-    return tick
-
-c = counter()
-c(); c(); c()   # 1 2 3</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums.append(4)
+print(nums)</pre>
     </div>
   </div>
 
   <!-- MCQ 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+  <div class="slide mcq" data-correct="0" data-explain=".append() returns None — don't reassign.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 1 of 3</div>
     <div class="q">Which best describes <b>Closures</b>?</div>
@@ -157,23 +143,9 @@ c(); c(); c()   # 1 2 3</pre>
   <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 3 of 3</div>
-    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">def counter():
-    n = 0
-    def tick():
-        nonlocal n
-        n += 1
-        retrun n
-    return tick
-
-c = counter()
-c(); c(); c()   # 1 2 3</pre></div>
-    <div class="opts">
-      <button class="opt">Typo: keyword is return. retrun is treated as a variable name → NameError.</button>
-      <button class="opt">Nothing — the code is correct as-is.</button>
-      <button class="opt">Missing <code>import sys</code> at the top.</button>
-      <button class="opt">The variable was never declared with <code>let</code>.</button>
-    </div>
-    <div class="qfeedback"></div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre></div><div class="opts"><button class="opt">append() returns None, so reassigning makes nums None.</button><button class="opt">Lists can't grow after they're made.</button><button class="opt">append() needs two arguments.</button><button class="opt">You must write nums + 4 instead.</button></div><div class="qfeedback"></div>
   </div>
 
   <!-- MCQ score -->

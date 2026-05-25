@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 13 — WTForms</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 13 · Day 61 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 13</div>
+    <div class="emoji">✅</div>
+    <h1>WTForms<br>+ Validators</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">declare</span> + <span class="sub">validate</span> forms in Python.</p>
+    <p class="bilingual">파이썬 클래스로 폼 만들고 검증</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How did we read the field "name" from a submitted form?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>request.form["name"]</code> inside a POST handler.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does <code>DataRequired</code> do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">class</span> <span class="fn">NameForm</span>(FlaskForm):
+    name = StringField(<span class="str">"Name"</span>,
+        validators=[DataRequired()])</pre>
+      <details><summary>Reveal output</summary><div class="ans">Refuses submit if "name" is empty. Shows an error instead.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">FlaskForm</span>
+      <span class="gloss">Python class for a form</span>
+      <span class="ko">폼 클래스</span>
+
+      <span class="term">validator</span>
+      <span class="gloss">rule for valid input</span>
+      <span class="ko">검증 규칙</span>
+
+      <span class="term">CSRF token</span>
+      <span class="gloss">secret to block fake submits</span>
+      <span class="ko">위조 방지 토큰</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Class = form shape ✅</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">Field</span><span class="val">label + type</span></div>
+      <div class="varbox"><span class="name">Validator</span><span class="val">rule</span></div>
+      <div class="varbox"><span class="name">validate</span><span class="val">True/False</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Declare once. Reuse everywhere.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Form with validation</h2>
+<pre><span class="kw">from</span> flask_wtf <span class="kw">import</span> FlaskForm
+<span class="kw">from</span> wtforms <span class="kw">import</span> StringField
+<span class="kw">from</span> wtforms.validators <span class="kw">import</span> DataRequired, Length
+
+app.config[<span class="str">"SECRET_KEY"</span>] = <span class="str">"shh"</span>
+
+<span class="kw">class</span> <span class="fn">NameForm</span>(FlaskForm):
+    name = StringField(<span class="str">"Name"</span>,
+        validators=[DataRequired(), Length(min=<span class="num">2</span>)])
+
+@app.<span class="fn">route</span>(<span class="str">"/n"</span>, methods=[<span class="str">"GET"</span>, <span class="str">"POST"</span>])
+<span class="kw">def</span> <span class="fn">n</span>():
+    form = <span class="fn">NameForm</span>()
+    <span class="kw">if</span> form.<span class="fn">validate_on_submit</span>():
+        <span class="kw">return</span> <span class="str">f"Hi, {form.name.data}!"</span>
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"f.html"</span>, form=form)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Validators check input</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">name = ""</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">DataRequired</span><span class="val">FAIL</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">name = "M"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">Length(2+)</span><span class="val">FAIL</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># name = "Mia" →</span> <span class="out">all PASS → submit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Valid? (Length min=3)</h2>
+    <div class="trace-grid">
+      <div class="cell head">input</div>
+      <div class="cell head">DataRequired</div>
+      <div class="cell head">Length(3+)</div>
+
+      <div class="cell">""</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">fail</span></details></div>
+      <div class="cell">—</div>
+
+      <div class="cell">"hi"</div>
+      <div class="cell">pass</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">fail</span></details></div>
+
+      <div class="cell">"Mia"</div>
+      <div class="cell">pass</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">pass</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot the csrf token</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>&lt;form method=<span class="str">"POST"</span>&gt;
+  {{ form.name }}
+&lt;/form&gt;</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ Bad Request, CSRF missing</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>&lt;form method=<span class="str">"POST"</span>&gt;
+  {{ form.hidden_tag() }}
+  {{ form.name }}
+&lt;/form&gt;</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ token included</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>SECRET_KEY missing</h2>
+<pre>app = <span class="fn">Flask</span>(__name__)
+<span class="com"># no app.config["SECRET_KEY"]</span></pre>
+    <div class="err">RuntimeError: SECRET_KEY not set</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>app.config["SECRET_KEY"] = "any string"</code>. Needed for CSRF.</p>
+      <p class="bilingual">CSRF 토큰 만들려면 SECRET_KEY 필수</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Validator typo</h2>
+<pre>validators=[Required()]</pre>
+    <div class="err">ImportError: cannot import name 'Required'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Old name. Now: <code>DataRequired</code>.</p>
+      <p class="bilingual">옛 이름 — 새 이름은 DataRequired</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>CSRF disabled</h2>
+<pre>app.config[<span class="str">"WTF_CSRF_ENABLED"</span>] = <span class="kw">False</span></pre>
+    <div class="err">Form accepts fake submissions from other sites</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Leave CSRF on. Disable only for tests. Production = always on.</p>
+      <p class="bilingual">CSRF는 켜둬야 안전</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">class</span> <span class="fn">PostForm</span>(_________):
+    title = _________(<span class="str">"Title"</span>,
+        validators=[_____________()])
+    body  = TextAreaField(<span class="str">"Body"</span>,
+        validators=[Length(min=___)])</pre>
+    <p style="margin-top:.6em">Goal: required title, body 10+ chars.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — show errors</h2>
+<pre>&lt;form method=<span class="str">"POST"</span>&gt;
+  {{ form._______() }}
+  {{ form.name.label }}
+  {{ form.name }}
+  {% <span class="kw">for</span> e <span class="kw">in</span> form.name._______ %}
+    &lt;p style=<span class="str">"color:red"</span>&gt;{{ ___ }}&lt;/p&gt;
+  {% <span class="kw">endfor</span> %}
+&lt;/form&gt;</pre>
+    <p style="margin-top:.6em">Show CSRF token + validation errors.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>validate_on_submit()</code> returns True when…</div>
+      <div class="opts">
+        <details><summary>A. Page is GET</summary><div class="ans">Nope — only POST.</div></details>
+        <details><summary>B. POST + all validators pass</summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. SECRET_KEY is used for…</div>
+      <div class="opts">
+        <details><summary>A. CSRF + sessions</summary><div class="ans">✓</div></details>
+        <details><summary>B. Database</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I describe my form with a <span class="blank"></span>, and each field has <span class="blank"></span> to check input."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build a signup form ✅</h2>
+    <ul class="check-list">
+      <li>Install <code>flask-wtf</code></li>
+      <li>Set <code>SECRET_KEY</code></li>
+      <li>Define <code>SignupForm</code> with validators</li>
+      <li>Render with <code>form.hidden_tag()</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add an <code>Email()</code> validator.</div>
+      <div class="item"><span class="lvl">★★</span>Style errors with Bootstrap <code>is-invalid</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Custom validator: name can't be "admin".</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why is SECRET_KEY needed for FlaskForm?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — SECRET_KEY가 왜 필요?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Validators<br>guard your form.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: study cafes — students log good spots.</p>
+    <p class="bilingual">다음 주: 스터디 카페 정보 모으기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

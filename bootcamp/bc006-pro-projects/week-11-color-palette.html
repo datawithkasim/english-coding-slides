@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 11 — Color Palette Generator</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 11 · Day 91 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 11</div>
+    <div class="emoji">🎨</div>
+    <h1>Color Palette<br>Generator</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">count</span> + <span class="sub">rank</span> the top colors in an image.</p>
+    <p class="bilingual">사진에서 자주 쓰인 색 5개 뽑아내기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why <code>or ""</code> after <code>extract_text()</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">extract_text() can return None — fallback to empty string avoids crash.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What's the top color?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">from</span> collections <span class="kw">import</span> Counter
+pixels = [(<span class="num">255</span>,<span class="num">0</span>,<span class="num">0</span>),(<span class="num">255</span>,<span class="num">0</span>,<span class="num">0</span>),
+          (<span class="num">0</span>,<span class="num">255</span>,<span class="num">0</span>)]
+<span class="fn">print</span>(<span class="fn">Counter</span>(pixels).<span class="fn">most_common</span>(<span class="num">1</span>))</pre>
+      <details><summary>Reveal output</summary><div class="ans"><code>[((255,0,0), 2)]</code> — red wins, 2 votes.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">pixel</span>
+      <span class="gloss">one dot in an image</span>
+      <span class="ko">픽셀</span>
+
+      <span class="term">Counter</span>
+      <span class="gloss">tally items in a list</span>
+      <span class="ko">개수 세기</span>
+
+      <span class="term">hex</span>
+      <span class="gloss">color string like #ff0000</span>
+      <span class="ko">16진수 색상</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Pixel → tuple → count 🎨</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">getdata()</span><span class="val">all pixels</span></div>
+      <div class="varbox"><span class="name">Counter</span><span class="val">count each</span></div>
+      <div class="varbox"><span class="name">most_common</span><span class="val">top N</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each pixel = (R,G,B) tuple.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Top 5 colors</h2>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image
+<span class="kw">from</span> collections <span class="kw">import</span> Counter
+
+img = Image.<span class="fn">open</span>(<span class="str">"photo.jpg"</span>).<span class="fn">convert</span>(<span class="str">"RGB"</span>)
+img = img.<span class="fn">resize</span>((<span class="num">100</span>, <span class="num">100</span>))
+
+pixels = <span class="fn">list</span>(img.<span class="fn">getdata</span>())
+top5   = <span class="fn">Counter</span>(pixels).<span class="fn">most_common</span>(<span class="num">5</span>)
+
+<span class="kw">for</span> color, count <span class="kw">in</span> top5:
+    <span class="fn">print</span>(color, count)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>RGB → hex</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">(255,0,0)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">"%02x%02x%02x"</span><span class="val">"ff0000"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">(0,128,255)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">hex</span><span class="val">"0080ff"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># prefix "#" →</span> <span class="out">CSS-ready</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Count + rank</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">pixels</div>
+      <div class="cell head">count</div>
+      <div class="cell head">top 1</div>
+
+      <div class="cell">R,R,R,G</div>
+      <div class="cell">R:3, G:1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">R</span></details></div>
+
+      <div class="cell">B,B,G,G,G</div>
+      <div class="cell">B:2, G:3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">G</span></details></div>
+
+      <div class="cell">R,G,B (each 1)</div>
+      <div class="cell">tied</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">first one</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>RGBA tuples</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>img = Image.<span class="fn">open</span>(<span class="str">"x.png"</span>)
+pixels = <span class="fn">list</span>(img.<span class="fn">getdata</span>())</pre>
+        <p style="margin-top:.4em;font-size:.85em">Counts each alpha variant separately</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>img = img.<span class="fn">convert</span>(<span class="str">"RGB"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">3-tuple, drops alpha.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — image too large -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Hangs forever</h2>
+<pre>img = Image.<span class="fn">open</span>(<span class="str">"4k_photo.jpg"</span>)
+pixels = <span class="fn">list</span>(img.<span class="fn">getdata</span>())  <span class="com"># 8M pixels</span></pre>
+    <div class="err">Counter loops 8 million tuples — slow + memory heavy</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Resize first: <code>img.resize((100,100))</code>. Sample is enough for palette.</p>
+      <p class="bilingual">큰 이미지는 100×100으로 축소 후 분석</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — RGB tuple display -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Ugly print</h2>
+<pre><span class="fn">print</span>(color)  <span class="com"># (255, 87, 51)</span></pre>
+    <div class="err">User sees raw tuple — not friendly for design tool</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Format as hex: <code>f"#{r:02x}{g:02x}{b:02x}"</code> → <code>#ff5733</code>.</p>
+      <p class="bilingual">디자이너용으로 hex (#ff5733) 변환</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — palette size 0 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Empty palette</h2>
+<pre>n   = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"How many? "</span>))
+top = <span class="fn">Counter</span>(pixels).<span class="fn">most_common</span>(n)</pre>
+    <div class="err">User types 0 → empty list, blank output</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Clamp the value: <code>n = max(1, min(n, 10))</code>. Always 1–10 colors.</p>
+      <p class="bilingual">입력값 범위 제한 (1~10)</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image
+<span class="kw">from</span> collections <span class="kw">import</span> ____
+
+img = Image.<span class="fn">open</span>(<span class="str">"___.jpg"</span>).<span class="fn">convert</span>(<span class="str">"___"</span>)
+img = img.<span class="fn">resize</span>((<span class="num">100</span>,<span class="num">100</span>))
+
+top = <span class="fn">Counter</span>(<span class="fn">list</span>(img.<span class="fn">getdata</span>())).____(<span class="num">5</span>)</pre>
+    <p style="margin-top:.6em">Goal: open RGB, resize, count, pick top 5.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — write HTML swatch</h2>
+<pre>html = <span class="str">"&lt;html&gt;&lt;body&gt;"</span>
+<span class="kw">for</span> (r,g,b), _ <span class="kw">in</span> top:
+    hex_ = <span class="fn">f</span><span class="str">"#{r:02x}{g:02x}{____:02x}"</span>
+    html += <span class="fn">f</span><span class="str">'&lt;div style="background:{hex_};...'</span>
+html += <span class="str">"&lt;/____&gt;"</span>
+
+<span class="fn">open</span>(<span class="str">"palette.html"</span>, <span class="str">"w"</span>).<span class="fn">write</span>(html)</pre>
+    <p style="margin-top:.6em">Output an HTML page with color blocks.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>Counter(list).most_common(3)</code> →</div>
+      <div class="opts">
+        <details><summary>A. Top 3 items + counts</summary><div class="ans">✓ Sorted by frequency.</div></details>
+        <details><summary>B. First 3 items</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Hex of <code>(255, 255, 255)</code> is…</div>
+      <div class="opts">
+        <details><summary>A. <code>#ffffff</code></summary><div class="ans">✓ White.</div></details>
+        <details><summary>B. <code>#000000</code></summary><div class="ans">Nope — that's black.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Counter tallies every <span class="blank"></span> tuple, and <code>.most_common(5)</code> returns the <span class="blank"></span> 5."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🎨</h2>
+    <ul class="check-list">
+      <li>Open and resize an image (PIL)</li>
+      <li>Convert to RGB, get pixel list</li>
+      <li>Counter → top 5 colors</li>
+      <li>Print each as hex code</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Write hex codes to a text file.</div>
+      <div class="item"><span class="lvl">★★</span>Generate an HTML page that shows the swatches.</div>
+      <div class="item"><span class="lvl">★★★</span>Group similar colors with k-means (sklearn).</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why resize the image before counting pixels?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 픽셀 세기 전에 이미지 축소하는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Pixels = tuples.<br>Counter ranks.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: custom web scraper.</p>
+    <p class="bilingual">다음 주: 웹 스크래퍼 직접 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

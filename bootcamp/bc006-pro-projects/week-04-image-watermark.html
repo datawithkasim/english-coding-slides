@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 4 — Image Watermark App</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 4 · Day 84 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 4</div>
+    <div class="emoji">🖼️</div>
+    <h1>Image<br>Watermark</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">load</span> + <span class="sub">stamp</span> text on a photo.</p>
+    <p class="bilingual">사진 위에 텍스트 워터마크를 찍는 앱 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you check a diagonal win on a 3×3 board?</div>
+      <details><summary>Show answer</summary><div class="ans">Compare <code>board[0][0] == board[1][1] == board[2][2]</code> (and the other diagonal).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image, ImageDraw
+
+img  = Image.<span class="fn">open</span>(<span class="str">"cat.png"</span>)
+draw = ImageDraw.<span class="fn">Draw</span>(img)
+draw.<span class="fn">text</span>((<span class="num">10</span>,<span class="num">10</span>), <span class="str">"© Min"</span>)
+img.<span class="fn">save</span>(<span class="str">"out.png"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">A new file <code>out.png</code> with "© Min" in the top-left corner.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">PIL / Pillow</span>
+      <span class="gloss">image library</span>
+      <span class="ko">이미지 라이브러리</span>
+
+      <span class="term">RGBA</span>
+      <span class="gloss">color + transparency</span>
+      <span class="ko">투명도 포함 색상</span>
+
+      <span class="term">canvas</span>
+      <span class="gloss">surface you draw on</span>
+      <span class="ko">캔버스</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Image = pixel grid 🟪</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">open()</span><span class="val">load file</span></div>
+      <div class="varbox"><span class="name">Draw()</span><span class="val">edit canvas</span></div>
+      <div class="varbox"><span class="name">save()</span><span class="val">write file</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Open → edit → save.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Stamp + save</h2>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image, ImageDraw, ImageFont
+
+img  = Image.<span class="fn">open</span>(<span class="str">"photo.jpg"</span>).<span class="fn">convert</span>(<span class="str">"RGBA"</span>)
+draw = ImageDraw.<span class="fn">Draw</span>(img)
+
+text = <span class="fn">input</span>(<span class="str">"Watermark? "</span>)
+draw.<span class="fn">text</span>((<span class="num">20</span>, <span class="num">20</span>), text,
+          fill=(<span class="num">255</span>,<span class="num">255</span>,<span class="num">255</span>,<span class="num">180</span>))
+
+img.<span class="fn">save</span>(<span class="str">"out.png"</span>)
+<span class="fn">print</span>(<span class="str">"Saved!"</span>)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Convert → stamp → save</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">photo.jpg</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">.convert("RGBA")</span><span class="val">supports alpha</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"© Min"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">draw.text(...)</span><span class="val">stamped pixels</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># save →</span> <span class="out">out.png on disk</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Where does the text land?</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">x, y</div>
+      <div class="cell head">corner</div>
+      <div class="cell head">match?</div>
+
+      <div class="cell">(0, 0)</div>
+      <div class="cell">top-left</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">(w-100, 10)</div>
+      <div class="cell">top-right</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">(10, h-30)</div>
+      <div class="cell">bottom-left</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot to save</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>draw.<span class="fn">text</span>((<span class="num">10</span>,<span class="num">10</span>), <span class="str">"hi"</span>)
+<span class="com"># no save()</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Memory edit only — no file</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>draw.<span class="fn">text</span>((<span class="num">10</span>,<span class="num">10</span>), <span class="str">"hi"</span>)
+img.<span class="fn">save</span>(<span class="str">"out.png"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Save writes the file.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — PIL not installed -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Import fails</h2>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image</pre>
+    <div class="err">ModuleNotFoundError: No module named 'PIL'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Install Pillow in the terminal: <code>pip install Pillow</code>. (Import name is <code>PIL</code>, package name is <code>Pillow</code>.)</p>
+      <p class="bilingual">설치 명령: pip install Pillow (import는 PIL)</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — image mode -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Transparency ignored</h2>
+<pre>img  = Image.<span class="fn">open</span>(<span class="str">"photo.jpg"</span>)
+draw.<span class="fn">text</span>((<span class="num">10</span>,<span class="num">10</span>), <span class="str">"hi"</span>,
+          fill=(<span class="num">255</span>,<span class="num">255</span>,<span class="num">255</span>,<span class="num">120</span>))</pre>
+    <div class="err">Text shows as solid white — alpha (120) ignored</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">JPG is RGB only. Convert first: <code>.convert("RGBA")</code> to enable transparency.</p>
+      <p class="bilingual">JPG는 RGB — 투명도 쓰려면 RGBA로 변환</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — save format mismatch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Save format wrong</h2>
+<pre>img = img.<span class="fn">convert</span>(<span class="str">"RGBA"</span>)
+img.<span class="fn">save</span>(<span class="str">"out.jpg"</span>)</pre>
+    <div class="err">OSError: cannot write mode RGBA as JPEG</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">JPG can't hold alpha. Either use <code>.png</code>, or <code>.convert("RGB")</code> before save.</p>
+      <p class="bilingual">RGBA는 JPG로 못 저장 — PNG 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> PIL <span class="kw">import</span> Image, ImageDraw
+
+img  = Image.<span class="fn">open</span>(<span class="str">"___"</span>).<span class="fn">convert</span>(<span class="str">"____"</span>)
+draw = ImageDraw.<span class="fn">Draw</span>(img)
+draw.<span class="fn">text</span>((___, ___), <span class="str">"© Me"</span>)
+img.<span class="fn">save</span>(<span class="str">"out.____"</span>)</pre>
+    <p style="margin-top:.6em">Goal: load photo, stamp, save as PNG.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — bottom-right + bigger</h2>
+<pre>img  = Image.<span class="fn">open</span>(<span class="str">"photo.png"</span>).<span class="fn">convert</span>(<span class="str">"RGBA"</span>)
+draw = ImageDraw.<span class="fn">Draw</span>(img)
+font = ImageFont.<span class="fn">truetype</span>(<span class="str">"arial.ttf"</span>, ____)
+
+w, h = img.____
+draw.<span class="fn">text</span>((w-<span class="num">200</span>, h-____), <span class="str">"© Me"</span>,
+          font=font)</pre>
+    <p style="margin-top:.6em">Bigger font, anchor to bottom-right.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To install Pillow you run…</div>
+      <div class="opts">
+        <details><summary>A. <code>pip install PIL</code></summary><div class="ans">Nope — that's an old fork.</div></details>
+        <details><summary>B. <code>pip install Pillow</code></summary><div class="ans">✓ Then <code>from PIL import …</code></div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. The 4th color value (alpha) means…</div>
+      <div class="opts">
+        <details><summary>A. Transparency</summary><div class="ans">✓ 0 = invisible, 255 = solid.</div></details>
+        <details><summary>B. Brightness</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"We <code>open()</code> the image, then <span class="blank"></span> on it with Draw, then <span class="blank"></span> to a new file."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🖼️</h2>
+    <ul class="check-list">
+      <li>pip install Pillow</li>
+      <li>Open a JPG/PNG of your choice</li>
+      <li>Ask user for watermark text</li>
+      <li>Stamp and save as <code>out.png</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Let user pick position: tl, tr, bl, br.</div>
+      <div class="item"><span class="lvl">★★</span>Watermark every image in a folder with <code>os.listdir</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Build a Tkinter UI — file picker + preview.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>when do you need <code>.convert("RGBA")</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — convert("RGBA")가 필요한 때?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Code edits<br>real files.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Tkinter — windows + buttons.</p>
+    <p class="bilingual">다음 주: Tkinter — 창과 버튼으로 GUI</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 7 — Flask Higher Lower</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 7 · Day 55 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 7</div>
+    <div class="emoji">🎲</div>
+    <h1>Flask<br>Higher Lower</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">read</span> + <span class="sub">compare</span> URL guesses.</p>
+    <p class="bilingual">URL로 숫자 맞추는 웹 게임 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>@app.route("/")</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Maps the URL <code>/</code> to the function below it.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does <code>&lt;int:guess&gt;</code> do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;int:guess&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(guess):
+    <span class="kw">return</span> <span class="fn">str</span>(guess + <span class="num">1</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">URL <code>/guess/5</code> → guess = 5 (int). Returns "6".</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">URL param</span>
+      <span class="gloss">value captured from the URL</span>
+      <span class="ko">URL 매개변수</span>
+
+      <span class="term">converter</span>
+      <span class="gloss"><code>int:</code> casts URL part to int</span>
+      <span class="ko">형 변환</span>
+
+      <span class="term">404</span>
+      <span class="gloss">no route matches this URL</span>
+      <span class="ko">없는 페이지</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>URL → variable → answer 🔢</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">URL</span><span class="val">/guess/7</span></div>
+      <div class="varbox"><span class="name">guess</span><span class="val">7 (int)</span></div>
+      <div class="varbox"><span class="name">vs target</span><span class="val">"higher"</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">URL becomes a function input.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Compare guess to target</h2>
+<pre><span class="kw">import</span> random
+target = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">100</span>)
+
+@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;int:g&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(g):
+    <span class="kw">if</span> g &lt; target:
+        <span class="kw">return</span> <span class="str">"Higher!"</span>
+    <span class="kw">if</span> g &gt; target:
+        <span class="kw">return</span> <span class="str">"Lower!"</span>
+    <span class="kw">return</span> <span class="str">"You got it! 🎉"</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ /guess/42</div>
+      <div style="opacity:1">Higher!  (if target = 73)</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>One URL, one answer</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">/guess/42</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">g</span><span class="val">42</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">target = 73</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">42 &lt; 73</span><span class="val">True</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># return →</span> <span class="out">"Higher!"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>target = 50</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">URL</div>
+      <div class="cell head">g</div>
+      <div class="cell head">compare</div>
+      <div class="cell head">answer</div>
+
+      <div class="cell">/guess/30</div>
+      <div class="cell">30</div>
+      <div class="cell">30 &lt; 50</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Higher</span></details></div>
+
+      <div class="cell">/guess/80</div>
+      <div class="cell">80</div>
+      <div class="cell">80 &gt; 50</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Lower</span></details></div>
+
+      <div class="cell">/guess/50</div>
+      <div class="cell">50</div>
+      <div class="cell">==</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">You got it</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot the converter</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;g&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(g):
+    <span class="kw">return</span> g + <span class="num">1</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">→ TypeError: str + int</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;int:g&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(g):
+    <span class="kw">return</span> <span class="fn">str</span>(g + <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ g is int, return str</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>int cast on URL param</h2>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;g&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(g):
+    <span class="kw">if</span> g &lt; target: ...</pre>
+    <div class="err">TypeError: '&lt;' not supported between str and int</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">URL parts are strings. Add <code>&lt;int:g&gt;</code> or cast: <code>int(g)</code>.</p>
+      <p class="bilingual">URL은 항상 문자열 — int 변환 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Comparison wrong</h2>
+<pre><span class="kw">if</span> g &gt; target:
+    <span class="kw">return</span> <span class="str">"Higher!"</span></pre>
+    <div class="err">Says "Higher" when guess is too big — backwards</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">If guess &gt; target, real answer is "Lower". Swap the messages.</p>
+      <p class="bilingual">크면 Lower, 작으면 Higher</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Route 404</h2>
+<pre><span class="com"># URL: /guess</span>
+<span class="com"># Defined: /guess/&lt;int:g&gt;</span></pre>
+    <div class="err">404 Not Found</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">No number in URL. Visit <code>/guess/42</code>, or add a second route for <code>/guess</code>.</p>
+      <p class="bilingual">URL에 숫자 빠짐 — /guess/42</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/guess/&lt;___:g&gt;"</span>)
+<span class="kw">def</span> <span class="fn">play</span>(g):
+    <span class="kw">if</span> g ___ target:
+        <span class="kw">return</span> <span class="str">"Higher!"</span>
+    ...</pre>
+    <p style="margin-top:.6em">Goal: int converter, less-than compare.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — range hint</h2>
+<pre><span class="kw">def</span> <span class="fn">play</span>(g):
+    diff = <span class="fn">abs</span>(g - target)
+    <span class="kw">if</span> g == target:
+        <span class="kw">return</span> <span class="str">"____"</span>
+    <span class="kw">if</span> diff &lt; ___:
+        <span class="kw">return</span> <span class="str">"Hot!"</span>
+    <span class="kw">return</span> <span class="str">"____"</span></pre>
+    <p style="margin-top:.6em">Hot when diff &lt; 10. Else "Cold".</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. URL <code>/x/7</code> with route <code>"/x/&lt;int:n&gt;"</code> gives n = …</div>
+      <div class="opts">
+        <details><summary>A. "7" (string)</summary><div class="ans">Nope — int converter casts it.</div></details>
+        <details><summary>B. 7 (int)</summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Flask returns 404 when…</div>
+      <div class="opts">
+        <details><summary>A. No route matches the URL</summary><div class="ans">✓</div></details>
+        <details><summary>B. Code crashed</summary><div class="ans">Nope — that's 500.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I capture the guess from the URL using <span class="blank"></span>, then compare it to <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the game 🎲</h2>
+    <ul class="check-list">
+      <li>Generate random target 1-100</li>
+      <li>Route <code>/guess/&lt;int:g&gt;</code></li>
+      <li>Compare and return message</li>
+      <li>Test in browser</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Return colored HTML — red for Lower, green for win.</div>
+      <div class="item"><span class="lvl">★★</span>Count tries — display "tries: N".</div>
+      <div class="item"><span class="lvl">★★★</span>Reset target on URL <code>/new</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do we need <code>&lt;int:…&gt;</code> in the URL pattern?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — int 컨버터 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">URLs carry<br>data.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: serve real HTML + images.</p>
+    <p class="bilingual">다음 주: 진짜 HTML 파일과 이미지 보내기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

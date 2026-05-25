@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 15 — Flash Cards Capstone</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 15 · Day 31 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 15</div>
+    <div class="emoji">🃏</div>
+    <h1>Flash Cards<br>(KO ↔ EN)</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">flip</span> + <span class="sub">save</span> a study app.</p>
+    <p class="bilingual">한국어-영어 플래시카드 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which exception does an empty JSON file raise?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>json.JSONDecodeError</code> — catch with try/except.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens after 3s?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>win.<span class="fn">after</span>(<span class="num">3000</span>, flip_card)</pre>
+      <details><summary>Reveal</summary><div class="ans">After 3000ms, <code>flip_card</code> runs — show the back.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">flip</span>
+      <span class="gloss">show the other side</span>
+      <span class="ko">뒤집기</span>
+
+      <span class="term">progress</span>
+      <span class="gloss">cards left to learn</span>
+      <span class="ko">진행도</span>
+
+      <span class="term">Canvas</span>
+      <span class="gloss">tkinter drawing area</span>
+      <span class="ko">캔버스</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>3 pieces fit together</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">pandas</span><span class="val">load CSV</span></div>
+      <div class="varbox"><span class="name">tkinter</span><span class="val">show + buttons</span></div>
+      <div class="varbox"><span class="name">JSON</span><span class="val">save progress</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Data + UI + storage.</p>
+    <p class="bilingual" style="text-align:center">데이터 + UI + 저장</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Pick + flip a card</h2>
+<pre><span class="kw">import</span> random, pandas <span class="kw">as</span> pd
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">"words.csv"</span>)
+cards = df.<span class="fn">to_dict</span>(orient=<span class="str">"records"</span>)
+current = {}
+
+<span class="kw">def</span> <span class="fn">next_card</span>():
+    <span class="kw">global</span> current
+    current = random.<span class="fn">choice</span>(cards)
+    front.<span class="fn">config</span>(text=current[<span class="str">"ko"</span>])
+    win.<span class="fn">after</span>(<span class="num">3000</span>, flip)
+
+<span class="kw">def</span> <span class="fn">flip</span>():
+    front.<span class="fn">config</span>(text=current[<span class="str">"en"</span>])</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Flow per card</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">next_card</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">show ko</span><span class="val">"학교"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">after 3s</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">flip → en</span><span class="val">"school"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># ✓ or ✗ →</span> <span class="out">save progress, next card</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Cards left?</h2>
+<pre>cards = [<span class="str">"a"</span>, <span class="str">"b"</span>, <span class="str">"c"</span>]
+done   = []</pre>
+    <div class="trace-grid">
+      <div class="cell head">action</div>
+      <div class="cell head">cards</div>
+      <div class="cell head">done</div>
+
+      <div class="cell">know "a"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">["b","c"]</span></details></div>
+      <div class="cell">["a"]</div>
+
+      <div class="cell">know "c"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">["b"]</span></details></div>
+      <div class="cell">["a","c"]</div>
+
+      <div class="cell">empty?</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell">—</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Empty card list crashes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>current = random.<span class="fn">choice</span>(cards)</pre>
+        <p style="margin-top:.4em;font-size:.85em">IndexError when cards == [].</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">if</span> <span class="kw">not</span> cards:
+    front.<span class="fn">config</span>(text=<span class="str">"Done!"</span>)
+    <span class="kw">return</span>
+current = random.<span class="fn">choice</span>(cards)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Guard before pick.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Card never flips</h2>
+<pre>win.<span class="fn">after</span>(<span class="num">3000</span>, <span class="fn">flip</span>())</pre>
+    <div class="err">Flips once at startup, never again</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Drop the <code>()</code>: <code>win.after(3000, flip)</code>. Pass, don't call.</p>
+      <p class="bilingual">after에는 함수 자체 — () 없이</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Progress not saved</h2>
+<pre><span class="kw">def</span> <span class="fn">know_it</span>():
+    cards.<span class="fn">remove</span>(current)</pre>
+    <div class="err">Quit + restart → all words back</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">After remove, save remaining list to JSON: <code>json.dump(cards, f)</code>.</p>
+      <p class="bilingual">남은 단어를 JSON에 저장</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Empty list edge</h2>
+<pre>current = random.<span class="fn">choice</span>(cards)</pre>
+    <div class="err">IndexError: Cannot choose from an empty sequence</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check first: <code>if not cards: show "All done!"</code>.</p>
+      <p class="bilingual">빈 리스트 먼저 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">next_card</span>():
+    <span class="kw">global</span> current
+    <span class="kw">if</span> <span class="kw">not</span> ____:
+        front.<span class="fn">config</span>(text=<span class="str">"Done!"</span>); <span class="kw">return</span>
+    current = random.<span class="fn">______</span>(cards)
+    front.<span class="fn">config</span>(text=current[<span class="str">"ko"</span>])
+    win.<span class="fn">after</span>(<span class="num">3000</span>, ____)</pre>
+    <p style="margin-top:.6em">Goal: guard, pick, schedule flip.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — save remaining</h2>
+<pre><span class="kw">def</span> <span class="fn">know_it</span>():
+    cards.<span class="fn">remove</span>(current)
+    <span class="kw">try</span>:
+        <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"left.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+            json.<span class="fn">______</span>(cards, f)
+    <span class="kw">except</span> OSError:
+        <span class="fn">print</span>(<span class="str">"can't save"</span>)
+    <span class="fn">next_card</span>()</pre>
+    <p style="margin-top:.6em">Persist remaining cards across runs.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>after(3000, flip)</code> vs <code>after(3000, flip())</code>:</div>
+      <div class="opts">
+        <details><summary>A. Same thing</summary><div class="ans">Different — second runs now.</div></details>
+        <details><summary>B. First schedules, second runs immediately</summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To save remaining cards, you use…</div>
+      <div class="opts">
+        <details><summary>A. <code>json.dump</code></summary><div class="ans">✓ Write the list to disk.</div></details>
+        <details><summary>B. <code>print</code></summary><div class="ans">Not persistent.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I load words from <span class="blank"></span>, flip after 3 seconds, and save the rest to <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Flash Cards 🃏</h2>
+    <ul class="check-list">
+      <li>Load <code>words.csv</code> with pandas (ko, en columns)</li>
+      <li>Show random KO, flip to EN after 3s</li>
+      <li>✓ / ✗ buttons remove or keep card</li>
+      <li>Save remaining list to JSON each round</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show progress: "12 / 50".</div>
+      <div class="item"><span class="lvl">★★</span>Reset button reloads full CSV.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a Canvas with a card image background.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how do pandas, tkinter, and JSON each help here?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 세 도구의 역할</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Many tools,<br>one app.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: datetime + email demo.</p>
+    <p class="bilingual">다음 주: datetime, 이메일 시연</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

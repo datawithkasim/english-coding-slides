@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 4 — Flask Auth</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 4 · Day 68 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 4</div>
+    <div class="emoji">🔐</div>
+    <h1>Flask<br>Auth</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">hash</span> + <span class="sub">login</span> users safely.</p>
+    <p class="bilingual">비밀번호 해시 + 로그인 — 안전한 사용자 인증</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What status code = resource missing?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>404</code> Not Found.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Same password, twice. Same hash?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>generate_password_hash(<span class="str">"abc"</span>)
+generate_password_hash(<span class="str">"abc"</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">Different hashes — random salt each time. But both verify "abc" correctly.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 auth words</h2>
+    <div class="vocab-table">
+      <span class="term">hash</span>
+      <span class="gloss">one-way scramble of a password</span>
+      <span class="ko">해시</span>
+
+      <span class="term">session</span>
+      <span class="gloss">memory that you are logged in</span>
+      <span class="ko">세션</span>
+
+      <span class="term">salt</span>
+      <span class="gloss">random extra added before hashing</span>
+      <span class="ko">솔트</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Sign-up vs login</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">sign-up</span><span class="val">hash + save</span></div>
+      <div class="varbox"><span class="name">login</span><span class="val">check_password_hash</span></div>
+      <div class="varbox"><span class="name">session</span><span class="val">remember user</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Store hash. Never the plain password.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Sign up + log in</h2>
+<pre><span class="kw">from</span> werkzeug.security <span class="kw">import</span> generate_password_hash, check_password_hash
+
+<span class="com"># on sign-up</span>
+user.password = generate_password_hash(<span class="str">"sunny"</span>)
+
+<span class="com"># on login</span>
+<span class="kw">if</span> check_password_hash(user.password, form_pw):
+    login_user(user)
+    <span class="kw">return</span> redirect(<span class="str">"/"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ login_user → session set</div>
+      <div style="opacity:1">current_user = user</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Hash flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"sunny"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">hash</span><span class="val">scrypt:32...d7e</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">login pw</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">check_password_hash</span><span class="val">True / False</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">True</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">login_user(user)</span><span class="val">session set</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What does each step do?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Step</div>
+      <div class="cell head">Function</div>
+      <div class="cell head">Input</div>
+      <div class="cell head">Output</div>
+
+      <div class="cell">1</div>
+      <div class="cell">generate_password_hash</div>
+      <div class="cell">"sunny"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">hash string</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">check_password_hash</div>
+      <div class="cell">hash + "sunny"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">login_user</div>
+      <div class="cell">user object</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">session cookie</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Plain-text password</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>user.password = form_pw
+<span class="kw">if</span> user.password == form_pw: ...</pre>
+        <p style="margin-top:.4em;font-size:.85em">DB leak → all passwords exposed.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>user.password = generate_password_hash(form_pw)
+check_password_hash(user.password, form_pw)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Hash one-way — leak is harmless.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — plain text password -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — plaintext</h2>
+<pre><span class="kw">def</span> <span class="fn">signup</span>():
+    user = User(email=form.email,
+                password=form.password)
+    db.session.add(user); db.session.commit()</pre>
+    <div class="err">DB stores password as plain text</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Hash first: <code>password=generate_password_hash(form.password)</code>.</p>
+      <p class="bilingual">DB에 비밀번호 그대로 저장 금지 — 반드시 해시</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — session not configured -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — session</h2>
+<pre>app = Flask(__name__)
+login_manager = LoginManager(app)
+
+<span class="com"># app.secret_key never set</span>
+session[<span class="str">"user"</span>] = <span class="num">7</span></pre>
+    <div class="err">RuntimeError: secret key not set</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Set <code>app.secret_key = os.environ["SECRET_KEY"]</code>. Sessions need a key to sign cookies.</p>
+      <p class="bilingual">세션 사용하려면 secret_key 설정 필수</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — logout failing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — logout</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/logout"</span>)
+<span class="kw">def</span> <span class="fn">logout</span>():
+    <span class="kw">return</span> redirect(<span class="str">"/"</span>)</pre>
+    <div class="err">User still appears logged in</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Call <code>logout_user()</code> before the redirect. Otherwise the session keeps the cookie.</p>
+      <p class="bilingual">logout_user() 호출해야 세션 종료</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">login</span>():
+    user = User.query.filter_by(email=form.email).first()
+    <span class="kw">if</span> user <span class="kw">and</span> ________(user.password, form.password):
+        ______(user)
+        <span class="kw">return</span> redirect(<span class="str">"/"</span>)</pre>
+    <p style="margin-top:.6em">Goal: verify hash, then log in.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — flash + redirect</h2>
+<pre><span class="kw">if</span> <span class="kw">not</span> user:
+    ______(<span class="str">"No user with that email"</span>)
+    <span class="kw">return</span> redirect(url_for(<span class="str">"login"</span>))
+<span class="kw">if</span> <span class="kw">not</span> ________(user.password, form.password):
+    ______(<span class="str">"Wrong password"</span>)
+    <span class="kw">return</span> redirect(url_for(<span class="str">"login"</span>))</pre>
+    <p style="margin-top:.6em">Goal: friendly flash messages on auth failure.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why hash before storing?</div>
+      <div class="opts">
+        <details><summary>A. To save space</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. So a DB leak doesn't expose passwords</summary><div class="ans">✓ One-way scramble.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>login_user(user)</code> does what?</div>
+      <div class="opts">
+        <details><summary>A. Saves to DB</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Sets a session cookie</summary><div class="ans">✓ Marks user logged in.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"We never store the <span class="blank"></span>. We hash it on sign-up and use <span class="blank"></span> on login."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Add auth to blog 🔐</h2>
+    <ul class="check-list">
+      <li>Sign-up route → hash + save</li>
+      <li>Login route → verify + <code>login_user</code></li>
+      <li>Logout route → <code>logout_user</code></li>
+      <li>Protect <code>/new-post</code> with <code>@login_required</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a "remember me" checkbox to login_user.</div>
+      <div class="item"><span class="lvl">★★</span>Require min 8-char password on sign-up.</div>
+      <div class="item"><span class="lvl">★★★</span>Send a welcome email after sign-up.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why is a hash safer than the plain password?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 해시가 평문보다 안전한 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Hash always.<br>Plain never.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: link users to their own posts.</p>
+    <p class="bilingual">다음 주: 사용자와 글을 연결</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 9 — Disappearing Text Writer</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 9 · Day 89 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 9</div>
+    <div class="emoji">👻</div>
+    <h1>Disappearing<br>Text Writer</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">detect</span> + <span class="sub">erase</span> when typing pauses.</p>
+    <p class="bilingual">5초간 안 치면 글이 사라지는 글쓰기 도구</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why redirect after a POST?</div>
+      <details><summary>Show answer</summary><div class="ans">So refresh doesn't duplicate the action — PRG pattern.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>last_key = time.<span class="fn">time</span>()
+
+<span class="kw">def</span> <span class="fn">check</span>():
+    <span class="kw">if</span> time.<span class="fn">time</span>() - last_key &gt; <span class="num">5</span>:
+        text.<span class="fn">delete</span>(<span class="str">"1.0"</span>, <span class="str">"end"</span>)
+    root.<span class="fn">after</span>(<span class="num">500</span>, check)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Every 0.5s, if no key for 5s — wipe the textbox.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">event</span>
+      <span class="gloss">user action (key, click)</span>
+      <span class="ko">이벤트</span>
+
+      <span class="term">bind</span>
+      <span class="gloss">attach function to event</span>
+      <span class="ko">이벤트 연결</span>
+
+      <span class="term">threshold</span>
+      <span class="gloss">trigger limit (5 sec)</span>
+      <span class="ko">기준값</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Timer + last keystroke ⌛</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">on_key</span><span class="val">last = now</span></div>
+      <div class="varbox"><span class="name">check</span><span class="val">now − last &gt; 5?</span></div>
+      <div class="varbox"><span class="name">wipe</span><span class="val">delete text</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each keypress resets the timer.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Tkinter writer</h2>
+<pre><span class="kw">import</span> tkinter <span class="kw">as</span> tk, time
+
+root = tk.<span class="fn">Tk</span>()
+text = tk.<span class="fn">Text</span>(root)
+text.<span class="fn">pack</span>()
+
+last = time.<span class="fn">time</span>()
+<span class="kw">def</span> <span class="fn">on_key</span>(e):
+    <span class="kw">global</span> last
+    last = time.<span class="fn">time</span>()
+
+<span class="kw">def</span> <span class="fn">check</span>():
+    <span class="kw">if</span> time.<span class="fn">time</span>() - last &gt; <span class="num">5</span>:
+        text.<span class="fn">delete</span>(<span class="str">"1.0"</span>, <span class="str">"end"</span>)
+    root.<span class="fn">after</span>(<span class="num">500</span>, check)
+
+text.<span class="fn">bind</span>(<span class="str">"&lt;Key&gt;"</span>, on_key)
+<span class="fn">check</span>()
+root.<span class="fn">mainloop</span>()</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Each key resets timer</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">type "a"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">last</span><span class="val">100.0</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">wait 3s</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">now − last</span><span class="val">3 (ok)</span></div>
+      </div>
+      <div class="read-line">
+        wait 6s <span class="com"># →</span> <span class="out">delete all 💥</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Wipe or no?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">last</div>
+      <div class="cell head">now</div>
+      <div class="cell head">gap</div>
+      <div class="cell head">wipe?</div>
+
+      <div class="cell">100</div>
+      <div class="cell">103</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">100</div>
+      <div class="cell">106</div>
+      <div class="cell">6</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">200</div>
+      <div class="cell">205.1</div>
+      <div class="cell">5.1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Missing global</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">def</span> <span class="fn">on_key</span>(e):
+    last = time.<span class="fn">time</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Creates local var — outer last never updates</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">def</span> <span class="fn">on_key</span>(e):
+    <span class="kw">global</span> last
+    last = time.<span class="fn">time</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Now updates outer var.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — after_cancel not called -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Double timers</h2>
+<pre><span class="kw">def</span> <span class="fn">restart</span>():
+    <span class="fn">check</span>()  <span class="com"># schedules a new check loop</span>
+    <span class="fn">check</span>()</pre>
+    <div class="err">Two check loops run — text wipes 2x faster, app stutters</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Save the id and cancel before restarting: <code>root.after_cancel(timer_id)</code>.</p>
+      <p class="bilingual">after를 다시 시작하기 전에 after_cancel</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — threshold wrong -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wipes too fast</h2>
+<pre><span class="kw">if</span> time.<span class="fn">time</span>() - last &gt; <span class="num">0.5</span>:
+    text.<span class="fn">delete</span>(<span class="str">"1.0"</span>, <span class="str">"end"</span>)</pre>
+    <div class="err">Half a second between words = wipe. Kid can't write!</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Raise threshold to 5 seconds: <code>&gt; 5</code>. Match the spec.</p>
+      <p class="bilingual">기준 시간을 5초로 (0.5초는 너무 짧음)</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — focus lost -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Keys don't register</h2>
+<pre>root.<span class="fn">bind</span>(<span class="str">"&lt;Key&gt;"</span>, on_key)</pre>
+    <div class="err">Bound to root, but Text widget steals focus → on_key never fires</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Bind on the Text widget itself: <code>text.bind("&lt;Key&gt;", on_key)</code>.</p>
+      <p class="bilingual">bind는 포커스 있는 위젯에 — Text에 직접 bind</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">on_key</span>(e):
+    <span class="kw">global</span> ____
+    last = time.<span class="fn">time</span>()
+
+<span class="kw">def</span> <span class="fn">check</span>():
+    <span class="kw">if</span> time.<span class="fn">time</span>() - last &gt; ____:
+        text.<span class="fn">delete</span>(<span class="str">"1.0"</span>, <span class="str">"____"</span>)
+    root.<span class="fn">after</span>(<span class="num">500</span>, ____)</pre>
+    <p style="margin-top:.6em">Goal: track time, wipe after 5s, re-schedule.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — countdown label</h2>
+<pre><span class="kw">def</span> <span class="fn">check</span>():
+    gap = time.<span class="fn">time</span>() - last
+    remain = <span class="num">5</span> - ____
+    label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{remain:.0f}s left"</span>)
+    <span class="kw">if</span> remain &lt;= ____:
+        text.<span class="fn">delete</span>(<span class="str">"1.0"</span>, <span class="str">"end"</span>)
+    root.<span class="fn">after</span>(____, check)</pre>
+    <p style="margin-top:.6em">Show seconds remaining live.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>text.bind("&lt;Key&gt;", fn)</code> means…</div>
+      <div class="opts">
+        <details><summary>A. Call fn on every keypress in text</summary><div class="ans">✓ Event handler.</div></details>
+        <details><summary>B. Press to focus text</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To re-run check() in 500ms…</div>
+      <div class="opts">
+        <details><summary>A. <code>time.sleep(0.5)</code></summary><div class="ans">Nope — blocks UI.</div></details>
+        <details><summary>B. <code>root.after(500, check)</code></summary><div class="ans">✓ Non-blocking schedule.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Every keypress resets <span class="blank"></span>, and the checker wipes the text when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 👻</h2>
+    <ul class="check-list">
+      <li>Tkinter window with a Text widget</li>
+      <li>Bind <code>&lt;Key&gt;</code> to update last-time</li>
+      <li>Every 500ms, check the gap</li>
+      <li>Wipe if gap &gt; 5 seconds</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show a countdown label that updates live.</div>
+      <div class="item"><span class="lvl">★★</span>Save snapshot to a file every minute.</div>
+      <div class="item"><span class="lvl">★★★</span>Fade text out gradually instead of instant delete.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does <code>root.after(500, check)</code> do?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — root.after(500, check)가 하는 일?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Events +<br>timers = apps.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: PDF → audiobook with PyPDF2 + pyttsx3.</p>
+    <p class="bilingual">다음 주: PDF를 오디오북으로 변환</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

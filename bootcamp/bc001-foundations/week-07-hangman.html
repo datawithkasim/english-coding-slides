@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 7 — Hangman</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 7 · Day 7 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 7</div>
+    <div class="emoji">🎯</div>
+    <h1>Hangman</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">combine</span> lists + loops + ifs.</p>
+    <p class="bilingual">리스트, 반복, 조건문 다 합쳐서 행맨 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What runs the function body — <code>greet</code> or <code>greet()</code>?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>greet()</code> — the parentheses call it.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>word = <span class="str">"cat"</span>
+<span class="kw">if</span> <span class="str">"a"</span> <span class="kw">in</span> word:
+    <span class="fn">print</span>(<span class="str">"found!"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">found! — <code>in</code> checks if a letter exists.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">algorithm</span>
+      <span class="gloss">step-by-step plan</span>
+      <span class="ko">알고리즘</span>
+
+      <span class="term">state</span>
+      <span class="gloss">what's stored right now</span>
+      <span class="ko">상태</span>
+
+      <span class="term">update</span>
+      <span class="gloss">change a value</span>
+      <span class="ko">갱신</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Game state changes each turn 🔄</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">word</span><span class="val">"bts"</span></div>
+      <div class="varbox"><span class="name">guessed</span><span class="val">["b","s"]</span></div>
+      <div class="varbox"><span class="name">lives</span><span class="val">5</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each guess updates state. Loop until win or lose.</p>
+    <p class="bilingual">매 턴 상태가 바뀜 — 이기거나 지면 멈춤</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One guess loop</h2>
+<pre><span class="kw">import</span> random
+words = [<span class="str">"bts"</span>, <span class="str">"tiger"</span>, <span class="str">"kimchi"</span>]
+word = random.<span class="fn">choice</span>(words)
+guessed = []
+lives = <span class="num">5</span>
+
+<span class="kw">while</span> lives &gt; <span class="num">0</span>:
+    g = <span class="fn">input</span>(<span class="str">"Letter? "</span>).<span class="fn">lower</span>()
+    <span class="kw">if</span> g <span class="kw">in</span> word:
+        guessed.<span class="fn">append</span>(g)
+    <span class="kw">else</span>:
+        lives = lives - <span class="num">1</span></pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>State updates each turn</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">guess "b"</div>
+        <div class="arrow-icon">✅</div>
+        <div class="target-box"><span class="name">guessed</span><span class="val">["b"]</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">guess "z"</div>
+        <div class="arrow-icon">❌</div>
+        <div class="target-box"><span class="name">lives</span><span class="val">4</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">guess "t"</div>
+        <div class="arrow-icon">✅</div>
+        <div class="target-box"><span class="name">guessed</span><span class="val">["b","t"]</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># word "bts" → display "b _ t" then "bts" (win!)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Lives left after each guess</h2>
+<pre>word = <span class="str">"cat"</span>
+lives = <span class="num">3</span>
+guesses = [<span class="str">"c"</span>, <span class="str">"z"</span>, <span class="str">"a"</span>, <span class="str">"x"</span>]</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">turn</div>
+      <div class="cell head"><code>1 c</code></div>
+      <div class="cell head"><code>2 z</code></div>
+      <div class="cell head"><code>3 a</code></div>
+      <div class="cell head"><code>4 x</code></div>
+
+      <div class="cell">lives</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Game over? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700">?</summary> <span style="color:#0a6b2e;font-weight:700">No — 1 life left, "t" not guessed</span></details></p>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Case sensitivity</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>word = <span class="str">"cat"</span>
+g = <span class="fn">input</span>(<span class="str">"? "</span>)
+<span class="kw">if</span> g <span class="kw">in</span> word: ...</pre>
+        <p style="margin-top:.4em;font-size:.85em">User types <code>"C"</code> → not found</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>word = <span class="str">"cat"</span>
+g = <span class="fn">input</span>(<span class="str">"? "</span>).<span class="fn">lower</span>()
+<span class="kw">if</span> g <span class="kw">in</span> word: ...</pre>
+        <p style="margin-top:.4em;font-size:.85em">Always lowercase first</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — case mismatch</h2>
+<pre>word = <span class="str">"Tiger"</span>
+g = <span class="fn">input</span>(<span class="str">"? "</span>)
+<span class="kw">if</span> g <span class="kw">in</span> word:
+    <span class="fn">print</span>(<span class="str">"hit"</span>)</pre>
+    <div class="err">User types "t" → no hit, even though word starts with T</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Lowercase both sides: <code>word.lower()</code> and <code>g.lower()</code>.</p>
+      <p class="bilingual">대소문자 다르면 매칭 안 됨 — 둘 다 lower()</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — repeat guess</h2>
+<pre>guessed = []
+g = <span class="fn">input</span>(<span class="str">"? "</span>)
+<span class="kw">if</span> g <span class="kw">in</span> word:
+    guessed.<span class="fn">append</span>(g)
+    <span class="fn">print</span>(<span class="str">"hit"</span>)</pre>
+    <div class="err">User types same letter twice — counts twice as hit</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check first: <code>if g in guessed: print("already")</code> — skip rest.</p>
+      <p class="bilingual">이미 추측한 글자 체크 먼저</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong win check</h2>
+<pre>word = <span class="str">"bts"</span>
+guessed = [<span class="str">"b"</span>, <span class="str">"t"</span>]
+
+<span class="kw">if</span> <span class="fn">len</span>(guessed) == <span class="fn">len</span>(word):
+    <span class="fn">print</span>(<span class="str">"You won!"</span>)</pre>
+    <div class="err">Says "won" even though "s" never guessed</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check every letter: <code>all(c in guessed for c in word)</code>.</p>
+      <p class="bilingual">길이만 비교하면 안 됨 — 모든 글자 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>word = random.<span class="fn">choice</span>(words)
+guessed = []
+lives = <span class="num">5</span>
+
+<span class="kw">while</span> lives ___ <span class="num">0</span>:
+    g = <span class="fn">input</span>(<span class="str">"? "</span>).______()
+    <span class="kw">if</span> g <span class="kw">in</span> ____:
+        guessed.append(g)
+    <span class="kw">else</span>:
+        lives = lives ___ <span class="num">1</span></pre>
+    <p style="margin-top:.6em">Goal: loop until lives = 0, track guesses.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — display masked word</h2>
+<pre>word = <span class="str">"kimchi"</span>
+guessed = [<span class="str">"k"</span>, <span class="str">"i"</span>]
+
+display = <span class="str">""</span>
+<span class="kw">for</span> c <span class="kw">in</span> word:
+    <span class="kw">if</span> c <span class="kw">in</span> ___:
+        display = display + ___
+    <span class="kw">else</span>:
+        display = display + <span class="str">"_"</span>
+
+<span class="fn">print</span>(display)</pre>
+    <p style="margin-top:.6em">Should print: <code>ki__i_</code></p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>"a" in "cat"</code> →</div>
+      <div class="opts">
+        <details><summary>A. True</summary><div class="ans">✓ <code>a</code> is inside "cat".</div></details>
+        <details><summary>B. False</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Why use <code>.lower()</code> on input?</div>
+      <div class="opts">
+        <details><summary>A. Makes it shorter</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. So "A" matches "a"</summary><div class="ans">✓ Avoids case bugs.</div></details>
+        <details><summary>C. Removes spaces</summary><div class="ans">Nope — that's <code>.strip()</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Each turn we update <code>guessed</code> or <code>lives</code>. The loop stops when <span class="blank"></span> or <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Hangman 🎯</h2>
+    <ul class="check-list">
+      <li>Pick a word from a K-pop / food / animal list</li>
+      <li>Track guessed letters and lives</li>
+      <li>Loop: ask letter, check, update state</li>
+      <li>End on win (all letters guessed) or lose (lives = 0)</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show "already guessed!" if user repeats a letter.</div>
+      <div class="item"><span class="lvl">★★</span>Show a stick-figure that grows as lives drop.</div>
+      <div class="item"><span class="lvl">★★★</span>Let user choose category (kpop / food / animal) before play.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: name 2 things that change ("state") each turn in Hangman.</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 매 턴 바뀌는 상태 2가지?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Combine<br>everything.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: function parameters + Caesar cipher.</p>
+    <p class="bilingual">다음 주: 함수 매개변수 + 카이사르 암호</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -22,6 +22,22 @@
 <div><span style="color:var(--kw)">"type"</span>: <span style="color:var(--str)">"electric"</span></div>
 </div></div>
 
+<div class="slide"><div class="pill">Watch it!</div><h2>Look up a key</h2>
+<div class="viz viz-dict">
+  <div class="d-table">
+    <div class="d-row"><span class="d-key">"hp"</span><span class="d-sep">:</span><span class="d-val">35</span></div>
+    <div class="d-row"><span class="d-key">"type"</span><span class="d-sep">:</span><span class="d-val">"electric"</span></div>
+    <div class="d-row"><span class="d-key">"name"</span><span class="d-sep">:</span><span class="d-val">"pikachu"</span></div>
+  </div>
+  <div class="d-lookup">pikachu[<span class="d-qs"><span class="d-q d-q1">"hp"</span><span class="d-q d-q2">"name"</span></span>]</div>
+  <div class="output-box">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line d-out d-out1">35</div>
+    <div class="out-line d-out d-out2">"pikachu"</div>
+  </div>
+</div>
+<p class="bilingual">사전 조회</p></div>
+
 <div class="slide"><div class="pill">Code</div><h2>Make a Pokémon dict</h2>
 <pre>pikachu = {
     <span class="str">"name"</span>: <span class="str">"pikachu"</span>,
@@ -107,9 +123,13 @@ print(p)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opaci
       <div class="edge-card"><div class="ehead">Insertion order kept</div><div class="edesc">Since Python 3.7, dicts remember the order you added items in.</div></div>
       <div class="edge-card"><div class="ehead">Looping iterates keys</div><div class="edesc">Default <code>for k in d</code> = keys only. Use <code>.items()</code> for pairs.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">pirnt(pikachu[&quot;name&quot;]) print(pikachu[&quot;hp&quot;]) print(pikachu[&quot;type&quot;])</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>pirnt</code> is a typo of <code>print</code>. Python raises <code>NameError: name 'pirnt' is not defined</code>. Spell built-ins carefully.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">print(pikachu[&quot;name&quot;]) print(pikachu[&quot;hp&quot;]) print(pikachu[&quot;type&quot;])</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="pikachu[&#x27;name&#x27;] looks up the key &#x27;name&#x27; → &quot;pikachu&quot;"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 5</div><div class="q">In the example, what does <code>pikachu['name']</code> evaluate to?</div><div class="opts"><button class="opt">pikachu</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">age = input(&quot;Age? &quot;)
+if age &gt; 18:
+    print(&quot;Adult&quot;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>input()</code> always returns a string. Comparing a string with a number raises <code>TypeError</code>. Convert with <code>int()</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">age = int(input(&quot;Age? &quot;))
+if age &gt; 18:
+    print(&quot;Adult&quot;)</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="input() returns a string — wrap it in int()."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 5</div><div class="q">In the example, what does <code>pikachu['name']</code> evaluate to?</div><div class="opts"><button class="opt">pikachu</button>
 <button class="opt">35</button>
 <button class="opt">55</button>
 <button class="opt">electric</button></div><div class="qfeedback"></div></div>
@@ -125,11 +145,9 @@ print(p)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opaci
 <button class="opt"><code>{ }</code></button>
 <button class="opt"><code>( )</code></button>
 <button class="opt"><code>&lt; &gt;</code></button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 5 of 5</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">p = {&#x27;name&#x27;: &#x27;pika&#x27;, &#x27;hp&#x27;: 35}
-print(p[&#x27;type&#x27;])</pre></div><div class="opts"><button class="opt">The key &#x27;type&#x27; was never added to the dict. p[&#x27;type&#x27;] raises KeyError. Use p.get(&#x27;type&#x27;, &#x27;unknown&#x27;) for a safe default.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing <code>import sys</code>.</button>
-<button class="opt">Wrong indentation depth.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 5 of 5</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">age = input(&quot;Age? &quot;)
+if age &gt; 18:
+    print(&quot;Adult&quot;)</pre></div><div class="opts"><button class="opt">input() gives text; convert with int() before comparing to a number.</button><button class="opt">input() takes no prompt text.</button><button class="opt">if can't compare with &gt;.</button><button class="opt">age must be printed first.</button></div><div class="qfeedback"></div></div>
 <div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 5</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
 <div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Build a small dictionary that holds 3 of your favorite things (game, food, song, whatever) and print each one on its own line.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em">favs = {
     &#x27;game&#x27;: &#x27;___&#x27;,
@@ -141,5 +159,5 @@ print(p[&#x27;type&#x27;])</pre></div><div class="opts"><button class="opt">The 
 for k, v in favs.items():
     pass  # print(f&#x27;{k}: {v}&#x27;)</pre></div><p class="practice-hint">Open your editor. Save as <code>practice.py</code> (or <code>.html</code>). Run it. Iterate.</p></div>
 <!-- INJECTED-EXTRAS-END -->
-<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 25</span><button id="next">›</button></div>
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 26</span><button id="next">›</button></div>
 </div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 5 — Homework Auto-Fill</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 5 · Day 53 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 5</div>
+    <div class="emoji">📝</div>
+    <h1>Homework<br>Auto-Fill</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">auto-test</span> a feedback form with many rows.</p>
+    <p class="bilingual">숙제 피드백 폼을 자동으로 여러 번 테스트</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why use <code>find_elements</code> (plural)?</div>
+      <details><summary>Show answer</summary><div class="ans">It returns a list of all matches, so <code>len()</code> tallies them.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>By ID vs by NAME?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>driver.<span class="fn">find_element</span>(By.NAME, <span class="str">"hw"</span>).<span class="fn">send_keys</span>(<span class="str">"easy"</span>)
+driver.<span class="fn">find_element</span>(By.ID,   <span class="str">"score"</span>).<span class="fn">send_keys</span>(<span class="str">"5"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Finds field with name="hw" (type "easy"), then field with id="score" (type "5").</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">By.NAME</span>
+      <span class="gloss">match by name attribute</span>
+      <span class="ko">name 속성으로</span>
+
+      <span class="term">By.ID</span>
+      <span class="gloss">match by id attribute</span>
+      <span class="ko">id 속성으로</span>
+
+      <span class="term">submit</span>
+      <span class="gloss">send form data to the server</span>
+      <span class="ko">폼 전송</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Loop over test rows 🔁</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">test 1</span><span class="val">"easy"</span></div>
+      <div class="varbox"><span class="name">test 2</span><span class="val">"hard"</span></div>
+      <div class="varbox"><span class="name">test 3</span><span class="val">"fun"</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Same form. Different test inputs. Local file only.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Test the form</h2>
+<pre>tests = [
+    (<span class="str">"easy"</span>, <span class="str">"5"</span>),
+    (<span class="str">"hard"</span>, <span class="str">"3"</span>),
+]
+
+<span class="kw">for</span> hw, score <span class="kw">in</span> tests:
+    driver.<span class="fn">get</span>(<span class="str">"file:///hw.html"</span>)
+    driver.<span class="fn">find_element</span>(By.NAME, <span class="str">"hw"</span>).<span class="fn">send_keys</span>(hw)
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"score"</span>).<span class="fn">send_keys</span>(score)
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"go"</span>).<span class="fn">click</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Submitted: easy/5 then hard/3</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Per test step</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">("easy", "5")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">form</span><span class="val">filled</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">click submit</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">page</span><span class="val">redirect</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># back to start →</span> <span class="out">next test</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Match the locator</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">HTML</div>
+      <div class="cell head">By.ID</div>
+      <div class="cell head">By.NAME</div>
+      <div class="cell head">use</div>
+
+      <div class="cell"><code>id="x" name="y"</code></div>
+      <div class="cell">"x"</div>
+      <div class="cell">"y"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">either</span></details></div>
+
+      <div class="cell"><code>name="z"</code></div>
+      <div class="cell">—</div>
+      <div class="cell">"z"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">By.NAME</span></details></div>
+
+      <div class="cell"><code>id="q"</code></div>
+      <div class="cell">"q"</div>
+      <div class="cell">—</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">By.ID</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot to clear first</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>field.<span class="fn">send_keys</span>(<span class="str">"easy"</span>)
+field.<span class="fn">send_keys</span>(<span class="str">"hard"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ types "easyhard"</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>field.<span class="fn">clear</span>()
+field.<span class="fn">send_keys</span>(<span class="str">"hard"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ types "hard"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>By.NAME vs By.ID</h2>
+<pre>driver.<span class="fn">find_element</span>(By.ID, <span class="str">"hw"</span>)
+<span class="com"># but HTML says: &lt;input name="hw"&gt;</span></pre>
+    <div class="err">NoSuchElementException</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Field has <code>name</code>, not <code>id</code>. Use <code>By.NAME</code>.</p>
+      <p class="bilingual">name 속성이면 By.NAME 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>send_keys timing</h2>
+<pre>field = driver.<span class="fn">find_element</span>(...)
+field.<span class="fn">send_keys</span>(<span class="str">"hello"</span>)
+field.<span class="fn">send_keys</span>(<span class="str">"world"</span>)</pre>
+    <div class="err">Field contains "helloworld" — no space</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Each <code>send_keys</code> appends. Use one call: <code>send_keys("hello world")</code>.</p>
+      <p class="bilingual">send_keys는 이어 입력 — 한 번에 전체 문자열</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Submit redirect</h2>
+<pre>btn.<span class="fn">click</span>()
+field2 = driver.<span class="fn">find_element</span>(...)</pre>
+    <div class="err">Element gone — page redirected after submit</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">After submit, page reloads. Re-load with <code>driver.get(...)</code> or wait for new page.</p>
+      <p class="bilingual">submit 후 페이지 바뀜 — 다시 get</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>driver.<span class="fn">find_element</span>(By.____, <span class="str">"hw"</span>).<span class="fn">send_keys</span>(<span class="str">"easy"</span>)
+driver.<span class="fn">find_element</span>(By.ID, <span class="str">"_____"</span>).<span class="fn">send_keys</span>(<span class="str">"5"</span>)
+driver.<span class="fn">find_element</span>(By.ID, <span class="str">"go"</span>).<span class="fn">_____</span>()</pre>
+    <p style="margin-top:.6em">Goal: fill hw + score, submit.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — loop tests</h2>
+<pre>cases = [(<span class="str">"easy"</span>, <span class="str">"5"</span>), (<span class="str">"fun"</span>, <span class="str">"4"</span>)]
+
+<span class="kw">for</span> hw, score <span class="kw">in</span> _____:
+    driver.<span class="fn">get</span>(<span class="str">"file:///hw.html"</span>)
+    driver.<span class="fn">find_element</span>(By.NAME, <span class="str">"hw"</span>).<span class="fn">send_keys</span>(___)
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"score"</span>).<span class="fn">send_keys</span>(___)
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"go"</span>).<span class="fn">click</span>()</pre>
+    <p style="margin-top:.6em">Run 2 tests, fresh page each.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To erase a field before typing, use…</div>
+      <div class="opts">
+        <details><summary>A. <code>.clear()</code></summary><div class="ans">✓ Then send_keys.</div></details>
+        <details><summary>B. <code>.delete()</code></summary><div class="ans">Nope — no such method.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. After submit, the page redirects. To test again you must…</div>
+      <div class="opts">
+        <details><summary>A. Reload with <code>driver.get</code></summary><div class="ans">✓ Or wait for new page.</div></details>
+        <details><summary>B. Nothing — old refs still work</summary><div class="ans">Nope — page changed.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I pick <span class="blank"></span> as my locator when the field has <span class="blank"></span>, then send_keys."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Test the form 📝</h2>
+    <ul class="check-list">
+      <li>Make a list of 3 test cases</li>
+      <li>Loop, load <code>hw.html</code> each time</li>
+      <li>Fill, submit, repeat</li>
+      <li>Print "test N passed"</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a 3rd field for name + log who submitted.</div>
+      <div class="item"><span class="lvl">★★</span>Check the success page text after submit.</div>
+      <div class="item"><span class="lvl">★★★</span>Read test cases from a CSV file.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>when do you use <code>By.NAME</code> instead of <code>By.ID</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — name vs id 언제?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Bots can<br>test forms.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Flask — your own web server.</p>
+    <p class="bilingual">다음 주: Flask로 내 웹 서버 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -28,6 +28,21 @@
 <span class="kw">def</span> <span class="fn">draw_marker</span>(x):
     pygame.draw.<span class="fn">circle</span>(screen, RED, (x + <span class="num">10</span>, <span class="num">100</span>), <span class="num">10</span>)</pre></div>
 
+<div class="slide"><div class="pill">Watch it!</div><h2>Marker function in action</h2>
+<div class="viz viz-func">
+  <div class="fn-caller">
+    <span class="fn-callcode">draw_marker(<span class="arg">gun_x</span>)</span>
+    <span class="fn-result">→ <span class="rv">red dot drawn ✓</span></span>
+  </div>
+  <div class="fn-flow-down">↓ call</div>
+  <div class="fn-body">
+    <div class="fn-sig">def draw_marker(<span class="param">x</span>):</div>
+    <div class="fn-line">pygame.draw.circle(screen, RED, (<span class="param-use">x</span> + 10, 100), 10)</div>
+  </div>
+  <div class="fn-flow-up">↑ return</div>
+</div>
+<p class="bilingual">함수</p></div>
+
 <div class="slide"><div class="pill">Tidy loop</div><h2>Game loop becomes simple</h2>
 <pre><span class="kw">while</span> running:
     screen.<span class="fn">fill</span>(SKY)
@@ -114,25 +129,19 @@ while running:
       <div class="edge-card"><div class="ehead">self first</div><div class="edesc">Inside a class method, first param is always <code>self</code> — Python passes it automatically.</div></div>
       <div class="edge-card"><div class="ehead">Don&#x27;t shadow builtins</div><div class="edesc">Avoid <code>list = [1,2,3]</code> — you just broke <code>list()</code> for the rest of the file.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> The <code>print</code> line is not indented inside the function. Python raises <code>IndentationError</code>. Function bodies must be indented 4 spaces.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def greet(name):
-    print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="The lesson title says it: Many Functions"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Many Functions</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>.append()</code> changes the list in place and returns <code>None</code>. Reassigning makes <code>nums</code> become <code>None</code>. Just call <code>nums.append(4)</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">nums = [1, 2, 3]
+nums.append(4)
+print(nums)</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain=".append() returns None — don't reassign."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Many Functions</button>
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><div class="opts"><button class="opt">The print line is not indented inside the function. Python raises IndentationError. Function bodies must be indented 4 spaces.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing <code>import sys</code>.</button>
-<button class="opt">Wrong indentation depth.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre></div><div class="opts"><button class="opt">append() returns None, so reassigning makes nums None.</button><button class="opt">Lists can't grow after they're made.</button><button class="opt">append() needs two arguments.</button><button class="opt">You must write nums + 4 instead.</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Multiple Functions</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>

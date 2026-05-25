@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 4 — Score Tracker</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 4 · Day 36 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 4</div>
+    <div class="emoji">⚽</div>
+    <h1>Team Score<br>Tracker</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">fetch</span> + <span class="sub">alert</span> on match results.</p>
+    <p class="bilingual">우리 팀 경기 결과 알림 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you read a secret key in Python?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>os.getenv("KEY")</code> — never paste in code.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Which match prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>team = <span class="str">"Tottenham"</span>
+<span class="kw">for</span> m <span class="kw">in</span> matches:
+    <span class="kw">if</span> team <span class="kw">in</span> (m[<span class="str">"home"</span>], m[<span class="str">"away"</span>]):
+        <span class="fn">print</span>(m)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Only matches where Tottenham played.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">filter</span>
+      <span class="gloss">keep only matching items</span>
+      <span class="ko">필터</span>
+
+      <span class="term">rate limit</span>
+      <span class="gloss">max requests per minute</span>
+      <span class="ko">요청 제한</span>
+
+      <span class="term">ISO date</span>
+      <span class="gloss">YYYY-MM-DD format</span>
+      <span class="ko">날짜 형식</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Filter then alert 📣</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">all matches</span><span class="val">[…]</span></div>
+      <div class="varbox"><span class="name">my team only</span><span class="val">filter</span></div>
+      <div class="varbox"><span class="name">print</span><span class="val">"Win 2-1"</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Big list → small list → message.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Last match alert</h2>
+<pre><span class="kw">import</span> requests, os
+key = os.<span class="fn">getenv</span>(<span class="str">"SPORTS_KEY"</span>)
+url = <span class="str">"https://api.football-data.org/v4/teams/73/matches"</span>
+data = requests.<span class="fn">get</span>(url, headers={<span class="str">"X-Auth-Token"</span>:key}).<span class="fn">json</span>()
+
+<span class="kw">for</span> m <span class="kw">in</span> data[<span class="str">"matches"</span>][-<span class="num">3</span>:]:
+    home, away = m[<span class="str">"homeTeam"</span>][<span class="str">"name"</span>], m[<span class="str">"awayTeam"</span>][<span class="str">"name"</span>]
+    score = m[<span class="str">"score"</span>][<span class="str">"fullTime"</span>]
+    <span class="fn">print</span>(<span class="str">f"{home} {score['home']}-{score['away']} {away}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Tottenham 2-1 Chelsea</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>List slice → loop → print</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">matches</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">[-3:]</span><span class="val">last 3 only</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">m</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">score dict</span><span class="val">{home:2, away:1}</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># formatted →</span> <span class="out">"Tottenham 2-1 Chelsea"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Win, draw, or loss?</h2>
+<pre>my = <span class="str">"Tottenham"</span>  <span class="com"># home team in each match</span></pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">home</div>
+      <div class="cell head">score</div>
+      <div class="cell head">away</div>
+      <div class="cell head">result</div>
+
+      <div class="cell">Tot</div>
+      <div class="cell">2-1</div>
+      <div class="cell">Che</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Win</span></details></div>
+
+      <div class="cell">Tot</div>
+      <div class="cell">1-1</div>
+      <div class="cell">Liv</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Draw</span></details></div>
+
+      <div class="cell">Tot</div>
+      <div class="cell">0-3</div>
+      <div class="cell">Arsenal</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Loss</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Too many requests</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    requests.<span class="fn">get</span>(url)</pre>
+        <p style="margin-top:.4em;font-size:.85em">429 — rate limit hit.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">import</span> time
+<span class="kw">while</span> <span class="kw">True</span>:
+    requests.<span class="fn">get</span>(url)
+    time.<span class="fn">sleep</span>(<span class="num">60</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Wait between calls.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Rate limit hit</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">200</span>):
+    r = requests.<span class="fn">get</span>(url)
+    <span class="fn">print</span>(r.status_code)</pre>
+    <div class="err">Status: 429 — Too Many Requests</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>time.sleep(6)</code> in the loop. Cache results so you don't refetch.</p>
+      <p class="bilingual">429 = 너무 많이 요청 — sleep로 천천히</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>API key wrong</h2>
+<pre>headers = {<span class="str">"X-Auth-Token"</span>: <span class="str">"WRONG_KEY"</span>}
+r = requests.<span class="fn">get</span>(url, headers=headers)</pre>
+    <div class="err">403 — Forbidden</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Copy the key from your dashboard again. Read via <code>os.getenv</code>.</p>
+      <p class="bilingual">403 = 권한 없음 — 키 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Date format wrong</h2>
+<pre>params = {<span class="str">"dateFrom"</span>: <span class="str">"15/05/2026"</span>}
+r = requests.<span class="fn">get</span>(url, params=params)</pre>
+    <div class="err">400 — Bad date format</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">ISO format: <code>"2026-05-15"</code> (YYYY-MM-DD).</p>
+      <p class="bilingual">날짜는 YYYY-MM-DD 형식 (ISO)</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>headers = {<span class="str">"X-Auth-Token"</span>: ____}
+data = requests.<span class="fn">get</span>(url, headers=______).<span class="fn">json</span>()
+<span class="kw">for</span> m <span class="kw">in</span> data[<span class="str">"matches"</span>][-_____:]:
+    <span class="fn">print</span>(m[<span class="str">"homeTeam"</span>][<span class="str">"name"</span>])</pre>
+    <p style="margin-top:.6em">Goal: send headers, slice last 5 matches.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — win/loss label</h2>
+<pre>my = <span class="str">"Tottenham"</span>
+home_score, away_score = score[<span class="str">"home"</span>], score[<span class="str">"away"</span>]
+<span class="kw">if</span> home == my <span class="kw">and</span> home_score ___ away_score:
+    <span class="fn">print</span>(<span class="str">"WIN"</span>)
+<span class="kw">elif</span> home_score == away_score:
+    <span class="fn">print</span>(<span class="str">"____"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"LOSS"</span>)</pre>
+    <p style="margin-top:.6em">Compare scores, label W/D/L.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Status <code>429</code> means…</div>
+      <div class="opts">
+        <details><summary>A. unauthorized</summary><div class="ans">Nope — that's 401.</div></details>
+        <details><summary>B. too many requests</summary><div class="ans">✓ Slow down.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which is ISO date?</div>
+      <div class="opts">
+        <details><summary>A. 15/05/2026</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. 2026-05-15</summary><div class="ans">✓ YYYY-MM-DD.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I filter the matches by <span class="blank"></span>, then alert when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Track your team ⚽</h2>
+    <ul class="check-list">
+      <li>Pick a team (soccer or baseball)</li>
+      <li>GET matches, send key in header</li>
+      <li>Loop last 3 matches</li>
+      <li>Print score line per match</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a W/D/L emoji per match.</div>
+      <div class="item"><span class="lvl">★★</span>Only print wins. Skip the rest.</div>
+      <div class="item"><span class="lvl">★★★</span>Track two teams; print a face-off summary.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what is a rate limit and why does it matter?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — rate limit이 뭐고 왜 중요?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Filter the list,<br>print the alert.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: habit tracker on Pixela.</p>
+    <p class="bilingual">다음 주: 습관 픽셀 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

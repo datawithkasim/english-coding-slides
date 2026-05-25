@@ -92,15 +92,9 @@ class Net(nn.Module):
     <h2>What's wrong with this code?</h2>
     <div class="debug-box">
       <div class="debug-tag">buggy</div>
-<pre style="margin-top:.4em">improt torch
-import torch.nn as nn
-
-class Net(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc = nn.Linear(10, 2)
-    def forward(self, x):
-        return self.fc(x)</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre>
     </div>
     <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
   </div>
@@ -109,23 +103,17 @@ class Net(nn.Module):
   <div class="slide">
     <div class="pill">🐛 Debug</div>
     <h2>The bug</h2>
-    <div class="debug-reveal"><b>Bug:</b> Typo: keyword is <code>import</code>, not <code>improt</code>. Python raises <code>SyntaxError</code>.</div>
+    <div class="debug-reveal"><b>Bug:</b> <code>.append()</code> changes the list in place and returns <code>None</code>. Reassigning makes <code>nums</code> become <code>None</code>. Just call <code>nums.append(4)</code>.</div>
     <div class="debug-box" style="margin-top:.7em">
       <div class="debug-tag fix">fixed</div>
-<pre style="margin-top:.4em">import torch
-import torch.nn as nn
-
-class Net(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc = nn.Linear(10, 2)
-    def forward(self, x):
-        return self.fc(x)</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums.append(4)
+print(nums)</pre>
     </div>
   </div>
 
   <!-- MCQ 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+  <div class="slide mcq" data-correct="0" data-explain=".append() returns None — don't reassign.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 1 of 5</div>
     <div class="q">Which best describes <b>PyTorch</b>?</div>
@@ -154,22 +142,9 @@ class Net(nn.Module):
   <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 3 of 5</div>
-    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">improt torch
-import torch.nn as nn
-
-class Net(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc = nn.Linear(10, 2)
-    def forward(self, x):
-        return self.fc(x)</pre></div>
-    <div class="opts">
-      <button class="opt">Typo: keyword is import, not improt. Python raises SyntaxError.</button>
-      <button class="opt">Nothing — the code is correct as-is.</button>
-      <button class="opt">Missing <code>import sys</code> at the top.</button>
-      <button class="opt">The variable was never declared with <code>let</code>.</button>
-    </div>
-    <div class="qfeedback"></div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre></div><div class="opts"><button class="opt">append() returns None, so reassigning makes nums None.</button><button class="opt">Lists can't grow after they're made.</button><button class="opt">append() needs two arguments.</button><button class="opt">You must write nums + 4 instead.</button></div><div class="qfeedback"></div>
   </div>
   <!-- MCQ 4 -->
   <div class="slide mcq" data-correct="0" data-explain="autograd: automatic gradients">

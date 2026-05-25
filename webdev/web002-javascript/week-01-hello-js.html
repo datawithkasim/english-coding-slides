@@ -108,25 +108,22 @@ console.log(&#x27;Hi, &#x27; + name + &#x27;!&#x27;);</pre><p style="margin-top:
       <div class="edge-card"><div class="ehead">this is weird</div><div class="edesc"><code>this</code> changes meaning by call site. Arrow functions inherit <code>this</code>.</div></div>
       <div class="edge-card"><div class="ehead">Async ≠ parallel</div><div class="edesc"><code>async/await</code> is concurrent, not multi-core.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">const items = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];
-for (var i = 0; i &lt; items.length; i++) {
-  setTimeout(() =&gt; console.log(items[i]), 100);
-}</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>var</code> isn't block-scoped, so <code>i</code> is shared across timeouts — they all log <code>undefined</code>. Use <code>let</code> instead.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">const items = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];
-for (let i = 0; i &lt; items.length; i++) {
-  setTimeout(() =&gt; console.log(items[i]), 100);
-}</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="The lesson title says it: Hello, JavaScript"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Hello, JavaScript</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet);</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>greet</code> with no <code>()</code> logs the function itself, not its result. Call it: <code>greet()</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet());</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Missing () — greet() actually calls it."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Hello, JavaScript</button>
 <button class="opt">Async generators</button>
 <button class="opt">Proxy + Reflect metaprogramming</button>
 <button class="opt">Service workers</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">const items = [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;];
-for (var i = 0; i &lt; items.length; i++) {
-  setTimeout(() =&gt; console.log(items[i]), 100);
-}</pre></div><div class="opts"><button class="opt">var isn&#x27;t block-scoped, so i is shared across timeouts — they all log undefined. Use let instead.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing semicolon.</button>
-<button class="opt">Variable not declared with <code>let</code>.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet);</pre></div><div class="opts"><button class="opt">greet needs () to run; without it you log the function.</button><button class="opt">Functions can't return strings.</button><button class="opt">greet must be capitalised.</button><button class="opt">console.log only takes numbers.</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Hello JS</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>

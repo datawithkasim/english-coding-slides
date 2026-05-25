@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 2 — REST + Custom API</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 2 · Day 66 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 2</div>
+    <div class="emoji">🛣️</div>
+    <h1>REST<br>+ Custom API</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">design</span> + <span class="sub">build</span> RESTful routes.</p>
+    <p class="bilingual">GET/POST/PUT/DELETE — REST 규칙으로 API 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Name 2 of the 4 design rules.</div>
+      <details><summary>Show answer</summary><div class="ans">Contrast, alignment, whitespace, hierarchy — any 2.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Which verb fits?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>"Show me song #5"   → ___
+"Add a new song"    → ___
+"Delete song #5"    → ___</pre>
+      <details><summary>Reveal</summary><div class="ans">GET · POST · DELETE</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 REST words</h2>
+    <div class="vocab-table">
+      <span class="term">resource</span>
+      <span class="gloss">a thing in your app (song, user)</span>
+      <span class="ko">리소스</span>
+
+      <span class="term">endpoint</span>
+      <span class="gloss">URL that handles a verb</span>
+      <span class="ko">엔드포인트</span>
+
+      <span class="term">status code</span>
+      <span class="gloss">number that means "what happened"</span>
+      <span class="ko">상태 코드</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>One resource, 4 verbs</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">GET</span><span class="val">read</span></div>
+      <div class="varbox"><span class="name">POST</span><span class="val">create</span></div>
+      <div class="varbox"><span class="name">PUT</span><span class="val">update</span></div>
+      <div class="varbox"><span class="name">DELETE</span><span class="val">remove</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Same URL, different verb = different action.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>A songs API</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/songs"</span>, methods=[<span class="str">"GET"</span>])
+<span class="kw">def</span> <span class="fn">list_songs</span>():
+    <span class="kw">return</span> jsonify(songs), <span class="num">200</span>
+
+<span class="kw">@app</span>.route(<span class="str">"/songs"</span>, methods=[<span class="str">"POST"</span>])
+<span class="kw">def</span> <span class="fn">add_song</span>():
+    data = request.get_json()
+    songs.append(data)
+    <span class="kw">return</span> jsonify(data), <span class="num">201</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ POST /songs → 201 Created</div>
+      <div style="opacity:1">{"title": "BTS - Dynamite"}</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Verb → action</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">GET /songs</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">list_songs()</span><span class="val">200 OK</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">POST /songs</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">add_song()</span><span class="val">201 Created</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">DELETE /songs/5</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">remove(5)</span><span class="val">204 No Content</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Match verb + URL → status</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Verb</div>
+      <div class="cell head">URL</div>
+      <div class="cell head">Means</div>
+      <div class="cell head">Code</div>
+
+      <div class="cell">GET</div>
+      <div class="cell">/songs</div>
+      <div class="cell">list all</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+
+      <div class="cell">POST</div>
+      <div class="cell">/songs</div>
+      <div class="cell">add one</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">201</span></details></div>
+
+      <div class="cell">DELETE</div>
+      <div class="cell">/songs/5</div>
+      <div class="cell">remove</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">204</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Verb in the URL</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>POST /addSong
+GET  /deleteSong/5</pre>
+        <p style="margin-top:.4em;font-size:.85em">Action twice — verb + URL clash.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>POST   /songs
+DELETE /songs/5</pre>
+        <p style="margin-top:.4em;font-size:.85em">URL = noun. Verb = HTTP method.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — wrong status code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong status</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/songs"</span>, methods=[<span class="str">"POST"</span>])
+<span class="kw">def</span> <span class="fn">add_song</span>():
+    songs.append(request.get_json())
+    <span class="kw">return</span> jsonify(songs), <span class="num">200</span></pre>
+    <div class="err">Frontend logs "OK" — but it was a create, not a fetch</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A new resource was created → return <code>201</code>, not <code>200</code>.</p>
+      <p class="bilingual">생성은 201, 조회 성공은 200</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — route conflict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — route conflict</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/songs/&lt;int:id&gt;"</span>)
+<span class="kw">def</span> <span class="fn">song_detail</span>(id): ...
+
+<span class="kw">@app</span>.route(<span class="str">"/songs/&lt;int:id&gt;"</span>)
+<span class="kw">def</span> <span class="fn">song_again</span>(id): ...</pre>
+    <div class="err">AssertionError: View function mapping is overwriting</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Two functions, same URL + method = clash. Rename one route or split by HTTP method.</p>
+      <p class="bilingual">같은 경로 두 번 등록하면 충돌</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — missing JSON body -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — missing JSON</h2>
+<pre><span class="kw">def</span> <span class="fn">add_song</span>():
+    data = request.get_json()
+    title = data[<span class="str">"title"</span>]</pre>
+    <div class="err">TypeError: 'NoneType' object is not subscriptable</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Client sent no JSON or wrong header. Guard: <code>if not data: return "Bad request", 400</code>. Set header <code>Content-Type: application/json</code>.</p>
+      <p class="bilingual">JSON 헤더 빠지면 None 반환</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/songs/&lt;int:id&gt;"</span>, methods=[<span class="str">"____"</span>])
+<span class="kw">def</span> <span class="fn">delete_song</span>(id):
+    songs.pop(id)
+    <span class="kw">return</span> <span class="str">""</span>, <span class="num">___</span></pre>
+    <p style="margin-top:.6em">Goal: DELETE verb + 204 No Content.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — full CRUD</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/songs"</span>,         methods=[<span class="str">"___"</span>, <span class="str">"___"</span>])
+<span class="kw">@app</span>.route(<span class="str">"/songs/&lt;int:id&gt;"</span>, methods=[<span class="str">"___"</span>, <span class="str">"___"</span>, <span class="str">"___"</span>])</pre>
+    <p style="margin-top:.6em">Goal: GET/POST on collection, GET/PUT/DELETE on item.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Verb to create a new resource?</div>
+      <div class="opts">
+        <details><summary>A. GET</summary><div class="ans">Nope — read only.</div></details>
+        <details><summary>B. POST</summary><div class="ans">✓ POST creates.</div></details>
+        <details><summary>C. DELETE</summary><div class="ans">Nope — removes.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Status code for "successfully created"?</div>
+      <div class="opts">
+        <details><summary>A. 200</summary><div class="ans">Generic OK — okay but 201 is better.</div></details>
+        <details><summary>B. 201</summary><div class="ans">✓ Created.</div></details>
+        <details><summary>C. 404</summary><div class="ans">Nope — that's "not found".</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"To <span class="blank"></span> a song I send <span class="blank"></span> to <code>/songs/&lt;id&gt;</code> and expect status <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build a books API 📚</h2>
+    <ul class="check-list">
+      <li><code>GET /books</code> — list all</li>
+      <li><code>POST /books</code> — add one (return 201)</li>
+      <li><code>GET /books/&lt;id&gt;</code> — one book</li>
+      <li><code>DELETE /books/&lt;id&gt;</code> — return 204</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a <code>PUT /books/&lt;id&gt;</code> to edit a book.</div>
+      <div class="item"><span class="lvl">★★</span>Return <code>404</code> when the id doesn't exist.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a query string: <code>/books?author=Roald</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why are nouns (not verbs) in REST URLs?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — REST URL에 동사 대신 명사를 쓰는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">URL = noun.<br>Verb = method.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: REST inside the Blog capstone.</p>
+    <p class="bilingual">다음 주: Blog 캡스톤에 REST 적용</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

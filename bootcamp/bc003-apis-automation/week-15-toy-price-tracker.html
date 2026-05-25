@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 15 — Toy Price Tracker</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 15 · Day 47 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 15</div>
+    <div class="emoji">🧱</div>
+    <h1>Toy Price<br>Tracker</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">watch</span> + <span class="sub">alert</span> on LEGO prices.</p>
+    <p class="bilingual">레고 가격 떨어지면 알림</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you skip a table header row when scraping?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>rows[1:]</code> — slice off index 0.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Deal or not?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>price     = <span class="num">52.00</span>
+threshold = <span class="num">60.00</span>
+<span class="kw">if</span> price &lt; threshold:
+    <span class="fn">print</span>(<span class="str">f"DEAL: {price}"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">DEAL: 52.0 — under threshold.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">threshold</span>
+      <span class="gloss">price target to alert</span>
+      <span class="ko">기준 가격</span>
+
+      <span class="term">user-agent</span>
+      <span class="gloss">tells site "I'm a browser"</span>
+      <span class="ko">유저 에이전트</span>
+
+      <span class="term">strip</span>
+      <span class="gloss">remove spaces &amp; symbols</span>
+      <span class="ko">잘라내기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Fetch → parse → compare 🔁</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">page</span><span class="val">HTML</span></div>
+      <div class="varbox"><span class="name">soup</span><span class="val">.price tag</span></div>
+      <div class="varbox"><span class="name">number</span><span class="val">float(...)</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Use public/sample pages — many shops block bots.</p>
+    <p class="bilingual" style="text-align:center">스크래핑 허용된 사이트만 사용</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Watch one set</h2>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+url     = <span class="str">"https://example.com/lego-42083.html"</span>
+headers = {<span class="str">"User-Agent"</span>: <span class="str">"Mozilla/5.0"</span>}
+soup    = BeautifulSoup(requests.<span class="fn">get</span>(url, headers=headers).text, <span class="str">"html.parser"</span>)
+
+raw   = soup.<span class="fn">select_one</span>(<span class="str">".price"</span>).<span class="fn">get_text</span>(strip=<span class="kw">True</span>)
+price = <span class="fn">float</span>(raw.<span class="fn">replace</span>(<span class="str">"$"</span>, <span class="str">""</span>).<span class="fn">replace</span>(<span class="str">","</span>, <span class="str">""</span>))
+threshold = <span class="num">100.00</span>
+
+<span class="kw">if</span> price &lt; threshold:
+    <span class="fn">print</span>(<span class="str">f"🚨 DEAL: ${price}"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">f"No deal yet — ${price}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">🚨 DEAL: $89.99</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>"$1,299.50" → 1299.50</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"$1,299.50"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">replace $</span><span class="val">"1,299.50"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"1,299.50"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">replace ,</span><span class="val">"1299.50"</span></div>
+      </div>
+      <div class="read-line">
+        float(<span class="str">"1299.50"</span>) <span class="com"># →</span> <span class="out">1299.5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Deal or wait?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">raw</div>
+      <div class="cell head">price</div>
+      <div class="cell head">threshold</div>
+      <div class="cell head">alert?</div>
+
+      <div class="cell">$59.99</div>
+      <div class="cell">59.99</div>
+      <div class="cell">60</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">DEAL</span></details></div>
+
+      <div class="cell">$120</div>
+      <div class="cell">120</div>
+      <div class="cell">60</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">wait</span></details></div>
+
+      <div class="cell">$60.00</div>
+      <div class="cell">60</div>
+      <div class="cell">60</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">wait (&lt;)</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Compare string vs number</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>price = <span class="str">"99.99"</span>
+<span class="kw">if</span> price &lt; <span class="num">100</span>: …</pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>price = <span class="fn">float</span>(<span class="str">"99.99"</span>)
+<span class="kw">if</span> price &lt; <span class="num">100</span>: …</pre>
+        <p style="margin-top:.4em;font-size:.85em">Cast first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Site blocks bot</h2>
+<pre>r = requests.<span class="fn">get</span>(url)
+<span class="fn">print</span>(r.status_code)</pre>
+    <div class="err">403 or 503 — site blocked you</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Send a User-Agent header. If still blocked, switch to a public test page or an API.</p>
+      <p class="bilingual">User-Agent 헤더 추가 — 안 되면 다른 사이트</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Price not parsed</h2>
+<pre>price = <span class="fn">float</span>(soup.<span class="fn">select_one</span>(<span class="str">".price"</span>).text)</pre>
+    <div class="err">ValueError: could not convert "$99.99"</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Strip <code>$</code> and commas before <code>float()</code>: <code>.replace("$","")</code>.</p>
+      <p class="bilingual">$, 쉼표 제거 후 float</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Threshold compare wrong</h2>
+<pre>threshold = <span class="str">"60"</span>
+<span class="kw">if</span> price &lt; threshold: …</pre>
+    <div class="err">TypeError — str vs float</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Make threshold a number too: <code>threshold = 60.0</code>.</p>
+      <p class="bilingual">기준값도 숫자로</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>raw   = soup.<span class="fn">select_one</span>(<span class="str">".____"</span>).<span class="fn">get_text</span>(strip=<span class="kw">True</span>)
+price = <span class="fn">float</span>(raw.<span class="fn">replace</span>(<span class="str">"$"</span>, <span class="str">""</span>).<span class="fn">replace</span>(<span class="str">","</span>, ____))
+<span class="kw">if</span> price ___ threshold:
+    <span class="fn">print</span>(<span class="str">"DEAL"</span>)</pre>
+    <p style="margin-top:.6em">Select, clean, compare.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — watch 3 toys</h2>
+<pre>toys = {<span class="str">"lego1"</span>: url1, <span class="str">"lego2"</span>: url2, <span class="str">"lego3"</span>: url3}
+<span class="kw">for</span> name, u <span class="kw">in</span> toys.<span class="fn">______</span>():
+    price = parse_price(u)
+    <span class="kw">if</span> price ___ threshold:
+        <span class="fn">print</span>(<span class="str">f"{name}: deal at {price}"</span>)</pre>
+    <p style="margin-top:.6em">Loop dict, alert per toy.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>"$99".replace("$","")</code> →</div>
+      <div class="opts">
+        <details><summary>A. "99"</summary><div class="ans">✓ Strips the dollar.</div></details>
+        <details><summary>B. 99</summary><div class="ans">Still a string!</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To convince a site you're a browser, send…</div>
+      <div class="opts">
+        <details><summary>A. User-Agent header</summary><div class="ans">✓ Common trick.</div></details>
+        <details><summary>B. API key</summary><div class="ans">Sites don't issue keys.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I clean the price text by removing <span class="blank"></span>, then compare to my <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Track a toy 🧱</h2>
+    <ul class="check-list">
+      <li>Pick a public sample page</li>
+      <li>Send User-Agent header</li>
+      <li>Parse + clean price</li>
+      <li>Print deal if below threshold</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Save price + date to <code>prices.csv</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Plot price history as a chart.</div>
+      <div class="item"><span class="lvl">★★★</span>Schedule daily run with cron.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why clean the price string before <code>float()</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — float 전에 문자열 정리 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Clean text,<br>compare numbers.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Selenium controls a browser.</p>
+    <p class="bilingual">다음 주: 셀레늄으로 브라우저 제어</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

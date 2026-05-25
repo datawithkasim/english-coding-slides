@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 6 — Flask Hello</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 6 · Day 54 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 6</div>
+    <div class="emoji">🌶️</div>
+    <h1>Flask<br>Hello</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">run</span> + <span class="sub">visit</span> your own web server.</p>
+    <p class="bilingual">내 컴퓨터에서 Flask 웹 서버 띄우기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What did Selenium do for us across the last 5 weeks?</div>
+      <details><summary>Show answer</summary><div class="ans">Drove a browser to fill, click, and tally on local pages.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does <code>@app.route</code> do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="str">"Hello"</span></pre>
+      <details><summary>Reveal output</summary><div class="ans">When the browser visits "/", call home() and send "Hello" back.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">Flask</span>
+      <span class="gloss">Python library for tiny web servers</span>
+      <span class="ko">웹 서버 라이브러리</span>
+
+      <span class="term">route</span>
+      <span class="gloss">a URL path the server handles</span>
+      <span class="ko">URL 경로</span>
+
+      <span class="term">decorator</span>
+      <span class="gloss">"@" line that wraps a function</span>
+      <span class="ko">데코레이터</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Request → route → response 📡</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">browser</span><span class="val">GET /</span></div>
+      <div class="varbox"><span class="name">flask</span><span class="val">route match</span></div>
+      <div class="varbox"><span class="name">function</span><span class="val">return text</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Browser asks. Flask answers.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Smallest Flask app</h2>
+<pre><span class="kw">from</span> flask <span class="kw">import</span> Flask
+
+app = <span class="fn">Flask</span>(__name__)
+
+@app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="str">"Hello, Coders!"</span>
+
+app.<span class="fn">run</span>(debug=<span class="kw">True</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Visit http://127.0.0.1:5000</div>
+      <div style="opacity:1">Hello, Coders!</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>One request, one response</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">GET /</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">flask</span><span class="val">find route</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">home()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">return</span><span class="val">"Hello"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># browser shows →</span> <span class="out">"Hello, Coders!"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which route handles it?</h2>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/"</span>)        <span class="kw">def</span> <span class="fn">a</span>(): ...
+@app.<span class="fn">route</span>(<span class="str">"/about"</span>)   <span class="kw">def</span> <span class="fn">b</span>(): ...
+@app.<span class="fn">route</span>(<span class="str">"/cat"</span>)     <span class="kw">def</span> <span class="fn">c</span>(): ...</pre>
+    <div class="trace-grid">
+      <div class="cell head">URL</div>
+      <div class="cell head">handler</div>
+      <div class="cell head">match?</div>
+
+      <div class="cell">/</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">a</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">/cat</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">c</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">/dog</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">none</span></details></div>
+      <div class="cell">404</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Missing @ decorator</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>(): <span class="kw">return</span> <span class="str">"hi"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">→ route not registered</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>(): <span class="kw">return</span> <span class="str">"hi"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">→ @ wraps the function</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Import error</h2>
+<pre><span class="kw">from</span> Flask <span class="kw">import</span> Flask</pre>
+    <div class="err">ModuleNotFoundError: No module named 'Flask'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Lowercase: <code>from flask import Flask</code>. Also: <code>pip install flask</code>.</p>
+      <p class="bilingual">패키지 이름은 소문자 flask</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Port in use</h2>
+<pre>app.<span class="fn">run</span>()</pre>
+    <div class="err">OSError: port 5000 already in use</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Another server is running. Stop it (Ctrl-C) or pick a new port: <code>app.run(port=5050)</code>.</p>
+      <p class="bilingual">포트 충돌 — 끄거나 다른 포트</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Decorator typo</h2>
+<pre>@app.<span class="fn">rout</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>(): <span class="kw">return</span> <span class="str">"hi"</span></pre>
+    <div class="err">AttributeError: 'Flask' object has no attribute 'rout'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Missing letter: <code>@app.route("/")</code>.</p>
+      <p class="bilingual">route 철자 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> flask <span class="kw">import</span> _____
+
+app = <span class="fn">Flask</span>(__name__)
+
+_app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="str">"____"</span>
+
+app.<span class="fn">run</span>()</pre>
+    <p style="margin-top:.6em">Goal: import Flask, decorator, return greeting.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — second route</h2>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="str">"Home"</span>
+
+@app.<span class="fn">route</span>(<span class="str">"/_____"</span>)
+<span class="kw">def</span> <span class="fn">_____</span>():
+    <span class="kw">return</span> <span class="str">"About me"</span></pre>
+    <p style="margin-top:.6em">Add an /about page.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. What URL does <code>@app.route("/")</code> handle?</div>
+      <div class="opts">
+        <details><summary>A. Just <code>/</code> (the home page)</summary><div class="ans">✓</div></details>
+        <details><summary>B. All URLs</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. The Flask dev server runs at…</div>
+      <div class="opts">
+        <details><summary>A. 127.0.0.1:5000</summary><div class="ans">✓ Localhost, port 5000.</div></details>
+        <details><summary>B. flask.com</summary><div class="ans">Nope — not the internet.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"A Flask route maps a <span class="blank"></span> to a <span class="blank"></span> that returns text."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build hello 🌶️</h2>
+    <ul class="check-list">
+      <li><code>pip install flask</code></li>
+      <li>Create <code>app.py</code></li>
+      <li>Add <code>/</code> route → return greeting</li>
+      <li>Run, visit localhost:5000</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add <code>/about</code> and <code>/contact</code> routes.</div>
+      <div class="item"><span class="lvl">★★</span>Return some HTML (<code>&lt;h1&gt;Hi&lt;/h1&gt;</code>).</div>
+      <div class="item"><span class="lvl">★★★</span>Add a route with an emoji in the path.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does the <code>@app.route</code> decorator do?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — @app.route 역할?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Routes turn URLs<br>into responses.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Higher Lower game in the browser.</p>
+    <p class="bilingual">다음 주: 브라우저에서 Higher Lower 게임</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 13 — Linear Regression + Seaborn</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 13 · Day 77 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 13</div>
+    <div class="emoji">📏</div>
+    <h1>Linear<br>Regression</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">fit</span> + <span class="sub">read</span> a best-fit line.</p>
+    <p class="bilingual">데이터에 가장 잘 맞는 선 그리기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What's <code>scores.mean(axis=1)</code> for shape (4, 3)?</div>
+      <details><summary>Show answer</summary><div class="ans">A shape-(4,) array — one mean per row.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What's the slope?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="com"># study hours vs test score</span>
+hours: [1, 2, 3, 4]
+score: [50, 60, 70, 80]</pre>
+      <details><summary>Reveal</summary><div class="ans">+10 per hour. Best-fit line: <code>score = 40 + 10·hours</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 regression words</h2>
+    <div class="vocab-table">
+      <span class="term">feature</span>
+      <span class="gloss">input column (x)</span>
+      <span class="ko">특성</span>
+
+      <span class="term">target</span>
+      <span class="gloss">what we want to predict (y)</span>
+      <span class="ko">예측 대상</span>
+
+      <span class="term">residual</span>
+      <span class="gloss">actual − predicted</span>
+      <span class="ko">잔차</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>y = mx + b</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">m</span><span class="val">slope</span></div>
+      <div class="varbox"><span class="name">b</span><span class="val">intercept</span></div>
+      <div class="varbox"><span class="name">x</span><span class="val">feature</span></div>
+      <div class="varbox"><span class="name">y</span><span class="val">target</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Pick m + b that minimize total error.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Seaborn lmplot</h2>
+<pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="str">"study.csv"</span>)
+
+sns.lmplot(data=df,
+           x=<span class="str">"hours"</span>,
+           y=<span class="str">"score"</span>)
+plt.show()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Scatter + best-fit line + confidence band</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Fit → predict → residual</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">data</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">fit</span><span class="val">find m, b</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">new x</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">predict</span><span class="val">y_hat = m·x + b</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">y − y_hat</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">residual</span><span class="val">how far off</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Compute residuals</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">hours</div>
+      <div class="cell head">actual</div>
+      <div class="cell head">predicted</div>
+      <div class="cell head">residual</div>
+
+      <div class="cell">2</div>
+      <div class="cell">62</div>
+      <div class="cell">60</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">+2</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">68</div>
+      <div class="cell">70</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">−2</span></details></div>
+
+      <div class="cell">5</div>
+      <div class="cell">92</div>
+      <div class="cell">90</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">+2</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Correlation ≠ cause</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="com"># "More ice cream causes drowning"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Both rise in summer. Hidden cause = heat.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="com"># "Ice cream + drownings correlate"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">A line fits ≠ one causes the other.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — target wrong -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong target</h2>
+<pre>X = df[[<span class="str">"score"</span>]]
+y = df[<span class="str">"hours"</span>]
+model = LinearRegression().fit(X, y)</pre>
+    <div class="err">Predicts hours from score — we wanted score from hours</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Swap: <code>X = df[["hours"]]</code>, <code>y = df["score"]</code>. Target is what you predict.</p>
+      <p class="bilingual">X와 y 헷갈리지 말 것 — y가 예측 대상</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — scaling missing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — scale gap</h2>
+<pre>X = df[[<span class="str">"hours"</span>, <span class="str">"income_won"</span>]]
+<span class="com"># hours: 0–10, income: 0–10,000,000</span></pre>
+    <div class="err">income dominates — hours barely matters in some models</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Scale features: <code>StandardScaler().fit_transform(X)</code>. Plain linear regression is OK, but matters for many ML algos.</p>
+      <p class="bilingual">스케일 차이 크면 특성 표준화 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — outliers -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — outlier</h2>
+<pre>hours: [1, 2, 3, 4, 5]
+score: [50, 60, 70, 80, <span class="num">5</span>]  <span class="com"># typo!</span></pre>
+    <div class="err">Slope drops near 0 — one bad row dragged the line</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Plot first. Check with <code>df.describe()</code>. Drop or fix the outlier before fitting.</p>
+      <p class="bilingual">이상치 1개가 전체 회귀선 망침</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression
+
+X = df[[<span class="str">"_____"</span>]]
+y = df[<span class="str">"_____"</span>]
+model = ______________().fit(X, y)
+<span class="fn">print</span>(model.coef_, model.intercept_)</pre>
+    <p style="margin-top:.6em">Goal: predict score from hours.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — predict + residual</h2>
+<pre>y_hat = model._______(X)
+residual = y - y_hat
+<span class="fn">print</span>(<span class="str">"R²:"</span>, model.____(X, y))
+sns._____plot(x=y_hat, y=residual)</pre>
+    <p style="margin-top:.6em">Goal: predictions, residuals, R² score, residual plot.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. In <code>y = mx + b</code>, <code>m</code> is…</div>
+      <div class="opts">
+        <details><summary>A. intercept</summary><div class="ans">Nope — that's b.</div></details>
+        <details><summary>B. slope</summary><div class="ans">✓ Rise/run.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. A residual is…</div>
+      <div class="opts">
+        <details><summary>A. predicted value</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. actual minus predicted</summary><div class="ans">✓ Error per point.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I fit a line on <span class="blank"></span> to predict <span class="blank"></span>. The slope was <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Fit a line 📏</h2>
+    <ul class="check-list">
+      <li>Read <code>study.csv</code> (hours, score)</li>
+      <li><code>sns.lmplot</code> to see the line</li>
+      <li>Fit <code>LinearRegression</code> + print slope, intercept</li>
+      <li>Predict score for someone studying 6 hours</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print R² with <code>model.score(X, y)</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Plot residuals — should look random.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a second feature: hours + sleep.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does a slope of +10 mean for our study data?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 기울기 +10의 의미?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">A line<br>can predict.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Nobel Prize — explore a real dataset.</p>
+    <p class="bilingual">다음 주: 노벨상 데이터 분석</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

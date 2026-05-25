@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 5 — Blog Users P4</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 5 · Day 69 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 5</div>
+    <div class="emoji">🧑‍🤝‍🧑</div>
+    <h1>Blog Users<br>Part 4</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">link</span> + <span class="sub">protect</span> each post by author.</p>
+    <p class="bilingual">사용자와 글을 연결 — 작성자만 수정 가능</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>login_user(user)</code> set?</div>
+      <details><summary>Show answer</summary><div class="ans">A signed session cookie — so <code>current_user</code> is filled.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Who can edit?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>post.author_id = <span class="num">1</span>
+current_user.id = <span class="num">2</span>
+<span class="kw">if</span> current_user.id != post.author_id:
+    abort(<span class="num">403</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">User 2 gets a 403 — only the author may edit.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">foreign key</span>
+      <span class="gloss">column that points to another table</span>
+      <span class="ko">외래 키</span>
+
+      <span class="term">relationship</span>
+      <span class="gloss">link between tables (User ↔ Post)</span>
+      <span class="ko">관계</span>
+
+      <span class="term">403</span>
+      <span class="gloss">forbidden — logged in but not allowed</span>
+      <span class="ko">권한 없음</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>One user → many posts</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">User</span><span class="val">id 1</span></div>
+      <div class="varbox"><span class="name">Post #7</span><span class="val">author_id = 1</span></div>
+      <div class="varbox"><span class="name">Post #8</span><span class="val">author_id = 1</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em"><code>author_id</code> = foreign key into <code>User</code>.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Model + protect edit</h2>
+<pre><span class="kw">class</span> <span class="fn">Post</span>(db.Model):
+    id        = db.Column(db.Integer, primary_key=<span class="kw">True</span>)
+    title     = db.Column(db.String)
+    author_id = db.Column(db.Integer,
+                          db.ForeignKey(<span class="str">"user.id"</span>))
+
+<span class="kw">@app</span>.route(<span class="str">"/edit/&lt;int:id&gt;"</span>)
+<span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">edit</span>(id):
+    post = Post.query.get_or_404(id)
+    <span class="kw">if</span> post.author_id != current_user.id:
+        abort(<span class="num">403</span>)
+    ...</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Edit request flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">/edit/7</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">@login_required</span><span class="val">user found</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">post.author_id == current_user.id</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">match</span><span class="val">edit form</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">id mismatch</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">abort(403)</span><span class="val">forbidden</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Who sees what?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">user</div>
+      <div class="cell head">post.author_id</div>
+      <div class="cell head">action</div>
+      <div class="cell head">result</div>
+
+      <div class="cell">id=1</div>
+      <div class="cell">1</div>
+      <div class="cell">edit</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">allowed</span></details></div>
+
+      <div class="cell">id=2</div>
+      <div class="cell">1</div>
+      <div class="cell">edit</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">403</span></details></div>
+
+      <div class="cell">anon</div>
+      <div class="cell">1</div>
+      <div class="cell">edit</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">redirect to login</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Trusting the form</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>post.author_id = request.form[<span class="str">"author_id"</span>]</pre>
+        <p style="margin-top:.4em;font-size:.85em">User can claim any author.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>post.author_id = current_user.id</pre>
+        <p style="margin-top:.4em;font-size:.85em">Server decides. Never trust the form.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — current_user None -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — current_user None</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/new"</span>)
+<span class="kw">def</span> <span class="fn">new_post</span>():
+    post = Post(author_id=current_user.id)</pre>
+    <div class="err">AttributeError: 'AnonymousUserMixin' has no attribute 'id'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>@login_required</code> above the route, or check <code>current_user.is_authenticated</code>.</p>
+      <p class="bilingual">로그인 안 한 사용자도 들어옴 — @login_required 추가</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — permission leak -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — permission leak</h2>
+<pre><span class="kw">@login_required</span>
+<span class="kw">def</span> <span class="fn">delete</span>(id):
+    post = Post.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.commit()</pre>
+    <div class="err">Any user can delete any post</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add ownership check: <code>if post.author_id != current_user.id: abort(403)</code>.</p>
+      <p class="bilingual">로그인만 확인하지 말고 작성자 일치도 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — foreign key -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — foreign key</h2>
+<pre><span class="kw">class</span> <span class="fn">Post</span>(db.Model):
+    author_id = db.Column(db.Integer)  <span class="com"># no FK</span></pre>
+    <div class="err">post.author_id = 9999 saves fine — but no User 9999 exists</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Declare the FK: <code>db.ForeignKey("user.id")</code>. DB will reject orphans.</p>
+      <p class="bilingual">ForeignKey 선언 안 하면 잘못된 ID 막지 못함</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/new"</span>, methods=[<span class="str">"POST"</span>])
+<span class="kw">@___________</span>
+<span class="kw">def</span> <span class="fn">new_post</span>():
+    post = Post(title=form.title,
+                author_id=______.id)
+    db.session.add(post)
+    db.session.commit()</pre>
+    <p style="margin-top:.6em">Goal: require login, set author from current_user.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — admin override</h2>
+<pre><span class="kw">def</span> <span class="fn">can_edit</span>(post):
+    <span class="kw">if</span> current_user.id == post.________: <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">if</span> current_user._______: <span class="kw">return</span> <span class="kw">True</span>
+    <span class="kw">return</span> <span class="kw">False</span></pre>
+    <p style="margin-top:.6em">Goal: author or admin may edit.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Foreign key = ?</div>
+      <div class="opts">
+        <details><summary>A. Random string</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Column pointing to another table</summary><div class="ans">✓ Links rows.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Status code for "logged in but not allowed"?</div>
+      <div class="opts">
+        <details><summary>A. 401</summary><div class="ans">Nope — not authenticated.</div></details>
+        <details><summary>B. 403</summary><div class="ans">✓ Forbidden.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I check <span class="blank"></span> against <code>post.author_id</code> and call <span class="blank"></span> if they don't match."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Lock down your blog 🔒</h2>
+    <ul class="check-list">
+      <li>Add <code>author_id</code> ForeignKey on Post</li>
+      <li>Set author from <code>current_user</code> on create</li>
+      <li>Block edit/delete unless author matches</li>
+      <li>Hide edit button in template when not author</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add <code>is_admin</code> boolean to User.</div>
+      <div class="item"><span class="lvl">★★</span>Allow admins to edit any post.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a Comments table with its own author_id.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why never read the author from the form?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 폼에서 author 읽으면 안 되는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Server decides<br>permissions.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: ship your blog to the internet.</p>
+    <p class="bilingual">다음 주: 블로그를 인터넷에 배포</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

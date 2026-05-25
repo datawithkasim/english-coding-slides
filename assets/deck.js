@@ -130,10 +130,38 @@
   // Score tracked per-deck in window.__quizState.
   window.__quizState = window.__quizState || { score: 0, answered: 0, total: 0 };
 
+  // Fisher-Yates in-place shuffle.
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Shuffle .opt children inside a single .mcq slide and remap data-correct
+  // to the new index of what was previously the correct option. All decks
+  // ship with the correct option at index 0; without shuffling, students
+  // learn "always pick the first" instead of the concept.
+  function shuffleMcq(m) {
+    const correct = parseInt(m.dataset.correct, 10);
+    if (Number.isNaN(correct)) return;
+    const container = m.querySelector('.opts') || (m.querySelector('.opt') && m.querySelector('.opt').parentElement);
+    if (!container) return;
+    const opts = Array.from(container.querySelectorAll('.opt'));
+    if (opts.length < 2) return;
+    const correctEl = opts[correct];
+    if (!correctEl) return;
+    const order = shuffle(opts.map((_, i) => i));
+    order.forEach(idx => container.appendChild(opts[idx]));
+    m.dataset.correct = String(order.indexOf(correct));
+  }
+
   function initQuiz() {
     const mcqs = document.querySelectorAll('.mcq');
     window.__quizState.total = mcqs.length;
     mcqs.forEach(m => {
+      shuffleMcq(m);
       const correct = parseInt(m.dataset.correct, 10);
       const opts = m.querySelectorAll('.opt');
       const feedback = m.querySelector('.qfeedback');

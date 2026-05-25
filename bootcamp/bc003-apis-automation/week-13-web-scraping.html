@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 13 — Web Scraping</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 13 · Day 45 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 13</div>
+    <div class="emoji">🕷️</div>
+    <h1>Web<br>Scraping</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">parse</span> + <span class="sub">extract</span> data from HTML.</p>
+    <p class="bilingual">BeautifulSoup으로 웹페이지에서 데이터 뽑기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">In HTML, what does <code>class="card"</code> let CSS do?</div>
+      <details><summary>Show answer</summary><div class="ans">Style every element with that class together.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does soup find?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>html = <span class="str">"&lt;h2 class='book'&gt;Web&lt;/h2&gt;"</span>
+soup = BeautifulSoup(html, <span class="str">"html.parser"</span>)
+<span class="fn">print</span>(soup.<span class="fn">find</span>(<span class="str">"h2"</span>).<span class="fn">get_text</span>())</pre>
+      <details><summary>Reveal output</summary><div class="ans">Web — the text inside the h2.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">parse</span>
+      <span class="gloss">read structure from text</span>
+      <span class="ko">파싱</span>
+
+      <span class="term">BeautifulSoup</span>
+      <span class="gloss">Python HTML reader</span>
+      <span class="ko">BS</span>
+
+      <span class="term">selector</span>
+      <span class="gloss">how to find an element</span>
+      <span class="ko">선택자</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>HTML → tree → data 🌳</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">get</span><span class="val">requests.get(url)</span></div>
+      <div class="varbox"><span class="name">parse</span><span class="val">BeautifulSoup</span></div>
+      <div class="varbox"><span class="name">find</span><span class="val">.find / .select</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Fetch → parse → pick.</p>
+    <p class="bilingual" style="text-align:center">스크래핑 허용된 사이트만 — robots.txt 확인</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Top books list</h2>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+url  = <span class="str">"http://books.toscrape.com"</span>
+html = requests.<span class="fn">get</span>(url).text
+soup = BeautifulSoup(html, <span class="str">"html.parser"</span>)
+
+<span class="kw">for</span> book <span class="kw">in</span> soup.<span class="fn">select</span>(<span class="str">".product_pod h3 a"</span>)[:<span class="num">5</span>]:
+    <span class="fn">print</span>(book[<span class="str">"title"</span>])</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output (top 5)</div>
+      <div style="opacity:1">A Light in the Attic<br>Tipping the Velvet<br>Soumission…</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>From text → soup → list</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">html string</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">soup</span><span class="val">tree</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.select("…")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">tags</span><span class="val">list</span></div>
+      </div>
+      <div class="read-line">
+        tag[<span class="str">"title"</span>] / tag.<span class="fn">get_text</span>() <span class="com"># →</span> <span class="out">"A Light…"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What does each call return?</h2>
+<pre>soup.<span class="fn">find</span>(<span class="str">"h2"</span>)
+soup.<span class="fn">find_all</span>(<span class="str">"li"</span>)
+soup.<span class="fn">select</span>(<span class="str">".card a"</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">call</div>
+      <div class="cell head">returns</div>
+      <div class="cell head">how many</div>
+
+      <div class="cell">find</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">first tag</span></details></div>
+      <div class="cell">1</div>
+
+      <div class="cell">find_all</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">list of tags</span></details></div>
+      <div class="cell">many</div>
+
+      <div class="cell">select</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">CSS-selector list</span></details></div>
+      <div class="cell">many</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>NoneType on missing tag</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>title = soup.<span class="fn">find</span>(<span class="str">"h2"</span>).text</pre>
+        <p style="margin-top:.4em;font-size:.85em">AttributeError if no h2.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>tag = soup.<span class="fn">find</span>(<span class="str">"h2"</span>)
+<span class="kw">if</span> tag: <span class="fn">print</span>(tag.text)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Check before use.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Class name typo</h2>
+<pre>soup.<span class="fn">select</span>(<span class="str">".product-pod"</span>)  <span class="com"># dash</span>
+<span class="com"># site uses .product_pod (underscore)</span></pre>
+    <div class="err">Empty list — selector matches nothing</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Open site → inspect → copy exact class. Underscore not dash.</p>
+      <p class="bilingual">클래스 이름 정확히 — 사이트에서 복사</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Attribute is None</h2>
+<pre>a = soup.<span class="fn">find</span>(<span class="str">"a"</span>)
+<span class="fn">print</span>(a[<span class="str">"href"</span>])</pre>
+    <div class="err">KeyError or NoneType — no href</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>a.get("href")</code> — returns None instead of crashing.</p>
+      <p class="bilingual">없을 수도 있으면 .get() 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bad HTML breaks parse</h2>
+<pre>html = <span class="str">"&lt;ul&gt;&lt;li&gt;A&lt;li&gt;B&lt;/ul&gt;"</span>
+soup = BeautifulSoup(html, <span class="str">"html.parser"</span>)</pre>
+    <div class="err">Items merge / nest weirdly</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>"lxml"</code> parser (install lxml) — more forgiving.</p>
+      <p class="bilingual">파서를 lxml로 바꾸면 더 잘 동작</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>html = requests.<span class="fn">get</span>(url).____
+soup = BeautifulSoup(html, <span class="str">"____"</span>)
+<span class="kw">for</span> book <span class="kw">in</span> soup.<span class="fn">______</span>(<span class="str">".product_pod h3 a"</span>):
+    <span class="fn">print</span>(book[<span class="str">"____"</span>])</pre>
+    <p style="margin-top:.6em">Fetch text, parse, loop, print title.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — get prices too</h2>
+<pre><span class="kw">for</span> p <span class="kw">in</span> soup.<span class="fn">select</span>(<span class="str">".product_pod"</span>):
+    title = p.<span class="fn">select_one</span>(<span class="str">"h3 a"</span>)[<span class="str">"____"</span>]
+    price = p.<span class="fn">select_one</span>(<span class="str">".price_color"</span>).<span class="fn">______</span>()
+    <span class="fn">print</span>(<span class="str">f"{title} — {price}"</span>)</pre>
+    <p style="margin-top:.6em">Title + price per book.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To get ALL matches use…</div>
+      <div class="opts">
+        <details><summary>A. <code>.find()</code></summary><div class="ans">Nope — that's first only.</div></details>
+        <details><summary>B. <code>.find_all() / .select()</code></summary><div class="ans">✓ Returns a list.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Safer attribute access?</div>
+      <div class="opts">
+        <details><summary>A. <code>tag["href"]</code></summary><div class="ans">Crashes if missing.</div></details>
+        <details><summary>B. <code>tag.get("href")</code></summary><div class="ans">✓ Returns None if missing.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I parse the HTML into a <span class="blank"></span>, then pick elements with <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Scrape the books 🕷️</h2>
+    <ul class="check-list">
+      <li>GET <code>books.toscrape.com</code></li>
+      <li>Make soup</li>
+      <li>Select <code>.product_pod h3 a</code></li>
+      <li>Print top 10 titles</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Also grab the rating from each card.</div>
+      <div class="item"><span class="lvl">★★</span>Save titles + prices to a CSV.</div>
+      <div class="item"><span class="lvl">★★★</span>Follow "next page" link until done.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does BeautifulSoup do?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — BeautifulSoup 역할?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Parse first.<br>Pick after.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: K-Pop Time Machine.</p>
+    <p class="bilingual">다음 주: 케이팝 타임머신</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

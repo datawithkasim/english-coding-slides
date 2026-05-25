@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 3 — Speed Logger</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 3 · Day 51 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 3</div>
+    <div class="emoji">📶</div>
+    <h1>Speed<br>Logger</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">measure</span> + <span class="sub">log</span> your wifi speed.</p>
+    <p class="bilingual">와이파이 속도 측정 후 로컬 파일에 기록</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why use a counted <code>for</code> loop, not <code>while True</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">Safety — it always stops. Bots need limits.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What gets written?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"50 Mbps\n"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Appends "50 Mbps" + newline to log.txt. Doesn't erase old lines.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">speedtest</span>
+      <span class="gloss">tool that measures internet speed</span>
+      <span class="ko">속도 측정</span>
+
+      <span class="term">append mode</span>
+      <span class="gloss">add to a file without erasing</span>
+      <span class="ko">파일에 이어 쓰기</span>
+
+      <span class="term">timestamp</span>
+      <span class="gloss">date + time stamp</span>
+      <span class="ko">타임스탬프</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Measure → format → save 📝</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">speedtest</span><span class="val">52 Mbps</span></div>
+      <div class="varbox"><span class="name">format</span><span class="val">"14:02 · 52"</span></div>
+      <div class="varbox"><span class="name">log.txt</span><span class="val">append</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">No tweets. Just a local text file.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Log one reading</h2>
+<pre><span class="kw">import</span> speedtest, datetime
+
+st = speedtest.<span class="fn">Speedtest</span>()
+mbps = st.<span class="fn">download</span>() / <span class="num">1_000_000</span>
+now  = datetime.datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%H:%M"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">f"{now} · {mbps:.1f} Mbps\n"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ log.txt now has</div>
+      <div style="opacity:1">14:02 · 52.3 Mbps</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Three steps</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">download()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">mbps</span><span class="val">52.3</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">strftime</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">now</span><span class="val">"14:02"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># append →</span> <span class="out">"14:02 · 52.3 Mbps"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Mode behavior</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">mode</div>
+      <div class="cell head">before</div>
+      <div class="cell head">write "X"</div>
+      <div class="cell head">after</div>
+
+      <div class="cell">"w"</div>
+      <div class="cell">"old"</div>
+      <div class="cell">"X"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"X"</span></details></div>
+
+      <div class="cell">"a"</div>
+      <div class="cell">"old"</div>
+      <div class="cell">"X"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"oldX"</span></details></div>
+
+      <div class="cell">"r"</div>
+      <div class="cell">"old"</div>
+      <div class="cell">—</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">read only</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Wrong file mode</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"w"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ erases old log each run</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ keeps history</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Speedtest hangs</h2>
+<pre>st = speedtest.<span class="fn">Speedtest</span>()
+mbps = st.<span class="fn">download</span>()</pre>
+    <div class="err">Takes 60s+, looks frozen</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">It's working — just slow. Add <code>print("measuring...")</code> before the call.</p>
+      <p class="bilingual">고장이 아님 — 진행 메시지 추가</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Log file path</h2>
+<pre><span class="fn">open</span>(<span class="str">"C:\Users\me\log.txt"</span>, <span class="str">"a"</span>)</pre>
+    <div class="err">SyntaxError: invalid escape \U</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use forward slashes or raw string: <code>r"C:\Users\me\log.txt"</code>.</p>
+      <p class="bilingual">백슬래시 문제 — r"..." 또는 / 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Parse Mbps wrong</h2>
+<pre>mbps = st.<span class="fn">download</span>()
+<span class="fn">print</span>(mbps)  <span class="com"># 52000000.0</span></pre>
+    <div class="err">Output is in bits per second, not Mbps</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Divide by 1 million: <code>mbps = st.download() / 1_000_000</code>.</p>
+      <p class="bilingual">bps → Mbps 변환 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>mbps = st.<span class="fn">download</span>() / ______
+now  = datetime.datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"____"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"_"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">f"{now} · {mbps:.1f}\n"</span>)</pre>
+    <p style="margin-top:.6em">Goal: Mbps, time only, append mode.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — log 5 readings</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(______):
+    mbps = st.<span class="fn">download</span>() / <span class="num">1_000_000</span>
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"log.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+        f.<span class="fn">write</span>(<span class="str">f"{i}: {mbps:.1f}\n"</span>)
+    time.<span class="fn">sleep</span>(______)</pre>
+    <p style="margin-top:.6em">5 readings, 10s apart.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>open(..., "a")</code> mode means…</div>
+      <div class="opts">
+        <details><summary>A. Append</summary><div class="ans">✓ Add to end.</div></details>
+        <details><summary>B. Erase</summary><div class="ans">Nope — that's "w".</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Why use <code>with open</code> instead of plain <code>open</code>?</div>
+      <div class="opts">
+        <details><summary>A. Auto-closes the file</summary><div class="ans">✓ Safer.</div></details>
+        <details><summary>B. It's faster</summary><div class="ans">Nope — same speed.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I measure speed with <span class="blank"></span>, then append to a file using mode <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the logger 📶</h2>
+    <ul class="check-list">
+      <li>Install <code>speedtest-cli</code></li>
+      <li>Measure download speed (Mbps)</li>
+      <li>Format timestamp + speed</li>
+      <li>Append line to <code>log.txt</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Log upload + download together.</div>
+      <div class="item"><span class="lvl">★★</span>Print warning if speed under 10 Mbps.</div>
+      <div class="item"><span class="lvl">★★★</span>Read log.txt, compute average across all runs.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what's the difference between "w" and "a" mode?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — "w"와 "a" 모드 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Files keep<br>history.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: tally votes on a local poll page.</p>
+    <p class="bilingual">다음 주: 로컬 투표 페이지 자동 집계</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

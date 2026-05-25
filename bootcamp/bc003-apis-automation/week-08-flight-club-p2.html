@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 8 — Flight Club P2</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 8 · Day 40 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 8</div>
+    <div class="emoji">📬</div>
+    <h1>Flight Club<br>Part 2</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">store</span> + <span class="sub">alert</span> a friend list.</p>
+    <p class="bilingual">친구 리스트에 항공권 알림 — 2편</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Where in <code>requests.get</code> do query params go?</div>
+      <details><summary>Show answer</summary><div class="ans">In <code>params={...}</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>How many alerts?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>emails = [<span class="str">"a@x.com"</span>, <span class="str">"b@y.com"</span>]
+price  = <span class="num">250000</span>
+budget = <span class="num">300000</span>
+<span class="kw">if</span> price &lt; budget:
+    <span class="kw">for</span> e <span class="kw">in</span> emails:
+        <span class="fn">print</span>(<span class="str">f"Alert {e}: {price}"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">2 alerts. (Real email = parent setup; we print only.)</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">subscriber</span>
+      <span class="gloss">friend on the list</span>
+      <span class="ko">구독자</span>
+
+      <span class="term">threshold</span>
+      <span class="gloss">trigger price</span>
+      <span class="ko">기준값</span>
+
+      <span class="term">notify</span>
+      <span class="gloss">tell someone</span>
+      <span class="ko">알리다</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Check → loop → notify 📣</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">price</span><span class="val">vs budget</span></div>
+      <div class="varbox"><span class="name">list</span><span class="val">[friend1, friend2]</span></div>
+      <div class="varbox"><span class="name">print</span><span class="val">alert each</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">If under threshold → loop list → notify.</p>
+    <p class="bilingual" style="text-align:center">진짜 이메일 안 보냄 — 콘솔 출력만</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Alert the club</h2>
+<pre>emails = [<span class="str">"jin@x.com"</span>, <span class="str">"mina@x.com"</span>]
+price  = <span class="fn">float</span>(<span class="str">"250000"</span>)
+budget = <span class="num">300000</span>
+city   = <span class="str">"Tokyo"</span>
+
+<span class="kw">if</span> price &lt; budget:
+    <span class="kw">for</span> e <span class="kw">in</span> emails:
+        <span class="fn">print</span>(<span class="str">f"To {e}: {city} flight {price:,.0f} KRW"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"No deals today"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">To jin@x.com: Tokyo flight 250,000 KRW</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>String vs number</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"250000"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">float</span><span class="val">250000.0</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">budget</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">int</span><span class="val">300000</span></div>
+      </div>
+      <div class="read-line">
+        250000.0 &lt; 300000 → <span class="out">True</span> → notify loop
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How many alerts?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">price</div>
+      <div class="cell head">budget</div>
+      <div class="cell head">list size</div>
+      <div class="cell head">alerts</div>
+
+      <div class="cell">200000</div>
+      <div class="cell">300000</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">350000</div>
+      <div class="cell">300000</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+
+      <div class="cell">100000</div>
+      <div class="cell">200000</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>String vs number compare</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>price = <span class="str">"250000"</span>
+<span class="kw">if</span> price &lt; budget: …</pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError — str &lt; int.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>price = <span class="fn">float</span>(<span class="str">"250000"</span>)
+<span class="kw">if</span> price &lt; budget: …</pre>
+        <p style="margin-top:.4em;font-size:.85em">Cast first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Empty list, nothing prints</h2>
+<pre>emails = []
+<span class="kw">for</span> e <span class="kw">in</span> emails:
+    <span class="fn">print</span>(<span class="str">f"Alert {e}"</span>)</pre>
+    <div class="err">No output — loop runs 0 times</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check the list. Add subscribers, or print "No friends yet."</p>
+      <p class="bilingual">빈 리스트면 루프가 안 돔 — 확인 또는 추가</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Comparing wrong types</h2>
+<pre>price  = <span class="str">"250000"</span>
+budget = <span class="num">300000</span>
+<span class="kw">if</span> price &lt; budget:
+    <span class="fn">print</span>(<span class="str">"deal"</span>)</pre>
+    <div class="err">TypeError: '&lt;' not supported str and int</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Cast price to float/int before comparing.</p>
+      <p class="bilingual">비교 전에 같은 타입으로 변환</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Date filter wrong</h2>
+<pre>flight_date = <span class="str">"2026-06-01"</span>
+<span class="kw">if</span> flight_date &gt; <span class="str">"2026-12-31"</span>:
+    <span class="fn">print</span>(<span class="str">"future"</span>)</pre>
+    <div class="err">Logic flips on YYYY-MM-DD strings</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>datetime</code> objects, not raw strings: <code>datetime.fromisoformat(...)</code>.</p>
+      <p class="bilingual">날짜 비교는 문자열 말고 datetime으로</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>emails = [<span class="str">"____"</span>, <span class="str">"____"</span>, <span class="str">"____"</span>]
+<span class="kw">if</span> price ___ budget:
+    <span class="kw">for</span> e <span class="kw">in</span> ______:
+        <span class="fn">print</span>(<span class="str">f"To {___}: deal"</span>)</pre>
+    <p style="margin-top:.6em">Goal: 3 friends, loop, print.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — add a friend</h2>
+<pre>name  = <span class="fn">input</span>(<span class="str">"Friend name? "</span>)
+email = <span class="fn">______</span>(<span class="str">"Email? "</span>)
+emails.<span class="fn">______</span>(email)
+<span class="fn">print</span>(<span class="str">f"{___} added — total {len(emails)}"</span>)</pre>
+    <p style="margin-top:.6em">Use <code>append</code> on the list.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>"100" &lt; 200</code> →</div>
+      <div class="opts">
+        <details><summary>A. True</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. TypeError</summary><div class="ans">✓ Can't compare str and int.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Add to list end uses…</div>
+      <div class="opts">
+        <details><summary>A. <code>.add()</code></summary><div class="ans">Nope — that's set.</div></details>
+        <details><summary>B. <code>.append()</code></summary><div class="ans">✓ List method.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"If the price is under <span class="blank"></span>, I loop my <span class="blank"></span> and print one alert each."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the club 📬</h2>
+    <ul class="check-list">
+      <li>Make a list of friend emails</li>
+      <li>Set a budget threshold</li>
+      <li>If price &lt; budget → loop list</li>
+      <li>Print alert per friend (no real send)</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Save emails to a JSON file.</div>
+      <div class="item"><span class="lvl">★★</span>Per-friend budgets — dict of {email: budget}.</div>
+      <div class="item"><span class="lvl">★★★</span>Combine with Week 7 — real Tequila search loop.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why compare same types when filtering?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 비교할 때 타입이 같아야 하는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Lists hold<br>your audience.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: HTML — build your own page.</p>
+    <p class="bilingual">다음 주: HTML 시작</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

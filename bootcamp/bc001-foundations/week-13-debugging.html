@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 13 — Debugging</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 13 · Day 13 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 13</div>
+    <div class="emoji">🐛</div>
+    <h1>Bug<br>Hunt</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">read</span> + <span class="sub">reproduce</span> + fix bugs.</p>
+    <p class="bilingual">트레이스백 읽고 버그를 빨리 찾는 법</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Local or global — which is visible everywhere?</div>
+      <details><summary>Show answer</summary><div class="ans">Global. Local lives only inside its function.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Which line breaks?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>nums = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]
+total = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    total += nums[i]
+<span class="fn">print</span>(total)</pre>
+      <details><summary>Reveal output</summary><div class="ans">IndexError on i = 3 — only indexes 0, 1, 2 exist.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">traceback</span>
+      <span class="gloss">the error report Python prints</span>
+      <span class="ko">트레이스백</span>
+
+      <span class="term">debug</span>
+      <span class="gloss">find + fix bugs in code</span>
+      <span class="ko">디버그</span>
+
+      <span class="term">reproduce</span>
+      <span class="gloss">make the same bug happen again</span>
+      <span class="ko">재현</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Read bottom-up 🔍</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">step 1</span><span class="val">reproduce</span></div>
+      <div class="varbox"><span class="name">step 2</span><span class="val">read error</span></div>
+      <div class="varbox"><span class="name">step 3</span><span class="val">narrow line</span></div>
+      <div class="varbox"><span class="name">step 4</span><span class="val">fix + retest</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Last line of the traceback names the error.</p>
+    <p class="bilingual" style="text-align:center">에러 메시지의 마지막 줄이 핵심</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Anatomy of an error</h2>
+<pre>Traceback (most recent call last):
+  File <span class="str">"game.py"</span>, line <span class="num">7</span>, <span class="kw">in</span> &lt;module&gt;
+    <span class="fn">print</span>(nums[<span class="num">5</span>])
+IndexError: list index out of range</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Reading order</div>
+      <div style="opacity:1">file → line → code → error name</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Print-debug flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">add print</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">print(x)</span><span class="val">see value</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">spot wrong value</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">narrow</span><span class="val">line N broken</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Move prints closer until you trap the bug</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Match error to cause</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">code</div>
+      <div class="cell head">error</div>
+      <div class="cell head">cause</div>
+      <div class="cell head">fix</div>
+
+      <div class="cell"><code>x = "5"; x + 1</code></div>
+      <div class="cell">TypeError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">type mix</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">int(x)</span></details></div>
+
+      <div class="cell"><code>print(naem)</code></div>
+      <div class="cell">NameError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">typo</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">spell name</span></details></div>
+
+      <div class="cell"><code>nums[9]</code></div>
+      <div class="cell">IndexError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">too big</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">use len()</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Reading top-down</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken habit</span>
+<pre>Traceback…
+  File "x.py", line 3
+  File "lib.py", line 99
+  File "deep.py", line 41
+TypeError: …</pre>
+        <p style="margin-top:.4em;font-size:.85em">Skim top → lost in library code</p>
+      </div>
+      <div class="col good"><span class="tag">✓ habit</span>
+<pre>Read the LAST line first.
+Then find YOUR file in the
+stack — that's your bug.</pre>
+        <p style="margin-top:.4em;font-size:.85em">Bottom-up wins.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — IndentationError -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Indentation</h2>
+<pre><span class="kw">def</span> <span class="fn">hi</span>(name):
+<span class="fn">print</span>(<span class="str">"hi"</span>, name)
+
+<span class="fn">hi</span>(<span class="str">"Mina"</span>)</pre>
+    <div class="err">IndentationError: expected an indented block</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Indent line 2 with 4 spaces — function body must be indented.</p>
+      <p class="bilingual">함수 본문은 4칸 들여쓰기 필수</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — IndexError -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Index out of range</h2>
+<pre>cards = [<span class="str">"A"</span>, <span class="str">"K"</span>, <span class="str">"Q"</span>]
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    <span class="fn">print</span>(cards[i])</pre>
+    <div class="err">IndexError: list index out of range</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>range(len(cards))</code> — never hardcode the size.</p>
+      <p class="bilingual">range는 len()으로 맞추기 — 크기 하드코딩 X</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — ZeroDivisionError -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Divide by zero</h2>
+<pre>total = <span class="num">100</span>
+people = <span class="num">0</span>
+each = total / people</pre>
+    <div class="err">ZeroDivisionError: division by zero</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Guard first: <code>if people &gt; 0: each = total / people</code>.</p>
+      <p class="bilingual">0으로 나누기 전에 if로 막기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>nums = [<span class="num">3</span>, <span class="num">7</span>, <span class="num">9</span>]
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(______(nums)):
+    <span class="fn">print</span>(nums[___])</pre>
+    <p style="margin-top:.6em">Goal: print each number, no IndexError.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — guarded divide</h2>
+<pre>total = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Total? "</span>))
+people = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"People? "</span>))
+
+<span class="kw">if</span> people ___ <span class="num">0</span>:
+    <span class="fn">print</span>(total ___ people)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"____ people 0"</span>)</pre>
+    <p style="margin-top:.6em">Goal: never crash on 0 people.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Which line of a traceback tells you the error type?</div>
+      <div class="opts">
+        <details><summary>A. The first line</summary><div class="ans">Nope — that's the header.</div></details>
+        <details><summary>B. The last line</summary><div class="ans">✓ Last line: ErrorName: message.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Best first step when stuck?</div>
+      <div class="opts">
+        <details><summary>A. Add print() near the bug</summary><div class="ans">✓ See the value.</div></details>
+        <details><summary>B. Rewrite the file</summary><div class="ans">Nope — lose your work.</div></details>
+        <details><summary>C. Ignore it</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The error is <span class="blank"></span> on line <span class="blank"></span> because the variable held the wrong value."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Bug Hunt Workshop 🔍</h2>
+    <ul class="check-list">
+      <li>Open the 5 broken snippets file</li>
+      <li>Run each — read the last line of the traceback</li>
+      <li>Add a <code>print()</code> if needed</li>
+      <li>Fix, retest, commit</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Write a snippet that raises <code>ValueError</code>. Explain why.</div>
+      <div class="item"><span class="lvl">★★</span>Use <code>try / except</code> to catch one error gracefully.</div>
+      <div class="item"><span class="lvl">★★★</span>Make a buggy version of last week's game. Trade with a friend to fix.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>which line of a traceback do you read first, and why?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 트레이스백은 어디부터 읽기?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Errors are<br>helpful, not scary.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Higher Lower — your second capstone.</p>
+    <p class="bilingual">다음 주: 하이로우 게임 — 두 번째 캡스톤</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

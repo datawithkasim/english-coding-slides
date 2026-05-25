@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 12 — Custom Web Scraper</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 12 · Day 92 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 12</div>
+    <div class="emoji">🕷️</div>
+    <h1>Custom Web<br>Scraper</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">fetch</span> + <span class="sub">parse</span> a real web page.</p>
+    <p class="bilingual">사이트에서 정보 자동 수집하기 (robots.txt 확인 필수)</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why resize an image before counting pixels?</div>
+      <details><summary>Show answer</summary><div class="ans">Speed + memory. A 100×100 sample is enough for a palette.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What do we get?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+html  = requests.<span class="fn">get</span>(URL).text
+soup  = <span class="fn">BeautifulSoup</span>(html, <span class="str">"html.parser"</span>)
+quote = soup.<span class="fn">find</span>(<span class="str">"span"</span>, class_=<span class="str">"text"</span>).text</pre>
+      <details><summary>Reveal output</summary><div class="ans">The first quote's text from the page — like <code>"The world as we have created it..."</code></div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">requests</span>
+      <span class="gloss">fetch a URL</span>
+      <span class="ko">웹 요청</span>
+
+      <span class="term">BeautifulSoup</span>
+      <span class="gloss">parse HTML</span>
+      <span class="ko">HTML 파서</span>
+
+      <span class="term">selector</span>
+      <span class="gloss">tag + class to find</span>
+      <span class="ko">선택자</span>
+
+      <span class="term">robots.txt</span>
+      <span class="gloss">site's scraper rules</span>
+      <span class="ko">크롤링 규칙</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Fetch → parse → pick 🍜</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">requests.get</span><span class="val">raw HTML</span></div>
+      <div class="varbox"><span class="name">soup</span><span class="val">tree</span></div>
+      <div class="varbox"><span class="name">find_all</span><span class="val">matching tags</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Always check robots.txt first.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Scrape all quotes</h2>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+URL = <span class="str">"https://quotes.toscrape.com/"</span>
+r    = requests.<span class="fn">get</span>(URL)
+soup = <span class="fn">BeautifulSoup</span>(r.text, <span class="str">"html.parser"</span>)
+
+<span class="kw">for</span> q <span class="kw">in</span> soup.<span class="fn">find_all</span>(<span class="str">"span"</span>,
+                       class_=<span class="str">"text"</span>):
+    <span class="fn">print</span>(q.text)</pre>
+    <p class="bilingual" style="margin-top:.4em">quotes.toscrape.com은 연습용으로 제공된 사이트</p>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Find tags by class</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"span.text"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">find_all</span><span class="val">list of 10 tags</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">tag.text</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">inner text</span><span class="val">just the quote</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># loop →</span> <span class="out">prints all quotes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Selector → result</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">selector</div>
+      <div class="cell head">match</div>
+      <div class="cell head">count</div>
+
+      <div class="cell">span.text</div>
+      <div class="cell">quotes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10/page</span></details></div>
+
+      <div class="cell">small.author</div>
+      <div class="cell">authors</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10/page</span></details></div>
+
+      <div class="cell">div.tags a</div>
+      <div class="cell">tag links</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">many</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>No status check</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>r = requests.<span class="fn">get</span>(URL)
+soup = <span class="fn">BeautifulSoup</span>(r.text, ...)</pre>
+        <p style="margin-top:.4em;font-size:.85em">404 page parsed as if it were data</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>r = requests.<span class="fn">get</span>(URL)
+r.<span class="fn">raise_for_status</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Crash early on bad response.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — site change -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Suddenly empty</h2>
+<pre>soup.<span class="fn">find_all</span>(<span class="str">"span"</span>, class_=<span class="str">"text"</span>)</pre>
+    <div class="err">Yesterday: 10 results. Today: []</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Site changed its HTML. Open DevTools, find new class name (maybe <code>quote-text</code>), update selector.</p>
+      <p class="bilingual">사이트 HTML이 바뀜 — DevTools로 새 클래스 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — rate limit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Blocked after 50 pages</h2>
+<pre><span class="kw">for</span> p <span class="kw">in</span> <span class="fn">range</span>(<span class="num">100</span>):
+    requests.<span class="fn">get</span>(<span class="fn">f</span><span class="str">"{URL}/page/{p}"</span>)</pre>
+    <div class="err">429 Too Many Requests</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Slow down: <code>time.sleep(1)</code> between requests. Respect the site.</p>
+      <p class="bilingual">요청 사이에 sleep(1) — 사이트 부하 줄이기</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — encoding -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Garbled characters</h2>
+<pre><span class="fn">open</span>(<span class="str">"out.txt"</span>, <span class="str">"w"</span>).<span class="fn">write</span>(quote)</pre>
+    <div class="err">UnicodeEncodeError: 'cp949' codec...</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Always: <code>open("out.txt", "w", encoding="utf-8")</code>.</p>
+      <p class="bilingual">파일 저장 시 encoding="utf-8" 명시</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> ____
+
+r    = requests.<span class="fn">get</span>(<span class="str">"https://quotes.toscrape.com/"</span>)
+r.____()  <span class="com"># crash on 404/500</span>
+soup = <span class="fn">BeautifulSoup</span>(r.text, <span class="str">"____"</span>)
+
+<span class="kw">for</span> q <span class="kw">in</span> soup.<span class="fn">find_all</span>(<span class="str">"span"</span>, class_=<span class="str">"____"</span>):
+    <span class="fn">print</span>(q.text)</pre>
+    <p style="margin-top:.6em">Goal: fetch, check status, parse, loop.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — save to CSV</h2>
+<pre><span class="kw">import</span> csv, time
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"quotes.csv"</span>, <span class="str">"w"</span>,
+          encoding=<span class="str">"____"</span>) <span class="kw">as</span> f:
+    w = csv.<span class="fn">writer</span>(f)
+    <span class="kw">for</span> p <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):
+        soup = ...  <span class="com"># fetch page p</span>
+        <span class="kw">for</span> q <span class="kw">in</span> soup.<span class="fn">find_all</span>(...):
+            w.<span class="fn">writerow</span>([____])
+        time.<span class="fn">sleep</span>(____)</pre>
+    <p style="margin-top:.6em">5 pages, 1s delay, utf-8.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Before scraping a site, you should…</div>
+      <div class="opts">
+        <details><summary>A. Check <code>/robots.txt</code></summary><div class="ans">✓ See what's allowed.</div></details>
+        <details><summary>B. Send 1000 requests</summary><div class="ans">Nope — gets you banned.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>find_all("a")</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. A list of links</summary><div class="ans">✓ All <code>&lt;a&gt;</code> tags on the page.</div></details>
+        <details><summary>B. The first link</summary><div class="ans">Nope — that's <code>find()</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"We <code>requests.get</code> the URL, parse with <span class="blank"></span>, then pick the data with <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🕷️</h2>
+    <ul class="check-list">
+      <li>Check <code>/robots.txt</code> of your target</li>
+      <li>Fetch HTML with <code>requests.get</code></li>
+      <li>Parse with BeautifulSoup</li>
+      <li>Pick + print key data (titles, prices, quotes)</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Loop multiple pages with <code>time.sleep(1)</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Save results to CSV with utf-8 encoding.</div>
+      <div class="item"><span class="lvl">★★★</span>Set <code>User-Agent</code> header, handle retries.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why <code>time.sleep(1)</code> between requests?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 요청 사이에 sleep 두는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Web pages =<br>data sources.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Selenium plays Chrome Dino for us.</p>
+    <p class="bilingual">다음 주: Selenium으로 크롬 공룡 게임 자동 플레이</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

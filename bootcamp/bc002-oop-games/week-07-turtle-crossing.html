@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 7 — Turtle Crossing</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 7 · Day 23 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 7</div>
+    <div class="emoji">🚗</div>
+    <h1>Turtle<br>Crossing</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">combine</span> + <span class="sub">level-up</span> a full arcade game.</p>
+    <p class="bilingual">거북이가 도로 건너기 (캡스톤)</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you bounce a ball off the top wall?</div>
+      <details><summary>Show answer</summary><div class="ans">When <code>ycor() &gt; 280</code>, flip <code>y_move *= -1</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What ends the game?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">for</span> car <span class="kw">in</span> cars.all_cars:
+    <span class="kw">if</span> car.<span class="fn">distance</span>(player) &lt; <span class="num">20</span>:
+        game_on = <span class="kw">False</span></pre>
+      <details><summary>Reveal</summary><div class="ans">A car comes within 20px of the player — game over.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">level</span>
+      <span class="gloss">round of difficulty</span>
+      <span class="ko">레벨</span>
+
+      <span class="term">spawn</span>
+      <span class="gloss">create a new object</span>
+      <span class="ko">생성</span>
+
+      <span class="term">finish line</span>
+      <span class="gloss">y-coord that ends a level</span>
+      <span class="ko">결승선</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>3 managers, 1 loop</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">Player</span><span class="val">moves up</span></div>
+      <div class="varbox"><span class="name">CarManager</span><span class="val">spawns + moves</span></div>
+      <div class="varbox"><span class="name">Scoreboard</span><span class="val">tracks level</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each class has one job.</p>
+    <p class="bilingual" style="text-align:center">한 클래스는 하나의 역할</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Main loop</h2>
+<pre><span class="kw">while</span> game_on:
+    screen.<span class="fn">update</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.1</span>)
+    cars.<span class="fn">create_car</span>()
+    cars.<span class="fn">move_cars</span>()
+
+    <span class="kw">for</span> car <span class="kw">in</span> cars.all_cars:
+        <span class="kw">if</span> car.<span class="fn">distance</span>(player) &lt; <span class="num">20</span>:
+            game_on = <span class="kw">False</span>
+
+    <span class="kw">if</span> player.<span class="fn">is_at_finish</span>():
+        player.<span class="fn">go_to_start</span>()
+        cars.<span class="fn">level_up</span>()
+        score.<span class="fn">level_up</span>()</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Level up flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">player.y &gt;= 280</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">finish!</span><span class="val">go_to_start</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">cars.level_up</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">speed</span><span class="val">+ 10</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># score.level_up →</span> <span class="out">"Level: 2"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What happens next?</h2>
+    <div class="trace-grid">
+      <div class="cell head">player.y</div>
+      <div class="cell head">car distance</div>
+      <div class="cell head">result</div>
+
+      <div class="cell">280</div>
+      <div class="cell">100</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">level up</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell">10</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">game over</span></details></div>
+
+      <div class="cell">100</div>
+      <div class="cell">200</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">keep going</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Cars too fast</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>STARTING_MOVE_DISTANCE = <span class="num">100</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Cars jump huge gaps — impossible.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>STARTING_MOVE_DISTANCE = <span class="num">5</span>
+MOVE_INCREMENT = <span class="num">10</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Slow start, level-up adds 10.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Cars teleport across</h2>
+<pre>car_speed = <span class="num">100</span>
+<span class="kw">for</span> car <span class="kw">in</span> cars:
+    car.<span class="fn">forward</span>(car_speed)</pre>
+    <div class="err">Cars skip past player — no collision detected</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use small steps (5–15). Big jumps skip over the player.</p>
+      <p class="bilingual">한 번에 너무 많이 가면 충돌 못 잡음</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Level never goes up</h2>
+<pre><span class="kw">if</span> player.<span class="fn">ycor</span>() == <span class="num">280</span>:
+    cars.<span class="fn">level_up</span>()</pre>
+    <div class="err">Player can stop at 270 or 290 — exact match fails</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>&gt;=</code> instead of <code>==</code>: <code>if player.ycor() &gt;= 280</code>.</p>
+      <p class="bilingual">정확히 같지 않아도 통과 가능하게</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Finish check after reset</h2>
+<pre>player.<span class="fn">go_to_start</span>()
+<span class="kw">if</span> player.<span class="fn">is_at_finish</span>():
+    cars.<span class="fn">level_up</span>()</pre>
+    <div class="err">Levels skip — player just reset</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check finish FIRST, then reset + level up. Don't re-check after moving home.</p>
+      <p class="bilingual">완주 확인 후 리셋 — 순서가 중요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">if</span> player.<span class="fn">ycor</span>() <span class="kw">>=</span> ___:
+    player.<span class="fn">go_to_start</span>()
+    cars.<span class="fn">______</span>()
+    score.<span class="fn">level_up</span>()
+
+<span class="kw">for</span> car <span class="kw">in</span> cars.all_cars:
+    <span class="kw">if</span> car.<span class="fn">distance</span>(player) &lt; ___:
+        game_on = ___</pre>
+    <p style="margin-top:.6em">Goal: finish + collision.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — random car colors</h2>
+<pre>COLORS = [<span class="str">"red"</span>, <span class="str">"blue"</span>, <span class="str">"green"</span>]
+
+<span class="kw">def</span> <span class="fn">create_car</span>(self):
+    <span class="kw">if</span> random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>) == <span class="num">1</span>:
+        car = <span class="fn">Turtle</span>(<span class="str">"square"</span>)
+        car.<span class="fn">color</span>(random.<span class="fn">choice</span>(_____))</pre>
+    <p style="margin-top:.6em">Pick a random color each spawn.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why <code>&gt;= 280</code> not <code>== 280</code>?</div>
+      <div class="opts">
+        <details><summary>A. Step size may overshoot</summary><div class="ans">✓ Exact misses.</div></details>
+        <details><summary>B. <code>==</code> is broken</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Each class should do…</div>
+      <div class="opts">
+        <details><summary>A. Many jobs</summary><div class="ans">Hard to read.</div></details>
+        <details><summary>B. One job</summary><div class="ans">✓ Single responsibility.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The level goes up when <span class="blank"></span>, and the game ends when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Turtle Crossing 🚗</h2>
+    <ul class="check-list">
+      <li>Player turtle moves up on press</li>
+      <li>CarManager spawns + moves cars</li>
+      <li>Detect car-player collision (game over)</li>
+      <li>Detect finish, level up, speed up cars</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show "Level: 3" on the screen with <code>write</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Add 2-lane traffic going opposite directions.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a power-up pellet that gives +5 levels.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why split logic into separate classes?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 클래스 분리의 이유</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One class,<br>one job.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: save data to files.</p>
+    <p class="bilingual">다음 주: 파일에 데이터 저장하기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

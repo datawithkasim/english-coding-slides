@@ -90,13 +90,8 @@ for t in ts: t.join()</pre>
     <h2>What's wrong with this code?</h2>
     <div class="debug-box">
       <div class="debug-tag">buggy</div>
-<pre style="margin-top:.4em">import threading
-def work(n):
-    pirnt(n)
-
-ts = [threading.Thread(target=work, args=(i,)) for i in range(5)]
-for t in ts: t.start()
-for t in ts: t.join()</pre>
+<pre style="margin-top:.4em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[3])</pre>
     </div>
     <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
   </div>
@@ -105,21 +100,16 @@ for t in ts: t.join()</pre>
   <div class="slide">
     <div class="pill">🐛 Debug</div>
     <h2>The bug</h2>
-    <div class="debug-reveal"><b>Bug:</b> Typo: <code>pirnt</code> is not defined. Python raises <code>NameError</code>. Spell built-in functions exactly.</div>
+    <div class="debug-reveal"><b>Bug:</b> A 3-item list has indexes 0, 1, 2. <code>colors[3]</code> raises <code>IndexError: list index out of range</code>. The last index is <code>len - 1</code>.</div>
     <div class="debug-box" style="margin-top:.7em">
       <div class="debug-tag fix">fixed</div>
-<pre style="margin-top:.4em">import threading
-def work(n):
-    print(n)
-
-ts = [threading.Thread(target=work, args=(i,)) for i in range(5)]
-for t in ts: t.start()
-for t in ts: t.join()</pre>
+<pre style="margin-top:.4em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[2])</pre>
     </div>
   </div>
 
   <!-- MCQ 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+  <div class="slide mcq" data-correct="0" data-explain="Index 3 is out of range — last index is 2.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 1 of 7</div>
     <div class="q">Which best describes <b>threading</b>?</div>
@@ -148,20 +138,8 @@ for t in ts: t.join()</pre>
   <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 3 of 7</div>
-    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">import threading
-def work(n):
-    pirnt(n)
-
-ts = [threading.Thread(target=work, args=(i,)) for i in range(5)]
-for t in ts: t.start()
-for t in ts: t.join()</pre></div>
-    <div class="opts">
-      <button class="opt">Typo: pirnt is not defined. Python raises NameError. Spell built-in functions exactly.</button>
-      <button class="opt">Nothing — the code is correct as-is.</button>
-      <button class="opt">Missing <code>import sys</code> at the top.</button>
-      <button class="opt">The variable was never declared with <code>let</code>.</button>
-    </div>
-    <div class="qfeedback"></div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[3])</pre></div><div class="opts"><button class="opt">Index 3 is out of range; the last index is 2 (IndexError).</button><button class="opt">Lists can't hold strings.</button><button class="opt">You must use colors.get(3).</button><button class="opt">List indexes start at 1.</button></div><div class="qfeedback"></div>
   </div>
   <!-- MCQ 4 -->
   <div class="slide mcq" data-correct="0" data-explain="start(): run">

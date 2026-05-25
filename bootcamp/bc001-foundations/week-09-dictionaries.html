@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 9 — Secret Auction</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 9 · Day 9 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 9</div>
+    <div class="emoji">🏷️</div>
+    <h1>Secret<br>Auction</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">store</span> + <span class="sub">look up</span> with dictionaries.</p>
+    <p class="bilingual">딕셔너리로 비밀 경매 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">In <code>encrypt(text, n)</code>, what is <code>n</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">A parameter — a name for the shift value.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>scores = {<span class="str">"Min"</span>: <span class="num">95</span>, <span class="str">"Tae"</span>: <span class="num">80</span>}
+<span class="fn">print</span>(scores[<span class="str">"Min"</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">95 — look up by key, not by number.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">dictionary</span>
+      <span class="gloss">pairs of key → value</span>
+      <span class="ko">딕셔너리</span>
+
+      <span class="term">key</span>
+      <span class="gloss">label you look up by</span>
+      <span class="ko">키</span>
+
+      <span class="term">value</span>
+      <span class="gloss">what's stored at that key</span>
+      <span class="ko">값</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Boxes labelled by name 🏷️</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">"Min"</span><span class="val">95</span></div>
+      <div class="varbox"><span class="name">"Tae"</span><span class="val">80</span></div>
+      <div class="varbox"><span class="name">"Jin"</span><span class="val">70</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">List = index by number. Dict = look up by key.</p>
+    <p class="bilingual">리스트는 번호, 딕셔너리는 이름으로 찾기</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Track bids</h2>
+<pre>bids = {}
+bids[<span class="str">"Min"</span>] = <span class="num">10000</span>
+bids[<span class="str">"Tae"</span>] = <span class="num">15000</span>
+bids[<span class="str">"Jin"</span>] = <span class="num">12000</span>
+
+<span class="fn">print</span>(bids)
+<span class="fn">print</span>(bids[<span class="str">"Tae"</span>])</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">{'Min': 10000, 'Tae': 15000, 'Jin': 12000}<br>15000</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Add then look up</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">bids["Min"] = 10000</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">bids</span><span class="val">{"Min": 10000}</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">bids["Tae"] = 15000</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">bids</span><span class="val">{...+"Tae": 15000}</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Look up:</span> bids["Tae"] <span class="com"># →</span> <span class="out">15000</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Look up the value</h2>
+<pre>menu = {<span class="str">"pizza"</span>: <span class="num">8</span>,
+        <span class="str">"sushi"</span>: <span class="num">12</span>,
+        <span class="str">"taco"</span>: <span class="num">5</span>}</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">expression</div>
+      <div class="cell head"><code>menu["pizza"]</code></div>
+      <div class="cell head"><code>menu["taco"]</code></div>
+      <div class="cell head"><code>len(menu)</code></div>
+
+      <div class="cell">value</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+    </div>
+    <p style="margin-top:.5em"><code>menu["ramen"]</code>? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700">?</summary> <span style="color:#0a6b2e;font-weight:700">KeyError — not in dict</span></details></p>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>List vs dict access</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>bids = {<span class="str">"Min"</span>: <span class="num">10000</span>}
+<span class="fn">print</span>(bids[<span class="num">0</span>])</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>KeyError: 0</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>bids = {<span class="str">"Min"</span>: <span class="num">10000</span>}
+<span class="fn">print</span>(bids[<span class="str">"Min"</span>])</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>10000</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — missing key</h2>
+<pre>bids = {<span class="str">"Min"</span>: <span class="num">10000</span>}
+<span class="fn">print</span>(bids[<span class="str">"Tae"</span>])</pre>
+    <div class="err">KeyError: 'Tae'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add the key first, or use <code>bids.get("Tae", 0)</code> for a safe default.</p>
+      <p class="bilingual">없는 키는 KeyError — get()으로 기본값 반환 가능</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — used a list</h2>
+<pre>bids = []
+bids[<span class="str">"Min"</span>] = <span class="num">10000</span></pre>
+    <div class="err">TypeError: list indices must be integers, not str</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Start with a dict: <code>bids = {}</code>, not <code>[]</code>.</p>
+      <p class="bilingual">이름으로 저장하려면 {} 딕셔너리</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — overwriting</h2>
+<pre>bids = {}
+bids[<span class="str">"Min"</span>] = <span class="num">10000</span>
+bids[<span class="str">"Min"</span>] = <span class="num">5000</span>
+
+<span class="fn">print</span>(bids[<span class="str">"Min"</span>])</pre>
+    <div class="err">Output: 5000 (lost the 10000)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Same key overwrites. To keep many bids per person, store a list as the value.</p>
+      <p class="bilingual">같은 키는 덮어씀 — 여러 값 저장은 리스트로</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>bids = ___
+
+name = <span class="fn">input</span>(<span class="str">"Name? "</span>)
+amount = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Bid? "</span>))
+
+bids[___] = ___
+<span class="fn">print</span>(bids)</pre>
+    <p style="margin-top:.6em">Goal: empty dict, then add one bid by name.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — find highest bidder</h2>
+<pre>bids = {<span class="str">"Min"</span>: <span class="num">10000</span>,
+        <span class="str">"Tae"</span>: <span class="num">15000</span>,
+        <span class="str">"Jin"</span>: <span class="num">12000</span>}
+
+best = <span class="num">0</span>
+winner = <span class="str">""</span>
+
+<span class="kw">for</span> name <span class="kw">in</span> ___:
+    <span class="kw">if</span> bids[name] &gt; ___:
+        best = bids[name]
+        winner = ___
+
+<span class="fn">print</span>(winner, best)</pre>
+    <p style="margin-top:.6em">Loop over keys, track max.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>{"a": 1}["a"]</code> →</div>
+      <div class="opts">
+        <details><summary>A. "a"</summary><div class="ans">Nope — that's the key.</div></details>
+        <details><summary>B. 1</summary><div class="ans">✓ Look up returns the value.</div></details>
+        <details><summary>C. error</summary><div class="ans">Nope — key exists.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Empty dict is</div>
+      <div class="opts">
+        <details><summary>A. <code>[]</code></summary><div class="ans">Nope — that's a list.</div></details>
+        <details><summary>B. <code>{}</code></summary><div class="ans">✓ Curly braces.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"A dictionary stores <span class="blank"></span> pairs. I look up a value by its <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the auction 🏷️</h2>
+    <ul class="check-list">
+      <li>Start <code>bids = {}</code></li>
+      <li>Loop: ask name + amount, add to dict</li>
+      <li>Stop when user types "done"</li>
+      <li>Find and print the highest bidder</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print all bidders sorted highest → lowest.</div>
+      <div class="item"><span class="lvl">★★</span>Clear the screen between bidders for secrecy.</div>
+      <div class="item"><span class="lvl">★★★</span>Use a nested dict: <code>bids[name] = {"amount": …, "item": …}</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: when is a dictionary better than a list?</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 딕셔너리가 리스트보다 좋을 때?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Dicts:<br>look up by name.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: return values + Calculator project.</p>
+    <p class="bilingual">다음 주: 함수 return + 계산기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

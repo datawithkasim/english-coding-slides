@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 1 — ISS Tracker</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 1 · Day 33 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 1</div>
+    <div class="emoji">🛰️</div>
+    <h1>Where's the<br>Space Station?</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">call</span> + <span class="sub">read</span> a live API.</p>
+    <p class="bilingual">API에서 우주정거장 위치 받아오기</p>
+  </div>
+
+  <!-- Slot 2: Course intro / Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">16-week bootcamp</div>
+    <h2>BC003 starts now 🚀</h2>
+    <p class="big">16 weeks of APIs + web. Today: ask the internet "where is the ISS?" and print the answer.</p>
+    <div class="emoji">🛰️ 🌍 📡</div>
+    <p class="bilingual">16주 동안 API와 웹 자동화 프로젝트</p>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> requests
+r = requests.<span class="fn">get</span>(<span class="str">"https://api.open-notify.org/iss-now.json"</span>)
+<span class="fn">print</span>(r.status_code)</pre>
+      <details><summary>Reveal output</summary><div class="ans">200 — means "OK, here's your data."</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">API</span>
+      <span class="gloss">a door to ask a server for data</span>
+      <span class="ko">에이피아이</span>
+
+      <span class="term">endpoint</span>
+      <span class="gloss">the URL you call</span>
+      <span class="ko">엔드포인트</span>
+
+      <span class="term">JSON</span>
+      <span class="gloss">data shape: keys and values</span>
+      <span class="ko">제이슨</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Ask → server → answer 📡</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">you</span><span class="val">requests.get(url)</span></div>
+      <div class="varbox"><span class="name">server</span><span class="val">"here's JSON"</span></div>
+      <div class="varbox"><span class="name">you</span><span class="val">r.json()</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">A request goes out. Data comes back.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Get ISS lat + lon</h2>
+<pre><span class="kw">import</span> requests
+url  = <span class="str">"https://api.open-notify.org/iss-now.json"</span>
+data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+
+lat = data[<span class="str">"iss_position"</span>][<span class="str">"latitude"</span>]
+lon = data[<span class="str">"iss_position"</span>][<span class="str">"longitude"</span>]
+<span class="fn">print</span>(<span class="str">f"ISS: {lat}, {lon}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">ISS: -23.41, 142.07</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>URL → JSON → key</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">url</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">requests.get</span><span class="val">200 OK</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.json()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">data</span><span class="val">{iss_position: {...}}</span></div>
+      </div>
+      <div class="read-line">
+        data[<span class="str">"iss_position"</span>][<span class="str">"latitude"</span>] <span class="com"># →</span> <span class="out">"-23.41"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What does each line give?</h2>
+<pre>r    = requests.<span class="fn">get</span>(url)
+data = r.<span class="fn">json</span>()
+pos  = data[<span class="str">"iss_position"</span>]
+lat  = pos[<span class="str">"latitude"</span>]</pre>
+    <div class="trace-grid">
+      <div class="cell head">var</div>
+      <div class="cell head">type</div>
+      <div class="cell head">value</div>
+
+      <div class="cell">r</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Response</span></details></div>
+      <div class="cell">200</div>
+
+      <div class="cell">data</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">dict</span></details></div>
+      <div class="cell">{...}</div>
+
+      <div class="cell">lat</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">str</span></details></div>
+      <div class="cell">"-23.41"</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot <code>.json()</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>data = requests.<span class="fn">get</span>(url)
+<span class="fn">print</span>(data[<span class="str">"iss_position"</span>])</pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError — Response not dict.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+<span class="fn">print</span>(data[<span class="str">"iss_position"</span>])</pre>
+        <p style="margin-top:.4em;font-size:.85em">.json() turns body into dict.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>404 not found</h2>
+<pre>url = <span class="str">"https://api.open-notify.org/iss-noww.json"</span>
+r   = requests.<span class="fn">get</span>(url)
+<span class="fn">print</span>(r.status_code)</pre>
+    <div class="err">Status: 404 — server can't find that path</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Typo in path. <code>iss-noww</code> → <code>iss-now</code>.</p>
+      <p class="bilingual">URL 경로 철자 확인 — 404는 "그런 주소 없음"</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>JSON key typo</h2>
+<pre>data = requests.<span class="fn">get</span>(url).<span class="fn">json</span>()
+lat  = data[<span class="str">"iss_postion"</span>][<span class="str">"latitude"</span>]</pre>
+    <div class="err">KeyError: 'iss_postion'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Key is <code>iss_position</code> (not <code>postion</code>). <code>print(data)</code> first to check keys.</p>
+      <p class="bilingual">JSON key 철자는 정확히 — 먼저 print해서 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing protocol</h2>
+<pre>url = <span class="str">"api.open-notify.org/iss-now.json"</span>
+r   = requests.<span class="fn">get</span>(url)</pre>
+    <div class="err">MissingSchema: invalid URL</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">URLs need <code>https://</code> at the start.</p>
+      <p class="bilingual">URL 앞에 https:// 꼭 붙이기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> requests
+url  = <span class="str">"https://api.open-notify.org/iss-now.json"</span>
+data = requests.<span class="fn">______</span>(url).<span class="fn">json</span>()
+<span class="fn">print</span>(data[<span class="str">"______"</span>])</pre>
+    <p style="margin-top:.6em">Goal: print the <code>iss_position</code> dict.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — show hemisphere</h2>
+<pre>lat = <span class="fn">float</span>(data[<span class="str">"iss_position"</span>][<span class="str">"latitude"</span>])
+<span class="kw">if</span> lat ___ <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"____ hemisphere"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"____ hemisphere"</span>)</pre>
+    <p style="margin-top:.6em">Goal: North if lat &gt; 0, else South.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Status code <code>200</code> means…</div>
+      <div class="opts">
+        <details><summary>A. error</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. OK, data here</summary><div class="ans">✓ Success.</div></details>
+        <details><summary>C. not found</summary><div class="ans">Nope — that's 404.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To turn a response into a dict you use…</div>
+      <div class="opts">
+        <details><summary>A. <code>.text</code></summary><div class="ans">Gives a string, not dict.</div></details>
+        <details><summary>B. <code>.json()</code></summary><div class="ans">✓ Parses JSON to dict.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I call <code>requests.get</code> on the <span class="blank"></span>, then use <span class="blank"></span> to read the JSON."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Track the ISS 🛰️</h2>
+    <ul class="check-list">
+      <li>Import <code>requests</code></li>
+      <li>GET the ISS URL</li>
+      <li>Parse with <code>.json()</code></li>
+      <li>Print lat + lon nicely</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print also the <code>timestamp</code> field.</div>
+      <div class="item"><span class="lvl">★★</span>Check status_code; print error if not 200.</div>
+      <div class="item"><span class="lvl">★★★</span>Loop every 30s and print position changes.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what is an API endpoint?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — API endpoint란?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">APIs return<br>data you can use.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: build a quiz from a trivia API.</p>
+    <p class="bilingual">다음 주: API로 퀴즈 앱 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 7 — Pandas: College Majors</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 7 · Day 71 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 7</div>
+    <div class="emoji">📊</div>
+    <h1>Pandas<br>College Majors</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">load</span> + <span class="sub">explore</span> a real CSV.</p>
+    <p class="bilingual">pandas로 CSV 읽고 데이터 탐색</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why do secrets go in env vars?</div>
+      <details><summary>Show answer</summary><div class="ans">So they aren't visible in code on GitHub.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>df = pd.DataFrame({
+    <span class="str">"name"</span>:    [<span class="str">"Ana"</span>, <span class="str">"Bo"</span>, <span class="str">"Ci"</span>],
+    <span class="str">"score"</span>:   [<span class="num">90</span>,    <span class="num">85</span>,   <span class="num">70</span>],
+})
+<span class="fn">print</span>(df.shape)</pre>
+      <details><summary>Reveal</summary><div class="ans">(3, 2) — 3 rows, 2 columns.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 pandas words</h2>
+    <div class="vocab-table">
+      <span class="term">DataFrame</span>
+      <span class="gloss">a table — rows + columns</span>
+      <span class="ko">데이터 표</span>
+
+      <span class="term">Series</span>
+      <span class="gloss">one column of a table</span>
+      <span class="ko">한 열</span>
+
+      <span class="term">groupby</span>
+      <span class="gloss">split rows into groups, then summarize</span>
+      <span class="ko">그룹화</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>A DataFrame = a spreadsheet 📋</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">Major</span><span class="val">column</span></div>
+      <div class="varbox"><span class="name">Total</span><span class="val">column</span></div>
+      <div class="varbox"><span class="name">Row 0</span><span class="val">Art, 1.2M</span></div>
+      <div class="varbox"><span class="name">Row 1</span><span class="val">CS, 0.4M</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Columns are Series. Rows have an index.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Load + peek</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="str">"majors.csv"</span>)
+<span class="fn">print</span>(df.shape)
+<span class="fn">print</span>(df.head(<span class="num">3</span>))
+<span class="fn">print</span>(df.columns.tolist())</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">(173, 21)<br>['Major', 'Total', 'Men', 'Women', ...]</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Select → sort → group</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">df["Major"]</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">Series</span><span class="val">one column</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.sort_values("Total")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">sorted</span><span class="val">ascending</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.groupby("Category")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">.sum()</span><span class="val">per group</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What's the result?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Call</div>
+      <div class="cell head">Type</div>
+      <div class="cell head">Shape</div>
+      <div class="cell head">Hint</div>
+
+      <div class="cell">df</div>
+      <div class="cell">DataFrame</div>
+      <div class="cell">(173, 21)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">full table</span></details></div>
+
+      <div class="cell">df["Total"]</div>
+      <div class="cell">Series</div>
+      <div class="cell">(173,)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">one column</span></details></div>
+
+      <div class="cell">df.head(5)</div>
+      <div class="cell">DataFrame</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">(5, 21)</span></details></div>
+      <div class="cell">first 5 rows</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Bracket types</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>df[<span class="str">"Major"</span>, <span class="str">"Total"</span>]</pre>
+        <p style="margin-top:.4em;font-size:.85em">KeyError — that's a tuple key.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>df[[<span class="str">"Major"</span>, <span class="str">"Total"</span>]]</pre>
+        <p style="margin-top:.4em;font-size:.85em">Double brackets = list of columns.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — column typo -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — column typo</h2>
+<pre>df = pd.read_csv(<span class="str">"majors.csv"</span>)
+<span class="fn">print</span>(df[<span class="str">"total"</span>].mean())</pre>
+    <div class="err">KeyError: 'total'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Case matters. Real column is <code>"Total"</code>. Use <code>df.columns</code> to confirm.</p>
+      <p class="bilingual">컬럼 이름 대소문자까지 정확히</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — SettingWithCopyWarning -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — copy warning</h2>
+<pre>cs = df[df.Major == <span class="str">"CS"</span>]
+cs[<span class="str">"Total"</span>] = cs[<span class="str">"Total"</span>] / <span class="num">1000</span></pre>
+    <div class="err">SettingWithCopyWarning: A value is trying to be set on a copy</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Take an explicit copy first: <code>cs = df[df.Major == "CS"].copy()</code>.</p>
+      <p class="bilingual">필터링 결과를 수정하려면 .copy() 명시</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — NaN -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — NaN values</h2>
+<pre><span class="fn">print</span>(df[<span class="str">"Median"</span>].mean())</pre>
+    <div class="err">Output: nan</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Missing values poison the math. Drop them: <code>df["Median"].dropna().mean()</code>. Or inspect with <code>df.isna().sum()</code>.</p>
+      <p class="bilingual">NaN 있으면 평균도 NaN — 먼저 처리</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>df = pd._______(<span class="str">"majors.csv"</span>)
+top5 = df.sort_values(<span class="str">"Total"</span>,
+                      ascending=<span class="kw">_____</span>).head(___)
+<span class="fn">print</span>(top5[[<span class="str">"Major"</span>, <span class="str">"Total"</span>]])</pre>
+    <p style="margin-top:.6em">Goal: 5 biggest majors, by Total.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — groupby</h2>
+<pre>by_cat = df._______(<span class="str">"Category"</span>)\
+           [[<span class="str">"Total"</span>]]._____()
+<span class="fn">print</span>(by_cat.sort_values(<span class="str">"Total"</span>, ascending=<span class="kw">False</span>))</pre>
+    <p style="margin-top:.6em">Goal: total students per category, biggest first.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. A single column is a…</div>
+      <div class="opts">
+        <details><summary>A. DataFrame</summary><div class="ans">Nope — that's the table.</div></details>
+        <details><summary>B. Series</summary><div class="ans">✓ 1-D labeled array.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>df.shape</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. (rows, cols)</summary><div class="ans">✓ Tuple.</div></details>
+        <details><summary>B. column names</summary><div class="ans">Nope — that's <code>df.columns</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I loaded the CSV with <span class="blank"></span>, then I picked the <span class="blank"></span> column and sorted it."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Explore the dataset 📊</h2>
+    <ul class="check-list">
+      <li>Load <code>majors.csv</code></li>
+      <li>Print shape, columns, head</li>
+      <li>Top 5 majors by total students</li>
+      <li>Group by category — biggest category?</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Find majors with more women than men.</div>
+      <div class="item"><span class="lvl">★★</span>Compute the percent of women per major.</div>
+      <div class="item"><span class="lvl">★★★</span>Save the top-10 table to <code>top.csv</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what's the difference between a DataFrame and a Series?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — DataFrame vs Series 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Data fits<br>in a table.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: matplotlib — draw the data.</p>
+    <p class="bilingual">다음 주: matplotlib — 그래프 그리기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -94,17 +94,9 @@ while True:
     <h2>What's wrong with this code?</h2>
     <div class="debug-box">
       <div class="debug-tag">buggy</div>
-<pre style="margin-top:.4em">import schedule, time
-
-def job():
-    pirnt(&#x27;running&#x27;)
-
-schedule.every(10).minutes.do(job)
-schedule.every().day.at(&#x27;09:00&#x27;).do(job)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)</pre>
+<pre style="margin-top:.4em">count = 0
+while count &lt; 5:
+    print(count)</pre>
     </div>
     <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
   </div>
@@ -113,25 +105,18 @@ while True:
   <div class="slide">
     <div class="pill">🐛 Debug</div>
     <h2>The bug</h2>
-    <div class="debug-reveal"><b>Bug:</b> Typo: <code>pirnt</code> is not defined. Python raises <code>NameError</code>. Spell built-in functions exactly.</div>
+    <div class="debug-reveal"><b>Bug:</b> <code>count</code> never changes, so <code>count &lt; 5</code> is always true — an infinite loop. Add <code>count += 1</code> inside the loop.</div>
     <div class="debug-box" style="margin-top:.7em">
       <div class="debug-tag fix">fixed</div>
-<pre style="margin-top:.4em">import schedule, time
-
-def job():
-    print(&#x27;running&#x27;)
-
-schedule.every(10).minutes.do(job)
-schedule.every().day.at(&#x27;09:00&#x27;).do(job)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)</pre>
+<pre style="margin-top:.4em">count = 0
+while count &lt; 5:
+    print(count)
+    count += 1</pre>
     </div>
   </div>
 
   <!-- MCQ 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+  <div class="slide mcq" data-correct="0" data-explain="count never increments — infinite loop.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 1 of 3</div>
     <div class="q">Which best describes <b>schedule + cron</b>?</div>
@@ -160,24 +145,9 @@ while True:
   <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 3 of 3</div>
-    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">import schedule, time
-
-def job():
-    pirnt(&#x27;running&#x27;)
-
-schedule.every(10).minutes.do(job)
-schedule.every().day.at(&#x27;09:00&#x27;).do(job)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)</pre></div>
-    <div class="opts">
-      <button class="opt">Typo: pirnt is not defined. Python raises NameError. Spell built-in functions exactly.</button>
-      <button class="opt">Nothing — the code is correct as-is.</button>
-      <button class="opt">Missing <code>import sys</code> at the top.</button>
-      <button class="opt">The variable was never declared with <code>let</code>.</button>
-    </div>
-    <div class="qfeedback"></div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">count = 0
+while count &lt; 5:
+    print(count)</pre></div><div class="opts"><button class="opt">count never changes, so the while loop runs forever.</button><button class="opt">while can't use the &lt; operator.</button><button class="opt">print(count) should be print(count + 1).</button><button class="opt">Missing a colon after while.</button></div><div class="qfeedback"></div>
   </div>
 
   <!-- MCQ score -->

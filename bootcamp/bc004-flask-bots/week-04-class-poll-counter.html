@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 4 — Class Poll Counter</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 4 · Day 52 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 4</div>
+    <div class="emoji">🗳️</div>
+    <h1>Class Poll<br>Counter</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">find</span> + <span class="sub">tally</span> votes on a local page.</p>
+    <p class="bilingual">로컬 투표 페이지에서 손 든 표 자동 집계</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What mode keeps old log lines and adds new ones?</div>
+      <details><summary>Show answer</summary><div class="ans">"a" — append mode. "w" erases.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What is <code>len</code> here?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>votes = driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"raised"</span>)
+<span class="fn">print</span>(<span class="fn">len</span>(votes))</pre>
+      <details><summary>Reveal output</summary><div class="ans">The number of elements with class "raised" — the count of hands up.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">find_elements</span>
+      <span class="gloss">return ALL matches (a list)</span>
+      <span class="ko">여러 요소 찾기</span>
+
+      <span class="term">class selector</span>
+      <span class="gloss">match every element with that class</span>
+      <span class="ko">클래스로 선택</span>
+
+      <span class="term">stale element</span>
+      <span class="gloss">element saved before page reloaded</span>
+      <span class="ko">오래된 참조</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>One vs many 🙌</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">find_element</span><span class="val">1 hand</span></div>
+      <div class="varbox"><span class="name">find_elements</span><span class="val">list</span></div>
+      <div class="varbox"><span class="name">len()</span><span class="val">tally</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">No social media. Just classroom hands.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Count the hands</h2>
+<pre>driver.<span class="fn">get</span>(<span class="str">"file:///poll.html"</span>)
+
+yes = driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"yes"</span>)
+no  = driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"no"</span>)
+
+<span class="fn">print</span>(<span class="str">f"Yes: {len(yes)}"</span>)
+<span class="fn">print</span>(<span class="str">f"No:  {len(no)}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Yes: 12<br>No:  4</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Two lists, two counts</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">.yes elements</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">list</span><span class="val">[•,•,…12]</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.no elements</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">list</span><span class="val">[•,•,•,•]</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># len →</span> <span class="out">12 · 4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How many match?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">HTML</div>
+      <div class="cell head">selector</div>
+      <div class="cell head">found</div>
+      <div class="cell head">len</div>
+
+      <div class="cell">3× <code>.yes</code></div>
+      <div class="cell">.yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell">3</div>
+
+      <div class="cell">3× <code>.yes</code>, 2× <code>.no</code></div>
+      <div class="cell">.no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell">2</div>
+
+      <div class="cell">0× <code>.maybe</code></div>
+      <div class="cell">.maybe</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">[]</span></details></div>
+      <div class="cell">0</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Singular vs plural</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>v = driver.<span class="fn">find_element</span>(...)
+<span class="fn">len</span>(v)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ TypeError, element not list</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>v = driver.<span class="fn">find_elements</span>(...)
+<span class="fn">len</span>(v)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ count of matches</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Count off by one</h2>
+<pre>yes = driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"yes "</span>)</pre>
+    <div class="err">len(yes) = 0, but page shows 12</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Trailing space in class name. Drop it: <code>"yes"</code>.</p>
+      <p class="bilingual">클래스 이름에 공백 — 정확히 입력</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Page not loaded</h2>
+<pre>driver.<span class="fn">get</span>(url)
+yes = driver.<span class="fn">find_elements</span>(...)</pre>
+    <div class="err">len(yes) = 0 first time, 12 second time</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wait for page: <code>WebDriverWait</code> until at least one <code>.yes</code> appears.</p>
+      <p class="bilingual">페이지 로드 기다리고 집계</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Stale element</h2>
+<pre>hands = driver.<span class="fn">find_elements</span>(...)
+driver.<span class="fn">refresh</span>()
+<span class="fn">print</span>(hands[<span class="num">0</span>].text)</pre>
+    <div class="err">StaleElementReferenceException</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Re-find after refresh. Old references die when the page reloads.</p>
+      <p class="bilingual">새로고침 후 다시 find_elements 호출</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>yes = driver.<span class="fn">find_______</span>(By.___, <span class="str">"yes"</span>)
+no  = driver.<span class="fn">find_______</span>(By.CLASS_NAME, <span class="str">"___"</span>)
+<span class="fn">print</span>(<span class="str">f"Yes: {___(yes)} · No: {___(no)}"</span>)</pre>
+    <p style="margin-top:.6em">Goal: tally both yes and no.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — winner check</h2>
+<pre>yes = <span class="fn">len</span>(driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"yes"</span>))
+no  = <span class="fn">len</span>(driver.<span class="fn">find_elements</span>(By.CLASS_NAME, <span class="str">"no"</span>))
+
+<span class="kw">if</span> yes ___ no:
+    <span class="fn">print</span>(<span class="str">"____"</span>)
+<span class="kw">elif</span> no > yes:
+    <span class="fn">print</span>(<span class="str">"____"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"____"</span>)</pre>
+    <p style="margin-top:.6em">Compare, print winner or tie.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>find_elements</code> with no match returns…</div>
+      <div class="opts">
+        <details><summary>A. None</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Empty list <code>[]</code></summary><div class="ans">✓ Safe to call len.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To get a count of matching elements, use…</div>
+      <div class="opts">
+        <details><summary>A. <code>len(matches)</code></summary><div class="ans">✓</div></details>
+        <details><summary>B. <code>matches.count</code></summary><div class="ans">Nope — no such property.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I use <span class="blank"></span> to get a list of matches, then <span class="blank"></span> to count them."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Tally votes 🗳️</h2>
+    <ul class="check-list">
+      <li>Open local <code>poll.html</code></li>
+      <li>Find all <code>.yes</code> and <code>.no</code></li>
+      <li>Print counts</li>
+      <li>Announce the winner</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a third option ("maybe") and count it.</div>
+      <div class="item"><span class="lvl">★★</span>Compute % yes: <code>yes/(yes+no)*100</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Refresh page every 5s, re-tally in a loop.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what's the difference between <code>find_element</code> and <code>find_elements</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 단수와 복수 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Lists let<br>bots tally.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: auto-fill a homework feedback form.</p>
+    <p class="bilingual">다음 주: 숙제 피드백 폼 자동 입력</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 6 — Reading Tracker + Sheets</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 6 · Day 38 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 6</div>
+    <div class="emoji">📚</div>
+    <h1>Reading<br>Tracker → Sheets</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">log</span> + <span class="sub">store</span> books in Google Sheets.</p>
+    <p class="bilingual">읽은 책을 구글 시트에 자동 기록</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What method writes new data to an API?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>requests.post(url, json=payload)</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Where does this row land?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>payload = {<span class="str">"book"</span>: {
+    <span class="str">"title"</span>: <span class="str">"Charlotte's Web"</span>,
+    <span class="str">"pages"</span>: <span class="num">192</span>,
+}}
+requests.<span class="fn">post</span>(sheety_url, json=payload)</pre>
+      <details><summary>Reveal output</summary><div class="ans">New row added to the Sheet's "book" tab.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">Sheety</span>
+      <span class="gloss">turns Sheets into an API</span>
+      <span class="ko">시트 API</span>
+
+      <span class="term">Bearer token</span>
+      <span class="gloss">auth string in headers</span>
+      <span class="ko">인증 토큰</span>
+
+      <span class="term">row</span>
+      <span class="gloss">one record in the sheet</span>
+      <span class="ko">행</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Sheet = database 📊</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">code</span><span class="val">POST json</span></div>
+      <div class="varbox"><span class="name">Sheety</span><span class="val">middleman</span></div>
+      <div class="varbox"><span class="name">Sheet</span><span class="val">new row</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Your script → Sheety → Google Sheets.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Add one book row</h2>
+<pre><span class="kw">import</span> requests, os
+url   = <span class="str">"https://api.sheety.co/abc/myBooks/books"</span>
+token = os.<span class="fn">getenv</span>(<span class="str">"SHEETY_TOKEN"</span>)
+headers = {<span class="str">"Authorization"</span>: <span class="str">f"Bearer {token}"</span>}
+body  = {<span class="str">"book"</span>: {
+    <span class="str">"title"</span>: <span class="str">"Charlotte's Web"</span>,
+    <span class="str">"pages"</span>: <span class="num">192</span>,
+    <span class="str">"finished"</span>: <span class="str">"yes"</span>,
+}}
+r = requests.<span class="fn">post</span>(url, json=body, headers=headers)
+<span class="fn">print</span>(r.status_code)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">200 — row added!</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Auth + body together</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">Bearer xyz</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">headers</span><span class="val">who you are</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">{book: {...}}</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">json body</span><span class="val">what to add</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Sheety wraps row in →</span> <span class="out">"book": {...}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>JSON keys → columns</h2>
+    <div class="trace-grid">
+      <div class="cell head">JSON key</div>
+      <div class="cell head">value</div>
+      <div class="cell head">column</div>
+
+      <div class="cell">title</div>
+      <div class="cell">"Charlotte's Web"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">title</span></details></div>
+
+      <div class="cell">pages</div>
+      <div class="cell">192</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">pages</span></details></div>
+
+      <div class="cell">finished</div>
+      <div class="cell">"yes"</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">finished</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Missing outer key</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>body = {<span class="str">"title"</span>: <span class="str">"Charlotte"</span>}</pre>
+        <p style="margin-top:.4em;font-size:.85em">400 — Sheety wants <code>book</code> wrapper.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>body = {<span class="str">"book"</span>: {<span class="str">"title"</span>: <span class="str">"Charlotte"</span>}}</pre>
+        <p style="margin-top:.4em;font-size:.85em">Wrap with sheet tab name.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Auth header missing</h2>
+<pre>r = requests.<span class="fn">post</span>(url, json=body)</pre>
+    <div class="err">401 — Authorization required</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>headers={"Authorization": f"Bearer {token}"}</code>.</p>
+      <p class="bilingual">Bearer 토큰을 헤더에 추가</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>JSON shape wrong</h2>
+<pre>body = [<span class="str">"Charlotte"</span>, <span class="num">192</span>]
+r = requests.<span class="fn">post</span>(url, json=body, headers=headers)</pre>
+    <div class="err">400 — expected object, got list</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Sheety wants a dict with column names: <code>{"book": {"title":..., "pages":...}}</code>.</p>
+      <p class="bilingual">JSON 구조 확인 — 리스트 말고 dict</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Sheet name wrong</h2>
+<pre>url = <span class="str">".../myBooks/Books"</span>  <span class="com"># capital B</span></pre>
+    <div class="err">404 — endpoint not found</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Tab names are lowercase in Sheety: <code>/books</code>.</p>
+      <p class="bilingual">시트 탭 이름은 소문자 — URL 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>headers = {<span class="str">"Authorization"</span>: <span class="str">f"____ {token}"</span>}
+body    = {<span class="str">"book"</span>: {<span class="str">"title"</span>: ____, <span class="str">"pages"</span>: ____}}
+r = requests.<span class="fn">______</span>(url, json=body, headers=headers)</pre>
+    <p style="margin-top:.6em">Goal: Bearer auth, send title + pages.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — read then add</h2>
+<pre>existing = requests.<span class="fn">get</span>(url, headers=headers).<span class="fn">json</span>()
+<span class="kw">if</span> <span class="fn">len</span>(existing[<span class="str">"____"</span>]) &lt; <span class="num">5</span>:
+    requests.<span class="fn">post</span>(url, json=body, headers=______)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"____"</span>)</pre>
+    <p style="margin-top:.6em">Only add if fewer than 5 rows.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Bearer tokens go in…</div>
+      <div class="opts">
+        <details><summary>A. params</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. headers</summary><div class="ans">✓ Authorization header.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Sheety expects the body shape…</div>
+      <div class="opts">
+        <details><summary>A. <code>{tab: {col: val}}</code></summary><div class="ans">✓ Wrap with tab name.</div></details>
+        <details><summary>B. <code>[val1, val2]</code></summary><div class="ans">Nope — needs dict.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"My script POSTs a <span class="blank"></span> to Sheety, which adds a row to my <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Track your books 📚</h2>
+    <ul class="check-list">
+      <li>Make a Sheet with title, pages, finished</li>
+      <li>Get Sheety URL + token</li>
+      <li>POST one book row</li>
+      <li>Check Sheet — new row?</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Ask user for inputs instead of hardcoding.</div>
+      <div class="item"><span class="lvl">★★</span>Add today's date column.</div>
+      <div class="item"><span class="lvl">★★★</span>GET all rows; print total pages read.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why does Sheety wrap rows in a tab name?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 왜 시트 이름으로 감쌀까?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Code writes<br>to spreadsheets.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: flight search with Tequila API.</p>
+    <p class="bilingual">다음 주: 항공권 검색</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

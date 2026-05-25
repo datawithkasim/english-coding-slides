@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 15 — Bingsu Machine</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 15 · Day 15 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 15</div>
+    <div class="emoji">🍧</div>
+    <h1>Bingsu<br>Machine</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">build</span> + <span class="sub">run</span> a vending machine on your laptop.</p>
+    <p class="bilingual">내 컴퓨터에서 빙수 자판기 시뮬레이터 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How does Higher Lower handle wrong guesses?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>break</code> out of the round loop, then print final score.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does the user see?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>menu = {<span class="str">"mango"</span>: <span class="num">5000</span>, <span class="str">"milk"</span>: <span class="num">4000</span>}
+choice = <span class="str">"mango"</span>
+coins = <span class="num">3000</span>
+<span class="kw">if</span> coins >= menu[choice]:
+    <span class="fn">print</span>(<span class="str">"Enjoy!"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"More coins"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">More coins — 3000 is less than 5000.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">environment</span>
+      <span class="gloss">where your code runs</span>
+      <span class="ko">환경</span>
+
+      <span class="term">terminal</span>
+      <span class="gloss">text window to run commands</span>
+      <span class="ko">터미널</span>
+
+      <span class="term">dict lookup</span>
+      <span class="gloss">get a value by key</span>
+      <span class="ko">사전 조회</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Your machine 🏠</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">file</span><span class="val">bingsu.py</span></div>
+      <div class="varbox"><span class="name">terminal</span><span class="val">python bingsu.py</span></div>
+      <div class="varbox"><span class="name">runs</span><span class="val">on your laptop</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Save the file. Open terminal. Run.</p>
+    <p class="bilingual" style="text-align:center">파일 저장 → 터미널 → 실행</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One order</h2>
+<pre>menu = {
+    <span class="str">"mango"</span>:      <span class="num">5000</span>,
+    <span class="str">"strawberry"</span>: <span class="num">6000</span>,
+    <span class="str">"milk"</span>:       <span class="num">4000</span>,
+}
+flavor = <span class="fn">input</span>(<span class="str">"Flavor? "</span>)
+coins  = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Coins? "</span>))
+price  = menu[flavor]
+
+<span class="kw">if</span> coins >= price:
+    change = coins - price
+    <span class="fn">print</span>(<span class="str">f"Enjoy! Change: {change}"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">f"Need {price - coins} more"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Inputs: mango, 6000</div>
+      <div style="opacity:1">Enjoy! Change: 1000</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Dict lookup → branch</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"mango"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">menu[…]</span><span class="val">5000</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">coins 6000</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">compare</span><span class="val">6000 &gt;= 5000</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># True branch →</span> <span class="out">"Enjoy! Change: 1000"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What does the machine print?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">flavor</div>
+      <div class="cell head">price</div>
+      <div class="cell head">coins</div>
+      <div class="cell head">result</div>
+
+      <div class="cell">mango</div>
+      <div class="cell">5000</div>
+      <div class="cell">5000</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Enjoy, 0</span></details></div>
+
+      <div class="cell">milk</div>
+      <div class="cell">4000</div>
+      <div class="cell">3000</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Need 1000</span></details></div>
+
+      <div class="cell">strawberry</div>
+      <div class="cell">6000</div>
+      <div class="cell">10000</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Enjoy, 4000</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Key typo</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>menu = {<span class="str">"mango"</span>: <span class="num">5000</span>}
+price = menu[<span class="str">"Mango"</span>]</pre>
+        <p style="margin-top:.4em;font-size:.85em">KeyError: 'Mango'</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>flavor = flavor.<span class="fn">lower</span>()
+price = menu[flavor]</pre>
+        <p style="margin-top:.4em;font-size:.85em">Normalize input first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Dict key typo</h2>
+<pre>menu = {<span class="str">"strawbery"</span>: <span class="num">6000</span>}
+price = menu[<span class="str">"strawberry"</span>]</pre>
+    <div class="err">KeyError: 'strawberry'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Spell-check the key. <code>strawbery</code> → <code>strawberry</code> in the dict.</p>
+      <p class="bilingual">dict key 철자가 정확해야 함</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Infinite loop, no coins</h2>
+<pre>coins = <span class="num">0</span>
+<span class="kw">while</span> coins < price:
+    <span class="fn">print</span>(<span class="str">"add coins"</span>)</pre>
+    <div class="err">Prints forever — coins never changes inside the loop</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Ask inside the loop: <code>coins += int(input("More? "))</code>.</p>
+      <p class="bilingual">while 안에서 값이 변해야 무한루프 안 됨</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>No way out</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    flavor = <span class="fn">input</span>(<span class="str">"Flavor? "</span>)
+    <span class="fn">serve</span>(flavor)</pre>
+    <div class="err">User can never quit the machine</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add an exit: <code>if flavor == "q": break</code>.</p>
+      <p class="bilingual">사용자가 끝낼 수 있는 출구 만들기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>menu = {<span class="str">"mango"</span>: <span class="num">5000</span>, <span class="str">"milk"</span>: <span class="num">4000</span>}
+flavor = <span class="fn">input</span>(<span class="str">"Flavor? "</span>).______()
+price  = menu[______]
+<span class="kw">if</span> coins ___ price:
+    <span class="fn">print</span>(<span class="str">"Enjoy"</span>)</pre>
+    <p style="margin-top:.6em">Goal: lowercase the flavor, look up, compare.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — loop with exit</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    flavor = <span class="fn">input</span>(<span class="str">"Flavor (q = quit)? "</span>)
+    <span class="kw">if</span> flavor == ___:
+        <span class="kw">break</span>
+    <span class="kw">if</span> flavor <span class="kw">not</span> <span class="kw">in</span> menu:
+        <span class="fn">print</span>(<span class="str">"____"</span>)
+        <span class="kw">continue</span>
+    <span class="fn">serve</span>(flavor)</pre>
+    <p style="margin-top:.6em">Goal: quit on <code>q</code>, skip bad flavors.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>menu["mango"]</code> with no "mango" key →</div>
+      <div class="opts">
+        <details><summary>A. None</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. KeyError</summary><div class="ans">✓ Missing key crashes.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To stop a <code>while True</code> loop you use…</div>
+      <div class="opts">
+        <details><summary>A. <code>break</code></summary><div class="ans">✓ Exits the loop.</div></details>
+        <details><summary>B. <code>continue</code></summary><div class="ans">Nope — skips to next iteration.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"We look up the price with <span class="blank"></span>, then compare it to <span class="blank"></span> to decide if we serve."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the machine 🍧</h2>
+    <ul class="check-list">
+      <li>Create a menu dict — 3+ flavors</li>
+      <li>Ask flavor + coins</li>
+      <li>Look up price, compute change</li>
+      <li>Loop until user types <code>q</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add toppings (mochi, red bean) with extra cost.</div>
+      <div class="item"><span class="lvl">★★</span>Track total sales across orders.</div>
+      <div class="item"><span class="lvl">★★★</span>Out-of-stock: remove flavor from dict when sold.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how do you let the user quit a <code>while True</code> loop?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — while True에서 나가는 방법?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Your laptop<br>runs Python.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: objects — code that thinks in things.</p>
+    <p class="bilingual">다음 주: 객체 — 사물처럼 생각하는 코드</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

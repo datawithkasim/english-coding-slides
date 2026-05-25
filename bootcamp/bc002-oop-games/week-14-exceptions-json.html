@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 14 — Exceptions &amp; JSON</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 14 · Day 30 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 14</div>
+    <div class="emoji">🛡️</div>
+    <h1>Errors &amp;<br>JSON</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">catch</span> + <span class="sub">save</span> data safely.</p>
+    <p class="bilingual">예외 처리와 JSON으로 데이터 저장</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which file mode kept history in the password manager?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>"a"</code> — append, not overwrite.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does it print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">try</span>:
+    n = <span class="fn">int</span>(<span class="str">"abc"</span>)
+<span class="kw">except</span> ValueError:
+    <span class="fn">print</span>(<span class="str">"caught!"</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">caught! — the error is handled, program continues.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">exception</span>
+      <span class="gloss">runtime error you can catch</span>
+      <span class="ko">예외</span>
+
+      <span class="term">try/except</span>
+      <span class="gloss">safe block + handler</span>
+      <span class="ko">예외 처리</span>
+
+      <span class="term">JSON</span>
+      <span class="gloss">data file format (text)</span>
+      <span class="ko">JSON 형식</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>4 blocks of safety</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">try</span><span class="val">attempt</span></div>
+      <div class="varbox"><span class="name">except</span><span class="val">catch error</span></div>
+      <div class="varbox"><span class="name">else</span><span class="val">if no error</span></div>
+      <div class="varbox"><span class="name">finally</span><span class="val">always run</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Catch only what you know.</p>
+    <p class="bilingual" style="text-align:center">예상한 예외만 잡기</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Save progress to JSON</h2>
+<pre><span class="kw">import</span> json
+
+data = {<span class="str">"score"</span>: <span class="num">5</span>, <span class="str">"q"</span>: <span class="num">3</span>}
+
+<span class="kw">try</span>:
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"save.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+        json.<span class="fn">dump</span>(data, f)
+<span class="kw">except</span> OSError <span class="kw">as</span> e:
+    <span class="fn">print</span>(<span class="fn">f</span><span class="str">"Save failed: {e}"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Saved!"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Saved!</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Load + decode</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">open(file)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">text</span><span class="val">'{"score": 5}'</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">json.load</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">dict</span><span class="val">{"score": 5}</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># empty file →</span> <span class="out">JSONDecodeError</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which exception?</h2>
+    <div class="trace-grid">
+      <div class="cell head">code</div>
+      <div class="cell head">error</div>
+      <div class="cell head">why</div>
+
+      <div class="cell"><code>int("abc")</code></div>
+      <div class="cell">ValueError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">not a number</span></details></div>
+
+      <div class="cell"><code>open("none.txt")</code></div>
+      <div class="cell">FileNotFoundError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">missing file</span></details></div>
+
+      <div class="cell"><code>d["missing"]</code></div>
+      <div class="cell">KeyError</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no key</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Bare except hides bugs</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">try</span>:
+    risky()
+<span class="kw">except</span>:
+    <span class="kw">pass</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Hides every error — even typos.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">try</span>:
+    risky()
+<span class="kw">except</span> ValueError <span class="kw">as</span> e:
+    <span class="fn">print</span>(e)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Catch only what you expect.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bare except hides bug</h2>
+<pre><span class="kw">try</span>:
+    score = int(input(<span class="str">"Score? "</span>))
+    <span class="fn">print</span>(scoer)  <span class="com"># typo</span>
+<span class="kw">except</span>:
+    <span class="fn">print</span>(<span class="str">"bad"</span>)</pre>
+    <div class="err">User sees "bad" — but real bug is a typo</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Catch <code>ValueError</code> specifically. Then the typo surfaces as <code>NameError</code>.</p>
+      <p class="bilingual">except는 구체적으로 — bare except 금지</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>JSON empty file</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"save.json"</span>) <span class="kw">as</span> f:
+    data = json.<span class="fn">load</span>(f)</pre>
+    <div class="err">JSONDecodeError: Expecting value: line 1 column 1</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wrap in <code>try/except</code>. On error, use a default <code>data = {}</code>.</p>
+      <p class="bilingual">빈 파일이면 기본값 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing key</h2>
+<pre>data = json.<span class="fn">load</span>(f)
+<span class="fn">print</span>(data[<span class="str">"high_score"</span>])</pre>
+    <div class="err">KeyError: 'high_score'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>.get("high_score", 0)</code> — returns default if missing.</p>
+      <p class="bilingual">.get으로 기본값 처리</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">try</span>:
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"save.json"</span>) <span class="kw">as</span> f:
+        data = json.<span class="fn">______</span>(f)
+<span class="kw">except</span> (FileNotFoundError, json.<span class="fn">______</span>):
+    data = ___</pre>
+    <p style="margin-top:.6em">Goal: load JSON, default to empty dict.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — full save flow</h2>
+<pre><span class="kw">def</span> <span class="fn">save_progress</span>(score, q):
+    data = {<span class="str">"score"</span>: ___, <span class="str">"q"</span>: ___}
+    <span class="kw">try</span>:
+        <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"save.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+            json.<span class="fn">______</span>(data, f)
+    <span class="kw">except</span> OSError <span class="kw">as</span> e:
+        <span class="fn">print</span>(<span class="str">"fail:"</span>, e)</pre>
+    <p style="margin-top:.6em">Save quiz progress safely.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>except:</code> with no type catches…</div>
+      <div class="opts">
+        <details><summary>A. Only ValueError</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Every exception</summary><div class="ans">✓ Too broad — hides bugs.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>json.dump(data, f)</code> writes…</div>
+      <div class="opts">
+        <details><summary>A. binary bytes</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. text in JSON format</summary><div class="ans">✓ Readable text.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I catch <span class="blank"></span> specifically so a different bug doesn't <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Quiz Saver 🛡️</h2>
+    <ul class="check-list">
+      <li>Load <code>save.json</code>, default to empty dict on error</li>
+      <li>Run a short quiz</li>
+      <li>Save final <code>{"score": N}</code> to JSON</li>
+      <li>Catch <code>OSError</code> + <code>JSONDecodeError</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add <code>"updated"</code> timestamp with datetime.</div>
+      <div class="item"><span class="lvl">★★</span>Track high score across runs.</div>
+      <div class="item"><span class="lvl">★★★</span>Migrate old format → new keys safely.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why catch a specific exception, not bare except?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 구체적 예외를 잡는 이유</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Catch what<br>you expect.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Flash Cards capstone.</p>
+    <p class="bilingual">다음 주: 플래시카드 캡스톤</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

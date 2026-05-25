@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 4 — Snake Part 1</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 4 · Day 20 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 4</div>
+    <div class="emoji">🐍</div>
+    <h1>Snake<br>Part 1</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">build</span> + <span class="sub">animate</span> a moving snake.</p>
+    <p class="bilingual">움직이는 뱀 만들기 (1부)</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you bind a key to a function?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>screen.onkey(func, "w")</code> — pass the function without <code>()</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>screen.<span class="fn">tracer</span>(<span class="num">0</span>)
+<span class="kw">for</span> seg <span class="kw">in</span> snake.segments:
+    seg.<span class="fn">forward</span>(<span class="num">20</span>)
+screen.<span class="fn">update</span>()</pre>
+      <details><summary>Reveal</summary><div class="ans">All segments move, then one repaint — smooth animation.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">game loop</span>
+      <span class="gloss">repeating tick of the game</span>
+      <span class="ko">게임 루프</span>
+
+      <span class="term">segment</span>
+      <span class="gloss">one piece of the snake body</span>
+      <span class="ko">조각</span>
+
+      <span class="term">tracer</span>
+      <span class="gloss">turns off auto-draw</span>
+      <span class="ko">자동 그리기 끄기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Tail follows head 🐍</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">seg[2]</span><span class="val">to seg[1]'s pos</span></div>
+      <div class="varbox"><span class="name">seg[1]</span><span class="val">to seg[0]'s pos</span></div>
+      <div class="varbox"><span class="name">seg[0]</span><span class="val">forward</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Move tail-to-head — last copies the next.</p>
+    <p class="bilingual" style="text-align:center">꼬리부터 머리 순서로 따라감</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Move the snake</h2>
+<pre><span class="kw">import</span> time
+screen.<span class="fn">tracer</span>(<span class="num">0</span>)
+snake = <span class="fn">Snake</span>()
+
+game_on = <span class="kw">True</span>
+<span class="kw">while</span> game_on:
+    screen.<span class="fn">update</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.1</span>)
+    snake.<span class="fn">move</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Window</div>
+      <div style="opacity:1">snake slides smoothly →</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Each tick: 3 steps</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">screen.update()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">paint</span><span class="val">one frame</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">time.sleep(0.1)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">wait</span><span class="val">slow tick</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">snake.move()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">shift</span><span class="val">tail→head</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Move order matters</h2>
+<pre><span class="com"># segments before: [0,0] [-20,0] [-40,0]</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(segs)-<span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):
+    new_x = segs[i-<span class="num">1</span>].<span class="fn">xcor</span>()
+    segs[i].<span class="fn">goto</span>(new_x, <span class="num">0</span>)
+segs[<span class="num">0</span>].<span class="fn">forward</span>(<span class="num">20</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">seg</div>
+      <div class="cell head">before x</div>
+      <div class="cell head">after x</div>
+
+      <div class="cell">2</div>
+      <div class="cell">-40</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">-20</span></details></div>
+
+      <div class="cell">1</div>
+      <div class="cell">-20</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">20</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Choppy animation</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">while</span> game_on:
+    snake.<span class="fn">move</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Repaints between each segment — flicker.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>screen.<span class="fn">tracer</span>(<span class="num">0</span>)
+<span class="kw">while</span> game_on:
+    snake.<span class="fn">move</span>()
+    screen.<span class="fn">update</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">tracer off → one update per tick.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Snake flickers</h2>
+<pre>snake = <span class="fn">Snake</span>()
+<span class="kw">while</span> game_on:
+    snake.<span class="fn">move</span>()</pre>
+    <div class="err">Flicker — turtle auto-redraws each segment</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Set <code>screen.tracer(0)</code> once and call <code>screen.update()</code> in the loop.</p>
+      <p class="bilingual">tracer(0) + update() 로 한 번에 그리기</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Body doesn't follow</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(segs)):
+    new = segs[i-<span class="num">1</span>].<span class="fn">pos</span>()
+    segs[i].<span class="fn">goto</span>(new)</pre>
+    <div class="err">Head jumps onto tail — wrong loop direction</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Move tail first: <code>range(len(segs)-1, 0, -1)</code>, then forward the head.</p>
+      <p class="bilingual">꼬리부터 거꾸로 이동시켜야 함</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Too fast to see</h2>
+<pre><span class="kw">while</span> game_on:
+    screen.<span class="fn">update</span>()
+    snake.<span class="fn">move</span>()</pre>
+    <div class="err">Snake teleports across screen</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>time.sleep(0.1)</code> between ticks to slow the loop.</p>
+      <p class="bilingual">sleep 빠지면 너무 빨라서 안 보임</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>screen.<span class="fn">tracer</span>(___)
+snake = <span class="fn">Snake</span>()
+
+<span class="kw">while</span> game_on:
+    screen.<span class="fn">______</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.1</span>)
+    snake.<span class="fn">______</span>()</pre>
+    <p style="margin-top:.6em">Goal: smooth, slow snake.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — speed up over time</h2>
+<pre>delay = <span class="num">0.15</span>
+<span class="kw">while</span> game_on:
+    screen.<span class="fn">update</span>()
+    time.<span class="fn">sleep</span>(_____)
+    snake.<span class="fn">move</span>()
+    delay = <span class="fn">max</span>(<span class="num">0.03</span>, delay - _____)</pre>
+    <p style="margin-top:.6em">Slowly decrease delay each tick.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>screen.tracer(0)</code> does what?</div>
+      <div class="opts">
+        <details><summary>A. Closes the screen</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Turns off auto-redraw</summary><div class="ans">✓ You call <code>update()</code> manually.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To move the body smoothly, loop from…</div>
+      <div class="opts">
+        <details><summary>A. Head to tail</summary><div class="ans">Body overwrites head.</div></details>
+        <details><summary>B. Tail to head</summary><div class="ans">✓ Each segment copies the next.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Each tick, I <span class="blank"></span> the screen and then <span class="blank"></span> the snake."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Snake Part 1 🐍</h2>
+    <ul class="check-list">
+      <li>Create 3 starting segments</li>
+      <li>Set <code>screen.tracer(0)</code></li>
+      <li>Loop: update, sleep, move tail-to-head</li>
+      <li>Bind W/A/S/D to turn the head</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Start with 5 segments instead of 3.</div>
+      <div class="item"><span class="lvl">★★</span>Use a different color for the head.</div>
+      <div class="item"><span class="lvl">★★★</span>Add wall collision: stop the game if head hits the edge.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do we loop from tail to head?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 꼬리부터 움직이는 이유</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Game loop =<br>update + tick.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: food + score with inheritance.</p>
+    <p class="bilingual">다음 주: 먹이와 점수, 상속</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

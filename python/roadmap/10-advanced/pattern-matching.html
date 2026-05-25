@@ -90,13 +90,9 @@
     <h2>What's wrong with this code?</h2>
     <div class="debug-box">
       <div class="debug-tag">buggy</div>
-<pre style="margin-top:.4em">match cmd.split():
-  case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
-        bye()
-    case [&#x27;go&#x27;, direction]:
-        move(direction)
-    case [&#x27;take&#x27;, *items] if items:
-        pickup(items)</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre>
     </div>
     <p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p>
   </div>
@@ -105,21 +101,17 @@
   <div class="slide">
     <div class="pill">🐛 Debug</div>
     <h2>The bug</h2>
-    <div class="debug-reveal"><b>Bug:</b> <code>IndentationError</code>. The indented line uses 2 spaces instead of 4. Python is strict — keep indentation consistent (PEP 8 says 4 spaces).</div>
+    <div class="debug-reveal"><b>Bug:</b> <code>.append()</code> changes the list in place and returns <code>None</code>. Reassigning makes <code>nums</code> become <code>None</code>. Just call <code>nums.append(4)</code>.</div>
     <div class="debug-box" style="margin-top:.7em">
       <div class="debug-tag fix">fixed</div>
-<pre style="margin-top:.4em">match cmd.split():
-    case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
-        bye()
-    case [&#x27;go&#x27;, direction]:
-        move(direction)
-    case [&#x27;take&#x27;, *items] if items:
-        pickup(items)</pre>
+<pre style="margin-top:.4em">nums = [1, 2, 3]
+nums.append(4)
+print(nums)</pre>
     </div>
   </div>
 
   <!-- MCQ 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="Definition straight from the topic summary.">
+  <div class="slide mcq" data-correct="0" data-explain=".append() returns None — don't reassign.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 1 of 7</div>
     <div class="q">Which best describes <b>Pattern matching (match/case)</b>?</div>
@@ -148,20 +140,9 @@
   <div class="slide mcq" data-correct="0" data-explain="Spot the typo / mistake.">
     <div class="pill purple">📝 Quiz</div>
     <div class="qmeta">Question 3 of 7</div>
-    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">match cmd.split():
-  case [&#x27;quit&#x27;] | [&#x27;exit&#x27;]:
-        bye()
-    case [&#x27;go&#x27;, direction]:
-        move(direction)
-    case [&#x27;take&#x27;, *items] if items:
-        pickup(items)</pre></div>
-    <div class="opts">
-      <button class="opt">IndentationError. The indented line uses 2 spaces instead of 4. Python is strict — keep indentation consistent (PEP 8 says 4 spaces).</button>
-      <button class="opt">Nothing — the code is correct as-is.</button>
-      <button class="opt">Missing <code>import sys</code> at the top.</button>
-      <button class="opt">The variable was never declared with <code>let</code>.</button>
-    </div>
-    <div class="qfeedback"></div>
+    <div class="q">What's wrong with this code?<br><pre style="font-size:.85em;margin-top:.5em">nums = [1, 2, 3]
+nums = nums.append(4)
+print(nums)</pre></div><div class="opts"><button class="opt">append() returns None, so reassigning makes nums None.</button><button class="opt">Lists can't grow after they're made.</button><button class="opt">append() needs two arguments.</button><button class="opt">You must write nums + 4 instead.</button></div><div class="qfeedback"></div>
   </div>
   <!-- MCQ 4 -->
   <div class="slide mcq" data-correct="0" data-explain="case pat:: branch">

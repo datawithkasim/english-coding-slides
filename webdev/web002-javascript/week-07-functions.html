@@ -37,6 +37,22 @@
 <p style="margin-top:1em"><code>return</code> sends a value <span class="sub">back</span> to whoever called.</p>
 <p class="bilingual">값을 돌려주기</p></div>
 
+<div class="slide"><div class="pill">Watch it!</div><h2>Function call + return</h2>
+  <div class="viz viz-func">
+    <div class="fn-caller">
+      <span class="fn-callcode">add(<span class="arg">3, 5</span>)</span>
+      <span class="fn-result">→ <span class="rv">8</span></span>
+    </div>
+    <div class="fn-flow-down">↓ call</div>
+    <div class="fn-body">
+      <div class="fn-sig">function add(<span class="param">a, b</span>) {</div>
+      <div class="fn-line">return <span class="param-use">a + b</span>;</div>
+      <div class="fn-line">}</div>
+    </div>
+    <div class="fn-flow-up">↑ return</div>
+  </div>
+  <p class="bilingual">함수</p></div>
+
 <div class="slide"><div class="pill">Code</div><h2>Calculator</h2>
 <pre>&lt;input id=<span style="color:#f1fa8c">"a"</span> type=<span style="color:#f1fa8c">"number"</span>&gt;
 &lt;input id=<span style="color:#f1fa8c">"b"</span> type=<span style="color:#f1fa8c">"number"</span>&gt;
@@ -120,25 +136,22 @@ console.log(square(double(3)));   // expect 36</pre><p style="margin-top:.6em;fo
       <div class="edge-card"><div class="ehead">self first</div><div class="edesc">Inside a class method, first param is always <code>self</code> — Python passes it automatically.</div></div>
       <div class="edge-card"><div class="ehead">Don&#x27;t shadow builtins</div><div class="edesc">Avoid <code>list = [1,2,3]</code> — you just broke <code>list()</code> for the rest of the file.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> The <code>print</code> line is not indented inside the function. Python raises <code>IndentationError</code>. Function bodies must be indented 4 spaces.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def greet(name):
-    print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="The lesson title says it: Functions — Reuse"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Functions — Reuse</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet);</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>greet</code> with no <code>()</code> logs the function itself, not its result. Call it: <code>greet()</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet());</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Missing () — greet() actually calls it."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Functions — Reuse</button>
 <button class="opt">Async generators</button>
 <button class="opt">Proxy + Reflect metaprogramming</button>
 <button class="opt">Service workers</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><div class="opts"><button class="opt">The print line is not indented inside the function. Python raises IndentationError. Function bodies must be indented 4 spaces.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing semicolon.</button>
-<button class="opt">Variable not declared with <code>let</code>.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">function greet() {
+  return &quot;Hi!&quot;;
+}
+console.log(greet);</pre></div><div class="opts"><button class="opt">greet needs () to run; without it you log the function.</button><button class="opt">Functions can't return strings.</button><button class="opt">greet must be capitalised.</button><button class="opt">console.log only takes numbers.</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Functions</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>

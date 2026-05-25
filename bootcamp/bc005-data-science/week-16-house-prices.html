@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 16 — House Price Capstone</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 16 · Day 80 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 16</div>
+    <div class="emoji">🏠</div>
+    <h1>House Price<br>Capstone</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">train</span> + <span class="sub">test</span> a regression model.</p>
+    <p class="bilingual">여러 특성으로 집값 예측하는 회귀 모델</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does a small p-value tell us?</div>
+      <details><summary>Show answer</summary><div class="ans">Under "no real difference", this result would be rare → reject H₀.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Why split into train + test?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>X_train, X_test, y_train, y_test \
+  = train_test_split(X, y, test_size=<span class="num">0.2</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">Train on 80%, check fairness on the unseen 20% — catches overfitting.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 ML words</h2>
+    <div class="vocab-table">
+      <span class="term">train/test</span>
+      <span class="gloss">learn on one slice, judge on another</span>
+      <span class="ko">학습/검증</span>
+
+      <span class="term">overfit</span>
+      <span class="gloss">great on train, bad on test</span>
+      <span class="ko">과적합</span>
+
+      <span class="term">R²</span>
+      <span class="gloss">how much variance the model explains</span>
+      <span class="ko">결정 계수</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>From data to model</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">features</span><span class="val">rooms, area, age</span></div>
+      <div class="varbox"><span class="name">target</span><span class="val">price</span></div>
+      <div class="varbox"><span class="name">split</span><span class="val">train + test</span></div>
+      <div class="varbox"><span class="name">judge</span><span class="val">R² on test</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Many features → one predicted price.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Full pipeline</h2>
+<pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.linear_model    <span class="kw">import</span> LinearRegression
+
+X = df[[<span class="str">"rooms"</span>, <span class="str">"area"</span>, <span class="str">"age"</span>]]
+y = df[<span class="str">"price"</span>]
+
+X_tr, X_te, y_tr, y_te = train_test_split(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>)
+
+model = LinearRegression().fit(X_tr, y_tr)
+<span class="fn">print</span>(<span class="str">"train R²:"</span>, model.score(X_tr, y_tr))
+<span class="fn">print</span>(<span class="str">"test R² :"</span>, model.score(X_te, y_te))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">train R²: 0.78<br>test R²: 0.74</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Pipeline flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">CSV</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">X, y</span><span class="val">features + target</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">split</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">train 80%</span><span class="val">test 20%</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">fit on train</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">score on test</span><span class="val">honest R²</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Diagnose the model</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">train R²</div>
+      <div class="cell head">test R²</div>
+      <div class="cell head">verdict</div>
+      <div class="cell head">Fix</div>
+
+      <div class="cell">0.95</div>
+      <div class="cell">0.40</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">overfit</span></details></div>
+      <div class="cell">simpler model</div>
+
+      <div class="cell">0.30</div>
+      <div class="cell">0.28</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">underfit</span></details></div>
+      <div class="cell">more features</div>
+
+      <div class="cell">0.80</div>
+      <div class="cell">0.78</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">healthy</span></details></div>
+      <div class="cell">ship + monitor</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Scoring on training data</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>model.fit(X, y)
+model.score(X, y)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Optimistic — sees its own answers.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>model.fit(X_tr, y_tr)
+model.score(X_te, y_te)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Honest — unseen rows.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — train/test leak -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — data leak</h2>
+<pre>scaler.fit(X)            <span class="com"># on ALL data</span>
+X = scaler.transform(X)
+X_tr, X_te, ... = split(X, y)</pre>
+    <div class="err">Scaler peeked at the test set</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Split first, then fit the scaler on <code>X_tr</code> only. Apply transform to <code>X_te</code>.</p>
+      <p class="bilingual">전처리는 train에서만 학습 — test 정보 누설 금지</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — scaling missing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — scale gap</h2>
+<pre>X = df[[<span class="str">"area"</span>, <span class="str">"age"</span>]]
+<span class="com"># area: 30–500, age: 0–100</span>
+model = Lasso().fit(X_tr, y_tr)</pre>
+    <div class="err">Lasso ignores small-scale "age" feature</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">For penalty models, scale features: <code>StandardScaler</code>. Fit on train only.</p>
+      <p class="bilingual">규제 모델은 스케일 통일 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — R² overfit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — overfit R²</h2>
+<pre>train R² = 0.99
+test  R² = 0.45</pre>
+    <div class="err">Huge gap — model memorized train rows</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Drop noisy features, use simpler model, or try cross-validation: <code>cross_val_score</code>.</p>
+      <p class="bilingual">train과 test 차이 크면 과적합 — 모델 단순화</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>X = df[[<span class="str">"rooms"</span>, <span class="str">"area"</span>, <span class="str">"age"</span>]]
+y = df[<span class="str">"_____"</span>]
+X_tr, X_te, y_tr, y_te = ________________(
+    X, y, test_size=____, random_state=42)
+model = ___________________().fit(X_tr, y_tr)
+<span class="fn">print</span>(model.score(X_te, y_te))</pre>
+    <p style="margin-top:.6em">Goal: split 80/20, fit, score on test.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — scale + cross-validate</h2>
+<pre><span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> cross_val_score
+
+scaler = ________________().fit(X_tr)
+X_tr_s = scaler.transform(___)
+X_te_s = scaler.transform(___)
+
+scores = cross_val_score(model, X_tr_s, y_tr, cv=___)
+<span class="fn">print</span>(scores.____())</pre>
+    <p style="margin-top:.6em">Goal: scale on train only, 5-fold CV mean.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why split into train + test?</div>
+      <div class="opts">
+        <details><summary>A. Faster fitting</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Honest score on unseen data</summary><div class="ans">✓ Catches overfit.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. R² of 1.0 on train + 0.3 on test means…</div>
+      <div class="opts">
+        <details><summary>A. Healthy model</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Overfit</summary><div class="ans">✓ Big gap.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I predicted <span class="blank"></span> from <span class="blank"></span>, split <span class="blank"></span>, and got a test R² of <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Predict prices 🏠</h2>
+    <ul class="check-list">
+      <li>Load <code>houses.csv</code></li>
+      <li>Pick 3+ features → X, price → y</li>
+      <li>Train/test split (80/20)</li>
+      <li>Fit, print train + test R²</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Plot predicted vs actual on the test set.</div>
+      <div class="item"><span class="lvl">★★</span>Try <code>Ridge</code> with <code>alpha=1.0</code>; compare R².</div>
+      <div class="item"><span class="lvl">★★★</span>Use 5-fold cross-validation; report mean ± std.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what is overfitting?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 과적합이란?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge → BC006 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">BC005 done.<br>You ship data.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next course: BC006 Pro Projects — portfolio builds.</p>
+    <p class="bilingual">다음 과정: BC006 프로 프로젝트 — 포트폴리오 완성</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

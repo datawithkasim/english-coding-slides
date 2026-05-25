@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 10 — Google Trends Time Series</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 10 · Day 74 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 10</div>
+    <div class="emoji">📅</div>
+    <h1>Google Trends<br>Time Series</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">parse</span> + <span class="sub">resample</span> dates.</p>
+    <p class="bilingual">날짜 데이터 파싱하고 월별/주별로 묶기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What's the default <code>how</code> in <code>pd.merge</code>?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>inner</code> — only rows in both tables.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What's the dtype?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>df = pd.read_csv(<span class="str">"trends.csv"</span>)
+<span class="fn">print</span>(df[<span class="str">"date"</span>].dtype)</pre>
+      <details><summary>Reveal</summary><div class="ans"><code>object</code> — pandas reads dates as text until you parse them.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 time words</h2>
+    <div class="vocab-table">
+      <span class="term">datetime</span>
+      <span class="gloss">a real date type (not text)</span>
+      <span class="ko">날짜형</span>
+
+      <span class="term">resample</span>
+      <span class="gloss">re-group by time period</span>
+      <span class="ko">시간 단위 변경</span>
+
+      <span class="term">freq</span>
+      <span class="gloss">period code: D, W, ME, YE</span>
+      <span class="ko">주기 코드</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Text → datetime</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">"2024-01-01"</span><span class="val">str</span></div>
+      <div class="varbox"><span class="name">to_datetime</span><span class="val">parse</span></div>
+      <div class="varbox"><span class="name">Timestamp</span><span class="val">datetime64</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Without parsing, dates are just strings.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Parse + resample monthly</h2>
+<pre>df = pd.read_csv(<span class="str">"trends.csv"</span>)
+df[<span class="str">"date"</span>] = pd.to_datetime(df[<span class="str">"date"</span>])
+df = df.set_index(<span class="str">"date"</span>)
+
+monthly = df[<span class="str">"interest"</span>].resample(<span class="str">"ME"</span>).mean()
+<span class="fn">print</span>(monthly.head())</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">2024-01-31    42.5<br>2024-02-29    44.1</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Daily → monthly</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"2024-01-05"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">to_datetime</span><span class="val">2024-01-05</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">set_index("date")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">DatetimeIndex</span><span class="val">time-aware</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">resample("ME")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">monthly groups</span><span class="val">.mean()</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Match freq → period</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Code</div>
+      <div class="cell head">Period</div>
+      <div class="cell head">Anchor</div>
+      <div class="cell head">Hint</div>
+
+      <div class="cell">D</div>
+      <div class="cell">daily</div>
+      <div class="cell">each day</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no change</span></details></div>
+
+      <div class="cell">W</div>
+      <div class="cell">weekly</div>
+      <div class="cell">Sunday</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">7-day bins</span></details></div>
+
+      <div class="cell">ME</div>
+      <div class="cell">monthly</div>
+      <div class="cell">month-end</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">last day of month</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Date stays text</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>df.set_index(<span class="str">"date"</span>)\
+  .resample(<span class="str">"ME"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError — index is object dtype.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>df[<span class="str">"date"</span>] = pd.to_datetime(df[<span class="str">"date"</span>])
+df.set_index(<span class="str">"date"</span>).resample(<span class="str">"ME"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Parse first, resample after.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — dtype object not datetime -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong dtype</h2>
+<pre>df.set_index(<span class="str">"date"</span>)
+df.resample(<span class="str">"ME"</span>).mean()</pre>
+    <div class="err">TypeError: Only valid with DatetimeIndex</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Parse before indexing: <code>df["date"] = pd.to_datetime(df["date"])</code>. Confirm with <code>df.dtypes</code>.</p>
+      <p class="bilingual">date 컬럼 datetime으로 변환 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — M vs ME -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — deprecated alias</h2>
+<pre>monthly = df.resample(<span class="str">"M"</span>).mean()</pre>
+    <div class="err">FutureWarning: 'M' is deprecated, use 'ME' instead</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">In modern pandas, use <code>"ME"</code> (month-end) or <code>"MS"</code> (month-start).</p>
+      <p class="bilingual">최신 pandas는 'M' 대신 'ME' 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — timezone -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — tz mismatch</h2>
+<pre>a = pd.to_datetime(<span class="str">"2024-01-01"</span>, utc=<span class="kw">True</span>)
+b = pd.to_datetime(<span class="str">"2024-01-01"</span>)
+<span class="fn">print</span>(a == b)</pre>
+    <div class="err">TypeError: cannot compare tz-naive and tz-aware</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Match timezones — either both UTC: <code>b.tz_localize("UTC")</code>, or both naive.</p>
+      <p class="bilingual">시간대 정보 통일 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>df[<span class="str">"date"</span>] = pd._________(df[<span class="str">"date"</span>])
+df = df.set_index(<span class="str">"____"</span>)
+weekly = df[<span class="str">"interest"</span>].resample(<span class="str">"_"</span>).mean()</pre>
+    <p style="margin-top:.6em">Goal: parse, index by date, weekly mean.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — rolling mean</h2>
+<pre>smooth = df[<span class="str">"interest"</span>]\
+    ._______(window=___)\
+    .____()
+plt.plot(smooth)
+plt.show()</pre>
+    <p style="margin-top:.6em">Goal: 4-week rolling mean to smooth the line.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Modern monthly freq code?</div>
+      <div class="opts">
+        <details><summary>A. M</summary><div class="ans">Deprecated — gives a warning.</div></details>
+        <details><summary>B. ME</summary><div class="ans">✓ Month-end.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Before <code>resample</code>, you must…</div>
+      <div class="opts">
+        <details><summary>A. Sort by date</summary><div class="ans">Helps but not the root.</div></details>
+        <details><summary>B. Make a DatetimeIndex</summary><div class="ans">✓ Required.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I parsed the date column with <span class="blank"></span>, set it as the index, then resampled to <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Trend over time 📅</h2>
+    <ul class="check-list">
+      <li>Read <code>trends.csv</code></li>
+      <li>Parse the date column</li>
+      <li>Resample to monthly mean</li>
+      <li>Plot the result with title + labels</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a 12-month rolling mean line on top.</div>
+      <div class="item"><span class="lvl">★★</span>Compare 2 search terms on the same chart.</div>
+      <div class="item"><span class="lvl">★★★</span>Spot the seasonal pattern (peaks each year?).</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do dates need <code>to_datetime</code> before <code>resample</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — resample 전에 to_datetime이 필요한 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Time is<br>a real type.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Plotly — make it interactive.</p>
+    <p class="bilingual">다음 주: Plotly — 마우스로 움직이는 그래프</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

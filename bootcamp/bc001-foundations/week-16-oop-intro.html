@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 16 — OOP Intro</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 16 · Day 16 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 16</div>
+    <div class="emoji">🤖</div>
+    <h1>Objects<br>& Classes</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">use</span> + <span class="sub">call</span> objects built by someone else.</p>
+    <p class="bilingual">클래스와 객체 — 사물처럼 코드 다루기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>menu["mango"]</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Looks up the value stored under the key "mango" in the dict.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">from</span> quiz <span class="kw">import</span> QuizBrain
+
+bot = <span class="fn">QuizBrain</span>()
+<span class="fn">print</span>(bot.score)
+bot.<span class="fn">next_question</span>()
+<span class="fn">print</span>(bot.score)</pre>
+      <details><summary>Reveal output</summary><div class="ans">0, then 0 (score only changes after check_answer).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">class</span>
+      <span class="gloss">a blueprint for an object</span>
+      <span class="ko">클래스</span>
+
+      <span class="term">object</span>
+      <span class="gloss">a thing built from a class</span>
+      <span class="ko">객체</span>
+
+      <span class="term">attribute</span>
+      <span class="gloss">data on an object (a noun)</span>
+      <span class="ko">속성</span>
+
+      <span class="term">method</span>
+      <span class="gloss">function on an object (a verb)</span>
+      <span class="ko">메서드</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Class = blueprint 🤖</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">class</span><span class="val">QuizBrain</span></div>
+      <div class="varbox"><span class="name">object</span><span class="val">bot = QuizBrain()</span></div>
+      <div class="varbox"><span class="name">attribute</span><span class="val">bot.score</span></div>
+      <div class="varbox"><span class="name">method</span><span class="val">bot.next_question()</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Blueprint → one thing → its data + actions.</p>
+    <p class="bilingual" style="text-align:center">설계도(클래스) → 실제 사물(객체)</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Use the Quiz Bot</h2>
+<pre><span class="kw">from</span> quiz <span class="kw">import</span> QuizBrain
+
+bot = <span class="fn">QuizBrain</span>()
+
+<span class="kw">while</span> bot.<span class="fn">has_more</span>():
+    q = bot.<span class="fn">next_question</span>()
+    ans = <span class="fn">input</span>(<span class="str">f"{q} (y/n) "</span>)
+    bot.<span class="fn">check_answer</span>(ans)
+
+<span class="fn">print</span>(<span class="str">f"Score: {bot.score}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ End of quiz</div>
+      <div style="opacity:1">Score: 3</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Object holds state</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">QuizBrain()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">bot.score</span><span class="val">0</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">check_answer("y")</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">bot.score</span><span class="val">1</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Methods change the object's own attributes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Is it class, object, attribute, or method?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">expression</div>
+      <div class="cell head">what is it?</div>
+      <div class="cell head">expression</div>
+      <div class="cell head">what is it?</div>
+
+      <div class="cell"><code>QuizBrain</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">class</span></details></div>
+      <div class="cell"><code>bot</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">object</span></details></div>
+
+      <div class="cell"><code>bot.score</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">attribute</span></details></div>
+      <div class="cell"><code>bot.check_answer()</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">method</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Class vs object</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>QuizBrain.<span class="fn">next_question</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Calls method on the blueprint — error.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>bot = <span class="fn">QuizBrain</span>()
+bot.<span class="fn">next_question</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Build the object, then call.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Forgot the parentheses</h2>
+<pre>bot = QuizBrain
+<span class="fn">print</span>(bot.score)</pre>
+    <div class="err">AttributeError: type object 'QuizBrain' has no attribute 'score'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>()</code> to instantiate: <code>bot = QuizBrain()</code>.</p>
+      <p class="bilingual">() 없으면 객체가 안 만들어짐 — 그냥 클래스 자체</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Method on the class, not the instance</h2>
+<pre>bot = <span class="fn">QuizBrain</span>()
+QuizBrain.<span class="fn">check_answer</span>(<span class="str">"y"</span>)</pre>
+    <div class="err">TypeError: missing 1 required positional argument: 'self'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Call on the instance: <code>bot.check_answer("y")</code>.</p>
+      <p class="bilingual">메서드는 객체에서 호출 — 클래스 직접 호출 X</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Attribute typo</h2>
+<pre>bot = <span class="fn">QuizBrain</span>()
+<span class="fn">print</span>(bot.scor)</pre>
+    <div class="err">AttributeError: 'QuizBrain' object has no attribute 'scor'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Spell it right: <code>bot.score</code>. Python is strict on attribute names.</p>
+      <p class="bilingual">속성 이름 철자가 정확해야 함</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> quiz <span class="kw">import</span> QuizBrain
+
+bot = ______()         <span class="com"># build the object</span>
+q   = bot.______()     <span class="com"># get next question</span>
+bot.<span class="fn">check_answer</span>(<span class="str">"y"</span>)
+<span class="fn">print</span>(bot.______)     <span class="com"># show score</span></pre>
+    <p style="margin-top:.6em">Goal: ask one question, print score.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — loop the quiz</h2>
+<pre>bot = <span class="fn">QuizBrain</span>()
+<span class="kw">while</span> bot.______():
+    q = bot.<span class="fn">next_question</span>()
+    ans = <span class="fn">input</span>(<span class="str">f"{q} "</span>)
+    bot.<span class="fn">check_answer</span>(___)
+
+<span class="fn">print</span>(<span class="str">f"Final: {bot.score} / {bot.total}"</span>)</pre>
+    <p style="margin-top:.6em">Goal: loop until <code>has_more()</code> is False.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>bot = QuizBrain()</code> — what is <code>bot</code>?</div>
+      <div class="opts">
+        <details><summary>A. A class</summary><div class="ans">Nope — that's QuizBrain.</div></details>
+        <details><summary>B. An object</summary><div class="ans">✓ An instance built from the class.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>bot.score</code> is a/an…</div>
+      <div class="opts">
+        <details><summary>A. Method</summary><div class="ans">Nope — no <code>()</code>.</div></details>
+        <details><summary>B. Attribute</summary><div class="ans">✓ Data on the object.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>QuizBrain</code> is a <span class="blank"></span>, and <code>bot</code> is its <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Run the Quiz Bot 🤖</h2>
+    <ul class="check-list">
+      <li>Import <code>QuizBrain</code></li>
+      <li>Build a <code>bot</code> with <code>()</code></li>
+      <li>Loop while <code>bot.has_more()</code></li>
+      <li>Print <code>bot.score</code> at the end</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print <code>"{score} / {total}"</code> after each answer.</div>
+      <div class="item"><span class="lvl">★★</span>Build a second <code>bot2</code>. Two players, two scores.</div>
+      <div class="item"><span class="lvl">★★★</span>Read the <code>QuizBrain</code> source — list its attributes and methods.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what's the difference between a class and an object?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 클래스와 객체의 차이는?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Objects<br>think in things.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next track: BC002 — define your own classes + build GUIs.</p>
+    <p class="bilingual">다음 트랙: BC002 — 직접 클래스 만들고 GUI 게임</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

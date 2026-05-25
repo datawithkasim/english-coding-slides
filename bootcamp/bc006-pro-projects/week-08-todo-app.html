@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 8 — Todo App</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 8 · Day 88 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 8</div>
+    <div class="emoji">✅</div>
+    <h1>Todo App</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">create</span> + <span class="sub">edit</span> + <span class="sub">delete</span> tasks.</p>
+    <p class="bilingual">CRUD으로 만드는 할일 관리 앱 (Flask)</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>@app.route("/x")</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Maps URL <code>/x</code> to the function below it.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does CRUD do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>todos = []
+todos.<span class="fn">append</span>({<span class="str">"task"</span>: <span class="str">"study"</span>})
+todos[<span class="num">0</span>][<span class="str">"task"</span>] = <span class="str">"sleep"</span>
+todos.<span class="fn">pop</span>(<span class="num">0</span>)
+<span class="fn">print</span>(todos)</pre>
+      <details><summary>Reveal output</summary><div class="ans"><code>[]</code> — added, edited, then deleted.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">CRUD</span>
+      <span class="gloss">create, read, update, delete</span>
+      <span class="ko">생성/읽기/수정/삭제</span>
+
+      <span class="term">redirect</span>
+      <span class="gloss">send user to another URL</span>
+      <span class="ko">다른 URL로 이동</span>
+
+      <span class="term">POST</span>
+      <span class="gloss">send data, change state</span>
+      <span class="ko">데이터 전송</span>
+
+      <span class="term">prefill</span>
+      <span class="gloss">form starts with old value</span>
+      <span class="ko">기존 값으로 채우기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>4 verbs, 4 routes 🛣️</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">C</span><span class="val">POST /add</span></div>
+      <div class="varbox"><span class="name">R</span><span class="val">GET /</span></div>
+      <div class="varbox"><span class="name">U</span><span class="val">POST /edit/&lt;id&gt;</span></div>
+      <div class="varbox"><span class="name">D</span><span class="val">POST /delete/&lt;id&gt;</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each verb → a route.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Add + list</h2>
+<pre>todos = []
+
+<span class="com">@app.route("/", methods=["GET","POST"])</span>
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">if</span> request.method == <span class="str">"POST"</span>:
+        task = request.form[<span class="str">"task"</span>]
+        todos.<span class="fn">append</span>(task)
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"/"</span>)
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"index.html"</span>,
+                           todos=todos)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Delete by index</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">click X (id=2)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">POST /delete/2</span><span class="val">route hit</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">todos.pop(2)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">list shrinks</span><span class="val">item gone</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># redirect("/") →</span> <span class="out">refreshed list</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>List after each action</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">action</div>
+      <div class="cell head">before</div>
+      <div class="cell head">after</div>
+
+      <div class="cell">add "A"</div>
+      <div class="cell">[]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">["A"]</span></details></div>
+
+      <div class="cell">add "B"</div>
+      <div class="cell">["A"]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">["A","B"]</span></details></div>
+
+      <div class="cell">pop(0)</div>
+      <div class="cell">["A","B"]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">["B"]</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot redirect</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>todos.<span class="fn">append</span>(task)
+<span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"index.html"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Refresh re-adds the task</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>todos.<span class="fn">append</span>(task)
+<span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"/"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">POST/Redirect/GET — safe refresh.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — edit form prefill -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Edit form is empty</h2>
+<pre><span class="com">&lt;!-- edit.html --&gt;</span>
+&lt;<span class="kw">input</span> name=<span class="str">"task"</span>&gt;</pre>
+    <div class="err">Click Edit — form is blank, not showing the old task</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Prefill with the existing value: <code>&lt;input name="task" value="{{ todo }}"&gt;</code>.</p>
+      <p class="bilingual">value 속성으로 기존 값 미리 채우기</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — delete confirm -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Accidental delete</h2>
+<pre>&lt;<span class="kw">a</span> href=<span class="str">"/delete/0"</span>&gt;X&lt;/<span class="kw">a</span>&gt;</pre>
+    <div class="err">Browser prefetcher visits link — task gone before click</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use a POST form + JS confirm: <code>onsubmit="return confirm('Delete?')"</code>.</p>
+      <p class="bilingual">삭제는 GET 대신 POST + 확인창</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — empty list view -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Blank page</h2>
+<pre>{% <span class="kw">for</span> t <span class="kw">in</span> todos %}
+  &lt;<span class="kw">li</span>&gt;{{ t }}&lt;/<span class="kw">li</span>&gt;
+{% <span class="kw">endfor</span> %}</pre>
+    <div class="err">No tasks → user sees totally empty screen</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use empty-state: <code>{% if not todos %}No tasks yet 🎉{% endif %}</code>.</p>
+      <p class="bilingual">목록이 비었을 때 빈 상태 메시지 표시</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="com">@app.route("/delete/&lt;int:i&gt;", methods=["____"])</span>
+<span class="kw">def</span> <span class="fn">delete</span>(i):
+    todos.____(i)
+    <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"____"</span>)</pre>
+    <p style="margin-top:.6em">Goal: pop by index, go home.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — edit route</h2>
+<pre><span class="com">@app.route("/edit/&lt;int:i&gt;", methods=["GET","____"])</span>
+<span class="kw">def</span> <span class="fn">edit</span>(i):
+    <span class="kw">if</span> request.method == <span class="str">"____"</span>:
+        todos[i] = request.form[<span class="str">"task"</span>]
+        <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"/"</span>)
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"edit.html"</span>,
+                           i=i, todo=____)</pre>
+    <p style="margin-top:.6em">GET shows form, POST saves.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. After a POST you usually…</div>
+      <div class="opts">
+        <details><summary>A. <code>render_template</code></summary><div class="ans">Risky — refresh duplicates.</div></details>
+        <details><summary>B. <code>redirect</code></summary><div class="ans">✓ POST → Redirect → GET.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>&lt;int:i&gt;</code> in a route means…</div>
+      <div class="opts">
+        <details><summary>A. Path variable as int</summary><div class="ans">✓ Flask casts it for you.</div></details>
+        <details><summary>B. Maximum number</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"After we save a task we <span class="blank"></span> so the user lands on a fresh GET of <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it ✅</h2>
+    <ul class="check-list">
+      <li>Routes for list, add, edit, delete</li>
+      <li>Form to add new task</li>
+      <li>Edit form pre-filled with old text</li>
+      <li>Delete with confirm</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Checkbox to mark done — strikethrough style.</div>
+      <div class="item"><span class="lvl">★★</span>Persist in SQLite — survives restart.</div>
+      <div class="item"><span class="lvl">★★★</span>Drag-to-reorder with JS.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why redirect after POST?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — POST 후 redirect 하는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">CRUD =<br>every web app.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Disappearing text writer — focus tools.</p>
+    <p class="bilingual">다음 주: 사라지는 글 — 집중력 도구</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 14 — K-Pop Time Machine</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 14 · Day 46 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 14</div>
+    <div class="emoji">🎤</div>
+    <h1>K-Pop<br>Time Machine</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">pick</span> + <span class="sub">show</span> a year's top 10.</p>
+    <p class="bilingual">연도별 케이팝 차트 보기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you safely read a tag's attribute?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>tag.get("href")</code> — returns None instead of crash.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>How many songs print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>year = <span class="str">"2019"</span>
+chart = data[year][:<span class="num">10</span>]
+<span class="kw">for</span> i, song <span class="kw">in</span> <span class="fn">enumerate</span>(chart, <span class="num">1</span>):
+    <span class="fn">print</span>(<span class="str">f"{i}. {song['title']}"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">10 songs, numbered 1–10.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">chart</span>
+      <span class="gloss">ranked list of songs</span>
+      <span class="ko">차트</span>
+
+      <span class="term">enumerate</span>
+      <span class="gloss">give index + value in loop</span>
+      <span class="ko">번호와 값</span>
+
+      <span class="term">slice</span>
+      <span class="gloss"><code>[:10]</code> first 10</span>
+      <span class="ko">슬라이스</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Pick year → grab chart 🎶</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">year</span><span class="val">"2019"</span></div>
+      <div class="varbox"><span class="name">data[year]</span><span class="val">list of songs</span></div>
+      <div class="varbox"><span class="name">[:10]</span><span class="val">top 10</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Public chart data — no login needed today.</p>
+    <p class="bilingual" style="text-align:center">공개 데이터만 사용 — Spotify 로그인 X</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Top 10 of 2019</h2>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+
+year = <span class="fn">input</span>(<span class="str">"Year (2000-2025)? "</span>)
+url  = <span class="str">f"https://en.wikipedia.org/wiki/K-pop_chart_{year}"</span>
+soup = BeautifulSoup(requests.<span class="fn">get</span>(url).text, <span class="str">"html.parser"</span>)
+
+songs = [tr.<span class="fn">get_text</span>(strip=<span class="kw">True</span>) <span class="kw">for</span> tr <span class="kw">in</span> soup.<span class="fn">select</span>(<span class="str">"table.wikitable tr"</span>)[<span class="num">1</span>:<span class="num">11</span>]]
+<span class="kw">for</span> i, s <span class="kw">in</span> <span class="fn">enumerate</span>(songs, <span class="num">1</span>):
+    <span class="fn">print</span>(<span class="str">f"{i}. {s}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">1. BTS — Boy with Luv<br>2. IZ*ONE — La Vie en Rose…</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>enumerate + slice 🔢</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">rows[1:11]</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">10 rows</span><span class="val">skip header</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">enumerate(…, 1)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">(1, song)</span><span class="val">numbered</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># f-string formats →</span> <span class="out">"1. BTS — …"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Slice gives what?</h2>
+<pre>nums = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]</pre>
+    <div class="trace-grid">
+      <div class="cell head">slice</div>
+      <div class="cell head">items</div>
+      <div class="cell head">length</div>
+
+      <div class="cell">nums[:3]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">[10,20,30]</span></details></div>
+      <div class="cell">3</div>
+
+      <div class="cell">nums[1:4]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">[20,30,40]</span></details></div>
+      <div class="cell">3</div>
+
+      <div class="cell">nums[-2:]</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">[40,50]</span></details></div>
+      <div class="cell">2</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Year out of range</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>year = <span class="str">"1900"</span>
+url  = <span class="str">f"…_{year}"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">404 — chart page doesn't exist.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">if</span> <span class="kw">not</span> (<span class="num">2000</span> &lt;= <span class="fn">int</span>(year) &lt;= <span class="num">2025</span>):
+    <span class="fn">print</span>(<span class="str">"Pick 2000-2025"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Validate first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Year range invalid</h2>
+<pre>year = <span class="fn">input</span>(<span class="str">"Year? "</span>)
+url  = <span class="str">f"…_{year}"</span>
+r    = requests.<span class="fn">get</span>(url)</pre>
+    <div class="err">404 if year &lt; 2000 or &gt; 2025</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Cast to int + check range before building URL.</p>
+      <p class="bilingual">유효한 연도 범위 확인 후 요청</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing chart table</h2>
+<pre>rows = soup.<span class="fn">select</span>(<span class="str">"table.wikitable tr"</span>)
+<span class="kw">for</span> r <span class="kw">in</span> rows[<span class="num">1</span>:<span class="num">11</span>]:
+    <span class="fn">print</span>(r.text)</pre>
+    <div class="err">Empty — table class is different on this page</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Inspect page; try <code>.select_one("table")</code> first. Print <code>len(rows)</code> to diagnose.</p>
+      <p class="bilingual">테이블 선택자 다를 수 있음 — len으로 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Encoding issue</h2>
+<pre>text = requests.<span class="fn">get</span>(url).text
+<span class="fn">print</span>(text[:<span class="num">100</span>])  <span class="com"># garbled Korean</span></pre>
+    <div class="err">한글 깨짐 — wrong encoding</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Set <code>r.encoding = "utf-8"</code> before <code>.text</code>. Or use <code>.content</code> + decode.</p>
+      <p class="bilingual">인코딩 utf-8 지정</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>year = <span class="fn">input</span>(<span class="str">"Year? "</span>)
+<span class="kw">if</span> <span class="kw">not</span> (____ &lt;= <span class="fn">int</span>(year) &lt;= ____):
+    <span class="fn">print</span>(<span class="str">"Bad year"</span>)
+url  = <span class="str">f"…/{____}"</span></pre>
+    <p style="margin-top:.6em">Validate range, then build URL.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — save to file</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">f"kpop_{year}.txt"</span>, <span class="str">"____"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> i, s <span class="kw">in</span> <span class="fn">enumerate</span>(songs, ___):
+        f.<span class="fn">write</span>(<span class="str">f"{i}. {s}\n"</span>)</pre>
+    <p style="margin-top:.6em">Write list to a text file.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>enumerate(list, 1)</code> starts numbering at…</div>
+      <div class="opts">
+        <details><summary>A. 0</summary><div class="ans">Nope — default is 0; we passed 1.</div></details>
+        <details><summary>B. 1</summary><div class="ans">✓ Human-friendly.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>rows[1:11]</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. 11 rows</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. 10 rows</summary><div class="ans">✓ Indices 1–10.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I ask the user for a <span class="blank"></span>, fetch the chart, and print the top <span class="blank"></span> songs."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Time travel 🎤</h2>
+    <ul class="check-list">
+      <li>Ask for a year</li>
+      <li>Validate range (2000–2025)</li>
+      <li>Fetch + parse chart page</li>
+      <li>Print top 10 numbered</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print artist + song separately.</div>
+      <div class="item"><span class="lvl">★★</span>Save the chart to <code>kpop_2019.csv</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Compare two years side by side.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why validate user input first?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 입력 검증이 왜 중요?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Year input,<br>chart output.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: toy price tracker.</p>
+    <p class="bilingual">다음 주: 장난감 가격 추적</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

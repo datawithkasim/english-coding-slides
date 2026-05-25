@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC003 Week 5 — Habit Tracker</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC003 · APIs &amp; Automation · Week 5 · Day 37 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 5</div>
+    <div class="emoji">🟩</div>
+    <h1>Habit<br>Pixel Tracker</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">POST</span> + <span class="sub">log</span> a habit.</p>
+    <p class="bilingual">습관을 픽셀로 기록하기 — Pixela API</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you send an API key with a request?</div>
+      <details><summary>Show answer</summary><div class="ans">In <code>headers</code>, e.g. <code>{"X-Auth-Token": key}</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>GET vs POST?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="com"># Pixela: log a pixel for today</span>
+requests.<span class="fn">get</span>(url)   <span class="com"># reads data</span>
+requests.<span class="fn">post</span>(url)  <span class="com"># writes data</span></pre>
+      <details><summary>Reveal answer</summary><div class="ans">GET = read. POST = create. Today: POST a pixel.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">POST</span>
+      <span class="gloss">send data to server</span>
+      <span class="ko">데이터 보내기</span>
+
+      <span class="term">payload</span>
+      <span class="gloss">the data body of a POST</span>
+      <span class="ko">전송 데이터</span>
+
+      <span class="term">pixel log</span>
+      <span class="gloss">one day's habit count</span>
+      <span class="ko">하루 기록</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>GET reads. POST writes ✍️</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">GET</span><span class="val">"what's there?"</span></div>
+      <div class="varbox"><span class="name">POST</span><span class="val">"add this"</span></div>
+      <div class="varbox"><span class="name">payload</span><span class="val">json={...}</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Read = GET. Write = POST + json.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Log one habit pixel</h2>
+<pre><span class="kw">import</span> requests, os, datetime
+user   = <span class="str">"kasim"</span>
+graph  = <span class="str">"reading"</span>
+token  = os.<span class="fn">getenv</span>(<span class="str">"PIXELA_TOKEN"</span>)
+today  = datetime.datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"%Y%m%d"</span>)
+
+url     = <span class="str">f"https://pixe.la/v1/users/{user}/graphs/{graph}"</span>
+headers = {<span class="str">"X-USER-TOKEN"</span>: token}
+payload = {<span class="str">"date"</span>: today, <span class="str">"quantity"</span>: <span class="str">"30"</span>}
+r = requests.<span class="fn">post</span>(url, json=payload, headers=headers)
+<span class="fn">print</span>(r.<span class="fn">json</span>())</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">{"message": "Success.", "isSuccess": true}</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>3 pieces of a POST</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">url</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">where</span><span class="val">/graphs/reading</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">headers</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">who</span><span class="val">X-USER-TOKEN</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">json</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">what</span><span class="val">{date, quantity}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Format today's date</h2>
+<pre><span class="kw">import</span> datetime
+now = datetime.datetime(<span class="num">2026</span>, <span class="num">5</span>, <span class="num">15</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">format</div>
+      <div class="cell head">code</div>
+      <div class="cell head">result</div>
+
+      <div class="cell">ISO</div>
+      <div class="cell">%Y-%m-%d</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2026-05-15</span></details></div>
+
+      <div class="cell">Pixela</div>
+      <div class="cell">%Y%m%d</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">20260515</span></details></div>
+
+      <div class="cell">slash</div>
+      <div class="cell">%d/%m/%Y</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">15/05/2026</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Quantity not a string</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>payload = {<span class="str">"quantity"</span>: <span class="num">30</span>}</pre>
+        <p style="margin-top:.4em;font-size:.85em">400 — Pixela wants string.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>payload = {<span class="str">"quantity"</span>: <span class="str">"30"</span>}</pre>
+        <p style="margin-top:.4em;font-size:.85em">Quotes around the number.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>401 unauthorized</h2>
+<pre>headers = {}
+r = requests.<span class="fn">post</span>(url, json=payload, headers=headers)</pre>
+    <div class="err">401 — no token sent</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>"X-USER-TOKEN": token</code> to headers.</p>
+      <p class="bilingual">토큰을 헤더에 포함</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing required field</h2>
+<pre>payload = {<span class="str">"quantity"</span>: <span class="str">"30"</span>}
+r = requests.<span class="fn">post</span>(url, json=payload, headers=headers)</pre>
+    <div class="err">400 — "date" is required</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Pixela needs both <code>date</code> and <code>quantity</code>. Add date.</p>
+      <p class="bilingual">필수 필드 빠짐 — date 추가</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Date in wrong format</h2>
+<pre>payload = {<span class="str">"date"</span>: <span class="str">"2026-05-15"</span>, <span class="str">"quantity"</span>: <span class="str">"30"</span>}</pre>
+    <div class="err">400 — bad date format</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Pixela wants <code>YYYYMMDD</code> — no dashes. Use <code>%Y%m%d</code>.</p>
+      <p class="bilingual">Pixela 날짜는 YYYYMMDD (대시 없음)</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>today = datetime.datetime.<span class="fn">now</span>().<span class="fn">strftime</span>(<span class="str">"____"</span>)
+payload = {<span class="str">"date"</span>: ____, <span class="str">"quantity"</span>: <span class="str">"45"</span>}
+r = requests.<span class="fn">______</span>(url, json=payload, headers=headers)</pre>
+    <p style="margin-top:.6em">Goal: today's date in YYYYMMDD, POST it.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — ask the user</h2>
+<pre>minutes = <span class="fn">______</span>(<span class="str">"Minutes read today? "</span>)
+payload = {
+    <span class="str">"date"</span>: today,
+    <span class="str">"quantity"</span>: <span class="fn">str</span>(_______),
+}</pre>
+    <p style="margin-top:.6em">Input minutes, cast to str.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To send data, use…</div>
+      <div class="opts">
+        <details><summary>A. <code>requests.get</code></summary><div class="ans">Nope — that reads.</div></details>
+        <details><summary>B. <code>requests.post</code></summary><div class="ans">✓ POST writes.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Pixela date format is…</div>
+      <div class="opts">
+        <details><summary>A. YYYY-MM-DD</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. YYYYMMDD</summary><div class="ans">✓ No dashes.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I send the data with <span class="blank"></span> and put my date plus quantity in the <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Log your habit 🟩</h2>
+    <ul class="check-list">
+      <li>Pick a habit (reading, exercise)</li>
+      <li>Build payload with date + quantity</li>
+      <li>POST with X-USER-TOKEN header</li>
+      <li>Print success message</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Use <code>PUT</code> to update a past day.</div>
+      <div class="item"><span class="lvl">★★</span>Track 2 habits in one script.</div>
+      <div class="item"><span class="lvl">★★★</span>Schedule daily with cron/scheduler.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what's the difference between GET and POST?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — GET과 POST 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">POST writes<br>new data.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: log to Google Sheets.</p>
+    <p class="bilingual">다음 주: 구글 시트에 기록</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

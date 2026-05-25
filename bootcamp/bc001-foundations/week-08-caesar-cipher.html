@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 8 — Caesar Cipher</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 8 · Day 8 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 8</div>
+    <div class="emoji">🔐</div>
+    <h1>Caesar<br>Cipher</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">pass</span> + <span class="sub">use</span> function parameters.</p>
+    <p class="bilingual">매개변수로 비밀 암호 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">In Hangman, what 2 things change each turn?</div>
+      <details><summary>Show answer</summary><div class="ans">Guessed letters and lives left — the game state.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">def</span> <span class="fn">shout</span>(word):
+    <span class="fn">print</span>(word + <span class="str">"!!"</span>)
+
+<span class="fn">shout</span>(<span class="str">"hi"</span>)
+<span class="fn">shout</span>(<span class="str">"bye"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">hi!! and bye!! — same code, different input.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">parameter</span>
+      <span class="gloss">name in the <code>def</code> line</span>
+      <span class="ko">매개변수</span>
+
+      <span class="term">argument</span>
+      <span class="gloss">value you pass in the call</span>
+      <span class="ko">인자</span>
+
+      <span class="term">shift</span>
+      <span class="gloss">move letters by N places</span>
+      <span class="ko">이동</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Function with inputs 📥</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">def encrypt(text, n)</span><span class="val">parameters</span></div>
+      <div class="varbox"><span class="name">encrypt("hi", 3)</span><span class="val">arguments</span></div>
+      <div class="varbox"><span class="name">inside</span><span class="val">text="hi", n=3</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Parameters wait. Arguments fill them.</p>
+    <p class="bilingual">매개변수는 빈 자리, 인자는 들어가는 값</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Shift one letter</h2>
+<pre><span class="kw">def</span> <span class="fn">shift_one</span>(letter, n):
+    code = <span class="fn">ord</span>(letter) + n
+    <span class="kw">return</span> <span class="fn">chr</span>(code)
+
+<span class="fn">print</span>(<span class="fn">shift_one</span>(<span class="str">"a"</span>, <span class="num">3</span>))
+<span class="fn">print</span>(<span class="fn">shift_one</span>(<span class="str">"b"</span>, <span class="num">1</span>))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">d<br>c</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Each letter shifts by n</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"h" + 3</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">letter</span><span class="val">"k"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"i" + 3</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">letter</span><span class="val">"l"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># "hi" with shift 3 →</span> <span class="out">"kl"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Shift by 2 — what comes out?</h2>
+<pre><span class="kw">def</span> <span class="fn">shift</span>(c, n):
+    <span class="kw">return</span> <span class="fn">chr</span>(<span class="fn">ord</span>(c) + n)</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">input</div>
+      <div class="cell head"><code>"a"</code></div>
+      <div class="cell head"><code>"c"</code></div>
+      <div class="cell head"><code>"m"</code></div>
+      <div class="cell head"><code>"x"</code></div>
+
+      <div class="cell">shift(_, 2)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"c"</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"e"</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"o"</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"z"</span></details></div>
+    </div>
+    <p style="margin-top:.5em"><code>shift("z", 2)</code>? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700">?</summary> <span style="color:#0a6b2e;font-weight:700">'|' — needs wrap-around fix</span></details></p>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Order of arguments</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">def</span> <span class="fn">f</span>(text, n):
+    ...
+<span class="fn">f</span>(<span class="num">3</span>, <span class="str">"hi"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">text=3, n="hi" — swapped!</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">def</span> <span class="fn">f</span>(text, n):
+    ...
+<span class="fn">f</span>(<span class="str">"hi"</span>, <span class="num">3</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Same order as def line</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — past 'z'</h2>
+<pre><span class="kw">def</span> <span class="fn">shift</span>(c, n):
+    <span class="kw">return</span> <span class="fn">chr</span>(<span class="fn">ord</span>(c) + n)
+
+<span class="fn">print</span>(<span class="fn">shift</span>(<span class="str">"y"</span>, <span class="num">5</span>))</pre>
+    <div class="err">Output: '~' (past 'z', not a letter)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wrap with modulo: <code>(ord(c) - ord("a") + n) % 26 + ord("a")</code>.</p>
+      <p class="bilingual">z 넘어가면 a로 — % 26 로 순환</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — uppercase ignored</h2>
+<pre><span class="kw">def</span> <span class="fn">encrypt</span>(text, n):
+    out = <span class="str">""</span>
+    <span class="kw">for</span> c <span class="kw">in</span> text:
+        out += <span class="fn">chr</span>(<span class="fn">ord</span>(c) + n)
+    <span class="kw">return</span> out
+
+<span class="fn">print</span>(<span class="fn">encrypt</span>(<span class="str">"Hi"</span>, <span class="num">1</span>))</pre>
+    <div class="err">Output: "Ij" — but "I" should stay as letter</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Lowercase first: <code>text = text.lower()</code>. Or handle upper case separately.</p>
+      <p class="bilingual">대문자 처리 — 보통 lower() 먼저</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — off-by-one shift</h2>
+<pre><span class="fn">print</span>(<span class="fn">encrypt</span>(<span class="str">"abc"</span>, <span class="num">1</span>))</pre>
+    <div class="err">Expected "bcd", got "abc" (no change)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Forgot to add <code>n</code>: <code>chr(ord(c) + n)</code>, not <code>chr(ord(c))</code>.</p>
+      <p class="bilingual">암호화 = 더하기, 복호화 = 빼기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">encrypt</span>(text, n):
+    out = <span class="str">""</span>
+    <span class="kw">for</span> c <span class="kw">in</span> ____:
+        out = out + <span class="fn">chr</span>(<span class="fn">ord</span>(c) ___ n)
+    <span class="kw">return</span> ___
+
+<span class="fn">print</span>(<span class="fn">encrypt</span>(<span class="str">"abc"</span>, <span class="num">3</span>))</pre>
+    <p style="margin-top:.6em">Goal: shift every letter by n. Print "def".</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — decrypt too</h2>
+<pre><span class="kw">def</span> <span class="fn">caesar</span>(text, n, mode):
+    <span class="kw">if</span> mode == <span class="str">"decrypt"</span>:
+        n = ___ n
+    out = <span class="str">""</span>
+    <span class="kw">for</span> c <span class="kw">in</span> text:
+        out += <span class="fn">chr</span>(<span class="fn">ord</span>(c) + n)
+    <span class="kw">return</span> out
+
+<span class="fn">caesar</span>(<span class="str">"khoor"</span>, <span class="num">3</span>, ___)</pre>
+    <p style="margin-top:.6em">Decrypt "khoor" with shift 3 → "hello".</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. In <code>def f(x, y)</code>, what are <code>x</code> and <code>y</code>?</div>
+      <div class="opts">
+        <details><summary>A. arguments</summary><div class="ans">Nope — those are the values you pass.</div></details>
+        <details><summary>B. parameters</summary><div class="ans">✓ Names in the def line.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>encrypt("hi", 1)</code> →</div>
+      <div class="opts">
+        <details><summary>A. "ij"</summary><div class="ans">✓ each letter +1.</div></details>
+        <details><summary>B. "hi1"</summary><div class="ans">Nope — n is the shift.</div></details>
+        <details><summary>C. "1hi"</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The function takes <span class="blank"></span> parameters. When I call it I pass <span class="blank"></span> arguments."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the cipher 🔐</h2>
+    <ul class="check-list">
+      <li>Define <code>encrypt(text, n)</code></li>
+      <li>Loop over each letter, shift by <code>n</code></li>
+      <li>Return the new text</li>
+      <li>Test: <code>encrypt("hello", 3)</code> → "khoor"</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Make <code>n</code> have a default value of 3.</div>
+      <div class="item"><span class="lvl">★★</span>Handle wrap-around past "z" using <code>% 26</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Keep spaces and punctuation unchanged.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: what is the difference between a parameter and an argument?</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 매개변수와 인자의 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Pass values<br>into code.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: dictionaries + Secret Auction.</p>
+    <p class="bilingual">다음 주: 딕셔너리 + 비밀 경매</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

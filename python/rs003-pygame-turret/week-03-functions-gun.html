@@ -35,6 +35,21 @@
     <span class="fn">draw_turret</span>()  <span class="com"># 1 line!</span>
     pygame.display.<span class="fn">flip</span>()</pre></div>
 
+<div class="slide"><div class="pill">Watch it!</div><h2>Function call + body</h2>
+<div class="viz viz-func">
+  <div class="fn-caller">
+    <span class="fn-callcode">draw_gun(<span class="arg">400</span>, <span class="arg">300</span>)</span>
+    <span class="fn-result">→ <span class="rv">gun drawn ✓</span></span>
+  </div>
+  <div class="fn-flow-down">↓ call</div>
+  <div class="fn-body">
+    <div class="fn-sig">def draw_gun(<span class="param">x</span>, <span class="param">y</span>):</div>
+    <div class="fn-line">pygame.draw.rect(screen, GREY, (<span class="param-use">x</span>, <span class="param-use">y</span>, 10, 40))</div>
+  </div>
+  <div class="fn-flow-up">↑ return</div>
+</div>
+<p class="bilingual">함수</p></div>
+
 <div class="slide"><div class="pill">Why?</div><h2>Big wins 🏆</h2>
 <ul class="check-list">
 <li>Game loop is short and clear</li>
@@ -110,25 +125,16 @@ ___(screen, 400, 300)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmi
       <div class="edge-card"><div class="ehead">self first</div><div class="edesc">Inside a class method, first param is always <code>self</code> — Python passes it automatically.</div></div>
       <div class="edge-card"><div class="ehead">Don&#x27;t shadow builtins</div><div class="edesc">Avoid <code>list = [1,2,3]</code> — you just broke <code>list()</code> for the rest of the file.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> The <code>print</code> line is not indented inside the function. Python raises <code>IndentationError</code>. Function bodies must be indented 4 spaces.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def greet(name):
-    print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="The lesson title says it: Add the Gun"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Add the Gun</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">age = 12
+print(&quot;I am &quot; + age + &quot; years old&quot;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> You can't join a number to a string with <code>+</code>. Python raises <code>TypeError: can only concatenate str (not "int") to str</code>. Wrap it in <code>str()</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">age = 12
+print(&quot;I am &quot; + str(age) + &quot; years old&quot;)</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Can't concatenate str and int — use str(age)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Add the Gun</button>
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">def greet(name):
-print(f&#x27;Hi, {name}&#x27;)
-
-greet(&#x27;Kasim&#x27;)</pre></div><div class="opts"><button class="opt">The print line is not indented inside the function. Python raises IndentationError. Function bodies must be indented 4 spaces.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing <code>import sys</code>.</button>
-<button class="opt">Wrong indentation depth.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">age = 12
+print(&quot;I am &quot; + age + &quot; years old&quot;)</pre></div><div class="opts"><button class="opt">age is a number; wrap it in str() to join it to text.</button><button class="opt">age must be quoted everywhere.</button><button class="opt">print() only takes one argument.</button><button class="opt">+ is not allowed inside print().</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Functions + Gun</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>

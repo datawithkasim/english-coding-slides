@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 11 — Bootstrap Blog Upgrade</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 11 · Day 59 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 11</div>
+    <div class="emoji">🃏</div>
+    <h1>Bootstrap<br>Blog Upgrade</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">add</span> + <span class="sub">trigger</span> cards and modals.</p>
+    <p class="bilingual">카드, 모달, 푸터로 블로그 꾸미기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What's the basic Bootstrap layout pattern?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>container → row → col-*</code>. 12-column grid.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Which button opens the modal?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>&lt;button data-bs-toggle=<span class="str">"modal"</span>
+        data-bs-target=<span class="str">"#hi"</span>&gt;Open&lt;/button&gt;
+
+&lt;div class=<span class="str">"modal"</span> id=<span class="str">"hi"</span>&gt;...&lt;/div&gt;</pre>
+      <details><summary>Reveal output</summary><div class="ans">The button — its target matches the modal's id <code>#hi</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">card</span>
+      <span class="gloss">styled box for content</span>
+      <span class="ko">카드</span>
+
+      <span class="term">modal</span>
+      <span class="gloss">pop-up dialog window</span>
+      <span class="ko">모달 창</span>
+
+      <span class="term">data-bs-*</span>
+      <span class="gloss">Bootstrap JS hooks</span>
+      <span class="ko">Bootstrap 속성</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Cards stack. Modal pops. 🃏</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">.card</span><span class="val">content box</span></div>
+      <div class="varbox"><span class="name">.modal</span><span class="val">pop-up</span></div>
+      <div class="varbox"><span class="name">footer</span><span class="val">bottom bar</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Pre-styled blocks. Just add classes.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Post as a card</h2>
+<pre>{% <span class="kw">for</span> p <span class="kw">in</span> posts %}
+&lt;div class=<span class="str">"card mb-3"</span>&gt;
+  &lt;div class=<span class="str">"card-body"</span>&gt;
+    &lt;h3 class=<span class="str">"card-title"</span>&gt;{{ p.title }}&lt;/h3&gt;
+    &lt;p class=<span class="str">"card-text"</span>&gt;{{ p.body }}&lt;/p&gt;
+    &lt;button class=<span class="str">"btn btn-primary"</span>
+            data-bs-toggle=<span class="str">"modal"</span>
+            data-bs-target=<span class="str">"#m{{ loop.index }}"</span>&gt;More&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% <span class="kw">endfor</span> %}</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Result</div>
+      <div style="opacity:1">Cards stack, "More" opens modal</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Click → toggle → show</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">click button</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">target #m1</span><span class="val">selected</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">Bootstrap JS</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">modal</span><span class="val">shown</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># click close →</span> <span class="out">modal hides</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Match target → modal</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">button target</div>
+      <div class="cell head">modal id</div>
+      <div class="cell head">match</div>
+      <div class="cell head">opens?</div>
+
+      <div class="cell">"#hi"</div>
+      <div class="cell">"hi"</div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">"#hi"</div>
+      <div class="cell">"bye"</div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">"hi"</div>
+      <div class="cell">"hi"</div>
+      <div class="cell">missing #</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot the JS bundle</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>&lt;link href=<span class="str">"...bootstrap.css"</span>&gt;
+<span class="com"># no JS bundle</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">→ modal never opens</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>&lt;link href=<span class="str">"...bootstrap.css"</span>&gt;
+&lt;script src=<span class="str">"...bootstrap.bundle.js"</span>&gt;</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ JS handles open/close</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>data-bs-toggle typo</h2>
+<pre>&lt;button data-toggle=<span class="str">"modal"</span> ...&gt;</pre>
+    <div class="err">Modal doesn't open on click</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Bootstrap 5 prefix: <code>data-bs-toggle</code> (not just <code>data-toggle</code>).</p>
+      <p class="bilingual">Bootstrap 5는 data-bs- 접두사</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Modal not opening</h2>
+<pre>&lt;button data-bs-target=<span class="str">"hi"</span>&gt;...
+&lt;div class=<span class="str">"modal"</span> id=<span class="str">"hi"</span>&gt;</pre>
+    <div class="err">Click does nothing</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Target needs <code>#</code>: <code>data-bs-target="#hi"</code>.</p>
+      <p class="bilingual"># 빠짐 — CSS 선택자 형식</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Image overflow</h2>
+<pre>&lt;div class=<span class="str">"card"</span>&gt;
+  &lt;img src=<span class="str">"big.jpg"</span>&gt;
+&lt;/div&gt;</pre>
+    <div class="err">Image breaks out of the card border</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add the class: <code>&lt;img class="card-img-top"&gt;</code> or <code>img-fluid</code>.</p>
+      <p class="bilingual">card-img-top 또는 img-fluid 클래스</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>&lt;div class=<span class="str">"_____"</span>&gt;
+  &lt;div class=<span class="str">"card-_____"</span>&gt;
+    &lt;h3 class=<span class="str">"card-title"</span>&gt;{{ p.title }}&lt;/h3&gt;
+    &lt;p class=<span class="str">"card-text"</span>&gt;{{ p.body }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+    <p style="margin-top:.6em">Goal: wrap a post in a card.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — footer + nav</h2>
+<pre>&lt;nav class=<span class="str">"navbar navbar-dark bg-dark"</span>&gt;
+  &lt;a class=<span class="str">"navbar-brand"</span>&gt;_____&lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;footer class=<span class="str">"_____ text-center mt-5"</span>&gt;
+  © 2026 _____
+&lt;/footer&gt;</pre>
+    <p style="margin-top:.6em">Add navbar brand and footer text.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To make modals work you need…</div>
+      <div class="opts">
+        <details><summary>A. Only the CSS file</summary><div class="ans">Nope — also the JS bundle.</div></details>
+        <details><summary>B. CSS + JS bundle</summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>data-bs-target</code> takes…</div>
+      <div class="opts">
+        <details><summary>A. An id with # prefix</summary><div class="ans">✓</div></details>
+        <details><summary>B. A class name</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I wrap each post in a <span class="blank"></span>, and the 'More' button opens a <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Upgrade the blog 🃏</h2>
+    <ul class="check-list">
+      <li>Wrap each post in <code>.card</code></li>
+      <li>Add a "More" button per card</li>
+      <li>Link it to a modal with full text</li>
+      <li>Add a footer with copyright</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add card images using <code>card-img-top</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Use Bootstrap colors: <code>bg-primary text-white</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Try the carousel for a hero banner.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how does a button know which modal to open?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 버튼이 어떤 모달을 열지 어떻게 앎?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Components<br>save layout time.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: HTML forms POST data to Flask.</p>
+    <p class="bilingual">다음 주: HTML 폼으로 데이터 보내기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

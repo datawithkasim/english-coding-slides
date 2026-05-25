@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 12 — Scope & Namespacing</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 12 · Day 12 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 12</div>
+    <div class="emoji">🗺️</div>
+    <h1>Scope &<br>Namespacing</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll know <span class="sub">where</span> + <span class="sub">when</span> a name exists.</p>
+    <p class="bilingual">변수가 어디서 살아있는지 — 지역과 전역</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What did Card Match combine?</div>
+      <details><summary>Show answer</summary><div class="ans">Lists, random, functions, loops, and conditionals — one game.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>score = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">add_point</span>():
+    score = <span class="num">1</span>
+
+<span class="fn">add_point</span>()
+<span class="fn">print</span>(score)</pre>
+      <details><summary>Reveal output</summary><div class="ans">0 — the local <code>score</code> inside doesn't change the outer one.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">scope</span>
+      <span class="gloss">where a name is visible</span>
+      <span class="ko">스코프</span>
+
+      <span class="term">local</span>
+      <span class="gloss">only inside this function</span>
+      <span class="ko">지역</span>
+
+      <span class="term">global</span>
+      <span class="gloss">visible to the whole file</span>
+      <span class="ko">전역</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Rooms inside rooms 🏠</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">global</span><span class="val">score = 0</span></div>
+      <div class="varbox"><span class="name">function</span><span class="val">local score</span></div>
+      <div class="varbox"><span class="name">function</span><span class="val">local count</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each function has its own room. Outer can't see inner.</p>
+    <p class="bilingual" style="text-align:center">함수마다 방이 따로 — 안쪽 변수는 밖에서 안 보임</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Local vs global</h2>
+<pre>score = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">play</span>():
+    <span class="kw">global</span> score
+    score = score + <span class="num">1</span>
+    <span class="fn">print</span>(<span class="str">"inside:"</span>, score)
+
+<span class="fn">play</span>()
+<span class="fn">play</span>()
+<span class="fn">print</span>(<span class="str">"outside:"</span>, score)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">inside: 1<br>inside: 2<br>outside: 2</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Two rooms, two scores</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">global</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">score</span><span class="val">0</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">play() runs</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">local score</span><span class="val">new box</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Without `global`, the outer score never changes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What's <code>score</code> at each line?</h2>
+<pre>score = <span class="num">0</span>           <span class="com"># L1</span>
+
+<span class="kw">def</span> <span class="fn">bump</span>():
+    score = <span class="num">5</span>       <span class="com"># L3</span>
+    <span class="fn">print</span>(score)
+
+<span class="fn">bump</span>()              <span class="com"># L4</span>
+<span class="fn">print</span>(score)        <span class="com"># L5</span></pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">line</div>
+      <div class="cell head">global</div>
+      <div class="cell head">local</div>
+      <div class="cell head">prints</div>
+
+      <div class="cell">L1</div>
+      <div class="cell">0</div>
+      <div class="cell">—</div>
+      <div class="cell">—</div>
+
+      <div class="cell">L3</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell">L5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell">—</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Shadow trap</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>total = <span class="num">10</span>
+
+<span class="kw">def</span> <span class="fn">show</span>():
+    total = total + <span class="num">1</span>
+    <span class="fn">print</span>(total)</pre>
+        <p style="margin-top:.4em;font-size:.85em">UnboundLocalError</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>total = <span class="num">10</span>
+
+<span class="kw">def</span> <span class="fn">show</span>():
+    <span class="kw">global</span> total
+    total = total + <span class="num">1</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Works — explicit global.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Outer didn't change</h2>
+<pre>lives = <span class="num">3</span>
+
+<span class="kw">def</span> <span class="fn">lose</span>():
+    lives = lives - <span class="num">1</span>
+
+<span class="fn">lose</span>()
+<span class="fn">print</span>(lives)</pre>
+    <div class="err">UnboundLocalError: local variable 'lives' referenced before assignment</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>global lives</code> as the first line inside <code>lose()</code>.</p>
+      <p class="bilingual">함수 안에서 전역 변수 수정하려면 global 선언</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Shadowed name</h2>
+<pre>name = <span class="str">"Mina"</span>
+
+<span class="kw">def</span> <span class="fn">greet</span>():
+    name = <span class="str">"Kasim"</span>
+
+<span class="fn">greet</span>()
+<span class="fn">print</span>(name)</pre>
+    <div class="err">Output: Mina  (expected Kasim)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Either declare <code>global name</code> or <code>return</code> the new value and reassign.</p>
+      <p class="bilingual">같은 이름이 안쪽에 생기면 바깥 변수는 안 바뀜</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Used name that doesn't exist out here</h2>
+<pre><span class="kw">def</span> <span class="fn">make</span>():
+    secret = <span class="num">42</span>
+
+<span class="fn">make</span>()
+<span class="fn">print</span>(secret)</pre>
+    <div class="err">NameError: name 'secret' is not defined</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Return it: <code>return secret</code>, then <code>secret = make()</code>.</p>
+      <p class="bilingual">함수 안 변수는 밖에서 안 보임 — return으로 꺼내기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>score = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">win</span>():
+    ______ score
+    score = score + ___
+
+<span class="fn">win</span>()
+<span class="fn">print</span>(score)</pre>
+    <p style="margin-top:.6em">Goal: print <code>1</code>.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — return is cleaner</h2>
+<pre>score = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">add_one</span>(s):
+    <span class="kw">return</span> ___ + <span class="num">1</span>
+
+score = <span class="fn">add_one</span>(______)
+<span class="fn">print</span>(score)</pre>
+    <p style="margin-top:.6em">Goal: same result, NO <code>global</code> keyword.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. A local variable is visible…</div>
+      <div class="opts">
+        <details><summary>A. Everywhere</summary><div class="ans">Nope — that's global.</div></details>
+        <details><summary>B. Only inside its function</summary><div class="ans">✓ Just inside.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To change a global inside a function you need…</div>
+      <div class="opts">
+        <details><summary>A. Nothing — Python figures it out</summary><div class="ans">Nope — you'll shadow it.</div></details>
+        <details><summary>B. The <code>global</code> keyword</summary><div class="ans">✓ Or return a new value.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>score</code> is local because <span class="blank"></span>, so I need <span class="blank"></span> to change the outer one."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Fix the score 🗺️</h2>
+    <ul class="check-list">
+      <li>Start with <code>score = 0</code> as a global</li>
+      <li>Write <code>win()</code> that adds 1</li>
+      <li>Call <code>win()</code> three times</li>
+      <li>Print final score — should be 3</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Rewrite <code>win()</code> with no <code>global</code> — use return.</div>
+      <div class="item"><span class="lvl">★★</span>Add <code>lose()</code> that subtracts. Avoid going below 0.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a second player. Each has their own score.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why are globals risky in big programs?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 전역 변수가 왜 위험할까?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Names<br>live in rooms.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: debugging — read errors, find bugs fast.</p>
+    <p class="bilingual">다음 주: 디버깅 — 오류 읽고 버그 빨리 찾기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 15 — SQLite + SQLAlchemy</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 15 · Day 63 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 15</div>
+    <div class="emoji">🗄️</div>
+    <h1>SQLite +<br>SQLAlchemy</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">model</span> + <span class="sub">save</span> rows with an ORM.</p>
+    <p class="bilingual">ORM으로 데이터베이스 모델 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why was CSV painful for searching and updating?</div>
+      <details><summary>Show answer</summary><div class="ans">Whole file rewrite + no query language. DB fixes both.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this define?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">class</span> <span class="fn">Cafe</span>(db.Model):
+    id   = db.<span class="fn">Column</span>(db.Integer, primary_key=<span class="kw">True</span>)
+    name = db.<span class="fn">Column</span>(db.String, nullable=<span class="kw">False</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">A table named "cafe" with two columns: id (PK) and name (required).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">ORM</span>
+      <span class="gloss">map Python classes to DB tables</span>
+      <span class="ko">객체-관계 매핑</span>
+
+      <span class="term">primary key</span>
+      <span class="gloss">unique row id</span>
+      <span class="ko">기본 키</span>
+
+      <span class="term">commit</span>
+      <span class="gloss">save pending changes</span>
+      <span class="ko">변경사항 저장</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Class = table 🗄️</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">Class</span><span class="val">Cafe</span></div>
+      <div class="varbox"><span class="name">Column</span><span class="val">name, id</span></div>
+      <div class="varbox"><span class="name">Row</span><span class="val">Cafe(name="Han")</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Write Python. SQLAlchemy makes the SQL.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Create + add a row</h2>
+<pre><span class="kw">from</span> flask_sqlalchemy <span class="kw">import</span> SQLAlchemy
+
+app.config[<span class="str">"SQLALCHEMY_DATABASE_URI"</span>] = <span class="str">"sqlite:///app.db"</span>
+db = <span class="fn">SQLAlchemy</span>(app)
+
+<span class="kw">class</span> <span class="fn">Cafe</span>(db.Model):
+    id   = db.<span class="fn">Column</span>(db.Integer, primary_key=<span class="kw">True</span>)
+    name = db.<span class="fn">Column</span>(db.String, nullable=<span class="kw">False</span>)
+
+<span class="kw">with</span> app.<span class="fn">app_context</span>():
+    db.<span class="fn">create_all</span>()
+    db.session.<span class="fn">add</span>(<span class="fn">Cafe</span>(name=<span class="str">"Han Cafe"</span>))
+    db.session.<span class="fn">commit</span>()</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Add → commit → query</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">db.session.add(c)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">pending</span><span class="val">not saved</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">db.session.commit()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">written</span><span class="val">id assigned</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># Cafe.query.all() →</span> <span class="out">[Cafe(id=1, name="Han")]</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Row state</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">step</div>
+      <div class="cell head">in DB?</div>
+      <div class="cell head">id</div>
+      <div class="cell head">why</div>
+
+      <div class="cell">Cafe(name="x")</div>
+      <div class="cell">no</div>
+      <div class="cell">None</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">not added</span></details></div>
+
+      <div class="cell">add(c)</div>
+      <div class="cell">no</div>
+      <div class="cell">None</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">pending</span></details></div>
+
+      <div class="cell">commit()</div>
+      <div class="cell">yes</div>
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">PK assigned</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgot to commit</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>db.session.<span class="fn">add</span>(c)
+<span class="com"># no commit</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">→ row lost on restart</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>db.session.<span class="fn">add</span>(c)
+db.session.<span class="fn">commit</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ saved to disk</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing app context</h2>
+<pre>db.<span class="fn">create_all</span>()</pre>
+    <div class="err">RuntimeError: Working outside of application context</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wrap in <code>with app.app_context(): …</code>.</p>
+      <p class="bilingual">app context 안에서 호출</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Primary key not set</h2>
+<pre><span class="kw">class</span> <span class="fn">Cafe</span>(db.Model):
+    name = db.<span class="fn">Column</span>(db.String)</pre>
+    <div class="err">ArgumentError: table needs a primary key</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add an id column: <code>db.Column(db.Integer, primary_key=True)</code>.</p>
+      <p class="bilingual">기본 키 필수</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Commit missing</h2>
+<pre>db.session.<span class="fn">add</span>(c)
+<span class="fn">print</span>(Cafe.query.<span class="fn">all</span>())</pre>
+    <div class="err">Sometimes shows row, sometimes doesn't — flaky</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Commit before querying from a different session.</p>
+      <p class="bilingual">commit 후 쿼리</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">class</span> <span class="fn">Movie</span>(db._____):
+    id    = db.<span class="fn">Column</span>(db.Integer, ____________=<span class="kw">True</span>)
+    title = db.<span class="fn">Column</span>(db.String, nullable=<span class="kw">False</span>)
+    year  = db.<span class="fn">Column</span>(db._______)</pre>
+    <p style="margin-top:.6em">Goal: Movie table with id, title, year.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — add + query</h2>
+<pre>m = <span class="fn">Movie</span>(title=<span class="str">"Up"</span>, year=<span class="num">2009</span>)
+db.session._____(m)
+db.session._______()
+
+all_movies = Movie.query._____()
+first      = Movie.query.<span class="fn">filter_by</span>(year=____).first()</pre>
+    <p style="margin-top:.6em">Add, commit, fetch all, find 2009.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>db.create_all()</code> needs to run…</div>
+      <div class="opts">
+        <details><summary>A. Inside <code>app.app_context()</code></summary><div class="ans">✓</div></details>
+        <details><summary>B. Anywhere</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Changes save to disk on…</div>
+      <div class="opts">
+        <details><summary>A. <code>add()</code></summary><div class="ans">Nope — only pending.</div></details>
+        <details><summary>B. <code>commit()</code></summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"A model class becomes a <span class="blank"></span>, and a class instance becomes a <span class="blank"></span> when I commit."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Migrate cafes to DB 🗄️</h2>
+    <ul class="check-list">
+      <li>Install <code>flask-sqlalchemy</code></li>
+      <li>Define <code>Cafe</code> model</li>
+      <li><code>db.create_all()</code> in app context</li>
+      <li>Add + commit one row, query it back</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a <code>quiet</code> integer column.</div>
+      <div class="item"><span class="lvl">★★</span>Use <code>filter_by(name=...)</code> to find one.</div>
+      <div class="item"><span class="lvl">★★★</span>Delete a row with <code>db.session.delete</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does <code>db.session.commit()</code> do?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — commit이 하는 일?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Databases<br>outlast restarts.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: put it all together — Top Movies site.</p>
+    <p class="bilingual">다음 주: 모두 합쳐서 영화 사이트</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

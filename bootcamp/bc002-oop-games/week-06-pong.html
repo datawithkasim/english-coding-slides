@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 6 — Pong Arcade</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 6 · Day 22 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 6</div>
+    <div class="emoji">🏓</div>
+    <h1>Pong<br>Arcade</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">bounce</span> + <span class="sub">score</span> a two-player game.</p>
+    <p class="bilingual">두 명이 즐기는 퐁 게임</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">When do you call <code>super().__init__()</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">First line of a child's <code>__init__</code> — sets up the parent.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens to the ball?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">if</span> ball.<span class="fn">ycor</span>() > <span class="num">280</span>:
+    ball.y_move *= -<span class="num">1</span></pre>
+      <details><summary>Reveal</summary><div class="ans">Ball bounces off the top wall — flip vertical direction.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">paddle</span>
+      <span class="gloss">player bat</span>
+      <span class="ko">패들</span>
+
+      <span class="term">bounce</span>
+      <span class="gloss">flip direction</span>
+      <span class="ko">튕기다</span>
+
+      <span class="term">scoreboard</span>
+      <span class="gloss">displays score</span>
+      <span class="ko">점수판</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Three objects, one loop</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">l_paddle</span><span class="val">player 1</span></div>
+      <div class="varbox"><span class="name">r_paddle</span><span class="val">player 2</span></div>
+      <div class="varbox"><span class="name">ball</span><span class="val">moves + bounces</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each has its own job + state.</p>
+    <p class="bilingual" style="text-align:center">각 객체는 자기 역할이 있음</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Bounce off wall</h2>
+<pre><span class="kw">while</span> game_on:
+    screen.<span class="fn">update</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.05</span>)
+    ball.<span class="fn">move</span>()
+
+    <span class="kw">if</span> ball.<span class="fn">ycor</span>() &gt; <span class="num">280</span> <span class="kw">or</span> ball.<span class="fn">ycor</span>() &lt; -<span class="num">280</span>:
+        ball.<span class="fn">bounce_y</span>()
+
+    <span class="kw">if</span> ball.<span class="fn">distance</span>(r_paddle) &lt; <span class="num">50</span>:
+        ball.<span class="fn">bounce_x</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Window</div>
+      <div style="opacity:1">ball ricochets off walls + paddle</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Two listeners, no clash</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"Up"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">r_paddle.go_up</span><span class="val">y += 20</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"w"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">l_paddle.go_up</span><span class="val">y += 20</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># both can press at once →</span> <span class="out">both paddles move</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Ball position after 3 ticks</h2>
+<pre>x_move = <span class="num">10</span>; y_move = <span class="num">10</span>
+<span class="com"># start at (0, 270)</span></pre>
+    <div class="trace-grid">
+      <div class="cell head">tick</div>
+      <div class="cell head">x</div>
+      <div class="cell head">y</div>
+
+      <div class="cell">1</div>
+      <div class="cell">10</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">280 → bounce</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">20</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">270</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">30</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">260</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Paddle escapes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">def</span> <span class="fn">go_up</span>(self):
+    self.<span class="fn">goto</span>(self.<span class="fn">xcor</span>(),
+            self.<span class="fn">ycor</span>() + <span class="num">20</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Goes past the wall.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">def</span> <span class="fn">go_up</span>(self):
+    <span class="kw">if</span> self.<span class="fn">ycor</span>() &lt; <span class="num">250</span>:
+        self.<span class="fn">goto</span>(self.<span class="fn">xcor</span>(),
+                self.<span class="fn">ycor</span>() + <span class="num">20</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Clamp at 250.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Paddle off-screen</h2>
+<pre>screen.<span class="fn">onkey</span>(r_paddle.go_up, <span class="str">"Up"</span>)</pre>
+    <div class="err">Holding Up moves paddle past the top wall</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check <code>ycor()</code> inside <code>go_up</code> and only move if under 250.</p>
+      <p class="bilingual">위치 검사로 화면 밖 방지</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Ball bounces wrong</h2>
+<pre><span class="kw">if</span> ball.<span class="fn">ycor</span>() &gt; <span class="num">280</span>:
+    ball.x_move *= -<span class="num">1</span></pre>
+    <div class="err">Top hit flips X instead of Y — sideways escape</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Top/bottom walls flip <code>y_move</code>. Left/right walls flip <code>x_move</code>.</p>
+      <p class="bilingual">위/아래는 y 반전, 좌/우는 x 반전</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Score not updating</h2>
+<pre><span class="kw">class</span> <span class="fn">Score</span>(Turtle):
+    <span class="kw">def</span> <span class="fn">point</span>(self):
+        self.score += <span class="num">1</span></pre>
+    <div class="err">Score increments internally but screen text never changes</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Call <code>self.clear()</code> then <code>self.write(...)</code> after every change.</p>
+      <p class="bilingual">점수 변경 후 clear + write 다시 호출</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">if</span> ball.<span class="fn">ycor</span>() &gt; <span class="num">280</span> <span class="kw">or</span> ball.<span class="fn">ycor</span>() &lt; -<span class="num">280</span>:
+    ball.<span class="fn">______</span>()
+
+<span class="kw">if</span> ball.<span class="fn">distance</span>(r_paddle) &lt; ___:
+    ball.<span class="fn">bounce_x</span>()</pre>
+    <p style="margin-top:.6em">Goal: bounce off walls + paddle.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — speed up on hit</h2>
+<pre><span class="kw">def</span> <span class="fn">bounce_x</span>(self):
+    self.x_move *= ___
+    self.move_speed ___ <span class="num">0.9</span>  <span class="com"># faster</span></pre>
+    <p style="margin-top:.6em">Each paddle hit speeds the ball up by 10%.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Top wall hit → flip…</div>
+      <div class="opts">
+        <details><summary>A. x</summary><div class="ans">Sideways — wrong.</div></details>
+        <details><summary>B. y</summary><div class="ans">✓ Vertical bounce.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Score text not updating because…</div>
+      <div class="opts">
+        <details><summary>A. Forgot clear() + write()</summary><div class="ans">✓ Repaint each change.</div></details>
+        <details><summary>B. score is read-only</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The ball bounces when it hits <span class="blank"></span> by flipping <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Pong 🏓</h2>
+    <ul class="check-list">
+      <li>Two <code>Paddle</code> instances at left + right</li>
+      <li>One <code>Ball</code> with <code>move()</code></li>
+      <li>Bounce off top, bottom, and paddles</li>
+      <li>Add a <code>Scoreboard</code> at top of screen</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Make the ball start in a random direction.</div>
+      <div class="item"><span class="lvl">★★</span>Display "GAME OVER" at 5 points.</div>
+      <div class="item"><span class="lvl">★★★</span>Add ball spin based on which part of the paddle hit.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>which value flips on a top-wall hit, and why?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 위 벽에 닿으면 어떤 값이 바뀜?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Objects +<br>events = games.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Turtle Crossing capstone.</p>
+    <p class="bilingual">다음 주: 거북이 길 건너기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

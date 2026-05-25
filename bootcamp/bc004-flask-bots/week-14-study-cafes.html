@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 14 — Study Cafes</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 14 · Day 62 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 14</div>
+    <div class="emoji">📚</div>
+    <h1>Study Cafes</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">write</span> + <span class="sub">read</span> rows of data in a CSV.</p>
+    <p class="bilingual">스터디 카페 정보를 CSV에 저장하고 표시</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What did <code>validate_on_submit</code> check?</div>
+      <details><summary>Show answer</summary><div class="ans">Request is POST AND all validators passed.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does <code>writerow</code> do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> csv
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>, newline=<span class="str">""</span>) <span class="kw">as</span> f:
+    csv.<span class="fn">writer</span>(f).<span class="fn">writerow</span>([<span class="str">"X"</span>, <span class="str">"Y"</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">Appends a new row to cafes.csv with two cells: X, Y.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">CSV</span>
+      <span class="gloss">comma-separated values file</span>
+      <span class="ko">쉼표 구분 파일</span>
+
+      <span class="term">writerow</span>
+      <span class="gloss">add one row to a CSV</span>
+      <span class="ko">한 줄 쓰기</span>
+
+      <span class="term">DictReader</span>
+      <span class="gloss">read each row as a dict</span>
+      <span class="ko">사전으로 읽기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>One row per cafe ☕</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">name</span><span class="val">"Han Cafe"</span></div>
+      <div class="varbox"><span class="name">wifi</span><span class="val">"yes"</span></div>
+      <div class="varbox"><span class="name">quiet</span><span class="val">"5/5"</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Neutral info only — students help students.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Add + show cafes</h2>
+<pre>@app.<span class="fn">route</span>(<span class="str">"/add"</span>, methods=[<span class="str">"GET"</span>, <span class="str">"POST"</span>])
+<span class="kw">def</span> <span class="fn">add</span>():
+    form = <span class="fn">CafeForm</span>()
+    <span class="kw">if</span> form.<span class="fn">validate_on_submit</span>():
+        <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>, newline=<span class="str">""</span>) <span class="kw">as</span> f:
+            csv.<span class="fn">writer</span>(f).<span class="fn">writerow</span>([
+                form.name.data, form.wifi.data,
+                form.power.data, form.quiet.data,
+            ])
+        <span class="kw">return</span> redirect(<span class="str">"/list"</span>)
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"add.html"</span>, form=form)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Read it back</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"cafes.csv"</span>) <span class="kw">as</span> f:
+    rows = <span class="fn">list</span>(csv.<span class="fn">DictReader</span>(f))
+<span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"list.html"</span>, rows=rows)</pre>
+    <p class="center" style="margin-top:.5em">Each row becomes a dict — keyed by header.</p>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>After 3 submits</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">name</div>
+      <div class="cell head">wifi</div>
+      <div class="cell head">power</div>
+      <div class="cell head">quiet</div>
+
+      <div class="cell">Han</div>
+      <div class="cell">yes</div>
+      <div class="cell">yes</div>
+      <div class="cell">5</div>
+
+      <div class="cell">Hodu</div>
+      <div class="cell">yes</div>
+      <div class="cell">no</div>
+      <div class="cell">3</div>
+
+      <div class="cell">Bori</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">slow</span></details></div>
+      <div class="cell">yes</div>
+      <div class="cell">4</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Missing newline arg</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ blank lines on Windows</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>,
+     newline=<span class="str">""</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ clean rows</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>CSV path on deploy</h2>
+<pre><span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>)</pre>
+    <div class="err">FileNotFoundError on server</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use an absolute path: <code>os.path.join(app.root_path, "cafes.csv")</code>.</p>
+      <p class="bilingual">서버에서는 절대 경로</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing column</h2>
+<pre>csv.<span class="fn">writer</span>(f).<span class="fn">writerow</span>([
+    form.name.data, form.wifi.data
+])
+<span class="com"># header has 4 columns</span></pre>
+    <div class="err">CSV rows out of sync — quiet shifts to wifi</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Always write the same number of cells as the header.</p>
+      <p class="bilingual">컬럼 수 일치 — 빈 값도 ""로 채움</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Escape commas</h2>
+<pre>form.name.data = <span class="str">"Cafe, Han"</span>
+csv.<span class="fn">writer</span>(f).<span class="fn">writerow</span>([name, ...])</pre>
+    <div class="err">DictReader splits "Cafe, Han" into 2 cells</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The <code>csv</code> module quotes for you. Don't write the comma yourself — use <code>writerow</code>.</p>
+      <p class="bilingual">csv 모듈이 자동으로 따옴표</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"cafes.csv"</span>, <span class="str">"a"</span>, newline=<span class="str">""</span>) <span class="kw">as</span> f:
+    csv.<span class="fn">writer</span>(f).<span class="fn">_________</span>([
+        form.name.data, form.____.data,
+        form.power.data, form._____.data,
+    ])</pre>
+    <p style="margin-top:.6em">Append one row: name, wifi, power, quiet.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — show in HTML</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"cafes.csv"</span>) <span class="kw">as</span> f:
+    rows = <span class="fn">list</span>(csv.<span class="fn">__________</span>(f))
+
+<span class="com"># template:</span>
+{% <span class="kw">for</span> r <span class="kw">in</span> ____ %}
+  &lt;tr&gt;
+    &lt;td&gt;{{ r['_____'] }}&lt;/td&gt;
+    &lt;td&gt;{{ r['quiet'] }}&lt;/td&gt;
+  &lt;/tr&gt;
+{% <span class="kw">endfor</span> %}</pre>
+    <p style="margin-top:.6em">Read with DictReader, loop in template.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To append a row to a CSV, mode = …</div>
+      <div class="opts">
+        <details><summary>A. "w"</summary><div class="ans">Nope — erases.</div></details>
+        <details><summary>B. "a"</summary><div class="ans">✓ Append.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>DictReader</code> turns each row into a…</div>
+      <div class="opts">
+        <details><summary>A. List</summary><div class="ans">Nope — that's <code>reader</code>.</div></details>
+        <details><summary>B. Dict (keyed by header)</summary><div class="ans">✓</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I save a new cafe with <span class="blank"></span> in append mode, and read every row with <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the cafe list 📚</h2>
+    <ul class="check-list">
+      <li>WTForms: name, wifi, power, quiet</li>
+      <li><code>/add</code> writes to CSV</li>
+      <li><code>/list</code> reads + shows table</li>
+      <li>Keep it neutral — no brand shilling</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Sort the list by quiet score.</div>
+      <div class="item"><span class="lvl">★★</span>Filter: show only wifi = "yes".</div>
+      <div class="item"><span class="lvl">★★★</span>Add a /delete/&lt;name&gt; route (with confirm).</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why pass <code>newline=""</code> to <code>open</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — newline="" 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">CSV stores<br>simple data.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: SQLite for real databases.</p>
+    <p class="bilingual">다음 주: SQLite로 진짜 데이터베이스</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

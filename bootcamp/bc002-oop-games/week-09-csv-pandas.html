@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 9 — CSV &amp; Pandas</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 9 · Day 25 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 9</div>
+    <div class="emoji">📊</div>
+    <h1>Class<br>Grade Sheet</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">load</span> + <span class="sub">average</span> a CSV with pandas.</p>
+    <p class="bilingual">pandas로 성적표 분석하기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which mode appends to a file?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>"a"</code> — adds new text without wiping.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">"grades.csv"</span>)
+<span class="fn">print</span>(df[<span class="str">"math"</span>].<span class="fn">mean</span>())</pre>
+      <details><summary>Reveal</summary><div class="ans">The average of the math column — one number.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">CSV</span>
+      <span class="gloss">comma-separated table file</span>
+      <span class="ko">표 파일</span>
+
+      <span class="term">DataFrame</span>
+      <span class="gloss">a pandas spreadsheet</span>
+      <span class="ko">데이터프레임</span>
+
+      <span class="term">column</span>
+      <span class="gloss">one named field</span>
+      <span class="ko">열</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>DataFrame = labeled table</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">name</span><span class="val">Min, Su, Ji</span></div>
+      <div class="varbox"><span class="name">math</span><span class="val">88, 92, 75</span></div>
+      <div class="varbox"><span class="name">english</span><span class="val">90, 80, 95</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Rows = students. Columns = subjects.</p>
+    <p class="bilingual" style="text-align:center">행=학생, 열=과목</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Compute averages</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">"grades.csv"</span>)
+<span class="fn">print</span>(df.<span class="fn">head</span>())
+
+<span class="fn">print</span>(<span class="str">f"Math avg: {df['math'].mean():.1f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Top: {df['math'].max()}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Math avg: 85.0<br>Top: 92</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Column selection</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">df</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">whole table</span><span class="val">3 rows × 3 cols</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">df["math"]</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">one column</span><span class="val">[88,92,75]</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># .mean() →</span> <span class="out">85.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What does it return?</h2>
+    <div class="trace-grid">
+      <div class="cell head">expression</div>
+      <div class="cell head">type</div>
+      <div class="cell head">result</div>
+
+      <div class="cell"><code>df["math"]</code></div>
+      <div class="cell">Series</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">column</span></details></div>
+
+      <div class="cell"><code>df["math"].mean()</code></div>
+      <div class="cell">float</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">85.0</span></details></div>
+
+      <div class="cell"><code>df.shape</code></div>
+      <div class="cell">tuple</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">(3, 3)</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Column name typo</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>df[<span class="str">"Math"</span>].<span class="fn">mean</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">KeyError if header is lowercase.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">print</span>(df.columns)
+df[<span class="str">"math"</span>].<span class="fn">mean</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Inspect columns first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong path</h2>
+<pre>df = pd.<span class="fn">read_csv</span>(<span class="str">"grades.cvs"</span>)</pre>
+    <div class="err">FileNotFoundError: [Errno 2] No such file: 'grades.cvs'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Typo: <code>.cvs</code> → <code>.csv</code>. Check file is in the same folder.</p>
+      <p class="bilingual">파일 경로/확장자 확인</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Column name typo</h2>
+<pre>df[<span class="str">"Mathematics"</span>].<span class="fn">mean</span>()</pre>
+    <div class="err">KeyError: 'Mathematics'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Print <code>df.columns</code> to see exact names. They are case-sensitive.</p>
+      <p class="bilingual">컬럼명 정확히 일치 (대소문자 포함)</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Sum of strings</h2>
+<pre>df = pd.<span class="fn">read_csv</span>(<span class="str">"grades.csv"</span>)
+df[<span class="str">"math"</span>].<span class="fn">sum</span>()</pre>
+    <div class="err">Result is "889275" — text concatenation</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Column was read as string. Cast: <code>df["math"] = df["math"].astype(int)</code>.</p>
+      <p class="bilingual">숫자로 변환 후 합계 계산</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> ___
+
+df = pd.<span class="fn">______</span>(<span class="str">"grades.csv"</span>)
+<span class="fn">print</span>(df[<span class="str">"____"</span>].<span class="fn">mean</span>())
+<span class="fn">print</span>(df[<span class="str">"____"</span>].<span class="fn">max</span>())</pre>
+    <p style="margin-top:.6em">Goal: load, average, find top.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — filter rows</h2>
+<pre>df = pd.<span class="fn">read_csv</span>(<span class="str">"grades.csv"</span>)
+
+high_math = df[df[<span class="str">"math"</span>] _____ <span class="num">80</span>]
+<span class="fn">print</span>(high_math[<span class="str">"____"</span>])</pre>
+    <p style="margin-top:.6em">Print names of students with math ≥ 80.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>pd.read_csv("x.csv")</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. A list of dicts</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. A DataFrame</summary><div class="ans">✓ A 2D labeled table.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>df["math"]</code> picks…</div>
+      <div class="opts">
+        <details><summary>A. One column</summary><div class="ans">✓ A Series.</div></details>
+        <details><summary>B. One row</summary><div class="ans">That's <code>df.iloc[0]</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I load the CSV into a <span class="blank"></span>, then use <code>.mean()</code> to get the <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Grade Sheet 📊</h2>
+    <ul class="check-list">
+      <li>Make <code>grades.csv</code> with 5 students</li>
+      <li>Load with <code>pd.read_csv</code></li>
+      <li>Print average of each subject</li>
+      <li>Find the highest-scoring student</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a "total" column with row sums.</div>
+      <div class="item"><span class="lvl">★★</span>Sort by total descending.</div>
+      <div class="item"><span class="lvl">★★★</span>Save the sorted table to <code>ranked.csv</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does <code>df["math"].mean()</code> compute?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — mean()은 무엇을 계산?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Pandas<br>= data magic.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: list comprehensions + NATO alphabet.</p>
+    <p class="bilingual">다음 주: 리스트 컴프리헨션</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

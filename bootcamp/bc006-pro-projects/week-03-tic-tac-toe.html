@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 3 — Tic Tac Toe</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 3 · Day 83 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 3</div>
+    <div class="emoji">⭕❌</div>
+    <h1>Tic Tac<br>Toe</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">track</span> + <span class="sub">check</span> a 3×3 game.</p>
+    <p class="bilingual">2명이 같이 하는 3×3 틱택토 게임 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does the viewport meta tag do?</div>
+      <details><summary>Show answer</summary><div class="ans">Tells the browser to match screen width on phones — proper size, not zoomed.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Who wins?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>board = [[<span class="str">"X"</span>,<span class="str">"X"</span>,<span class="str">"X"</span>],
+         [<span class="str">"O"</span>,<span class="str">"O"</span>,<span class="str">"-"</span>],
+         [<span class="str">"-"</span>,<span class="str">"-"</span>,<span class="str">"-"</span>]]
+
+<span class="kw">if</span> board[<span class="num">0</span>][<span class="num">0</span>] == board[<span class="num">0</span>][<span class="num">1</span>] == board[<span class="num">0</span>][<span class="num">2</span>]:
+    <span class="fn">print</span>(<span class="str">"row 0 wins"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">row 0 wins — X X X across top.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">2D list</span>
+      <span class="gloss">list of lists, like a grid</span>
+      <span class="ko">2차원 리스트</span>
+
+      <span class="term">turn</span>
+      <span class="gloss">whose move it is now</span>
+      <span class="ko">차례</span>
+
+      <span class="term">diagonal</span>
+      <span class="gloss">corner to corner line</span>
+      <span class="ko">대각선</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>The board is a grid 🎯</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">board[0]</span><span class="val">top row</span></div>
+      <div class="varbox"><span class="name">board[1]</span><span class="val">middle row</span></div>
+      <div class="varbox"><span class="name">board[2]</span><span class="val">bottom row</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">board[row][col] picks one square.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One full turn</h2>
+<pre>board = [[<span class="str">"-"</span>]*<span class="num">3</span> <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
+turn  = <span class="str">"X"</span>
+
+r = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Row 0-2? "</span>))
+c = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Col 0-2? "</span>))
+board[r][c] = turn
+
+<span class="kw">for</span> row <span class="kw">in</span> board:
+    <span class="fn">print</span>(row)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Input: 1, 1</div>
+      <div style="opacity:1">['-','-','-'] ['-','X','-'] ['-','-','-']</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Win = 3-in-a-line</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">row</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">board[i][0..2]</span><span class="val">all equal?</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">col</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">board[0..2][j]</span><span class="val">all equal?</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># diag →</span> <span class="out">board[0][0] == [1][1] == [2][2]</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Win or no?</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">board</div>
+      <div class="cell head">line</div>
+      <div class="cell head">winner</div>
+
+      <div class="cell">X X X / O - / - -</div>
+      <div class="cell">row 0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">X</span></details></div>
+
+      <div class="cell">X O - / X O - / X - -</div>
+      <div class="cell">col 0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">X</span></details></div>
+
+      <div class="cell">X - O / - X - / O - X</div>
+      <div class="cell">diag</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">X</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Overwriting moves</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>board[r][c] = turn
+<span class="com"># no check!</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Player 2 lands on X — overwrites it</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">if</span> board[r][c] == <span class="str">"-"</span>:
+    board[r][c] = turn</pre>
+        <p style="margin-top:.4em;font-size:.85em">Block if cell already taken.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — win check row vs col -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong axis</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">if</span> board[i][<span class="num">0</span>] == board[i][<span class="num">1</span>] == board[i][<span class="num">2</span>]:
+        <span class="fn">print</span>(<span class="str">"col win"</span>)</pre>
+    <div class="err">Says "col win" but the line is actually a ROW</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">For columns swap indexes: <code>board[0][i] == board[1][i] == board[2][i]</code>.</p>
+      <p class="bilingual">행 검사: board[i][0..2], 열 검사: board[0..2][i]</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — draw check -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Never ends</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    play()
+    <span class="kw">if</span> wins():
+        <span class="kw">break</span></pre>
+    <div class="err">Board full, no one wins, loop keeps asking</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Also check draw: <code>if "-" not in [c for row in board for c in row]: break</code>.</p>
+      <p class="bilingual">무승부 확인: 빈칸이 없으면 종료</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — turn flip -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Same player twice</h2>
+<pre>turn = <span class="str">"X"</span>
+<span class="kw">while</span> <span class="kw">True</span>:
+    play(turn)
+    <span class="com"># turn never changes!</span></pre>
+    <div class="err">X plays every round — O never gets a turn</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Flip after each move: <code>turn = "O" if turn == "X" else "X"</code>.</p>
+      <p class="bilingual">매 차례 후 turn을 반대로 바꿔야 함</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>board = [[<span class="str">"-"</span>]*<span class="num">3</span> <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
+turn  = <span class="str">"X"</span>
+
+r = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Row? "</span>))
+c = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Col? "</span>))
+<span class="kw">if</span> board[r][c] == <span class="str">"___"</span>:
+    board[r][c] = ____
+    turn = <span class="str">"O"</span> <span class="kw">if</span> turn == ____ <span class="kw">else</span> <span class="str">"X"</span></pre>
+    <p style="margin-top:.6em">Goal: place, then flip turn.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — full win check</h2>
+<pre><span class="kw">def</span> <span class="fn">check</span>(b):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="kw">if</span> b[i][<span class="num">0</span>] == b[i][<span class="num">1</span>] == b[i][<span class="num">2</span>] != <span class="str">"___"</span>:
+            <span class="kw">return</span> b[i][<span class="num">0</span>]
+        <span class="kw">if</span> b[<span class="num">0</span>][i] == b[<span class="num">1</span>][i] == b[<span class="num">2</span>][i] != <span class="str">"-"</span>:
+            <span class="kw">return</span> ____
+    <span class="kw">return</span> <span class="kw">None</span></pre>
+    <p style="margin-top:.6em">Add 2 diagonal checks yourself.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To flip turn between X and O…</div>
+      <div class="opts">
+        <details><summary>A. <code>turn = "X" or "O"</code></summary><div class="ans">Nope — always "X".</div></details>
+        <details><summary>B. <code>turn = "O" if turn == "X" else "X"</code></summary><div class="ans">✓ Ternary swap.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>board[0][2]</code> means…</div>
+      <div class="opts">
+        <details><summary>A. Top-right cell</summary><div class="ans">✓ row 0, col 2.</div></details>
+        <details><summary>B. Bottom-left cell</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"To check a row I compare <span class="blank"></span>, and to check a column I compare <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it ⭕❌</h2>
+    <ul class="check-list">
+      <li>3×3 board as a 2D list of <code>"-"</code></li>
+      <li>Loop asks row + col, places X or O</li>
+      <li>Flip turn after each move</li>
+      <li>Check rows, cols, diagonals for a winner</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Pretty-print board with <code>|</code> dividers.</div>
+      <div class="item"><span class="lvl">★★</span>Track score across multiple games.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a simple computer opponent — random valid move.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how do you check a diagonal win?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 대각선 승리 확인 방법?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">2D lists<br>= game boards.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: PIL — edit photos with code.</p>
+    <p class="bilingual">다음 주: PIL — 코드로 사진 편집</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

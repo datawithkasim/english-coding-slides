@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 12 — Pomodoro Timer</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 12 · Day 28 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 12</div>
+    <div class="emoji">🍅</div>
+    <h1>Pomodoro<br>Timer</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">schedule</span> + <span class="sub">count down</span> with <code>after()</code>.</p>
+    <p class="bilingual">25분 집중 + 5분 휴식 타이머</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How do you attach a click handler to a button?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>tk.Button(win, command=func)</code> — pass the function (no <code>()</code>).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>win.<span class="fn">after</span>(<span class="num">1000</span>, tick)</pre>
+      <details><summary>Reveal</summary><div class="ans">After 1000ms (1 second), tkinter calls <code>tick</code> once.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">after()</span>
+      <span class="gloss">schedule a future call</span>
+      <span class="ko">예약 실행</span>
+
+      <span class="term">recursive</span>
+      <span class="gloss">function calls itself</span>
+      <span class="ko">재귀</span>
+
+      <span class="term">dynamic typing</span>
+      <span class="gloss">vars change type at runtime</span>
+      <span class="ko">동적 타입</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>after() chains itself</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">tick()</span><span class="val">update label</span></div>
+      <div class="varbox"><span class="name">after(1000, tick)</span><span class="val">do again in 1s</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each tick schedules the next.</p>
+    <p class="bilingual" style="text-align:center">매 호출이 다음 호출 예약</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Countdown</h2>
+<pre><span class="kw">def</span> <span class="fn">count_down</span>(secs):
+    label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{secs:02d}"</span>)
+    <span class="kw">if</span> secs &gt; <span class="num">0</span>:
+        win.<span class="fn">after</span>(<span class="num">1000</span>, count_down, secs - <span class="num">1</span>)
+    <span class="kw">else</span>:
+        label.<span class="fn">config</span>(text=<span class="str">"Done!"</span>)
+
+<span class="fn">count_down</span>(<span class="num">10</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Window</div>
+      <div style="opacity:1">10, 09, 08 … 00, Done!</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>One tick at a time</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">count_down(3)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">label</span><span class="val">"03"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">after 1s</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">count_down(2)</span><span class="val">"02"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># until 0 →</span> <span class="out">"Done!"</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Padded output</h2>
+<pre>label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{secs:02d}"</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">secs</div>
+      <div class="cell head">type</div>
+      <div class="cell head">label</div>
+
+      <div class="cell">5</div>
+      <div class="cell">int</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"05"</span></details></div>
+
+      <div class="cell">25</div>
+      <div class="cell">int</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">"25"</span></details></div>
+
+      <div class="cell">"5"</div>
+      <div class="cell">str</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">error</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Timer runs once</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">def</span> <span class="fn">tick</span>():
+    secs -= <span class="num">1</span>
+    label.<span class="fn">config</span>(text=secs)</pre>
+        <p style="margin-top:.4em;font-size:.85em">No re-schedule.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">def</span> <span class="fn">tick</span>(secs):
+    label.<span class="fn">config</span>(text=secs)
+    <span class="kw">if</span> secs &gt; <span class="num">0</span>:
+        win.<span class="fn">after</span>(<span class="num">1000</span>, tick, secs-<span class="num">1</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Chain after() each call.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>after() not chained</h2>
+<pre><span class="kw">def</span> <span class="fn">count</span>(s):
+    label.<span class="fn">config</span>(text=s)
+    win.<span class="fn">after</span>(<span class="num">1000</span>, count)
+<span class="fn">count</span>(<span class="num">5</span>)</pre>
+    <div class="err">TypeError: count() missing 1 required positional argument: 's'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Pass the next value: <code>win.after(1000, count, s-1)</code>.</p>
+      <p class="bilingual">after에 다음 인자 함께 전달</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Type confusion</h2>
+<pre>secs = entry.<span class="fn">get</span>()  <span class="com"># str!</span>
+<span class="kw">if</span> secs &gt; <span class="num">0</span>:
+    win.<span class="fn">after</span>(<span class="num">1000</span>, tick, secs - <span class="num">1</span>)</pre>
+    <div class="err">TypeError: '&gt;' not supported between 'str' and 'int'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Cast: <code>secs = int(entry.get())</code>. Entry returns str.</p>
+      <p class="bilingual">Entry는 문자열 — int 변환 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Label stays the same</h2>
+<pre><span class="kw">def</span> <span class="fn">tick</span>(secs):
+    label = tk.<span class="fn">Label</span>(win, text=secs)
+    label.<span class="fn">pack</span>()</pre>
+    <div class="err">A new label appears each tick — old one stays</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Build the label once outside <code>tick</code>. Update with <code>label.config(text=secs)</code>.</p>
+      <p class="bilingual">위젯 재생성 말고 config로 업데이트</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">count_down</span>(secs):
+    label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{secs:02d}"</span>)
+    <span class="kw">if</span> secs &gt; ___:
+        win.<span class="fn">after</span>(_____, count_down, secs - <span class="num">1</span>)
+    <span class="kw">else</span>:
+        label.<span class="fn">config</span>(text=<span class="str">"____"</span>)</pre>
+    <p style="margin-top:.6em">Goal: count to 0, show "Done!".</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — work → break</h2>
+<pre><span class="kw">def</span> <span class="fn">start_work</span>():
+    <span class="fn">count_down</span>(<span class="num">25</span> * <span class="num">60</span>, on_done=___)
+
+<span class="kw">def</span> <span class="fn">start_break</span>():
+    <span class="fn">count_down</span>(___ * <span class="num">60</span>, on_done=start_work)</pre>
+    <p style="margin-top:.6em">After work, auto-start a 5-min break.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>win.after(1000, func)</code> means…</div>
+      <div class="opts">
+        <details><summary>A. Call func in 1 second</summary><div class="ans">✓ Schedules once.</div></details>
+        <details><summary>B. Call func 1000 times</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>entry.get()</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. str</summary><div class="ans">✓ Always a string.</div></details>
+        <details><summary>B. int</summary><div class="ans">Cast with int() if you need.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Each tick I update the label and call <span class="blank"></span> to schedule the <span class="blank"></span> tick."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Pomodoro 🍅</h2>
+    <ul class="check-list">
+      <li>One label, one Start button</li>
+      <li><code>count_down(25*60)</code> on click</li>
+      <li>Use <code>after(1000, ...)</code> to chain</li>
+      <li>Show "Break!" then count 5 minutes</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show <code>"MM:SS"</code> formatted time.</div>
+      <div class="item"><span class="lvl">★★</span>Add a checkmark for each finished pomodoro.</div>
+      <div class="item"><span class="lvl">★★★</span>Add Reset button — cancel scheduled <code>after()</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how does <code>after()</code> make a timer repeat?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — after()로 반복하는 방법</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Schedule =<br>future call.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: a Password Manager GUI.</p>
+    <p class="bilingual">다음 주: 비밀번호 매니저</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

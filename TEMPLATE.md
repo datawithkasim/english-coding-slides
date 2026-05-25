@@ -1,10 +1,13 @@
-# Slide Template — 12-Slot Structure
+# Slide Template — 12-Slot and 20-Slot Structures
 
-Every deck in this library follows the same 12-slot order. Teachers and students learn the rhythm; consistency lets us focus on content.
+Two structures live in this library:
 
-Total time per deck: **~10 minutes**.
+- **12-slot · 10 min** — original. Used by RS / WEB / AI tracks. One concept, lecture-style.
+- **20-slot · 15–18 min** — bootcamp extension. Used by BC track (100-Day-of-Code adaptation). Heavier on activities: debug × 3, modify × 2, trace, quiz, stretch, exit ticket.
 
-## The 12 slots
+Pick the structure that matches the track. Both share the same CSS in `assets/style.css`.
+
+## 12-slot (RS / WEB / AI)
 
 | # | Slot | Time | Required? |
 |---|------|------|-----------|
@@ -20,6 +23,33 @@ Total time per deck: **~10 minutes**.
 | 10 | **Code Talk Frame** | 45s | Yes |
 | 11 | **Make / Your Turn** | 30s | Yes |
 | 12 | **Close & Bridge** | 30s | Yes |
+
+## 20-slot (BC bootcamp)
+
+| # | Slot | Time | Required? |
+|---|------|------|-----------|
+| 1 | **Title + Objective** | 30s | Yes |
+| 2 | **Recap & Retrieve** | 60s | Yes (W1 = course intro instead) |
+| 3 | **Predict (Hook)** | 60s | Yes |
+| 4 | **Vocab Preview** | 60s | Yes |
+| 5 | **Concept (Notional Machine)** | 60s | Yes |
+| 6 | **Run (Worked Example)** | 60s | Yes |
+| 7 | **Investigate (Animated Trace)** | 90s | When applicable |
+| 8 | **Trace Activity** (student fills in values) | 90s | Yes |
+| 9 | **Common Mistake** | 45s | Yes |
+| 10 | **Debug 1** (find the bug) | 90s | Yes |
+| 11 | **Debug 2** (different bug type) | 90s | Yes |
+| 12 | **Debug 3** (third bug type) | 90s | Yes |
+| 13 | **Modify 1** (easy fill-blank) | 60s | Yes |
+| 14 | **Modify 2** (harder variant) | 60s | Yes |
+| 15 | **Quick Quiz** (2 MCQs) | 90s | Yes |
+| 16 | **Code Talk Frame** | 45s | Yes |
+| 17 | **Make / Your Turn** | 60s | Yes |
+| 18 | **Stretch** (★/★★/★★★ bonuses) | flexible | Yes |
+| 19 | **Exit Ticket** (one self-check) | 30s | Yes |
+| 20 | **Close & Bridge** | 30s | Yes |
+
+Activity CSS lives in `assets/style.css` under the "BC bootcamp track" section. Reuse `.trace-grid`, `.debug-card`, `.err`, `.quiz-card`, `.stretch-list`, `.exit`, `.activity-tag` — do NOT inline-style new activity components.
 
 ## Per-slide rules
 

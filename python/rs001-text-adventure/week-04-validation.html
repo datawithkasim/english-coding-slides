@@ -80,6 +80,27 @@
     <p class="big center" style="margin-top:.6em">Reject invalid → re-ask until valid.</p>
   </div>
 
+  <!-- Concept viz: if/else on validity -->
+  <div class="slide"><div class="pill">Watch it!</div><h2>Check the input</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">choice = "cave"</span>
+        <span class="case case-b">choice = "banana"</span>
+      </div>
+      <div class="if-cond">choice in locations</div>
+      <div class="if-branches">
+        <div class="if-branch true">print("You go in!")</div>
+        <div class="if-branch false">print("Try again.")</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">You go in!</div>
+        <div class="out-line out-b">Try again.</div>
+      </div>
+    </div>
+    <p class="bilingual">조건문</p>
+  </div>
+
   <!-- Slot 6: Run -->
   <div class="slide">
     <span class="slot-badge">SLOT 6</span>
@@ -193,9 +214,11 @@ choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span
       <div class="edge-card"><div class="ehead">Snake_case in Python</div><div class="edesc">PEP 8: <code>player_name</code>, not <code>playerName</code> or <code>PlayerName</code>.</div></div>
       <div class="edge-card"><div class="ehead">Re-assign freely</div><div class="edesc">x = 5 then x = 'hello' is legal. Python infers the type from the value.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">places = [&quot;mine&quot;, &quot;cave&quot;] pirnt(&quot;banana&quot; in places) print(&quot;cave&quot; not in places)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>pirnt</code> is a typo of <code>print</code>. Python raises <code>NameError: name 'pirnt' is not defined</code>. Spell built-ins carefully.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">places = [&quot;mine&quot;, &quot;cave&quot;] print(&quot;banana&quot; in places) print(&quot;cave&quot; not in places)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="print() writes its argument followed by a newline. Output: Try again."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 4</div><div class="q">In the example, what does <code>print('Try again.')</code> output?</div><div class="opts"><button class="opt">Try again.</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[3])</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> A 3-item list has indexes 0, 1, 2. <code>colors[3]</code> raises <code>IndexError: list index out of range</code>. The last index is <code>len - 1</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[2])</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Index 3 is out of range — last index is 2."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 4</div><div class="q">In the example, what does <code>print('Try again.')</code> output?</div><div class="opts"><button class="opt">Try again.</button>
 <button class="opt">TRY AGAIN.</button>
 <button class="opt">None</button>
 <button class="opt">an error</button></div><div class="qfeedback"></div></div>
@@ -207,12 +230,8 @@ choice = <span class="fn">input</span>(<span class="str">"Where? "</span>).<span
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 4 of 4</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">age = input(&#x27;Age? &#x27;)
-if age &gt; 18:
-    print(&#x27;adult&#x27;)</pre></div><div class="opts"><button class="opt">input() always returns a string. Comparing a string to a number with &gt; raises TypeError. Cast with int(input(...)).</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing <code>import sys</code>.</button>
-<button class="opt">Wrong indentation depth.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 4 of 4</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">colors = [&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;]
+print(colors[3])</pre></div><div class="opts"><button class="opt">Index 3 is out of range; the last index is 2 (IndexError).</button><button class="opt">Lists can't hold strings.</button><button class="opt">You must use colors.get(3).</button><button class="opt">List indexes start at 1.</button></div><div class="qfeedback"></div></div>
 <div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 4</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
 <div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Ask the user for a number. Keep asking until they type a valid one. Then print it.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em">while True:
     raw = input(&#x27;Number? &#x27;)

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 10 — PDF to Audiobook</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 10 · Day 90 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 10</div>
+    <div class="emoji">🎧</div>
+    <h1>PDF to<br>Audiobook</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">read</span> + <span class="sub">speak</span> a PDF aloud.</p>
+    <p class="bilingual">PDF 글자 추출 → 음성으로 읽어주기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>root.after(500, check)</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Schedules <code>check()</code> to run in 500ms — non-blocking.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> pyttsx3
+e = pyttsx3.<span class="fn">init</span>()
+e.<span class="fn">say</span>(<span class="str">"Hello world"</span>)
+e.<span class="fn">runAndWait</span>()</pre>
+      <details><summary>Reveal output</summary><div class="ans">Computer's TTS voice says "Hello world" out loud.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">PyPDF2</span>
+      <span class="gloss">read PDF files</span>
+      <span class="ko">PDF 읽기</span>
+
+      <span class="term">pyttsx3</span>
+      <span class="gloss">text-to-speech engine</span>
+      <span class="ko">음성 합성</span>
+
+      <span class="term">encoding</span>
+      <span class="gloss">how letters are stored</span>
+      <span class="ko">인코딩</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>PDF → text → voice 📖🔊</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">PdfReader</span><span class="val">extract text</span></div>
+      <div class="varbox"><span class="name">join pages</span><span class="val">one big string</span></div>
+      <div class="varbox"><span class="name">engine.say</span><span class="val">speak it</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Use simple PDFs you own.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Read book aloud</h2>
+<pre><span class="kw">import</span> pyttsx3
+<span class="kw">from</span> PyPDF2 <span class="kw">import</span> PdfReader
+
+pdf = <span class="fn">PdfReader</span>(<span class="str">"my_notes.pdf"</span>)
+text = <span class="str">""</span>
+<span class="kw">for</span> page <span class="kw">in</span> pdf.pages:
+    text += page.<span class="fn">extract_text</span>() <span class="kw">or</span> <span class="str">""</span>
+
+engine = pyttsx3.<span class="fn">init</span>()
+engine.<span class="fn">say</span>(text[:<span class="num">500</span>])
+engine.<span class="fn">runAndWait</span>()</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Page by page</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">page 0</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">extract_text()</span><span class="val">"Once upon..."</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">page 1</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">extract_text()</span><span class="val">"a time..."</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># engine.say(text) →</span> <span class="out">🔊 voice plays</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How long is text?</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">pages</div>
+      <div class="cell head">chars/page</div>
+      <div class="cell head">total</div>
+
+      <div class="cell">3</div>
+      <div class="cell">1000</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3000</span></details></div>
+
+      <div class="cell">10</div>
+      <div class="cell">500</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5000</span></details></div>
+
+      <div class="cell">1</div>
+      <div class="cell">0 (image PDF)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>None breaks concat</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>text += page.<span class="fn">extract_text</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError if page returns None</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>text += page.<span class="fn">extract_text</span>() <span class="kw">or</span> <span class="str">""</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Fall back to empty string.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — blank PDF -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Silent output</h2>
+<pre>pdf = <span class="fn">PdfReader</span>(<span class="str">"scan.pdf"</span>)
+text = <span class="str">""</span>.<span class="fn">join</span>(p.<span class="fn">extract_text</span>() <span class="kw">or</span> <span class="str">""</span>
+              <span class="kw">for</span> p <span class="kw">in</span> pdf.pages)
+<span class="fn">print</span>(<span class="fn">len</span>(text))</pre>
+    <div class="err">Prints 0 — engine has nothing to say</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">PDF is scanned images, not text. Use OCR (pytesseract) or pick a text-PDF.</p>
+      <p class="bilingual">스캔 PDF는 글자 추출 안 됨 — 텍스트 PDF 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — no voice -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>No sound</h2>
+<pre>engine = pyttsx3.<span class="fn">init</span>()
+engine.<span class="fn">say</span>(<span class="str">"hi"</span>)
+<span class="com"># no runAndWait</span></pre>
+    <div class="err">Function ends, voice never plays</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Always call <code>engine.runAndWait()</code> after <code>say()</code>. It blocks until done.</p>
+      <p class="bilingual">say 후 runAndWait 호출 필수</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — encoding error -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Korean garbled</h2>
+<pre><span class="fn">print</span>(text)</pre>
+    <div class="err">UnicodeEncodeError on Korean characters</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Save text with explicit encoding: <code>open("out.txt", "w", encoding="utf-8")</code>. Same when reading.</p>
+      <p class="bilingual">한글은 encoding="utf-8" 명시 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> PyPDF2 <span class="kw">import</span> ____
+
+pdf  = <span class="fn">PdfReader</span>(<span class="str">"book.pdf"</span>)
+text = <span class="str">""</span>
+<span class="kw">for</span> page <span class="kw">in</span> pdf.____:
+    text += page.<span class="fn">extract_text</span>() <span class="kw">or</span> <span class="str">"____"</span>
+
+engine.<span class="fn">say</span>(text)
+engine.____()</pre>
+    <p style="margin-top:.6em">Goal: extract, fallback "", speak, wait.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — save MP3</h2>
+<pre><span class="kw">import</span> pyttsx3
+engine = pyttsx3.<span class="fn">init</span>()
+engine.<span class="fn">setProperty</span>(<span class="str">"rate"</span>, ____)
+engine.<span class="fn">save_to_file</span>(text, <span class="str">"book.____"</span>)
+engine.____()</pre>
+    <p style="margin-top:.6em">Adjust speed + save to file instead of play.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>extract_text()</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. Always a string</summary><div class="ans">Mostly, but sometimes None.</div></details>
+        <details><summary>B. str or None</summary><div class="ans">✓ Always check with <code>or ""</code>.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Korean text needs…</div>
+      <div class="opts">
+        <details><summary>A. <code>encoding="utf-8"</code></summary><div class="ans">✓ Handles all Korean letters.</div></details>
+        <details><summary>B. <code>encoding="ascii"</code></summary><div class="ans">Nope — breaks on Korean.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"We use PyPDF2 to pull <span class="blank"></span> from each page, then pyttsx3 to <span class="blank"></span> it aloud."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🎧</h2>
+    <ul class="check-list">
+      <li>pip install PyPDF2 pyttsx3</li>
+      <li>Use a simple text PDF you own</li>
+      <li>Loop pages, concat text (with "or "")</li>
+      <li>Speak first 500 chars to test</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Adjust <code>rate</code> and <code>volume</code> properties.</div>
+      <div class="item"><span class="lvl">★★</span>Save the audio to an MP3 with <code>save_to_file</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Tkinter GUI: pick PDF, play/pause buttons.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do we add <code>or ""</code> after <code>extract_text()</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — extract_text() 뒤에 or "" 붙이는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Code reads<br>files aloud.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: extract a color palette from any image.</p>
+    <p class="bilingual">다음 주: 이미지에서 색상 팔레트 추출</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

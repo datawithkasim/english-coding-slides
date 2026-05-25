@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 14 — Space Invaders</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 14 · Day 94 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 14</div>
+    <div class="emoji">👾</div>
+    <h1>Space<br>Invaders</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">shoot</span> + <span class="sub">survive</span> waves of invaders.</p>
+    <p class="bilingual">터틀로 만드는 스페이스 인베이더 게임</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why call <code>send_keys</code> on body, not driver?</div>
+      <details><summary>Show answer</summary><div class="ans">Driver has no <code>send_keys</code>. Keys go to elements — body keeps it on the page.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Hit or miss?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>bullet.<span class="fn">sety</span>(bullet.<span class="fn">ycor</span>() + <span class="num">15</span>)
+
+<span class="kw">for</span> inv <span class="kw">in</span> invaders:
+    <span class="kw">if</span> bullet.<span class="fn">distance</span>(inv) &lt; <span class="num">25</span>:
+        inv.<span class="fn">hideturtle</span>()</pre>
+      <details><summary>Reveal output</summary><div class="ans">Bullet moves up. If close to any invader, that invader vanishes.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">sprite</span>
+      <span class="gloss">moving game object</span>
+      <span class="ko">스프라이트</span>
+
+      <span class="term">wave</span>
+      <span class="gloss">group of enemies</span>
+      <span class="ko">한 무리</span>
+
+      <span class="term">spawn</span>
+      <span class="gloss">create new object</span>
+      <span class="ko">생성</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Many sprites 👾👾👾</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">player</span><span class="val">moves L/R</span></div>
+      <div class="varbox"><span class="name">bullets</span><span class="val">go up</span></div>
+      <div class="varbox"><span class="name">invaders</span><span class="val">march sideways</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Each frame, every list updates.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Spawn invader wave</h2>
+<pre><span class="kw">import</span> turtle
+invaders = []
+
+<span class="kw">for</span> col <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):
+    inv = turtle.<span class="fn">Turtle</span>(<span class="str">"square"</span>)
+    inv.<span class="fn">color</span>(<span class="str">"green"</span>)
+    inv.<span class="fn">penup</span>()
+    inv.<span class="fn">goto</span>(col*<span class="num">50</span> - <span class="num">200</span>, <span class="num">200</span>)
+    invaders.<span class="fn">append</span>(inv)
+
+dx = <span class="num">3</span>
+<span class="kw">while</span> <span class="kw">True</span>:
+    <span class="kw">for</span> inv <span class="kw">in</span> invaders:
+        inv.<span class="fn">setx</span>(inv.<span class="fn">xcor</span>() + dx)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Wave bounces + drops</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">edge x &gt; 280</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">dx = -dx</span><span class="val">flip direction</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">all drop</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">y -= 20</span><span class="val">closer to player</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># bullet hits →</span> <span class="out">inv.hideturtle()</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Distance check</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">bullet</div>
+      <div class="cell head">invader</div>
+      <div class="cell head">dist</div>
+      <div class="cell head">hit?</div>
+
+      <div class="cell">(0,100)</div>
+      <div class="cell">(0,110)</div>
+      <div class="cell">10</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">(0,100)</div>
+      <div class="cell">(50,100)</div>
+      <div class="cell">50</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">(0,180)</div>
+      <div class="cell">(20,200)</div>
+      <div class="cell">~28</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no (≥25)</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Modify-while-iterating</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> invaders:
+    <span class="kw">if</span> hit(i):
+        invaders.<span class="fn">remove</span>(i)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Skips items, weird behavior</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> invaders[:]:
+    <span class="kw">if</span> hit(i):
+        invaders.<span class="fn">remove</span>(i)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Iterate a copy.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — collision miss -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bullet phases through</h2>
+<pre><span class="kw">if</span> bullet.<span class="fn">distance</span>(inv) &lt; <span class="num">5</span>:
+    inv.<span class="fn">hideturtle</span>()</pre>
+    <div class="err">Bullet rarely hits — passes invader in one frame</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use a bigger radius matching sprite size: <code>&lt; 25</code>. Test smaller bullet steps.</p>
+      <p class="bilingual">충돌 반지름을 25 정도로 (스프라이트 크기 맞춰)</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — speed scaling -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Too easy after wave 2</h2>
+<pre>dx = <span class="num">3</span>  <span class="com"># never changes</span></pre>
+    <div class="err">Same speed forever — game gets boring</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">When all dead, respawn faster: <code>dx = dx * 1.2</code> per wave.</p>
+      <p class="bilingual">웨이브마다 dx 빠르게 (난이도 증가)</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — lives reset -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Lives never reset</h2>
+<pre><span class="kw">def</span> <span class="fn">new_game</span>():
+    <span class="kw">global</span> dx
+    dx = <span class="num">3</span>
+    <span class="com"># lives forgotten</span></pre>
+    <div class="err">Restart keeps lives at 0 — instant game over</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Reset every global: <code>global lives; lives = 3</code> inside <code>new_game()</code>.</p>
+      <p class="bilingual">새 게임 시 lives도 함께 초기화</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>bullets = []
+
+<span class="kw">def</span> <span class="fn">fire</span>():
+    b = turtle.<span class="fn">Turtle</span>(<span class="str">"triangle"</span>)
+    b.<span class="fn">penup</span>()
+    b.<span class="fn">goto</span>(player.<span class="fn">xcor</span>(), player.<span class="fn">ycor</span>())
+    bullets.<span class="fn">append</span>(____)
+
+<span class="kw">for</span> b <span class="kw">in</span> bullets[:]:
+    b.<span class="fn">sety</span>(b.<span class="fn">ycor</span>() + ____)
+    <span class="kw">if</span> b.<span class="fn">ycor</span>() &gt; ____:
+        b.<span class="fn">hideturtle</span>()
+        bullets.<span class="fn">remove</span>(b)</pre>
+    <p style="margin-top:.6em">Goal: spawn, move up, kill off-screen.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — wave bounce</h2>
+<pre><span class="kw">global</span> dx
+
+<span class="kw">for</span> inv <span class="kw">in</span> invaders:
+    inv.<span class="fn">setx</span>(inv.<span class="fn">xcor</span>() + dx)
+
+<span class="kw">if</span> <span class="fn">any</span>(<span class="fn">abs</span>(i.<span class="fn">xcor</span>()) &gt; <span class="num">280</span> <span class="kw">for</span> i <span class="kw">in</span> invaders):
+    dx = ____
+    <span class="kw">for</span> inv <span class="kw">in</span> ____:
+        inv.<span class="fn">sety</span>(inv.<span class="fn">ycor</span>() - ____)</pre>
+    <p style="margin-top:.6em">At wall, flip + drop the whole row.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Safe way to remove during a loop…</div>
+      <div class="opts">
+        <details><summary>A. <code>for x in lst:</code></summary><div class="ans">Nope — skips items.</div></details>
+        <details><summary>B. <code>for x in lst[:]:</code></summary><div class="ans">✓ Iterate the copy.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>hideturtle()</code> on an invader…</div>
+      <div class="opts">
+        <details><summary>A. Removes it from the list</summary><div class="ans">Nope — list still has it.</div></details>
+        <details><summary>B. Hides it from the screen</summary><div class="ans">✓ Also call <code>list.remove</code> to drop.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Every frame we move the <span class="blank"></span> and check the bullet's <span class="blank"></span> to each invader."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 👾</h2>
+    <ul class="check-list">
+      <li>Player turtle, arrow keys + space to fire</li>
+      <li>Row of invaders that march L/R + drop at wall</li>
+      <li>Bullets travel up, hit detection by distance</li>
+      <li>Wave ends when invaders empty</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Score per kill, displayed on screen.</div>
+      <div class="item"><span class="lvl">★★</span>Invaders shoot back — own bullet list.</div>
+      <div class="item"><span class="lvl">★★★</span>Boss invader with multiple hit points.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why iterate <code>invaders[:]</code> when removing?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — invaders[:]로 반복하는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Lists of sprites<br>= real games.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: build a site that talks to a real API.</p>
+    <p class="bilingual">다음 주: 실제 API를 쓰는 웹사이트</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

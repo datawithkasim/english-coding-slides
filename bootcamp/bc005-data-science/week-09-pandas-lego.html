@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 9 — Pandas: LEGO Dataset</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 9 · Day 73 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 9</div>
+    <div class="emoji">🧱</div>
+    <h1>Pandas<br>LEGO Dataset</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">merge</span> + <span class="sub">pivot</span> two tables.</p>
+    <p class="bilingual">LEGO 데이터 — 표 합치기, 요약하기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which call opens the chart window?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>plt.show()</code> — labels alone don't show a window.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Inner vs outer merge?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>sets:   set_id 1, 2, 3
+themes: set_id 1, 2
+
+pd.merge(sets, themes,
+         on=<span class="str">"set_id"</span>,
+         how=<span class="str">"inner"</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">2 rows — only set_ids in both tables (1 and 2).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 merge words</h2>
+    <div class="vocab-table">
+      <span class="term">merge</span>
+      <span class="gloss">join 2 tables on a shared key</span>
+      <span class="ko">병합</span>
+
+      <span class="term">pivot</span>
+      <span class="gloss">turn rows into a wide summary</span>
+      <span class="ko">피벗</span>
+
+      <span class="term">agg</span>
+      <span class="gloss">summarize a column (sum, mean…)</span>
+      <span class="ko">집계</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Two tables, one key</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">sets</span><span class="val">set_id, year</span></div>
+      <div class="varbox"><span class="name">themes</span><span class="val">set_id, name</span></div>
+      <div class="varbox"><span class="name">merge</span><span class="val">on set_id</span></div>
+      <div class="varbox"><span class="name">result</span><span class="val">one wide table</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Shared column = the bridge.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Merge + summarize</h2>
+<pre>sets    = pd.read_csv(<span class="str">"sets.csv"</span>)
+themes  = pd.read_csv(<span class="str">"themes.csv"</span>)
+
+both = pd.merge(sets, themes,
+                left_on=<span class="str">"theme_id"</span>,
+                right_on=<span class="str">"id"</span>)
+
+by_year = both.groupby(<span class="str">"year"</span>)\
+              [<span class="str">"num_parts"</span>].mean()
+<span class="fn">print</span>(by_year.tail())</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Mean parts per set by year</div>
+      <div style="opacity:1">2021    267.4<br>2022    283.2</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Merge step by step</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">sets</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">12k rows</span><span class="val">set_id, theme_id</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">themes</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">600 rows</span><span class="val">id, name</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">merge inner</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">11.9k rows</span><span class="val">all columns</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Pick the right join</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Need</div>
+      <div class="cell head">left</div>
+      <div class="cell head">right</div>
+      <div class="cell head">how</div>
+
+      <div class="cell">only matches</div>
+      <div class="cell">sets</div>
+      <div class="cell">themes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">inner</span></details></div>
+
+      <div class="cell">keep all sets</div>
+      <div class="cell">sets</div>
+      <div class="cell">themes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">left</span></details></div>
+
+      <div class="cell">keep both</div>
+      <div class="cell">sets</div>
+      <div class="cell">themes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">outer</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Duplicate rows after merge</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>pd.merge(sets, themes, on=<span class="str">"id"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Wrong key — sets has many per theme.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>pd.merge(sets, themes,
+         left_on=<span class="str">"theme_id"</span>,
+         right_on=<span class="str">"id"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Match the right keys.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — merge key missing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — missing key</h2>
+<pre>pd.merge(sets, themes, on=<span class="str">"set_id"</span>)</pre>
+    <div class="err">KeyError: 'set_id' not in themes</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">themes uses <code>id</code>, not <code>set_id</code>. Use <code>left_on</code> + <code>right_on</code>.</p>
+      <p class="bilingual">두 표의 키 이름 다를 때 left_on / right_on 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — inner vs outer -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — lost rows</h2>
+<pre>both = pd.merge(sets, themes,
+                left_on=<span class="str">"theme_id"</span>,
+                right_on=<span class="str">"id"</span>)
+<span class="fn">print</span>(both.shape)  <span class="com"># fewer than sets</span></pre>
+    <div class="err">10k rows after merge — but sets had 12k</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Default is <code>inner</code>. To keep every set, use <code>how="left"</code>.</p>
+      <p class="bilingual">inner 조인은 매칭 안 되면 행을 버림 — left 조인 사용</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — duplicate rows -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — duplicates</h2>
+<pre>both = pd.merge(sets, themes,
+                left_on=<span class="str">"theme_id"</span>,
+                right_on=<span class="str">"id"</span>)
+<span class="fn">print</span>(both.shape)  <span class="com"># 24k, double!</span></pre>
+    <div class="err">Each set appears twice — themes has duplicate ids</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check + clean: <code>themes.drop_duplicates("id", inplace=True)</code>.</p>
+      <p class="bilingual">병합 전 키 중복 제거</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>both = pd.merge(sets, themes,
+                left_on=<span class="str">"_______"</span>,
+                right_on=<span class="str">"___"</span>,
+                how=<span class="str">"_____"</span>)</pre>
+    <p style="margin-top:.6em">Goal: keep every set, even with no theme.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — pivot table</h2>
+<pre>summary = both._______(
+    index=<span class="str">"year"</span>,
+    columns=<span class="str">"name"</span>,
+    values=<span class="str">"num_parts"</span>,
+    aggfunc=<span class="str">"____"</span>)</pre>
+    <p style="margin-top:.6em">Goal: mean parts per theme per year.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Default merge is…</div>
+      <div class="opts">
+        <details><summary>A. inner</summary><div class="ans">✓ Only matches.</div></details>
+        <details><summary>B. outer</summary><div class="ans">Nope — that's both sides kept.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To keep all rows from the left table?</div>
+      <div class="opts">
+        <details><summary>A. how="left"</summary><div class="ans">✓ Left join.</div></details>
+        <details><summary>B. how="right"</summary><div class="ans">Nope — keeps right table.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I merged on <span class="blank"></span> with <code>how=</code><span class="blank"></span> because I wanted to keep every set."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Explore LEGO 🧱</h2>
+    <ul class="check-list">
+      <li>Load <code>sets.csv</code> and <code>themes.csv</code></li>
+      <li>Merge on the right keys</li>
+      <li>Mean parts per year</li>
+      <li>Top 5 themes by total parts</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Plot mean parts per year as a line chart.</div>
+      <div class="item"><span class="lvl">★★</span>Find the theme with the largest single set.</div>
+      <div class="item"><span class="lvl">★★★</span>Compare 1990s vs 2020s sets — bigger over time?</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>when do you use <code>how="left"</code> instead of <code>"inner"</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — left와 inner 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Tables link<br>through keys.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: time series — Google Trends data.</p>
+    <p class="bilingual">다음 주: 시계열 — 구글 트렌드 데이터</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

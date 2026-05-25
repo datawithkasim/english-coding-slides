@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 15 — Handwashing & t-Tests</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 15 · Day 79 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 15</div>
+    <div class="emoji">🧼</div>
+    <h1>Handwashing<br>& t-Tests</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">test</span> + <span class="sub">read</span> a p-value.</p>
+    <p class="bilingual">두 그룹 차이가 진짜인지 t-검정으로 확인</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>value_counts()</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Tallies how often each value appears (drops NaN by default).</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does p-value mean?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>p = 0.001</pre>
+      <details><summary>Reveal</summary><div class="ans">If the two groups were really the same, results this different would appear &lt; 1 in 1000 times. → likely real.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 stats words</h2>
+    <div class="vocab-table">
+      <span class="term">t-test</span>
+      <span class="gloss">compares 2 group means</span>
+      <span class="ko">t-검정</span>
+
+      <span class="term">p-value</span>
+      <span class="gloss">chance the difference is luck</span>
+      <span class="ko">p-값</span>
+
+      <span class="term">α (alpha)</span>
+      <span class="gloss">cutoff, often 0.05</span>
+      <span class="ko">유의 수준</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Two groups, one question</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">before</span><span class="val">no handwash</span></div>
+      <div class="varbox"><span class="name">after</span><span class="val">handwash</span></div>
+      <div class="varbox"><span class="name">means</span><span class="val">10% vs 2%</span></div>
+      <div class="varbox"><span class="name">t-test</span><span class="val">real or luck?</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Small p → keep the difference. Big p → could be luck.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Two-sample t-test</h2>
+<pre><span class="kw">from</span> scipy.stats <span class="kw">import</span> ttest_ind
+
+before = df[df.washed == <span class="kw">False</span>][<span class="str">"death_rate"</span>]
+after  = df[df.washed == <span class="kw">True</span>][<span class="str">"death_rate"</span>]
+
+t, p = ttest_ind(before, after, equal_var=<span class="kw">False</span>)
+<span class="fn">print</span>(<span class="str">f"t = {t:.2f}, p = {p:.4f}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">t = 6.43, p = 0.0000</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>From means to decision</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">before, after</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">ttest_ind</span><span class="val">t, p</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">p = 0.0000</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">vs α=0.05</span><span class="val">p &lt; α</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">decision</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">reject "no diff"</span><span class="val">real effect</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>p-value → decision (α=0.05)</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">p</div>
+      <div class="cell head">vs α</div>
+      <div class="cell head">verdict</div>
+      <div class="cell head">plain English</div>
+
+      <div class="cell">0.001</div>
+      <div class="cell">p &lt; α</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">reject H₀</span></details></div>
+      <div class="cell">likely real</div>
+
+      <div class="cell">0.04</div>
+      <div class="cell">p &lt; α</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">reject H₀</span></details></div>
+      <div class="cell">borderline</div>
+
+      <div class="cell">0.30</div>
+      <div class="cell">p &gt; α</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">do not reject</span></details></div>
+      <div class="cell">could be luck</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>p-value misreading</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>"p = 0.001 means
+the effect is 99.9% real"</pre>
+        <p style="margin-top:.4em;font-size:.85em">Misstatement of probability.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>"If no real difference,
+this result is rare."</pre>
+        <p style="margin-top:.4em;font-size:.85em">p is about the data given H₀.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — groups mixed up -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — groups mixed up</h2>
+<pre>before = df.death_rate
+after  = df[df.washed][<span class="str">"death_rate"</span>]
+ttest_ind(before, after)</pre>
+    <div class="err">"before" includes washed rows — groups overlap</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Define both sides cleanly: <code>before = df[~df.washed][...]</code>, <code>after = df[df.washed][...]</code>.</p>
+      <p class="bilingual">두 그룹이 서로 겹치면 안 됨</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — one-tail vs two-tail -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong tail</h2>
+<pre>t, p = ttest_ind(before, after)
+<span class="com"># claim: "handwashing is BETTER"</span>
+<span class="fn">print</span>(p)  <span class="com"># two-tailed</span></pre>
+    <div class="err">Direction claim uses a two-tailed p — over-conservative</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">For a one-direction claim use <code>alternative="greater"</code> (modern scipy).</p>
+      <p class="bilingual">방향 있는 가설 = 단측 검정</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — p-value interpretation -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong sentence</h2>
+<pre>p = 0.20
+<span class="com"># "There is no difference."</span></pre>
+    <div class="err">Not significant ≠ no difference exists</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Say: "We did not find a significant difference." Small samples can hide real effects.</p>
+      <p class="bilingual">"차이 없음"이 아니라 "차이 못 찾음"</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>before = df[df.washed == <span class="kw">_____</span>][<span class="str">"____"</span>]
+after  = df[df.washed == <span class="kw">_____</span>][<span class="str">"____"</span>]
+t, p = ________(before, after, equal_var=<span class="kw">False</span>)
+<span class="fn">print</span>(p)</pre>
+    <p style="margin-top:.6em">Goal: clean group split, run Welch t-test.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — boxplot + decision</h2>
+<pre>sns.boxplot(data=df, x=<span class="str">"washed"</span>, y=<span class="str">"death_rate"</span>)
+plt.show()
+
+α = ____
+<span class="kw">if</span> p &lt; α:
+    <span class="fn">print</span>(<span class="str">"________"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"________"</span>)</pre>
+    <p style="margin-top:.6em">Goal: show distributions, then announce decision.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. p &lt; 0.05 means…</div>
+      <div class="opts">
+        <details><summary>A. The effect is huge</summary><div class="ans">Nope — p doesn't measure size.</div></details>
+        <details><summary>B. Unlikely under "no difference"</summary><div class="ans">✓ Reject H₀ at α=0.05.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>ttest_ind</code> compares…</div>
+      <div class="opts">
+        <details><summary>A. 2 independent group means</summary><div class="ans">✓ Yes.</div></details>
+        <details><summary>B. paired samples</summary><div class="ans">That's <code>ttest_rel</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I compared <span class="blank"></span> vs <span class="blank"></span> and got p = <span class="blank"></span>, so I <span class="blank"></span> the no-difference idea."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Handwashing data 🧼</h2>
+    <ul class="check-list">
+      <li>Load monthly deaths CSV</li>
+      <li>Split before/after handwashing rule</li>
+      <li>Boxplot of the two groups</li>
+      <li>Run <code>ttest_ind</code>, print + interpret p</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Report the size of the difference, not only p.</div>
+      <div class="item"><span class="lvl">★★</span>Try <code>alternative="less"</code> for direction.</div>
+      <div class="item"><span class="lvl">★★★</span>Bootstrap a 95% CI for the mean difference.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does p = 0.02 mean?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — p = 0.02 의미?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Tests<br>tell us if it's real.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: capstone — predict house prices.</p>
+    <p class="bilingual">다음 주: 캡스톤 — 집값 예측</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

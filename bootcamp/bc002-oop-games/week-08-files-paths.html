@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 8 — Files, Directories, Paths</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 8 · Day 24 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 8</div>
+    <div class="emoji">📁</div>
+    <h1>Files &amp;<br>Paths</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">save</span> + <span class="sub">read</span> notes from disk.</p>
+    <p class="bilingual">파일에 메모 저장하기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why split a game into many classes?</div>
+      <details><summary>Show answer</summary><div class="ans">One job per class — easier to read, test, and reuse.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"hi.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"hello"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"hi.txt"</span>) <span class="kw">as</span> f:
+    <span class="fn">print</span>(f.<span class="fn">read</span>())</pre>
+      <details><summary>Reveal</summary><div class="ans">hello — write then read the same file.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">path</span>
+      <span class="gloss">file address on disk</span>
+      <span class="ko">파일 경로</span>
+
+      <span class="term">mode</span>
+      <span class="gloss">read 'r' or write 'w'</span>
+      <span class="ko">모드</span>
+
+      <span class="term">with</span>
+      <span class="gloss">auto-closes the file</span>
+      <span class="ko">자동 닫기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Open → use → close</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">"r"</span><span class="val">read</span></div>
+      <div class="varbox"><span class="name">"w"</span><span class="val">write (overwrite)</span></div>
+      <div class="varbox"><span class="name">"a"</span><span class="val">append</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em"><code>with</code> = open + close safely.</p>
+    <p class="bilingual" style="text-align:center">with 쓰면 close 자동</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Notebook saver</h2>
+<pre>note = <span class="fn">input</span>(<span class="str">"Your note? "</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(note + <span class="str">"\n"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>) <span class="kw">as</span> f:
+    <span class="fn">print</span>(f.<span class="fn">read</span>())</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Input: "buy mango"</div>
+      <div style="opacity:1">buy mango (appended + printed)</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>What each mode does</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">"r"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">read</span><span class="val">file must exist</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"w"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">write</span><span class="val">wipes first</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">"a"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">append</span><span class="val">adds at end</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What's in the file?</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"x.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f: f.<span class="fn">write</span>(<span class="str">"A"</span>)
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"x.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f: f.<span class="fn">write</span>(<span class="str">"B"</span>)
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"x.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f: f.<span class="fn">write</span>(<span class="str">"C"</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">step</div>
+      <div class="cell head">mode</div>
+      <div class="cell head">file</div>
+
+      <div class="cell">1</div>
+      <div class="cell">w</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">A</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">a</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">AB</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">w</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">C</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Wiped your data</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>f = <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"w"</span>)
+f.<span class="fn">write</span>(note)</pre>
+        <p style="margin-top:.4em;font-size:.85em">"w" overwrites old notes.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(note + <span class="str">"\n"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">"a" keeps history.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong mode</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"r"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"hello"</span>)</pre>
+    <div class="err">io.UnsupportedOperation: not writable</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Open with <code>"w"</code> or <code>"a"</code> to write. <code>"r"</code> is read-only.</p>
+      <p class="bilingual">쓰기는 "w" 또는 "a" 모드 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Forgot to close</h2>
+<pre>f = <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"w"</span>)
+f.<span class="fn">write</span>(<span class="str">"hi"</span>)
+<span class="com"># file never closed</span></pre>
+    <div class="err">Sometimes writes are not flushed to disk</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>with open(...) as f:</code> — auto-closes safely on exit.</p>
+      <p class="bilingual">with 문이 자동으로 close 처리</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>File not found</h2>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="str">"diary.txt"</span>) <span class="kw">as</span> f:
+    text = f.<span class="fn">read</span>()</pre>
+    <div class="err">FileNotFoundError: [Errno 2] No such file</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check the path. File must exist for read mode. Or open with <code>"a"</code> first to create it.</p>
+      <p class="bilingual">읽기 전에 파일이 존재해야 함</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>note = <span class="fn">input</span>(<span class="str">"Note? "</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>, <span class="str">"_"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(note + <span class="str">"\n"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>) <span class="kw">as</span> f:
+    <span class="fn">print</span>(f.<span class="fn">______</span>())</pre>
+    <p style="margin-top:.6em">Goal: append + read.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — loop until quit</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    note = <span class="fn">input</span>(<span class="str">"Note (q=quit)? "</span>)
+    <span class="kw">if</span> note == ___:
+        <span class="kw">break</span>
+    <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notes.txt"</span>, _____) <span class="kw">as</span> f:
+        f.<span class="fn">write</span>(note + <span class="str">"\n"</span>)</pre>
+    <p style="margin-top:.6em">Add many notes in one session.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>"w"</code> on existing file…</div>
+      <div class="opts">
+        <details><summary>A. Appends</summary><div class="ans">That's "a".</div></details>
+        <details><summary>B. Overwrites</summary><div class="ans">✓ Wipes first.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>with open(...) as f:</code></div>
+      <div class="opts">
+        <details><summary>A. Auto-closes</summary><div class="ans">✓ Safe pattern.</div></details>
+        <details><summary>B. Slower</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I open the file in <span class="blank"></span> mode so I can <span class="blank"></span> without losing data."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Notebook Saver 📓</h2>
+    <ul class="check-list">
+      <li>Ask user for a note</li>
+      <li>Append it to <code>notes.txt</code> with a newline</li>
+      <li>Loop until user types <code>q</code></li>
+      <li>Print all notes at the end</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Number each note: <code>"1. buy mango"</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Add a date stamp to each note.</div>
+      <div class="item"><span class="lvl">★★★</span>Search command: print notes containing a word.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>difference between "w" and "a" modes?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — "w"와 "a" 차이</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Files keep<br>data alive.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: pandas + CSV data.</p>
+    <p class="bilingual">다음 주: pandas로 CSV 다루기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

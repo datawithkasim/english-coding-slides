@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC001 Week 11 — Card Match</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC001 · Python Foundations · Week 11 · Day 11 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 11</div>
+    <div class="emoji">🃏</div>
+    <h1>Card<br>Match</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">combine</span> + <span class="sub">compare</span> in a full game.</p>
+    <p class="bilingual">랜덤·리스트·함수·반복문을 합쳐 카드 게임 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What does <code>return</code> do?</div>
+      <details><summary>Show answer</summary><div class="ans">Sends a value back from a function to the caller.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Who wins?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>player = <span class="num">19</span>
+computer = <span class="num">21</span>
+
+<span class="kw">if</span> computer == <span class="num">21</span>:
+    <span class="fn">print</span>(<span class="str">"Computer wins"</span>)
+<span class="kw">elif</span> player > computer:
+    <span class="fn">print</span>(<span class="str">"You win"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Computer wins — first if catches it.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">capstone</span>
+      <span class="gloss">project that combines many skills</span>
+      <span class="ko">캡스톤</span>
+
+      <span class="term">state</span>
+      <span class="gloss">the current values in your game</span>
+      <span class="ko">상태</span>
+
+      <span class="term">compare</span>
+      <span class="gloss">check which value is bigger</span>
+      <span class="ko">비교</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Game = state + rules 🎯</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">deck</span><span class="val">[1, 2, … 11]</span></div>
+      <div class="varbox"><span class="name">player</span><span class="val">[10, 7]</span></div>
+      <div class="varbox"><span class="name">computer</span><span class="val">[9, 8]</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Closer to 21 wins. No going over.</p>
+    <p class="bilingual" style="text-align:center">21에 가까운 쪽이 이김 · 21 초과면 패</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Draw two cards each</h2>
+<pre><span class="kw">import</span> random
+deck = [<span class="num">11</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>,<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>,<span class="num">10</span>,<span class="num">10</span>,<span class="num">10</span>,<span class="num">10</span>]
+
+<span class="kw">def</span> <span class="fn">deal</span>(): <span class="kw">return</span> random.<span class="fn">choice</span>(deck)
+
+player   = [<span class="fn">deal</span>(), <span class="fn">deal</span>()]
+computer = [<span class="fn">deal</span>(), <span class="fn">deal</span>()]
+<span class="fn">print</span>(player, <span class="fn">sum</span>(player))
+<span class="fn">print</span>(computer, <span class="fn">sum</span>(computer))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ One run</div>
+      <div style="opacity:1">[10, 7] 17<br>[9, 8] 17</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>One round flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">deal()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">player</span><span class="val">[10, 7] = 17</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">deal()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">computer</span><span class="val">[9, 5] = 14</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># 17 &gt; 14, no bust →</span> <span class="out">player wins</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Who wins each row?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">row</div>
+      <div class="cell head">player</div>
+      <div class="cell head">computer</div>
+      <div class="cell head">winner</div>
+
+      <div class="cell">1</div>
+      <div class="cell">20</div>
+      <div class="cell">18</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">player</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">22</div>
+      <div class="cell">19</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">computer</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">21</div>
+      <div class="cell">21</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">draw</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Over 21 = bust. Equal = draw.</p>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Order of checks matters</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">if</span> p > c: win = <span class="str">"you"</span>
+<span class="kw">elif</span> p > <span class="num">21</span>: win = <span class="str">"bust"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">22 vs 18 → "you" (wrong!)</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">if</span> p > <span class="num">21</span>: win = <span class="str">"bust"</span>
+<span class="kw">elif</span> p > c: win = <span class="str">"you"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Check bust first.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Same cards every game</h2>
+<pre>deck = [<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>,<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>,<span class="num">10</span>]
+player = deck[<span class="num">0</span>]
+computer = deck[<span class="num">1</span>]</pre>
+    <div class="err">Output: player always 2, computer always 3</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use <code>random.choice(deck)</code> — or <code>random.shuffle(deck)</code> first.</p>
+      <p class="bilingual">셔플 안 하면 매번 같은 카드가 나옴</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Tie at 21 mishandled</h2>
+<pre><span class="kw">if</span> player == <span class="num">21</span>:
+    <span class="fn">print</span>(<span class="str">"player wins"</span>)
+<span class="kw">elif</span> computer == <span class="num">21</span>:
+    <span class="fn">print</span>(<span class="str">"computer wins"</span>)</pre>
+    <div class="err">Both 21 → prints "player wins" (should be draw)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check both first: <code>if player == 21 and computer == 21: draw</code>.</p>
+      <p class="bilingual">동시 21은 무승부 — 동률 먼저 검사</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Ace counted as 11 → bust</h2>
+<pre>hand = [<span class="num">11</span>, <span class="num">9</span>, <span class="num">5</span>]
+total = <span class="fn">sum</span>(hand)</pre>
+    <div class="err">total = 25  (should re-count ace as 1)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">If <code>total &gt; 21</code> and 11 in hand: replace one 11 with 1.</p>
+      <p class="bilingual">11이면 21 넘을 때 1로 바꿔주기</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">deal</span>():
+    <span class="kw">return</span> random.______(deck)
+
+player = [<span class="fn">deal</span>(), ______]
+<span class="fn">print</span>(<span class="fn">sum</span>(player))</pre>
+    <p style="margin-top:.6em">Goal: print the player's score.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — hit or stand</h2>
+<pre><span class="kw">while</span> <span class="fn">sum</span>(player) < ___:
+    choice = <span class="fn">input</span>(<span class="str">"hit or stand? "</span>)
+    <span class="kw">if</span> choice == <span class="str">"hit"</span>:
+        player.______(<span class="fn">deal</span>())
+    <span class="kw">else</span>:
+        <span class="kw">break</span></pre>
+    <p style="margin-top:.6em">Goal: keep drawing while score under 21.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>random.choice(deck)</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. The whole list</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. One random item from it</summary><div class="ans">✓ One element.</div></details>
+        <details><summary>C. A shuffled copy</summary><div class="ans">That's shuffle().</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Both hands = 21. Result?</div>
+      <div class="opts">
+        <details><summary>A. Player wins</summary><div class="ans">Nope — equal.</div></details>
+        <details><summary>B. Draw</summary><div class="ans">✓ Same score = draw.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The <code>deck</code> holds <span class="blank"></span>, and we compare <span class="blank"></span> to decide the winner."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Card Match 🃏</h2>
+    <ul class="check-list">
+      <li>Make a deck list of card values</li>
+      <li>Deal 2 cards to player + computer</li>
+      <li>Compare sums — closer to 21 wins</li>
+      <li>Handle bust (&gt; 21) and ties</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Let the player hit until they stand.</div>
+      <div class="item"><span class="lvl">★★</span>Auto-convert ace 11 → 1 when bust.</div>
+      <div class="item"><span class="lvl">★★★</span>Track wins/losses across multiple rounds.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why do we check <code>&gt; 21</code> before <code>&gt; computer</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 왜 21 초과를 먼저 검사?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Combine<br>to capstone.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: scope — where variables live.</p>
+    <p class="bilingual">다음 주: 스코프 — 변수가 사는 범위</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

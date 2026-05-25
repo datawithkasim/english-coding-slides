@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 2 — Pokedex Auto-Catch</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 2 · Day 50 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 2</div>
+    <div class="emoji">⚡</div>
+    <h1>Pokedex<br>Auto-Catch</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">loop</span> + <span class="sub">click</span> on a local demo page.</p>
+    <p class="bilingual">로컬 포켓몬 데모에서 자동 캐치 버튼 클릭</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">How did the bot type text into a form?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>find_element(...).send_keys("text")</code> — locator + keys.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this loop do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"catch"</span>).<span class="fn">click</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.5</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Clicks the catch button 5 times, pausing 0.5s each.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">.click()</span>
+      <span class="gloss">press the element like a mouse</span>
+      <span class="ko">클릭</span>
+
+      <span class="term">race condition</span>
+      <span class="gloss">code runs faster than page reacts</span>
+      <span class="ko">타이밍 충돌</span>
+
+      <span class="term">try/except</span>
+      <span class="gloss">handle errors safely</span>
+      <span class="ko">예외 처리</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Loop + click + wait 🔁</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">find</span><span class="val">catch btn</span></div>
+      <div class="varbox"><span class="name">click</span><span class="val">tap it</span></div>
+      <div class="varbox"><span class="name">sleep</span><span class="val">breathe</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">No swipes. Just buttons on a local demo page.</p>
+    <p class="bilingual" style="text-align:center">로컬 데모 페이지에서만</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Catch them all</h2>
+<pre><span class="kw">import</span> time
+driver.<span class="fn">get</span>(<span class="str">"file:///pokedex.html"</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    btn = driver.<span class="fn">find_element</span>(By.ID, <span class="str">"catch"</span>)
+    name = driver.<span class="fn">find_element</span>(By.ID, <span class="str">"who"</span>).text
+    <span class="fn">print</span>(<span class="str">f"Caught {name}!"</span>)
+    btn.<span class="fn">click</span>()
+    time.<span class="fn">sleep</span>(<span class="num">0.4</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Caught Pikachu! Caught Bulbasaur! …</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Per loop step</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">read name</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">name</span><span class="val">"Pikachu"</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">click catch</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">next pokemon</span><span class="val">loads</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># sleep 0.4s →</span> <span class="out">repeat 10 times</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How many clicks?</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):
+    btn.<span class="fn">click</span>()</pre>
+    <div class="trace-grid">
+      <div class="cell head">n</div>
+      <div class="cell head">clicks</div>
+      <div class="cell head">last i</div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">10</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell">—</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>No safety exit</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    btn.<span class="fn">click</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ forever, your laptop hangs</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    btn.<span class="fn">click</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ 10 then stops</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Button missing on some screens</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    driver.<span class="fn">find_element</span>(By.ID, <span class="str">"catch"</span>).<span class="fn">click</span>()</pre>
+    <div class="err">NoSuchElementException on screen 6 (already caught)</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wrap in <code>try / except NoSuchElementException</code>, then <code>continue</code>.</p>
+      <p class="bilingual">버튼 없는 화면 — try/except로 건너뛰기</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Race condition</h2>
+<pre>btn.<span class="fn">click</span>()
+name = driver.<span class="fn">find_element</span>(By.ID, <span class="str">"who"</span>).text</pre>
+    <div class="err">StaleElementReferenceException — page changed too fast</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>time.sleep(0.3)</code> after click, OR use <code>WebDriverWait</code>.</p>
+      <p class="bilingual">클릭 후 페이지 바뀌는 시간 — 잠깐 기다리기</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Infinite loop guard</h2>
+<pre><span class="kw">while</span> driver.<span class="fn">find_element</span>(By.ID, <span class="str">"catch"</span>):
+    btn.<span class="fn">click</span>()</pre>
+    <div class="err">Runs forever — find_element raises, doesn't return None</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use a counter: <code>for i in range(20)</code>. Always cap loops.</p>
+      <p class="bilingual">무한 루프 방지 — 횟수 제한</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(______):
+    btn = driver.<span class="fn">find_element</span>(By.___, <span class="str">"catch"</span>)
+    btn.<span class="fn">_____</span>()
+    time.<span class="fn">sleep</span>(______)</pre>
+    <p style="margin-top:.6em">Goal: click 10 times, 0.5s pause each.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — try/except</h2>
+<pre><span class="kw">from</span> selenium.common.exceptions <span class="kw">import</span> NoSuchElementException
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">15</span>):
+    <span class="kw">try</span>:
+        driver.<span class="fn">find_element</span>(By.ID, <span class="str">"catch"</span>).<span class="fn">click</span>()
+    <span class="kw">except</span> ______:
+        <span class="fn">print</span>(<span class="str">"____"</span>)
+        <span class="kw">______</span></pre>
+    <p style="margin-top:.6em">Skip missing buttons. Print "skipped".</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why prefer <code>for range(10)</code> over <code>while True</code>?</div>
+      <div class="opts">
+        <details><summary>A. It stops automatically</summary><div class="ans">✓ Safety cap.</div></details>
+        <details><summary>B. It's faster</summary><div class="ans">Nope — same speed.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. A race condition means…</div>
+      <div class="opts">
+        <details><summary>A. Code is too slow</summary><div class="ans">Nope — opposite.</div></details>
+        <details><summary>B. Code runs before page is ready</summary><div class="ans">✓ Timing mismatch.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I loop with <span class="blank"></span> so the bot stops safely, and I add <span class="blank"></span> to avoid race conditions."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the catcher ⚡</h2>
+    <ul class="check-list">
+      <li>Open local <code>pokedex.html</code></li>
+      <li>Loop 10 times with <code>range</code></li>
+      <li>Click catch, sleep 0.4s</li>
+      <li>Print the name each round</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Save caught names to a list, print at end.</div>
+      <div class="item"><span class="lvl">★★</span>Skip if name starts with "Z" using <code>continue</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Count unique names with a set.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how does a sleep stop a race condition?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — sleep이 타이밍 충돌을 어떻게 막음?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Loops drive<br>auto-clicks.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: log internet speed to a file.</p>
+    <p class="bilingual">다음 주: 인터넷 속도 측정 + 파일 기록</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

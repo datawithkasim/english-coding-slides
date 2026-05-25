@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC004 Week 9 — Flask Jinja Blog</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC004 · Flask &amp; Bots · Week 9 · Day 57 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 9</div>
+    <div class="emoji">📝</div>
+    <h1>Flask<br>Jinja Blog</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">pass</span> + <span class="sub">loop</span> data into HTML.</p>
+    <p class="bilingual">Jinja로 데이터 전달하고 블로그 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which folder holds CSS and images in Flask?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>static/</code> — served as raw files.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does <code>{{ name }}</code> do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="com"># Python passes name="Mia"</span>
+&lt;h1&gt;Hi, {{ name }}!&lt;/h1&gt;</pre>
+      <details><summary>Reveal output</summary><div class="ans">Jinja replaces <code>{{ name }}</code> with "Mia". Output: "Hi, Mia!"</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">Jinja</span>
+      <span class="gloss">Flask's template engine</span>
+      <span class="ko">템플릿 엔진</span>
+
+      <span class="term">{{ … }}</span>
+      <span class="gloss">print a value into HTML</span>
+      <span class="ko">값 출력</span>
+
+      <span class="term">{% for %}</span>
+      <span class="gloss">loop in a template</span>
+      <span class="ko">템플릿 반복문</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Python → template → HTML 📦</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">python</span><span class="val">posts=[...]</span></div>
+      <div class="varbox"><span class="name">template</span><span class="val">{% for %}</span></div>
+      <div class="varbox"><span class="name">browser</span><span class="val">3 posts</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Data goes in. HTML comes out.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Pass posts to template</h2>
+<pre>posts = [
+    {<span class="str">"title"</span>: <span class="str">"Day 1"</span>, <span class="str">"body"</span>: <span class="str">"hi"</span>},
+    {<span class="str">"title"</span>: <span class="str">"Day 2"</span>, <span class="str">"body"</span>: <span class="str">"more"</span>},
+]
+
+@app.<span class="fn">route</span>(<span class="str">"/"</span>)
+<span class="kw">def</span> <span class="fn">home</span>():
+    <span class="kw">return</span> <span class="fn">render_template</span>(<span class="str">"blog.html"</span>, posts=posts)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ blog.html loops</div>
+      <div style="opacity:1">Day 1: hi · Day 2: more</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Loop in HTML</h2>
+<pre>{% <span class="kw">for</span> p <span class="kw">in</span> posts %}
+  &lt;h2&gt;{{ p.title }}&lt;/h2&gt;
+  &lt;p&gt;{{ p.body }}&lt;/p&gt;
+{% <span class="kw">endfor</span> %}</pre>
+    <p class="center" style="margin-top:.5em">For each post → render h2 + p.</p>
+  </div>
+
+  <!-- Slot 8: Trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How many h2 tags?</h2>
+    <div class="trace-grid">
+      <div class="cell head">posts length</div>
+      <div class="cell head">{% for %} runs</div>
+      <div class="cell head">h2 count</div>
+
+      <div class="cell">2</div>
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">5</div>
+      <div class="cell">5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Missing endfor</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>{% <span class="kw">for</span> p <span class="kw">in</span> posts %}
+  &lt;h2&gt;{{ p.title }}&lt;/h2&gt;</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ TemplateSyntaxError</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>{% <span class="kw">for</span> p <span class="kw">in</span> posts %}
+  &lt;h2&gt;{{ p.title }}&lt;/h2&gt;
+{% <span class="kw">endfor</span> %}</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ closes the loop</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Undefined variable</h2>
+<pre>&lt;h1&gt;{{ tittle }}&lt;/h1&gt;
+<span class="com"># python passes title="Hi"</span></pre>
+    <div class="err">Page shows blank — typo, undefined silently</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Spelling: <code>{{ title }}</code>. Jinja renders empty for undefined.</p>
+      <p class="bilingual">변수 이름 오타 — 출력이 빈칸</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Autoescape</h2>
+<pre>posts = [{<span class="str">"body"</span>: <span class="str">"&lt;b&gt;Bold&lt;/b&gt;"</span>}]
+<span class="com"># template: {{ p.body }}</span></pre>
+    <div class="err">Shows literal &lt;b&gt;Bold&lt;/b&gt; not bold text</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Jinja auto-escapes HTML (safety). Use <code>{{ p.body | safe }}</code> if you trust the source.</p>
+      <p class="bilingual">HTML 자동 이스케이프 — | safe 필터</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Missing block</h2>
+<pre><span class="com"># base.html has {% block content %}</span>
+<span class="com"># child has just &lt;h1&gt;hi&lt;/h1&gt;</span></pre>
+    <div class="err">Child content doesn't appear</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Wrap content: <code>{% block content %} … {% endblock %}</code>.</p>
+      <p class="bilingual">block 안에 넣어야 부모 템플릿에 들어감</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>{% ___ p <span class="kw">in</span> posts %}
+  &lt;h2&gt;{{ p.______ }}&lt;/h2&gt;
+  &lt;p&gt;{{ p.______ }}&lt;/p&gt;
+{% ______ %}</pre>
+    <p style="margin-top:.6em">Goal: loop posts, show title + body.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — if inside for</h2>
+<pre>{% <span class="kw">for</span> p <span class="kw">in</span> posts %}
+  &lt;h2&gt;{{ p.title }}&lt;/h2&gt;
+  {% ___ p.featured %}
+    &lt;span&gt;⭐ featured&lt;/span&gt;
+  {% ______ %}
+{% <span class="kw">endfor</span> %}</pre>
+    <p style="margin-top:.6em">Star only featured posts.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>{{ x }}</code> in Jinja does what?</div>
+      <div class="opts">
+        <details><summary>A. Prints the value of x</summary><div class="ans">✓</div></details>
+        <details><summary>B. Defines x</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To close a for loop, write…</div>
+      <div class="opts">
+        <details><summary>A. <code>{% endfor %}</code></summary><div class="ans">✓</div></details>
+        <details><summary>B. <code>{% /for %}</code></summary><div class="ans">Nope — wrong syntax.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I pass <span class="blank"></span> from Python, and the template prints each item using <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the blog 📝</h2>
+    <ul class="check-list">
+      <li>List of post dicts in Python</li>
+      <li>Pass to template via <code>render_template</code></li>
+      <li>Loop in HTML</li>
+      <li>Style with CSS</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Show <code>{{ loop.index }}</code> next to each post.</div>
+      <div class="item"><span class="lvl">★★</span>Add a base template + <code>{% extends %}</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Single-post route: <code>/post/&lt;int:id&gt;</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how do <code>{{ }}</code> and <code>{% %}</code> differ?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — {{ }}와 {% %} 차이?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Templates loop<br>your data.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Bootstrap — fast, pretty styling.</p>
+    <p class="bilingual">다음 주: Bootstrap CSS 프레임워크</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

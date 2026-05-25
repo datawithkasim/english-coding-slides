@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC005 Week 3 — Blog Capstone P3 (REST)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC005 · Data Science · Week 3 · Day 67 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 3</div>
+    <div class="emoji">📝</div>
+    <h1>Blog Capstone<br>Part 3</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">turn</span> your blog into a <span class="sub">REST</span> API.</p>
+    <p class="bilingual">블로그 캡스톤에 REST 엔드포인트 붙이기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which verb edits an existing item?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>PUT</code> (or <code>PATCH</code>) — POST creates, PUT updates.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Status code?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>GET /posts        → ___
+POST /posts       → ___
+GET /posts/9999   → ___
+DELETE /posts/3   → ___</pre>
+      <details><summary>Reveal</summary><div class="ans">200 · 201 · 404 · 204</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 capstone words</h2>
+    <div class="vocab-table">
+      <span class="term">jsonify</span>
+      <span class="gloss">turn Python dict → JSON response</span>
+      <span class="ko">JSON 응답</span>
+
+      <span class="term">404</span>
+      <span class="gloss">resource not found</span>
+      <span class="ko">없음</span>
+
+      <span class="term">405</span>
+      <span class="gloss">method not allowed</span>
+      <span class="ko">허용 안 됨</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Blog as REST</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">/posts</span><span class="val">GET POST</span></div>
+      <div class="varbox"><span class="name">/posts/&lt;id&gt;</span><span class="val">GET PUT DELETE</span></div>
+      <div class="varbox"><span class="name">JSON</span><span class="val">in + out</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">HTML pages stay. JSON endpoints get added.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One post, by id</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/api/posts/&lt;int:id&gt;"</span>)
+<span class="kw">def</span> <span class="fn">api_post</span>(id):
+    post = next((p <span class="kw">for</span> p <span class="kw">in</span> posts <span class="kw">if</span> p[<span class="str">"id"</span>] == id), <span class="kw">None</span>)
+    <span class="kw">if</span> post <span class="kw">is</span> <span class="kw">None</span>:
+        <span class="kw">return</span> jsonify(error=<span class="str">"not found"</span>), <span class="num">404</span>
+    <span class="kw">return</span> jsonify(post), <span class="num">200</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ GET /api/posts/2</div>
+      <div style="opacity:1">{"id":2, "title":"Hi", ...}</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Request → response</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">GET /api/posts/2</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">find id=2</span><span class="val">post object</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">jsonify(post)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">200 OK</span><span class="val">JSON body</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">GET /api/posts/9999</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">no match</span><span class="val">404</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which response?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Verb</div>
+      <div class="cell head">URL</div>
+      <div class="cell head">State</div>
+      <div class="cell head">Code</div>
+
+      <div class="cell">GET</div>
+      <div class="cell">/api/posts</div>
+      <div class="cell">3 posts</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+
+      <div class="cell">GET</div>
+      <div class="cell">/api/posts/77</div>
+      <div class="cell">no match</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">404</span></details></div>
+
+      <div class="cell">PUT</div>
+      <div class="cell">/api/posts</div>
+      <div class="cell">no PUT here</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">405</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Returning the raw object</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">return</span> post  <span class="com"># dict</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">TypeError — Flask needs a Response.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">return</span> jsonify(post)</pre>
+        <p style="margin-top:.4em;font-size:.85em">jsonify wraps dict + sets headers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — 405 Method Not Allowed -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — 405</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/api/posts"</span>)  <span class="com"># GET only</span>
+<span class="kw">def</span> <span class="fn">all_posts</span>():
+    ...
+
+<span class="com"># client sends:</span>
+<span class="com"># POST /api/posts {"title": "Hello"}</span></pre>
+    <div class="err">405 Method Not Allowed</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add the method: <code>methods=["GET", "POST"]</code>.</p>
+      <p class="bilingual">405 — 메서드 허용 목록 누락</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — JSON serialization -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — can't serialize</h2>
+<pre><span class="kw">from</span> datetime <span class="kw">import</span> date
+post = {<span class="str">"title"</span>: <span class="str">"Hi"</span>, <span class="str">"date"</span>: date.today()}
+<span class="kw">return</span> jsonify(post)</pre>
+    <div class="err">TypeError: Object of type date is not JSON serializable</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Convert to string first: <code>"date": date.today().isoformat()</code>.</p>
+      <p class="bilingual">날짜는 문자열로 바꿔야 JSON 가능</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — ID mismatch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — ID mismatch</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/api/posts/&lt;id&gt;"</span>)  <span class="com"># no int:</span>
+<span class="kw">def</span> <span class="fn">one_post</span>(id):
+    <span class="kw">return</span> jsonify(posts[id])</pre>
+    <div class="err">TypeError: list indices must be int, not str</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Convert <code>&lt;int:id&gt;</code> in route, or <code>int(id)</code> inside.</p>
+      <p class="bilingual">URL 파라미터는 문자열 — 정수 변환 필요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">@app</span>.route(<span class="str">"/api/posts"</span>, methods=[<span class="str">"___"</span>])
+<span class="kw">def</span> <span class="fn">create_post</span>():
+    data = request.get_json()
+    posts.append(data)
+    <span class="kw">return</span> ______(data), <span class="num">___</span></pre>
+    <p style="margin-top:.6em">Goal: POST verb, JSON response, 201 status.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — guard a 404</h2>
+<pre><span class="kw">def</span> <span class="fn">one_post</span>(id):
+    post = next((p <span class="kw">for</span> p <span class="kw">in</span> posts
+                 <span class="kw">if</span> p[<span class="str">"id"</span>] == ___), <span class="kw">None</span>)
+    <span class="kw">if</span> ___ <span class="kw">is</span> <span class="kw">None</span>:
+        <span class="kw">return</span> jsonify(error=<span class="str">"missing"</span>), ___
+    <span class="kw">return</span> jsonify(post)</pre>
+    <p style="margin-top:.6em">Goal: match id, return 404 if missing.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>jsonify(dict)</code> returns…</div>
+      <div class="opts">
+        <details><summary>A. Python dict</summary><div class="ans">Nope — it's a Response.</div></details>
+        <details><summary>B. Flask Response with JSON headers</summary><div class="ans">✓ That's the point.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Status code for missing resource?</div>
+      <div class="opts">
+        <details><summary>A. 405</summary><div class="ans">Nope — method not allowed.</div></details>
+        <details><summary>B. 404</summary><div class="ans">✓ Not found.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"My endpoint returns <span class="blank"></span> when the post exists and <span class="blank"></span> when it doesn't."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Wire the blog API 📝</h2>
+    <ul class="check-list">
+      <li>Add <code>/api/posts</code> — GET + POST</li>
+      <li>Add <code>/api/posts/&lt;int:id&gt;</code> — GET + DELETE</li>
+      <li>Return correct status codes</li>
+      <li>Test with curl or Thunder Client</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add <code>PUT /api/posts/&lt;id&gt;</code> for edits.</div>
+      <div class="item"><span class="lvl">★★</span>Filter: <code>/api/posts?tag=python</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Require an API key in the request header.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why use <code>jsonify</code> instead of returning a dict?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 왜 jsonify 사용?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Your blog<br>speaks JSON.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: login + hashed passwords.</p>
+    <p class="bilingual">다음 주: 로그인 + 비밀번호 해시</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

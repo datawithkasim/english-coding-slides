@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 3 — Instances &amp; State</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 3 · Day 19 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 3</div>
+    <div class="emoji">✏️</div>
+    <h1>Etch-a-<br>Sketch</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">listen</span> + <span class="sub">drive</span> a turtle with arrow keys.</p>
+    <p class="bilingual">키보드로 거북이 조종하기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What keeps the turtle window open?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>screen.mainloop()</code> at the end of the file.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What's different?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>screen.<span class="fn">onkey</span>(go, <span class="str">"w"</span>)
+screen.<span class="fn">onkey</span>(<span class="fn">go</span>(), <span class="str">"w"</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">Line 1 passes the function. Line 2 calls it now — wrong!</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">instance</span>
+      <span class="gloss">one object made from a class</span>
+      <span class="ko">인스턴스</span>
+
+      <span class="term">state</span>
+      <span class="gloss">data each object remembers</span>
+      <span class="ko">상태</span>
+
+      <span class="term">listen</span>
+      <span class="gloss">wait for a key event</span>
+      <span class="ko">이벤트 대기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Pass the function — don't call it</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">go</span><span class="val">recipe</span></div>
+      <div class="varbox"><span class="name">go()</span><span class="val">cook now</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">No <code>()</code> = the recipe. Yes <code>()</code> = the dish.</p>
+    <p class="bilingual" style="text-align:center">() 없이 = 함수 자체, () 붙이면 호출됨</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Arrow keys move turtle</h2>
+<pre><span class="kw">from</span> turtle <span class="kw">import</span> Turtle, Screen
+
+t = <span class="fn">Turtle</span>()
+screen = <span class="fn">Screen</span>()
+
+<span class="kw">def</span> <span class="fn">go</span>():    t.<span class="fn">forward</span>(<span class="num">10</span>)
+<span class="kw">def</span> <span class="fn">left</span>():  t.<span class="fn">left</span>(<span class="num">10</span>)
+
+screen.<span class="fn">listen</span>()
+screen.<span class="fn">onkey</span>(go,   <span class="str">"w"</span>)
+screen.<span class="fn">onkey</span>(left, <span class="str">"a"</span>)
+screen.<span class="fn">mainloop</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Press W</div>
+      <div style="opacity:1">turtle steps forward 10</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Each turtle has own state</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">Turtle()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">t1.pos</span><span class="val">(0,0)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">Turtle()</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">t2.pos</span><span class="val">(0,0)</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># t1.forward(50) →</span> <span class="out">t1 moves, t2 stays</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Bare ref vs call?</h2>
+    <div class="trace-grid">
+      <div class="cell head">code</div>
+      <div class="cell head">runs now?</div>
+      <div class="cell head">good for onkey?</div>
+
+      <div class="cell"><code>go</code></div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell"><code>go()</code></div>
+      <div class="cell">yes</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell"><code>onkey(go,"w")</code></div>
+      <div class="cell">later, on press</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">correct</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Called instead of passed</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>screen.<span class="fn">onkey</span>(<span class="fn">go</span>(), <span class="str">"w"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Runs <code>go</code> once now. Press W: nothing.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>screen.<span class="fn">onkey</span>(go, <span class="str">"w"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Pass the function. Runs on each press.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Pressing W does nothing</h2>
+<pre>screen.<span class="fn">onkey</span>(<span class="fn">go</span>(), <span class="str">"w"</span>)
+screen.<span class="fn">listen</span>()</pre>
+    <div class="err">go() ran once at startup, then never again</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Remove the <code>()</code> from <code>go()</code>. Pass the function reference: <code>onkey(go, "w")</code>.</p>
+      <p class="bilingual">함수를 전달할 때는 () 없이</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Shared state</h2>
+<pre>t = <span class="fn">Turtle</span>()
+t.<span class="fn">forward</span>(<span class="num">100</span>)
+t.<span class="fn">forward</span>(<span class="num">50</span>)
+<span class="fn">print</span>(t.<span class="fn">xcor</span>())</pre>
+    <div class="err">Expected 50, got 150 — values stack on same turtle</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">One instance keeps its own position. Make a new <code>Turtle()</code> if you want a fresh start.</p>
+      <p class="bilingual">같은 인스턴스는 상태가 이어짐</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Listener missing</h2>
+<pre>screen.<span class="fn">onkey</span>(go, <span class="str">"w"</span>)
+screen.<span class="fn">mainloop</span>()</pre>
+    <div class="err">Keys press but nothing happens</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Call <code>screen.listen()</code> before <code>mainloop()</code> so the screen accepts keys.</p>
+      <p class="bilingual">listen() 호출해야 키 입력 받음</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">go</span>():    t.<span class="fn">forward</span>(<span class="num">10</span>)
+<span class="kw">def</span> <span class="fn">back</span>():  t.<span class="fn">back</span>(<span class="num">10</span>)
+
+screen.<span class="fn">listen</span>()
+screen.<span class="fn">onkey</span>(____, <span class="str">"w"</span>)
+screen.<span class="fn">onkey</span>(____, <span class="str">"s"</span>)
+screen.<span class="fn">______</span>()</pre>
+    <p style="margin-top:.6em">Goal: W forward, S back, window stays open.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — clear the sketch</h2>
+<pre><span class="kw">def</span> <span class="fn">clear</span>():
+    t.<span class="fn">clear</span>()
+    t.<span class="fn">home</span>()
+
+screen.<span class="fn">onkey</span>(____, <span class="str">"c"</span>)</pre>
+    <p style="margin-top:.6em">Press <code>c</code> → wipe screen, recenter turtle.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>onkey(go, "w")</code> — why no <code>()</code>?</div>
+      <div class="opts">
+        <details><summary>A. Pass the function, run later</summary><div class="ans">✓ Higher-order pattern.</div></details>
+        <details><summary>B. Typo — should have ()</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Two <code>Turtle()</code> calls give…</div>
+      <div class="opts">
+        <details><summary>A. Same turtle, twice</summary><div class="ans">Nope.</div></details>
+        <details><summary>B. Two independent turtles</summary><div class="ans">✓ Each has its own state.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I pass <code>go</code> without <span class="blank"></span> so it runs only when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build Etch-a-Sketch ✏️</h2>
+    <ul class="check-list">
+      <li>One turtle + one screen</li>
+      <li>Define 4 movement functions</li>
+      <li>Bind W/A/S/D with <code>onkey</code> (no <code>()</code>!)</li>
+      <li><code>listen()</code> then <code>mainloop()</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a <code>c</code> key to clear the screen.</div>
+      <div class="item"><span class="lvl">★★</span>Change pen color on a key press.</div>
+      <div class="item"><span class="lvl">★★★</span>Add two turtles with W/A/S/D and arrow keys.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why does <code>onkey</code> get <code>go</code> not <code>go()</code>?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — onkey에 ()가 없는 이유</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Functions are<br>values too.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Snake — build the game loop.</p>
+    <p class="bilingual">다음 주: 스네이크 게임 루프</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

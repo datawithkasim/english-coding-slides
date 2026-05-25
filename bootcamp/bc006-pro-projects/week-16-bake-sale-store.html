@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 16 — Bake Sale Store</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 16 · Day 96 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 16 · FINAL</div>
+    <div class="emoji">🧁</div>
+    <h1>Bake Sale<br>Store</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">list</span> + <span class="sub">cart</span> + <span class="sub">checkout</span> (Stripe test mode!).</p>
+    <p class="bilingual">학교 베이크세일 가상 쇼핑몰 (Stripe 테스트 모드)</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Where do you keep your API key?</div>
+      <details><summary>Show answer</summary><div class="ans">In an env var or <code>.env</code> file — never in the code you commit to GitHub.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does Stripe TEST do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>stripe.api_key = <span class="str">"sk_test_..."</span>
+session = stripe.checkout.Session.<span class="fn">create</span>(...)
+
+<span class="com"># pay with card 4242 4242 4242 4242</span></pre>
+      <details><summary>Reveal output</summary><div class="ans">Fake checkout page. Card 4242... always succeeds — no real money moves.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">cart</span>
+      <span class="gloss">items chosen, not yet paid</span>
+      <span class="ko">장바구니</span>
+
+      <span class="term">checkout</span>
+      <span class="gloss">pay step</span>
+      <span class="ko">결제 단계</span>
+
+      <span class="term">test mode</span>
+      <span class="gloss">fake money for practice</span>
+      <span class="ko">테스트 결제</span>
+
+      <span class="term">webhook</span>
+      <span class="gloss">Stripe → your server alert</span>
+      <span class="ko">웹훅</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>List → cart → pay 🛒</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">products</span><span class="val">cookies, cake</span></div>
+      <div class="varbox"><span class="name">session[cart]</span><span class="val">user's items</span></div>
+      <div class="varbox"><span class="name">Stripe</span><span class="val">test card 4242…</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">No real money. Ever.</p>
+    <p class="bilingual" style="text-align:center">실제 결제 X — 테스트 카드만 사용</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Checkout session</h2>
+<pre><span class="kw">import</span> stripe, os
+stripe.api_key = os.environ[<span class="str">"STRIPE_TEST_KEY"</span>]
+
+<span class="com">@app.route("/buy", methods=["POST"])</span>
+<span class="kw">def</span> <span class="fn">buy</span>():
+    s = stripe.checkout.Session.<span class="fn">create</span>(
+        line_items=[{
+          <span class="str">"price_data"</span>: {
+            <span class="str">"currency"</span>: <span class="str">"krw"</span>,
+            <span class="str">"product_data"</span>: {<span class="str">"name"</span>: <span class="str">"Cookie"</span>},
+            <span class="str">"unit_amount"</span>: <span class="num">2000</span>},
+          <span class="str">"quantity"</span>: <span class="num">1</span>}],
+        mode=<span class="str">"payment"</span>,
+        success_url=<span class="str">"http://localhost:5000/ok"</span>,
+        cancel_url=<span class="str">"http://localhost:5000/"</span>)
+    <span class="kw">return</span> <span class="fn">redirect</span>(s.url)</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Pay flow</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">Click buy</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">Stripe page</span><span class="val">enter 4242…</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">Submit</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">success_url</span><span class="val">"/ok"</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># webhook →</span> <span class="out">order saved</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Cart total</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">item</div>
+      <div class="cell head">price</div>
+      <div class="cell head">qty</div>
+      <div class="cell head">sub</div>
+
+      <div class="cell">cookie</div>
+      <div class="cell">2000</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6000</span></details></div>
+
+      <div class="cell">muffin</div>
+      <div class="cell">3000</div>
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6000</span></details></div>
+
+      <div class="cell">total</div>
+      <div class="cell">—</div>
+      <div class="cell">—</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">12000</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Live key by accident</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>stripe.api_key = <span class="str">"sk_live_..."</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Charges real cards! Never in class.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>stripe.api_key = <span class="str">"sk_test_..."</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Test mode only. Card 4242…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — webhook signature -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Webhook rejected</h2>
+<pre>event = stripe.Webhook.<span class="fn">construct_event</span>(
+    payload, sig, <span class="str">"wrong_secret"</span>)</pre>
+    <div class="err">SignatureVerificationError</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use the <code>whsec_…</code> from Stripe Dashboard → Webhooks. Put it in env var, not in code.</p>
+      <p class="bilingual">웹훅 시크릿은 대시보드에서 복사 → 환경변수</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — test card flow -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Card declined</h2>
+<pre><span class="com"># typed: 1234 5678 9012 3456</span></pre>
+    <div class="err">Stripe says: Your card number is incorrect</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Use a Stripe test card: <code>4242 4242 4242 4242</code>, any future expiry, any 3-digit CVC.</p>
+      <p class="bilingual">테스트 카드: 4242 4242 4242 4242</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — currency mismatch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong total</h2>
+<pre><span class="str">"currency"</span>: <span class="str">"usd"</span>,
+<span class="str">"unit_amount"</span>: <span class="num">2000</span>  <span class="com"># expected ₩2000</span></pre>
+    <div class="err">Charges $20.00 USD instead of ₩2000</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">USD is cents (2000 = $20). KRW is whole units. Use <code>"currency": "krw"</code> for won.</p>
+      <p class="bilingual">USD는 센트(100배), KRW는 원 단위</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> stripe, os
+stripe.api_key = os.environ[<span class="str">"____"</span>]
+
+session = stripe.checkout.Session.<span class="fn">create</span>(
+    line_items=[{
+        <span class="str">"price_data"</span>: {
+            <span class="str">"currency"</span>: <span class="str">"____"</span>,
+            <span class="str">"product_data"</span>: {<span class="str">"name"</span>: <span class="str">"Cookie"</span>},
+            <span class="str">"unit_amount"</span>: ____},
+        <span class="str">"quantity"</span>: <span class="num">1</span>}],
+    mode=<span class="str">"____"</span>,
+    success_url=URL+<span class="str">"/ok"</span>,
+    cancel_url=URL+<span class="str">"/"</span>)</pre>
+    <p style="margin-top:.6em">Goal: test key, krw, mode payment.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — cart from session</h2>
+<pre><span class="com">@app.route("/add/&lt;item&gt;")</span>
+<span class="kw">def</span> <span class="fn">add</span>(item):
+    cart = session.<span class="fn">get</span>(<span class="str">"cart"</span>, [])
+    cart.<span class="fn">append</span>(____)
+    session[<span class="str">"cart"</span>] = cart
+    <span class="kw">return</span> <span class="fn">redirect</span>(<span class="str">"/"</span>)
+
+<span class="com">@app.route("/checkout")</span>
+<span class="kw">def</span> <span class="fn">checkout</span>():
+    items = [____ <span class="kw">for</span> i <span class="kw">in</span> session[<span class="str">"cart"</span>]]
+    s = stripe.checkout.Session.<span class="fn">create</span>(
+            line_items=____, mode=<span class="str">"payment"</span>, ...)</pre>
+    <p style="margin-top:.6em">Build line_items from the cart.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Stripe test card number…</div>
+      <div class="opts">
+        <details><summary>A. 4242 4242 4242 4242</summary><div class="ans">✓ Always succeeds in test mode.</div></details>
+        <details><summary>B. Your own card</summary><div class="ans">No! That charges real money.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>sk_test_…</code> vs <code>sk_live_…</code></div>
+      <div class="opts">
+        <details><summary>A. Same thing</summary><div class="ans">No — very different.</div></details>
+        <details><summary>B. test = fake, live = real $</summary><div class="ans">✓ Use test_ in class.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Stripe in <span class="blank"></span> mode lets me practice checkout with card <span class="blank"></span>, with no real money."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🧁</h2>
+    <ul class="check-list">
+      <li>Flask store: list 3-5 bake sale items</li>
+      <li>Add-to-cart via Flask session</li>
+      <li>Checkout button → Stripe TEST session</li>
+      <li>Use card 4242 4242 4242 4242</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Quantity selector per product (+/- buttons).</div>
+      <div class="item"><span class="lvl">★★</span>Order list on a thank-you page after success.</div>
+      <div class="item"><span class="lvl">★★★</span>Webhook handler that marks orders paid in SQLite.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>how does Stripe TEST mode protect you?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — Stripe 테스트 모드가 안전한 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge — FINAL -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🎉🎓🎉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">100 days.<br>You did it!</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Variables → games → APIs → stores. What will you build next?</p>
+    <p class="bilingual">100일 완주 축하해 — 다음에는 뭘 만들까?</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

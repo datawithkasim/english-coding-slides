@@ -33,6 +33,25 @@ platform = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <sp
         on_ground = <span class="kw">True</span></pre>
 <p style="margin-top:1em">Only land if <span class="sub">moving down</span>. Otherwise can pass through from below.</p></div>
 
+<div class="slide"><div class="pill">Watch it!</div><h2>Landing check — both must be true</h2>
+<div class="viz viz-if">
+  <div class="if-input">
+    <span class="case case-a">falling (velocity_y = 5)</span>
+    <span class="case case-b">jumping up (velocity_y = -8)</span>
+  </div>
+  <div class="if-cond">colliderect(plat) and velocity_y &gt; 0</div>
+  <div class="if-branches">
+    <div class="if-branch true">snap to plat.top, on_ground = True</div>
+    <div class="if-branch false">pass through from below</div>
+  </div>
+  <div class="if-output">
+    <div class="out-label">▸ Result</div>
+    <div class="out-line out-a">land on platform</div>
+    <div class="out-line out-b">keep moving — no land</div>
+  </div>
+</div>
+<p class="bilingual">조건문</p></div>
+
 <div class="slide"><div class="pill">Concept</div><h2>Snap to top</h2>
 <div style="background:var(--code-bg);color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.6">
 <div>player falling 🟥</div>
@@ -144,9 +163,11 @@ print(a.colliderect(b))</pre><details><summary>Reveal output</summary><div class
       <div class="edge-card"><div class="ehead">Don&#x27;t mutate during for</div><div class="edesc">Modifying the list you're looping over is a common source of bugs.</div></div>
       <div class="edge-card"><div class="ehead">break vs continue</div><div class="edesc"><code>break</code> exits the loop. <code>continue</code> skips this iteration only.</div></div>
 </div></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">player = pygame.Rect(100, 500, 50, 50) platform = pygame.Rect(100, 540, 200, 20) if player.colliderect(platform): pirnt(&quot;touching!&quot;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
-<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>pirnt</code> is a typo of <code>print</code>. Python raises <code>NameError: name 'pirnt' is not defined</code>. Spell built-ins carefully.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">player = pygame.Rect(100, 500, 50, 50) platform = pygame.Rect(100, 540, 200, 20) if player.colliderect(platform): print(&quot;touching!&quot;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="print() writes its argument followed by a newline. Output: touching!"><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 4</div><div class="q">In the example, what does <code>print('touching!')</code> output?</div><div class="opts"><button class="opt">touching!</button>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">name = &quot;Kasim&#x27;
+print(name)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> The string opens with <code>"</code> but closes with <code>'</code>. Python raises <code>SyntaxError: unterminated string literal</code>. Quotes must match.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">name = &quot;Kasim&quot;
+print(name)</pre></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Mismatched quotes — unterminated string (SyntaxError)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 4</div><div class="q">In the example, what does <code>print('touching!')</code> output?</div><div class="opts"><button class="opt">touching!</button>
 <button class="opt">TOUCHING!</button>
 <button class="opt">None</button>
 <button class="opt">an error</button></div><div class="qfeedback"></div></div>
@@ -158,12 +179,8 @@ print(a.colliderect(b))</pre><details><summary>Reveal output</summary><div class
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 4 of 4</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">for i in range(1, 10):
-    if i = 5:
-        print(&#x27;found&#x27;)</pre></div><div class="opts"><button class="opt">= is assignment, == is comparison. Inside an if, you need == or Python raises SyntaxError.</button>
-<button class="opt">Nothing — works as written.</button>
-<button class="opt">Missing <code>import sys</code>.</button>
-<button class="opt">Wrong indentation depth.</button></div><div class="qfeedback"></div></div>
+<div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 4 of 4</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">name = &quot;Kasim&#x27;
+print(name)</pre></div><div class="opts"><button class="opt">The quotes don't match, so the string is never closed (SyntaxError).</button><button class="opt">name is a reserved word.</button><button class="opt">Strings must go inside [ ].</button><button class="opt">print() can't take a variable.</button></div><div class="qfeedback"></div></div>
 <div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 4</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
 <div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Print the numbers 1–10. Then print only the even ones.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em">for i in range(1, 11):
     print(i)
@@ -174,5 +191,5 @@ for i in range(1, 11):
     # only print even
     pass</pre></div><p class="practice-hint">Open your editor. Save as <code>practice.py</code> (or <code>.html</code>). Run it. Iterate.</p></div>
 <!-- INJECTED-EXTRAS-END -->
-<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 25</span><button id="next">›</button></div>
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 26</span><button id="next">›</button></div>
 </div><script src="../../assets/deck.js"></script></body></html>

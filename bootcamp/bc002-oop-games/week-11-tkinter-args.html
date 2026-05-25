@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC002 Week 11 — Tkinter &amp; *args</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC002 · OOP &amp; Games · Week 11 · Day 27 of 100</div>
+
+  <!-- Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 11</div>
+    <div class="emoji">📐</div>
+    <h1>Mile → Km<br>GUI</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">build</span> + <span class="sub">wire</span> buttons with tkinter.</p>
+    <p class="bilingual">버튼이 있는 GUI 만들기</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">What is <code>[x*2 for x in nums]</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">A list comprehension — builds a new list in one line.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does it print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">def</span> <span class="fn">add</span>(*nums):
+    <span class="kw">return</span> <span class="fn">sum</span>(nums)
+
+<span class="fn">print</span>(<span class="fn">add</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>))</pre>
+      <details><summary>Reveal</summary><div class="ans">10 — <code>*nums</code> packs all positional args.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">tkinter</span>
+      <span class="gloss">Python's GUI toolkit</span>
+      <span class="ko">GUI 라이브러리</span>
+
+      <span class="term">*args</span>
+      <span class="gloss">many positional args as tuple</span>
+      <span class="ko">가변 인자</span>
+
+      <span class="term">**kwargs</span>
+      <span class="gloss">many keyword args as dict</span>
+      <span class="ko">키워드 가변 인자</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Window has parts</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">Tk()</span><span class="val">window</span></div>
+      <div class="varbox"><span class="name">Label</span><span class="val">text</span></div>
+      <div class="varbox"><span class="name">Button</span><span class="val">action</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Pack widgets → call mainloop.</p>
+    <p class="bilingual" style="text-align:center">위젯 배치 → 메인루프</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Mile to Km</h2>
+<pre><span class="kw">import</span> tkinter <span class="kw">as</span> tk
+
+<span class="kw">def</span> <span class="fn">convert</span>():
+    miles = <span class="fn">float</span>(entry.<span class="fn">get</span>())
+    label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{miles*1.609:.1f} km"</span>)
+
+win = tk.<span class="fn">Tk</span>()
+entry = tk.<span class="fn">Entry</span>(win); entry.<span class="fn">pack</span>()
+tk.<span class="fn">Button</span>(win, text=<span class="str">"Go"</span>, command=convert).<span class="fn">pack</span>()
+label = tk.<span class="fn">Label</span>(win, text=<span class="str">"--"</span>); label.<span class="fn">pack</span>()
+
+win.<span class="fn">mainloop</span>()</pre>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>*args packs values</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">add(1, 2, 3)</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">nums</span><span class="val">(1, 2, 3)</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">**kw: color="red"</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">kw</span><span class="val">{"color":"red"}</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># flexible signatures →</span> <span class="out">accept any count</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What lands where?</h2>
+<pre><span class="kw">def</span> <span class="fn">f</span>(a, *args, **kwargs):
+    <span class="fn">print</span>(a, args, kwargs)
+
+<span class="fn">f</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, x=<span class="num">9</span>)</pre>
+    <div class="trace-grid">
+      <div class="cell head">var</div>
+      <div class="cell head">type</div>
+      <div class="cell head">value</div>
+
+      <div class="cell"><code>a</code></div>
+      <div class="cell">int</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell"><code>args</code></div>
+      <div class="cell">tuple</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">(2, 3)</span></details></div>
+
+      <div class="cell"><code>kwargs</code></div>
+      <div class="cell">dict</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">{"x": 9}</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Window never appears</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>win = tk.<span class="fn">Tk</span>()
+tk.<span class="fn">Label</span>(win, text=<span class="str">"hi"</span>).<span class="fn">pack</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">Script ends, no event loop.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>win = tk.<span class="fn">Tk</span>()
+tk.<span class="fn">Label</span>(win, text=<span class="str">"hi"</span>).<span class="fn">pack</span>()
+win.<span class="fn">mainloop</span>()</pre>
+        <p style="margin-top:.4em;font-size:.85em">mainloop keeps window alive.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Forgot mainloop</h2>
+<pre>win = tk.<span class="fn">Tk</span>()
+tk.<span class="fn">Button</span>(win, text=<span class="str">"Go"</span>).<span class="fn">pack</span>()</pre>
+    <div class="err">Window flashes and closes</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add <code>win.mainloop()</code> at the end so the GUI keeps listening.</p>
+      <p class="bilingual">mainloop 빠지면 창이 안 보임</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong parent</h2>
+<pre>frame = tk.<span class="fn">Frame</span>(win)
+tk.<span class="fn">Label</span>(win, text=<span class="str">"hi"</span>).<span class="fn">pack</span>(<span class="kw">in_</span>=frame)</pre>
+    <div class="err">Label appears outside the frame</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Pass the right parent: <code>tk.Label(frame, text="hi").pack()</code>.</p>
+      <p class="bilingual">위젯 부모를 정확히 지정</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>kwargs typo</h2>
+<pre>tk.<span class="fn">Button</span>(win, txt=<span class="str">"Go"</span>)</pre>
+    <div class="err">TclError: unknown option "-txt"</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The keyword is <code>text</code>, not <code>txt</code>. tkinter is strict on names.</p>
+      <p class="bilingual">kwargs 이름 정확히 맞춤</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">import</span> tkinter <span class="kw">as</span> tk
+
+<span class="kw">def</span> <span class="fn">go</span>():
+    miles = <span class="fn">float</span>(entry.<span class="fn">get</span>())
+    label.<span class="fn">config</span>(text=<span class="fn">f</span><span class="str">"{miles*1.609} km"</span>)
+
+win = tk.<span class="fn">Tk</span>()
+entry = tk.<span class="fn">______</span>(win); entry.<span class="fn">pack</span>()
+tk.<span class="fn">Button</span>(win, text=<span class="str">"Go"</span>, command=___).<span class="fn">pack</span>()
+label = tk.<span class="fn">Label</span>(win, text=<span class="str">"--"</span>); label.<span class="fn">pack</span>()
+win.<span class="fn">______</span>()</pre>
+    <p style="margin-top:.6em">Goal: entry + button + label.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — flexible config</h2>
+<pre><span class="kw">def</span> <span class="fn">make_btn</span>(win, **kwargs):
+    btn = tk.<span class="fn">Button</span>(win, **_____)
+    btn.<span class="fn">pack</span>()
+    <span class="kw">return</span> btn
+
+<span class="fn">make_btn</span>(win, text=<span class="str">"Go"</span>, bg=<span class="str">"orange"</span>)</pre>
+    <p style="margin-top:.6em"><code>**kwargs</code> passes options through.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>*args</code> inside a function is a…</div>
+      <div class="opts">
+        <details><summary>A. tuple</summary><div class="ans">✓ All positional args packed.</div></details>
+        <details><summary>B. list</summary><div class="ans">Close — but it's a tuple.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>command=go</code> — why no <code>()</code>?</div>
+      <div class="opts">
+        <details><summary>A. Pass function, run on click</summary><div class="ans">✓ Same as <code>onkey</code>.</div></details>
+        <details><summary>B. <code>()</code> is automatic</summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I make a <span class="blank"></span>, pack widgets, and call <span class="blank"></span> to show the window."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Mile → Km 📐</h2>
+    <ul class="check-list">
+      <li>Make a <code>Tk()</code> window</li>
+      <li>Add an <code>Entry</code>, a <code>Button</code>, a <code>Label</code></li>
+      <li>Button calls <code>convert()</code> on click</li>
+      <li>Call <code>win.mainloop()</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a reverse "Km → Mile" button.</div>
+      <div class="item"><span class="lvl">★★</span>Color the result red when miles &gt; 100.</div>
+      <div class="item"><span class="lvl">★★★</span>Wrap the GUI inside a <code>class App</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>what does <code>*args</code> do inside a function?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — *args의 역할</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">GUI =<br>widgets + loop.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Pomodoro timer.</p>
+    <p class="bilingual">다음 주: 포모도로 타이머</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

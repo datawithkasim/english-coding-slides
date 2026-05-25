@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BC006 Week 13 — Google Dino Auto-Player</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">BC006 · Pro Projects · Week 13 · Day 93 of 100</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Week 13</div>
+    <div class="emoji">🦖</div>
+    <h1>Dino<br>Auto-Player</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">drive</span> + <span class="sub">jump</span> Chrome Dino with code.</p>
+    <p class="bilingual">Selenium으로 크롬 공룡 게임 자동 점프봇</p>
+  </div>
+
+  <!-- Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week…</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why <code>time.sleep(1)</code> between web requests?</div>
+      <details><summary>Show answer</summary><div class="ans">Be polite — avoid rate-limit / ban, reduce server load.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does Selenium do?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.keys <span class="kw">import</span> Keys
+
+driver = webdriver.<span class="fn">Chrome</span>()
+driver.<span class="fn">get</span>(<span class="str">"chrome://dino"</span>)
+body = driver.<span class="fn">find_element</span>(<span class="str">"tag name"</span>, <span class="str">"body"</span>)
+body.<span class="fn">send_keys</span>(Keys.SPACE)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Opens Chrome, presses Space — dino starts running + jumps once.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">Selenium</span>
+      <span class="gloss">browser automation</span>
+      <span class="ko">브라우저 자동화</span>
+
+      <span class="term">JavaScript exec</span>
+      <span class="gloss">run JS from Python</span>
+      <span class="ko">JS 실행</span>
+
+      <span class="term">canvas</span>
+      <span class="gloss">game render surface</span>
+      <span class="ko">캔버스</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Bot loop 🤖</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">read</span><span class="val">obstacle near?</span></div>
+      <div class="varbox"><span class="name">decide</span><span class="val">jump?</span></div>
+      <div class="varbox"><span class="name">act</span><span class="val">send_keys</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Sense → think → act. Repeat.</p>
+  </div>
+
+  <!-- Slot 6: Run -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Auto-jump bot</h2>
+<pre><span class="kw">import</span> time
+<span class="kw">from</span> selenium <span class="kw">import</span> webdriver
+<span class="kw">from</span> selenium.webdriver.common.keys <span class="kw">import</span> Keys
+
+d = webdriver.<span class="fn">Chrome</span>()
+d.<span class="fn">get</span>(<span class="str">"chrome://dino"</span>)
+body = d.<span class="fn">find_element</span>(<span class="str">"tag name"</span>, <span class="str">"body"</span>)
+body.<span class="fn">send_keys</span>(Keys.SPACE)
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    body.<span class="fn">send_keys</span>(Keys.SPACE)
+    time.<span class="fn">sleep</span>(<span class="num">0.6</span>)</pre>
+    <p class="bilingual" style="margin-top:.4em">기본 봇 — 0.6초마다 점프</p>
+  </div>
+
+  <!-- Slot 7: Investigate -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Read game state</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <div class="input-pill">execute_script</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">Runner.instance_</span><span class="val">JS object</span></div>
+      </div>
+      <div class="step-row">
+        <div class="input-pill">.horizon...</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">obstacles[0]</span><span class="val">distance to dino</span></div>
+      </div>
+      <div class="read-line">
+        <span class="com"># if dist &lt; 100 →</span> <span class="out">SPACE!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Jump or no?</h2>
+    <div class="trace-grid cols-3">
+      <div class="cell head">distance</div>
+      <div class="cell head">threshold</div>
+      <div class="cell head">action</div>
+
+      <div class="cell">200</div>
+      <div class="cell">100</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">wait</span></details></div>
+
+      <div class="cell">80</div>
+      <div class="cell">100</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">jump</span></details></div>
+
+      <div class="cell">50</div>
+      <div class="cell">100</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">jump</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Window not focused</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>pyautogui.<span class="fn">press</span>(<span class="str">"space"</span>)
+<span class="com"># user clicked away</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">SPACE goes to wrong window</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>body.<span class="fn">send_keys</span>(Keys.SPACE)
+<span class="com"># Selenium targets driver</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Always lands in the browser.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — keyboard focus -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Dino doesn't jump</h2>
+<pre>d.<span class="fn">send_keys</span>(Keys.SPACE)</pre>
+    <div class="err">AttributeError: 'WebDriver' has no 'send_keys'</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>send_keys</code> is on an element. Grab body first: <code>body = d.find_element("tag name", "body")</code>.</p>
+      <p class="bilingual">send_keys는 element에서 호출 — body 먼저 찾기</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — jump timing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Crashes every time</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    body.<span class="fn">send_keys</span>(Keys.SPACE)
+    time.<span class="fn">sleep</span>(<span class="num">2</span>)</pre>
+    <div class="err">Jumps every 2s — misses fast cactus, game over</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Read obstacle distance via JS each loop, jump only when close: <code>if dist &lt; 100: jump()</code>.</p>
+      <p class="bilingual">고정 타이머 X — 장애물 거리 보고 점프</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — end-of-game -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Loop after death</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="kw">if</span> close(): <span class="fn">jump</span>()</pre>
+    <div class="err">Game over, but bot still presses SPACE — restarts forever</div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Check crashed: <code>if d.execute_script("return Runner.instance_.crashed"): break</code>.</p>
+      <p class="bilingual">crashed 상태 확인 후 루프 종료</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">from</span> selenium <span class="kw">import</span> ____
+<span class="kw">from</span> selenium.webdriver.common.keys <span class="kw">import</span> Keys
+
+d = webdriver.<span class="fn">Chrome</span>()
+d.<span class="fn">get</span>(<span class="str">"chrome://____"</span>)
+body = d.<span class="fn">find_element</span>(<span class="str">"tag name"</span>, <span class="str">"____"</span>)
+body.<span class="fn">send_keys</span>(Keys.____)</pre>
+    <p style="margin-top:.6em">Goal: open Dino, find body, press space.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — smart jump</h2>
+<pre>JS = <span class="str">"return Runner.instance_.horizon.obstacles"</span>
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    obs = d.<span class="fn">execute_script</span>(____)
+    <span class="kw">if</span> obs <span class="kw">and</span> obs[<span class="num">0</span>][<span class="str">"xPos"</span>] &lt; ____:
+        body.<span class="fn">send_keys</span>(Keys.____)
+    <span class="kw">if</span> d.<span class="fn">execute_script</span>(<span class="str">"return Runner.instance_.____"</span>):
+        <span class="kw">break</span></pre>
+    <p style="margin-top:.6em">Jump when cactus within ~100 px.</p>
+  </div>
+
+  <!-- Slot 15: Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. To send a key to a page you call…</div>
+      <div class="opts">
+        <details><summary>A. <code>element.send_keys(...)</code></summary><div class="ans">✓ Use an element like body.</div></details>
+        <details><summary>B. <code>driver.send_keys(...)</code></summary><div class="ans">Nope — not on driver.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. To peek at game state you use…</div>
+      <div class="opts">
+        <details><summary>A. <code>driver.execute_script(JS)</code></summary><div class="ans">✓ Run JS, return value.</div></details>
+        <details><summary>B. <code>print(driver)</code></summary><div class="ans">Nope.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell a partner 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Selenium drives the browser, and we send <span class="blank"></span> when an obstacle's distance is below <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🦖</h2>
+    <ul class="check-list">
+      <li>pip install selenium</li>
+      <li>Open Chrome at chrome://dino (offline)</li>
+      <li>Press SPACE once to start</li>
+      <li>Loop: read obstacles, jump if close, stop on crash</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add duck (down arrow) for flying bats.</div>
+      <div class="item"><span class="lvl">★★</span>Scale threshold with current speed (game gets faster).</div>
+      <div class="item"><span class="lvl">★★★</span>Record top score and re-launch the game.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: <strong>why call <code>send_keys</code> on body, not driver?</strong></p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — send_keys를 body에서 호출하는 이유?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Bots = sense,<br>think, act.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next week: Space Invaders with Turtle.</p>
+    <p class="bilingual">다음 주: 터틀로 스페이스 인베이더 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 20</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

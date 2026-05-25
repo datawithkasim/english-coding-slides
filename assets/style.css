@@ -41,7 +41,7 @@ html, body {
 .slide {
   position: absolute;
   inset: 0;
-  padding: 6%;
+  padding: 4.5% 6%;
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -54,14 +54,14 @@ html, body {
    beyond the old vmin-only ceiling without making portrait phones huge.
    Caps raised so a 1920×1080 projector shows ~120px headings instead of
    the old pinched 88px. */
-h1 { font-size: clamp(40px, min(9vmin, 6.5vw), 140px); line-height: 1.05; margin-bottom: .25em; }
-h2 { font-size: clamp(28px, min(6.2vmin, 4.5vw), 96px); line-height: 1.1; margin-bottom: .5em; color: var(--accent-2); }
-p, li { font-size: clamp(18px, min(3.6vmin, 2.4vw), 44px); line-height: 1.5; }
+h1 { font-size: clamp(44px, min(10.2vmin, 7.3vw), 158px); line-height: 1.05; margin-bottom: .25em; }
+h2 { font-size: clamp(31px, min(7vmin, 5vw), 108px); line-height: 1.1; margin-bottom: .5em; color: var(--accent-2); }
+p, li { font-size: clamp(20px, min(4.1vmin, 2.7vw), 50px); line-height: 1.5; }
 .sub { color: var(--accent); font-weight: 700; }
-.big { font-size: clamp(20px, min(4vmin, 2.8vw), 52px); font-weight: 600; }
+.big { font-size: clamp(22px, min(4.5vmin, 3.2vw), 59px); font-weight: 600; }
 .center { text-align: center; }
 .center-all { justify-content: center; align-items: center; text-align: center; }
-.emoji { font-size: clamp(56px, min(12vmin, 9vw), 180px); margin-bottom: .15em; line-height: 1; }
+.emoji { font-size: clamp(62px, min(13.5vmin, 10vw), 200px); margin-bottom: .15em; line-height: 1; }
 
 /* Cap line length inside slides so paragraphs on wide projectors don't
    stretch into 1900px run-on lines. Code blocks are exempt — they need
@@ -84,7 +84,7 @@ pre {
   padding: 1em 1.3em;
   border-radius: 14px;
   font-family: "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
-  font-size: clamp(14px, min(2.9vmin, 2vw), 36px);
+  font-size: clamp(16px, min(3.3vmin, 2.3vw), 40px);
   line-height: 1.55;
   overflow: hidden;
   white-space: pre;
@@ -237,9 +237,9 @@ ul li { margin-bottom: .35em; }
   height: 1.6em; position: relative; font-weight: 700;
 }
 .var-row .label { color: var(--ink); }
-.var-vals { position: relative; display: inline-block; min-width: 4em; text-align: left; }
+.var-vals { display: inline-grid; vertical-align: baseline; min-width: 4em; text-align: left; }
 .var-val {
-  position: absolute; left: 0; top: 0; white-space: nowrap;
+  grid-area: 1 / 1; white-space: nowrap;
   color: var(--accent); opacity: 0;
 }
 
@@ -900,7 +900,7 @@ ul li { margin-bottom: .35em; }
   display: flex; flex-direction: column; gap: .4em; align-items: center;
   margin: .6em 0;
 }
-.clean-chain .stage {
+.clean-chain .cc-step {
   background: white; border: 3px solid var(--soft); border-radius: 14px;
   padding: .55em 1.2em;
   font-family: "JetBrains Mono", monospace; font-weight: 700;
@@ -908,10 +908,10 @@ ul li { margin-bottom: .35em; }
   min-width: 14em; text-align: center;
   box-shadow: 0 4px 0 var(--soft);
 }
-.clean-chain .stage.s1 { color: var(--ink); animation: cc1 8s infinite; }
-.clean-chain .stage.s2 { color: var(--accent-2); animation: cc2 8s infinite; }
-.clean-chain .stage.s3 { color: var(--accent); animation: cc3 8s infinite; }
-.clean-chain .stage.s4 { background: var(--accent); color: white; border-color: var(--accent); animation: cc4 8s infinite; }
+.clean-chain .cc-step.s1 { color: var(--ink); animation: cc1 8s infinite; }
+.clean-chain .cc-step.s2 { color: var(--accent-2); animation: cc2 8s infinite; }
+.clean-chain .cc-step.s3 { color: var(--accent); animation: cc3 8s infinite; }
+.clean-chain .cc-step.s4 { background: var(--accent); color: white; border-color: var(--accent); animation: cc4 8s infinite; }
 .clean-chain .arrow {
   font-family: "JetBrains Mono", monospace;
   font-size: clamp(13px, 2.2vmin, 18px);
@@ -1207,6 +1207,609 @@ ul li { margin-bottom: .35em; }
   font-style: italic;
 }
 
+/* ============================================================
+   Code visualization patterns — animated teaching aids.
+   See also: viz-3 / viz-4 / viz-5 for for-loop iteration above.
+   Each pattern below loops on its own CSS timeline so students
+   see the construct play out repeatedly without clicking.
+============================================================ */
+
+/* ---------- shared scaffolding ---------- */
+.viz-stage {
+  background: var(--code-bg);
+  border-radius: 14px;
+  padding: clamp(.9em, 2.2vmin, 1.4em);
+  color: var(--code-ink);
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  display: flex; flex-direction: column;
+  gap: clamp(.5em, 1.6vmin, 1em);
+  align-items: stretch;
+}
+.viz-stage .vlabel {
+  color: var(--com);
+  font-size: clamp(13px, 2vmin, 17px);
+  letter-spacing: .04em;
+}
+.viz-pill {
+  display: inline-block;
+  background: #2a2a3e;
+  color: #f5f5f5;
+  font-weight: 700;
+  font-size: clamp(15px, 2.6vmin, 22px);
+  padding: .35em .8em;
+  border-radius: 10px;
+  border: 3px solid transparent;
+  font-family: "JetBrains Mono", monospace;
+}
+.viz-pill.kw { color: var(--kw); }
+.viz-pill.str { color: var(--str); }
+.viz-pill.num { color: var(--num); }
+.viz-arrow {
+  font-size: clamp(20px, 3.4vmin, 30px);
+  color: var(--com);
+  text-align: center;
+  line-height: 1;
+}
+
+/* ---------- IF / ELSE branching (viz-if) ----------
+   Cycles two scenarios (true then false) every 8s so students see
+   both branches taken. Markup expectations:
+
+   <div class="viz viz-if">
+     <div class="if-input">
+       <span class="case case-a">age = 14</span>
+       <span class="case case-b">age = 9</span>
+     </div>
+     <div class="if-cond">age >= 13</div>
+     <div class="if-branches">
+       <div class="if-branch true">print("teen")</div>
+       <div class="if-branch false">print("kid")</div>
+     </div>
+     <div class="if-output">
+       <div class="out-label">▸ Output</div>
+       <div class="out-line out-a">teen</div>
+       <div class="out-line out-b">kid</div>
+     </div>
+   </div>
+*/
+.viz-if { display: flex; flex-direction: column; gap: clamp(.55em, 1.6vmin, 1em); }
+.viz-if .if-input,
+.viz-if .if-cond,
+.viz-if .if-branches,
+.viz-if .if-output {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: .65em .9em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(16px, 2.9vmin, 26px);
+  font-weight: 700;
+  text-align: center;
+  position: relative;
+}
+.viz-if .if-input { display: flex; justify-content: center; gap: .8em; }
+.viz-if .if-input .case {
+  padding: .25em .75em;
+  border-radius: 8px;
+  background: #3a3a52;
+  border: 3px solid transparent;
+  opacity: .35;
+  transition: opacity .25s;
+}
+.viz-if .if-cond {
+  display: inline-block; align-self: center;
+  border: 3px solid transparent;
+}
+.viz-if .if-branches { display: flex; gap: 1em; justify-content: center; padding: 0; background: transparent; }
+.viz-if .if-branch {
+  flex: 1; max-width: 50%;
+  padding: .55em .9em; border-radius: 10px;
+  background: #2a2a3e; border: 3px solid transparent;
+  opacity: .35;
+  transition: opacity .25s;
+}
+.viz-if .if-branch.true::before  { content: "✓ true →  "; color: var(--fn); font-weight: 800; }
+.viz-if .if-branch.false::before { content: "✗ false →  "; color: #ff79c6; font-weight: 800; }
+.viz-if .if-output { background: #1e1e2e; }
+.viz-if .if-output .out-label { color: var(--com); font-size: .7em; font-weight: 500; margin-bottom: .25em; }
+.viz-if .if-output .out-line { opacity: 0; color: var(--str); }
+
+/* Scenario A: 0–4s — case-a glows, condition turns green, true branch lights */
+.viz-if .if-input .case-a   { animation: ifc-a 8s infinite; }
+.viz-if .if-input .case-b   { animation: ifc-b 8s infinite; }
+.viz-if .if-cond            { animation: ifcond 8s infinite; }
+.viz-if .if-branch.true     { animation: ifbtrue 8s infinite; }
+.viz-if .if-branch.false    { animation: ifbfalse 8s infinite; }
+.viz-if .if-output .out-a   { animation: ifout-a 8s infinite; }
+.viz-if .if-output .out-b   { animation: ifout-b 8s infinite; }
+@keyframes ifc-a {
+  0%,5%   { opacity: .35; background: #3a3a52; border-color: transparent; transform: scale(1); }
+  10%,45% { opacity: 1; background: var(--accent); border-color: var(--accent); transform: scale(1.06); }
+  50%,100% { opacity: .35; background: #3a3a52; border-color: transparent; transform: scale(1); }
+}
+@keyframes ifc-b {
+  0%,55%  { opacity: .35; background: #3a3a52; border-color: transparent; transform: scale(1); }
+  60%,95% { opacity: 1; background: var(--accent); border-color: var(--accent); transform: scale(1.06); }
+  98%,100%{ opacity: .35; transform: scale(1); }
+}
+@keyframes ifcond {
+  0%,12%   { background: #2a2a3e; border-color: transparent; color: #f5f5f5; }
+  15%,45%  { background: rgba(80,250,123,.18); border-color: var(--fn); color: var(--fn); }
+  48%,62%  { background: #2a2a3e; border-color: transparent; color: #f5f5f5; }
+  65%,95%  { background: rgba(255,121,198,.18); border-color: var(--kw); color: var(--kw); }
+  98%,100% { background: #2a2a3e; border-color: transparent; color: #f5f5f5; }
+}
+@keyframes ifbtrue {
+  0%,18%   { opacity: .35; transform: scale(1); background: #2a2a3e; }
+  22%,45%  { opacity: 1; transform: scale(1.04); background: rgba(80,250,123,.16); border-color: var(--fn); }
+  48%,100% { opacity: .35; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+}
+@keyframes ifbfalse {
+  0%,68%   { opacity: .35; transform: scale(1); background: #2a2a3e; }
+  72%,95%  { opacity: 1; transform: scale(1.04); background: rgba(255,121,198,.16); border-color: var(--kw); }
+  98%,100% { opacity: .35; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+}
+@keyframes ifout-a {
+  0%,28%   { opacity: 0; transform: translateX(-6px); }
+  32%,46%  { opacity: 1; transform: none; }
+  50%,100% { opacity: 0; }
+}
+@keyframes ifout-b {
+  0%,78%   { opacity: 0; transform: translateX(-6px); }
+  82%,96%  { opacity: 1; transform: none; }
+  99%,100% { opacity: 0; }
+}
+
+/* ---------- WHILE loop (viz-while) ----------
+   Cycles: var box updates, condition check pulses, body fires.
+   Designed for 4 iterations (true,true,true,false-exit). 8s cycle.
+
+   <div class="viz viz-while">
+     <div class="wh-var"><span class="vname">count</span> = <span class="vval">
+       <span>0</span><span>1</span><span>2</span><span>3</span>
+     </span></div>
+     <div class="wh-cond">count &lt; 3</div>
+     <div class="wh-body">print(count); count += 1</div>
+     <div class="output-box">
+       <div class="out-label">▸ Output</div>
+       <div class="out-line">0</div>
+       <div class="out-line">1</div>
+       <div class="out-line">2</div>
+       <div class="out-line wh-exit">→ exit loop</div>
+     </div>
+   </div>
+*/
+.viz-while { display: flex; flex-direction: column; gap: clamp(.5em, 1.4vmin, .9em); }
+.viz-while .wh-var,
+.viz-while .wh-cond,
+.viz-while .wh-body {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: .6em .9em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(16px, 2.8vmin, 24px);
+  font-weight: 700;
+  text-align: center;
+  border: 3px solid transparent;
+}
+.viz-while .wh-var .vname { color: var(--accent); }
+.viz-while .wh-var .vval { display: inline-grid; vertical-align: baseline; min-width: 1.2em; color: var(--num); }
+.viz-while .wh-var .vval > span {
+  grid-area: 1 / 1; text-align: center; opacity: 0;
+}
+.viz-while .wh-var .vval > span:nth-child(1) { animation: wv 8s infinite; }
+.viz-while .wh-var .vval > span:nth-child(2) { animation: wv 8s infinite 2s; }
+.viz-while .wh-var .vval > span:nth-child(3) { animation: wv 8s infinite 4s; }
+.viz-while .wh-var .vval > span:nth-child(4) { animation: wv 8s infinite 6s; }
+@keyframes wv { 0%,22% { opacity: 1; } 25%,100% { opacity: 0; } }
+
+.viz-while .wh-cond { animation: whcond 8s infinite; }
+@keyframes whcond {
+  0%,4%   { background: #2a2a3e; border-color: transparent; color: #f5f5f5; }
+  6%,22%  { background: rgba(80,250,123,.16); border-color: var(--fn); color: var(--fn); transform: scale(1.02); }
+  25%,29% { background: rgba(80,250,123,.16); border-color: var(--fn); color: var(--fn); }
+  31%,47% { background: rgba(80,250,123,.16); border-color: var(--fn); color: var(--fn); transform: scale(1.02); }
+  50%,54% { background: rgba(80,250,123,.16); border-color: var(--fn); color: var(--fn); }
+  56%,72% { background: rgba(80,250,123,.16); border-color: var(--fn); color: var(--fn); transform: scale(1.02); }
+  75%,79% { background: #2a2a3e; border-color: transparent; }
+  81%,96% { background: rgba(255,121,198,.16); border-color: var(--kw); color: var(--kw); transform: scale(1.02); }
+  99%,100% { background: #2a2a3e; border-color: transparent; color: #f5f5f5; transform: scale(1); }
+}
+.viz-while .wh-body { animation: whbody 8s infinite; }
+@keyframes whbody {
+  0%,9%   { opacity: .3; transform: scale(1); }
+  12%,22% { opacity: 1; transform: scale(1.03); background: rgba(255,120,73,.14); border-color: var(--accent); }
+  25%,34% { opacity: .3; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+  37%,47% { opacity: 1; transform: scale(1.03); background: rgba(255,120,73,.14); border-color: var(--accent); }
+  50%,59% { opacity: .3; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+  62%,72% { opacity: 1; transform: scale(1.03); background: rgba(255,120,73,.14); border-color: var(--accent); }
+  75%,100%{ opacity: .25; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+}
+.viz-while .output-box .out-line:nth-child(2) { animation: whout1 8s infinite; }
+.viz-while .output-box .out-line:nth-child(3) { animation: whout2 8s infinite; }
+.viz-while .output-box .out-line:nth-child(4) { animation: whout3 8s infinite; }
+.viz-while .output-box .wh-exit { animation: whexit 8s infinite; color: var(--kw); }
+@keyframes whout1 { 0%,18%   { opacity: 0; transform: translateX(-6px);} 22%,95% { opacity: 1; transform: none;} 98%,100%{opacity:0;} }
+@keyframes whout2 { 0%,43%   { opacity: 0; transform: translateX(-6px);} 47%,95% { opacity: 1; transform: none;} 98%,100%{opacity:0;} }
+@keyframes whout3 { 0%,68%   { opacity: 0; transform: translateX(-6px);} 72%,95% { opacity: 1; transform: none;} 98%,100%{opacity:0;} }
+@keyframes whexit { 0%,82%   { opacity: 0; transform: translateX(-6px);} 86%,98% { opacity: 1; transform: none;} 99%,100%{opacity:0;} }
+
+/* ---------- FUNCTION call + return (viz-func) ----------
+   Visualises call → body executes → return value flows back.
+
+   <div class="viz viz-func">
+     <div class="fn-caller">
+       <span class="fn-callcode">greet(<span class="arg">"Min"</span>)</span>
+       <span class="fn-result"><span class="rv">"Hello, Min!"</span></span>
+     </div>
+     <div class="fn-flow-down">↓ call</div>
+     <div class="fn-body">
+       <div class="fn-sig">def greet(<span class="param">name</span>):</div>
+       <div class="fn-line">return "Hello, " + <span class="param-use">name</span> + "!"</div>
+     </div>
+     <div class="fn-flow-up">↑ return</div>
+   </div>
+*/
+.viz-func { display: flex; flex-direction: column; gap: clamp(.45em, 1.3vmin, .8em); }
+.viz-func .fn-caller,
+.viz-func .fn-body {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: .65em .9em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(15px, 2.7vmin, 22px);
+  border: 3px solid transparent;
+}
+.viz-func .fn-caller {
+  display: flex; justify-content: space-between; align-items: center; gap: 1em; flex-wrap: wrap;
+}
+.viz-func .fn-callcode { font-weight: 700; }
+.viz-func .fn-callcode .arg { color: var(--str); }
+.viz-func .fn-result { color: var(--com); font-size: .9em; }
+.viz-func .fn-result .rv { color: var(--str); font-weight: 700; opacity: 0; }
+.viz-func .fn-body { text-align: left; }
+.viz-func .fn-sig { color: var(--kw); font-weight: 700; margin-bottom: .25em; }
+.viz-func .fn-sig .param { color: var(--accent); }
+.viz-func .fn-line { color: #f5f5f5; padding-left: 1.5em; }
+.viz-func .fn-line .param-use { color: var(--accent); }
+.viz-func .fn-flow-down,
+.viz-func .fn-flow-up {
+  text-align: center; color: var(--com);
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(15px, 2.4vmin, 20px);
+}
+
+.viz-func .fn-caller { animation: fncall 5s infinite; }
+.viz-func .fn-body   { animation: fnbody 5s infinite; }
+.viz-func .fn-flow-down { animation: fnarrowd 5s infinite; }
+.viz-func .fn-flow-up   { animation: fnarrowu 5s infinite; }
+.viz-func .fn-result .rv { animation: fnret 5s infinite; }
+.viz-func .fn-callcode .arg { animation: fnarg 5s infinite; }
+.viz-func .fn-sig .param { animation: fnparam 5s infinite; }
+.viz-func .fn-line .param-use { animation: fnparamuse 5s infinite; }
+
+@keyframes fncall {
+  0%,4%   { background: rgba(255,120,73,.16); border-color: var(--accent); }
+  20%,80% { background: #2a2a3e; border-color: transparent; }
+  88%,100%{ background: rgba(80,250,123,.16); border-color: var(--fn); }
+}
+@keyframes fnbody {
+  0%,18%  { background: #2a2a3e; border-color: transparent; opacity: .55; }
+  25%,68% { background: rgba(107,78,230,.14); border-color: var(--accent-2); opacity: 1; }
+  78%,100%{ background: #2a2a3e; border-color: transparent; opacity: .55; }
+}
+@keyframes fnarrowd { 0%,8% { color: var(--com);} 12%,22% { color: var(--accent); transform: scale(1.3);} 28%,100% { color: var(--com); transform: scale(1);} }
+@keyframes fnarrowu { 0%,72% { color: var(--com); transform: scale(1);} 76%,88% { color: var(--fn); transform: scale(1.3);} 92%,100% { color: var(--com); transform: scale(1);} }
+@keyframes fnret    { 0%,82% { opacity: 0; transform: translateY(4px);} 88%,98% { opacity: 1; transform: none;} 100% { opacity: 0; } }
+@keyframes fnarg    { 0%,4% { background: rgba(241,250,140,.2); padding: 0 .25em; border-radius: 4px;} 18%,100% { background: transparent; padding: 0; } }
+@keyframes fnparam  { 0%,18% { background: transparent;} 24%,30% { background: rgba(255,120,73,.25); padding: 0 .2em; border-radius: 4px;} 36%,100% { background: transparent; padding: 0;} }
+@keyframes fnparamuse { 0%,30% { background: transparent;} 36%,48% { background: rgba(255,120,73,.3); padding: 0 .2em; border-radius: 4px;} 54%,100% { background: transparent; padding: 0;} }
+
+/* ---------- Variable re-assignment timeline (viz-reassign) ----------
+   Code lines play in sequence; var box on right shows current value.
+
+   <div class="viz viz-reassign">
+     <div class="ra-code">
+       <div class="ra-line">x = 1</div>
+       <div class="ra-line">x = x + 4</div>
+       <div class="ra-line">x = x * 2</div>
+       <div class="ra-line">x = x - 3</div>
+     </div>
+     <div class="ra-box">
+       <span class="ra-name">x</span>
+       <span class="ra-vals">
+         <span>1</span><span>5</span><span>10</span><span>7</span>
+       </span>
+     </div>
+   </div>
+*/
+.viz-reassign {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(.7em, 2vmin, 1.4em);
+  align-items: center;
+}
+.viz-reassign .ra-code {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: .8em 1em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(16px, 2.8vmin, 24px);
+  line-height: 1.7;
+}
+.viz-reassign .ra-line {
+  padding: .15em .5em;
+  border-radius: 6px;
+  opacity: .35;
+  border-left: 3px solid transparent;
+}
+.viz-reassign .ra-box {
+  background: white;
+  border: 4px solid var(--accent);
+  border-radius: 16px;
+  padding: 1em 1.2em;
+  box-shadow: 0 6px 0 var(--soft);
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+}
+.viz-reassign .ra-name {
+  display: block;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: clamp(18px, 3vmin, 26px);
+  margin-bottom: .25em;
+}
+.viz-reassign .ra-vals {
+  position: relative; display: inline-block;
+  min-height: 1.4em; min-width: 2em;
+  font-size: clamp(28px, 5vmin, 48px);
+  font-weight: 800;
+  color: var(--ink);
+}
+.viz-reassign .ra-vals > span {
+  position: absolute; left: 50%; top: 0;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.viz-reassign .ra-line:nth-child(1) { animation: ra-line 8s infinite 0s; }
+.viz-reassign .ra-line:nth-child(2) { animation: ra-line 8s infinite 2s; }
+.viz-reassign .ra-line:nth-child(3) { animation: ra-line 8s infinite 4s; }
+.viz-reassign .ra-line:nth-child(4) { animation: ra-line 8s infinite 6s; }
+.viz-reassign .ra-vals > span:nth-child(1) { animation: ra-val 8s infinite 0s; }
+.viz-reassign .ra-vals > span:nth-child(2) { animation: ra-val 8s infinite 2s; }
+.viz-reassign .ra-vals > span:nth-child(3) { animation: ra-val 8s infinite 4s; }
+.viz-reassign .ra-vals > span:nth-child(4) { animation: ra-val 8s infinite 6s; }
+@keyframes ra-line {
+  0%,1%   { opacity: .35; background: transparent; border-left-color: transparent; }
+  3%,22%  { opacity: 1; background: rgba(255,120,73,.16); border-left-color: var(--accent); }
+  25%,100%{ opacity: .35; background: transparent; border-left-color: transparent; }
+}
+@keyframes ra-val {
+  0%,1%   { opacity: 0; transform: translateX(-50%) translateY(8px) scale(.85); }
+  4%,22%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.1); color: var(--accent); }
+  25%,100%{ opacity: 0; transform: translateX(-50%) scale(1); }
+}
+
+/* ---------- Dict / object lookup (viz-dict) ----------
+   <div class="viz viz-dict">
+     <div class="d-table">
+       <div class="d-row"><span class="d-key">"hp"</span><span class="d-sep">:</span><span class="d-val">35</span></div>
+       <div class="d-row"><span class="d-key">"type"</span><span class="d-sep">:</span><span class="d-val">"electric"</span></div>
+       <div class="d-row"><span class="d-key">"name"</span><span class="d-sep">:</span><span class="d-val">"Pikachu"</span></div>
+     </div>
+     <div class="d-lookup">pokemon[<span class="d-q d-q1">"hp"</span><span class="d-q d-q2">"name"</span>]</div>
+     <div class="output-box">
+       <div class="out-label">▸ Output</div>
+       <div class="out-line d-out d-out1">35</div>
+       <div class="out-line d-out d-out2">"Pikachu"</div>
+     </div>
+   </div>
+*/
+.viz-dict { display: flex; flex-direction: column; gap: clamp(.5em, 1.4vmin, .9em); }
+.viz-dict .d-table {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: .6em .9em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(15px, 2.6vmin, 22px);
+}
+.viz-dict .d-row {
+  display: flex; gap: .5em; align-items: center;
+  padding: .25em .4em; border-radius: 6px;
+}
+.viz-dict .d-key { color: var(--str); font-weight: 700; min-width: 5em; }
+.viz-dict .d-sep { color: var(--com); }
+.viz-dict .d-val { color: var(--num); font-weight: 700; }
+.viz-dict .d-lookup {
+  background: #1e1e2e;
+  border-radius: 12px;
+  padding: .55em .9em;
+  font-family: "JetBrains Mono", monospace;
+  color: #f5f5f5;
+  font-size: clamp(16px, 2.8vmin, 24px);
+  text-align: center; font-weight: 700;
+}
+/* Grid-stack so both q-strings share one inline slot sized to the widest key.
+   Keeps brackets and the rest of the lookup text on a single line in flow. */
+.viz-dict .d-qs { display: inline-grid; vertical-align: baseline; }
+.viz-dict .d-q { grid-area: 1 / 1; opacity: 0; color: var(--str); white-space: nowrap; text-align: center; }
+.viz-dict .d-q.d-q1 { animation: dq1 8s infinite; }
+.viz-dict .d-q.d-q2 { animation: dq2 8s infinite; }
+@keyframes dq1 { 0%,2% { opacity: 0; } 4%,46% { opacity: 1; } 48%,100% { opacity: 0; } }
+@keyframes dq2 { 0%,52% { opacity: 0; } 54%,96% { opacity: 1; } 98%,100% { opacity: 0; } }
+
+/* Row 1 (hp) — selected scenario 1 */
+.viz-dict .d-row:nth-child(1) { animation: drow-1 8s infinite; }
+.viz-dict .d-row:nth-child(2) { animation: drow-0 8s infinite; }
+.viz-dict .d-row:nth-child(3) { animation: drow-2 8s infinite; }
+@keyframes drow-1 {
+  0%,8%   { background: transparent; }
+  12%,40% { background: rgba(255,120,73,.18); outline: 2px solid var(--accent); }
+  44%,100%{ background: transparent; outline: none; }
+}
+@keyframes drow-2 {
+  0%,58%  { background: transparent; }
+  62%,90% { background: rgba(107,78,230,.18); outline: 2px solid var(--accent-2); }
+  94%,100%{ background: transparent; outline: none; }
+}
+@keyframes drow-0 { 0%,100% { background: transparent; } }
+
+.viz-dict .output-box .d-out { opacity: 0; }
+.viz-dict .output-box .d-out1 { animation: dout1 8s infinite; }
+.viz-dict .output-box .d-out2 { animation: dout2 8s infinite; }
+@keyframes dout1 { 0%,18% { opacity: 0; transform: translateX(-6px);} 22%,46% { opacity: 1; transform: none;} 50%,100% { opacity: 0;} }
+@keyframes dout2 { 0%,68% { opacity: 0; transform: translateX(-6px);} 72%,96% { opacity: 1; transform: none;} 99%,100% { opacity: 0;} }
+
+/* ---------- List index pointer (viz-index) ----------
+   Pointer travels along an array, value of expression updates in box.
+   <div class="viz viz-index">
+     <div class="iter-row">
+       <div class="iter-item">"a"</div><div class="iter-item">"b"</div><div class="iter-item">"c"</div><div class="iter-item">"d"</div>
+     </div>
+     <div class="idx-expr"><span class="idx-name">items</span>[<span class="idx-num"><span>0</span><span>1</span><span>2</span><span>3</span></span>]</div>
+     <div class="output-box">
+       <div class="out-label">▸ value</div>
+       <div class="out-line">"a"</div><div class="out-line">"b"</div><div class="out-line">"c"</div><div class="out-line">"d"</div>
+     </div>
+   </div>
+   Reuses viz-4 highlight + var-val for the index number.
+*/
+.viz-index { display: flex; flex-direction: column; gap: clamp(.5em, 1.4vmin, 1em); }
+.viz-index .idx-expr {
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  font-size: clamp(18px, 3.2vmin, 28px);
+  color: var(--ink);
+  background: white;
+  border-radius: 12px;
+  padding: .4em .8em;
+  box-shadow: 0 4px 0 var(--soft);
+}
+.viz-index .idx-name { color: var(--accent-2); }
+.viz-index .idx-num {
+  display: inline-grid; vertical-align: baseline;
+  min-width: 1.2em; color: var(--accent); font-weight: 800;
+}
+.viz-index .idx-num > span { grid-area: 1 / 1; text-align: center; opacity: 0; }
+.viz-index .idx-num > span:nth-child(1) { animation: vv4 5s infinite; }
+.viz-index .idx-num > span:nth-child(2) { animation: vv4 5s infinite 1s; }
+.viz-index .idx-num > span:nth-child(3) { animation: vv4 5s infinite 2s; }
+.viz-index .idx-num > span:nth-child(4) { animation: vv4 5s infinite 3s; }
+.viz-index .iter-item:nth-child(1) { animation: hl4 5s infinite; }
+.viz-index .iter-item:nth-child(2) { animation: hl4 5s infinite 1s; }
+.viz-index .iter-item:nth-child(3) { animation: hl4 5s infinite 2s; }
+.viz-index .iter-item:nth-child(4) { animation: hl4 5s infinite 3s; }
+.viz-index .out-line:nth-child(2) { animation: out4a 5s infinite; }
+.viz-index .out-line:nth-child(3) { animation: out4b 5s infinite; }
+.viz-index .out-line:nth-child(4) { animation: out4c 5s infinite; }
+.viz-index .out-line:nth-child(5) { animation: out4d 5s infinite; }
+
+/* ---------- Event flow (viz-event) ----------
+   click → listener → DOM update. Used by web002 events.
+   <div class="viz viz-event">
+     <div class="ev-step ev-click">🖱 click</div>
+     <div class="viz-arrow">↓</div>
+     <div class="ev-step ev-listen">button.addEventListener("click", run)</div>
+     <div class="viz-arrow">↓</div>
+     <div class="ev-step ev-run">run() fires</div>
+     <div class="viz-arrow">↓</div>
+     <div class="ev-step ev-dom">DOM updates ✓</div>
+   </div>
+*/
+.viz-event { display: flex; flex-direction: column; gap: clamp(.25em, .8vmin, .5em); align-items: center; }
+.viz-event .ev-step {
+  background: #2a2a3e; color: #f5f5f5;
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(15px, 2.6vmin, 22px);
+  font-weight: 700;
+  padding: .55em 1em; border-radius: 12px;
+  border: 3px solid transparent;
+  opacity: .4;
+  text-align: center;
+}
+.viz-event .ev-click  { animation: ev-step 4s infinite 0s; }
+.viz-event .ev-listen { animation: ev-step 4s infinite .9s; }
+.viz-event .ev-run    { animation: ev-step 4s infinite 1.8s; }
+.viz-event .ev-dom    { animation: ev-step 4s infinite 2.7s; background: rgba(80,250,123,.14); }
+@keyframes ev-step {
+  0%,2%   { opacity: .4; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+  6%,18%  { opacity: 1; transform: scale(1.06); background: rgba(255,120,73,.22); border-color: var(--accent); }
+  24%,100%{ opacity: .55; transform: scale(1); background: #2a2a3e; border-color: transparent; }
+}
+
+/* ---------- Coordinates / movement (viz-coord) ----------
+   For pygame x/y, gravity, collisions. Shows a sprite moving on a grid.
+
+   <div class="viz viz-coord" data-mode="move-x">
+     <div class="cg-grid">
+       <div class="cg-axis">x →</div>
+       <div class="cg-track"><div class="cg-sprite">🎮</div></div>
+     </div>
+     <div class="cg-readout"><span class="cg-name">x</span> = <span class="cg-val"><span>0</span><span>100</span><span>200</span><span>300</span></span></div>
+   </div>
+*/
+.viz-coord {
+  background: #2a2a3e;
+  border-radius: 14px;
+  padding: 1em;
+  display: flex; flex-direction: column; gap: .8em;
+}
+.viz-coord .cg-grid {
+  background: #1e1e2e;
+  border-radius: 10px;
+  padding: 1em .6em;
+  position: relative;
+  min-height: clamp(80px, 16vmin, 140px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.viz-coord .cg-axis {
+  color: var(--com); font-family: "JetBrains Mono", monospace;
+  font-size: clamp(13px, 2vmin, 17px);
+  margin-bottom: .4em;
+}
+.viz-coord .cg-track {
+  position: relative; height: clamp(40px, 8vmin, 60px);
+  background: repeating-linear-gradient(to right, transparent 0, transparent 24px, rgba(255,255,255,.08) 24px, rgba(255,255,255,.08) 25px);
+  border-radius: 6px;
+}
+.viz-coord .cg-sprite {
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(28px, 5.5vmin, 48px);
+  animation: cg-move 4s infinite ease-in-out;
+}
+@keyframes cg-move {
+  0%,5%    { left: 4%; }
+  25%,30%  { left: 32%; }
+  50%,55%  { left: 60%; }
+  75%,80%  { left: 88%; }
+  95%,100% { left: 4%; }
+}
+.viz-coord .cg-readout {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(16px, 2.8vmin, 24px);
+  color: #f5f5f5; text-align: center; font-weight: 700;
+}
+.viz-coord .cg-name { color: var(--accent); }
+.viz-coord .cg-val {
+  display: inline-grid; vertical-align: baseline;
+  min-width: 2.5em; color: var(--num);
+}
+.viz-coord .cg-val > span { grid-area: 1 / 1; text-align: center; opacity: 0; }
+.viz-coord .cg-val > span:nth-child(1) { animation: vv4 4s infinite; }
+.viz-coord .cg-val > span:nth-child(2) { animation: vv4 4s infinite 1s; }
+.viz-coord .cg-val > span:nth-child(3) { animation: vv4 4s infinite 2s; }
+.viz-coord .cg-val > span:nth-child(4) { animation: vv4 4s infinite 3s; }
+
+/* ============================================================
+   End code-viz patterns
+============================================================ */
+
 /* ============ Narrow-viewport adaptations ============
    Stage already fills 100vw/100vh at every size. These rules only restack
    side-by-side components that can't fit a narrow width.
@@ -1239,6 +1842,11 @@ ul li { margin-bottom: .35em; }
   pre { overflow-x: auto; white-space: pre; }
   /* Nav buttons hug the bottom edge */
   .nav { bottom: 12px; }
+  /* Viz: branches stack vertically; reassign collapses to 1 col */
+  .viz-if .if-branches { flex-direction: column; }
+  .viz-if .if-branch { max-width: 100%; }
+  .viz-reassign { grid-template-columns: 1fr; }
+  .viz-func .fn-caller { flex-direction: column; gap: .3em; align-items: flex-start; }
 }
 
 @media (max-width: 420px) {
@@ -1251,4 +1859,126 @@ ul li { margin-bottom: .35em; }
 
 @media (max-height: 480px) and (orientation: landscape) {
   .slide { padding: 2vh 3vw; }
+}
+
+/* =========================================================
+   BC bootcamp track — activity components
+   Added with BC001 W1. Used by: trace grid, debug card,
+   MCQ quiz, stretch list, exit ticket, activity tag pill.
+   ========================================================= */
+
+.activity-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: .65em;
+  font-weight: 700;
+  letter-spacing: .05em;
+  padding: .15em .55em;
+  border-radius: 999px;
+  margin-left: .4em;
+  vertical-align: middle;
+}
+
+/* Trace grid — student fills in variable values per line */
+.trace-grid {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: .4em;
+  margin-top: .5em;
+  font-size: clamp(14px, 2.4vmin, 28px);
+  max-width: 100%;
+}
+.trace-grid.cols-4 { grid-template-columns: auto 1fr 1fr 1fr; }
+.trace-grid.cols-5 { grid-template-columns: auto 1fr 1fr 1fr 1fr; }
+.trace-grid .cell {
+  background: #fff;
+  border: 2px solid var(--soft);
+  border-radius: 10px;
+  padding: .4em .6em;
+  text-align: center;
+  min-width: 0;
+}
+.trace-grid .head { background: var(--soft); font-weight: 700; color: var(--ink); }
+.trace-grid code { font-family: 'JetBrains Mono', monospace; }
+.trace-grid details { cursor: pointer; display: inline-block; }
+.trace-grid summary { list-style: none; color: var(--accent); font-weight: 700; }
+.trace-grid summary::-webkit-details-marker { display: none; }
+.trace-grid .reveal { color: #0a6b2e; font-weight: 700; }
+
+/* Debug card — reveal-the-fix pattern */
+.debug-card {
+  margin-top: .5em;
+  background: #fff;
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  padding: .5em .8em;
+}
+.debug-card summary {
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+}
+.debug-card summary::-webkit-details-marker { display: none; }
+.debug-card .err {
+  font-family: 'JetBrains Mono', monospace;
+  background: #fff5f0;
+  border-left: 3px solid var(--accent);
+  padding: .3em .5em;
+  margin: .35em 0;
+  font-size: .85em;
+}
+
+/* MCQ quiz card */
+.quiz-card {
+  background: #fff;
+  border: 2px solid var(--soft);
+  border-radius: 18px;
+  padding: 1em 1.1em;
+  margin-top: .6em;
+  box-shadow: 0 4px 0 var(--soft);
+}
+.quiz-card .q { font-weight: 700; margin-bottom: .4em; color: var(--accent-2); }
+.quiz-card .opts { display: grid; gap: .35em; }
+.quiz-card details {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: .45em .7em;
+  cursor: pointer;
+  border: 1px solid var(--soft);
+}
+.quiz-card details[open] { background: #eafbe7; border-color: #7ed87e; }
+.quiz-card summary { list-style: none; font-weight: 600; }
+.quiz-card summary::-webkit-details-marker { display: none; }
+.quiz-card .ans { margin-top: .3em; color: #0a6b2e; font-weight: 700; }
+
+/* Stretch challenges — tiered bonus list */
+.stretch-list { display: grid; gap: .5em; margin-top: .6em; }
+.stretch-list .item {
+  background: #fff;
+  border: 2px dashed var(--accent-2);
+  border-radius: 14px;
+  padding: .55em .8em;
+}
+.stretch-list .item .lvl {
+  color: var(--accent-2);
+  font-weight: 700;
+  margin-right: .4em;
+}
+
+/* Exit ticket */
+.exit {
+  background: #fff;
+  border: 3px solid var(--accent);
+  border-radius: 18px;
+  padding: .9em 1em;
+  margin-top: .5em;
+}
+.exit .label {
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: .7em;
+  letter-spacing: .08em;
 }
