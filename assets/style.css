@@ -1982,3 +1982,35 @@ ul li { margin-bottom: .35em; }
   font-size: .7em;
   letter-spacing: .08em;
 }
+
+/* ===== Print → PDF handout =====================================================
+   Any deck can be exported with: python scripts/build-deck-pdf.py <deck.html>
+   On screen only .slide.active shows; for print we reveal every slide, one per
+   16:9 landscape page. clamp() sizes resolve oddly against the print box, so the
+   key text roles are pinned to fixed pt. */
+@page { size: 297mm 167mm; margin: 0; }
+@media print {
+  html, body { width: 297mm; height: auto; margin: 0; }
+  .stage { position: static; width: 297mm; height: auto; overflow: visible; }
+  .footer-tag, .nav { display: none !important; }
+  .slide {
+    position: static !important; inset: auto !important;
+    display: flex !important;
+    break-after: page; page-break-after: always;
+    break-inside: avoid; page-break-inside: avoid;
+    width: 297mm; height: 167mm;
+    box-sizing: border-box;
+    animation: none !important;
+  }
+  .slide:last-of-type { break-after: auto; page-break-after: avoid; }
+  h1 { font-size: 64pt !important; }
+  h2 { font-size: 34pt !important; }
+  p, li, .big { font-size: 18pt !important; }
+  .big { font-size: 22pt !important; }
+  pre { font-size: 15pt !important; }
+  .emoji { font-size: 72pt !important; }
+  .bilingual { font-size: 13pt !important; }
+  .opt-card .ico { font-size: 30pt !important; }
+  .opt-card .name { font-size: 18pt !important; }
+  .opt-card .ex { font-size: 14pt !important; }
+}
