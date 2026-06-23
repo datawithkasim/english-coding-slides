@@ -1,50 +1,51 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RS003 W3 — Functions + Gun</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
-<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Weeks 5·6</div>
+<title>RS003 W3 — Functions + Ship</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Space Shooter · Weeks 5·6</div>
 
-<div class="slide active center-all"><div class="pill">Weeks 5·6</div><div class="emoji">🔫</div>
-<h1>Add the<br>Gun</h1>
+<div class="slide active center-all"><div class="pill">Weeks 5·6</div><div class="emoji">🚀</div>
+<h1>Wrap the<br>Ship</h1>
 <p class="big" style="margin-top:.8em;color:var(--accent-2);">Functions group code</p>
-<p class="bilingual">총 추가 + 함수</p></div>
+<p class="bilingual">우주선 + 함수</p></div>
 
 <div class="slide"><div class="pill">Problem</div><h2>Game loop getting big 😅</h2>
 <pre><span class="kw">while</span> running:
-    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># base</span>
-    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># gun barrel</span>
-    pygame.draw.<span class="fn">circle</span>(...)  <span class="com"># gun head</span>
-    pygame.draw.<span class="fn">line</span>(...)  <span class="com"># gun aim line</span></pre>
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># body</span>
+    pygame.draw.<span class="fn">polygon</span>(...)  <span class="com"># nose</span>
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># thruster L</span>
+    pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># thruster R</span></pre>
 <p style="margin-top:1em">Hard to read. Let's group it!</p></div>
 
 <div class="slide"><div class="pill">Concept</div><h2>What's a <code>function</code>?</h2>
 <p class="big">A reusable <span class="sub">block of code</span> with a name.</p>
-<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">draw_turret</span>():
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
     pygame.draw.<span class="fn">rect</span>(...)
-    pygame.draw.<span class="fn">circle</span>(...)
-    pygame.draw.<span class="fn">line</span>(...)</pre>
+    pygame.draw.<span class="fn">polygon</span>(...)
+    pygame.draw.<span class="fn">rect</span>(...)</pre>
 <p style="margin-top:.6em"><code>def</code> = "define". Group lines under one name.</p></div>
 
 <div class="slide"><div class="pill">Code</div><h2>Define + call</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
-    pygame.draw.<span class="fn">rect</span>(screen, GREY, base_rect)
-    pygame.draw.<span class="fn">rect</span>(screen, GREY, barrel_rect)
-    pygame.draw.<span class="fn">circle</span>(screen, GREY, (cx, cy), <span class="num">15</span>)
+<pre><span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
+    pygame.draw.<span class="fn">rect</span>(screen, CYAN, (x-<span class="num">20</span>, y, <span class="num">40</span>, <span class="num">50</span>))            <span class="com"># body</span>
+    pygame.draw.<span class="fn">polygon</span>(screen, WHITE, [(x, y-<span class="num">20</span>), (x-<span class="num">20</span>, y), (x+<span class="num">20</span>, y)])  <span class="com"># nose</span>
+    pygame.draw.<span class="fn">rect</span>(screen, RED, (x-<span class="num">16</span>, y+<span class="num">50</span>, <span class="num">8</span>, <span class="num">10</span>))         <span class="com"># thruster L</span>
+    pygame.draw.<span class="fn">rect</span>(screen, RED, (x+<span class="num">8</span>, y+<span class="num">50</span>, <span class="num">8</span>, <span class="num">10</span>))          <span class="com"># thruster R</span>
 
 <span class="kw">while</span> running:
-    screen.<span class="fn">fill</span>(SKY)
-    <span class="fn">draw_turret</span>()  <span class="com"># 1 line!</span>
+    screen.<span class="fn">fill</span>(SPACE)
+    <span class="fn">draw_ship</span>(CENTER_X, HEIGHT - <span class="num">80</span>)  <span class="com"># 1 line!</span>
     pygame.display.<span class="fn">flip</span>()</pre></div>
 
 <div class="slide"><div class="pill">Watch it!</div><h2>Function call + body</h2>
 <div class="viz viz-func">
   <div class="fn-caller">
-    <span class="fn-callcode">draw_gun(<span class="arg">400</span>, <span class="arg">300</span>)</span>
-    <span class="fn-result">→ <span class="rv">gun drawn ✓</span></span>
+    <span class="fn-callcode">draw_ship(<span class="arg">400</span>, <span class="arg">300</span>)</span>
+    <span class="fn-result">→ <span class="rv">ship drawn ✓</span></span>
   </div>
   <div class="fn-flow-down">↓ call</div>
   <div class="fn-body">
-    <div class="fn-sig">def draw_gun(<span class="param">x</span>, <span class="param">y</span>):</div>
-    <div class="fn-line">pygame.draw.rect(screen, GREY, (<span class="param-use">x</span>, <span class="param-use">y</span>, 10, 40))</div>
+    <div class="fn-sig">def draw_ship(<span class="param">x</span>, <span class="param">y</span>):</div>
+    <div class="fn-line">pygame.draw.rect(screen, CYAN, (<span class="param-use">x</span>-20, <span class="param-use">y</span>, 40, 50))</div>
   </div>
   <div class="fn-flow-up">↑ return</div>
 </div>
@@ -53,46 +54,46 @@
 <div class="slide"><div class="pill">Why?</div><h2>Big wins 🏆</h2>
 <ul class="check-list">
 <li>Game loop is short and clear</li>
-<li>Change turret style once → done</li>
+<li>Change ship style once → done</li>
 <li>Reuse the function in any frame</li>
-<li>Code reads like English: "draw turret"</li>
+<li>Code reads like English: "draw ship"</li>
 </ul></div>
 
 <div class="slide"><div class="pill">Concept</div><h2>One object = many parts</h2>
 <div style="background:white;border:3px solid var(--accent);border-radius:14px;padding:1em;margin-top:1em">
-<div style="text-align:center;font-family:monospace;font-weight:700;color:var(--accent-2)">turret =</div>
+<div style="text-align:center;font-family:monospace;font-weight:700;color:var(--accent-2)">ship =</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6em;margin-top:.6em">
-<div class="opt-card"><div class="ico">⬛</div><div class="name">base</div></div>
-<div class="opt-card"><div class="ico">▬</div><div class="name">barrel</div></div>
-<div class="opt-card"><div class="ico">⚫</div><div class="name">tip</div></div>
+<div class="opt-card"><div class="ico">⬛</div><div class="name">body</div></div>
+<div class="opt-card"><div class="ico">🔺</div><div class="name">nose</div></div>
+<div class="opt-card"><div class="ico">🔥</div><div class="name">thrusters</div></div>
 </div></div>
-<p class="center" style="margin-top:.8em">3 shapes = 1 turret.</p></div>
+<p class="center" style="margin-top:.8em">3 shapes = 1 ship.</p></div>
 
 <div class="slide"><div class="pill">⚠️ Don't forget</div><h2>Indent matters</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
+<pre><span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
     pygame.draw.<span class="fn">rect</span>(...)  <span class="com"># inside</span>
-pygame.draw.<span class="fn">circle</span>(...)  <span class="com"># 🚫 outside!</span></pre>
+pygame.draw.<span class="fn">polygon</span>(...)  <span class="com"># 🚫 outside!</span></pre>
 <p style="margin-top:1em">4 spaces = inside the function. No spaces = outside.</p></div>
 
 <div class="slide"><div class="pill">⚠️ Watch</div><h2>Define ≠ run</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_turret</span>():
+<pre><span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
     ...
 <span class="com"># nothing happens — never called</span>
 
-<span class="fn">draw_turret</span>()  <span class="com"># now it runs!</span></pre>
+<span class="fn">draw_ship</span>(<span class="num">400</span>, <span class="num">520</span>)  <span class="com"># now it runs!</span></pre>
 <p style="margin-top:1em">Need <code>()</code> to actually <span class="sub">call</span> the function.</p></div>
 
 <div class="slide"><div class="pill">Your turn!</div><h2>Refactor with functions 🛠️</h2>
 <ul class="check-list">
-<li>Make a <code>draw_turret()</code> function</li>
-<li>Inside: draw base + barrel + circle on top</li>
-<li>Call <code>draw_turret()</code> in your game loop</li>
+<li>Make a <code>draw_ship(x, y)</code> function</li>
+<li>Inside: draw body + nose triangle + two thrusters</li>
+<li>Call <code>draw_ship(x, y)</code> in your game loop</li>
 <li>See how short the loop becomes!</li>
 </ul></div>
 
-<div class="slide center-all"><div class="emoji">🔫</div>
-<h1 style="font-size:clamp(36px,6.5vmin,60px)">Turret complete!</h1>
-<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: move the gun left/right.</p>
+<div class="slide center-all"><div class="emoji">🚀</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Ship complete!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: move the ship in all 4 directions.</p>
 <p class="bilingual">다음 주: 키보드 이동</p></div>
 
 
@@ -112,11 +113,11 @@ print(fire(5))</pre><details><summary>Reveal output</summary><div class="ans">10
     <span class="term">parameter</span><span class="gloss">input the function expects</span><span class="ko">매개변수</span>
     <span class="term">call site</span><span class="gloss">the place where you use the function</span><span class="ko">함수 호출 위치</span>
 </div></div>
-<div class="slide"><span class="slot-badge">SLOT 9</span><div class="pill">Try it</div><h2>Fill in the blanks</h2><pre>def draw_gun(screen, x, y):
-    pygame.draw.rect(screen, (200, 200, 200), (x, y, 10, 40))
+<div class="slide"><span class="slot-badge">SLOT 9</span><div class="pill">Try it</div><h2>Fill in the blanks</h2><pre>def draw_ship(screen, x, y):
+    pygame.draw.rect(screen, (80, 220, 255), (x-20, y, 40, 50))
 
 # call site
-___(screen, 400, 300)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Call the function with the surface and two coordinates.</p></div>
+___(screen, 400, 300)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Call the draw_ship function with the surface and two coordinates.</p></div>
 <div class="slide"><span class="slot-badge">SLOT 10</span><div class="pill purple">Code Talk</div><h2>Tell a partner</h2><div class="frame-card"><div class="label">Sentence frame</div><div class="frame">"This <code>____</code> line does <code>____</code> because <code>____</code>."</div><div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div></div></div>
 <div class="slide"><div class="pill">⚠ Edge cases</div><h2>Gotchas + pitfalls</h2>
 <div class="edge-grid">
@@ -129,13 +130,13 @@ ___(screen, 400, 300)</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmi
 print(&quot;I am &quot; + age + &quot; years old&quot;)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
 <div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> You can't join a number to a string with <code>+</code>. Python raises <code>TypeError: can only concatenate str (not "int") to str</code>. Wrap it in <code>str()</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">age = 12
 print(&quot;I am &quot; + str(age) + &quot; years old&quot;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Can't concatenate str and int — use str(age)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Add the Gun</button>
+<div class="slide mcq" data-correct="0" data-explain="Can't concatenate str and int — use str(age)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Wrap the Ship</button>
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">age = 12
 print(&quot;I am &quot; + age + &quot; years old&quot;)</pre></div><div class="opts"><button class="opt">age is a number; wrap it in str() to join it to text.</button><button class="opt">age must be quoted everywhere.</button><button class="opt">print() only takes one argument.</button><button class="opt">+ is not allowed inside print().</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Functions + Gun</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
+<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Functions + Ship</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>
 <button class="opt">The IDE shows no red squiggles.</button></div><div class="qfeedback"></div></div>

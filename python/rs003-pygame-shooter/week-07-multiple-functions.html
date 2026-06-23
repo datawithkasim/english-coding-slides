@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RS003 W7 — Multiple Functions</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
-<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Weeks 13·14</div>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Space Shooter · Weeks 13·14</div>
 
 <div class="slide active center-all"><div class="pill">Weeks 13·14</div><div class="emoji">🧩</div>
 <h1>Many<br>Functions</h1>
@@ -10,34 +10,34 @@
 
 <div class="slide"><div class="pill">Big idea</div><h2>One function per <span class="sub">job</span></h2>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1em;margin-top:1em">
-<div class="opt-card"><div class="ico">⬛</div><div class="name">draw_ground</div></div>
-<div class="opt-card"><div class="ico">🔫</div><div class="name">draw_turret</div></div>
-<div class="opt-card"><div class="ico">🎯</div><div class="name">draw_marker</div></div>
+<div class="opt-card"><div class="ico">✨</div><div class="name">draw_stars</div></div>
+<div class="opt-card"><div class="ico">🚀</div><div class="name">draw_ship</div></div>
+<div class="opt-card"><div class="ico">🟡</div><div class="name">draw_bullet</div></div>
 </div>
 <p class="big center" style="margin-top:1em">Each function does <span class="sub">one thing</span> well.</p></div>
 
 <div class="slide"><div class="pill">Code</div><h2>Three functions</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_ground</span>():
+<pre><span class="kw">def</span> <span class="fn">draw_stars</span>():
     <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):
         x = i * <span class="num">40</span>
-        pygame.draw.<span class="fn">rect</span>(screen, BROWN, (x, <span class="num">580</span>, <span class="num">38</span>, <span class="num">10</span>))
+        pygame.draw.<span class="fn">circle</span>(screen, WHITE, (x, <span class="num">60</span>), <span class="num">2</span>)
 
-<span class="kw">def</span> <span class="fn">draw_turret</span>(x):
-    pygame.draw.<span class="fn">rect</span>(screen, GREY, (x, <span class="num">540</span>, <span class="num">20</span>, <span class="num">40</span>))
+<span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
+    pygame.draw.<span class="fn">rect</span>(screen, CYAN, (x - <span class="num">20</span>, y, <span class="num">40</span>, <span class="num">50</span>))
 
-<span class="kw">def</span> <span class="fn">draw_marker</span>(x):
-    pygame.draw.<span class="fn">circle</span>(screen, RED, (x + <span class="num">10</span>, <span class="num">100</span>), <span class="num">10</span>)</pre></div>
+<span class="kw">def</span> <span class="fn">draw_bullet</span>(x, y):
+    pygame.draw.<span class="fn">rect</span>(screen, YELLOW, (x - <span class="num">2</span>, y - <span class="num">8</span>, <span class="num">4</span>, <span class="num">12</span>))</pre></div>
 
-<div class="slide"><div class="pill">Watch it!</div><h2>Marker function in action</h2>
+<div class="slide"><div class="pill">Watch it!</div><h2>Bullet function in action</h2>
 <div class="viz viz-func">
   <div class="fn-caller">
-    <span class="fn-callcode">draw_marker(<span class="arg">gun_x</span>)</span>
-    <span class="fn-result">→ <span class="rv">red dot drawn ✓</span></span>
+    <span class="fn-callcode">draw_bullet(<span class="arg">ship_x</span>, <span class="arg">ship_y</span>)</span>
+    <span class="fn-result">→ <span class="rv">bullet drawn ✓</span></span>
   </div>
   <div class="fn-flow-down">↓ call</div>
   <div class="fn-body">
-    <div class="fn-sig">def draw_marker(<span class="param">x</span>):</div>
-    <div class="fn-line">pygame.draw.circle(screen, RED, (<span class="param-use">x</span> + 10, 100), 10)</div>
+    <div class="fn-sig">def draw_bullet(<span class="param">x</span>, <span class="param">y</span>):</div>
+    <div class="fn-line">pygame.draw.rect(screen, YELLOW, (<span class="param-use">x</span> - 2, <span class="param-use">y</span> - 8, 4, 12))</div>
   </div>
   <div class="fn-flow-up">↑ return</div>
 </div>
@@ -45,29 +45,29 @@
 
 <div class="slide"><div class="pill">Tidy loop</div><h2>Game loop becomes simple</h2>
 <pre><span class="kw">while</span> running:
-    screen.<span class="fn">fill</span>(SKY)
+    screen.<span class="fn">fill</span>(SPACE)
 
-    <span class="fn">draw_ground</span>()
-    <span class="fn">draw_turret</span>(gun_x)
-    <span class="fn">draw_marker</span>(gun_x)
+    <span class="fn">draw_stars</span>()
+    <span class="fn">draw_ship</span>(ship_x, ship_y)
+    <span class="fn">draw_bullet</span>(ship_x, ship_y)
 
     pygame.display.<span class="fn">flip</span>()</pre>
-<p style="margin-top:1em">Reads like English: draw ground, draw turret, draw marker.</p></div>
+<p style="margin-top:1em">Reads like English: draw stars, draw ship, draw bullet.</p></div>
 
 <div class="slide"><div class="pill">Concept</div><h2>Functions <span class="sub">share data</span></h2>
-<pre><span class="fn">draw_turret</span>(gun_x)
-<span class="fn">draw_marker</span>(gun_x)  <span class="com"># same gun_x!</span></pre>
-<p style="margin-top:1em">Marker tracks gun → both use the same <code>gun_x</code> value.</p>
+<pre><span class="fn">draw_ship</span>(ship_x, ship_y)
+<span class="fn">draw_bullet</span>(ship_x, ship_y)  <span class="com"># same ship_x!</span></pre>
+<p style="margin-top:1em">Bullet fires from the ship → both use the same <code>ship_x</code> value.</p>
 <p class="bilingual">두 함수가 같은 위치를 공유</p></div>
 
-<div class="slide"><div class="pill">Concept</div><h2>Position-aware marker</h2>
+<div class="slide"><div class="pill">Concept</div><h2>Position-aware bullet</h2>
 <div style="background:#1e1e2e;color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(14px,2.4vmin,20px);text-align:center;line-height:1.7">
-<div>      🎯 ← marker tracks gun</div>
+<div>      🟡 ← bullet starts at the ship</div>
+<div>           ▲</div>
 <div>           │</div>
-<div>           ▼</div>
-<div>      🔫 ← gun moves with arrow keys</div>
+<div>      🚀 ← ship moves with arrow keys</div>
 </div>
-<p class="center" style="margin-top:.6em">Marker x = gun x. Move gun → marker follows.</p></div>
+<p class="center" style="margin-top:.6em">Bullet x = ship x. Move ship → next shot follows.</p></div>
 
 <div class="slide"><div class="pill">Why split?</div><h2>Wins of multi-function code</h2>
 <ul class="check-list">
@@ -78,15 +78,15 @@
 </ul></div>
 
 <div class="slide"><div class="pill">⚠️ Watch</div><h2>Order of drawing</h2>
-<pre><span class="fn">draw_turret</span>()
-<span class="fn">draw_ground</span>()  <span class="com"># 🚫 ground covers turret!</span></pre>
+<pre><span class="fn">draw_ship</span>(ship_x, ship_y)
+<span class="fn">draw_stars</span>()  <span class="com"># 🚫 stars cover the ship!</span></pre>
 <p style="margin-top:1em">Pygame draws <span class="sub">on top</span> of previous. Background first, foreground last.</p></div>
 
 <div class="slide"><div class="pill">Your turn!</div><h2>Split your code 🧩</h2>
 <ul class="check-list">
-<li>Make <code>draw_ground()</code> with a for loop</li>
-<li>Make <code>draw_turret(x)</code> taking position</li>
-<li>Add <code>draw_marker(x)</code> that follows the gun</li>
+<li>Make <code>draw_stars()</code> with a for loop</li>
+<li>Make <code>draw_ship(x, y)</code> taking position</li>
+<li>Add <code>draw_bullet(x, y)</code> that fires from the ship</li>
 <li>Game loop calls all 3 in order</li>
 </ul></div>
 

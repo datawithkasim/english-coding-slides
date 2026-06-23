@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RS003 W4 — Move the Gun</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
-<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Weeks 7·8</div>
+<title>RS003 W4 — Move the Ship</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Space Shooter · Weeks 7·8</div>
 
 <div class="slide active center-all"><div class="pill">Weeks 7·8</div><div class="emoji">⌨️</div>
-<h1>Move<br>Left / Right</h1>
+<h1>Move in<br>4 Directions</h1>
 <p class="big" style="margin-top:.8em;color:var(--accent-2);">Keyboard input + position variables</p>
-<p class="bilingual">건 좌우 이동</p></div>
+<p class="bilingual">우주선 4방향 이동</p></div>
 
-<div class="slide"><div class="pill">Concept</div><h2>X-axis = left ↔ right</h2>
+<div class="slide"><div class="pill">Concept</div><h2>X = left↔right, Y = up↕down</h2>
 <div style="background:#1e1e2e;color:white;padding:1.2em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.6vmin,22px);text-align:center;line-height:2">
 <div>← x decreases  ──  x increases →</div>
-<div style="font-size:2em;margin:.3em 0">🔫</div>
-<div style="color:var(--com)">x = position</div>
+<div style="font-size:2em;margin:.3em 0">🚀</div>
+<div>↑ y decreases  ──  y increases ↓</div>
+<div style="color:var(--com)">x, y = position</div>
 </div>
-<p class="center" style="margin-top:.8em">Change <code>x</code> → moves left/right.</p></div>
+<p class="center" style="margin-top:.8em">Change <code>x</code> → left/right. Change <code>y</code> → up/down.</p></div>
 
 <div class="slide"><div class="pill">Code</div><h2>Detect key presses</h2>
 <pre>keys = pygame.key.<span class="fn">get_pressed</span>()
 
-<span class="kw">if</span> keys[pygame.K_LEFT]:
-    gun_x = gun_x - <span class="num">5</span>
-<span class="kw">if</span> keys[pygame.K_RIGHT]:
-    gun_x = gun_x + <span class="num">5</span></pre>
-<p style="margin-top:1em">Each frame: check if arrow keys are <span class="sub">held down</span>.</p></div>
+<span class="kw">if</span> keys[pygame.K_LEFT]:  ship_x -= <span class="num">5</span>
+<span class="kw">if</span> keys[pygame.K_RIGHT]: ship_x += <span class="num">5</span>
+<span class="kw">if</span> keys[pygame.K_UP]:    ship_y -= <span class="num">5</span>
+<span class="kw">if</span> keys[pygame.K_DOWN]:  ship_y += <span class="num">5</span></pre>
+<p style="margin-top:1em">Each frame: check which arrow keys are <span class="sub">held down</span>.</p>
+<p style="margin-top:.4em">Remember: <code>y</code> goes <span class="sub">DOWN</span> on screen!</p></div>
 
 <div class="slide"><div class="pill">Watch it!</div><h2>Which key is pressed?</h2>
 <div class="viz viz-if">
@@ -33,73 +35,74 @@
   </div>
   <div class="if-cond">keys[pygame.K_LEFT]</div>
   <div class="if-branches">
-    <div class="if-branch true">gun_x -= 5</div>
-    <div class="if-branch false">gun_x += 5</div>
+    <div class="if-branch true">ship_x -= 5</div>
+    <div class="if-branch false">ship_x += 5</div>
   </div>
   <div class="if-output">
     <div class="out-label">▸ Output</div>
-    <div class="out-line out-a">gun moves left</div>
-    <div class="out-line out-b">gun moves right</div>
+    <div class="out-line out-a">ship moves left</div>
+    <div class="out-line out-b">ship moves right</div>
   </div>
 </div>
 <p class="bilingual">조건문</p></div>
 
 <div class="slide"><div class="pill">Concept</div><h2>Speed as a constant</h2>
-<pre>GUN_SPEED = <span class="num">5</span>
+<pre>SPEED = <span class="num">5</span>
 
-<span class="kw">if</span> keys[pygame.K_LEFT]:
-    gun_x = gun_x - GUN_SPEED
-<span class="kw">if</span> keys[pygame.K_RIGHT]:
-    gun_x = gun_x + GUN_SPEED</pre>
-<p style="margin-top:1em">Easy to tune — change one value, gun feels different!</p></div>
+<span class="kw">if</span> keys[pygame.K_LEFT]:  ship_x -= SPEED
+<span class="kw">if</span> keys[pygame.K_RIGHT]: ship_x += SPEED
+<span class="kw">if</span> keys[pygame.K_UP]:    ship_y -= SPEED
+<span class="kw">if</span> keys[pygame.K_DOWN]:  ship_y += SPEED</pre>
+<p style="margin-top:1em">Easy to tune — change one value, the ship feels different!</p></div>
 
-<div class="slide"><div class="pill">Two parts</div><h2>Base stays, gun moves</h2>
+<div class="slide"><div class="pill">Two variables</div><h2>Track the ship's position</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
-<div class="opt-card"><div class="ico">⬛</div><div class="name">Base</div><div class="ex">FIXED at center</div></div>
-<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">🔫</div><div class="name" style="color:var(--accent)">Gun</div><div class="ex">moves with arrow keys</div></div>
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">↔️</div><div class="name" style="color:var(--accent)">ship_x</div><div class="ex">left / right</div></div>
+<div class="opt-card" style="border:3px solid var(--accent-2)"><div class="ico">↕️</div><div class="name" style="color:var(--accent-2)">ship_y</div><div class="ex">up / down</div></div>
 </div>
-<p style="margin-top:1em">Use <span class="sub">two variables</span>: <code>BASE_X</code> (constant), <code>gun_x</code> (changes).</p></div>
+<p style="margin-top:1em">Two variables move the ship anywhere: <code>ship_x</code> and <code>ship_y</code>.</p></div>
 
 <div class="slide"><div class="pill">Code</div><h2>Full setup</h2>
-<pre>WIDTH = <span class="num">800</span>
-GUN_SPEED = <span class="num">5</span>
-BASE_X = WIDTH // <span class="num">2</span>
-gun_x = BASE_X  <span class="com"># start at center</span>
+<pre>WIDTH, HEIGHT = <span class="num">800</span>, <span class="num">600</span>
+SPEED = <span class="num">5</span>
+ship_x = WIDTH // <span class="num">2</span>     <span class="com"># start at center</span>
+ship_y = HEIGHT - <span class="num">100</span>   <span class="com"># near the bottom</span>
 
 <span class="kw">while</span> running:
     keys = pygame.key.<span class="fn">get_pressed</span>()
-    <span class="kw">if</span> keys[pygame.K_LEFT]:  gun_x -= GUN_SPEED
-    <span class="kw">if</span> keys[pygame.K_RIGHT]: gun_x += GUN_SPEED
+    <span class="kw">if</span> keys[pygame.K_LEFT]:  ship_x -= SPEED
+    <span class="kw">if</span> keys[pygame.K_RIGHT]: ship_x += SPEED
+    <span class="kw">if</span> keys[pygame.K_UP]:    ship_y -= SPEED
+    <span class="kw">if</span> keys[pygame.K_DOWN]:  ship_y += SPEED
 
-    <span class="fn">draw_turret</span>(gun_x)
+    <span class="fn">draw_ship</span>(ship_x, ship_y)
     pygame.display.<span class="fn">flip</span>()</pre></div>
 
-<div class="slide"><div class="pill">Tip</div><h2>Pass <code>gun_x</code> to function</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_turret</span>(x):
-    pygame.draw.<span class="fn">rect</span>(screen, GREY, base_rect)  <span class="com"># fixed</span>
-    pygame.draw.<span class="fn">rect</span>(screen, GREY,
-        (x, y, BARREL_W, BARREL_H))  <span class="com"># uses x!</span></pre>
-<p style="margin-top:1em">Function takes <code>x</code>, draws gun there.</p></div>
+<div class="slide"><div class="pill">Tip</div><h2>Pass <code>ship_x, ship_y</code> to function</h2>
+<pre><span class="kw">def</span> <span class="fn">draw_ship</span>(x, y):
+    pygame.draw.<span class="fn">rect</span>(screen, CYAN,
+        (x - <span class="num">20</span>, y, <span class="num">40</span>, <span class="num">50</span>))  <span class="com"># uses x AND y!</span></pre>
+<p style="margin-top:1em">Function takes <code>x</code> and <code>y</code>, draws the ship there.</p></div>
 
 <div class="slide"><div class="pill">⚠️ Watch</div><h2><code>+=</code> and <code>-=</code> shortcuts</h2>
-<pre>gun_x = gun_x + <span class="num">5</span>   <span class="com"># long way</span>
-gun_x += <span class="num">5</span>           <span class="com"># short way</span>
+<pre>ship_x = ship_x + <span class="num">5</span>   <span class="com"># long way</span>
+ship_x += <span class="num">5</span>           <span class="com"># short way</span>
 
-gun_x = gun_x - <span class="num">5</span>
-gun_x -= <span class="num">5</span></pre>
+ship_y = ship_y - <span class="num">5</span>
+ship_y -= <span class="num">5</span></pre>
 <p style="margin-top:1em">Both work the same. <code>+=</code> is faster to type.</p></div>
 
-<div class="slide"><div class="pill">Your turn!</div><h2>Move the gun ⬅️➡️</h2>
+<div class="slide"><div class="pill">Your turn!</div><h2>Fly the ship ⬅️➡️⬆️⬇️</h2>
 <ul class="check-list">
-<li>Add <code>GUN_SPEED</code> constant</li>
-<li>Make <code>gun_x</code> variable, start at center</li>
-<li>Use arrow keys to update <code>gun_x</code></li>
-<li>Pass <code>gun_x</code> to <code>draw_turret()</code></li>
-<li>Try changing <code>GUN_SPEED</code> — feel the difference!</li>
+<li>Add a <code>SPEED</code> constant</li>
+<li>Make <code>ship_x</code> and <code>ship_y</code> variables</li>
+<li>Use all 4 arrow keys to update them</li>
+<li>Pass both to <code>draw_ship(ship_x, ship_y)</code></li>
+<li>Try changing <code>SPEED</code> — feel the difference!</li>
 </ul></div>
 
 <div class="slide center-all"><div class="emoji">⌨️</div>
-<h1 style="font-size:clamp(36px,6.5vmin,60px)">Gun moves!</h1>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Ship flies!</h1>
 <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: stop it from going off-screen.</p>
 <p class="bilingual">다음 주: 이동 범위 제한</p></div>
 
@@ -122,9 +125,9 @@ print(x)</pre><details><summary>Reveal output</summary><div class="ans">95</div>
 </div></div>
 <div class="slide"><span class="slot-badge">SLOT 9</span><div class="pill">Try it</div><h2>Fill in the blanks</h2><pre>keys = pygame.key.___()
 if keys[pygame.K_LEFT]:
-    turret_x ___ 5
+    ship_x ___ 5
 if keys[pygame.K_RIGHT]:
-    turret_x ___ 5</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Method that returns the current pressed-key state. Left arrow subtracts; right arrow adds.</p></div>
+    ship_x ___ 5</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Method that returns the current pressed-key state. Left arrow subtracts; right arrow adds.</p></div>
 <div class="slide"><span class="slot-badge">SLOT 10</span><div class="pill purple">Code Talk</div><h2>Tell a partner</h2><div class="frame-card"><div class="label">Sentence frame</div><div class="frame">"This <code>____</code> line does <code>____</code> because <code>____</code>."</div><div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div></div></div>
 <div class="slide"><div class="pill">⚠ Edge cases</div><h2>Gotchas + pitfalls</h2>
 <div class="edge-grid">
@@ -139,14 +142,14 @@ if score = 10:
 <div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>=</code> assigns a value; <code>==</code> compares. Using <code>=</code> in an <code>if</code> raises <code>SyntaxError</code>. Comparisons need <code>==</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">score = 5
 if score == 10:
     print(&quot;Win!&quot;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="= assigns; comparison needs == (SyntaxError)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Move Left / Right</button>
+<div class="slide mcq" data-correct="0" data-explain="= assigns; comparison needs == (SyntaxError)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Move in 4 Directions</button>
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
 <div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">score = 5
 if score = 10:
     print(&quot;Win!&quot;)</pre></div><div class="opts"><button class="opt">Comparison needs == , not = (SyntaxError).</button><button class="opt">score is not defined.</button><button class="opt">if statements can't test numbers.</button><button class="opt">It is missing an else branch.</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Move the Gun</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
+<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Move the Ship</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>
 <button class="opt">The IDE shows no red squiggles.</button></div><div class="qfeedback"></div></div>

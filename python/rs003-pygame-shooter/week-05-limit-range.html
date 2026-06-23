@@ -1,59 +1,57 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RS003 W5 — Limit Range</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
-<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Weeks 9·10</div>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Space Shooter · Weeks 9·10</div>
 
 <div class="slide active center-all"><div class="pill">Weeks 9·10</div><div class="emoji">🚧</div>
 <h1>Stay<br>On Screen</h1>
 <p class="big" style="margin-top:.8em;color:var(--accent-2);">Min / max + conditionals</p>
 <p class="bilingual">이동 범위 제한</p></div>
 
-<div class="slide"><div class="pill">Problem</div><h2>Gun escapes! 🏃</h2>
+<div class="slide"><div class="pill">Problem</div><h2>Ship escapes! 🏃</h2>
 <div style="background:#1e1e2e;color:white;padding:1em;border-radius:14px;margin-top:1em;font-family:monospace;font-size:clamp(15px,2.5vmin,22px);text-align:center">
 <div>┌─────────screen─────────┐</div>
-<div>│                        │ 🔫 ←off screen!</div>
+<div>│                        │ 🚀 ←off screen!</div>
 <div>└────────────────────────┘</div>
 </div>
-<p class="center" style="margin-top:1em">Hold right too long → gun disappears off the edge.</p></div>
+<p class="center" style="margin-top:1em">Hold an arrow too long → ship flies off the edge.</p></div>
 
-<div class="slide"><div class="pill">Concept</div><h2>Min &amp; max values</h2>
+<div class="slide"><div class="pill">Concept</div><h2>Four walls to stay inside</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
-<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">⬅️</div><div class="name" style="color:var(--accent)">MIN</div><div class="ex">smallest allowed x</div></div>
-<div class="opt-card" style="border:3px solid var(--accent-2)"><div class="ico">➡️</div><div class="name" style="color:var(--accent-2)">MAX</div><div class="ex">biggest allowed x</div></div>
+<div class="opt-card" style="border:3px solid var(--accent)"><div class="ico">↔️</div><div class="name" style="color:var(--accent)">x limits</div><div class="ex">left &amp; right walls</div></div>
+<div class="opt-card" style="border:3px solid var(--accent-2)"><div class="ico">↕️</div><div class="name" style="color:var(--accent-2)">y limits</div><div class="ex">top &amp; bottom walls</div></div>
 </div>
-<p class="big center" style="margin-top:1em">Gun must stay between MIN and MAX.</p></div>
+<p class="big center" style="margin-top:1em">Ship must stay between all 4 edges.</p></div>
 
-<div class="slide"><div class="pill">Code</div><h2>Define limits</h2>
+<div class="slide"><div class="pill">Code</div><h2>Clamp x — left &amp; right</h2>
 <pre>WIDTH = <span class="num">800</span>
-GUN_W = <span class="num">20</span>
 
-MIN_X = <span class="num">0</span>
-MAX_X = WIDTH - GUN_W</pre>
-<p style="margin-top:1em">MAX is <code>WIDTH - GUN_W</code> so gun's <span class="sub">right edge</span> stays inside.</p></div>
+<span class="kw">if</span> ship_x &lt; <span class="num">20</span>: ship_x = <span class="num">20</span>
+<span class="kw">if</span> ship_x &gt; WIDTH - <span class="num">20</span>: ship_x = WIDTH - <span class="num">20</span></pre>
+<p style="margin-top:1em">Keep the ship's <span class="sub">left &amp; right</span> edges inside the window.</p></div>
 
-<div class="slide"><div class="pill">Code</div><h2>Block movement at edges</h2>
-<pre><span class="kw">if</span> keys[pygame.K_LEFT] <span class="kw">and</span> gun_x &gt; MIN_X:
-    gun_x -= GUN_SPEED
+<div class="slide"><div class="pill">Code</div><h2>Clamp y — top &amp; bottom</h2>
+<pre>HEIGHT = <span class="num">600</span>
 
-<span class="kw">if</span> keys[pygame.K_RIGHT] <span class="kw">and</span> gun_x &lt; MAX_X:
-    gun_x += GUN_SPEED</pre>
-<p style="margin-top:1em">Only move if there's <span class="sub">room</span>. Combined with <code>and</code>!</p></div>
+<span class="kw">if</span> ship_y &lt; <span class="num">20</span>: ship_y = <span class="num">20</span>
+<span class="kw">if</span> ship_y &gt; HEIGHT - <span class="num">60</span>: ship_y = HEIGHT - <span class="num">60</span></pre>
+<p style="margin-top:1em">Same idea for <span class="sub">up &amp; down</span> — clamp <code>ship_y</code> too.</p></div>
 
 <div class="slide"><div class="pill">Watch it!</div><h2>Clamp inside the window</h2>
 <div class="viz viz-if">
   <div class="if-input">
-    <span class="case case-a">gun_x = 400</span>
-    <span class="case case-b">gun_x = 790</span>
+    <span class="case case-a">ship_x = 400</span>
+    <span class="case case-b">ship_x = 790</span>
   </div>
-  <div class="if-cond">gun_x &lt; MAX_X</div>
+  <div class="if-cond">ship_x &lt; WIDTH - 20</div>
   <div class="if-branches">
-    <div class="if-branch true">gun_x += GUN_SPEED</div>
-    <div class="if-branch false">gun_x stays put</div>
+    <div class="if-branch true">ship_x stays</div>
+    <div class="if-branch false">ship_x = WIDTH - 20</div>
   </div>
   <div class="if-output">
     <div class="out-label">▸ Result</div>
-    <div class="out-line out-a">gun keeps moving</div>
-    <div class="out-line out-b">gun blocked at edge</div>
+    <div class="out-line out-a">ship free to move</div>
+    <div class="out-line out-b">ship snapped to edge</div>
   </div>
 </div>
 <p class="bilingual">조건문</p></div>
@@ -66,31 +64,28 @@ MAX_X = WIDTH - GUN_W</pre>
 <div class="varbox"><span class="name">&lt;=</span><span class="val">less or equal</span></div>
 </div></div>
 
-<div class="slide"><div class="pill">Alternative</div><h2>Clamp after moving</h2>
-<pre><span class="kw">if</span> keys[pygame.K_LEFT]:  gun_x -= GUN_SPEED
-<span class="kw">if</span> keys[pygame.K_RIGHT]: gun_x += GUN_SPEED
-
-<span class="com"># clamp to range</span>
-<span class="kw">if</span> gun_x &lt; MIN_X: gun_x = MIN_X
-<span class="kw">if</span> gun_x &gt; MAX_X: gun_x = MAX_X</pre>
+<div class="slide"><div class="pill">Shortcut</div><h2>Clamp with min &amp; max</h2>
+<pre><span class="com"># same as four if-statements</span>
+ship_x = <span class="fn">max</span>(<span class="num">20</span>, <span class="fn">min</span>(WIDTH - <span class="num">20</span>, ship_x))
+ship_y = <span class="fn">max</span>(<span class="num">20</span>, <span class="fn">min</span>(HEIGHT - <span class="num">60</span>, ship_y))</pre>
 <p style="margin-top:1em">Move first, then snap back if out of bounds.</p></div>
 
 <div class="slide"><div class="pill">⚠️ Off-by-one</div><h2>Watch the edge</h2>
-<pre>MAX_X = WIDTH       <span class="com"># 🚫 gun's right edge goes off</span>
-MAX_X = WIDTH - GUN_W  <span class="com"># ✅ stays inside</span></pre>
-<p style="margin-top:1em">Pixel positions start at the <span class="sub">left edge</span> of the gun.</p></div>
+<pre>ship_x &gt; WIDTH       <span class="com"># 🚫 ship's right edge goes off</span>
+ship_x &gt; WIDTH - <span class="num">20</span>  <span class="com"># ✅ stays inside</span></pre>
+<p style="margin-top:1em">Leave room for the ship's <span class="sub">half-width</span> at the edge.</p></div>
 
-<div class="slide"><div class="pill">Your turn!</div><h2>Lock the gun on screen 🚧</h2>
+<div class="slide"><div class="pill">Your turn!</div><h2>Lock the ship on screen 🚧</h2>
 <ul class="check-list">
-<li>Define <code>MIN_X</code> and <code>MAX_X</code></li>
-<li>Add <code>and gun_x &gt; MIN_X</code> to left key</li>
-<li>Add <code>and gun_x &lt; MAX_X</code> to right key</li>
-<li>Test holding arrow keys at the edges!</li>
+<li>Clamp <code>ship_x</code> between <code>20</code> and <code>WIDTH - 20</code></li>
+<li>Clamp <code>ship_y</code> between <code>20</code> and <code>HEIGHT - 60</code></li>
+<li>All 4 walls now block the ship</li>
+<li>Test holding arrow keys at every edge!</li>
 </ul></div>
 
 <div class="slide center-all"><div class="emoji">🚧</div>
 <h1 style="font-size:clamp(36px,6.5vmin,60px)">Locked in!</h1>
-<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: for loops to draw patterns.</p>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: for loops to spawn rows of enemies.</p>
 <p class="bilingual">다음 주: for 루프로 패턴</p></div>
 
 
@@ -110,7 +105,7 @@ print(x)</pre><details><summary>Reveal output</summary><div class="ans">0</div><
     <span class="term">min / max</span><span class="gloss">smallest / largest allowed value</span><span class="ko">최소 / 최대</span>
     <span class="term">boundary</span><span class="gloss">the edge of the playable area</span><span class="ko">경계선</span>
 </div></div>
-<div class="slide"><span class="slot-badge">SLOT 9</span><div class="pill">Try it</div><h2>Fill in the blanks</h2><pre>turret_x = ___(0, min(turret_x, SCREEN_WIDTH - turret_width))</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Clamp pattern — outer function picks the larger of two values.</p></div>
+<div class="slide"><span class="slot-badge">SLOT 9</span><div class="pill">Try it</div><h2>Fill in the blanks</h2><pre>ship_x = ___(20, min(ship_x, SCREEN_WIDTH - 20))</pre><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,18px);opacity:.85"><b>Hint:</b> Clamp pattern — outer function picks the larger of two values.</p></div>
 <div class="slide"><span class="slot-badge">SLOT 10</span><div class="pill purple">Code Talk</div><h2>Tell a partner</h2><div class="frame-card"><div class="label">Sentence frame</div><div class="frame">"This <code>____</code> line does <code>____</code> because <code>____</code>."</div><div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div></div></div>
 <div class="slide"><div class="pill">⚠ Edge cases</div><h2>Gotchas + pitfalls</h2>
 <div class="edge-grid">
@@ -132,7 +127,7 @@ if age &gt;= 10:
 <div class="slide mcq" data-correct="0" data-explain="Spot the typo or wrong logic."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with this code?<br><pre style="font-size:.8em;margin-top:.4em">age = 12
 if age &gt;= 10
     print(&quot;Old enough&quot;)</pre></div><div class="opts"><button class="opt">The if line needs a colon at the end (SyntaxError).</button><button class="opt">&gt;= is not a real operator.</button><button class="opt">age must be a string here.</button><button class="opt">print must be indented less.</button></div><div class="qfeedback"></div></div>
-<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Limit Range</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
+<div class="slide mcq" data-correct="0" data-explain="No error ≠ correct. Test with multiple inputs."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For <b>Stay On Screen</b>, what counts as 'done'?</div><div class="opts"><button class="opt">Code runs without errors AND produces the expected output for several inputs.</button>
 <button class="opt">Code compiles.</button>
 <button class="opt">It looks neat in the editor.</button>
 <button class="opt">The IDE shows no red squiggles.</button></div><div class="qfeedback"></div></div>

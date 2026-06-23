@@ -1,85 +1,97 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RS003 W8 — Final Mini Game</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
-<div class="stage"><div class="footer-tag">RS003 · Pygame Turret · Weeks 15·16</div>
+<div class="stage"><div class="footer-tag">RS003 · Pygame Space Shooter · Weeks 15·16</div>
 
 <div class="slide active center-all"><div class="pill">Weeks 15·16</div><div class="emoji">🏆</div>
-<h1>Final<br>Turret Game</h1>
+<h1>Final<br>Space Shooter</h1>
 <p class="big" style="margin-top:.8em;color:var(--accent-2);">Pull it all together</p>
 <p class="bilingual">미니 프로젝트 완성</p></div>
 
 <div class="slide"><div class="pill">Goal</div><h2>Combine all 7 weeks</h2>
 <ul class="check-list">
 <li>Pygame window + game loop</li>
-<li>Turret base &amp; gun</li>
+<li>Player ship (body + nose + thrusters)</li>
 <li>Functions to draw each part</li>
-<li>Keyboard controls</li>
-<li>Range limits</li>
-<li>For loop pattern (ground/stars)</li>
+<li>4-direction keyboard controls</li>
+<li>Clamp to all 4 walls</li>
+<li>Falling enemies + bullets + score</li>
 </ul></div>
 
 <div class="slide"><div class="pill">Structure</div><h2>Constants on top</h2>
 <pre>WIDTH, HEIGHT = <span class="num">800</span>, <span class="num">600</span>
-GUN_W = <span class="num">20</span>
-GUN_SPEED = <span class="num">5</span>
-MIN_X = <span class="num">0</span>
-MAX_X = WIDTH - GUN_W
+SPEED = <span class="num">5</span>
 
-SKY = (<span class="num">135</span>, <span class="num">206</span>, <span class="num">235</span>)
-BROWN = (<span class="num">95</span>, <span class="num">60</span>, <span class="num">30</span>)
-GREY = (<span class="num">100</span>, <span class="num">100</span>, <span class="num">100</span>)</pre></div>
+SPACE = (<span class="num">10</span>, <span class="num">12</span>, <span class="num">40</span>)
+CYAN = (<span class="num">80</span>, <span class="num">220</span>, <span class="num">255</span>)
+WHITE = (<span class="num">255</span>, <span class="num">255</span>, <span class="num">255</span>)
+RED = (<span class="num">230</span>, <span class="num">60</span>, <span class="num">60</span>)
+YELLOW = (<span class="num">255</span>, <span class="num">210</span>, <span class="num">40</span>)
+GREY = (<span class="num">120</span>, <span class="num">120</span>, <span class="num">140</span>)</pre></div>
 
 <div class="slide"><div class="pill">Functions</div><h2>One per scene piece</h2>
-<pre><span class="kw">def</span> <span class="fn">draw_ground</span>(): ...
-<span class="kw">def</span> <span class="fn">draw_turret</span>(x): ...
-<span class="kw">def</span> <span class="fn">draw_marker</span>(x): ...
-<span class="kw">def</span> <span class="fn">draw_stars</span>(): ...
+<pre><span class="kw">def</span> <span class="fn">draw_stars</span>(): ...
+<span class="kw">def</span> <span class="fn">draw_ship</span>(x, y): ...
+<span class="kw">def</span> <span class="fn">draw_enemy</span>(e): ...
+<span class="kw">def</span> <span class="fn">draw_bullet</span>(b): ...
 
-<span class="kw">def</span> <span class="fn">handle_keys</span>(gun_x):
+<span class="kw">def</span> <span class="fn">handle_keys</span>(ship_x, ship_y):
     keys = pygame.key.<span class="fn">get_pressed</span>()
-    <span class="kw">if</span> keys[pygame.K_LEFT] <span class="kw">and</span> gun_x &gt; MIN_X:
-        gun_x -= GUN_SPEED
-    <span class="kw">if</span> keys[pygame.K_RIGHT] <span class="kw">and</span> gun_x &lt; MAX_X:
-        gun_x += GUN_SPEED
-    <span class="kw">return</span> gun_x</pre></div>
+    <span class="kw">if</span> keys[pygame.K_LEFT]:  ship_x -= SPEED
+    <span class="kw">if</span> keys[pygame.K_RIGHT]: ship_x += SPEED
+    <span class="kw">if</span> keys[pygame.K_UP]:    ship_y -= SPEED
+    <span class="kw">if</span> keys[pygame.K_DOWN]:  ship_y += SPEED
+    ship_x = <span class="fn">max</span>(<span class="num">20</span>, <span class="fn">min</span>(WIDTH - <span class="num">20</span>, ship_x))
+    ship_y = <span class="fn">max</span>(<span class="num">20</span>, <span class="fn">min</span>(HEIGHT - <span class="num">60</span>, ship_y))
+    <span class="kw">return</span> ship_x, ship_y</pre></div>
 
 <div class="slide"><div class="pill">Game loop</div><h2>Now beautifully tidy</h2>
-<pre>gun_x = WIDTH // <span class="num">2</span>
+<pre>ship_x, ship_y = WIDTH // <span class="num">2</span>, HEIGHT - <span class="num">100</span>
 running = <span class="kw">True</span>
 
 <span class="kw">while</span> running:
     <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
         <span class="kw">if</span> event.type == pygame.QUIT:
             running = <span class="kw">False</span>
+        <span class="kw">if</span> event.type == pygame.KEYDOWN:
+            <span class="kw">if</span> event.key == pygame.K_SPACE:
+                bullets.append([ship_x, ship_y - <span class="num">20</span>])
 
-    gun_x = <span class="fn">handle_keys</span>(gun_x)
+    ship_x, ship_y = <span class="fn">handle_keys</span>(ship_x, ship_y)
 
-    screen.<span class="fn">fill</span>(SKY)
+    screen.<span class="fn">fill</span>(SPACE)
     <span class="fn">draw_stars</span>()
-    <span class="fn">draw_ground</span>()
-    <span class="fn">draw_turret</span>(gun_x)
-    <span class="fn">draw_marker</span>(gun_x)
+    <span class="kw">for</span> e <span class="kw">in</span> enemies: <span class="fn">draw_enemy</span>(e)
+    <span class="kw">for</span> b <span class="kw">in</span> bullets: <span class="fn">draw_bullet</span>(b)
+    <span class="fn">draw_ship</span>(ship_x, ship_y)
     pygame.display.<span class="fn">flip</span>()
     clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre></div>
 
 <div class="slide"><div class="pill">8 weeks!</div><h2>Look how far 🚀</h2>
 <ul class="check-list" style="font-size:clamp(15px,2.5vmin,20px)">
 <li>W1 — Pygame window</li>
-<li>W2 — Constants + base</li>
+<li>W2 — Constants + ship body</li>
 <li>W3 — Functions</li>
-<li>W4 — Keyboard</li>
-<li>W5 — Limits</li>
+<li>W4 — Keyboard (4-direction)</li>
+<li>W5 — Wall limits</li>
 <li>W6 — For loops</li>
 <li>W7 — Multi-functions</li>
 <li>W8 — Full mini-game!</li>
 </ul></div>
 
+<div class="slide"><div class="pill">Polish</div><h2>Swap shapes for PNG sprites 🖼️</h2>
+<pre>ship_img = pygame.image.<span class="fn">load</span>(<span class="str">"ship.png"</span>).<span class="fn">convert_alpha</span>()
+enemy_img = pygame.image.<span class="fn">load</span>(<span class="str">"enemy.png"</span>).<span class="fn">convert_alpha</span>()
+
+screen.<span class="fn">blit</span>(ship_img, (ship_x - ship_img.<span class="fn">get_width</span>()//<span class="num">2</span>, ship_y))</pre>
+<p style="margin-top:1em">Load real art and <code>blit</code> it instead of drawing rectangles.</p></div>
+
 <div class="slide"><div class="pill">Bonus ideas</div><h2>Make it yours 🎨</h2>
 <ul class="check-list">
-<li>Add a score that goes up over time</li>
-<li>Spawn random targets with <code>random.choice</code></li>
-<li>Add UP/DOWN keys for gun angle</li>
-<li>Change theme: castle, space, jungle</li>
+<li>Add a score that goes up on each hit</li>
+<li>Spawn random enemies with <code>random.choice</code></li>
+<li>Add missiles on the <code>M</code> key + explosions</li>
+<li>Enemy types worth different points</li>
 </ul></div>
 
 <div class="slide"><div class="pill">Your turn!</div><h2>Ship the game 🏆</h2>
@@ -95,7 +107,7 @@ running = <span class="kw">True</span>
 <p class="big" style="margin-top:.8em;color:var(--accent-2);">First real graphics game built.</p>
 <p class="bilingual">완성!</p>
 <div class="fruit-row" style="margin-top:1em;font-size:clamp(34px,6vmin,56px)">
-<span>🔫</span><span>🎯</span><span>⭐</span><span>🏆</span></div></div>
+<span>🚀</span><span>👾</span><span>⭐</span><span>🏆</span></div></div>
 
 
 
@@ -137,7 +149,7 @@ if age &gt;= 10
 <div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> The <code>if</code> header is missing its colon. Python raises <code>SyntaxError: expected ':'</code>. Every <code>if</code>/<code>for</code>/<code>while</code>/<code>def</code> line ends in <code>:</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">age = 12
 if age &gt;= 10:
     print(&quot;Old enough&quot;)</pre></div></div>
-<div class="slide mcq" data-correct="0" data-explain="Missing colon after the if condition (SyntaxError)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Final Turret Game</button>
+<div class="slide mcq" data-correct="0" data-explain="Missing colon after the if condition (SyntaxError)."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Looking at the slide titles, what is this lesson mainly about?</div><div class="opts"><button class="opt">Final Space Shooter</button>
 <button class="opt">List comprehensions</button>
 <button class="opt">Decorators and metaclasses</button>
 <button class="opt">Multi-threaded I/O</button></div><div class="qfeedback"></div></div>
@@ -152,5 +164,5 @@ if age &gt;= 10
 <div class="slide"><div class="pill">💻 Practice</div><h2>Coding practice</h2><div class="practice-task">Take the example code from this week. Type it out from scratch — no copy/paste. Run it. Now change one value or name and predict the output before running again.</div><div class="debug-box"><div class="debug-tag fix" style="background:var(--accent-2)">starter</div><pre style="margin-top:.4em"># Re-type the example code below. Then experiment.
 </pre></div><p class="practice-hint">Open your editor. Save as <code>practice.py</code> (or <code>.html</code>). Run it. Iterate.</p></div>
 <!-- INJECTED-EXTRAS-END -->
-<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 22</span><button id="next">›</button></div>
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 23</span><button id="next">›</button></div>
 </div><script src="../../assets/deck.js"></script></body></html>
