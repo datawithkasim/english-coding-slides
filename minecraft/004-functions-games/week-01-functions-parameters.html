@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M004 W1 — Functions with Parameters</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M004 · Functions Games · Week 1</div>
+
+<div class="slide active center-all"><div class="pill">Week 1</div><div class="emoji">🏗️</div>
+<h1>Functions<br>with Inputs</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">One function, many towers</p>
+<p class="bilingual">함수에 숫자를 넣어 매번 다르게 짓기</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>8 weeks → your own game 🎮</h2>
+<div class="emoji">🏗️💬🕹️</div>
+<p class="big">Teach the agent one skill, then reuse it everywhere.</p>
+<p class="bilingual">작은 함수들을 모아 게임을 만들어요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What is a <code>function</code>?</h2>
+<p class="big">A named block of steps you can <span class="sub">reuse</span> as many times as you want.</p>
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">build_tower</span>():
+    agent.place(STONE, FORWARD)
+    agent.move(UP, <span class="num">1</span>)</pre>
+<p style="margin-top:.6em">Define once. <code>build_tower()</code> runs it again and again.</p>
+<p class="bilingual">한 번 정의 → 여러 번 호출</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>A <code>parameter</code> — an input</h2>
+<p class="big">A parameter is a number the function uses <span class="sub">inside</span>.</p>
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">build_tower</span>(<span style="color:#ff7849">height</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span style="color:#ff7849">height</span>):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, <span class="num">1</span>)</pre>
+<p style="margin-top:.6em"><code>height</code> changes each call — same code, different tower.</p>
+<p class="bilingual">매개변수 = 함수가 안에서 쓰는 입력값</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Calling with different numbers</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8em;margin-top:1em">
+<div class="varbox"><span class="name">build_tower(2)</span><span class="val">tower 2 tall</span></div>
+<div class="varbox"><span class="name">build_tower(5)</span><span class="val">tower 5 tall</span></div>
+<div class="varbox"><span class="name">build_tower(3)</span><span class="val">tower 3 tall</span></div>
+<div class="varbox"><span class="name">build_tower(8)</span><span class="val">tower 8 tall</span></div>
+</div>
+<p class="bilingual">하나의 함수, 매번 다른 높이</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Call → run → result</h2>
+  <div class="viz viz-func">
+    <div class="fn-caller">
+      <span class="fn-callcode">build_tower(<span class="arg">3</span>)</span>
+      <span class="fn-result">→ <span class="rv">3-block tower</span></span>
+    </div>
+    <div class="fn-flow-down">↓ call</div>
+    <div class="fn-body">
+      <div class="fn-sig">def build_tower(<span class="param">height</span>):</div>
+      <div class="fn-line">for i in range(<span class="param-use">height</span>):</div>
+      <div class="fn-line">  agent.place(STONE, FORWARD)</div>
+    </div>
+    <div class="fn-flow-up">↑ done</div>
+  </div>
+  <p class="bilingual">호출하면 함수 안이 실행돼요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>return</code> — give an answer back</h2>
+<p class="big">A function can <span class="sub">give back</span> a value instead of building.</p>
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">count_steps</span>(distance):
+    <span class="kw">return</span> distance + <span class="num">2</span>
+
+steps = <span class="fn">count_steps</span>(<span class="num">4</span>)
+player.say(steps)   <span class="com"># 6</span></pre>
+<p class="bilingual">return = 값을 돌려주기</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How tall is the tower?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>def build_tower(height):
+    for i in range(height):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, 1)
+
+build_tower(3)</pre><details><summary>Reveal output</summary><div class="ans">3 blocks tall — height = 3, so the loop runs 3 times.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">function</span><span class="gloss">a named block of code you can reuse</span><span class="ko">함수</span>
+<span class="term">parameter</span><span class="gloss">an input a function uses inside</span><span class="ko">매개변수</span>
+<span class="term">call</span><span class="gloss">running a function by name + ()</span><span class="ko">호출</span>
+<span class="term">return</span><span class="gloss">the value a function gives back</span><span class="ko">반환</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: build a tower 4 tall — but <b>nothing happens</b>.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def build_tower(height):
+    for i in range(height):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> defining a function only <b>teaches</b> it. You never <b>called</b> it, so nothing runs. Add a call.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def build_tower(height):
+    for i in range(height):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, 1)
+
+build_tower(4)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a tower village 🏘️</h2>
+<ul class="check-list">
+<li>Write one function with a <code>height</code> parameter</li>
+<li>Use <code>height</code> inside the <code>range</code> loop</li>
+<li>Call it 3+ times with different numbers</li>
+<li>Watch towers of different sizes appear</li>
+<li>Send a photo of your skyline</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A parameter is the input the function uses inside its steps."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">What is a <b>parameter</b>?</div><div class="opts"><button class="opt">An input the function uses inside, like <code>height</code>.</button>
+<button class="opt">The name of the agent.</button>
+<button class="opt">A block in Minecraft.</button>
+<button class="opt">The world file.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Defining only teaches the function — you must call it to run it."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">You wrote <code>def build_tower(height):</code> but nothing builds. Why?</div><div class="opts"><button class="opt">You defined it but never <b>called</b> it.</button><button class="opt">Functions can't build towers.</button><button class="opt">height must be capitalised.</button><button class="opt">You need two parameters.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="return hands a value back to whoever called the function."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">What does <code>return distance + 2</code> do?</div><div class="opts"><button class="opt">Gives a value back to whoever called the function.</button>
+<button class="opt">Places 2 blocks.</button>
+<button class="opt">Turns the agent.</button>
+<button class="opt">Nothing — return is invalid.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🏗️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">One function, many builds!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: run your code from chat.</p>
+<p class="bilingual">다음 주: 채팅 명령으로 실행하기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

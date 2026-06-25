@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 W6 — Building a Well</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Week 6</div>
+
+<div class="slide active center-all"><div class="pill">Week 6</div><div class="emoji">🪣</div>
+<h1>Building<br>a Well</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Build up, then dig down</p>
+<p class="bilingual">벽을 쌓고 아래로 파기</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Two skills in one build 🪣</h2>
+<div class="emoji">🟦⬇️</div>
+<p class="big">A square wall on top + a hole dug down below.</p>
+<p class="bilingual">사각 벽 + 깊은 구멍</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>A square = 4 sides + 4 turns</h2>
+<pre>repeat 4 times:
+    repeat 3 times:
+        place block down
+        move forward
+    turn right</pre>
+<p style="margin-top:.6em">Build a side, turn right, repeat <span class="sub">4 times</span> → a closed square.</p>
+<p class="bilingual">정사각형 = 4면 + 4번 회전</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Digging = destroy + go down</h2>
+<pre>repeat 3 times:
+    destroy block down
+    move down by 1</pre>
+<p style="margin-top:.6em"><code>destroy block down</code> breaks the block, then the agent drops into the gap.</p>
+<p class="bilingual">파기 = 부수고 + 내려가기</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>place vs destroy</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🧱</div><div class="name">place block</div><div class="ex">adds a block</div></div>
+<div class="opt-card"><div class="ico">⛏️</div><div class="name">destroy block</div><div class="ex">removes a block</div></div>
+</div>
+<p class="bilingual">놓기와 부수기는 반대예요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Blocks: wall first, then dig</h2>
+<pre><span class="com"># 1) the square wall</span>
+repeat 4 times:
+    repeat 3 times:
+        place block down
+        move forward
+    turn right
+<span class="com"># 2) dig the hole</span>
+repeat 3 times:
+    destroy block down
+    move down by 1</pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2>How the teacher world builds it</h2>
+<pre><span class="com"># well — week 6 result</span>
+<span style="color:#50fa7b">blocks.fill</span>(COBBLESTONE, <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">20</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">0</span>), <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">24</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">4</span>))
+<span style="color:#50fa7b">blocks.fill</span>(AIR, <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">21</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">1</span>), <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">23</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">3</span>))
+<span style="color:#50fa7b">blocks.fill</span>(WATER, <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">21</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">1</span>), <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">23</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">3</span>))</pre>
+<p style="margin-top:.8em">Fill cobblestone, carve out <code>AIR</code> for the hole, then add <code>WATER</code>.</p>
+<p class="bilingual">AIR 로 비우고 WATER 로 채워요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How deep is the hole?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>repeat 3 times:
+    destroy block down
+    move down by 1</pre><details><summary>Reveal output</summary><div class="ans">3 blocks deep — each loop breaks one block and drops the agent down one level.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">destroy</span><span class="gloss">break and remove a block</span><span class="ko">부수다</span>
+<span class="term">dig</span><span class="gloss">remove blocks going downward</span><span class="ko">파다</span>
+<span class="term">deep</span><span class="gloss">how far down something goes</span><span class="ko">깊은</span>
+<span class="term">square</span><span class="gloss">a shape with 4 equal sides</span><span class="ko">정사각형</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: <b>dig 3 blocks straight down</b>.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">repeat 3 times:
+    destroy block down</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the agent breaks the same block 3 times without moving — it never goes deeper. Add <code>move down by 1</code> so it drops into the hole each loop.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">repeat 3 times:
+    destroy block down
+    move down by 1</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a deeper well 🪣</h2>
+<ul class="check-list">
+<li>Open this week's world</li>
+<li>Build a <b>3×3 square wall</b> with a loop</li>
+<li>Dig the hole <b>at least 5 blocks deep</b></li>
+<li>Build the wall <i>first</i>, then dig</li>
+<li>Send a photo looking down into your well</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A square needs 4 sides, so the loop runs 4 times with a turn each side."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">How many times must you repeat "build a side, turn right" for a square?</div><div class="opts"><button class="opt">4 times.</button>
+<button class="opt">2 times.</button>
+<button class="opt">1 time.</button>
+<button class="opt">10 times.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Without move down the agent breaks the same block over and over."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">Why must digging include <code>move down by 1</code>?</div><div class="opts"><button class="opt">So the agent drops deeper each loop.</button><button class="opt">To turn the agent around.</button><button class="opt">To place water.</button><button class="opt">It isn't needed.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="destroy removes a block; place adds one."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q"><code>destroy block down</code> does the opposite of:</div><div class="opts"><button class="opt"><code>place block down</code></button>
+<button class="opt"><code>turn right</code></button>
+<button class="opt"><code>move forward</code></button>
+<button class="opt"><code>repeat</code></button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🪣</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Well dug!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a farm house with variables.</p>
+<p class="bilingual">다음 주: 변수로 농장 집 짓기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M004 W2 — Chat Commands</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M004 · Functions Games · Week 2</div>
+
+<div class="slide active center-all"><div class="pill">Week 2</div><div class="emoji">💬</div>
+<h1>Chat<br>Commands</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Type a word — code runs</p>
+<p class="bilingual">채팅에 단어를 입력하면 코드가 실행돼요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>You're the controller 🎛️</h2>
+<div class="emoji">⌨️➡️🏗️</div>
+<p class="big">Last week you called functions in code. Now <span class="sub">you</span> call them by typing.</p>
+<p class="bilingual">이제 직접 명령어로 함수를 호출해요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What's a <code>chat command</code>?</h2>
+<p class="big">Code that runs when you type a <span class="sub">word</span> in the chat box.</p>
+<pre style="margin-top:1em"><span class="kw">def</span> <span class="fn">on_bridge</span>():
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+        agent.place(PLANKS, FORWARD)
+        agent.move(FORWARD, <span class="num">1</span>)
+player.on_chat(<span class="str">"bridge"</span>, on_bridge)</pre>
+<p style="margin-top:.6em">Type <code>bridge</code> → the agent builds a bridge.</p>
+<p class="bilingual">단어를 입력 → 코드 실행</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Commands can take a <code>number</code></h2>
+<pre style="margin-top:.4em"><span class="kw">def</span> <span class="fn">on_tower</span>(<span style="color:#ff7849">n</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span style="color:#ff7849">n</span>):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, <span class="num">1</span>)
+player.on_chat(<span class="str">"tower"</span>, on_tower)</pre>
+<p style="margin-top:.6em">Type <code>tower 4</code> → <code>n</code> becomes <span class="sub">4</span>. <code>tower 8</code> → taller!</p>
+<p class="bilingual">명령어에 숫자를 함께 보낼 수 있어요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Pass the number into a function</h2>
+<pre><span class="kw">def</span> <span class="fn">build_tower</span>(height):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(height):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, <span class="num">1</span>)
+
+<span class="kw">def</span> <span class="fn">on_tower</span>(<span style="color:#ff7849">n</span>):
+    <span class="fn">build_tower</span>(<span style="color:#ff7849">n</span>)
+player.on_chat(<span class="str">"tower"</span>, on_tower)</pre>
+<p class="bilingual">채팅 숫자를 함수에 그대로 넘겨줘요</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Type → pass → build</h2>
+  <div class="viz viz-func">
+    <div class="fn-caller">
+      <span class="fn-callcode">"tower <span class="arg">3</span>"</span>
+      <span class="fn-result">→ <span class="rv">build_tower(3)</span></span>
+    </div>
+    <div class="fn-flow-down">↓ pass n</div>
+    <div class="fn-body">
+      <div class="fn-sig">def build_tower(<span class="param">height</span>):</div>
+      <div class="fn-line">for i in range(<span class="param-use">height</span>):</div>
+      <div class="fn-line">  agent.place(STONE, FORWARD)</div>
+    </div>
+    <div class="fn-flow-up">↑ tower built</div>
+  </div>
+  <p class="bilingual">입력한 숫자가 함수로 전달돼요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How tall, step by step?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>def build_tower(height):
+    for i in range(height):
+        agent.place(STONE, FORWARD)
+        agent.move(UP, 1)
+
+player.on_chat("tower", build_tower)
+# you type:  tower 4</pre><details><summary>Reveal output</summary><div class="ans">n = 4 → build_tower(4) → a 4-block tower.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">chat command</span><span class="gloss">code that runs when you type a word</span><span class="ko">채팅 명령</span>
+<span class="term">argument</span><span class="gloss">the value you send with a command</span><span class="ko">인수</span>
+<span class="term">pass</span><span class="gloss">handing a value into a function</span><span class="ko">전달하다</span>
+<span class="term">trigger</span><span class="gloss">the thing that makes code run</span><span class="ko">실행 조건</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: typing <b>bridge</b> builds a bridge — but nothing runs.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">player.on_chat("brige", build_bridge)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Read the word letter by letter.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the command is spelled <code>"brige"</code>, so typing <code>bridge</code> never matches. Spelling must be exact.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">player.on_chat("bridge", build_bridge)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Make two commands 💬</h2>
+<ul class="check-list">
+<li>One simple command (no number)</li>
+<li>One command that takes a number</li>
+<li>Pass that number into a function</li>
+<li>Try a small number, then a big one</li>
+<li>Send a video of you typing both</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The string in on_chat must exactly match what you type."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q"><code>player.on_chat("brige", f)</code> won't fire when you type <code>bridge</code>. Why?</div><div class="opts"><button class="opt">The command name is misspelled — it must match exactly.</button>
+<button class="opt">Functions can't be chat commands.</button>
+<button class="opt">You can only have one command.</button>
+<button class="opt">bridge is a reserved word.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Typing tower 4 sends 4 in as the argument n."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">You type <code>tower 4</code> for <code>def on_tower(n):</code>. What is <code>n</code>?</div><div class="opts"><button class="opt">4 — the number is passed in as the argument.</button><button class="opt">"tower"</button><button class="opt">Always 0.</button><button class="opt">The agent's position.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Each chat command needs its own unique name."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Two commands both named <code>"build"</code> — what's the fix?</div><div class="opts"><button class="opt">Give each command its own unique name.</button>
+<button class="opt">Delete one function body.</button>
+<button class="opt">Add more numbers.</button>
+<button class="opt">Nothing — duplicates are fine.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">💬</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">You're in control!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: the agent senses the world.</p>
+<p class="bilingual">다음 주: 주변 블록을 감지하기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

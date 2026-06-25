@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M004 W7 — Auto-Building Spaces</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M004 · Functions Games · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">🏰</div>
+<h1>Auto-Building<br>Spaces</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Loops + functions + chat</p>
+<p class="bilingual">명령 하나로 공간 전체가 저절로 지어져요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Everything together 🧩</h2>
+<div class="emoji">🔁🏗️💬</div>
+<p class="big">A loop repeats a room, a function builds it, a number decides the size.</p>
+<p class="bilingual">반복 + 함수 + 채팅 숫자</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Loop a function call</h2>
+<pre><span class="kw">def</span> <span class="fn">on_dungeon</span>(rooms):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(rooms):
+        <span class="fn">build_room</span>()
+        agent.<span class="fn">move</span>(FORWARD, <span class="num">6</span>)
+player.on_chat(<span class="str">"dungeon"</span>, on_dungeon)</pre>
+<p style="margin-top:.6em">Type <code>dungeon 3</code> → 3 rooms, each 6 apart.</p>
+<p class="bilingual">반복이 함수 호출을 여러 번 실행해요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Functions inside functions</h2>
+<pre><span class="kw">def</span> <span class="fn">build_room</span>():
+    <span class="fn">build_wall</span>(<span class="num">5</span>)
+    <span class="fn">build_wall</span>(<span class="num">5</span>)
+    <span class="fn">build_wall</span>(<span class="num">5</span>)
+    <span class="fn">build_wall</span>(<span class="num">5</span>)</pre>
+<p style="margin-top:.6em"><code>dungeon 2</code> → 2 rooms × 4 walls = <span class="sub">8 walls</span>.</p>
+<p class="bilingual">방 함수가 벽 함수를 재사용해요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Randomness makes it feel alive</h2>
+<pre><span class="kw">def</span> <span class="fn">on_towers</span>(count):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(count):
+        <span class="fn">build_tower</span>(randint(<span class="num">3</span>, <span class="num">8</span>))
+        agent.<span class="fn">move</span>(FORWARD, <span class="num">4</span>)
+player.on_chat(<span class="str">"towers"</span>, on_towers)</pre>
+<p style="margin-top:.6em">Each tower gets a random height — no two the same.</p>
+<p class="bilingual">랜덤 높이로 매번 다른 풍경</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Loop builds room by room</h2>
+  <div class="viz viz-while">
+    <div class="wh-var"><span class="vname">room</span> = <span class="vval"><span>1</span><span>2</span><span>3</span><span>4</span></span></div>
+    <div class="wh-cond">room &lt;= rooms</div>
+    <div class="wh-body">build_room(); move(FORWARD, 6)</div>
+    <div class="output-box">
+      <div class="out-label">▸ Built</div>
+      <div class="out-line">room 1 ✓</div>
+      <div class="out-line">room 2 ✓</div>
+      <div class="out-line">room 3 ✓</div>
+      <div class="out-line wh-exit">→ dungeon done</div>
+    </div>
+  </div>
+  <p class="bilingual">반복이 끝날 때까지 방을 지어요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How many walls?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>def build_room():
+    build_wall(5)
+    build_wall(5)
+    build_wall(5)
+    build_wall(5)
+
+player.on_chat("dungeon", on_dungeon)
+# you type:  dungeon 2</pre><details><summary>Reveal output</summary><div class="ans">8 walls — 2 rooms × 4 walls each.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">argument</span><span class="gloss">the number you send with a command</span><span class="ko">인수</span>
+<span class="term">range</span><span class="gloss">how many times a loop repeats</span><span class="ko">범위</span>
+<span class="term">randint</span><span class="gloss">a random number in a range</span><span class="ko">난수</span>
+<span class="term">offset</span><span class="gloss">how far to move between pieces</span><span class="ko">간격</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: <code>dungeon 5</code> builds 5 rooms — but always builds just <b>one</b>.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def on_dungeon(rooms):
+    for i in range(1):
+        build_room()
+        agent.move(FORWARD, 6)
+player.on_chat("dungeon", on_dungeon)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">The argument <code>rooms</code> is never used.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the loop is <code>range(1)</code>, ignoring <code>rooms</code>. Loop over the argument.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def on_dungeon(rooms):
+    for i in range(rooms):
+        build_room()
+        agent.move(FORWARD, 6)
+player.on_chat("dungeon", on_dungeon)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Auto-build a space 🏰</h2>
+<ul class="check-list">
+<li>Chat command with a number argument</li>
+<li>A loop repeats a room piece</li>
+<li>Use the argument in <code>range</code></li>
+<li>Move the right distance between pieces</li>
+<li>Try a small number, then a big one</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The loop used range(1) and ignored the rooms argument."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q"><code>dungeon 5</code> only builds one room. Why?</div><div class="opts"><button class="opt">The loop is <code>range(1)</code> and ignores <code>rooms</code>.</button>
+<button class="opt">5 is too many rooms.</button>
+<button class="opt">Chat commands only build once.</button>
+<button class="opt">build_room is misspelled.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Rooms 6 long need move forward 6 so they don't overlap."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">Rooms are 6 long but the agent moves 5 between them. What breaks?</div><div class="opts"><button class="opt">Each room overlaps the back wall of the last — move 6.</button><button class="opt">The rooms get too tall.</button><button class="opt">The loop never ends.</button><button class="opt">Nothing — 5 is correct.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="randint gives a different random height each loop."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Why do <code>build_tower(randint(3, 8))</code> towers all differ?</div><div class="opts"><button class="opt"><code>randint</code> picks a new random height each loop.</button>
+<button class="opt">The agent gets tired.</button>
+<button class="opt">Towers always shrink.</button>
+<button class="opt">range adds 1 each time.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🏰</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">A whole space, one command!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: build your final game.</p>
+<p class="bilingual">다음 주: 나만의 미니게임 완성</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

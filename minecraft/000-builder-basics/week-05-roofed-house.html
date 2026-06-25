@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 W5 — Roofed House</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Week 5</div>
+
+<div class="slide active center-all"><div class="pill">Week 5</div><div class="emoji">🏠</div>
+<h1>Roofed<br>House</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Cap the walls with a roof</p>
+<p class="bilingual">벽 위에 지붕 올리기</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Walls + roof = a real house 🏠</h2>
+<div class="emoji">🧱➕🔺</div>
+<p class="big">Last week: walls. This week: a roof on top.</p>
+<p class="bilingual">벽에 지붕을 더하면 집 완성</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Go up <span class="sub">first</span>, then build the roof</h2>
+<p class="big">A roof must sit on <span class="sub">top</span> of the walls — so the agent climbs up before placing it.</p>
+<pre style="margin-top:1em">move up by 1
+repeat 3 times:
+    place block down
+    move forward</pre>
+<p style="margin-top:.6em">Without <code>move up</code>, the roof lands on the floor.</p>
+<p class="bilingual">먼저 위로 올라가서 지붕을 놓아요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>A roof is a flat square layer</h2>
+<pre>repeat 4 times:
+    repeat 4 times:
+        place block down
+        move forward
+    turn right</pre>
+<p style="margin-top:.6em">Nested loop again — but this time flat, like a lid.</p>
+<p class="bilingual">지붕은 평평한 정사각형 층이에요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Order matters</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">✅</div><div class="name">up → place</div><div class="ex">roof on the walls</div></div>
+<div class="opt-card"><div class="ico">🚫</div><div class="name">place → up</div><div class="ex">roof on the floor</div></div>
+</div>
+<p class="bilingual">순서가 결과를 바꿔요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Blocks: climb then roof</h2>
+<pre><span class="com"># stand on top of the walls first</span>
+move up by 4
+repeat 4 times:
+    repeat 4 times:
+        place block down
+        move forward
+    turn right</pre></div>
+
+<div class="slide"><div class="pill">Code</div><h2>How the teacher world builds it</h2>
+<pre><span class="com"># house roof — week 5 result</span>
+<span style="color:#50fa7b">blocks.fill</span>(OAK_PLANKS, <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">10</span>,<span style="color:#bd93f9">4</span>,<span style="color:#bd93f9">0</span>), <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">16</span>,<span style="color:#bd93f9">4</span>,<span style="color:#bd93f9">6</span>))
+<span style="color:#50fa7b">blocks.fill</span>(OAK_LOG, <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">13</span>,<span style="color:#bd93f9">5</span>,<span style="color:#bd93f9">0</span>), <span style="color:#50fa7b">pos</span>(<span style="color:#bd93f9">13</span>,<span style="color:#bd93f9">5</span>,<span style="color:#bd93f9">6</span>))</pre>
+<p style="margin-top:.8em">The <code>4</code> in the middle is the <span class="sub">height</span> — the roof sits at y=4, on top of the walls.</p>
+<p class="bilingual">가운데 숫자가 높이(y)예요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>Same height, or higher?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>move up by 1
+repeat 3 times:
+    place block down
+    move forward</pre><details><summary>Reveal output</summary><div class="ans">Higher — the agent goes up 1 first, so the new line lands one block above where it was.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">roof</span><span class="gloss">the flat layer covering a house top</span><span class="ko">지붕</span>
+<span class="term">layer</span><span class="gloss">one flat level of blocks</span><span class="ko">층</span>
+<span class="term">on top of</span><span class="gloss">resting above something</span><span class="ko">위에</span>
+<span class="term">order</span><span class="gloss">the sequence commands run in</span><span class="ko">순서</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>Spot the difference</h2><p style="margin-bottom:.4em">These should do the same thing — but one is buggy.</p><div class="debug-box"><div class="debug-tag fix">clean</div><pre style="margin-top:.4em">repeat 4 times:
+    place block down
+    move forward
+turn right</pre></div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">repeat 4 times:
+    place block down
+    move forward
+    turn right</pre></div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> in the buggy version <code>turn right</code> is <b>indented</b>, so it turns on <i>every</i> loop — the agent spins in a tiny circle instead of laying one straight side then turning once.</div><p style="margin-top:.6em">Indentation decides what's inside the loop.</p></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a roofed house 🏠</h2>
+<ul class="check-list">
+<li>Open this week's world (walls already built)</li>
+<li>Move the agent <b>up</b> to wall height first</li>
+<li>Use a nested loop to lay a flat roof</li>
+<li>Check no holes are left in the top</li>
+<li>Send a photo of your finished house</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The agent must climb to the top of the walls before placing the roof."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Before placing a roof, the agent should:</div><div class="opts"><button class="opt">Move up to the top of the walls.</button>
+<button class="opt">Move down into the ground.</button>
+<button class="opt">Turn left four times.</button>
+<button class="opt">Nothing — roofs build themselves.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="If turn right is indented it runs every loop, so the agent spins instead of making a straight side."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">Why does indenting <code>turn right</code> break the loop?</div><div class="opts"><button class="opt">It turns on every repeat instead of once.</button><button class="opt">It deletes the blocks.</button><button class="opt">Indenting never changes anything.</button><button class="opt">It makes the loop run forever.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="place then up builds the roof on the floor; up then place puts it on the walls."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Which order puts the roof <b>on the walls</b>?</div><div class="opts"><button class="opt">move up, then place the roof.</button>
+<button class="opt">place the roof, then move up.</button>
+<button class="opt">move down, then place the roof.</button>
+<button class="opt">Order doesn't matter.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🏠</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">House complete!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: dig a well.</p>
+<p class="bilingual">다음 주: 우물 파기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

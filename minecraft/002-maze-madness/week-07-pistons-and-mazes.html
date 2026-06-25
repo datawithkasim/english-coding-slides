@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M002 W7 — Pistons and Mazes</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M002 · Maze Madness · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">🧱</div>
+<h1>Pistons<br>and Mazes</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Power a bridge, then cross</p>
+<p class="bilingual">피스톤으로 길을 열고 건너기 (영어코딩)</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Machines that move blocks ⚙️</h2>
+<div class="emoji">🕹️➡️🌉</div>
+<p class="big">A sticky piston pulls a block back and opens a path — while powered.</p>
+<p class="bilingual">레버로 피스톤을 켜면 다리가 열려요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What is a piston?</h2>
+<p class="big">A piston <span class="sub">pushes</span> a block when it gets a redstone signal. A <span class="sub">sticky</span> piston can also <span class="sub">pull</span> it back.</p>
+<pre style="margin-top:1em">lever ON  → piston pulls block → path opens
+lever OFF → piston pushes back  → path closes</pre>
+<p class="bilingual">신호가 있으면 열리고, 끊기면 닫혀요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Only flip when there's a gap</h2>
+<pre><span style="color:#ff79c6">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.interact</span>(FORWARD)   <span class="com"># power the piston</span>
+<span style="color:#ff79c6">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:.6em">Interact only at the blocked spot — not on every step.</p>
+<p class="bilingual">막힌 곳에서만 레버를 작동시켜요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Power, then cross</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)
+<span class="fn">agent.interact</span>(FORWARD)   <span class="com"># piston opens the gap</span>
+<span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">2</span>)   <span class="com"># cross while it's open</span></pre>
+<p style="margin-top:1em">Cross <span class="sub">before</span> the signal turns off and the bridge vanishes.</p>
+<p class="bilingual">다리가 열려 있는 동안 건너요</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Signal opens the bridge</h2>
+<div class="viz viz-event">
+<div class="ev-step ev-click">agent.interact(FORWARD)</div>
+<div class="viz-arrow">↓</div>
+<div class="ev-step ev-listen">redstone signal → piston</div>
+<div class="viz-arrow">↓</div>
+<div class="ev-step ev-run">sticky piston pulls block</div>
+<div class="viz-arrow">↓</div>
+<div class="ev-step ev-dom">🌉 gap opens → cross ✓</div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Loop across the maze</h2>
+<pre><span style="color:#ff79c6">while</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, DOWN):
+    <span style="color:#ff79c6">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+        <span class="fn">agent.interact</span>(FORWARD)
+        <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)
+    <span style="color:#ff79c6">else</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:.6em">At a gap → power + cross. On solid ground → just walk.</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>Can the agent move now?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>agent.move(FORWARD, 1)
+agent.interact(FORWARD)   # sticky piston pulls
+agent.move(FORWARD, 1)</pre><details><summary>Reveal output</summary><div class="ans">Yes — flipping the lever powers the piston, it pulls the block back, the gap opens, and the agent crosses.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">piston</span><span class="gloss">a block that pushes others when powered</span><span class="ko">피스톤</span>
+<span class="term">sticky piston</span><span class="gloss">a piston that can pull a block back too</span><span class="ko">끈끈이 피스톤</span>
+<span class="term">gap</span><span class="gloss">a missing section of the path</span><span class="ko">틈</span>
+<span class="term">bridge</span><span class="gloss">the block the piston moves into place</span><span class="ko">다리</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: interact only when a gap is ahead.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">while not agent.detect(BLOCK, DOWN):
+    agent.interact(FORWARD)
+    agent.move(FORWARD, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> it interacts on <i>every</i> step, flipping levers it shouldn't. Wrap <code>interact</code> in an <code>if</code> so it only fires when a block is ahead.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">while not agent.detect(BLOCK, DOWN):
+    if agent.detect(BLOCK, FORWARD):
+        agent.interact(FORWARD)
+    agent.move(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Cross the gap 🧱</h2>
+<ul class="check-list">
+<li>Open the Week 7 world + Code Builder</li>
+<li>Move to the lever and power the piston</li>
+<li>Cross <i>while</i> the path is open</li>
+<li>Only <code>interact</code> when a gap is ahead</li>
+<li>Send your walkthrough video on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A piston moves a block when it receives a redstone signal."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">What makes a piston move a block?</div><div class="opts"><button class="opt">A redstone signal, like one from a flipped lever.</button>
+<button class="opt">The agent standing nearby.</button>
+<button class="opt">Daylight.</button>
+<button class="opt">Nothing — pistons never move.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A sticky piston can pull a block back, opening a path."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What can a <b>sticky</b> piston do that a normal one can't?</div><div class="opts"><button class="opt">Pull the block back when the signal stops.</button><button class="opt">Move two blocks at once.</button><button class="opt">Fly.</button><button class="opt">Nothing different.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Wrap interact in an if so it only fires at a real gap, not every step."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Why guard <code>interact</code> with <code>if agent.detect(BLOCK, FORWARD)</code>?</div><div class="opts"><button class="opt">So it only flips a lever when something is actually ahead.</button>
+<button class="opt">So it moves faster.</button>
+<button class="opt">So the loop never ends.</button>
+<button class="opt">It has no effect.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🧱</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Bridge crossed!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: the 20×20×20 capstone maze.</p>
+<p class="bilingual">다음 주: 최종 20×20×20 큐브 미로</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M003 W7 — Designing the Museum</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M003 · 3D Coordinates · Week 7</div>
+
+<div class="slide active center-all"><div class="pill">Week 7</div><div class="emoji">📐</div>
+<h1>Designing<br>the Museum</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Plan the coordinates before you build</p>
+<p class="bilingual">짓기 전에 좌표부터 설계해요 — 설계도</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>One room, everything together 📐</h2>
+<div class="emoji">🟫🖼️🗿</div>
+<p class="big">Floor (x, z) + wall art (x, y) + pedestals (x, y, z).</p>
+<p class="bilingual">바닥 · 벽 그림 · 받침대를 한 방에</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What is a <code>blueprint</code>?</h2>
+<p class="big">A plan that lists <span class="sub">every coordinate</span> before you build — so nothing overlaps and each statue lands on its stand.</p>
+<p class="bilingual">미리 좌표를 정해두면 겹치지 않아요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Each piece, its own coordinates</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:1em">
+<div class="varbox"><span class="name">floor</span><span class="val">(x, z) flat</span></div>
+<div class="varbox"><span class="name">picture</span><span class="val">(x, y) on wall</span></div>
+<div class="varbox"><span class="name">pedestal</span><span class="val">(x, y, z) box</span></div>
+</div>
+<p class="bilingual">바닥은 (x,z), 그림은 (x,y), 받침대는 (x,y,z)</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Pedestal + statue on top</h2>
+<pre><span class="com"># pedestal fills up to height 1</span>
+<span class="fn">blocks.fill</span>(STONE, <span class="fn">pos</span>(<span class="num">2</span>,<span class="num">0</span>,<span class="num">2</span>), <span class="fn">pos</span>(<span class="num">4</span>,<span class="num">1</span>,<span class="num">4</span>), FillOperation.REPLACE)
+<span class="com"># statue rests one block higher</span>
+<span class="fn">blocks.place</span>(GOLD_BLOCK, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">2</span>, <span class="num">3</span>))</pre>
+<p style="margin-top:.6em">Stone ends at y = 1, so the statue sits at <span class="sub">y = 2</span> — right on top.</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Two pedestals, no overlap</h2>
+<pre><span class="fn">blocks.fill</span>(STONE, <span class="fn">pos</span>(<span class="num">1</span>,<span class="num">0</span>,<span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>,<span class="num">1</span>,<span class="num">2</span>), FillOperation.REPLACE)
+<span class="fn">blocks.fill</span>(STONE, <span class="fn">pos</span>(<span class="num">6</span>,<span class="num">0</span>,<span class="num">6</span>), <span class="fn">pos</span>(<span class="num">7</span>,<span class="num">1</span>,<span class="num">7</span>), FillOperation.REPLACE)</pre>
+<p style="margin-top:.6em">Different <span class="sub">(x, z)</span> footprints — one near front-left, one far back-right. They never crash.</p></div>
+
+<div class="slide"><div class="pill">See it</div><h2>Blueprint — looking down from above</h2>
+<svg viewBox="0 0 560 540" style="width:min(74vmin,820px);height:auto;display:block;margin:.4em auto" xmlns="http://www.w3.org/2000/svg">
+<!-- floor grid: x right 0..8, z up-the-page 0..8. cell 50, pad-left 70, bottom 470 -->
+<g stroke="#ecdcc8" stroke-width="2">
+<line x1="70" y1="470" x2="70" y2="70"/><line x1="120" y1="470" x2="120" y2="70"/><line x1="170" y1="470" x2="170" y2="70"/><line x1="220" y1="470" x2="220" y2="70"/><line x1="270" y1="470" x2="270" y2="70"/><line x1="320" y1="470" x2="320" y2="70"/><line x1="370" y1="470" x2="370" y2="70"/><line x1="420" y1="470" x2="420" y2="70"/><line x1="470" y1="470" x2="470" y2="70"/>
+<line x1="70" y1="470" x2="470" y2="470"/><line x1="70" y1="420" x2="470" y2="420"/><line x1="70" y1="370" x2="470" y2="370"/><line x1="70" y1="320" x2="470" y2="320"/><line x1="70" y1="270" x2="470" y2="270"/><line x1="70" y1="220" x2="470" y2="220"/><line x1="70" y1="170" x2="470" y2="170"/><line x1="70" y1="120" x2="470" y2="120"/><line x1="70" y1="70" x2="470" y2="70"/>
+</g>
+<!-- back wall (z = 0) where pictures hang: top row of the floor, highlighted -->
+<rect x="70" y="70" width="400" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="2" opacity="0.85"/>
+<text x="270" y="102" font-family="sans-serif" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">back wall — pictures (x, y)</text>
+<!-- pedestal A footprint: x 1..2, z 1..2 (two cells each) -> screen x 120..220, z rows nearest bottom -->
+<rect x="120" y="370" width="100" height="100" fill="#ff7849" stroke="#1a1a2e" stroke-width="2"/>
+<text x="170" y="425" font-family="sans-serif" font-size="16" font-weight="700" fill="#1a1a2e" text-anchor="middle">pedestal A</text>
+<!-- pedestal B footprint: x 6..7, z 6..7 -->
+<rect x="370" y="120" width="100" height="100" fill="#ff7849" stroke="#1a1a2e" stroke-width="2"/>
+<text x="420" y="175" font-family="sans-serif" font-size="16" font-weight="700" fill="#1a1a2e" text-anchor="middle">pedestal B</text>
+<!-- axes -->
+<line x1="70" y1="470" x2="490" y2="470" stroke="#1a1a2e" stroke-width="3"/>
+<line x1="70" y1="470" x2="70" y2="45" stroke="#1a1a2e" stroke-width="3"/>
+<polygon points="490,470 478,464 478,476" fill="#1a1a2e"/>
+<polygon points="70,45 64,57 76,57" fill="#1a1a2e"/>
+<text x="500" y="468" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">x</text>
+<text x="60" y="42" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">z</text>
+<text x="270" y="510" font-family="sans-serif" font-size="15" fill="#1a1a2e" text-anchor="middle">x = across</text>
+<text x="28" y="270" font-family="sans-serif" font-size="15" fill="#1a1a2e" text-anchor="middle" transform="rotate(-90 28 270)">z = forward</text>
+</svg>
+<p class="bilingual">위에서 본 설계도 — 받침대 두 개의 (x, z) 자리가 겹치지 않게 미리 정해요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>Does the statue rest on top?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>pedestal: fill stone from (2, 0, 2) to (4, 1, 4)
+statue:   place gold block at (3, 2, 3)</pre><details><summary>Reveal output</summary><div class="ans">Yes — it rests right on top. The pedestal fills up to height 1, so y = 2 is the block directly above it.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">blueprint</span><span class="gloss">a coordinate plan made before building</span><span class="ko">설계도</span>
+<span class="term">pedestal</span><span class="gloss">a short box a sculpture sits on</span><span class="ko">받침대</span>
+<span class="term">sculpture</span><span class="gloss">a 3D artwork on a pedestal</span><span class="ko">조각상</span>
+<span class="term">overlap</span><span class="gloss">two pieces sharing the same footprint</span><span class="ko">겹침</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: the statue <b>rests on top</b> of the pedestal (top is at y = 1).</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">fill stone from (2, 0, 2) to (4, 1, 4)
+place gold block at (3, 5, 3)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> y = 5 floats the statue high in the air. The pedestal ends at height 1, so the top block is <code>y = 2</code>, not 5.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">fill stone from (2, 0, 2) to (4, 1, 4)
+place gold block at (3, 2, 3)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Draw a blueprint 📐</h2>
+<ul class="check-list">
+<li>Sketch one room from above — floor, back wall, pedestals</li>
+<li>Write the floor's two corner coordinates</li>
+<li>Give <b>two</b> pedestals different (x, z) footprints</li>
+<li>Write each statue's <code>(x, y, z)</code> resting on top</li>
+<li>Build it from your blueprint, then send a photo</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A blueprint plans every coordinate before building so pieces don't overlap."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Why make a blueprint <b>before</b> building?</div><div class="opts"><button class="opt">So coordinates are planned and nothing overlaps.</button>
+<button class="opt">So the build runs faster.</button>
+<button class="opt">It's not needed at all.</button>
+<button class="opt">To pick block colours only.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The pedestal ends at y=1, so the top block sits at y=2."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">A pedestal fills up to height 1. Where does the statue rest?</div><div class="opts"><button class="opt">y = 2</button><button class="opt">y = 1</button><button class="opt">y = 5</button><button class="opt">y = 0</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Two pieces with the same (x, z) footprint pile up in one spot."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">How do you stop two pedestals from crashing into each other?</div><div class="opts"><button class="opt">Give them different (x, z) footprints.</button>
+<button class="opt">Make them the same height.</button>
+<button class="opt">Place them at the same coordinates.</button>
+<button class="opt">Use gold instead of stone.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">📐</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Blueprint ready!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: build your own museum.</p>
+<p class="bilingual">다음 주: 나만의 미술관 완성</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

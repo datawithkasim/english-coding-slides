@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M002 W2 — Turning at Walls</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M002 · Maze Madness · Week 2</div>
+
+<div class="slide active center-all"><div class="pill">Week 2</div><div class="emoji">🌀</div>
+<h1>Turning<br>at Walls</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Wall ahead? Turn. Path clear? Go.</p>
+<p class="bilingual">벽이 있으면 돌고, 길이 열리면 전진 (영어코딩)</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>One rule, repeated forever 🔄</h2>
+<div class="emoji">🧱➡️🤖</div>
+<p class="big">If a wall is ahead, turn. Otherwise, step forward.</p>
+<p class="bilingual">한 가지 규칙을 끝없이 반복해요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>if</code> / <code>else</code> — pick a branch</h2>
+<p class="big">The agent asks one question, then runs <span class="sub">one</span> of two paths.</p>
+<pre style="margin-top:1em"><span style="color:#ff79c6">if</span> wall ahead:
+    turn right
+<span style="color:#ff79c6">else</span>:
+    move forward</pre>
+<p style="margin-top:.6em">Only one branch runs each time — never both.</p>
+<p class="bilingual">조건에 따라 둘 중 하나만 실행돼요</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Wall → turn · clear → move</h2>
+<div class="viz viz-if">
+<div class="if-input">
+<span class="case case-a">wall ahead</span>
+<span class="case case-b">path clear</span>
+</div>
+<div class="if-cond">agent.detect(BLOCK, FORWARD)?</div>
+<div class="if-branches">
+<div class="if-branch true">agent.turn(RIGHT_TURN)</div>
+<div class="if-branch false">agent.move(FORWARD, 1)</div>
+</div>
+<div class="if-output">
+<div class="out-label">▸ Agent does</div>
+<div class="out-line out-a">turns right</div>
+<div class="out-line out-b">steps forward</div>
+</div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The turning rule</h2>
+<pre><span style="color:#ff79c6">if</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span style="color:#ff79c6">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:1em">Wall in front → spin right. Clear → take one step.</p>
+<p class="bilingual">벽이면 오른쪽으로, 아니면 한 칸 전진</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Repeat it to solve the maze</h2>
+<pre><span style="color:#ff79c6">while</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, DOWN):
+    <span style="color:#ff79c6">if</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+        <span class="fn">agent.turn</span>(RIGHT_TURN)
+    <span style="color:#ff79c6">else</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:.6em">A <code>while</code> loop wraps the rule so it runs again and again.</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Choosing a turn with <code>elif</code></h2>
+<pre>direction = <span style="color:#f1fa8c">"right"</span>
+
+<span style="color:#ff79c6">if</span> direction == <span style="color:#f1fa8c">"left"</span>:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span style="color:#ff79c6">elif</span> direction == <span style="color:#f1fa8c">"right"</span>:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span style="color:#ff79c6">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:.6em"><code>elif</code> = "else, if instead…". Checked only if the first was false.</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What will the agent do?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>if agent.detect(BLOCK, FORWARD):
+    agent.turn(RIGHT_TURN)
+else:
+    agent.move(FORWARD, 1)</pre><details><summary>Reveal output</summary><div class="ans">Wall ahead → it turns right. Path clear → it steps forward one block. Exactly one branch runs.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">if / else</span><span class="gloss">run one branch when true, the other when false</span><span class="ko">조건문</span>
+<span class="term">branch</span><span class="gloss">one of the two paths the code can take</span><span class="ko">분기 (갈래)</span>
+<span class="term">elif</span><span class="gloss">check another condition if the first was false</span><span class="ko">아니면 만약</span>
+<span class="term">turn</span><span class="gloss">change facing without changing spot</span><span class="ko">돌다</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: turn when blocked, move when clear.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">if not agent.detect(BLOCK, FORWARD):
+    agent.turn(RIGHT_TURN)
+else:
+    agent.move(FORWARD, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the test is inverted. It turns when the <i>path is clear</i> and walks <i>into</i> walls. Remove <code>not</code> so it turns when a wall is detected.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">if agent.detect(BLOCK, FORWARD):
+    agent.turn(RIGHT_TURN)
+else:
+    agent.move(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Turn through the maze 🌀</h2>
+<ul class="check-list">
+<li>Open the Week 2 world + Code Builder</li>
+<li>Write the <code>if</code> / <code>else</code> turning rule</li>
+<li>Wrap it in a <code>while</code> loop</li>
+<li>Guide the agent to the goal</li>
+<li>Send a photo or video on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="if/else runs exactly one branch depending on whether the condition is true."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">In an <code>if</code> / <code>else</code>, how many branches run each time?</div><div class="opts"><button class="opt">Exactly one — true runs the if, false runs the else.</button>
+<button class="opt">Both branches always run.</button>
+<button class="opt">Neither runs.</button>
+<button class="opt">It depends on the loop count.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="elif is only checked when the conditions before it were false."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">When is an <code>elif</code> branch checked?</div><div class="opts"><button class="opt">Only if the earlier if/elif conditions were false.</button><button class="opt">Always, before the if.</button><button class="opt">Only inside a while loop.</button><button class="opt">Never — it's ignored.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Turning changes facing only; moving changes the agent's block."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">What's the difference between <code>turn</code> and <code>move</code>?</div><div class="opts"><button class="opt">turn changes facing in place; move walks to a new block.</button>
+<button class="opt">They do the same thing.</button>
+<button class="opt">turn places a block; move removes one.</button>
+<button class="opt">move only works downward.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🌀</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Turning solved!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: check two things at once with AND.</p>
+<p class="bilingual">다음 주: AND로 두 가지를 한 번에 확인</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

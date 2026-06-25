@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M002 W4 — AND and OR Conditions</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M002 · Maze Madness · Week 4</div>
+
+<div class="slide active center-all"><div class="pill">Week 4</div><div class="emoji">🔂</div>
+<h1>AND &amp; OR<br>Conditions</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Smarter decisions</p>
+<p class="bilingual">AND와 OR로 더 똑똑한 판단 (영어코딩)</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Two tools, used together 🧰</h2>
+<div class="emoji">🔀➕🔁</div>
+<p class="big"><code>and</code> = both true. <code>or</code> = at least one true.</p>
+<p class="bilingual">AND는 둘 다, OR는 하나만 참이면 돼요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>or</code> — either one is enough</h2>
+<p class="big"><code>A or B</code> is true when <span class="sub">at least one</span> side is true.</p>
+<pre style="margin-top:1em">no wall ahead <span style="color:#ff79c6">or</span> no wall below
+<span class="com"># True if EITHER path is open</span></pre>
+<p style="margin-top:.6em">Only false when both sides are false.</p>
+<p class="bilingual">하나만 참이어도 전체가 참</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>AND vs OR side by side</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🤝</div><div class="name">and</div><div class="ex">both true<br>→ true</div></div>
+<div class="opt-card"><div class="ico">🔱</div><div class="name">or</div><div class="ex">at least one true<br>→ true</div></div>
+</div>
+<p class="bilingual">AND는 엄격하게, OR는 너그럽게</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>OR to keep moving</h2>
+<pre><span style="color:#ff79c6">if</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span style="color:#ff79c6">or</span> \
+   <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, DOWN):
+    <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:1em">Move if the front <span class="sub">or</span> the way below is clear.</p>
+<p class="bilingual">앞 또는 아래가 열려 있으면 전진</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>AND and OR in one loop</h2>
+<pre><span style="color:#ff79c6">while</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, DOWN):
+    <span style="color:#ff79c6">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span style="color:#ff79c6">and</span> <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+        <span class="fn">agent.turn</span>(LEFT_TURN)
+    <span style="color:#ff79c6">elif</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span style="color:#ff79c6">or</span> <span style="color:#ff79c6">not</span> <span class="fn">agent.detect</span>(BLOCK, LEFT):
+        <span class="fn">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)
+    <span style="color:#ff79c6">else</span>:
+        <span class="fn">agent.turn</span>(RIGHT_TURN)</pre>
+<p style="margin-top:.6em">Corner → turn left. Open front or left → move. Else → turn right.</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>OR: either branch is enough</h2>
+<div class="viz viz-if">
+<div class="if-input">
+<span class="case case-a">front open</span>
+<span class="case case-b">front 🧱, below open</span>
+</div>
+<div class="if-cond">front clear OR below clear?</div>
+<div class="if-branches">
+<div class="if-branch true">agent.move(FORWARD, 1)</div>
+<div class="if-branch false">turn instead</div>
+</div>
+<div class="if-output">
+<div class="out-label">▸ Agent does</div>
+<div class="out-line out-a">moves ✓</div>
+<div class="out-line out-b">moves ✓ (below open)</div>
+</div>
+</div></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>Does it move?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>if not agent.detect(BLOCK, FORWARD) or \
+   not agent.detect(BLOCK, DOWN):
+    agent.move(FORWARD, 1)
+# front BLOCKED, but below is open</pre><details><summary>Reveal output</summary><div class="ans">Yes, it moves. Front is blocked, but "below is open" is true — and <code>or</code> only needs one true side.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">or</span><span class="gloss">true when at least one condition is true</span><span class="ko">또는</span>
+<span class="term">and</span><span class="gloss">true only when both conditions are true</span><span class="ko">그리고</span>
+<span class="term">either</span><span class="gloss">one side or the other is enough</span><span class="ko">둘 중 하나</span>
+<span class="term">order</span><span class="gloss">which check the code tries first</span><span class="ko">순서</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: move when front <b>OR</b> below is clear.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">if not agent.detect(BLOCK, FORWARD) and \
+   not agent.detect(BLOCK, DOWN):
+    agent.move(FORWARD, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> it uses <code>and</code>, so it only moves when <i>both</i> are clear. The goal needs <i>either</i> one — swap <code>and</code> for <code>or</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">if not agent.detect(BLOCK, FORWARD) or \
+   not agent.detect(BLOCK, DOWN):
+    agent.move(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Use AND + OR 🔂</h2>
+<ul class="check-list">
+<li>Open the Week 4 world + Code Builder</li>
+<li>Use at least one <code>and</code> condition</li>
+<li>Use at least one <code>or</code> condition</li>
+<li>Watch the branch order — check the right side first</li>
+<li>Send your walkthrough video on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="or is true when at least one side is true."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">When is <code>A or B</code> true?</div><div class="opts"><button class="opt">When at least one of A or B is true.</button>
+<button class="opt">Only when both are true.</button>
+<button class="opt">Only when both are false.</button>
+<button class="opt">Never.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="and needs both true; or needs only one."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">How is <code>and</code> different from <code>or</code>?</div><div class="opts"><button class="opt"><code>and</code> needs both true; <code>or</code> needs only one true.</button><button class="opt">They are identical.</button><button class="opt"><code>or</code> needs both; <code>and</code> needs one.</button><button class="opt"><code>and</code> only works on numbers.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Order matters: the first matching branch runs, so check the more specific case first."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Why does branch <b>order</b> matter in <code>if</code> / <code>elif</code> / <code>else</code>?</div><div class="opts"><button class="opt">The first true branch runs, so put the more specific check first.</button>
+<button class="opt">Order never matters.</button>
+<button class="opt">Python runs them bottom to top.</button>
+<button class="opt">All branches run together.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔂</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">AND + OR done!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: build a mini cube puzzle.</p>
+<p class="bilingual">다음 주: 미니 큐브 퍼즐 만들기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>
