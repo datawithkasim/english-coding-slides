@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RS003 W9 — Meteor Shooter Level-Up (Boss · Weapons · Powerups · Squadrons)</title>
+</head>
+<body>
+<div class="deck">
+
+<!-- ============ TITLE ============ -->
+<section class="slide title-slide" data-accent="cyan">
+  <div class="title-badge">2-HOUR CODING LESSON · PYGAME</div>
+  <h1>Meteor Shooter <span class="glow">Level-Up</span></h1>
+  <p class="subtitle">Boss Fights · Real Weapons · Powerups · Squadrons</p>
+  <div class="filerow">
+    <span class="pill start">start &nbsp;<code>meteor_shooter.py</code>&nbsp; <em>(dead scaffolding)</em></span>
+    <span class="arrow">→</span>
+    <span class="pill end">end &nbsp;<code>meteor_shooter_v2.py</code>&nbsp; <em>(fully working)</em></span>
+  </div>
+  <p class="teach-note">Read the <b>Why</b> aloud → show OLD vs NEW → student types the micro-steps <b>themselves</b> before you reveal the final snippet. Typing it in small steps is what makes it stick.</p>
+  <div class="hint">→ / Space next &nbsp;·&nbsp; ← back &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; click a step to check it off</div>
+</section>
+
+<!-- ============ AGENDA ============ -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">◷</span> AGENDA <span class="tag tag-time">120 min</span></div>
+  <h2>Timing Overview</h2>
+  <table class="agenda">
+    <thead><tr><th>#</th><th>Section</th><th class="mins">Minutes</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>Setup &amp; recap of what's broken</td><td class="mins">10</td></tr>
+      <tr><td>1</td><td>Fixing the missile (typo, ammo, homing)</td><td class="mins">20</td></tr>
+      <tr><td>2</td><td>Enemies that shoot back</td><td class="mins">20</td></tr>
+      <tr><td>3</td><td>Synchronized squadron fighters</td><td class="mins">20</td></tr>
+      <tr><td>4</td><td>Powerups</td><td class="mins">20</td></tr>
+      <tr><td>5</td><td>Full boss fight</td><td class="mins">25</td></tr>
+      <tr><td>6</td><td>Playtest + challenges</td><td class="mins">5</td></tr>
+      <tr class="total"><td></td><td>Total</td><td class="mins">120</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ SECTION 0 ============ -->
+<section class="slide" data-accent="slate">
+  <div class="kicker"><span class="num">00</span> SETUP &amp; RECAP <span class="tag tag-time">10 min</span></div>
+  <h2>Find the three "ghosts"</h2>
+  <p class="lead">Open the old file together. <code>boss</code>, <code>missiles</code>, and <code>powerups</code> are all declared — and even <b>drawn on screen</b> — but nothing ever fills them in.</p>
+  <blockquote class="ask">Ask the student: <i>"If I never put anything into this list, what will this loop do?"</i><br>Walk them to the answer: <b>nothing, silently, forever.</b></blockquote>
+  <p class="takeaway">🧠 Core lesson of the whole session: in games, data structures and render loops are just <b>plumbing</b> — the interesting bugs are always <b>"nothing ever wrote to this."</b></p>
+</section>
+
+<!-- ============ PRE-FLIGHT (real-file reality check) ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">⚠</span> PRE-FLIGHT <span class="tag tag-time">before you run</span></div>
+  <h2>Reality check on your actual file</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">It won't run yet — and ammo starts empty</div>
+      <pre class="code"># -- MISSILE MOVEMENT -- #
+for b in bullets:          # &lt;- empty body = IndentationError
+
+# missile_ammo = 0  -&gt; weapon 4 can't fire until a
+# powerup drops, or you add MISSILE_START_AMMO = 3</pre>
+      <div class="pnote">That empty <code>for</code> is exactly <b>where the §1 homing loop goes</b>. Want to run <i>before</i> §1? Drop a temporary <code>pass</code> inside it.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">Constants you'll add as you go</div>
+      <pre class="code"># §1  MISSILE_START_AMMO, MISSILE_HOMING_STRENGTH
+# §2  ENEMY_SHOOT_COOLDOWN_MIN / MAX, ENEMY_BULLET_SPEED
+# §3  SQUAD_SIZE, SQUAD_SHOOT_INTERVAL, SQUAD_SPAWN_CHANCE
+# §4  POWERUP_DROP_CHANCE, POWERUP_FALL_SPEED
+# §5  BOSS_MAX_HP, BOSS_SHOOT_COOLDOWN, BOSS_SPREAD_COUNT
+#     (BOSS_SCORE_INTERVAL, BOSS_BULLET_SPEED already exist)</pre>
+    </div>
+  </div>
+  <p class="ref">👻 The drawn-but-empty ghosts in this file are <code>missiles</code> and <code>boss_bullets</code>. The lesson adds a <b>net-new</b> <code>enemy_bullets</code> list (§2), and the boss reuses it (§5) — leave <code>missiles</code>/<code>boss_bullets</code> alone.</p>
+</section>
+
+<!-- ============ SECTION 1 : WHY ============ -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-why">WHY</span></div>
+  <h2>Fixing the Missile</h2>
+  <p class="lead">The missile weapon already exists, but it's a fake — a slow bullet with a typo'd key (<code>"spash"</code> instead of <code>"splash"</code>), so the splash-damage code that already exists never triggers.</p>
+  <p class="lead">A real missile should also:</p>
+  <ul class="why-list">
+    <li><b>(a)</b> cost a limited resource so it feels powerful, and</li>
+    <li><b>(b)</b> steer toward a target — "missile" implies homing. A straight-flying missile is just a fat bullet.</li>
+  </ul>
+</section>
+
+<!-- S1 SEE IT : homing sim -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-sim">SEE IT</span></div>
+  <h2>Watch it home in</h2>
+  <div class="simwrap">
+    <canvas class="sim" data-sim="homing"></canvas>
+    <div class="controls">
+      <label>Homing strength <output>0.3</output><input id="homStrength" type="range" min="0" max="1" step="0.05" value="0.3"></label>
+      <span class="ctl-note">0 = flies straight (a fat bullet) · high = snaps to nearest · <b>click the canvas</b> to fire</span>
+    </div>
+  </div>
+</section>
+
+<!-- S1 DISCOVER -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-discover">🤔 FIGURE IT OUT</span></div>
+  <h2>How would <i>you</i> make the missile hunt?</h2>
+  <ul class="discover">
+    <li><span class="q">Q.</span>Splash damage never fires — the key is <code>"spash"</code>. Why did that never <b>crash</b> the game?<span class="hint"><code>.get("splash", 0)</code> returns 0 for a missing key — no error, just silently wrong.</span></li>
+    <li><span class="q">Q.</span>To make it turn, how do you find the <b>nearest</b> enemy?<span class="hint">compare distances — and you can skip the square root (compare squared distances).</span></li>
+    <li><span class="q">Q.</span>Which way do you nudge it — left or right?<span class="hint">compare the target's <code>x</code> to the bullet's <code>x</code>.</span></li>
+    <li><span class="q">Q.</span>What stops it snapping instantly, or flying off forever?<span class="hint">a small step each frame, plus a max-speed cap.</span></li>
+  </ul>
+  <p class="trythis">🕹️ Flip back to the sim — drag strength 0 → 1. What does 0 do? Why cap the turn at ±5?</p>
+</section>
+
+<!-- S1 CODE : missile append -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-reveal">REVEAL ·the shot</span></div>
+  <h2>Dead splash (typo) → real splash + homing</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">OLD (your file) — guard already here; <code>spash</code> typo + no homing</div>
+      <pre class="code">elif current_weapon == 4:
+    if missile_ammo &gt; 0:
+        # missile: x, y, vx, color, r, speed, splash
+        bullets.append({"x": spawn_x, "y": spawn_y, "vx": 0, "color": BLUE, "r": 8, "speed": BULLET_SPEED // 2, "spash": 50})
+        missile_ammo -= 1
+        shoot_timer = 40</pre>
+      <div class="pnote">Ammo guard + <code>missile_ammo -= 1</code> are <b>already here</b>. Two real problems: the key is <code>"spash"</code>, so <code>.get("splash", 0)</code> is always 0 (splash never fires) — and there's no homing.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">NEW — fix <code>spash</code>→<code>splash</code>, add <code>homing</code></div>
+      <pre class="code">elif current_weapon == 4:
+    if missile_ammo &gt; 0:
+        bullets.append({
+            "x": spawn_x, "y": spawn_y, "vx": 0, "color": BLUE, "r": 8,
+            "speed": BULLET_SPEED // 2, "splash": 50, "homing": True,
+        })
+        missile_ammo -= 1
+        shoot_timer = 40</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S1 CODE : homing loop -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-reveal">REVEAL ·homing</span></div>
+  <h2>Steer toward the nearest target</h2>
+  <p class="lead sm">Once per frame, <b>before</b> bullets move, steer any homing bullet toward the closest thing worth hitting:</p>
+  <div class="panel new solo">
+    <div class="phdr">NEW — homing steer (new code, no OLD counterpart)</div>
+    <pre class="code">for b in bullets:
+    if b.get("homing"):
+        targets = list(enemies)
+        if boss is not None:
+            targets.append(boss)
+        if targets:
+            nearest = min(targets, key=lambda t: (t["x"] - b["x"]) ** 2 + (t["y"] - b["y"]) ** 2)
+            if nearest["x"] &gt; b["x"]:
+                b["vx"] = min(b["vx"] + MISSILE_HOMING_STRENGTH, 5)
+            elif nearest["x"] &lt; b["x"]:
+                b["vx"] = max(b["vx"] - MISSILE_HOMING_STRENGTH, -5)</pre>
+  </div>
+  <div class="whatshappening"><b class="h">💡 WHAT'S HAPPENING</b><ul>
+    <li><code>min(targets, key=…)</code> picks the nearest enemy by <b>squared</b> distance.</li>
+    <li><code>vx</code> nudges by <code>MISSILE_HOMING_STRENGTH</code> each frame — small = lazy curve, big = sharp turn.</li>
+    <li>the <code>min(…, 5)</code> / <code>max(…, -5)</code> cap keeps it from oscillating.</li>
+  </ul></div>
+  <div class="worked"><div class="h">▚ WORKED EXAMPLE — why squared distance, no √</div><pre>nearest = min by (dx² + dy²)
+
+  enemy A:  dx=30  dy=40    30² + 40² = 2500
+  enemy B:  dx=10  dy=70    10² + 70² = 5000
+
+  2500 &lt; 5000  →  A is nearer.  √ gives 50 vs 70.7 — same
+  winner, so we skip it. Squaring is cheaper.</pre></div>
+</section>
+
+<!-- S1 STEPS -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">01</span> MISSILE <span class="tag tag-steps">BUILD IT</span></div>
+  <h2>Build it — your turn</h2>
+  <ol class="steps">
+    <li>Fix the typo: <code>"spash"</code> → <code>"splash"</code>. Ask: <i>"why did this bug never crash the program?"</i> (Answer: <code>.get("splash", 0)</code> silently returns 0 for a missing key — a great teaching moment about <code>.get()</code> hiding bugs.)</li>
+    <li><code>if missile_ammo &gt; 0:</code> guard + <code>missile_ammo -= 1</code> are <b>already in your file</b> — verify them, don't re-add.</li>
+    <li>Add <code>MISSILE_START_AMMO = 3</code> near the top config constants, and set <code>missile_ammo = MISSILE_START_AMMO</code> at game start <b>and</b> in the retry-reset block (two places — easy to forget the second one).</li>
+    <li>Add <code>"homing": True</code> to the missile's dict.</li>
+    <li>Fill the empty <code># -- MISSILE MOVEMENT --</code> stub (the one that currently crashes the file) with the homing loop — it sits right before <code># -- BULLET MOVEMENT --</code>. Add the <code>MISSILE_HOMING_STRENGTH</code> constant too.</li>
+    <li>Playtest: fire a missile at ammo 3, watch it curve, watch it run out.</li>
+  </ol>
+</section>
+
+<!-- ============ SECTION 2 : WHY ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">02</span> ENEMY FIRE <span class="tag tag-why">WHY</span></div>
+  <h2>Enemies That Shoot Back</h2>
+  <p class="lead">Right now the player is never in danger from range — only from collision.</p>
+  <p class="lead">Giving enemies a cooldown timer and a shared <code>enemy_bullets</code> list adds real dodging gameplay — and it <b>reuses a pattern the student already knows</b> (the player's own <code>shoot_timer</code>), just applied to every enemy individually.</p>
+</section>
+
+<!-- S2 DISCOVER -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">02</span> ENEMY FIRE <span class="tag tag-discover">🤔 FIGURE IT OUT</span></div>
+  <h2>How do you make <i>every</i> enemy shoot?</h2>
+  <ul class="discover">
+    <li><span class="q">Q.</span>You already built the player's <code>shoot_timer</code>. How does <b>each</b> enemy get its own countdown?<span class="hint">an enemy is just a dict — give it a field, e.g. <code>shoot_cd</code>.</span></li>
+    <li><span class="q">Q.</span>What happens when that countdown hits 0?<span class="hint">fire a bullet, then reset the timer to a new random value.</span></li>
+    <li><span class="q">Q.</span>Where do the enemy bullets live?<span class="hint">one shared list — mirror the player's <code>bullets</code>.</span></li>
+    <li><span class="q">Q.</span>How do you know a bullet hit the player?<span class="hint">you already wrote enemy-vs-player — it's the same AABB overlap test.</span></li>
+    <li class="warn"><span class="q">⚠</span>Before you copy that check — <b>find the bug in it first</b>.<span class="hint">it compares against <code>player["y"] + player["w"]</code> — width on the vertical side.</span></li>
+  </ul>
+</section>
+
+<!-- S2 CODE : block 1 -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">02</span> ENEMY FIRE <span class="tag tag-reveal">REVEAL ·cooldown + fire</span></div>
+  <h2>Give every enemy its own cooldown</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — OLD had <b>nothing</b>: no shooting, no <code>enemy_bullets</code></div>
+    <pre class="code">enemy_bullets = []          # new top-level list, alongside bullets/enemies
+
+# when spawning a normal enemy, give it its own cooldown:
+enemies.append({
+    "x": random.randint(0, 380), "y": -20, "w": 20, "h": 20,
+    "color": RED, "points": 1,
+    "shoot_cd": random.randint(ENEMY_SHOOT_COOLDOWN_MIN, ENEMY_SHOOT_COOLDOWN_MAX),
+})
+
+# once per frame, tick every enemy's cooldown and fire when it hits zero:
+for e in enemies:
+    e["shoot_cd"] -= 1
+    if e["shoot_cd"] &lt;= 0:
+        enemy_bullets.append({
+            "x": e["x"] + e["w"] // 2, "y": e["y"] + e["h"],
+            "color": RED, "r": 3, "speed": ENEMY_BULLET_SPEED,
+        })
+        e["shoot_cd"] = random.randint(ENEMY_SHOOT_COOLDOWN_MIN, ENEMY_SHOOT_COOLDOWN_MAX)</pre>
+  </div>
+</section>
+
+<!-- S2 CODE : block 2 -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">02</span> ENEMY FIRE <span class="tag tag-reveal">REVEAL ·move + collide</span></div>
+  <h2>Move them &amp; check the player</h2>
+  <p class="lead sm">Same collision math the student already wrote for enemy-vs-player — just player-vs-bullet:</p>
+  <div class="panel new solo">
+    <div class="phdr">NEW — move down, then AABB test against the player rect</div>
+    <pre class="code">for eb in enemy_bullets:
+    eb["y"] += eb.get("speed", ENEMY_BULLET_SPEED)
+# ... then collision check against player["x"], player["y"], player["w"], player["h"]</pre>
+    <div class="pnote">⚠ The existing <code># -- ENEMY HITS PLAYER --</code> check uses <code>player["y"] + player["w"]</code> (width on the vertical side — a real bug, harmless only while w==h==40). Copy the <i>shape</i>, but use <code>player["h"]</code>.</div>
+  </div>
+</section>
+
+<!-- S2 STEPS -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">02</span> ENEMY FIRE <span class="tag tag-steps">BUILD IT</span></div>
+  <h2>Build it — your turn</h2>
+  <ol class="steps tight">
+    <li>Add <code>enemy_bullets = []</code> next to the other state lists, and reset it in the retry block and on nuke.</li>
+    <li>Add <code>ENEMY_SHOOT_COOLDOWN_MIN/MAX</code> and <code>ENEMY_BULLET_SPEED</code> constants.</li>
+    <li>Add <code>"shoot_cd": random.randint(...)</code> to <i>every</i> place an enemy dict is created (two spots — normal and "big" enemy).</li>
+    <li>Write a new loop <code># -- ENEMY SHOOTING --</code> that decrements <code>shoot_cd</code> and appends to <code>enemy_bullets</code> at zero.</li>
+    <li>Write <code># -- ENEMY BULLET MOVEMENT --</code>, moving <code>eb["y"]</code> downward and dropping off-screen ones (identical shape to the player-bullet movement loop).</li>
+    <li>Write <code># -- ENEMY BULLETS HIT PLAYER --</code> using the same AABB test as <code># -- ENEMY HITS PLAYER --</code>, but comparing to <code>eb["x"]/eb["y"]</code>, and <code>lives -= 1</code> on hit.</li>
+    <li>Add a render loop for <code>enemy_bullets</code> (a <code>pygame.draw.circle</code>, same shape as the bullet render loop).</li>
+    <li>Playtest: stand still and get shot.</li>
+  </ol>
+</section>
+
+<!-- ============ SECTION 3 : WHY ============ -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-why">WHY</span></div>
+  <h2>Synchronized Squadron Fighters</h2>
+  <p class="lead">The fun conceptual twist: you <b>don't</b> need a shared object or a manager class to make enemies move "in sync."</p>
+  <p class="lead">Stamp every enemy in a group with the <b>same spawn frame</b> and use the <b>same movement formula</b> → they automatically stay in lockstep, because math with the same inputs gives the same outputs.</p>
+  <p class="takeaway">🧠 A concrete intro to <b>derived state</b> vs. <b>stored state</b>.</p>
+</section>
+
+<!-- S3 SEE IT : squadron sim -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-sim">SEE IT</span></div>
+  <h2>Same clock → they weave as one</h2>
+  <div class="simwrap">
+    <canvas class="sim" data-sim="squad"></canvas>
+    <div class="controls">
+      <label><input id="squadShared" type="checkbox" checked> shared clock</label>
+      <label>Wobble <code>t *</code> <output>0.05</output><input id="squadFreq" type="range" min="0.01" max="0.15" step="0.01" value="0.05"></label>
+      <span class="ctl-note">untick "shared clock" → each fighter gets its own clock → the formation falls apart</span>
+    </div>
+  </div>
+</section>
+
+<!-- S3 DISCOVER -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-discover">🤔 FIGURE IT OUT</span></div>
+  <h2>Move 4 fighters in sync — with no manager class?</h2>
+  <ul class="discover">
+    <li><span class="q">Q.</span>For 4 enemies to weave <b>together</b>, what must they all share?<span class="hint">one clock — a frame counter every member can read.</span></li>
+    <li><span class="q">Q.</span>If each computes its <code>x</code> from the <b>same</b> formula and the <b>same</b> time, what do you get?<span class="hint">same inputs → same output → they stay in lockstep. No shared object needed.</span></li>
+    <li><span class="q">Q.</span>What single number controls how fast they wobble?<span class="hint">the multiplier inside <code>math.sin(t * ?)</code>.</span></li>
+  </ul>
+  <p class="trythis">🕹️ In the sim: toggle "shared clock" OFF and watch them scatter. Predict 0.05 vs 0.15 before you drag.</p>
+</section>
+
+<!-- S3 CODE : spawn_squadron -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-reveal">REVEAL ·spawn</span></div>
+  <h2>Stamp the whole group at spawn</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — no squadron concept existed before</div>
+    <pre class="code">def spawn_squadron(frame_count):
+    center = random.randint(80, WIDTH - 80)
+    spacing = 40
+    start_x = center - (spacing * (SQUAD_SIZE - 1)) / 2
+    for i in range(SQUAD_SIZE):
+        enemies.append({
+            "x": start_x + i * spacing, "y": -30, "w": 24, "h": 24,
+            "color": PURPLE, "points": 3, "squad": True,
+            "spawn_frame": frame_count,
+            "col_offset": start_x + i * spacing,
+            "shoot_cd": SQUAD_SHOOT_INTERVAL,
+        })</pre>
+  </div>
+</section>
+
+<!-- S3 CODE : move + volley -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-reveal">REVEAL ·move + volley</span></div>
+  <h2>Same clock → they wave &amp; fire as one</h2>
+  <div class="compare">
+    <div class="panel new">
+      <div class="phdr">NEW — each member derives its own <code>x</code> from the shared clock</div>
+      <pre class="code">if e.get("squad"):
+    e["y"] += 1 + (score // 10)
+    t = frame_count - e["spawn_frame"]
+    e["x"] = e["col_offset"] + math.sin(t * 0.05) * 50</pre>
+    </div>
+    <div class="panel new">
+      <div class="phdr">NEW — synced volley: same trick, applied to shooting</div>
+      <pre class="code">if e.get("squad"):
+    t = frame_count - e["spawn_frame"]
+    if t &gt; 0 and t % SQUAD_SHOOT_INTERVAL == 0:
+        enemy_bullets.append({"x": e["x"] + e["w"] // 2, "y": e["y"] + e["h"],
+                               "color": PINK, "r": 4, "speed": ENEMY_BULLET_SPEED})</pre>
+    </div>
+  </div>
+  <div class="whatshappening"><b class="h">💡 WHY THEY STAY IN SYNC</b><ul>
+    <li><code>t = frame_count - spawn_frame</code> is the <b>same</b> for every member (same spawn frame).</li>
+    <li>same <code>t</code> + same formula → same offset → they move as one. No manager object.</li>
+    <li>that's <b>derived state</b>: recomputed each frame, never stored.</li>
+  </ul></div>
+  <div class="worked"><div class="h">▚ WORKED EXAMPLE — the weave, frame by frame</div><pre>x = col_offset + sin(t · f) · 50        f = wobble constant
+
+f = 0.05  →  full weave every 2π/f ≈ 126 frames (~2s @60fps)
+f = 0.15  →  every ≈ 42 frames                  (3× faster)
+
+  t = 0    sin(0.00) =  0.00    x = col +  0    (centre)
+  t = 31   sin(1.57) =  1.00    x = col + 50    (far right)
+  t = 63   sin(3.14) =  0.00    x = col +  0    (centre)
+  t = 94   sin(4.71) = -1.00    x = col - 50    (far left)</pre></div>
+</section>
+
+<!-- S3 STEPS -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">03</span> SQUADRON <span class="tag tag-steps">BUILD IT</span></div>
+  <h2>Build it — your turn</h2>
+  <ol class="steps">
+    <li>Add a global <code>frame_count = 0</code>, incremented once per frame at the top of the update block. Ask <i>why</i> we need this now (answer: a shared "clock" every squad member can read independently).</li>
+    <li>Write <code>spawn_squadron()</code> above the main loop, using <code>SQUAD_SIZE = 4</code> and evenly spaced <code>x</code> positions around a random center.</li>
+    <li>In the enemy-spawn section, add a branch: <code>if boss is None and random.randint(1, SQUAD_SPAWN_CHANCE) == 1: spawn_squadron(frame_count)</code>.</li>
+    <li>In the enemy-movement loop, branch on <code>e.get("squad")</code> and use the sine formula instead of straight-down movement.</li>
+    <li>In the enemy-shooting loop, branch on <code>e.get("squad")</code> and use the modulo-timer check instead of the individual cooldown.</li>
+    <li>Playtest: watch four purple enemies enter together and weave as one, firing one synced volley — ask the student to predict what happens if you change <code>0.05</code> to <code>0.15</code> (faster wobble) <b>before</b> you show them.</li>
+  </ol>
+</section>
+
+<!-- ============ SECTION 4 : WHY ============ -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">04</span> POWERUPS <span class="tag tag-why">WHY</span></div>
+  <h2>Powerups</h2>
+  <p class="lead">The <code>powerups</code> list was already being drawn — this is the satisfying moment where the "ghost" gets a body.</p>
+  <p class="lead">Powerups need three things a static enemy doesn't:</p>
+  <ul class="why-list">
+    <li>a <b>drop chance</b> on kill,</li>
+    <li>a <b>fall speed</b>, and</li>
+    <li>a <b>pickup effect</b> keyed by type.</li>
+  </ul>
+</section>
+
+<!-- S4 DISCOVER -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">04</span> POWERUPS <span class="tag tag-discover">🤔 FIGURE IT OUT</span></div>
+  <h2>The powerups list is drawn but empty. Give it a body.</h2>
+  <ul class="discover">
+    <li><span class="q">Q.</span>What <b>three</b> things does a powerup need that a static enemy doesn't?<span class="hint">a way to appear, a way to move, a way to matter — drop chance, fall speed, pickup effect.</span></li>
+    <li><span class="q">Q.</span>When should one appear?<span class="hint">sometimes, right when an enemy dies — a random chance.</span></li>
+    <li><span class="q">Q.</span>How does picking it up change the game?<span class="hint">same AABB as enemy-vs-player, then branch on its <code>kind</code>.</span></li>
+  </ul>
+</section>
+
+<!-- S4 CODE : old + spawn/drop -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">04</span> POWERUPS <span class="tag tag-reveal">REVEAL ·give it a body</span></div>
+  <h2>From drawn-but-empty → drops on kill</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">OLD — drawn, but nothing ever appends to it</div>
+      <pre class="code"># Powerups Layer (Placeholder hook)
+for pu in powerups:
+    pygame.draw.rect(screen, pu["color"], pygame.Rect(pu["x"], pu["y"], pu["w"], pu["h"]))</pre>
+      <div class="pnote">That's it — nothing ever appends to <code>powerups</code>, and there's no pickup logic.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">NEW — a spawn helper + a drop chance on kill</div>
+      <pre class="code">def spawn_powerup(x, y):
+    kind = random.choice(["missile", "nuke", "life"])
+    color = {"missile": BLUE, "nuke": ORANGE, "life": GOLD}[kind]
+    powerups.append({"x": x, "y": y, "w": 16, "h": 16, "color": color, "kind": kind})
+
+# inside the bullet-vs-enemy collision, right after an enemy dies:
+if random.randint(1, POWERUP_DROP_CHANCE) == 1:
+    spawn_powerup(e["x"], e["y"])</pre>
+    </div>
+  </div>
+</section>
+
+<!-- S4 CODE : fall + pickup -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">04</span> POWERUPS <span class="tag tag-reveal">REVEAL ·fall + pickup</span></div>
+  <h2>Fall, then apply an effect by type</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — same AABB shape as enemy-vs-player, but grants a buff</div>
+    <pre class="code"># once per frame:
+for pu in powerups:
+    pu["y"] += POWERUP_FALL_SPEED
+
+# player picks it up:
+for pu in powerups:
+    if (player["x"] &lt; pu["x"] + pu["w"] and player["x"] + player["w"] &gt; pu["x"]
+            and player["y"] &lt; pu["y"] + pu["h"] and player["y"] + player["h"] &gt; pu["y"]):
+        if pu["kind"] == "missile": missile_ammo += 2
+        elif pu["kind"] == "nuke": nukes += 1
+        elif pu["kind"] == "life": lives += 1</pre>
+  </div>
+</section>
+
+<!-- S4 STEPS -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">04</span> POWERUPS <span class="tag tag-steps">BUILD IT</span></div>
+  <h2>Build it — your turn</h2>
+  <ol class="steps">
+    <li>Write <code>spawn_powerup(x, y)</code> as a small helper — a good moment to talk about <i>why</i> we factor this out (we'll call it from two places: normal kills and boss defeat).</li>
+    <li>Add <code>POWERUP_DROP_CHANCE</code>, <code>POWERUP_FALL_SPEED</code> constants.</li>
+    <li>Call <code>spawn_powerup(e["x"], e["y"])</code> inside the existing enemy-death block, gated by a random chance.</li>
+    <li>Add a <code># -- POWERUP MOVEMENT --</code> loop that increments <code>pu["y"]</code> and drops off-screen ones, mirroring the bullet-movement pattern.</li>
+    <li>Add a <code># -- POWERUPS PICKED UP BY PLAYER --</code> loop using the <i>exact same</i> AABB shape as enemy-vs-player, but applying an effect instead of <code>lives -= 1</code>.</li>
+    <li>Playtest: kill enemies until one drops loot, walk into it, watch the HUD numbers change (add missiles/nukes to the UI string too).</li>
+  </ol>
+</section>
+
+<!-- ============ SECTION 5 : WHY ============ -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-why">WHY</span></div>
+  <h2>The Boss Fight</h2>
+  <p class="lead">The payoff — the health-bar rendering was <b>already sitting in the old file, fully written, waiting for a boss that never existed.</b> Point that out explicitly.</p>
+  <p class="takeaway">🧠 "Done-looking" code can still be <b>dead code</b> if nothing feeds it.</p>
+  <p class="lead">A boss needs four things:</p>
+  <ul class="why-list four">
+    <li>a <b>spawn condition</b></li>
+    <li>a <b>movement pattern</b></li>
+    <li>a <b>shoot pattern</b></li>
+    <li>a <b>defeat condition</b></li>
+  </ul>
+</section>
+
+<!-- S5 SEE IT : boss sim -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-sim">SEE IT</span></div>
+  <h2>Bounce + timed spread volley</h2>
+  <div class="simwrap">
+    <canvas class="sim" data-sim="boss"></canvas>
+    <div class="controls">
+      <label>Spread bullets <output>7</output><input id="bossSpread" type="range" min="1" max="11" step="2" value="7"></label>
+      <span class="ctl-note">this slider is <code>BOSS_SPREAD_COUNT</code> — each bullet's <code>offset = (i - N//2) * 1.5</code></span>
+    </div>
+  </div>
+</section>
+
+<!-- S5 DISCOVER -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-discover">🤔 FIGURE IT OUT</span></div>
+  <h2>Build a boss from dead code</h2>
+  <ul class="discover">
+    <li><span class="q">Q.</span>The health bar is <b>already written</b>. Why does it never show?<span class="hint">it's guarded by <code>if boss is not None</code> — and <code>boss</code> is always None.</span></li>
+    <li><span class="q">Q.</span>A boss needs <b>four</b> things — can you name them?<span class="hint">spawn, move, shoot, defeat.</span></li>
+    <li><span class="q">Q.</span>New list for its bullets, or reuse one?<span class="hint">reuse <code>enemy_bullets</code> — movement, render and player-hit already exist.</span></li>
+  </ul>
+  <p class="trythis">🕹️ In the sim: drag the spread count. What does <code>(i - N//2)</code> do to the fan?</p>
+</section>
+
+<!-- S5 CODE : old dead health bar -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-reveal">REVEAL ·the dead HUD</span></div>
+  <h2>The entire OLD boss system</h2>
+  <div class="panel old solo">
+    <div class="phdr">OLD — a full health bar that <code>boss is always None</code> never triggers</div>
+    <pre class="code"># Boss Status + Health Bar
+if boss is not None:
+    pygame.draw.rect(screen, boss["color"], pygame.Rect(boss["x"], boss["y"], boss["w"], boss["h"]))
+    max_hp = boss.get("max_hp", boss.get("hp", 50))
+    hp = max(0, boss.get("hp", max_hp))
+    hp_ratio = (hp / max_hp) if max_hp else 0
+    pygame.draw.rect(screen, (100, 0, 0), (boss["x"], boss["y"] - 12, boss["w"], 8))
+    pygame.draw.rect(screen, (0, 200, 0), (boss["x"], boss["y"] - 12, int(boss["w"] * hp_ratio), 8))</pre>
+  </div>
+</section>
+
+<!-- S5 CODE : spawn -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-reveal">REVEAL ·spawn</span></div>
+  <h2>Spawn condition</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — appear once score crosses the threshold</div>
+    <pre class="code">if boss is None and score &gt;= next_boss_score:
+    boss = {"x": WIDTH // 2 - 60, "y": 40, "w": 120, "h": 50,
+            "color": PURPLE, "hp": BOSS_MAX_HP, "max_hp": BOSS_MAX_HP, "vx": 3}
+    boss_shoot_timer = BOSS_SHOOT_COOLDOWN</pre>
+  </div>
+</section>
+
+<!-- S5 CODE : move + volley -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-reveal">REVEAL ·move + spread</span></div>
+  <h2>Bounce, plus a timed spread volley</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — reuses <code>enemy_bullets</code> from Section 2, for free</div>
+    <pre class="code">if boss is not None:
+    boss["x"] += boss["vx"]
+    if boss["x"] &lt;= 0 or boss["x"] &gt;= WIDTH - boss["w"]:
+        boss["vx"] *= -1
+    boss_shoot_timer -= 1
+    if boss_shoot_timer &lt;= 0:
+        for i in range(BOSS_SPREAD_COUNT):
+            offset = (i - BOSS_SPREAD_COUNT // 2) * 1.5
+            enemy_bullets.append({"x": boss["x"] + boss["w"] // 2, "y": boss["y"] + boss["h"],
+                                   "vx": offset, "color": YELLOW, "r": 5, "speed": BOSS_BULLET_SPEED})
+        boss_shoot_timer = BOSS_SHOOT_COOLDOWN</pre>
+  </div>
+  <div class="worked"><div class="h">▚ WORKED EXAMPLE — offset = (i − N//2) × 1.5   for N = 7</div><pre>BOSS_SPREAD_COUNT = 7        N // 2 = 3
+
+  i        0      1      2      3      4      5      6
+  i − 3   -3     -2     -1      0     +1     +2     +3
+  × 1.5   -4.5   -3.0   -1.5    0.0   +1.5   +3.0   +4.5    ← vx
+
+i = 3 fires straight down; the rest fan out evenly both ways.</pre></div>
+</section>
+
+<!-- S5 CODE : damage + defeat -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-reveal">REVEAL ·damage + defeat</span></div>
+  <h2>Taking damage &amp; the defeat drop</h2>
+  <div class="panel new solo">
+    <div class="phdr">NEW — added inside the existing per-bullet loop</div>
+    <pre class="code">if boss is not None:
+    if (b["x"] - b["r"] &lt; boss["x"] + boss["w"] and b["x"] + b["r"] &gt; boss["x"]
+            and b["y"] - b["r"] &lt; boss["y"] + boss["h"] and b["y"] + b["r"] &gt; boss["y"]):
+        bullet_used = True
+        dmg = 20 if b.get("splash", 0) &gt; 0 else 5
+        boss["hp"] -= dmg
+        if boss["hp"] &lt;= 0:
+            score += 100
+            spawn_powerup(boss["x"] + 20, boss["y"])
+            spawn_powerup(boss["x"] + 80, boss["y"])
+            boss = None
+            next_boss_score += BOSS_SCORE_INTERVAL</pre>
+  </div>
+  <div class="whatshappening"><b class="h">💡 WHAT'S HAPPENING</b><ul>
+    <li>same AABB test as bullets-vs-enemy — just against the boss rect.</li>
+    <li><code>dmg = 20 if splash else 5</code> — missiles hurt the boss far more than bullets.</li>
+    <li>on defeat: add score, drop two powerups, clear <code>boss</code>, raise the next threshold.</li>
+  </ul></div>
+</section>
+
+<!-- S5 STEPS -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">05</span> BOSS FIGHT <span class="tag tag-steps">BUILD IT</span></div>
+  <h2>Build it — your turn</h2>
+  <ol class="steps tight">
+    <li>Add <code>BOSS_MAX_HP</code>, <code>BOSS_SHOOT_COOLDOWN</code>, <code>BOSS_SPREAD_COUNT</code> constants, and <code>next_boss_score = BOSS_SCORE_INTERVAL</code> / <code>boss_shoot_timer = BOSS_SHOOT_COOLDOWN</code> starting state (already declared unused in the old file — point that out).</li>
+    <li>Write the spawn-condition block. Ask: <i>"why check <code>boss is None</code> first?"</i> (so we don't spawn a second boss on top of the first).</li>
+    <li>Write the movement/bounce block.</li>
+    <li>Write the shoot-timer/volley block — note it reuses <code>enemy_bullets</code>, the <i>same list</i> from Section 2. Ask why that's convenient (one render loop, one movement loop, one player-hit check already cover boss bullets for free).</li>
+    <li>Add the bullets-vs-boss check inside the existing per-bullet collision loop (right after the enemies-vs-bullet check, same indentation).</li>
+    <li>Add <code>player-vs-boss</code> collision (copy the enemy-vs-player AABB check, swap in <code>boss["x"]/["y"]/["w"]/["h"]</code>, guarded by <code>if boss is not None:</code>) — and fix the <code>["w"]</code>→<code>["h"]</code> vertical bug as you copy it.</li>
+    <li>Update the HUD string to include <code>Missiles: {missile_ammo}</code> so ammo is visible.</li>
+    <li>Playtest: grind score to 30, watch the boss appear, dodge the spread volley, kill it, watch it drop two powerups and the threshold climb by 30 again.</li>
+  </ol>
+</section>
+
+<!-- ============ SECTION 6 : PLAYTEST + CHALLENGES ============ -->
+<section class="slide" data-accent="green">
+  <div class="kicker"><span class="num">06</span> PLAYTEST &amp; CHALLENGES <span class="tag tag-time">5 min · or homework</span></div>
+  <h2>Play a full round — then let them stretch</h2>
+  <p class="lead sm">Don't demo the answers — let them try:</p>
+  <ul class="challenges">
+    <li>Make the boss's <code>vx</code> speed up as its HP drops (a simple "enrage" phase).</li>
+    <li>Make squadron members that die <i>out of formation</i> stop moving in sync (hint: what field would you have to remove or ignore?).</li>
+    <li>Add a fourth powerup type that temporarily swaps <code>current_weapon</code> to 5 for 5 seconds.</li>
+    <li>Make <code>combo_timer</code> decay visually in the HUD so the player can see their combo window closing.</li>
+  </ul>
+  <p class="ref">📄 Full working reference: <code>meteor_shooter_v2.py</code> — run through an automated headless playtest (thousands of frames, every weapon cycled, forced boss fights &amp; powerup pickups). If a student's version diverges, diff against it directly.</p>
+</section>
+
+</div>
+
+<!-- ============ NAV CHROME ============ -->
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="counter" id="counter">1 / 1</div>
+<button class="edge edge-left" id="prevBtn" aria-label="previous">‹</button>
+<button class="edge edge-right" id="nextBtn" aria-label="next">›</button>
+
+<style>
+:root{
+  --bg:#0a0d13; --bg2:#0f141d; --panel:#121926; --ink:#e8eef6; --dim:#93a1b5;
+  --line:#22303f; --accent:#38d0e0;
+  --old:#ff6b6b; --oldbg:#1c1213; --oldln:#3a1f22;
+  --new:#5ee6a0; --newbg:#0f1a16; --newln:#1f3a2c;
+  --k:#ff8bd0; --s:#f2c078; --c:#5fd0e6; --n:#f0a35e; --cm:#5b6b7c; --fn:#8bd4ff;
+  --mono:"Cascadia Code","JetBrains Mono","Fira Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+.deck,.slide{margin:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(1200px 700px at 70% -10%,#141c28 0%,var(--bg) 60%);
+  color:var(--ink); font-family:var(--sans); overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:fixed; inset:0; display:none; flex-direction:column;
+  justify-content:center; padding:clamp(2rem,4.5vw,5rem) clamp(2.4rem,6vw,7rem);
+  opacity:0; transition:opacity .28s ease;
+}
+.slide.active{display:flex; opacity:1}
+.slide[data-accent="cyan"]{--accent:#38d0e0}
+.slide[data-accent="red"]{--accent:#ff7a6b}
+.slide[data-accent="purple"]{--accent:#b79bff}
+.slide[data-accent="gold"]{--accent:#ffcf5c}
+.slide[data-accent="pink"]{--accent:#ff8bd0}
+.slide[data-accent="green"]{--accent:#5ee6a0}
+.slide[data-accent="slate"]{--accent:#9fb2c6}
+
+/* kicker / headings */
+.kicker{
+  font-family:var(--mono); font-size:clamp(.85rem,1.35vw,1.15rem);
+  letter-spacing:.12em; color:var(--accent); text-transform:uppercase;
+  display:flex; align-items:center; gap:.7em; margin-bottom:.5em;
+}
+.kicker .num{
+  background:var(--accent); color:#06090e; font-weight:700;
+  padding:.08em .5em; border-radius:.35em;
+}
+.tag{
+  margin-left:auto; font-size:.82em; letter-spacing:.1em; padding:.15em .7em;
+  border:1px solid var(--line); border-radius:2em; color:var(--dim);
+}
+.tag-why{border-color:var(--accent); color:var(--accent)}
+.tag-code{border-color:#3a5570; color:#7fb2d6}
+.tag-steps{border-color:#5a7a4a; color:#9bd67f}
+.tag-time{border-color:#6a5a3a; color:#e6c477}
+h1{font-size:clamp(2.6rem,7vw,5.5rem); line-height:1; margin:.1em 0 .25em; letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.9vw,3rem); line-height:1.05; margin:.1em 0 .6em; letter-spacing:-.01em}
+.glow{color:var(--accent); text-shadow:0 0 26px color-mix(in srgb,var(--accent) 55%,transparent)}
+code{font-family:var(--mono); background:#1a2433; color:#cfe0f0; padding:.08em .38em; border-radius:.3em; font-size:.9em; border:1px solid #223145}
+
+/* title slide */
+.title-slide{justify-content:center}
+.title-badge{
+  font-family:var(--mono); align-self:flex-start; color:var(--accent);
+  border:1px solid var(--accent); border-radius:2em; padding:.35em 1.1em;
+  letter-spacing:.16em; font-size:clamp(.7rem,1.3vw,1rem); margin-bottom:1.2em;
+}
+.subtitle{font-size:clamp(1.1rem,2.6vw,2rem); color:var(--dim); margin:.2em 0 1.4em; font-weight:500}
+.filerow{display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.6em}
+.pill{font-size:clamp(.85rem,1.5vw,1.15rem); padding:.55em 1em; border-radius:.6em; border:1px solid var(--line); background:var(--bg2)}
+.pill em{color:var(--dim); font-style:normal; font-size:.85em}
+.pill.start{border-color:var(--oldln)} .pill.end{border-color:var(--newln)}
+.filerow .arrow{color:var(--accent); font-size:1.8em; font-weight:700}
+.teach-note{max-width:60ch; color:#c3d0de; font-size:clamp(.95rem,1.7vw,1.35rem); line-height:1.5; border-left:3px solid var(--accent); padding-left:1em; margin:.4em 0 1.6em}
+.hint{font-family:var(--mono); color:var(--dim); font-size:clamp(.72rem,1.2vw,.95rem); letter-spacing:.03em}
+
+/* body text */
+.lead{font-size:clamp(1.05rem,2.05vw,1.55rem); line-height:1.5; max-width:66ch; margin:.35em 0; color:#d5dfeb}
+.lead.sm{font-size:clamp(.95rem,1.7vw,1.3rem); margin-bottom:.5em}
+.why-list,.challenges{font-size:clamp(1.05rem,2vw,1.5rem); line-height:1.6; max-width:64ch; padding-left:1.2em; margin:.5em 0}
+.why-list.four{columns:2; column-gap:2.5rem}
+.challenges{list-style:none; padding-left:0}
+.challenges li{padding:.55em .9em; margin:.5em 0; background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:.4em; font-size:clamp(.95rem,1.7vw,1.3rem)}
+.ask{font-size:clamp(1rem,1.9vw,1.45rem); line-height:1.55; background:var(--bg2); border:1px solid var(--line); border-left:4px solid var(--accent); padding:1em 1.3em; border-radius:.5em; margin:.9em 0; max-width:70ch}
+.takeaway{font-size:clamp(1rem,1.9vw,1.4rem); line-height:1.5; color:#e8eef6; background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent),transparent); border-radius:.5em; padding:.7em 1em; max-width:70ch; margin:.7em 0}
+.ref{margin-top:1.1em; font-size:clamp(.85rem,1.5vw,1.15rem); color:var(--dim); line-height:1.5; max-width:78ch; border-top:1px solid var(--line); padding-top:.9em}
+
+/* agenda table */
+table.agenda{border-collapse:collapse; width:min(900px,92%); font-size:clamp(1rem,2vw,1.5rem)}
+table.agenda th,table.agenda td{text-align:left; padding:.55em .9em; border-bottom:1px solid var(--line)}
+table.agenda thead th{font-family:var(--mono); color:var(--accent); font-size:.72em; letter-spacing:.12em; text-transform:uppercase}
+table.agenda td:first-child{font-family:var(--mono); color:var(--accent); font-weight:700; width:2.5em}
+table.agenda .mins{text-align:right; font-family:var(--mono); color:#d5dfeb; width:6em}
+table.agenda tr.total td{border-top:2px solid var(--accent); border-bottom:none; font-weight:700; color:#fff; padding-top:.7em}
+table.agenda tr.total .mins{color:var(--accent)}
+
+/* code panels */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1rem,2vw,1.8rem); align-items:start}
+@media (max-width:1000px){.compare{grid-template-columns:1fr}}
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:.7em; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.panel.solo{max-width:1100px}
+.phdr{font-family:var(--mono); font-size:clamp(.78rem,1.3vw,1.02rem); padding:.6em 1em; letter-spacing:.03em; border-bottom:1px solid var(--line); color:var(--dim)}
+.panel.old .phdr{background:var(--oldbg); border-bottom-color:var(--oldln); color:#ffb3ab}
+.panel.new .phdr{background:var(--newbg); border-bottom-color:var(--newln); color:#a6f0c8}
+.panel.old{border-color:var(--oldln)} .panel.new{border-color:var(--newln)}
+.phdr::before{content:""; display:inline-block; width:.7em; height:.7em; border-radius:50%; margin-right:.6em; vertical-align:middle}
+.panel.old .phdr::before{background:var(--old)} .panel.new .phdr::before{background:var(--new)}
+pre.code{
+  margin:0; padding:1em 1.15em; font-family:var(--mono);
+  font-size:clamp(.86rem,1.18vw,1.12rem); line-height:1.5; color:#dbe6f2;
+  white-space:pre-wrap; overflow-wrap:anywhere; tab-size:4;
+}
+pre.code::-webkit-scrollbar{height:8px} pre.code::-webkit-scrollbar-thumb{background:#2b3a4c; border-radius:4px}
+.pnote{font-size:clamp(.8rem,1.4vw,1.05rem); color:var(--dim); padding:.7em 1.1em; border-top:1px solid var(--line); line-height:1.45; background:var(--bg2)}
+/* syntax colors */
+.tk-k{color:var(--k); font-weight:600}
+.tk-s{color:var(--s)}
+.tk-c{color:var(--cm); font-style:italic}
+.tk-n{color:var(--n)}
+.tk-b{color:var(--c)}
+.tk-fn{color:var(--fn)}
+
+/* micro-steps checklist */
+ol.steps{list-style:none; counter-reset:step; padding:0; margin:.3em 0; max-width:92ch; font-size:clamp(.95rem,1.7vw,1.3rem)}
+ol.steps.tight{font-size:clamp(.88rem,1.5vw,1.15rem)}
+ol.steps li{
+  counter-increment:step; position:relative; padding:.5em .8em .5em 3.1em;
+  margin:.32em 0; border:1px solid var(--line); border-radius:.5em; background:var(--bg2);
+  line-height:1.42; cursor:pointer; transition:.15s;
+}
+ol.steps.tight li{padding:.4em .7em .4em 2.9em; margin:.24em 0}
+ol.steps li::before{
+  content:counter(step); position:absolute; left:.55em; top:50%; transform:translateY(-50%);
+  width:1.7em; height:1.7em; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:.85em;
+  background:#1c2635; color:var(--accent); border:1px solid var(--line); border-radius:.4em;
+}
+ol.steps li:hover{border-color:var(--accent)}
+ol.steps li.done{opacity:.5; border-color:var(--new)}
+ol.steps li.done::before{content:"✓"; background:var(--new); color:#06120b; border-color:var(--new)}
+ol.steps li.done > *{text-decoration:line-through}
+
+/* nav chrome */
+.progress{position:fixed; top:0; left:0; right:0; height:4px; background:#131a24; z-index:20}
+.progress-bar{height:100%; width:0; background:linear-gradient(90deg,var(--accent),#7fe0ff); transition:width .28s ease}
+.counter{position:fixed; bottom:1rem; right:1.3rem; font-family:var(--mono); color:var(--dim); font-size:.9rem; z-index:20; letter-spacing:.08em}
+.edge{position:fixed; top:0; bottom:0; width:8%; border:0; background:transparent; color:transparent; font-size:3rem; cursor:pointer; z-index:15; transition:.2s}
+.edge-left{left:0} .edge-right{right:0}
+.edge:hover{color:var(--dim); background:linear-gradient(90deg,rgba(255,255,255,.04),transparent)}
+.edge-right:hover{background:linear-gradient(270deg,rgba(255,255,255,.04),transparent)}
+
+/* live simulations */
+.tag-sim{border-color:var(--accent); color:var(--accent)}
+.simwrap{display:flex; flex-direction:column; gap:1.1rem; align-items:center; width:100%}
+canvas.sim{width:min(880px,94%); aspect-ratio:2 / 1; display:block; background:#05080d; border:1px solid var(--line); border-radius:.6em; box-shadow:0 12px 34px rgba(0,0,0,.45)}
+.controls{display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap; justify-content:center; font-family:var(--mono); font-size:clamp(.8rem,1.35vw,1.05rem); max-width:92%}
+.controls label{display:flex; gap:.5em; align-items:center; color:var(--ink)}
+.controls output{color:var(--accent); min-width:2.6em; display:inline-block; text-align:right}
+.controls input[type=range]{accent-color:var(--accent); width:clamp(130px,20vw,230px)}
+.controls input[type=checkbox]{accent-color:var(--accent); width:1.15em; height:1.15em}
+.ctl-note{color:var(--dim)}
+
+/* guided-discovery */
+.tag-reveal{border-color:#3a5570; color:#7fb2d6}
+.tag-discover{border-color:var(--accent); color:var(--accent)}
+ul.discover{list-style:none; padding:0; margin:.4em 0; max-width:92ch; font-size:clamp(.95rem,1.75vw,1.34rem)}
+ul.discover li{position:relative; padding:.5em .95em; margin:.42em 0; border-left:3px solid var(--accent); background:var(--bg2); border-radius:.45em; line-height:1.45}
+ul.discover li.warn{border-left-color:var(--old)}
+ul.discover .q{color:var(--accent); font-family:var(--mono); font-weight:700; margin-right:.4em}
+ul.discover .hint{display:block; color:var(--dim); font-size:.86em; margin-top:.25em}
+ul.discover .hint::before{content:"↳ "}
+.trythis{margin-top:1em; font-family:var(--mono); font-size:clamp(.84rem,1.5vw,1.15rem); color:var(--ink); background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 16%,transparent),transparent); padding:.7em 1em; border-radius:.5em; border-left:3px solid var(--accent)}
+.whatshappening{max-width:1100px; margin:.9em auto 0; background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:.5em; padding:.8em 1.1em; font-size:clamp(.84rem,1.45vw,1.1rem); line-height:1.5}
+.whatshappening b.h{display:block; font-family:var(--mono); color:var(--accent); font-size:.82em; letter-spacing:.08em; margin-bottom:.4em}
+.whatshappening ul{margin:0; padding-left:1.2em}
+.whatshappening li{margin:.2em 0}
+.worked{max-width:1100px; margin:.9em auto 0; background:#0a1017; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:.5em; overflow:hidden}
+.worked .h{font-family:var(--mono); color:var(--accent); font-size:clamp(.74rem,1.25vw,.95rem); letter-spacing:.06em; padding:.55em 1em; border-bottom:1px solid var(--line); background:var(--bg2)}
+.worked pre{margin:0; padding:.8em 1.1em; font-family:var(--mono); font-size:clamp(.8rem,1.18vw,1.05rem); line-height:1.55; white-space:pre; overflow-x:auto; color:#dbe6f2}
+.worked pre::-webkit-scrollbar{height:8px} .worked pre::-webkit-scrollbar-thumb{background:#2b3a4c; border-radius:4px}
+</style>
+
+<script>
+(function(){
+  var KW = new Set(["def","return","if","elif","else","for","in","is","not","and","or","None","True","False","lambda","while","break","continue","import","from","as","class","pass","with","global","nonlocal","yield","raise","try","except","finally","del","assert"]);
+  var BUILTIN = new Set(["min","max","range","len","int","float","abs","list","dict","set","tuple","sorted","enumerate","print","random","math","randint","choice","sin","cos","get","append","pygame"]);
+
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  function highlight(code){
+    var out="", i=0, n=code.length, prevWasDef=false;
+    function isIdStart(c){return /[A-Za-z_]/.test(c);}
+    function isId(c){return /[A-Za-z0-9_]/.test(c);}
+    while(i<n){
+      var c=code[i];
+      if(c==="#"){ var j=i; while(j<n && code[j]!=="\n") j++; out+='<span class="tk-c">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(c==='"'||c==="'"){ var q=c,j=i+1; while(j<n){ if(code[j]==="\\"){j+=2;continue;} if(code[j]===q){j++;break;} j++; } out+='<span class="tk-s">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(/[0-9]/.test(c)){ var j=i; while(j<n && /[0-9.]/.test(code[j])) j++; out+='<span class="tk-n">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(isIdStart(c)){
+        var j=i; while(j<n && isId(code[j])) j++;
+        var word=code.slice(i,j);
+        var k=j; while(k<n && code[k]===" ") k++;
+        var cls="";
+        if(KW.has(word)) cls="tk-k";
+        else if(prevWasDef) cls="tk-fn";
+        else if(code[k]==="(") cls="tk-fn";
+        else if(BUILTIN.has(word)) cls="tk-b";
+        if(cls) out+='<span class="'+cls+'">'+esc(word)+'</span>'; else out+=esc(word);
+        prevWasDef = (word==="def");
+        i=j; continue;
+      }
+      out+=esc(c); i++;
+    }
+    return out;
+  }
+
+  document.querySelectorAll("pre.code").forEach(function(pre){
+    pre.innerHTML = highlight(pre.textContent);
+  });
+
+  // step checklist toggle
+  document.querySelectorAll("ol.steps li").forEach(function(li){
+    li.addEventListener("click", function(){ li.classList.toggle("done"); });
+  });
+
+  // deck navigation
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var cur=0;
+  var bar=document.getElementById("progressBar");
+  var counter=document.getElementById("counter");
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,idx){ s.classList.toggle("active", idx===cur); });
+    bar.style.width=((cur+1)/slides.length*100)+"%";
+    counter.textContent=(cur+1)+" / "+slides.length;
+    try{ location.hash=cur+1; }catch(e){}
+    if(SIMENGINE) SIMENGINE.onShow(slides[cur]);
+  }
+  function next(){ show(cur+1); } function prev(){ show(cur-1); }
+  document.getElementById("nextBtn").onclick=next;
+  document.getElementById("prevBtn").onclick=prev;
+  document.addEventListener("keydown", function(e){
+    if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){ e.preventDefault(); next(); }
+    else if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); prev(); }
+    else if(e.key==="Home"){ show(0); }
+    else if(e.key==="End"){ show(slides.length-1); }
+    else if(e.key==="f"||e.key==="F"){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); } else { document.exitFullscreen&&document.exitFullscreen(); } }
+  });
+  // ---- live simulation engine (one shared rAF loop; only the visible slide's canvas runs) ----
+  var SIMENGINE = (function(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var TAU = Math.PI * 2;
+    var current = null, raf = null, last = 0;
+
+    function sizeCanvas(cv){
+      var cw = cv.clientWidth || 800, ch = cv.clientHeight || 400;
+      cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr);
+      var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx: ctx, w: cw, h: ch };
+    }
+    function frame(ts){
+      if(!current){ raf = null; return; }
+      var dt = last ? Math.min((ts - last) / 16.6667, 3) : 1;  // in 60fps-frames, clamped so resume never teleports
+      last = ts;
+      current.api.step(dt);
+      current.api.draw(current.ctx);
+      raf = requestAnimationFrame(frame);
+    }
+    function stop(){ if(raf){ cancelAnimationFrame(raf); raf = null; } current = null; last = 0; }
+    function start(name, cv){
+      stop();
+      var s = sizeCanvas(cv);
+      var api = FAC[name](cv, s.w, s.h);
+      api.reset();
+      current = { name: name, canvas: cv, ctx: s.ctx, api: api };
+      last = 0; raf = requestAnimationFrame(frame);
+    }
+    function onShow(slideEl){
+      var cv = slideEl && slideEl.querySelector('canvas.sim');
+      if(cv) start(cv.getAttribute('data-sim'), cv); else stop();
+    }
+    window.addEventListener('resize', function(){ if(current) start(current.name, current.canvas); });
+
+    var FAC = {
+      // §1 homing missile — steer vx toward nearest target, exactly like the lesson code
+      homing: function(cv, W, H){
+        var missiles = [], enemies = [], fireT = 0;
+        function strength(){ var el = document.getElementById('homStrength'); return el ? parseFloat(el.value) : 0.3; }
+        function spawnEnemy(top){ enemies.push({ x: 30 + Math.random()*(W-60), y: top ? 8 : 8 + Math.random()*(H*0.45), w: 16, h: 16 }); }
+        function fire(){ missiles.push({ x: W/2, y: H-18, vx: 0, speed: 3.2, r: 6, trail: [] }); }
+        function reset(){ missiles = []; enemies = []; fireT = 0; for(var i=0;i<4;i++) spawnEnemy(false); }
+        function step(dt){
+          for(var i=0;i<enemies.length;i++){ enemies[i].y += 0.35*dt; if(enemies[i].y > H*0.6) enemies[i].y = 8; }
+          fireT -= dt; if(fireT <= 0){ fire(); fireT = 70; }
+          var s = strength();
+          for(var m=missiles.length-1;m>=0;m--){ var b = missiles[m];
+            if(enemies.length){ var best=null, bd=1e9;
+              for(var j=0;j<enemies.length;j++){ var e=enemies[j], dx=e.x-b.x, dy=e.y-b.y, d=dx*dx+dy*dy; if(d<bd){ bd=d; best=e; } }
+              if(best){ if(best.x > b.x) b.vx = Math.min(b.vx + s, 5); else if(best.x < b.x) b.vx = Math.max(b.vx - s, -5); }
+            }
+            b.x += b.vx*dt; b.y -= b.speed*dt;
+            b.trail.push({ x: b.x, y: b.y }); if(b.trail.length > 14) b.trail.shift();
+            var hit = false;
+            for(var j=enemies.length-1;j>=0;j--){ var e=enemies[j]; if(Math.abs(e.x-b.x) < e.w && Math.abs(e.y-b.y) < e.h){ enemies.splice(j,1); spawnEnemy(true); hit=true; break; } }
+            if(hit){ missiles.splice(m,1); continue; }
+            if(b.y < -20 || b.x < -20 || b.x > W+20) missiles.splice(m,1);
+          }
+        }
+        function draw(ctx){
+          ctx.fillStyle = '#05080d'; ctx.fillRect(0,0,W,H);
+          for(var i=0;i<enemies.length;i++){ var e=enemies[i]; ctx.fillStyle = '#ff6b6b'; ctx.fillRect(e.x-e.w/2, e.y-e.h/2, e.w, e.h); }
+          for(var m=0;m<missiles.length;m++){ var b=missiles[m];
+            for(var t=0;t<b.trail.length;t++){ var p=b.trail[t]; ctx.globalAlpha = (t/b.trail.length)*0.5; ctx.fillStyle = '#38d0e0'; ctx.beginPath(); ctx.arc(p.x, p.y, b.r*0.6, 0, TAU); ctx.fill(); }
+            ctx.globalAlpha = 1; ctx.fillStyle = '#4aa3ff'; ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, TAU); ctx.fill();
+          }
+          ctx.globalAlpha = 1; ctx.fillStyle = '#5ee6a0'; ctx.fillRect(W/2-14, H-13, 28, 9);
+        }
+        cv.style.cursor = 'crosshair'; cv.onclick = fire;
+        return { reset: reset, step: step, draw: draw };
+      },
+      // §3 squadron — shared clock => lockstep; per-enemy clock => desync
+      squad: function(cv, W, H){
+        var t = 0, members = [];
+        function freq(){ var el = document.getElementById('squadFreq'); return el ? parseFloat(el.value) : 0.05; }
+        function shared(){ var el = document.getElementById('squadShared'); return el ? el.checked : true; }
+        function reset(){ t = 0; members = []; var N=4, sp=W*0.12, startx=W/2 - sp*(N-1)/2; for(var i=0;i<N;i++) members.push({ col: startx+i*sp, phase: i*30 }); }
+        function step(dt){ t += dt; }
+        function draw(ctx){
+          ctx.fillStyle = '#0a0710'; ctx.fillRect(0,0,W,H);
+          var f = freq(), amp = W*0.13, sh = shared(), y = H*0.45;
+          for(var i=0;i<members.length;i++){ var mb=members[i]; var tt = sh ? t : (t + mb.phase); var x = mb.col + Math.sin(tt*f)*amp;
+            ctx.fillStyle = '#b79bff'; ctx.fillRect(x-13, y-13, 26, 26);
+            ctx.fillStyle = 'rgba(183,155,255,.22)'; ctx.fillRect(x-13, y+16, 26, 4);
+          }
+          ctx.fillStyle = sh ? '#5ee6a0' : '#ff8bd0'; ctx.font = '14px monospace';
+          ctx.fillText(sh ? 'shared clock  ->  lockstep' : 'per-enemy clock  ->  desync', 14, H-14);
+        }
+        return { reset: reset, step: step, draw: draw };
+      },
+      // §5 boss — bounce + timed spread volley; slider is BOSS_SPREAD_COUNT
+      boss: function(cv, W, H){
+        var boss, bullets, shootT;
+        function spread(){ var el = document.getElementById('bossSpread'); return el ? parseInt(el.value, 10) : 7; }
+        function reset(){ boss = { x: W/2-55, y: 26, w: 110, h: 34, vx: 2.2 }; bullets = []; shootT = 0; }
+        function step(dt){
+          boss.x += boss.vx*dt;
+          if(boss.x <= 0){ boss.x = 0; boss.vx = Math.abs(boss.vx); }
+          if(boss.x >= W-boss.w){ boss.x = W-boss.w; boss.vx = -Math.abs(boss.vx); }
+          shootT -= dt;
+          if(shootT <= 0){ var N = spread(); for(var i=0;i<N;i++){ var off = (i - (N>>1))*1.4; bullets.push({ x: boss.x+boss.w/2, y: boss.y+boss.h, vx: off, speed: 2.6, r: 5 }); } shootT = 55; }
+          for(var b=bullets.length-1;b>=0;b--){ var bu=bullets[b]; bu.x += bu.vx*dt; bu.y += bu.speed*dt; if(bu.y > H+12 || bu.x < -12 || bu.x > W+12) bullets.splice(b,1); }
+        }
+        function draw(ctx){
+          ctx.fillStyle = '#0c0710'; ctx.fillRect(0,0,W,H);
+          ctx.fillStyle = '#640000'; ctx.fillRect(boss.x, boss.y-10, boss.w, 6);
+          ctx.fillStyle = '#00c800'; ctx.fillRect(boss.x, boss.y-10, boss.w*0.72, 6);
+          ctx.fillStyle = '#b455c9'; ctx.fillRect(boss.x, boss.y, boss.w, boss.h);
+          ctx.fillStyle = '#ffe14a'; for(var i=0;i<bullets.length;i++){ var bu=bullets[i]; ctx.beginPath(); ctx.arc(bu.x, bu.y, bu.r, 0, TAU); ctx.fill(); }
+          ctx.fillStyle = '#5ee6a0'; ctx.fillRect(W/2-15, H-15, 30, 11);
+        }
+        return { reset: reset, step: step, draw: draw };
+      }
+    };
+    return { onShow: onShow, stop: stop };
+  })();
+
+  // live range/checkbox readouts
+  document.querySelectorAll('.controls input[type=range]').forEach(function(r){
+    var out = r.parentElement.querySelector('output');
+    if(!out) return;
+    var upd = function(){ out.textContent = r.value; };
+    r.addEventListener('input', upd); upd();
+  });
+
+  window.addEventListener("hashchange", function(){
+    var h=parseInt((location.hash||"").replace("#",""),10);
+    if(!isNaN(h) && h-1!==cur) show(h-1);
+  });
+  var startH=parseInt((location.hash||"").replace("#",""),10);
+  show(isNaN(startH)?0:startH-1);
+})();
+</script>
+</body>
+</html>
