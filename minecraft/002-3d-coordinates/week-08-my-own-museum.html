@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Coordinates — My Own Museum</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">3D Coordinates · Lesson 8</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 8</div><div class="emoji">🏛️</div>
+<h1>My Own<br>Museum</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Final project — everything together</p>
+<p class="bilingual">마지막 프로젝트 — 배운 모든 걸 하나로</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>A room visitors walk into 🏛️</h2>
+<div class="emoji">🚪🖼️🗿</div>
+<p class="big">Flat pictures (2D) + solid sculptures (3D) in one gallery.</p>
+<p class="bilingual">2D 그림과 3D 조각을 한 전시실에</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>2D vs 3D art</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🖼️</div><div class="name">2D picture</div><div class="ex">flat on the wall<br>only x &amp; y change</div></div>
+<div class="opt-card"><div class="ico">🗿</div><div class="name">3D sculpture</div><div class="ex">solid in the room<br>x, y, z all used</div></div>
+</div>
+<p class="bilingual">그림은 평평(x,y), 조각은 입체(x,y,z)</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>The whole course in one build</h2>
+<ul style="margin-top:.6em">
+<li><b>Loops</b> draw the pictures, row by row</li>
+<li><b>fill</b> makes the room hollow + carves the doorway</li>
+<li><b>fill</b> stacks the pedestals</li>
+<li><b>(x, y, z)</b> places every sculpture on its stand</li>
+</ul>
+<p class="bilingual">반복문 · fill · 좌표 — 전부 한 번에</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>2D wall picture (z stays 0)</h2>
+<pre><span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.place</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">1</span>, <span class="num">0</span>))</pre>
+<p style="margin-top:1em">z stays <code>0</code>, so it's <span class="sub">flat</span> on the back wall. Only x changes along the row.</p>
+<p class="bilingual">z를 0으로 고정 → 벽에 평평하게</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>3D sculpture on a pedestal</h2>
+<pre><span class="fn">blocks.fill</span>(STONE, <span class="fn">pos</span>(<span class="num">4</span>,<span class="num">0</span>,<span class="num">4</span>), <span class="fn">pos</span>(<span class="num">5</span>,<span class="num">1</span>,<span class="num">5</span>), FillOperation.REPLACE)
+<span class="fn">blocks.place</span>(GOLD_BLOCK, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">2</span>, <span class="num">4</span>))
+<span class="fn">blocks.place</span>(GOLD_BLOCK, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">2</span>, <span class="num">5</span>))</pre>
+<p style="margin-top:.6em">All three numbers used — visitors can walk all the way around it.</p></div>
+
+<div class="slide"><div class="pill">3D space</div><h2>2D pictures + 3D sculptures together</h2>
+<svg viewBox="150 90 480 430" style="width:min(74vmin,820px);height:auto;display:block;margin:.4em auto" xmlns="http://www.w3.org/2000/svg">
+<polygon points="410,300 444.64,320 410,340 375.36,320" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,320 410,340 375.36,360 340.72,340" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,340 375.36,360 340.72,380 306.08,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="306.08,360 340.72,380 306.08,400 271.44,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="271.44,380 306.08,400 271.44,420 236.8,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="236.8,400 271.44,420 236.8,440 202.16,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,320 479.28,340 444.64,360 410,340" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,340 444.64,360 410,380 375.36,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,360 410,380 375.36,400 340.72,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,380 375.36,400 340.72,420 306.08,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="306.08,400 340.72,420 306.08,440 271.44,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="271.44,420 306.08,440 271.44,460 236.8,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="479.28,340 513.92,360 479.28,380 444.64,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,360 479.28,380 444.64,400 410,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,380 444.64,400 410,420 375.36,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,400 410,420 375.36,440 340.72,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,420 375.36,440 340.72,460 306.08,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="306.08,440 340.72,460 306.08,480 271.44,460" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="513.92,360 548.56,380 513.92,400 479.28,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="479.28,380 513.92,400 479.28,420 444.64,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,400 479.28,420 444.64,440 410,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,420 444.64,440 410,460 375.36,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,440 410,460 375.36,480 340.72,460" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,460 375.36,480 340.72,500 306.08,480" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="548.56,380 583.2,400 548.56,420 513.92,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="513.92,400 548.56,420 513.92,440 479.28,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="479.28,420 513.92,440 479.28,460 444.64,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,440 479.28,460 444.64,480 410,460" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,460 444.64,480 410,500 375.36,480" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,480 410,500 375.36,520 340.72,500" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="583.2,400 617.84,420 583.2,440 548.56,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="548.56,420 583.2,440 548.56,460 513.92,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="513.92,440 548.56,460 513.92,480 479.28,460" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="479.28,460 513.92,480 479.28,500 444.64,480" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,480 479.28,500 444.64,520 410,500" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,500 444.64,520 410,540 375.36,520" fill="none" stroke="#ecdcc8" stroke-width="2"/><line x1="410" y1="300" x2="617.84" y2="420" stroke="#1a1a2e" stroke-width="3"/><polygon points="617.84,420 606.68,419.33 611.68,410.67" fill="#1a1a2e"/><line x1="410" y1="300" x2="202.16" y2="420" stroke="#1a1a2e" stroke-width="3"/><polygon points="202.16,420 208.32,410.67 213.32,419.33" fill="#1a1a2e"/><line x1="410" y1="300" x2="410" y2="100" stroke="#6b4ee6" stroke-width="3"/><polygon points="410,100 415,110 405,110" fill="#6b4ee6"/><text x="625.84" y="438" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">x</text><text x="180.16" y="440" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">z</text><text x="402" y="88" font-family="sans-serif" font-size="22" font-weight="700" fill="#6b4ee6">y</text><polygon points="375.36,360 410,380 410,340 375.36,320" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,360 410,380 410,340 444.64,320" fill="#c9542a" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,300 444.64,320 410,340 375.36,320" fill="#ff9466" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,320 410,340 410,300 375.36,280" fill="#ff9a3d" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,320 410,340 410,300 444.64,280" fill="#d97a1a" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,260 444.64,280 410,300 375.36,280" fill="#ffb066" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,480 410,500 410,460 375.36,440" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,480 410,500 410,460 444.64,440" fill="#c9542a" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,420 444.64,440 410,460 375.36,440" fill="#ff9466" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,440 410,460 410,420 375.36,400" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,440 410,460 410,420 444.64,400" fill="#4f37b8" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,380 444.64,400 410,420 375.36,400" fill="#8e76f0" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,300 513.92,360 513.92,280 410,220" fill="#ff7849" stroke="#1a1a2e" stroke-width="2" opacity="0.92"/><polygon points="444.64,292 479.28,312 479.28,280 444.64,260" fill="#ffd9c2" stroke="#1a1a2e" stroke-width="1.5"/><text x="461.96" y="238" font-family="sans-serif" font-size="17" font-weight="700" fill="#1a1a2e" text-anchor="middle">2D picture (z = 0)</text><text x="470" y="440" font-family="sans-serif" font-size="17" font-weight="700" fill="#1a1a2e" text-anchor="start">3D sculpture</text><line x1="466" y1="436" x2="410" y2="420" stroke="#1a1a2e" stroke-width="1.5"/>
+</svg>
+<p class="bilingual">벽에 붙은 평평한 그림(z=0)과 바닥에 선 입체 조각 — 2D와 3D를 한 장면에</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>Flat or solid?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>set x to 0
+repeat 5 times:
+    place red block at (x, 1, 0)
+    add 1 to x</pre><details><summary>Reveal output</summary><div class="ans">Flat like a painting — every block stays at z = 0, only x changes. You look at it straight on from the front.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">museum / gallery</span><span class="gloss">the room that holds the artworks</span><span class="ko">미술관 / 전시실</span>
+<span class="term">2D art</span><span class="gloss">flat — only x and y change (z fixed)</span><span class="ko">2차원 작품</span>
+<span class="term">3D art</span><span class="gloss">solid — uses x, y, and z</span><span class="ko">3차원 작품</span>
+<span class="term">footprint</span><span class="gloss">the (x, z) space a piece takes on the floor</span><span class="ko">바닥 자리</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: a wall picture that climbs <b>up</b> the wall (z stays 0).</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">repeat 4 times: place red at (x, 1, 0)
+repeat 4 times: place red at (x, 1, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">The second row should be higher, not forward. Think first.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the second row raises <b>z</b> (steps forward onto the floor). To climb the wall, raise <b>y</b> instead and keep z = 0.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">repeat 4 times: place red at (x, 1, 0)
+repeat 4 times: place red at (x, 2, 0)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build your museum 🏛️</h2>
+<ul class="check-list">
+<li>A gallery room with floor, walls, and a doorway</li>
+<li>Two flat <b>2D</b> pictures (only x &amp; y change)</li>
+<li>Two <b>3D</b> sculptures, each on its own pedestal</li>
+<li>Pedestals don't overlap; statues rest on top</li>
+<li>Record a full gallery tour video</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="2D art keeps z fixed — only x and y change, so it stays flat."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">What makes a wall picture <b>2D</b> (flat)?</div><div class="opts"><button class="opt">z stays fixed; only x and y change.</button>
+<button class="opt">All three numbers change.</button>
+<button class="opt">It uses fill instead of loops.</button>
+<button class="opt">It's made of gold blocks.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A 3D sculpture uses x, y, and z, so you can walk around it."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What makes a sculpture <b>3D</b> (solid)?</div><div class="opts"><button class="opt">It uses all three numbers — x, y, and z.</button><button class="opt">It only uses x and y.</button><button class="opt">It floats in the air.</button><button class="opt">It's flat on the wall.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Before cutting a doorway, the inside must be hollowed out with fill air."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Your gallery is a solid stone block. What step did you skip?</div><div class="opts"><button class="opt">Hollowing the inside with fill air.</button>
+<button class="opt">Adding more pictures.</button>
+<button class="opt">Making it taller.</button>
+<button class="opt">Nothing — it's done.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🏛️</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Museum complete!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">You can place a block anywhere in space. 🎉</p>
+<p class="bilingual">이제 공간 어디든 블록을 놓을 수 있어요</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

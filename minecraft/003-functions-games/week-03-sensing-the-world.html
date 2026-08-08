@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functions & Games — Sensing the World</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">Functions Games · Lesson 3</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 3</div><div class="emoji">🔍</div>
+<h1>Sensing<br>the World</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Look before you leap</p>
+<p class="bilingual">움직이기 전에 주변을 먼저 살펴요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>A smart agent 🤖</h2>
+<div class="emoji">🔍🔥🌸</div>
+<p class="big">It checks <span class="sub">ahead</span> and <span class="sub">below</span>, then decides what to do.</p>
+<p class="bilingual">감지 → 결정 → 행동</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>agent.detect</code> — look ahead</h2>
+<p class="big">Ask the agent: is something <span class="sub">blocking the way</span>?</p>
+<pre style="margin-top:1em"><span class="kw">if</span> agent.<span class="fn">detect</span>(DETECT_BLOCK, FORWARD):
+    agent.<span class="fn">turn</span>(LEFT_TURN)
+<span class="kw">else</span>:
+    agent.<span class="fn">move</span>(FORWARD, <span class="num">1</span>)</pre>
+<p style="margin-top:.6em">Wall ahead? Turn. Path open? Walk on.</p>
+<p class="bilingual">앞에 막혀 있으면 돌고, 아니면 전진</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2><code>agent.inspect</code> — what's below?</h2>
+<pre style="margin-top:.4em"><span class="kw">if</span> agent.<span class="fn">inspect</span>(DOWN) == LAVA:
+    agent.<span class="fn">place</span>(STONE, DOWN)
+    agent.<span class="fn">move</span>(FORWARD, <span class="num">1</span>)
+<span class="kw">else</span>:
+    agent.<span class="fn">move</span>(FORWARD, <span class="num">1</span>)</pre>
+<p style="margin-top:.6em">Lava below? Cover it first, then move. Safe? Just move.</p>
+<p class="bilingual">발밑이 용암이면 먼저 막아요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Different block → different action</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🌱</div><div class="name">on DIRT</div><div class="ex">place a flower</div></div>
+<div class="opt-card"><div class="ico">🌵</div><div class="name">on SAND</div><div class="ex">place a cactus</div></div>
+</div>
+<p class="bilingual">발밑 블록에 따라 다르게 행동해요</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Check → branch → act</h2>
+  <div class="viz viz-if">
+    <div class="if-input">
+      <span class="case case-a">below = LAVA</span>
+      <span class="case case-b">below = GRASS</span>
+    </div>
+    <div class="if-cond">inspect(DOWN) == LAVA</div>
+    <div class="if-branches">
+      <div class="if-branch true">place(STONE, DOWN)</div>
+      <div class="if-branch false">move(FORWARD, 1)</div>
+    </div>
+    <div class="if-output">
+      <div class="out-label">▸ Action</div>
+      <div class="out-line out-a">cover the lava</div>
+      <div class="out-line out-b">walk forward</div>
+    </div>
+  </div>
+  <p class="bilingual">조건에 따라 행동이 갈려요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What gets planted?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre># agent walks over: dirt, sand, dirt
+for i in range(3):
+    if agent.inspect(DOWN) == DIRT:
+        agent.place(FLOWER, DOWN)
+    if agent.inspect(DOWN) == SAND:
+        agent.place(CACTUS, DOWN)
+    agent.move(FORWARD, 1)</pre><details><summary>Reveal output</summary><div class="ans">flower, cactus, flower — one check per step.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">detect</span><span class="gloss">check if a block is in a direction</span><span class="ko">감지하다</span>
+<span class="term">inspect</span><span class="gloss">ask which block is there</span><span class="ko">조사하다</span>
+<span class="term">condition</span><span class="gloss">a true/false test for <code>if</code></span><span class="ko">조건</span>
+<span class="term">else</span><span class="gloss">what to do when the test is false</span><span class="ko">그 외에는</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: cover <b>lava below</b> — but the agent falls in.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">if agent.detect(DETECT_BLOCK, FORWARD):
+    agent.place(STONE, DOWN)
+agent.move(FORWARD, 1)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">The lava is below — where does this code look?</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the check looks <b>FORWARD</b>, but the lava is <b>DOWN</b>. Inspect the block below.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">if agent.inspect(DOWN) == LAVA:
+    agent.place(STONE, DOWN)
+agent.move(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Cross the danger field 🔥</h2>
+<ul class="check-list">
+<li>Check the block <code>DOWN</code> at least once</li>
+<li>Check the block <code>FORWARD</code> at least once</li>
+<li>Act differently for 2+ block types</li>
+<li>Cover lava before stepping on it</li>
+<li>Send a video of a safe crossing</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="To find lava under your feet, inspect the block DOWN."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Lava is under the agent. Which check finds it?</div><div class="opts"><button class="opt"><code>agent.inspect(DOWN) == LAVA</code></button>
+<button class="opt"><code>agent.detect(DETECT_BLOCK, FORWARD)</code></button>
+<button class="opt"><code>agent.move(UP, 1)</code></button>
+<button class="opt"><code>player.say("lava")</code></button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="else runs only when the if condition is false."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">When does the <code>else</code> branch run?</div><div class="opts"><button class="opt">Only when the <code>if</code> condition is false.</button><button class="opt">Always, every time.</button><button class="opt">Only on the first loop.</button><button class="opt">Never.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Sensing first lets the agent decide before it acts."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Why check a block <b>before</b> moving?</div><div class="opts"><button class="opt">So the agent can decide what to do and stay safe.</button>
+<button class="opt">It makes the agent move faster.</button>
+<button class="opt">It places blocks automatically.</button>
+<button class="opt">There's no reason to.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔍</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">A sensing agent!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: the world reacts to you.</p>
+<p class="bilingual">다음: 플레이어 이벤트</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

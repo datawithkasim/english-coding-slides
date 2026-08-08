@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Coordinates — Layer Up: Terrain &amp; Trees</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">3D Coordinates · Lesson 5</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 5</div><div class="emoji">🍄</div>
+<h1>Layer Up<br>Terrain &amp; Trees</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Stack flat <code>fill</code> layers — one per y</p>
+<p class="bilingual">납작한 fill 한 층씩, y를 올리며 쌓아 입체를 만들어요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Flat layers → tall world 🍄</h2>
+<div class="emoji">🟫➡️🍄</div>
+<p class="big">You know the floor (x, z). New move: <code>fill</code> a flat slab, raise <b>y</b>, fill again.</p>
+<p class="bilingual">바닥(x, z) 위에 fill 한 층씩 y를 올리면 입체가 돼요</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> &amp; <b>z</b> → walk on the ground to pick the <b>spot</b> (across + forward).</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → the <b>layer number</b>. Add <b>+1</b> to stack the next slab on top.</span></div>
+</div>
+<p style="margin-top:.7em">Each <code>fill</code> is one flat layer at one <span class="sub">y</span>. Order is always <code>(x, y, z)</code>.</p>
+<p class="bilingual">y는 층 번호 — +1 하면 다음 층이 위에 쌓여요</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>The <code>fill</code> block in Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">layer ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">fill</span> with RED
+   from (<span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>)
+   to   (<span class="num">10</span>, <span class="num">2</span>, <span class="num">10</span>)  replace</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Drag the <b>fill with</b> block, pick a block colour</li>
+<li>Set <b>from</b> and <b>to</b> corners — each is <code>(x, y, z)</code></li>
+<li>Same <code>y</code> in both = one flat layer. Raise <code>y</code> for the next one</li>
+</ul>
+<p class="bilingual">fill 블록 → from·to 두 모서리 → 둘 다 y가 같으면 한 층, y를 올리면 다음 층</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>One fill = one flat layer</h2>
+<p class="big">Keep <span class="sub">y the same</span> in <code>from</code> and <code>to</code> → a flat slab. Bump <span class="sub">y</span> up by 1 → the next layer sits on top.</p>
+<pre>fill RED from (2, <span style="color:#ff7849">2</span>, 2) to (10, <span style="color:#ff7849">2</span>, 10)   <span class="com"># layer y=2</span>
+fill RED from (3, <span style="color:#ff7849">3</span>, 3) to (9,  <span style="color:#ff7849">3</span>, 9)    <span class="com"># layer y=3</span></pre>
+<p class="bilingual">from·to의 y가 같으면 납작한 한 층, y를 +1 하면 그 위에 다음 층</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The stem: a small box up</h2>
+<pre><span class="fn">fill</span> with BROWN
+   from (<span class="num">4</span>, <span class="num">0</span>, <span class="num">4</span>)
+   to   (<span class="num">8</span>, <span class="num">1</span>, <span class="num">8</span>)  replace</pre>
+<p style="margin-top:.8em">From y = 0 up to y = 1 — a short brown stem 2 layers tall, ready for a cap.</p>
+<p class="bilingual">y 0 → 1 까지 채우면 2층짜리 갈색 줄기(기둥)</p></div>
+
+<div class="slide"><div class="pill">See it</div><h2>One spot (x, z) · stacked up (y)</h2>
+<svg viewBox="150 80 480 400" style="width:min(74vmin,820px);height:auto;display:block;margin:.4em auto" xmlns="http://www.w3.org/2000/svg">
+<polygon points="410,300 444.64,320 410,340 375.36,320" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,320 410,340 375.36,360 340.72,340" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,340 375.36,360 340.72,380 306.08,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="306.08,360 340.72,380 306.08,400 271.44,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="271.44,380 306.08,400 271.44,420 236.8,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,320 479.28,340 444.64,360 410,340" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,340 444.64,360 410,380 375.36,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,360 410,380 375.36,400 340.72,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,380 375.36,400 340.72,420 306.08,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="306.08,400 340.72,420 306.08,440 271.44,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="479.28,340 513.92,360 479.28,380 444.64,360" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="444.64,360 479.28,380 444.64,400 410,380" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="410,380 444.64,400 410,420 375.36,400" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="375.36,400 410,420 375.36,440 340.72,420" fill="none" stroke="#ecdcc8" stroke-width="2"/><polygon points="340.72,420 375.36,440 340.72,460 306.08,440" fill="none" stroke="#ecdcc8" stroke-width="2"/><line x1="410" y1="300" x2="583.2" y2="400" stroke="#1a1a2e" stroke-width="3"/><polygon points="583.2,400 572.04,399.33 577.04,390.67" fill="#1a1a2e"/><line x1="410" y1="300" x2="236.8" y2="400" stroke="#1a1a2e" stroke-width="3"/><polygon points="236.8,400 242.96,390.67 247.96,399.33" fill="#1a1a2e"/><line x1="410" y1="300" x2="410" y2="140" stroke="#6b4ee6" stroke-width="3"/><polygon points="410,140 415,150 405,150" fill="#6b4ee6"/><text x="591.2" y="418" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">x</text><text x="214.8" y="420" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">z</text><text x="402" y="128" font-family="sans-serif" font-size="22" font-weight="700" fill="#6b4ee6">y</text><polygon points="375.36,360 410,380 410,340 375.36,320" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,360 410,380 410,340 444.64,320" fill="#5e3717" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,300 444.64,320 410,340 375.36,320" fill="#8c5a2b" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,440 410,460 410,420 375.36,400" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,440 410,460 410,420 444.64,400" fill="#5e3717" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,380 444.64,400 410,420 375.36,400" fill="#8c5a2b" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,400 410,420 410,380 375.36,360" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,400 410,420 410,380 444.64,360" fill="#5e3717" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,340 444.64,360 410,380 375.36,360" fill="#8c5a2b" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,360 410,380 410,340 375.36,320" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,360 410,380 410,340 444.64,320" fill="#5e3717" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,300 444.64,320 410,340 375.36,320" fill="#8c5a2b" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="375.36,320 410,340 410,300 375.36,280" fill="#b8362b" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="444.64,320 410,340 410,300 444.64,280" fill="#8f2820" stroke="#1a1a2e" stroke-width="1.5"/><polygon points="410,260 444.64,280 410,300 375.36,280" fill="#d94436" stroke="#1a1a2e" stroke-width="1.5"/><text x="480" y="254" font-family="sans-serif" font-size="18" font-weight="700" fill="#1a1a2e" text-anchor="start">red cap on top</text><line x1="476" y1="250" x2="418" y2="280" stroke="#1a1a2e" stroke-width="1.5"/><text x="478" y="372" font-family="sans-serif" font-size="18" font-weight="700" fill="#1a1a2e" text-anchor="start">stem: layers up y ↑</text><line x1="474" y1="368" x2="420" y2="368" stroke="#1a1a2e" stroke-width="1.5"/>
+</svg>
+<p class="bilingual">바닥 격자(x, z) 위로 y가 솟아요 — 갈색 줄기를 쌓고 꼭대기에 빨간 모자를 올리면 버섯!</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>A mushroom, layer by layer 🍄</h2>
+<pre><span class="com"># stem</span>
+fill BROWN from (<span class="num">4</span>,<span class="num">0</span>,<span class="num">4</span>)  to (<span class="num">8</span>, <span class="num">1</span>,<span class="num">8</span>)
+<span class="com"># cap — raise y each line, shrink the spread</span>
+fill RED   from (<span class="num">2</span>,<span class="num">2</span>,<span class="num">2</span>)  to (<span class="num">10</span>,<span class="num">2</span>,<span class="num">10</span>)
+fill RED   from (<span class="num">3</span>,<span class="num">3</span>,<span class="num">3</span>)  to (<span class="num">9</span>, <span class="num">3</span>,<span class="num">9</span>)
+fill RED   from (<span class="num">4</span>,<span class="num">4</span>,<span class="num">4</span>)  to (<span class="num">8</span>, <span class="num">4</span>,<span class="num">8</span>)
+fill RED   from (<span class="num">5</span>,<span class="num">5</span>,<span class="num">5</span>)  to (<span class="num">7</span>, <span class="num">5</span>,<span class="num">7</span>)</pre>
+<p style="margin-top:.4em">y climbs 2 → 5. Each layer is a little narrower → a round cap.</p>
+<p class="bilingual">y가 2→5로 오르고, 층마다 좁아져서 둥근 모자가 돼요</p></div>
+
+<div class="slide"><div class="pill">Real code</div><h2>The Python it makes 🐍</h2>
+<pre><span class="kw">def</span> <span class="fn">on_run</span>():
+    <span class="fn">blocks.fill</span>(BROWN_CONCRETE,
+        <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">4</span>), <span class="fn">pos</span>(<span class="num">8</span>, <span class="num">1</span>, <span class="num">8</span>),
+        FillOperation.REPLACE)        <span class="com"># stem</span>
+    <span class="fn">blocks.fill</span>(RED_CONCRETE,
+        <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">2</span>, <span class="num">2</span>), <span class="fn">pos</span>(<span class="num">10</span>, <span class="num">2</span>, <span class="num">10</span>),
+        FillOperation.REPLACE)        <span class="com"># cap, y = 2</span>
+    <span class="com"># ...3 more cap layers: y = 3, 4, 5</span>
+<span class="fn">player.on_chat</span>(<span class="num">"run"</span>, <span class="fn">on_run</span>)</pre>
+<p style="margin-top:.4em"><code>pos(x, y, z)</code> is the spot · <code>REPLACE</code> overwrites what's there · type <b>run</b> in chat to build.</p>
+<p class="bilingual">블록을 파이썬으로 보면 — pos(x, y, z)가 자리, REPLACE는 덮어쓰기. 채팅창에 run 입력</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Terrain = layers of different height</h2>
+<svg viewBox="0 0 520 360" style="width:min(70vmin,760px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+<text x="260" y="24" font-family="sans-serif" font-size="16" font-weight="700" fill="#1a1a2e" text-anchor="middle">side view — each fill stacks to a different y</text>
+<rect x="70" y="278" width="42" height="42" fill="#4fb24f" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="134" y="278" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="134" y="236" width="42" height="42" fill="#4fb24f" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="198" y="278" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="198" y="236" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="198" y="194" width="42" height="42" fill="#4fb24f" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="262" y="278" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="262" y="236" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="262" y="194" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="262" y="152" width="42" height="42" fill="#4fb24f" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="326" y="278" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="326" y="236" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="326" y="194" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="326" y="152" width="42" height="42" fill="#7a4a23" stroke="#1a1a2e" stroke-width="1.5"/><rect x="326" y="110" width="42" height="42" fill="#4fb24f" stroke="#1a1a2e" stroke-width="1.5"/>
+<line x1="60" y1="320" x2="420" y2="320" stroke="#1a1a2e" stroke-width="3"/><polygon points="420,320 408,314 408,326" fill="#1a1a2e"/>
+<line x1="70" y1="330" x2="70" y2="95" stroke="#6b4ee6" stroke-width="3"/><polygon points="70,95 64,107 76,107" fill="#6b4ee6"/>
+<text x="430" y="326" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">x</text>
+<text x="60" y="92" font-family="sans-serif" font-size="22" font-weight="700" fill="#6b4ee6">y</text>
+<text x="91" y="338" font-family="sans-serif" font-size="13" fill="#1a1a2e" text-anchor="middle">1</text><text x="155" y="338" font-family="sans-serif" font-size="13" fill="#1a1a2e" text-anchor="middle">2</text><text x="219" y="338" font-family="sans-serif" font-size="13" fill="#1a1a2e" text-anchor="middle">3</text><text x="283" y="338" font-family="sans-serif" font-size="13" fill="#1a1a2e" text-anchor="middle">4</text><text x="347" y="338" font-family="sans-serif" font-size="13" fill="#1a1a2e" text-anchor="middle">5</text>
+</svg>
+<p style="margin-top:.2em">Move along x. Give each spot a taller top <code>y</code>. Bumpy ground = terrain.</p>
+<p class="bilingual">x를 따라가며 자리마다 꼭대기 y를 다르게 = 울퉁불퉁한 땅(지형)</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Build a slope of terrain</h2>
+<pre>fill DIRT from (<span class="num">0</span>,<span class="num">0</span>,<span class="num">0</span>) to (<span class="num">0</span>,<span class="num">1</span>,<span class="num">5</span>)   <span class="com"># low</span>
+fill DIRT from (<span class="num">1</span>,<span class="num">0</span>,<span class="num">0</span>) to (<span class="num">1</span>,<span class="num">2</span>,<span class="num">5</span>)
+fill DIRT from (<span class="num">2</span>,<span class="num">0</span>,<span class="num">0</span>) to (<span class="num">2</span>,<span class="num">3</span>,<span class="num">5</span>)
+fill DIRT from (<span class="num">3</span>,<span class="num">0</span>,<span class="num">0</span>) to (<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>)   <span class="com"># high</span></pre>
+<p style="margin-top:.4em">Each strip stops at a taller <code>y</code> — the ground rises into a hill.</p>
+<p class="bilingual">줄마다 꼭대기 y가 더 높아져 언덕이 생겨요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What grows between these layers?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>fill BROWN from (4, 0, 4) to (8, 1, 8)
+fill RED   from (2, 2, 2) to (10, 2, 10)
+fill RED   from (5, 5, 5) to (7, 5, 7)</pre><details><summary>Reveal output</summary><div class="ans">A mushroom shape — a short brown stem (y 0–1) with a wide red cap starting at y = 2 and a small red top at y = 5. The middle number (y) climbs each layer.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">layer</span><span class="gloss">one flat slab from a single fill</span><span class="ko">층</span>
+<span class="term">stack</span><span class="gloss">put layers on top by raising y</span><span class="ko">쌓다</span>
+<span class="term">terrain</span><span class="gloss">ground built up to different heights</span><span class="ko">지형</span>
+<span class="term">cap</span><span class="gloss">the wide top layers of a mushroom/tree</span><span class="ko">갓 / 윗부분</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: stack a <b>second layer on top</b> of the first.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">fill RED from (2, 2, 2) to (10, 2, 10)
+fill RED from (3, 2, 3) to (9, 2, 9)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Both layers use y = 2. Think first.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> both fills sit at <b>y = 2</b>, so the second lands <b>on top of</b> the first — nothing stacks up. Raise the <b>middle number</b> to <code>y = 3</code> for the next layer.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">fill RED from (2, 2, 2) to (10, 2, 10)
+fill RED from (3, 3, 3) to (9, 3, 9)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Grow terrain + a mushroom 🍄</h2>
+<ul class="check-list">
+<li>Fill a stem box (a few layers tall)</li>
+<li>Stack cap layers — raise <code>y</code> by 1 each, shrink the spread</li>
+<li>Make 3 terrain strips that stop at <b>different heights</b></li>
+<li>Write down the <code>y</code> of your top layer</li>
+<li>Send a photo from the ground up to the top</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="from and to share the same y, so the fill is one flat slab at that height."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">A <code>fill</code> with the <b>same y</b> in from and to makes…</div><div class="opts"><button class="opt">One flat layer at that height.</button>
+<button class="opt">A tall tower.</button>
+<button class="opt">Nothing.</button>
+<button class="opt">A hole in the ground.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Raising the middle number (y) puts the next layer on top."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">To stack the next layer <b>on top</b>, which number do you raise?</div><div class="opts"><button class="opt">y (the middle one)</button><button class="opt">x (the first one)</button><button class="opt">z (the last one)</button><button class="opt">All three the same</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Different top heights at different x spots make bumpy terrain."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">How do you make bumpy <b>terrain</b>?</div><div class="opts"><button class="opt">Stop each strip at a different top y.</button>
+<button class="opt">Use the same height everywhere.</button>
+<button class="opt">Only move forward in z.</button>
+<button class="opt">Fill one block.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🍄</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">You stacked it up!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: command all three numbers at once.</p>
+<p class="bilingual">다음: x, y, z 세 숫자를 한꺼번에</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 21</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pyramid Problems — Loops</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">Pyramid Problems · Lesson 2</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 2</div><div class="emoji">🔁</div>
+<h1>Loops</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Say it once. Do it many times.</p>
+<p class="bilingual">반복문 — 한 번 쓰면 여러 번 실행 · 영어코딩</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Stop copy-pasting 🥱</h2>
+<div class="emoji">🧱🧱🧱🧱🧱</div>
+<p class="big">Last lesson: 5 lines for 5 blocks. This lesson: 1 loop.</p>
+<p class="bilingual">같은 줄을 반복하지 않아도 됩니다</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>The <code>for</code> loop</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+<p style="margin-top:1em"><code>range(5)</code> = do the inside <span class="sub">5 times</span>.</p>
+<p class="bilingual">range(5) = 5번 반복</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Indent = inside the loop</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">agent.place</span>(DOWN)   <span class="com"># repeats ✅</span>
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)   <span class="com"># repeats ✅</span>
+<span class="fn">agent.turn</span>(RIGHT)   <span class="com"># runs once ❌</span></pre>
+<p style="margin-top:.8em">Indented lines repeat. Un-indented lines do not.</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>The loop runs 3 times</h2>
+<div class="viz viz-3">
+<div class="iter-row">
+<div class="iter-item">🧱</div><div class="iter-item">🧱</div><div class="iter-item">🧱</div>
+</div>
+<div class="var-row"><span class="label">i = </span><span class="var-vals">
+<span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span>
+</span></div>
+<div class="output-box">
+<div class="out-label">▸ blocks placed</div>
+<div class="out-line">block 1</div><div class="out-line">block 2</div><div class="out-line">block 3</div>
+</div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>A row vs a tower</h2>
+<pre><span class="com"># flat row on the ground</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+
+<span class="com"># tall tower standing up</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre></div>
+
+<div class="slide"><span class="slot-badge">Predict</span><div class="pill">Predict 🤔</div><h2>What does this build?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(4):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(FORWARD, 1)</pre><details><summary>Reveal answer</summary><div class="ans">A flat row of 4 blocks on the ground.</div></details></div></div>
+
+<div class="slide"><span class="slot-badge">Vocab</span><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+    <span class="term">loop</span><span class="gloss">code that repeats a set of commands</span><span class="ko">반복문</span>
+    <span class="term">for</span><span class="gloss">a loop that repeats a fixed number of times</span><span class="ko">~동안</span>
+    <span class="term">range(n)</span><span class="gloss">repeat n times (counts 0 to n-1)</span><span class="ko">범위</span>
+    <span class="term">indent</span><span class="gloss">the spaces that put a line inside the loop</span><span class="ko">들여쓰기</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong here?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em"><span class="com"># goal: a flat row of 6 blocks</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(6):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(FORWARD, 1)
+    <span class="fn">agent.turn</span>(RIGHT)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The fix</h2><div class="debug-reveal"><b>Bug:</b> <code>agent.turn(RIGHT)</code> is inside the loop, so the agent turns after every block and walks in a tiny circle instead of a straight line.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(6):
+    <span class="fn">agent.place</span>(DOWN)
+    <span class="fn">agent.move</span>(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Loop a 20-block wall 🧱</h2>
+<ul class="check-list">
+<li>Use one <code>for</code> loop with <code>range(20)</code></li>
+<li>Place a block + move forward each time</li>
+<li>Then build a U-shaped wall (3 sides)</li>
+<li>Send a photo + walkthrough on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="range(5) repeats the indented body 5 times."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">How many times does <code>for i in range(5):</code> repeat?</div><div class="opts"><button class="opt">5 times.</button>
+<button class="opt">4 times.</button>
+<button class="opt">6 times.</button>
+<button class="opt">Forever.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Turning every loop makes the agent spin instead of going straight."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong?<br><pre style="font-size:.8em;margin-top:.4em">for i in range(6):
+    agent.place(DOWN)
+    agent.move(FORWARD, 1)
+    agent.turn(RIGHT)</pre></div><div class="opts"><button class="opt">turn(RIGHT) is inside the loop — the agent spins in circles.</button><button class="opt">range(6) is too big.</button><button class="opt">You can't place and move together.</button><button class="opt">DOWN should be UP.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Indented lines repeat; un-indented lines run once after the loop."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">What does the <b>indent</b> control?</div><div class="opts"><button class="opt">Which lines are inside the loop and repeat.</button>
+<button class="opt">The color of the blocks.</button>
+<button class="opt">How fast the agent moves.</button>
+<button class="opt">Nothing — spaces are ignored.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔁</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Loops unlocked!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: variables — name your numbers.</p>
+<p class="bilingual">다음: 변수로 숫자에 이름 붙이기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

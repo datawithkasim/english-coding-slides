@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Coordinates — The Ground Plane</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">3D Coordinates · Lesson 4</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 4</div><div class="emoji">🟫</div>
+<h1>The Ground<br>Plane (x, z)</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Stop looking at the wall — look down</p>
+<p class="bilingual">벽에서 바닥으로 — 이제 (x, z)를 써요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>The floor uses (x, z) 🟫</h2>
+<div class="emoji">⬅️➡️↕️</div>
+<p class="big">x is across. z is forward. y is still height.</p>
+<p class="bilingual">바닥에서는 가로 x, 앞으로 z</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Wall vs floor</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">🧱</div><div class="name">wall (x, y)</div><div class="ex">across + UP<br>(standing up)</div></div>
+<div class="opt-card"><div class="ico">🟫</div><div class="name">floor (x, z)</div><div class="ex">across + FORWARD<br>(lying flat)</div></div>
+</div>
+<p class="bilingual">벽은 위로(y), 바닥은 앞으로(z)</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>The three directions</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:1em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<p style="margin-top:1em">On the flat floor we keep <code>y = 0</code> and move with x and z.</p>
+<p class="bilingual">바닥은 y를 0으로 두고 x, z만 움직여요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>A path running forward (grow z)</h2>
+<pre><span class="kw">for</span> z <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.place</span>(STONE, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, z))</pre>
+<p style="margin-top:1em">x stays <code>2</code>, y stays <code>0</code> (on the ground), z grows 0 → 4. A path going <span class="sub">forward</span>.</p>
+<p class="bilingual">z가 자라면 앞으로 길이 생겨요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Filling a whole floor</h2>
+<pre><span class="kw">for</span> z <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):        <span class="com"># 3 forward</span>
+    <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):    <span class="com"># 4 across</span>
+        <span class="fn">blocks.place</span>(STONE, <span class="fn">pos</span>(x, <span class="num">0</span>, z))</pre>
+<p style="margin-top:.6em">Inner loop runs x across, outer steps z forward: a floor pad <span class="sub">4 × 3</span>.</p></div>
+
+<div class="slide"><div class="pill">See it</div><h2>The floor from above (x, z)</h2>
+<svg viewBox="0 0 520 520" style="width:min(74vmin,820px);height:auto;display:block;margin:.4em auto" xmlns="http://www.w3.org/2000/svg">
+<text x="270" y="26" font-family="sans-serif" font-size="17" font-weight="700" fill="#1a1a2e" text-anchor="middle">looking straight down at the ground</text>
+<!-- grid: z runs UP the page (forward = away), x runs right -->
+<g stroke="#ecdcc8" stroke-width="2">
+<line x1="70" y1="470" x2="70" y2="50"/><line x1="120" y1="470" x2="120" y2="50"/><line x1="170" y1="470" x2="170" y2="50"/><line x1="220" y1="470" x2="220" y2="50"/><line x1="270" y1="470" x2="270" y2="50"/><line x1="320" y1="470" x2="320" y2="50"/><line x1="370" y1="470" x2="370" y2="50"/><line x1="420" y1="470" x2="420" y2="50"/><line x1="470" y1="470" x2="470" y2="50"/>
+<line x1="70" y1="470" x2="470" y2="470"/><line x1="70" y1="420" x2="470" y2="420"/><line x1="70" y1="370" x2="470" y2="370"/><line x1="70" y1="320" x2="470" y2="320"/><line x1="70" y1="270" x2="470" y2="270"/><line x1="70" y1="220" x2="470" y2="220"/><line x1="70" y1="170" x2="470" y2="170"/><line x1="70" y1="120" x2="470" y2="120"/><line x1="70" y1="70" x2="470" y2="70"/>
+</g>
+<!-- floor pad x 0..3, z 0..2 (orange). screen_y for z = 470 - (z+1)*50 -->
+<rect x="70" y="420" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="120" y="420" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="170" y="420" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="220" y="420" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="70" y="370" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="120" y="370" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="170" y="370" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="220" y="370" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/>
+<rect x="70" y="320" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="120" y="320" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="170" y="320" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/><rect x="220" y="320" width="50" height="50" fill="#ff7849" stroke="#1a1a2e" stroke-width="1.5"/>
+<!-- path forward at x=5, z 0..4 (purple) -->
+<rect x="320" y="420" width="50" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/><rect x="320" y="370" width="50" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/><rect x="320" y="320" width="50" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/><rect x="320" y="270" width="50" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/><rect x="320" y="220" width="50" height="50" fill="#6b4ee6" stroke="#1a1a2e" stroke-width="1.5"/>
+<text x="345" y="200" font-family="sans-serif" font-size="16" font-weight="700" fill="#6b4ee6" text-anchor="middle">path →</text>
+<!-- axes: x right, z up -->
+<line x1="70" y1="470" x2="490" y2="470" stroke="#1a1a2e" stroke-width="3"/>
+<line x1="70" y1="470" x2="70" y2="45" stroke="#1a1a2e" stroke-width="3"/>
+<polygon points="490,470 478,464 478,476" fill="#1a1a2e"/>
+<polygon points="70,45 64,57 76,57" fill="#1a1a2e"/>
+<text x="500" y="468" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">x</text>
+<text x="60" y="42" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">z</text>
+<text x="285" y="490" font-family="sans-serif" font-size="15" fill="#1a1a2e" text-anchor="middle">x = across</text>
+<text x="28" y="260" font-family="sans-serif" font-size="15" fill="#1a1a2e" text-anchor="middle" transform="rotate(-90 28 260)">z = forward</text>
+</svg>
+<p class="bilingual">바닥을 위에서 본 모습 — x는 가로, z는 앞으로(위쪽)</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What shape covers the floor?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>z = 0
+repeat 3 times:
+    x = 0
+    repeat 4 times:
+        place stone block at (x, z)
+        add 1 to x
+    add 1 to z</pre><details><summary>Reveal output</summary><div class="ans">A flat rectangle floor — 4 across (x) and 3 forward (z). 12 blocks lying flat on the ground.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">floor / ground</span><span class="gloss">the flat plane you look down on</span><span class="ko">바닥</span>
+<span class="term">z</span><span class="gloss">how far forward (depth)</span><span class="ko">깊이 / 앞으로</span>
+<span class="term">forward</span><span class="gloss">the direction z grows</span><span class="ko">앞으로</span>
+<span class="term">path</span><span class="gloss">a line of floor blocks to walk on</span><span class="ko">길</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: a path running <b>forward</b> at x = 2.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">n = 0
+repeat 5 times:
+    place stone block at (n, 2)
+    add 1 to n</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">On the floor, the slots are (x, z). Think first.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> <code>n</code> is in the <b>x</b> slot, so the path runs across instead of forward. Put the growing number in the <b>z</b> slot and keep x = 2.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">z = 0
+repeat 5 times:
+    place stone block at (2, z)
+    add 1 to z</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Lay a floor + path 🟫</h2>
+<ul class="check-list">
+<li>Open your homework world + Code Builder</li>
+<li>Fill a floor pad with a nested loop (x across, z forward)</li>
+<li>Lay a path that runs forward (grow z) or across (grow x)</li>
+<li>Place a marker at <code>(0, 0, 0)</code> where the floor starts</li>
+<li>Send a photo looking down at your floor</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="On the floor the two numbers are x (across) and z (forward); y stays 0."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Which two numbers describe a spot on the <b>floor</b>?</div><div class="opts"><button class="opt">x and z</button>
+<button class="opt">x and y</button>
+<button class="opt">y and z</button>
+<button class="opt">Just x</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="z is depth — how far forward."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What does growing <b>z</b> do on the floor?</div><div class="opts"><button class="opt">Moves forward.</button><button class="opt">Moves up into the air.</button><button class="opt">Moves across.</button><button class="opt">Nothing.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The inner loop grows x across; the outer loop must grow z to step to the next row."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Your floor comes out as a thin line, not a rectangle. What's missing?</div><div class="opts"><button class="opt">Growing z in the outer loop.</button>
+<button class="opt">Growing y in the outer loop.</button>
+<button class="opt">A bigger inner range.</button>
+<button class="opt">Nothing.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🟫</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Floor laid!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: layer up — terrain &amp; trees.</p>
+<p class="bilingual">다음: 위로 쌓아 지형과 나무 만들기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

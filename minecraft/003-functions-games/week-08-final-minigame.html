@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functions & Games — Final Minigame</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">Functions Games · Lesson 8</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 8</div><div class="emoji">🏆</div>
+<h1>Your Final<br>Minigame</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Combine everything</p>
+<p class="bilingual">지금까지 배운 모든 걸 모아 게임을 완성해요</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>No new ideas — just build 🎉</h2>
+<div class="emoji">📚💬🔍⚡</div>
+<p class="big">Library + chat commands + sensing + events = a playable game.</p>
+<p class="bilingual">새 개념 없이, 가진 도구로 완성</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>One command starts the game</h2>
+<pre><span class="kw">def</span> <span class="fn">on_start</span>():
+    <span class="fn">build_arena</span>()
+    player.<span class="fn">teleport</span>(room_1)
+    player.say(<span class="str">"Reach the gold block!"</span>)
+player.on_chat(<span class="str">"start"</span>, on_start)</pre>
+<p style="margin-top:.6em">Type <code>start</code> → build the world, drop the player in, give the goal.</p>
+<p class="bilingual">시작 명령 하나로 게임이 열려요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Build the arena from your library</h2>
+<pre><span class="kw">def</span> <span class="fn">build_arena</span>():
+    <span class="fn">build_room</span>()
+    agent.<span class="fn">move</span>(FORWARD, <span class="num">6</span>)
+    <span class="fn">build_room</span>()
+    agent.<span class="fn">move</span>(FORWARD, <span class="num">6</span>)
+    <span class="fn">build_room</span>()</pre>
+<p style="margin-top:.6em">Three rooms in a row, all from week 5 + 7 functions.</p>
+<p class="bilingual">라이브러리 함수로 경기장을 지어요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Traps and goals — events</h2>
+<pre><span class="kw">def</span> <span class="fn">on_walk</span>():
+    <span class="kw">if</span> agent.<span class="fn">inspect</span>(DOWN) == RED_CARPET:
+        agent.<span class="fn">place</span>(AIR, DOWN)
+        player.say(<span class="str">"Trap!"</span>)
+    <span class="kw">if</span> agent.<span class="fn">inspect</span>(DOWN) == GOLD_BLOCK:
+        player.say(<span class="str">"You win!"</span>)
+player.on_travelled(on_walk)</pre>
+<p class="bilingual">함정과 목표를 이벤트로 처리해요</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Walk → check → win or trap</h2>
+  <div class="viz viz-if">
+    <div class="if-input">
+      <span class="case case-a">below = GOLD_BLOCK</span>
+      <span class="case case-b">below = RED_CARPET</span>
+    </div>
+    <div class="if-cond">inspect(DOWN) == GOLD_BLOCK</div>
+    <div class="if-branches">
+      <div class="if-branch true">say("You win!")</div>
+      <div class="if-branch false">trap: place(AIR, DOWN)</div>
+    </div>
+    <div class="if-output">
+      <div class="out-label">▸ Result</div>
+      <div class="out-line out-a">🏆 victory</div>
+      <div class="out-line out-b">🕳️ you fell</div>
+    </div>
+  </div>
+  <p class="bilingual">밟은 블록이 결과를 정해요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What happens at each step?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>def on_walk():
+    if agent.inspect(DOWN) == RED_CARPET:
+        agent.place(AIR, DOWN)
+        player.say("Trap!")
+    if agent.inspect(DOWN) == GOLD_BLOCK:
+        player.say("You win!")
+player.on_travelled(on_walk)
+# player crosses red carpet, then gold</pre><details><summary>Reveal output</summary><div class="ans">Red carpet → falls + "Trap!". Gold → "You win!".</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>Words from the whole course</h2><div class="vocab-table">
+<span class="term">goal</span><span class="gloss">what the player must reach to win</span><span class="ko">목표</span>
+<span class="term">trap</span><span class="gloss">a hazard that fires on a trigger</span><span class="ko">함정</span>
+<span class="term">reward</span><span class="gloss">a prize for reaching the goal</span><span class="ko">보상</span>
+<span class="term">playtest</span><span class="gloss">playing your game to find bugs</span><span class="ko">플레이 테스트</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2><p style="margin-bottom:.4em">Goal: gold = win, red carpet = trap. Right now they're swapped.</p><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">def on_walk():
+    if agent.inspect(DOWN) == GOLD_BLOCK:
+        player.say("Trap!")
+    if agent.inspect(DOWN) == RED_CARPET:
+        player.say("You win!")</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">The two reactions are on the wrong blocks.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2><div class="debug-reveal"><b>Bug:</b> the actions are swapped — gold should win, red carpet should trap. Match each to the right block.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">def on_walk():
+    if agent.inspect(DOWN) == GOLD_BLOCK:
+        player.say("You win!")
+    if agent.inspect(DOWN) == RED_CARPET:
+        player.say("Trap!")</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build your minigame 🏆</h2>
+<ul class="check-list">
+<li>Plan first: goal, rooms, trap, reward</li>
+<li>One <code>start</code> command builds it all</li>
+<li>Reuse functions from your library</li>
+<li>Traps + goal fire from events</li>
+<li>Playtest, then send a video</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The win and trap actions were on the wrong blocks."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Gold says "Trap!" and red carpet says "You win!". Fix?</div><div class="opts"><button class="opt">Swap them — gold should win, red carpet should trap.</button>
+<button class="opt">Delete both events.</button>
+<button class="opt">Add more rooms.</button>
+<button class="opt">Rename the function.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Without a block check, the trap fires on every step at spawn."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q"><code>on_travelled</code> with no check makes the trap fire at spawn. Why?</div><div class="opts"><button class="opt">The event fires every step — it needs a block check.</button><button class="opt">Spawn is always a trap.</button><button class="opt">The world is too small.</button><button class="opt">Traps can't use events.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Done means a player can start, hit every trigger, and finish."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">For your <b>final game</b>, what counts as 'done'?</div><div class="opts"><button class="opt">A player can start it, every trigger works, and they can finish.</button>
+<button class="opt">The code has no red squiggles.</button>
+<button class="opt">It looks neat in the editor.</button>
+<button class="opt">It builds one room.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🏆</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">You're a game maker!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Functions + games — course complete.</p>
+<p class="bilingual">축하해요! 영어코딩 함수와 게임 코스 완주</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>
