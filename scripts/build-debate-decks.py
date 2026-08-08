@@ -187,9 +187,9 @@ W = {
     ag=["Saying it hurts is not feeling it", "Rights come with duties", "Protection taken from people and animals"]),
 16: dict(topic="SHOWCASE DEBATE", ko="마지막 발표 토론", emoji="🎬", dd=True,
     motion="New technology makes the world better.",
-    skill="Everything", frame="student's choice — any frame from weeks 1–15",
-    hook="Sixteen weeks of arguing what I told you to argue. Today you argue what you think.",
-    model="Sides are your own real opinion. The only week that is true.",
+    skill="Everything", frame="any frame from weeks 1–15",
+    hook="Sides are drawn, same as week one. This one is recorded.",
+    model="Sides are drawn at random, exactly as in week 4 — that is the only way the two recordings compare.",
     mistake="—",
     mfix="Correct gently today. This is a performance day, not a drilling day.",
     fmt="Showcase + playback", fmtko="발표 + 녹음 비교",
@@ -241,7 +241,7 @@ def deck(n):
     else:
         s.append('''<div class="slide"><span class="slot-badge">SLOT 2</span><div class="pill">How this works</div><h2>Four rules</h2>
 <ul class="check-list">
-<li><b>I give you your side.</b> You may argue something you disagree with.</li>
+<li><b>Sides are drawn at random.</b> You may get one you disagree with.</li>
 <li>That is the point — you cannot beat an argument you do not understand.</li>
 <li>Turns are short. 30 to 45 seconds. Nobody talks for five minutes.</li>
 <li>Attack the reason, never the person.</li>
@@ -262,7 +262,7 @@ def deck(n):
     # 5 — the skill
     s.append(f'''<div class="slide"><span class="slot-badge">SLOT 5</span><div class="pill">Today's skill</div><h2>{e(d["skill"])}</h2>
 <p class="big center" style="margin-top:1.2em">{e(d["motion"])}</p>
-<p class="sub center" style="margin-top:.8em">Sides are assigned. Argue yours even if you disagree.</p>
+<p class="sub center" style="margin-top:.8em">Sides are drawn at random. Argue yours even if you disagree.</p>
 <p class="bilingual">입장은 선생님이 정해요</p></div>''')
 
     # 6 — the frame
@@ -315,7 +315,7 @@ def deck(n):
         hw = "Write about today. Read the essay for next week. Words. One question for the other side."
     else:
         bridge = "That is the course."
-        hw = "Your own real opinion, and three questions looking back."
+        hw = "Write on your assigned side, read the closing essay, and three questions looking back."
     s.append(f'''<div class="slide center-all"><div class="emoji">{d["emoji"]}</div>
 <h1 style="font-size:clamp(32px,5.5vmin,52px)">{e(d["skill"])}</h1>
 <div class="frame-card" style="margin-top:1em;text-align:left"><div class="label">Homework</div>
