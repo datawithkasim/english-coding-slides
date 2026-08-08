@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 W0 — Pixel Art</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+/* tiny self-contained pixel grid */
+.pgrid{display:inline-grid;gap:3px;background:#cbd5e1;padding:6px;border-radius:10px;margin:.4em auto}
+.pgrid .px{width:34px;height:34px;border-radius:5px;background:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;color:#64748b}
+.pgrid .red{background:#ef4444}
+.pgrid .start{background:#22c55e;color:#fff}
+.pgrid .end{background:#ef4444;color:#fff}
+.pgrid .mid{background:#f59e0b;color:#fff}
+.pgrid .same{background:#a855f7;color:#fff}
+.pgrid .lbl{background:transparent;color:#475569;font-weight:800}
+.arrow-x{color:var(--accent);font-weight:800}
+.arrow-y{color:var(--accent-2);font-weight:800}
+.fillmap span{font-weight:800}
+.fnum{background:#22c55e22;border:2px solid #22c55e;border-radius:6px;padding:0 .25em;color:#16a34a}
+.fz{background:#94a3b822;border:2px dashed #94a3b8;border-radius:6px;padding:0 .25em;color:#64748b}
+</style></head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Pixel Art · Warm-Up</div>
+
+<!-- 1 title -->
+<div class="slide active center-all"><div class="pill">Pre-Lesson · Warm-Up</div><div class="emoji">🎨</div>
+<h1>Pixel Art</h1>
+<p class="big" style="margin-top:.6em;color:var(--accent-2)">Count squares → fill the wall</p>
+<p class="bilingual">칸 세고 → 벽 채우기</p></div>
+
+<!-- 2 the wall = graph paper -->
+<div class="slide center-all"><div class="pill purple">Big idea</div>
+<h2>The wall is graph paper 📐</h2>
+<p class="big" style="margin-top:.3em"><span class="arrow-x">X</span> goes across →&nbsp;&nbsp;<span class="arrow-y">Y</span> goes up ↑</p>
+<div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span><span class="px lbl">3</span><span class="px lbl">4</span>
+<span class="px lbl">2</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+<span class="px lbl">1</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+<span class="px lbl">0</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+</div>
+<p style="margin-top:.4em">Z is how deep the wall is — it <b>never changes</b>. Leave it alone.</p>
+<p class="bilingual">X = 가로, Y = 세로, Z는 안 바뀜</p></div>
+
+<!-- 3 read X -->
+<div class="slide"><div class="pill">Step 1</div><h2>Read <span class="arrow-x">X</span> — left → right 👉</h2>
+<p>Count the columns starting at <b>0</b>: 0, 1, 2, 3 …</p>
+<div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span><span class="px lbl">3</span><span class="px lbl">4</span>
+<span class="px lbl">1</span><span class="px"></span><span class="px start">1</span><span class="px mid">2</span><span class="px end">3</span><span class="px"></span>
+<span class="px lbl">0</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+</div>
+<p style="margin-top:.4em">Red <b>begins at X 1</b>, <b>ends at X 3</b>.</p>
+<p class="bilingual">왼쪽부터 칸 세기 — 시작 X, 끝 X</p></div>
+
+<!-- 4 read Y -->
+<div class="slide"><div class="pill">Step 2</div><h2>Read <span class="arrow-y">Y</span> — bottom → up 👆</h2>
+<p>Count the rows starting at <b>0</b>: 0, 1, 2, 3 …</p>
+<div class="pgrid" style="grid-template-columns:repeat(3,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span>
+<span class="px lbl">3</span><span class="px"></span><span class="px end">3</span>
+<span class="px lbl">2</span><span class="px"></span><span class="px mid">2</span>
+<span class="px lbl">1</span><span class="px"></span><span class="px start">1</span>
+<span class="px lbl">0</span><span class="px"></span><span class="px"></span>
+</div>
+<p style="margin-top:.4em">Red <b>begins at Y 1</b>, <b>ends at Y 3</b>.</p>
+<p class="bilingual">아래부터 칸 세기 — 시작 Y, 끝 Y</p></div>
+
+<!-- 5 START and END -->
+<div class="slide center-all"><div class="pill">Step 3</div><h2>Every square has an address 📍</h2>
+<p class="big">Always read it in order: <span class="arrow-x">X first</span> → <span class="arrow-y">then Y</span></p>
+<div class="pgrid" style="grid-template-columns:repeat(5,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span><span class="px lbl">3</span>
+<span class="px lbl">2</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px same">●</span>
+<span class="px lbl">1</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+<span class="px lbl">0</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+</div>
+<p style="margin-top:.4em">Count across: X = <b>3</b>. &nbsp;Then count up: Y = <b>2</b>. &nbsp;Address = <b>(3, 2)</b>.</p>
+<p class="bilingual">칸 주소 = (X, Y) · 항상 X 먼저, 그 다음 Y</p></div>
+
+<!-- 6 the fill command -->
+<div class="slide"><div class="pill">The command</div><h2>Put the address into <code>fill</code></h2>
+<pre style="margin-top:.6em;font-size:clamp(13px,2.4vmin,18px)"><span class="fn">blocks.fill</span>(YELLOW_WOOL,
+   <span class="fn">world</span>(<span class="fnum">X</span>, <span class="fnum">Y</span>, <span class="fz">Z</span>),   <span class="com"># where the color starts</span>
+   <span class="fn">world</span>(<span class="fnum">X</span>, <span class="fnum">Y</span>, <span class="fz">Z</span>))   <span class="com"># where the color stops</span></pre>
+<p style="margin-top:.7em" class="fillmap"><span class="fnum">&nbsp;green&nbsp;</span> = the <b>first two numbers</b> → <b>X first</b>, <b>then Y</b></p>
+<p class="fillmap"><span class="fz">&nbsp;gray&nbsp;</span> = Z, the depth → <b>always the same</b>, leave it</p>
+<p class="bilingual">앞 두 숫자 = X 먼저, 그 다음 Y · Z는 그대로</p></div>
+
+<!-- 7 worked single square -->
+<div class="slide"><div class="pill">Example A</div><h2>One square</h2>
+<div class="pgrid" style="grid-template-columns:repeat(4,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span>
+<span class="px lbl">2</span><span class="px"></span><span class="px"></span><span class="px"></span>
+<span class="px lbl">1</span><span class="px"></span><span class="px"></span><span class="px same">●</span>
+<span class="px lbl">0</span><span class="px"></span><span class="px"></span><span class="px"></span>
+</div>
+<p>X first = <b>2</b>, then Y = <b>1</b>. One square → same address twice.</p>
+<pre style="margin-top:.4em">blocks.fill(YELLOW_WOOL, world(<span class="fnum">2</span>,<span class="fnum">1</span>,<span class="fz">0</span>), world(<span class="fnum">2</span>,<span class="fnum">1</span>,<span class="fz">0</span>))</pre>
+<p class="bilingual">한 칸 = 주소 두 번 똑같이</p></div>
+
+<!-- 8 worked line -->
+<div class="slide"><div class="pill">Example B</div><h2>A row of one color ➡️</h2>
+<div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+<span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span><span class="px lbl">3</span><span class="px lbl">4</span>
+<span class="px lbl">2</span><span class="px"></span><span class="px red">●</span><span class="px red">●</span><span class="px red">●</span><span class="px"></span>
+<span class="px lbl">1</span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span><span class="px"></span>
+</div>
+<p>Fill the whole row at once: first square <b>(1, 2)</b> → last square <b>(3, 2)</b>. <b>Y stays 2</b>.</p>
+<pre style="margin-top:.4em">blocks.fill(YELLOW_WOOL, world(<span class="fnum">1</span>,<span class="fnum">2</span>,<span class="fz">0</span>), world(<span class="fnum">3</span>,<span class="fnum">2</span>,<span class="fz">0</span>))</pre>
+<p class="bilingual">같은 색 한 줄 = 한 번에 채우기 · Y 그대로</p></div>
+
+<!-- 9 the rule recap -->
+<div class="slide center-all"><div class="pill purple">Remember 🔑</div>
+<h2>One block thick = one number stays</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:.6em;max-width:680px;margin-inline:auto">
+<div class="opt-card"><div class="ico">➡️</div><div class="name">row (1 tall)</div><div class="ex">Y is the same in both</div></div>
+<div class="opt-card"><div class="ico">⬆️</div><div class="name">column (1 wide)</div><div class="ex">X is the same in both</div></div>
+</div>
+<p style="margin-top:.6em">Same number = correct, <b>not a mistake</b>.</p>
+<p class="bilingual">한 칸 두께면 숫자 하나는 안 바뀜 — 맞는 거예요</p></div>
+
+<!-- 10 predict -->
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What shape is this?</h2>
+<div class="predict-card"><div class="label">Predict first — then reveal</div>
+<pre>blocks.fill(YELLOW_WOOL, world(1,0,0), world(1,4,0))</pre>
+<details><summary>Reveal</summary><div class="ans">A <b>column</b>, 5 tall. X is 1 in both (same), Y goes 0 → 4. That is 5 squares.</div></details></div></div>
+
+<!-- 11 your turn -->
+<div class="slide"><div class="pill">Your turn!</div><h2>Build one square + one line 🧱</h2>
+<ul class="check-list">
+<li>Open the <b>Pixel Art</b> world</li>
+<li>Pick a colored row — count <b>X across</b>, then <b>Y up</b></li>
+<li>First square → last square, keep <b>Z the same</b></li>
+<li>Run your <code>blocks.fill</code> ▶</li>
+<li>Send a photo of your wall</li>
+</ul>
+<p class="bilingual">X 세고 → Y 세고 → fill 실행 → 사진 보내기</p></div>
+
+<!-- 12 close -->
+<div class="slide center-all"><div class="emoji">🎨</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Wall filled!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2)">Next: moving the agent.</p>
+<p class="bilingual">다음: 에이전트 움직이기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 12</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

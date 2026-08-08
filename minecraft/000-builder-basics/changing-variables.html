@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 — Changing a Variable</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .sim-wrap{display:flex;flex-direction:column;gap:.6em;align-items:center;margin-top:.4em}
+  .sim-canvas{width:100%;max-width:min(1000px,84vw);height:clamp(140px,30vmin,340px);
+    background:var(--panel);border:2px solid var(--soft);border-radius:14px}
+  .sim-ctl{display:flex;flex-wrap:wrap;gap:1.1em;align-items:center;justify-content:center;
+    font-size:clamp(15px,2.6vmin,30px)}
+  .sim-ctl input[type=range]{width:clamp(140px,22vw,320px);accent-color:var(--accent)}
+  .sim-ctl output{color:var(--accent);font-weight:800;min-width:1.6em;display:inline-block;text-align:center}
+  .sim-code{font-family:"JetBrains Mono",Consolas,monospace;background:var(--code-bg);
+    border-radius:10px;padding:.45em .8em;color:var(--code-ink);font-size:clamp(13px,2.3vmin,26px)}
+  .sim-note{color:var(--com);font-size:clamp(13px,2.1vmin,24px)}
+  .val-row{display:flex;gap:.5em;flex-wrap:wrap;justify-content:center;margin-top:.3em}
+  .val-chip{background:var(--panel);border:2px solid var(--accent);border-radius:10px;
+    padding:.15em .6em;color:var(--accent);font-weight:800;font-family:Consolas,monospace;
+    font-size:clamp(14px,2.4vmin,28px)}
+</style>
+</head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Lesson 5 · Changing a Variable</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 5</div><div class="emoji">📈</div>
+<h1>The Number<br>That Grows</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">A variable can change <i>while</i> you build</p>
+<p class="bilingual">변수 바꾸기 — 만드는 도중에 자라는 숫자</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Same loop, different result every time 🪜</h2>
+<div class="emoji">1️⃣2️⃣3️⃣</div>
+<p class="big">Last lesson the number stayed still. Now it changes on every turn of the loop.</p>
+<p class="bilingual">지난 레슨은 고정된 숫자, 이번엔 매번 바뀌는 숫자</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Read it right to left</h2>
+<pre>height = height + 1</pre>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">➡️</div><div class="name">height + 1</div><div class="ex">take what's inside, add 1</div></div>
+<div class="opt-card"><div class="ico">⬅️</div><div class="name">height =</div><div class="ex">put the answer back in</div></div>
+</div>
+<p class="bilingual">안에 있던 값 + 1 → 다시 그 이름에 넣기</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Inside the loop = changes every time</h2>
+<pre>height = 1
+repeat 4 times:
+    place block down
+    move up by height
+    move forward
+    height = height + 1</pre>
+<p style="margin-top:.6em">Step 1 climbs 1, step 2 climbs 2, step 3 climbs 3… a staircase.</p>
+<p class="bilingual">반복문 안에 있으니 매번 커져요</p></div>
+
+<div class="slide"><div class="pill">See it</div><h2>Drag start and step 🪜</h2>
+<div class="sim-wrap">
+  <canvas class="sim-canvas" id="stairSim"></canvas>
+  <div class="sim-ctl">
+    <label>start = <output id="startOut">1</output>
+      <input id="startRange" type="range" min="1" max="5" step="1" value="1"></label>
+    <label>add each time = <output id="stepOut">1</output>
+      <input id="stepRange" type="range" min="1" max="4" step="1" value="1"></label>
+  </div>
+  <div class="val-row" id="valRow"></div>
+  <p class="sim-note">숫자가 커질수록 계단이 가팔라져요</p>
+</div></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>It can shrink too</h2>
+<pre>gap = 7
+repeat 4 times:
+    place block down
+    move forward by gap
+    gap = gap - 2</pre>
+<div class="val-row" style="margin-top:.6em">
+<span class="val-chip">7</span><span class="val-chip">5</span><span class="val-chip">3</span><span class="val-chip">1</span></div>
+<p style="margin-top:.6em">Take away instead of adding, and the build gets tighter each time.</p>
+<p class="bilingual">빼면 점점 좁아져요 — 경사 지붕이 이 방법이에요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Blocks: a growing staircase</h2>
+<pre>set <span style="color:#50fa7b">height</span> to <span style="color:#bd93f9">1</span>
+repeat <span style="color:#bd93f9">4</span> times:
+    place block down
+    move up by <span style="color:#50fa7b">height</span>
+    move forward
+    change <span style="color:#50fa7b">height</span> by <span style="color:#bd93f9">1</span></pre>
+<p style="margin-top:.6em">In Code Builder the <b>change … by 1</b> block is the one that makes it grow.</p>
+<p class="bilingual">change 블록이 숫자를 키워요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The same idea in Python</h2>
+<pre><span style="color:#50fa7b">height</span> = <span style="color:#bd93f9">1</span>
+<span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#50fa7b">range</span>(<span style="color:#bd93f9">4</span>):
+    <span style="color:#50fa7b">agent.place</span>(DOWN)
+    <span style="color:#50fa7b">agent.move</span>(UP, height)
+    <span style="color:#50fa7b">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)
+    height = height + <span style="color:#bd93f9">1</span></pre>
+<p class="bilingual">블록의 change 와 똑같아요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>What does the agent build?</h2>
+<div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>height = 1
+repeat 4 times:
+    place block down
+    move up by height
+    move forward</pre>
+<details><summary>Reveal output</summary><div class="ans">Every step climbs the same 1 — a straight ramp, not a staircase. Nothing ever changes <code>height</code>.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">change</span><span class="gloss">give the name a new number</span><span class="ko">바꾸다</span>
+<span class="term">grow</span><span class="gloss">get bigger each time</span><span class="ko">커지다</span>
+<span class="term">shrink</span><span class="gloss">get smaller each time</span><span class="ko">작아지다</span>
+<span class="term">staircase</span><span class="gloss">steps that climb up</span><span class="ko">계단</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2>
+<p style="margin-bottom:.4em">Goal: step 1 climbs <b>1</b>, then 2, then 3, then 4.</p>
+<div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">height = 1
+repeat 4 times:
+    height = height + 1
+    place block down
+    move up by height
+    move forward</pre></div>
+<p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2>
+<div class="debug-reveal"><b>Bug:</b> it adds <span class="sub">before</span> the step is built, so the first step already climbs 2 and the last one climbs 5. Add <span class="sub">after</span> you build.</div>
+<div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">height = 1
+repeat 4 times:
+    place block down
+    move up by height
+    move forward
+    height = height + 1</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a staircase 🪜</h2>
+<ul class="check-list">
+<li>Make a variable called <code>height</code>, start it at <b>1</b></li>
+<li>Inside the loop: build the step, <b>then</b> change <code>height</code> by 1</li>
+<li>Run it ▶ — each step should climb higher</li>
+<li>Change <b>one</b> number — the start, or the amount you add</li>
+<li>Show both staircases in your video</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="height + 1 is worked out first, then stored back in the same name."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div>
+<div class="q"><code>height</code> holds 3. What does <code>height = height + 1</code> do?</div>
+<div class="opts"><button class="opt">Makes <code>height</code> hold 4.</button>
+<button class="opt">Makes <code>height</code> hold 1.</button>
+<button class="opt">Builds one more block.</button>
+<button class="opt">Nothing — you can't use a name twice.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="With no change inside the loop, every turn uses the same number."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div>
+<div class="q">A loop never changes <code>height</code>. What do you get?</div>
+<div class="opts"><button class="opt">Every step the same — no staircase.</button>
+<button class="opt">A staircase that climbs faster.</button>
+<button class="opt">A staircase that shrinks.</button>
+<button class="opt">An error message.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Subtracting makes each turn smaller than the last — that is how the sloped roof works."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div>
+<div class="q">What does <code>gap = gap - 2</code> do each loop?</div>
+<div class="opts"><button class="opt">Makes the number smaller each time.</button>
+<button class="opt">Makes the number bigger each time.</button>
+<button class="opt">Keeps the number the same.</button>
+<button class="opt">Sets the number to 2.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🪜</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Your number moves!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: house walls — a loop inside a loop.</p>
+<p class="bilingual">다음: 집 벽 — 반복문 속 반복문</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  const cv = document.getElementById('stairSim');
+  const startR = document.getElementById('startRange');
+  const stepR = document.getElementById('stepRange');
+  const startO = document.getElementById('startOut');
+  const stepO = document.getElementById('stepOut');
+  const valRow = document.getElementById('valRow');
+  if (!cv || !startR) return;
+  const ctx = cv.getContext('2d');
+  const STEPS = 4;
+
+  function heights() {
+    const out = [];
+    let h = +startR.value;
+    for (let i = 0; i < STEPS; i++) { out.push(h); h += +stepR.value; }
+    return out;
+  }
+
+  function draw() {
+    const hs = heights();
+    const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio || 1;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    // cumulative climb: each column is as tall as the total climbed so far
+    const tops = [];
+    let total = 0;
+    for (const step of hs) { total += step; tops.push(total); }
+
+    const pad = w * 0.06;
+    const cell = Math.min((w - pad * 2) / STEPS, (h - pad * 2) / Math.max(total, 1));
+    const baseY = h - pad;
+
+    tops.forEach((top, i) => {
+      for (let b = 0; b < top; b++) {
+        const x = pad + i * cell;
+        const y = baseY - (b + 1) * cell;
+        ctx.fillStyle = b >= top - hs[i] ? '#38d0e0' : '#2c6f7a';
+        ctx.fillRect(x + 1, y + 1, cell - 2, cell - 2);
+        ctx.strokeStyle = '#0a0d13';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(x + 1, y + 1, cell - 2, cell - 2);
+      }
+    });
+  }
+
+  function sync() {
+    startO.textContent = startR.value;
+    stepO.textContent = stepR.value;
+    valRow.innerHTML = heights()
+      .map(v => '<span class="val-chip">+' + v + '</span>').join('');
+    draw();
+  }
+  startR.addEventListener('input', sync);
+  stepR.addEventListener('input', sync);
+  window.addEventListener('resize', draw);
+  sync();
+})();
+</script>
+</body></html>

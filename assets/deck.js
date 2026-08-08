@@ -15,6 +15,10 @@
   if (next) next.onclick = () => show(i + 1);
   if (prev) prev.onclick = () => show(i - 1);
   document.addEventListener('keydown', (e) => {
+    // Don't hijack arrows/space while a slide's own control (e.g. a range
+    // slider in a live sim) has focus.
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
     if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
     if (e.key === 'Home') show(0);

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 — Variables</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .sim-wrap{display:flex;flex-direction:column;gap:.6em;align-items:center;margin-top:.5em}
+  .sim-canvas{width:100%;max-width:min(1000px,84vw);height:clamp(120px,26vmin,300px);
+    background:var(--panel);border:2px solid var(--soft);border-radius:14px}
+  .sim-ctl{display:flex;flex-wrap:wrap;gap:.9em;align-items:center;justify-content:center;
+    font-size:clamp(15px,2.6vmin,30px)}
+  .sim-ctl input[type=range]{width:clamp(180px,34vw,460px);accent-color:var(--accent)}
+  .sim-ctl output{color:var(--accent);font-weight:800;min-width:1.6em;display:inline-block;text-align:center}
+  .sim-code{font-family:"JetBrains Mono",Consolas,monospace;background:var(--code-bg);
+    border-radius:10px;padding:.45em .8em;color:var(--code-ink);font-size:clamp(14px,2.5vmin,28px)}
+  .sim-note{color:var(--com);font-size:clamp(13px,2.1vmin,24px)}
+</style>
+</head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Lesson 4 · Variables</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 4</div><div class="emoji">🔢</div>
+<h1>One Name,<br>One Number</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Give a number a name — change it once, change everything</p>
+<p class="bilingual">변수 — 숫자에 이름 붙이기</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Your bridge was 15. Now make it 30. 😤</h2>
+<div class="emoji">🔁➡️🔢</div>
+<p class="big">Hunting for every number in your code is slow. Name it once and change one line.</p>
+<p class="bilingual">숫자에 이름을 붙이면 한 줄만 고쳐도 전체가 바뀌어요</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>What is a <code>variable</code>?</h2>
+<p class="big">A variable is a <span class="sub">name</span> that holds a <span class="sub">number</span>.</p>
+<pre style="margin-top:1em">length = 5</pre>
+<p style="margin-top:.6em">Now the name <code>length</code> holds <b>5</b>. Wherever you write <code>length</code>, the computer reads <b>5</b>.</p>
+<p class="bilingual">변수 = 숫자를 담아 두는 이름</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Set it first, then use it</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em">
+<div class="opt-card"><div class="ico">1️⃣</div><div class="name">length = 5</div><div class="ex">give the name a number</div></div>
+<div class="opt-card"><div class="ico">2️⃣</div><div class="name">repeat length times</div><div class="ex">use the name</div></div>
+</div>
+<p style="margin-top:.8em">Order matters. Use a name before you set it and the agent builds nothing.</p>
+<p class="bilingual">값을 먼저 정하고, 그다음에 써요</p></div>
+
+<div class="slide"><div class="pill">See it</div><h2>Drag the number, watch the build 🧱</h2>
+<div class="sim-wrap">
+  <canvas class="sim-canvas" id="rowSim"></canvas>
+  <div class="sim-ctl">
+    <label>length = <output id="rowOut">5</output>
+      <input id="rowRange" type="range" min="1" max="20" step="1" value="5"></label>
+  </div>
+  <div class="sim-code">length = <span id="rowCode" style="color:#bd93f9">5</span><br>repeat length times: place block down, move forward</div>
+  <p class="sim-note">한 줄만 바꿔도 다리 길이가 바뀝니다</p>
+</div></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>One name, two walls</h2>
+<pre>length = 6
+repeat length times:
+    place block down
+    move forward
+turn right
+repeat length times:
+    place block down
+    move forward</pre>
+<p style="margin-top:.6em">Both sides use <code>length</code>. Change the first line to <code>9</code> and <span class="sub">both</span> sides grow.</p>
+<p class="bilingual">이름 하나로 두 벽을 함께 바꿔요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Blocks: a path with a variable</h2>
+<pre>set <span style="color:#50fa7b">length</span> to <span style="color:#bd93f9">5</span>
+repeat <span style="color:#50fa7b">length</span> times:
+    place block down
+    move forward</pre>
+<p style="margin-top:.6em">In Code Builder, drag <b>Variables → set</b>, name it <code>length</code>, then drop the name into the repeat.</p>
+<p class="bilingual">Variables 서랍에서 set 블록을 꺼내요</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The same idea in Python</h2>
+<pre><span style="color:#50fa7b">length</span> = <span style="color:#bd93f9">5</span>
+<span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#50fa7b">range</span>(length):
+    <span style="color:#50fa7b">agent.place</span>(DOWN)
+    <span style="color:#50fa7b">agent.move</span>(FORWARD, <span style="color:#bd93f9">1</span>)</pre>
+<p style="margin-top:1em"><code>range(length)</code> reads the number inside the name.</p>
+<p class="bilingual">이름 안에 든 숫자를 읽어요</p></div>
+
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How long is the path?</h2>
+<div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>length = 3
+length = 8
+repeat length times:
+    place block down
+    move forward</pre>
+<details><summary>Reveal output</summary><div class="ans">8 blocks. The second line replaces the 3 — a name holds only its newest number.</div></details></div></div>
+
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">variable</span><span class="gloss">a name that holds a number</span><span class="ko">변수</span>
+<span class="term">set</span><span class="gloss">give the name a number</span><span class="ko">값을 정하다</span>
+<span class="term">value</span><span class="gloss">the number inside the name</span><span class="ko">값</span>
+<span class="term">length</span><span class="gloss">how long something is</span><span class="ko">길이</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2>
+<p style="margin-bottom:.4em">Goal: a path <b>6 blocks long</b>, built with a variable.</p>
+<div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">repeat length times:
+    place block down
+    move forward
+length = 6</pre></div>
+<p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2>
+<div class="debug-reveal"><b>Bug:</b> the loop runs <span class="sub">before</span> <code>length</code> gets its number, so it repeats 0 times and nothing is built. Set the variable first.</div>
+<div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">length = 6
+repeat length times:
+    place block down
+    move forward</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build with a variable 🧱</h2>
+<ul class="check-list">
+<li>Make a variable called <code>length</code></li>
+<li>Build a path or fence with <code>repeat length times</code></li>
+<li>Run it ▶</li>
+<li>Change <b>only</b> the value of <code>length</code> and run again</li>
+<li>Show both sizes in your video</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A variable is a name that holds a value you can reuse and change in one place."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div>
+<div class="q">What does <code>length = 7</code> do?</div>
+<div class="opts"><button class="opt">Puts the number 7 into the name <code>length</code>.</button>
+<button class="opt">Builds 7 blocks straight away.</button>
+<button class="opt">Turns the agent 7 times.</button>
+<button class="opt">Nothing — it's a comment.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Set the value first; the loop reads the name when it runs."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div>
+<div class="q">Where must <code>length = 6</code> go?</div>
+<div class="opts"><button class="opt">Before the loop that uses it.</button>
+<button class="opt">After the loop that uses it.</button>
+<button class="opt">Inside the loop, every time.</button>
+<button class="opt">Anywhere — order doesn't matter.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="One name used in both loops means one edit changes both."
+><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div>
+<div class="q">Two loops both use <code>length</code>. You change <code>length</code> from 6 to 10. What happens?</div>
+<div class="opts"><button class="opt">Both loops build 10.</button>
+<button class="opt">Only the first loop builds 10.</button>
+<button class="opt">Only the second loop builds 10.</button>
+<button class="opt">Nothing changes.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔢</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">One number, whole build!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a number that changes while you build.</p>
+<p class="bilingual">다음: 만드는 도중에 바뀌는 숫자</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  const cv = document.getElementById('rowSim');
+  const range = document.getElementById('rowRange');
+  const out = document.getElementById('rowOut');
+  const code = document.getElementById('rowCode');
+  if (!cv || !range) return;
+  const ctx = cv.getContext('2d');
+
+  function draw() {
+    const n = +range.value;
+    const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio || 1;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    const pad = w * 0.05;
+    const size = Math.min((w - pad * 2) / 20, h * 0.42);
+    const y = h / 2 - size / 2;
+    for (let i = 0; i < n; i++) {
+      const x = pad + i * size;
+      ctx.fillStyle = '#38d0e0';
+      ctx.fillRect(x + 1, y + 1, size - 2, size - 2);
+      ctx.strokeStyle = '#0a0d13';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x + 1, y + 1, size - 2, size - 2);
+    }
+    // ghost slots up to 20 so the row's max width is visible
+    for (let i = n; i < 20; i++) {
+      const x = pad + i * size;
+      ctx.strokeStyle = '#232b3a';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x + 1, y + 1, size - 2, size - 2);
+    }
+    ctx.fillStyle = '#8a97b8';
+    ctx.font = `600 ${Math.max(12, size * 0.5)}px Consolas, monospace`;
+    ctx.fillText(n + ' blocks', pad, y + size + Math.max(20, size * 0.85));
+  }
+
+  function sync() {
+    out.textContent = range.value;
+    code.textContent = range.value;
+    draw();
+  }
+  range.addEventListener('input', sync);
+  window.addEventListener('resize', draw);
+  sync();
+})();
+</script>
+</body></html>
