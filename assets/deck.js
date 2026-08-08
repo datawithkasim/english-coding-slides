@@ -247,3 +247,31 @@
     initQuiz();
   });
 })();
+
+// === DB debate track: speaking timer =========================
+// One timer per slide. Passing 0 stops and resets it.
+(function () {
+  const running = {};
+  window.debateTimer = function (id, seconds) {
+    const root = document.getElementById(id);
+    if (!root) return;
+    const out = root.querySelector('.dtime');
+    clearInterval(running[id]);
+    root.classList.remove('warn', 'done');
+    if (!seconds) { out.textContent = '45'; return; }
+
+    let left = seconds;
+    out.textContent = left;
+    running[id] = setInterval(() => {
+      left -= 1;
+      out.textContent = left;
+      root.classList.toggle('warn', left <= 10 && left > 0);
+      if (left <= 0) {
+        clearInterval(running[id]);
+        root.classList.remove('warn');
+        root.classList.add('done');
+        out.textContent = 'TIME';
+      }
+    }, 1000);
+  };
+})();
