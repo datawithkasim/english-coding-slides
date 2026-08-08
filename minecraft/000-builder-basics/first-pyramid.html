@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 W5 — First Pyramid</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Lesson 12 · First Pyramid</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 12</div><div class="emoji">🔺</div>
+<h1>First Pyramid</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Stack shrinking squares.</p>
+<p class="bilingual">첫 피라미드 — 점점 작아지는 층 쌓기 · 영어코딩</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Layers that shrink 🔻</h2>
+<div class="emoji">9️⃣→7️⃣→5️⃣→3️⃣→1️⃣</div>
+<p class="big">Each layer is a square, 2 smaller than the one below.</p>
+<p class="bilingual">한 층씩 2칸 작아지며 위로</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Why shrink by 2?</h2>
+<p class="big">A pyramid narrows on <span class="sub">both</span> sides each layer — left and right.</p>
+<p style="margin-top:.6em">Lose 1 block each side = <code>size - 2</code> per layer. That keeps it centered.</p>
+<p class="bilingual">양쪽에서 1칸씩 → 2칸 줄어듭니다</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>The <code>while</code> loop</h2>
+<pre><span class="kw">while</span> size &gt; <span class="num">0</span>:
+    build_layer(size)
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+    size = size - <span class="num">2</span></pre>
+<p style="margin-top:1em"><code>while</code> repeats <span class="sub">as long as</span> the condition is true.</p>
+<p class="bilingual">while = 조건이 참인 동안 반복</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>size counts down, then exits</h2>
+<div class="viz viz-while">
+  <div class="wh-var"><span class="vname">size</span> = <span class="vval">
+    <span>9</span><span>7</span><span>5</span><span>3</span>
+  </span></div>
+  <div class="wh-cond">size &gt; 0</div>
+  <div class="wh-body">build_layer(size); move up; size -= 2</div>
+  <div class="output-box">
+    <div class="out-label">▸ layers built</div>
+    <div class="out-line">9 × 9</div>
+    <div class="out-line">7 × 7</div>
+    <div class="out-line">5 × 5</div>
+    <div class="out-line wh-exit">→ size 1, then exit</div>
+  </div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The full pyramid</h2>
+<pre>size = <span class="num">9</span>
+
+<span class="kw">while</span> size &gt; <span class="num">0</span>:
+    <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(size):
+        <span class="kw">for</span> col <span class="kw">in</span> <span class="fn">range</span>(size):
+            <span class="fn">agent.place</span>(DOWN)
+            <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        <span class="fn">agent.turn</span>(RIGHT)
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+    size = size - <span class="num">2</span></pre></div>
+
+<div class="slide"><span class="slot-badge">Predict</span><div class="pill">Predict 🤔</div><h2>List the layer sizes</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>size = 9
+<span class="kw">while</span> size &gt; 0:
+    build_layer(size)
+    <span class="fn">agent.move</span>(UP, 1)
+    size = size - 2</pre><details><summary>Reveal answer</summary><div class="ans">9 → 7 → 5 → 3 → 1 = 5 layers.</div></details></div></div>
+
+<div class="slide"><span class="slot-badge">Vocab</span><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+    <span class="term">while</span><span class="gloss">repeat while a condition stays true</span><span class="ko">~하는 동안</span>
+    <span class="term">layer</span><span class="gloss">one square level of the pyramid</span><span class="ko">층</span>
+    <span class="term">condition</span><span class="gloss">the true/false test that controls the loop</span><span class="ko">조건</span>
+    <span class="term">shrink</span><span class="gloss">get smaller each layer (size − 2)</span><span class="ko">줄어들다</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong here?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em"><span class="com"># each layer should be 2 smaller</span>
+size = 9
+<span class="kw">while</span> size &gt; 0:
+    build_layer(size)
+    <span class="fn">agent.move</span>(UP, 1)
+    size = size - 1</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The fix</h2><div class="debug-reveal"><b>Bug:</b> <code>size - 1</code> shrinks only one side, so the layers are not centered and it looks lopsided. A real pyramid loses a block on <i>each</i> side: <code>size - 2</code>.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">    size = size - 2</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Build a size-7 pyramid 🔺</h2>
+<ul class="check-list">
+<li>Start with <code>size = 7</code></li>
+<li>Use a <code>while</code> loop, <code>size - 2</code> each layer</li>
+<li>Move up 1 between layers (7 → 5 → 3 → 1)</li>
+<li>Build it again in a different material</li>
+<li>Send a photo + walkthrough on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A pyramid narrows on both sides, so size - 2 keeps it centered."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">Why does the pyramid shrink by 2 each layer?</div><div class="opts"><button class="opt">It narrows on both sides — one block each side.</button>
+<button class="opt">2 is faster to type.</button>
+<button class="opt">Minecraft requires even numbers.</button>
+<button class="opt">To make it taller.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="size - 1 shrinks only one side and the pyramid looks lopsided."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What's wrong with <code>size = size - 1</code> here?</div><div class="opts"><button class="opt">It shrinks only one side — the layers aren't centered.</button><button class="opt">The loop never ends.</button><button class="opt">size can't go below 1.</button><button class="opt">Nothing — it's correct.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Starting at 9 and stepping by 2 gives 9, 7, 5, 3, 1 = 5 layers."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q">Starting at <code>size = 9</code>, how many layers?</div><div class="opts"><button class="opt">5 layers (9, 7, 5, 3, 1).</button>
+<button class="opt">9 layers.</button>
+<button class="opt">4 layers.</button>
+<button class="opt">Infinite.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔺</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">First pyramid built!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: flip it — build an inverted pyramid.</p>
+<p class="bilingual">다음: 거꾸로 된 피라미드 만들기</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>

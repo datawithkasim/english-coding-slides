@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M000 W7 — Pyramid Variations</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">M000 · Builder Basics · Lesson 14 · Pyramid Variations</div>
+
+<div class="slide active center-all"><div class="pill">Lesson 14</div><div class="emoji">🔷</div>
+<h1>Pyramid<br>Variations</h1>
+<p class="big" style="margin-top:.8em;color:var(--accent-2);">Hollow. Stepped. Your own.</p>
+<p class="bilingual">피라미드 변형 — 속 빈·계단식·나만의 변형 · 영어코딩</p></div>
+
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>One pyramid, many remixes 🎛️</h2>
+<div class="emoji">🔳 🪜 🔀</div>
+<p class="big">Change a small part of the code → a brand new shape.</p>
+<p class="bilingual">코드 한 부분만 바꿔도 새로운 모양</p></div>
+
+<div class="slide"><div class="pill">How to count</div><h2>Count the axis — one block, one number 🧭</h2>
+<div style="display:flex;flex-direction:column;gap:.5em;margin-top:.7em;max-width:760px;margin-inline:auto">
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">1</span><span>Stand on the start block — that spot is <code>(0, 0, 0)</code>.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">2</span><span><b>x</b> → walk <b>right</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">3</span><span><b>y</b> → jump <b>up</b>. Add <b>+1</b> for every block.</span></div>
+<div style="display:flex;align-items:center;gap:.7em;background:white;border-radius:12px;padding:.5em .9em"><span style="flex:none;width:1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:white;font-weight:800;display:grid;place-items:center">4</span><span><b>z</b> → walk <b>forward</b>. Add <b>+1</b> for every block.</span></div>
+</div>
+<p style="margin-top:.7em">Say them in order every time: <code>(x, y, z)</code> = <span class="sub">across, up, forward</span>.</p>
+<p class="bilingual">한 칸 움직이면 +1 — 오른쪽 x, 위로 y, 앞으로 z. 순서는 늘 (x, y, z)</p></div>
+
+<div class="slide"><div class="pill">Type it in</div><h2>Put the numbers into Minecraft ⌨️</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8em;margin-top:.9em">
+<div class="varbox"><span class="name">x</span><span class="val">across →</span></div>
+<div class="varbox"><span class="name">y</span><span class="val">up ↑</span></div>
+<div class="varbox"><span class="name">z</span><span class="val">forward ⤴</span></div>
+</div>
+<pre style="margin-top:.9em"><span class="fn">place</span> STONE at (<span class="num">x</span>, <span class="num">y</span>, <span class="num">z</span>)</pre>
+<ul class="check-list" style="margin-top:.2em">
+<li>Open <b>Code Builder</b> (press <code>C</code> in the world)</li>
+<li>Type the numbers in order — <code>(x, y, z)</code></li>
+<li>Press <b>Run</b> ▶ — your block appears at that spot</li>
+</ul>
+<p class="bilingual">코드 빌더(C) 열고 → (x, y, z) 순서로 숫자 넣고 → Run ▶</p></div>
+
+<div class="slide"><div class="pill">Concept</div><h2>Hollow = edges only</h2>
+<p class="big">Place a block only when it's on the <span class="sub">edge</span> of the square.</p>
+<p style="margin-top:.6em">Edge means: first row, last row, first column, or last column.</p>
+<p class="bilingual">가장자리에만 블록을 놓으면 속이 빕니다</p></div>
+
+<div class="slide"><div class="pill">Code</div><h2>The edge condition</h2>
+<pre><span class="kw">if</span> row == <span class="num">0</span> <span class="kw">or</span> row == size-<span class="num">1</span> <span class="kw">or</span> \
+   col == <span class="num">0</span> <span class="kw">or</span> col == size-<span class="num">1</span>:
+    <span class="fn">agent.place</span>(DOWN)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+<p style="margin-top:.8em">On the edge → place. In the middle → skip.</p></div>
+
+<div class="slide"><div class="pill">Watch it!</div><h2>Place only on the edge</h2>
+<div class="viz viz-if">
+  <div class="if-input">
+    <span class="case case-a">edge cell</span>
+    <span class="case case-b">middle cell</span>
+  </div>
+  <div class="if-cond">row/col on edge?</div>
+  <div class="if-branches">
+    <div class="if-branch true">agent.place(DOWN)</div>
+    <div class="if-branch false">skip — leave hollow</div>
+  </div>
+  <div class="if-output">
+    <div class="out-label">▸ result</div>
+    <div class="out-line out-a">🧱 block placed</div>
+    <div class="out-line out-b">⬜ empty</div>
+  </div>
+</div></div>
+
+<div class="slide"><div class="pill">Code</div><h2>Stepped — bigger steps</h2>
+<pre>size = <span class="num">9</span>
+<span class="kw">while</span> size &gt; <span class="num">0</span>:
+    build_layer(size)
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+    size = size - <span class="num">4</span>   <span class="com"># 9 → 5 → 1: chunky steps</span></pre>
+<p style="margin-top:.8em">Change the step number → change the look. <code>−4</code> = a stepped pyramid.</p></div>
+
+<div class="slide"><span class="slot-badge">Predict</span><div class="pill">Predict 🤔</div><h2>How many layers?</h2><div class="predict-card"><div class="label">Predict first — then click reveal</div><pre>size = 9
+<span class="kw">while</span> size &gt; 0:
+    build_layer(size)
+    <span class="fn">agent.move</span>(UP, 1)
+    size = size - 4</pre><details><summary>Reveal answer</summary><div class="ans">Sizes 9 → 5 → 1 = 3 layers (a chunky, stepped pyramid).</div></details></div></div>
+
+<div class="slide"><span class="slot-badge">Vocab</span><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+    <span class="term">hollow</span><span class="gloss">empty inside — only the edges filled</span><span class="ko">속이 빈</span>
+    <span class="term">edge</span><span class="gloss">the outer row or column of a square</span><span class="ko">가장자리</span>
+    <span class="term">if</span><span class="gloss">do something only when a test is true</span><span class="ko">만약 ~라면</span>
+    <span class="term">stepped</span><span class="gloss">big jumps in size between layers</span><span class="ko">계단식</span>
+</div></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong here?</h2><div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em"><span class="com"># goal: a HOLLOW layer (edges only)</span>
+<span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(size):
+    <span class="kw">for</span> col <span class="kw">in</span> <span class="fn">range</span>(size):
+        <span class="fn">agent.place</span>(DOWN)
+        <span class="fn">agent.move</span>(FORWARD, 1)
+    <span class="fn">agent.turn</span>(RIGHT)</pre></div><p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Think first — then click next.</p></div>
+
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The fix</h2><div class="debug-reveal"><b>Bug:</b> It places a block on <i>every</i> cell, so the layer is solid, not hollow. Add an <code>if</code> so it only places on the edge.</div><div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">        <span class="kw">if</span> row==0 <span class="kw">or</span> row==size-1 <span class="kw">or</span> col==0 <span class="kw">or</span> col==size-1:
+            <span class="fn">agent.place</span>(DOWN)
+        <span class="fn">agent.move</span>(FORWARD, 1)</pre></div></div>
+
+<div class="slide"><div class="pill">Your turn!</div><h2>Invent a variation 🎨</h2>
+<ul class="check-list">
+<li>Pick one: hollow, stepped, gap, or your own</li>
+<li>Give it a name + a one-sentence description</li>
+<li>Change the part of the code that makes it different</li>
+<li>Build it in your homework world</li>
+<li>Send a photo + walkthrough on KakaoTalk</li>
+</ul></div>
+
+<div class="slide mcq" data-correct="0" data-explain="A hollow layer places blocks only on the edge cells."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 1 of 3</div><div class="q">What makes a pyramid layer <b>hollow</b>?</div><div class="opts"><button class="opt">Placing blocks only on the edge cells.</button>
+<button class="opt">Using a smaller size.</button>
+<button class="opt">Building it upside down.</button>
+<button class="opt">Moving up twice each layer.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="The if controls whether each cell places a block, leaving the middle empty."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 2 of 3</div><div class="q">What does the <code>if</code> condition do in a hollow layer?</div><div class="opts"><button class="opt">Places a block only when the cell is on the edge.</button><button class="opt">Turns the agent right.</button><button class="opt">Counts the layers.</button><button class="opt">Moves the agent up.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide mcq" data-correct="0" data-explain="Stepping by 4 from 9 gives 9, 5, 1 = 3 layers."><div class="pill purple">📝 Quiz</div><div class="qmeta">Question 3 of 3</div><div class="q"><code>size = 9</code>, step <code>size - 4</code> — how many layers?</div><div class="opts"><button class="opt">3 layers (9, 5, 1).</button>
+<button class="opt">5 layers.</button>
+<button class="opt">9 layers.</button>
+<button class="opt">2 layers.</button></div><div class="qfeedback"></div></div>
+
+<div class="slide center-all mcq-score"><div class="pill purple">Quiz</div><h2>Your score</h2><div class="score-val">0 / 3</div><p class="score-msg">Answer the questions to see your score.</p><button class="quiz-reset">↺ retake</button></div>
+
+<div class="slide center-all"><div class="emoji">🔷</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Variations remixed!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: the final project — a giant diamond.</p>
+<p class="bilingual">다음: 최종 프로젝트 — 거대한 다이아몬드</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 18</span><button id="next">›</button></div>
+</div><script src="../../assets/deck.js"></script></body></html>
