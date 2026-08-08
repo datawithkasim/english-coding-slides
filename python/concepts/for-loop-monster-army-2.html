@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mini Project 2 — Monster Parade (loop a list)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ---- live monster-parade sim (deck-local, one-off) ---- */
+  .sim-wrap {
+    display: flex; flex-direction: column-reverse; gap: .7rem; align-items: center;
+    width: 100%; margin: .2em 0; padding-bottom: 3.4rem;
+  }
+  canvas.sim {
+    width: min(940px, 96%); aspect-ratio: 2.15 / 1; max-height: 54vh;
+    display: block; background: #05080d;
+    border: 1px solid var(--line); border-radius: .6em; box-shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+  .sim-ctl {
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(13px, 1.7vmin, 18px); color: var(--com);
+  }
+  .sim-ctl label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .sim-ctl output { color: var(--accent); min-width: 1.4em; text-align: right; font-weight: 800; }
+  .sim-ctl input[type=range] { accent-color: var(--accent); width: clamp(140px, 24vw, 260px); }
+
+  .stepnum {
+    display: inline-block; font-family: "JetBrains Mono", monospace; font-weight: 800;
+    color: var(--accent-2); letter-spacing: .08em; font-size: clamp(13px, 1.8vmin, 18px);
+    margin-bottom: .2em;
+  }
+  .stars { color: var(--num); font-weight: 800; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Mini Project 2 · Monster Parade 🎉</div>
+
+  <!-- 1. Title + Objective -->
+  <div class="slide active center-all">
+    <div class="pill">Mini Project · Part 2</div>
+    <div class="emoji">🎉</div>
+    <h1>Monster Parade</h1>
+    <p class="big" style="margin-top:.4em;color:var(--accent-2);">One loop. <span class="sub">Different</span> monsters.</p>
+    <p class="bilingual">리스트로 여러 몬스터 행진</p>
+  </div>
+
+  <!-- 2. Recap & Retrieve -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Part 1: you built this</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):
+    <span class="fn">print</span>(<span class="str">"👾"</span> * i)</pre>
+    <p style="margin-top:.7em">Same monster, five times. Now: <span class="sub">different</span> monsters.</p>
+  </div>
+
+  <!-- 3. Predict (Hook) -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>We want this parade</h2>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">👾👾👾👾👾👾</div>
+      <div class="out-line" style="opacity:1">🐙🐙🐙🐙🐙🐙</div>
+      <div class="out-line" style="opacity:1">👻👻👻👻👻👻</div>
+      <div class="out-line" style="opacity:1">🤖🤖🤖🤖🤖🤖</div>
+    </div>
+    <p style="margin-top:.7em">Each row is a different monster. How?</p>
+    <p class="bilingual">몬스터가 매번 바뀌어요</p>
+  </div>
+
+  <!-- 4. Vocab Preview -->
+  <div class="slide">
+    <div class="pill purple">Words</div>
+    <h2>Three new words</h2>
+    <div class="vocab-table">
+      <span class="term">list</span>
+      <span class="gloss">a box that holds many things in order</span>
+      <span class="ko">리스트</span>
+
+      <span class="term">[ ]</span>
+      <span class="gloss">square brackets make a list</span>
+      <span class="ko">대괄호</span>
+
+      <span class="term">for monster in army</span>
+      <span class="gloss">take one thing from the list, each time</span>
+      <span class="ko">하나씩 꺼내기</span>
+    </div>
+  </div>
+
+  <!-- 5. Concept (Notional Machine) — no code on purpose -->
+  <div class="slide center-all">
+    <div class="pill">Idea 💡</div>
+    <h2>A list is a line of boxes</h2>
+    <p class="big" style="margin-top:.5em">The worker takes <span class="sub">box 1</span>,<br>does the job,<br>then takes <span class="sub">box 2</span>.</p>
+    <p style="margin-top:.8em">👾 → job. 🐙 → job. 👻 → job. Stop.</p>
+    <p class="bilingual">상자 하나씩 → 작업 반복</p>
+  </div>
+
+  <!-- 6. Run (Worked Example) — Step 1 -->
+  <div class="slide">
+    <span class="stepnum">STEP 1</span>
+    <h2>Make the list</h2>
+<pre>army = [<span class="str">"👾"</span>, <span class="str">"🐙"</span>, <span class="str">"👻"</span>, <span class="str">"🤖"</span>]
+<span class="fn">print</span>(army)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">['👾', '🐙', '👻', '🤖']</div>
+    </div>
+    <p style="margin-top:.5em">One name, four monsters inside.</p>
+  </div>
+
+  <!-- 7. Investigate (Animated Trace) -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2><code>for monster in army</code></h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">👾</div>
+        <div class="iter-item">🐙</div>
+        <div class="iter-item">👻</div>
+        <div class="iter-item">🤖</div>
+      </div>
+      <div class="var-row"><span class="label">monster = </span><span class="var-vals">
+        <span class="var-val">👾</span><span class="var-val">🐙</span><span class="var-val">👻</span><span class="var-val">🤖</span>
+      </span></div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line">👾</div>
+        <div class="out-line">🐙</div>
+        <div class="out-line">👻</div>
+        <div class="out-line">🤖</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.4em">No numbers. The loop walks the list.</p>
+  </div>
+
+  <!-- 8. Step 2 — loop it -->
+  <div class="slide">
+    <span class="stepnum">STEP 2</span>
+    <h2>Loop the list</h2>
+<pre>army = [<span class="str">"👾"</span>, <span class="str">"🐙"</span>, <span class="str">"👻"</span>, <span class="str">"🤖"</span>]
+
+<span class="kw">for</span> monster <span class="kw">in</span> army:
+    <span class="fn">print</span>(monster)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">👾</div>
+      <div class="out-line" style="opacity:1">🐙</div>
+      <div class="out-line" style="opacity:1">👻</div>
+      <div class="out-line" style="opacity:1">🤖</div>
+    </div>
+    <p style="margin-top:.5em">4 things in the list = 4 rows.</p>
+  </div>
+
+  <!-- 9. Live sim -->
+  <div class="slide">
+    <div class="pill">Play with it 🎮</div>
+    <h2>Add monsters — watch the parade</h2>
+    <div class="sim-wrap">
+      <canvas id="paradeSim" class="sim"></canvas>
+      <div class="sim-ctl">
+        <label>list size <input id="paradeN" type="range" min="1" max="6" step="1" value="4"><output id="paradeOut">4</output></label>
+        <span>longer list = more rows</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. Common Mistake -->
+  <div class="slide">
+    <div class="pill">Careful ⚠</div>
+    <h2>A missing comma glues two together</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">Broken</span>
+<pre>army = [<span class="str">"👾"</span> <span class="str">"🐙"</span>, <span class="str">"👻"</span>]</pre>
+        <p style="margin-top:.4em">Now the list has <code>2</code> things: <code>"👾🐙"</code> and <code>"👻"</code>.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">Fixed</span>
+<pre>army = [<span class="str">"👾"</span>, <span class="str">"🐙"</span>, <span class="str">"👻"</span>]</pre>
+        <p style="margin-top:.4em">Comma between every item. 3 things.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. Step 3 — the finished project -->
+  <div class="slide">
+    <span class="stepnum">STEP 3</span>
+    <h2>Make each row long</h2>
+<pre>army = [<span class="str">"👾"</span>, <span class="str">"🐙"</span>, <span class="str">"👻"</span>, <span class="str">"🤖"</span>]
+
+<span class="kw">for</span> monster <span class="kw">in</span> army:
+    <span class="fn">print</span>(monster * <span class="num">6</span>)
+
+<span class="fn">print</span>(<span class="str">"🔥 MONSTER PARADE!"</span>)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">👾👾👾👾👾👾</div>
+      <div class="out-line" style="opacity:1">🐙🐙🐙🐙🐙🐙</div>
+      <div class="out-line" style="opacity:1">👻👻👻👻👻👻</div>
+      <div class="out-line" style="opacity:1">🤖🤖🤖🤖🤖🤖</div>
+      <div class="out-line" style="opacity:1">🔥 MONSTER PARADE!</div>
+    </div>
+  </div>
+
+  <!-- 12. Modify (Faded) -->
+  <div class="slide">
+    <div class="pill">Your turn ✏️</div>
+    <h2>Fill the blanks: 3 sea animals</h2>
+<pre>sea = [<span class="str">"🐙"</span>, <span class="str">"___"</span>, <span class="str">"___"</span>]
+
+<span class="kw">for</span> animal <span class="kw">in</span> <span class="str">___</span>:
+    <span class="fn">print</span>(animal * <span class="num">4</span>)</pre>
+    <p style="margin-top:.7em">Which list name goes after <code>in</code>?</p>
+  </div>
+
+  <!-- 13. Code Talk Frame -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The list holds <code>____</code> monsters, so the loop runs <code>____</code> times."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 14. Make / Your Turn -->
+  <div class="slide">
+    <div class="pill">Build it 🔨</div>
+    <h2>Make your own parade</h2>
+    <ul class="check-list">
+      <li>Open a new file. Pick 4 emoji you like.</li>
+      <li>Put them in a list. Commas between them.</li>
+      <li>Loop the list with <code>for</code>.</li>
+      <li>Inside, print the item times 6.</li>
+      <li>After the loop, print a big finish.</li>
+    </ul>
+  </div>
+
+  <!-- 15. Stretch -->
+  <div class="slide">
+    <div class="pill">Bonus 🌶️</div>
+    <h2>Go further</h2>
+    <ul class="check-list">
+      <li><span class="stars">★</span> Add two more monsters to the list.</li>
+      <li><span class="stars">★★</span> Use <code>i</code> and the list together — growing rows.</li>
+      <li><span class="stars">★★★</span> Two lists: your army vs the enemy army.</li>
+    </ul>
+  </div>
+
+  <!-- 16. Close & Bridge -->
+  <div class="slide center-all">
+    <div class="pill">Done ✅</div>
+    <h2>Lists feed your loop</h2>
+    <p class="big" style="margin-top:.4em"><code>[ ]</code> + <code>for</code> + <code>in</code></p>
+    <p style="margin-top:.8em">Next time: count things while the loop runs.</p>
+    <p class="bilingual">다음 시간: 반복하며 숫자 세기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 16</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* Live "monster parade" sim — deck-local. Only animates while its slide is active. */
+(function () {
+  var cv = document.getElementById('paradeSim');
+  var slider = document.getElementById('paradeN');
+  var out = document.getElementById('paradeOut');
+  if (!cv || !slider) return;
+
+  var slide = cv.closest('.slide');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var C = {
+    bg: '#05080d', panel: '#101823', line: '#2a3444', ink: '#e8eef6', dim: '#8b9ab0',
+    kw: '#ff7849', str: '#ffd479', num: '#c792ea', fn: '#5ee6a0', hi: '#ff7849'
+  };
+  var MONO = '"JetBrains Mono","Fira Code",monospace';
+  var EMOJI = '"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+
+  /* 8x8 pixel monsters — '#' = filled */
+  var POOL = [
+    { e: '👾', c: '#5ee6a0', px: ['..#..#..', '...##...', '.######.', '##.##.##', '########', '#.####.#', '#.#..#.#', '..#..#..'] },
+    { e: '🐙', c: '#a78bfa', px: ['..####..', '.######.', '.#.##.#.', '.######.', '..####..', '.#.#.#.#', '#..#.#..', '.#....#.'] },
+    { e: '👻', c: '#38d0e0', px: ['..####..', '.######.', '.##..##.', '.#.##.#.', '.######.', '.######.', '.######.', '.#.##.#.'] },
+    { e: '🤖', c: '#ffcf5c', px: ['.#....#.', '..####..', '.######.', '.#.##.#.', '.######.', '..####..', '.#....#.', '.##..##.'] },
+    { e: '🦠', c: '#ff8bd0', px: ['...##...', '..####..', '.##..##.', '##.##.##', '##....##', '.##..##.', '..####..', '...##...'] },
+    { e: '💀', c: '#ff6b6b', px: ['..####..', '.######.', '##.##.##', '########', '.######.', '..####..', '.#.##.#.', '.#.##.#.'] }
+  ];
+  var COPIES = 6;   // print(monster * 6)
+
+  var n = +slider.value;   // list length
+  var shown = 0;           // rows stamped so far
+  var t = 0, holding = 0;
+  var ROW_MS = 560, HOLD_MS = 1500;
+
+  function reset() { shown = 0; t = 0; holding = 0; }
+  slider.addEventListener('input', function () {
+    n = +slider.value; out.textContent = n; reset();
+  });
+
+  function fit() {
+    var w = cv.clientWidth || 800, h = cv.clientHeight || 450;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  var s = fit();
+  window.addEventListener('resize', function () { s = fit(); });
+
+  function sprite(ctx, mon, x, y, size, alive) {
+    var u = size / 8;
+    ctx.fillStyle = alive ? mon.c : 'rgba(139,154,176,.16)';
+    for (var r = 0; r < 8; r++) {
+      var row = mon.px[r];
+      for (var c = 0; c < 8; c++) {
+        if (row[c] === '#') ctx.fillRect(x + c * u, y + r * u, u + .5, u + .5);
+      }
+    }
+  }
+
+  function step(dt) {
+    if (holding > 0) { holding -= dt; if (holding <= 0) reset(); return; }
+    t += dt;
+    while (t >= ROW_MS && shown < n) { t -= ROW_MS; shown++; }
+    if (shown >= n) holding = HOLD_MS;
+  }
+
+  function draw(ctx, w, h) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, w, h);
+
+    var pad = w * 0.03;
+    var codeW = w * 0.40;
+    // shrink the font so the whole listing always fits the panel, even at 6 items
+    var LINES = n + 8.1;
+    var fs = Math.max(9, Math.min(Math.round(w * 0.0225), Math.floor((h - pad * 2.6) / (LINES * 1.45))));
+
+    // --- code panel ---
+    ctx.fillStyle = C.panel; ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.rect(pad, pad, codeW, h - pad * 2); ctx.fill(); ctx.stroke();
+
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    var cx = pad + fs * 0.9;
+    var lineH = fs * 1.45;
+    var blockH = lineH * LINES;
+    var cy = pad + Math.max(fs * 0.6, ((h - pad * 2) - blockH) / 2);
+
+    ctx.font = '700 ' + fs + 'px ' + MONO;
+    ctx.fillStyle = C.ink; ctx.fillText('army = [', cx, cy);
+    cy += lineH;
+
+    for (var k = 0; k < n; k++) {
+      var active = (k + 1) === shown;
+      // the emoji item
+      ctx.font = '700 ' + fs + 'px ' + EMOJI;
+      ctx.fillStyle = C.str;
+      ctx.fillText('"' + POOL[k].e + '",', cx + fs * 1.6, cy);
+      if (active) {
+        ctx.font = '800 ' + fs + 'px ' + MONO;
+        ctx.fillStyle = C.hi;
+        ctx.fillText('←', cx + fs * 6.2, cy);
+      }
+      cy += lineH;
+    }
+    ctx.font = '700 ' + fs + 'px ' + MONO;
+    ctx.fillStyle = C.ink; ctx.fillText(']', cx, cy);
+    cy += lineH * 1.5;
+
+    // for line
+    var parts = [['for ', C.kw], ['monster ', C.ink], ['in ', C.kw], ['army:', C.ink]];
+    var px = cx;
+    parts.forEach(function (p) { ctx.fillStyle = p[1]; ctx.fillText(p[0], px, cy); px += ctx.measureText(p[0]).width; });
+    cy += lineH;
+    var p2 = [['    ', C.ink], ['print', C.fn], ['(monster * ', C.ink], ['6', C.num], [')', C.ink]];
+    px = cx;
+    p2.forEach(function (p) { ctx.fillStyle = p[1]; ctx.fillText(p[0], px, cy); px += ctx.measureText(p[0]).width; });
+
+    // monster = readout
+    cy += lineH * 1.6;
+    ctx.fillStyle = C.dim; ctx.font = '600 ' + fs + 'px ' + MONO;
+    ctx.fillText('monster =', cx, cy);
+    if (shown > 0) {
+      ctx.font = '700 ' + Math.round(fs * 1.5) + 'px ' + EMOJI;
+      ctx.fillStyle = C.ink;
+      ctx.fillText(POOL[shown - 1].e, cx + fs * 6.4, cy - fs * 0.3);
+    }
+
+    // --- parade area ---
+    var ax = pad * 2 + codeW;
+    var aw = w - ax - pad;
+    var ah = h - pad * 2;
+    var cell = Math.min(aw / (COPIES + 0.4), ah / (n + 0.4));
+    var size = cell * 0.8;
+    var startY = pad + (ah - cell * n) / 2;
+    var startX = ax + (aw - cell * COPIES) / 2;
+
+    for (var r = 0; r < n; r++) {
+      var alive = r < shown;
+      var y = startY + r * cell;
+      for (var c2 = 0; c2 < COPIES; c2++) {
+        sprite(ctx, POOL[r], startX + c2 * cell, y, size, alive);
+      }
+    }
+  }
+
+  var last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!slide.classList.contains('active')) { last = 0; return; }
+    var dt = last ? Math.min(ts - last, 100) : 16;
+    last = ts;
+    if (cv.clientWidth && cv.width !== Math.round(cv.clientWidth * dpr)) s = fit();
+    step(dt);
+    draw(s.ctx, s.w, s.h);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
