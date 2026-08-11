@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Experience Lesson — Your First Python</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ============ deck-local: activity widgets ============ */
+  .lab { width: 100%; margin: .2em 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: start; }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+  .plabel {
+    font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.5vmin, 14px);
+    letter-spacing: .1em; text-transform: uppercase; color: var(--com); margin-bottom: .3em;
+  }
+  .rule {
+    font-family: "JetBrains Mono", monospace; color: var(--com);
+    font-size: clamp(13px, 1.9vmin, 18px); margin-bottom: .4em;
+  }
+  .rule b { color: var(--accent); }
+
+  .codeline {
+    background: var(--code-bg); border-radius: .5em; padding: .55em .8em;
+    font-family: "JetBrains Mono", monospace; color: var(--code-ink);
+    font-size: clamp(15px, 2.4vmin, 24px); min-height: 1.9em; line-height: 1.5;
+  }
+  .codeline .slot {
+    display: inline-block; min-width: 2.4em; border-bottom: 2px dashed var(--com);
+    text-align: center; color: var(--str);
+  }
+  .codeline .slot.filled { border-bottom-color: var(--accent); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; margin: .45em 0; }
+  .chip {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(14px, 2.1vmin, 20px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--soft); border-radius: .5em; padding: .32em .75em; cursor: pointer;
+  }
+  .chip:hover { border-color: var(--accent); background: rgba(56,208,224,.12); }
+  .chip.on { border-color: var(--accent); background: rgba(56,208,224,.22); }
+  .chip.lit { border-color: var(--accent-2); background: rgba(139,92,246,.22); }
+
+  .btn {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(13px, 1.9vmin, 18px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--accent); border-radius: .55em; padding: .38em .85em; cursor: pointer;
+  }
+  .btn:hover { background: rgba(56,208,224,.18); }
+  .btn.ghost { border-color: var(--soft); color: var(--com); }
+  .btn.go { border-color: var(--fn); color: var(--fn); }
+  .bar { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: center; margin: .5em 0 .2em; }
+
+  .screen {
+    background: #05080d; border: 2px solid var(--soft); border-radius: .6em;
+    padding: .55em .8em; min-height: 3.2em;
+    font-family: "JetBrains Mono", monospace; color: var(--ink);
+    font-size: clamp(16px, 2.6vmin, 26px); line-height: 1.45;
+  }
+  .screen .ln { display: block; }
+
+  .target {
+    border: 2px dashed var(--accent-2); border-radius: .6em; padding: .45em .8em;
+    background: rgba(139,92,246,.08);
+    font-family: "JetBrains Mono", monospace; font-size: clamp(16px, 2.6vmin, 26px); color: var(--ink);
+  }
+  .target .tl {
+    display: block; font-size: clamp(11px, 1.5vmin, 14px); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent-2); margin-bottom: .15em;
+  }
+  .target .ln { display: block; }
+
+  .msg { text-align: center; font-weight: 800; min-height: 1.5em; margin-top: .3em;
+         font-size: clamp(14px, 2.1vmin, 20px); color: var(--com); }
+  .msg.good { color: var(--fn); }
+  .msg.bad { color: #ff8b8b; }
+
+  .grid { display: grid; gap: 5px; justify-content: center; margin: .2em auto; }
+  .cell {
+    width: clamp(36px, 6.2vmin, 66px); height: clamp(36px, 6.2vmin, 66px);
+    background: #0d131c; border: 1px solid var(--soft); border-radius: .35em;
+    display: flex; align-items: center; justify-content: center;
+    font-size: clamp(20px, 4vmin, 42px);
+  }
+  .cell.goal { border-color: var(--accent-2); background: rgba(139,92,246,.14); }
+  .cell.wall { background: #2a1520; border-color: #6b2438; }
+  .queue { display: flex; gap: .3rem; flex-wrap: wrap; justify-content: center; min-height: 2em; }
+  .qitem {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    border: 2px solid var(--soft); border-radius: .4em; padding: .15em .5em;
+    font-size: clamp(14px, 2vmin, 20px); color: var(--ink);
+  }
+  .qitem.now { border-color: var(--accent); background: rgba(56,208,224,.22); }
+
+  .vbox {
+    display: inline-block; border: 3px solid var(--accent); border-radius: .6em;
+    padding: 1.1em 1em .5em; position: relative; background: var(--panel); min-width: 7em;
+    text-align: center; font-family: "JetBrains Mono", monospace;
+    font-size: clamp(15px, 2.4vmin, 24px); color: var(--ink);
+  }
+  .vbox .vname {
+    position: absolute; top: -.72em; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: #04202a; font-size: clamp(11px, 1.6vmin, 15px);
+    font-weight: 800; padding: .1em .7em; border-radius: 1em; white-space: nowrap;
+  }
+
+  .fork { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .4em; }
+  .branch {
+    border: 2px solid var(--soft); border-radius: .6em; padding: .5em .7em; opacity: .32;
+    font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.2vmin, 21px);
+  }
+  .branch.live { opacity: 1; border-color: var(--fn); background: rgba(80,250,123,.08); }
+  .branch .bl { display: block; font-size: .68em; letter-spacing: .1em; color: var(--com); text-transform: uppercase; margin-bottom: .15em; }
+
+  .slider { display: flex; gap: .7rem; align-items: center; justify-content: center; flex-wrap: wrap;
+            font-family: "JetBrains Mono", monospace; color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+  .slider label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .slider input[type=range] { accent-color: var(--accent); width: clamp(130px, 20vw, 260px); }
+  .slider output { color: var(--accent); font-weight: 800; min-width: 1.6em; text-align: right; }
+
+  .paint { display: grid; gap: 3px; justify-content: center; }
+  .px {
+    width: clamp(22px, 3.8vmin, 42px); height: clamp(22px, 3.8vmin, 42px);
+    background: #0d131c; border: 1px solid var(--soft); border-radius: .25em; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 2.6vmin, 28px);
+  }
+  .px:hover { border-color: var(--accent); }
+
+  .big-emoji { font-size: clamp(24px, 4.6vmin, 50px); letter-spacing: .1em; line-height: 1.25; }
+
+  /* "type this in your IDE" block */
+  .ide {
+    margin-top: .55em; border: 2px solid var(--fn); border-radius: .6em;
+    background: rgba(80,250,123,.05); padding: .45em .7em;
+  }
+  .ide .itag {
+    display: block; font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(11px, 1.5vmin, 14px); letter-spacing: .08em; color: var(--fn);
+    text-transform: uppercase; margin-bottom: .25em;
+  }
+  .ide .icode {
+    font-family: "JetBrains Mono", monospace; white-space: pre; overflow-x: auto;
+    background: var(--code-bg); color: var(--code-ink); border-radius: .4em;
+    padding: .45em .7em; font-size: clamp(13px, 2vmin, 20px); line-height: 1.45;
+  }
+  .ide .ihint {
+    font-family: "JetBrains Mono", monospace; color: var(--com);
+    font-size: clamp(12px, 1.7vmin, 16px); margin-top: .3em;
+  }
+
+  .steps-big { list-style: none; padding: 0; margin: .4em 0; }
+  .steps-big li {
+    font-size: clamp(16px, 2.6vmin, 26px); margin: .45em 0; padding-left: 2.2em; position: relative;
+  }
+  .steps-big li .n {
+    position: absolute; left: 0; top: 0; width: 1.5em; height: 1.5em; border-radius: 50%;
+    background: var(--accent); color: #04202a; font-family: "JetBrains Mono", monospace;
+    font-weight: 800; font-size: .8em; display: flex; align-items: center; justify-content: center;
+  }
+  .runbtn {
+    display: inline-block; border: 2px solid var(--fn); color: var(--fn); border-radius: .45em;
+    padding: .1em .55em; font-family: "JetBrains Mono", monospace; font-weight: 800;
+  }
+
+  /* item strip for lists / strings */
+  .strip { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; margin: .4em 0; }
+  .item {
+    border: 2px solid var(--soft); border-radius: .45em; padding: .2em .5em; min-width: 1.9em;
+    text-align: center; font-family: "JetBrains Mono", monospace; font-size: clamp(18px, 3.2vmin, 34px);
+    position: relative; color: var(--ink); background: var(--panel);
+  }
+  .item .ix {
+    position: absolute; top: -.85em; left: 50%; transform: translateX(-50%);
+    font-size: clamp(10px, 1.4vmin, 13px); color: var(--com); font-weight: 800;
+  }
+  .item.hit { border-color: var(--accent); background: rgba(56,208,224,.2); }
+  .item.done { border-color: var(--fn); }
+
+  .racebar { background: #0d131c; border: 2px solid var(--soft); border-radius: .5em; height: 1.5em; overflow: hidden; margin: .3em 0; }
+  .racebar .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); width: 0%; }
+  .rlabel { font-family: "JetBrains Mono", monospace; color: var(--com); font-size: clamp(13px,1.9vmin,18px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Experience Lesson · Python 🐍</div>
+
+  <!-- 1 TITLE -->
+  <div class="slide active center-all">
+    <div class="pill">Experience Lesson</div>
+    <div class="emoji">🐍</div>
+    <h1>Your First Python</h1>
+    <p class="big" style="margin-top:.3em;color:var(--accent-2);">No talking. Let's build.</p>
+    <p class="bilingual">바로 시작해요</p>
+  </div>
+
+  <!-- 1b OPEN THE IDE -->
+  <div class="slide">
+    <div class="pill purple">Set up 💻</div>
+    <h2>Open your IDE</h2>
+    <div class="lab two">
+      <div>
+        <ul class="steps-big">
+          <li><span class="n">1</span>Go to <b>app.english-coding.co.uk</b></li>
+          <li><span class="n">2</span>Sign in with the name and password on your card.</li>
+          <li><span class="n">3</span>Open <code>main.py</code>.</li>
+          <li><span class="n">4</span>Type the code, then press <span class="runbtn">▶ Run</span>.</li>
+        </ul>
+        <p class="bilingual">화면 왼쪽에 코드, 오른쪽에 결과가 나와요</p>
+      </div>
+      <div>
+        <div class="ide">
+          <span class="itag">👉 Try it now</span>
+          <div class="icode">print("hello 🐍")</div>
+          <div class="ihint">Type it exactly. Quotes and brackets included. Then press Run.</div>
+        </div>
+        <div class="plabel" style="margin-top:.6em">You should see</div>
+        <div class="screen"><span class="ln">hello 🐍</span></div>
+        <p class="msg">Red error? Check the quotes and the brackets.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 ROBOT -->
+  <div class="slide">
+    <div class="pill">Activity 1 🤖</div>
+    <h2>Drive the robot to the ⭐</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Code = a list of steps. Build the list, press <b>RUN</b>.</div>
+        <div class="plabel">Your steps</div>
+        <div class="queue" id="botQ"></div>
+        <div class="chips">
+          <button class="chip" data-bot="R">right ▶</button>
+          <button class="chip" data-bot="L">◀ left</button>
+          <button class="chip" data-bot="U">up ▲</button>
+          <button class="chip" data-bot="D">down ▼</button>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="botRun">▶ RUN</button>
+          <button class="btn ghost" id="botClear">clear</button>
+          <button class="btn ghost" id="botNew">🎲 new maze</button>
+        </div>
+      </div>
+      <div>
+        <div class="grid" id="botGrid"></div>
+        <p class="msg" id="botMsg">Get the robot to the ⭐</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("step 1")
+print("step 2")
+print("step 3")</div>
+      <div class="ihint">Run it. The lines come out top to bottom — just like the robot.</div>
+    </div>
+  </div>
+
+  <!-- 3 ROBOT WALLS -->
+  <div class="slide">
+    <div class="pill">Activity 2 🧱</div>
+    <h2>Same robot. Now there are walls.</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Walls block the robot. Plan the way around.</div>
+        <div class="plabel">Your steps</div>
+        <div class="queue" id="bot2Q"></div>
+        <div class="chips">
+          <button class="chip" data-bot2="R">right ▶</button>
+          <button class="chip" data-bot2="L">◀ left</button>
+          <button class="chip" data-bot2="U">up ▲</button>
+          <button class="chip" data-bot2="D">down ▼</button>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="bot2Run">▶ RUN</button>
+          <button class="btn ghost" id="bot2Clear">clear</button>
+          <button class="btn ghost" id="bot2New">🎲 new maze</button>
+        </div>
+      </div>
+      <div>
+        <div class="grid" id="bot2Grid"></div>
+        <p class="msg" id="bot2Msg">Get to the ⭐ without hitting a wall.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("start")
+print("turn")
+print("finish")</div>
+      <div class="ihint">Now swap two lines and run again. Different order, different result.</div>
+    </div>
+  </div>
+
+  <!-- 4 SAY IT -->
+  <div class="slide">
+    <div class="pill">Activity 3 🗣️</div>
+    <h2>Make the computer say it</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>print</b> puts words on the screen.</div>
+        <div class="target"><span class="tl">Make the screen say</span><span id="sayTarget">—</span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">print</span>(<span class="str">"</span><span class="slot" id="saySlot">…</span><span class="str">"</span>)</div>
+        <div class="chips" id="sayChips"></div>
+        <div class="bar">
+          <button class="btn go" id="sayRun">▶ RUN</button>
+          <button class="btn ghost" id="sayNew">🎲 new one</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="sayScreen"></div>
+        <p class="msg" id="sayMsg">Pick the words in order. Then RUN.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("I made this")</div>
+      <div class="ihint">Run it. Then put your own name inside the quotes.</div>
+    </div>
+  </div>
+
+  <!-- 5 EMOJI SENTENCE -->
+  <div class="slide">
+    <div class="pill">Activity 4 😺</div>
+    <h2>Say it in emoji</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Emoji are just letters to Python. Anything in quotes works.</div>
+        <div class="target"><span class="tl">Copy this</span><span class="big-emoji" id="emoTarget">—</span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">print</span>(<span class="str">"</span><span class="slot" id="emoSlot">…</span><span class="str">"</span>)</div>
+        <div class="chips" id="emoChips"></div>
+        <div class="bar">
+          <button class="btn go" id="emoRun">▶ RUN</button>
+          <button class="btn ghost" id="emoNew">🎲 new one</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen"><span class="ln big-emoji" id="emoScreen"></span></div>
+        <p class="msg" id="emoMsg">Same order as the target.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("🐙🐍🦁")</div>
+      <div class="ihint">Run it. Then build a longer emoji line.</div>
+    </div>
+  </div>
+
+  <!-- 6 REPEAT ROW -->
+  <div class="slide">
+    <div class="pill">Activity 5 🎯</div>
+    <h2>Build exactly this row</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>*</b> repeats. <code>"🐙" * 3</code> = three of them.</div>
+        <div class="target"><span class="tl">Target</span><span class="big-emoji" id="armyTarget">—</span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">print</span>(<span class="str">"<span id="armyEmoji">🐙</span>"</span> * <span class="num" id="armyN">1</span>)</div>
+        <div class="slider" style="margin-top:.5em">
+          <label>number <input id="armySlider" type="range" min="1" max="12" value="1"><output id="armyOut">1</output></label>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="armyCheck">✓ check</button>
+          <button class="btn ghost" id="armyNew">🎲 new target</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Your row</div>
+        <div class="screen"><span class="ln big-emoji" id="armyScreen">🐙</span></div>
+        <p class="msg" id="armyMsg">Match the target, then check.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("🐙" * 5)</div>
+      <div class="ihint">Run it. Then change 5 to 20. How wide does it get?</div>
+    </div>
+  </div>
+
+  <!-- 7 ORDER THE LINES -->
+  <div class="slide">
+    <div class="pill">Activity 6 🔀</div>
+    <h2>Put the lines in the right order</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Python runs lines <b>top to bottom</b>.</div>
+        <div class="target"><span class="tl">Screen must look like</span><span id="ordTarget"></span></div>
+        <div class="plabel" style="margin-top:.5em">Click in order</div>
+        <div class="chips" id="ordChips"></div>
+        <div class="bar">
+          <button class="btn ghost" id="ordReset">↺ start again</button>
+          <button class="btn ghost" id="ordNew">🎲 new one</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Your program</div>
+        <div class="codeline" id="ordCode" style="min-height:5em"></div>
+        <p class="msg" id="ordMsg">Which line prints first?</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("ready")
+print("set")
+print("GO 🏁")</div>
+      <div class="ihint">Run it. Move GO to the top and run again.</div>
+    </div>
+  </div>
+
+  <!-- 8 LEN OF STRING -->
+  <div class="slide">
+    <div class="pill">Activity 7 📏</div>
+    <h2>How long is the word?</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>len()</b> counts what is inside.</div>
+        <div class="codeline"><span class="fn">len</span>(<span class="str">"<span id="lenWord">CAT</span>"</span>)</div>
+        <div class="plabel" style="margin-top:.6em">Pick the answer</div>
+        <div class="chips" id="lenChips"></div>
+        <div class="bar"><button class="btn ghost" id="lenNew">🎲 new word</button></div>
+      </div>
+      <div>
+        <div class="strip" id="lenStrip"></div>
+        <p class="msg" id="lenMsg">Count the letters, then pick.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print(len("PYTHON"))</div>
+      <div class="ihint">Run it. Then try your own name inside the quotes.</div>
+    </div>
+  </div>
+
+  <!-- 9 ITERATE A STRING -->
+  <div class="slide">
+    <div class="pill">Activity 8 🔤</div>
+    <h2>A loop can walk through a word</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">One letter each turn.</div>
+        <div class="codeline"><span class="kw">for</span> letter <span class="kw">in</span> <span class="str">"<span id="strWord">CAT</span>"</span>:
+<br>    <span class="kw">print</span>(letter)</div>
+        <div class="strip" id="strStrip" style="margin-top:.6em"></div>
+        <div class="bar">
+          <button class="btn go" id="strRun">▶ RUN slowly</button>
+          <button class="btn ghost" id="strNew">🎲 new word</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="strScreen" style="min-height:7em"></div>
+        <p class="msg" id="strMsg">Guess how many lines before you press RUN.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">for letter in "CAT":
+    print(letter)</div>
+      <div class="ihint">The 4 spaces matter. Run it, then change CAT to your name.</div>
+    </div>
+  </div>
+
+  <!-- 10 SPELL CHALLENGE -->
+  <div class="slide">
+    <div class="pill">Activity 9 🔮</div>
+    <h2>How many lines will print?</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Same loop. New word. Answer first, then check.</div>
+        <div class="codeline"><span class="kw">for</span> letter <span class="kw">in</span> <span class="str">"<span id="spellWord">PYTHON</span>"</span>:
+<br>    <span class="kw">print</span>(letter)</div>
+        <div class="plabel" style="margin-top:.6em">Your answer</div>
+        <div class="chips" id="spellChips"></div>
+        <div class="bar">
+          <button class="btn go" id="spellRun">▶ RUN to check</button>
+          <button class="btn ghost" id="spellNew">🎲 new word</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="spellScreen" style="min-height:7em"></div>
+        <p class="msg" id="spellMsg">Pick a number first.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">for letter in "BANANA":
+    print(letter)</div>
+      <div class="ihint">Guess the number of lines first. Then run and count.</div>
+    </div>
+  </div>
+
+  <!-- 11 MAKE A LIST -->
+  <div class="slide">
+    <div class="pill">Activity 10 📦</div>
+    <h2>Make a list</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">A <b>list</b> holds many things in order. Square brackets.</div>
+        <div class="plabel">Click to add</div>
+        <div class="chips" id="mkChips"></div>
+        <div class="bar">
+          <button class="btn ghost" id="mkUndo">↩ remove last</button>
+          <button class="btn ghost" id="mkClear">clear</button>
+        </div>
+      </div>
+      <div>
+        <div class="codeline" id="mkCode">bag = []</div>
+        <div class="strip" id="mkStrip" style="margin-top:.6em"></div>
+        <p class="msg" id="mkMsg">Things in the list: 0</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🍎", "🍌", "🍇"]
+print(bag)</div>
+      <div class="ihint">Run it. Then add two more things inside the brackets.</div>
+    </div>
+  </div>
+
+  <!-- 12 ITERATE A LIST -->
+  <div class="slide">
+    <div class="pill">Activity 11 🚶</div>
+    <h2>A loop walks the list</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">One item each turn — same as the word.</div>
+        <div class="codeline">bag = [<span class="str" id="itemList">"🍎", "🍌", "🍇"</span>]
+<br>
+<br><span class="kw">for</span> thing <span class="kw">in</span> bag:
+<br>    <span class="kw">print</span>(thing)</div>
+        <div class="strip" id="itStrip" style="margin-top:.6em"></div>
+        <div class="bar">
+          <button class="btn go" id="itRun">▶ RUN slowly</button>
+          <button class="btn ghost" id="itNew">🎲 new bag</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="itScreen" style="min-height:7em"></div>
+        <p class="msg" id="itMsg">Watch the box light up as it prints.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🍎", "🍌", "🍇"]
+
+for thing in bag:
+    print(thing)</div>
+      <div class="ihint">Run it. Add one more item — how many lines now?</div>
+    </div>
+  </div>
+
+  <!-- 13 INDEX -->
+  <div class="slide">
+    <div class="pill">Activity 12 🔢</div>
+    <h2>Every item has a number</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Counting starts at <b>0</b>. Not 1.</div>
+        <div class="codeline"><span class="kw">print</span>(bag[<span class="num" id="ixN">0</span>])</div>
+        <div class="slider" style="margin-top:.6em">
+          <label>index <input id="ixSlider" type="range" min="0" max="4" value="0"><output id="ixOut">0</output></label>
+        </div>
+        <div class="bar"><button class="btn ghost" id="ixNew">🎲 new bag</button></div>
+      </div>
+      <div>
+        <div class="strip" id="ixStrip"></div>
+        <div class="plabel" style="margin-top:.6em">Screen</div>
+        <div class="screen"><span class="ln big-emoji" id="ixScreen"></span></div>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🍎", "🍌", "🍇"]
+print(bag[0])</div>
+      <div class="ihint">Run it. Then try bag[1] and bag[2]. What does bag[3] do?</div>
+    </div>
+  </div>
+
+  <!-- 14 INDEX CHALLENGE -->
+  <div class="slide">
+    <div class="pill">Activity 13 🎯</div>
+    <h2>Grab the right one</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Remember: the first one is <b>0</b>.</div>
+        <div class="target"><span class="tl">Print this item</span><span class="big-emoji" id="igTarget">🍎</span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">print</span>(bag[<span class="slot" id="igSlot">?</span>])</div>
+        <div class="chips" id="igChips"></div>
+        <div class="bar"><button class="btn ghost" id="igNew">🎲 new one</button></div>
+      </div>
+      <div>
+        <div class="strip" id="igStrip"></div>
+        <p class="msg" id="igMsg">Pick the index number.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🐢", "🦊", "🐙", "🐼"]
+print(bag[2])</div>
+      <div class="ihint">Change the number so it prints 🐼. Count from 0.</div>
+    </div>
+  </div>
+
+  <!-- 15 APPEND -->
+  <div class="slide">
+    <div class="pill">Activity 14 ➕</div>
+    <h2>Build the exact bag</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>append</b> puts one more thing on the end.</div>
+        <div class="target"><span class="tl">Target bag</span><span class="big-emoji" id="apTarget"></span></div>
+        <div class="plabel" style="margin-top:.5em">Click to append</div>
+        <div class="chips" id="apChips"></div>
+        <div class="bar">
+          <button class="btn ghost" id="apUndo">↩ remove last</button>
+          <button class="btn go" id="apCheck">✓ check</button>
+          <button class="btn ghost" id="apNew">🎲 new target</button>
+        </div>
+      </div>
+      <div>
+        <div class="codeline" id="apCode">bag = []</div>
+        <div class="strip" id="apStrip" style="margin-top:.6em"></div>
+        <p class="msg" id="apMsg">Same things, same order.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🍎"]
+bag.append("🍓")
+print(bag)</div>
+      <div class="ihint">Run it. Append two more things, then run again.</div>
+    </div>
+  </div>
+
+  <!-- 16 LEN OF LIST -->
+  <div class="slide">
+    <div class="pill">Activity 15 🧮</div>
+    <h2>How many things in the bag?</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>len()</b> works on lists too.</div>
+        <div class="codeline"><span class="kw">print</span>(<span class="fn">len</span>(bag))</div>
+        <div class="plabel" style="margin-top:.6em">Pick the answer</div>
+        <div class="chips" id="llChips"></div>
+        <div class="bar"><button class="btn ghost" id="llNew">🎲 new bag</button></div>
+      </div>
+      <div>
+        <div class="strip" id="llStrip"></div>
+        <p class="msg" id="llMsg">Count them, then pick.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🍎", "🍌", "🍇"]
+print(len(bag))</div>
+      <div class="ihint">Run it. Add an item and run again — the number follows.</div>
+    </div>
+  </div>
+
+  <!-- 17 LIST TIMES -->
+  <div class="slide">
+    <div class="pill">Activity 16 ✖️</div>
+    <h2>Every item, many times</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">The loop prints. The star repeats.</div>
+        <div class="codeline"><span class="kw">for</span> thing <span class="kw">in</span> bag:
+<br>    <span class="kw">print</span>(thing * <span class="num" id="ltN">3</span>)</div>
+        <div class="slider" style="margin-top:.6em">
+          <label>times <input id="ltSlider" type="range" min="1" max="8" value="3"><output id="ltOut">3</output></label>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="ltRun">▶ RUN slowly</button>
+          <button class="btn ghost" id="ltNew">🎲 new bag</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="ltScreen" style="min-height:7em"></div>
+        <p class="msg" id="ltMsg">How many rows will there be?</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">bag = ["🐢", "🐙"]
+
+for thing in bag:
+    print(thing * 3)</div>
+      <div class="ihint">Run it. Change 3 to 8. Change the bag too.</div>
+    </div>
+  </div>
+
+  <!-- 18 PATTERN -->
+  <div class="slide">
+    <div class="pill">Activity 17 🧱</div>
+    <h2>Copy the picture with a loop</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><code>i</code> counts 0, 1, 2, 3…</div>
+        <div class="target"><span class="tl">Target picture</span><span id="patTarget"></span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num" id="patRows">3</span>):
+<br>    <span class="kw">print</span>(<span class="str">"<span id="patEmoji">🐙</span>"</span> * <span class="num" id="patMode">i</span>)</div>
+        <div class="slider" style="margin-top:.45em">
+          <label>rows <input id="patSlider" type="range" min="1" max="6" value="1"><output id="patOut">1</output></label>
+        </div>
+        <div class="chips" style="margin-top:.1em">
+          <button class="chip" data-pat="i">grow: <b>i</b></button>
+          <button class="chip" data-pat="same">same: <b>3</b></button>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="patRun">▶ RUN slowly</button>
+          <button class="btn ghost" id="patCheck">✓ check</button>
+          <button class="btn ghost" id="patNew">🎲 new picture</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Your picture</div>
+        <div class="screen" id="patScreen" style="min-height:8em"></div>
+        <p class="msg" id="patMsg">Match the target picture.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">for i in range(5):
+    print("🐙" * i)</div>
+      <div class="ihint">Run it. Then change 5 to 8 and watch the shape grow.</div>
+    </div>
+  </div>
+
+  <!-- 19 COUNTDOWN -->
+  <div class="slide">
+    <div class="pill">Activity 18 🚀</div>
+    <h2>Countdown to launch</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>-1</b> at the end means count backwards.</div>
+        <div class="codeline"><span class="kw">for</span> n <span class="kw">in</span> <span class="fn">range</span>(<span class="num" id="cdN">5</span>, <span class="num">0</span>, <span class="num">-1</span>):
+<br>    <span class="kw">print</span>(n)
+<br><span class="kw">print</span>(<span class="str">"🚀 LIFT OFF"</span>)</div>
+        <div class="slider" style="margin-top:.6em">
+          <label>start at <input id="cdSlider" type="range" min="3" max="10" value="5"><output id="cdOut">5</output></label>
+        </div>
+        <div class="bar"><button class="btn go" id="cdRun">▶ LAUNCH</button></div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="cdScreen" style="min-height:8em"></div>
+        <p class="msg" id="cdMsg">Count out loud with the computer.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">for n in range(5, 0, -1):
+    print(n)
+
+print("🚀 LIFT OFF")</div>
+      <div class="ihint">Run it. Then start at 10. Why does it never print 0?</div>
+    </div>
+  </div>
+
+  <!-- 20 STORY MACHINE -->
+  <div class="slide">
+    <div class="pill">Activity 19 🎭</div>
+    <h2>Silly story machine</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">A <b>variable</b> is a labelled box. Fill it, then print it.</div>
+        <div class="chips" id="mlA"></div>
+        <div class="chips" id="mlB"></div>
+        <div class="chips" id="mlC"></div>
+        <div class="bar">
+          <button class="btn go" id="mlRun">▶ RUN</button>
+          <button class="btn ghost" id="mlNew">🎲 new words</button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div class="vbox"><span class="vname">story</span><span id="mlBox">"…"</span></div>
+        <div class="plabel" style="margin-top:.6em">Screen</div>
+        <div class="screen" id="mlScreen"></div>
+        <p class="msg" id="mlMsg">Every mix makes a new story.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">story = "My cat eats 1000 pizzas"
+print(story)</div>
+      <div class="ihint">Run it. Then change the words inside the quotes.</div>
+    </div>
+  </div>
+
+  <!-- 21 RULE MAKER -->
+  <div class="slide">
+    <div class="pill">Activity 20 ⚖️</div>
+    <h2>Set the rule so it says the right thing</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>if</b> picks a path.</div>
+        <div class="target"><span class="tl">Task</span><span id="ruleTask">—</span></div>
+        <div class="codeline" style="margin-top:.45em">age = <span class="num" id="ruleAge">10</span>
+<br><span class="kw">if</span> age &gt; <span class="num" id="ruleLimit">5</span>:
+<br>    <span class="kw">print</span>(<span class="str">"YES ✅"</span>)
+<br><span class="kw">else</span>:
+<br>    <span class="kw">print</span>(<span class="str">"NO ❌"</span>)</div>
+        <div class="slider" style="margin-top:.5em">
+          <label>rule number <input id="ruleSlider" type="range" min="0" max="20" value="5"><output id="ruleOut">5</output></label>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="ruleCheck">✓ check</button>
+          <button class="btn ghost" id="ruleNew">🎲 new task</button>
+        </div>
+      </div>
+      <div>
+        <div class="fork">
+          <div class="branch" id="ruleYes"><span class="bl">age &gt; rule</span>YES ✅</div>
+          <div class="branch" id="ruleNo"><span class="bl">else</span>NO ❌</div>
+        </div>
+        <div class="plabel" style="margin-top:.5em">Screen</div>
+        <div class="screen"><span class="ln" id="ruleScreen">YES ✅</span></div>
+        <p class="msg" id="ruleMsg">Move the rule number to match the task.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">age = 10
+
+if age > 5:
+    print("YES ✅")
+else:
+    print("NO ❌")</div>
+      <div class="ihint">Run it. Then change age to 3 and run again.</div>
+    </div>
+  </div>
+
+  <!-- 22 COMPARE -->
+  <div class="slide">
+    <div class="pill">Activity 21 ↔️</div>
+    <h2>Pick the right sign</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>&gt;</b> means bigger. <b>&lt;</b> means smaller.</div>
+        <div class="target"><span class="tl">Make it print</span><span id="cmpTask">TRUE</span></div>
+        <div class="codeline" style="margin-top:.45em"><span class="kw">print</span>(<span class="num" id="cmpA">3</span> <span class="slot" id="cmpSlot">?</span> <span class="num" id="cmpB">7</span>)</div>
+        <div class="chips" id="cmpChips">
+          <button class="chip" data-cmp="&gt;">&gt;</button>
+          <button class="chip" data-cmp="&lt;">&lt;</button>
+        </div>
+        <div class="bar"><button class="btn ghost" id="cmpNew">🎲 new numbers</button></div>
+      </div>
+      <div>
+        <div class="plabel">Screen</div>
+        <div class="screen"><span class="ln" id="cmpScreen">—</span></div>
+        <p class="msg" id="cmpMsg">Which sign makes it true?</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print(3 > 7)
+print(3 < 7)</div>
+      <div class="ihint">Run it. Then swap the numbers around.</div>
+    </div>
+  </div>
+
+  <!-- 23 MOOD -->
+  <div class="slide">
+    <div class="pill">Activity 22 😀</div>
+    <h2>Three paths, not two</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>elif</b> = "or else, if this".</div>
+        <div class="codeline"><span class="kw">if</span> score &gt; <span class="num">70</span>:
+<br>    <span class="kw">print</span>(<span class="str">"😀 great"</span>)
+<br><span class="kw">elif</span> score &gt; <span class="num">30</span>:
+<br>    <span class="kw">print</span>(<span class="str">"🙂 ok"</span>)
+<br><span class="kw">else</span>:
+<br>    <span class="kw">print</span>(<span class="str">"😴 sleepy"</span>)</div>
+        <div class="slider" style="margin-top:.6em">
+          <label>score <input id="moodSlider" type="range" min="0" max="100" value="50"><output id="moodOut">50</output></label>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div class="screen"><span class="ln" style="font-size:clamp(40px,9vmin,110px)" id="moodFace">🙂</span></div>
+        <p class="msg" id="moodMsg">Find the exact number where the face changes.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">score = 50
+
+if score > 70:
+    print("😀 great")
+elif score > 30:
+    print("🙂 ok")
+else:
+    print("😴 sleepy")</div>
+      <div class="ihint">Run it. Find the score where the face changes.</div>
+    </div>
+  </div>
+
+  <!-- 24 RANDOM -->
+  <div class="slide">
+    <div class="pill">Activity 23 🎲</div>
+    <h2>Let the computer choose</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>random</b> gives a different answer every run.</div>
+        <div class="codeline">random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)</div>
+        <div style="text-align:center;margin-top:.5em">
+          <div class="dice" id="d1" data-dice data-range="1-6">
+            <div class="face">?</div>
+            <div class="dlabel">you get <span class="arrow">→</span> <span class="val">?</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="codeline">random.<span class="fn">choice</span>([<span class="str">"🍕"</span>, <span class="str">"🍔"</span>, <span class="str">"🍣"</span>])</div>
+        <div class="picker" id="p1" data-picker style="margin-top:.45em">
+          <div class="pickrow">
+            <span class="pkitem" data-v="🍕">🍕</span>
+            <span class="pkitem" data-v="🍔">🍔</span>
+            <span class="pkitem" data-v="🍣">🍣</span>
+          </div>
+          <div class="pkresult"><span class="arrow">→</span> <span class="val"></span></div>
+        </div>
+        <p class="msg">Call it before it lands. Best of five.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">import random
+
+print(random.randint(1, 6))</div>
+      <div class="ihint">Run it five times. A new number every time.</div>
+    </div>
+  </div>
+
+  <!-- 25 LUCKY LOOT -->
+  <div class="slide">
+    <div class="pill">Activity 24 🎁</div>
+    <h2>Loop + random = loot bag</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Loop five times. Grab a random thing each time.</div>
+        <div class="codeline">loot = []
+<br><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+<br>    loot.<span class="fn">append</span>(random.<span class="fn">choice</span>(box))
+<br><span class="kw">print</span>(loot)</div>
+        <div class="bar"><button class="btn go" id="lootRun">▶ OPEN 5 BOXES</button></div>
+      </div>
+      <div>
+        <div class="strip" id="lootStrip" style="min-height:2.6em"></div>
+        <div class="plabel" style="margin-top:.5em">Screen</div>
+        <div class="screen"><span class="ln big-emoji" id="lootScreen"></span></div>
+        <p class="msg" id="lootMsg">Guess your best item before you press it.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">import random
+
+box = ["💎", "🍪", "🪙", "👑"]
+loot = []
+
+for i in range(5):
+    loot.append(random.choice(box))
+
+print(loot)</div>
+      <div class="ihint">Run it a few times. Did you ever get the crown?</div>
+    </div>
+  </div>
+
+  <!-- 26 GUESS -->
+  <div class="slide">
+    <div class="pill">Activity 25 🔢</div>
+    <h2>Guess my number</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">I picked 1–20. Every guess runs this code.</div>
+        <div class="codeline"><span class="kw">if</span> guess &lt; secret:
+<br>    <span class="kw">print</span>(<span class="str">"higher ⬆"</span>)
+<br><span class="kw">elif</span> guess &gt; secret:
+<br>    <span class="kw">print</span>(<span class="str">"lower ⬇"</span>)
+<br><span class="kw">else</span>:
+<br>    <span class="kw">print</span>(<span class="str">"you got it! 🎉"</span>)</div>
+        <div class="bar"><button class="btn ghost" id="guessNew">🎲 new number</button></div>
+      </div>
+      <div>
+        <div class="chips" id="guessPad"></div>
+        <div class="plabel" style="margin-top:.35em">Screen</div>
+        <div class="screen" id="guessScreen" style="min-height:5.2em"></div>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">secret = 7
+guess = 5
+
+if guess < secret:
+    print("higher ⬆")
+else:
+    print("lower ⬇")</div>
+      <div class="ihint">Change guess until it matches secret, then add an else for winning.</div>
+    </div>
+  </div>
+
+  <!-- 27 ROCK PAPER SCISSORS -->
+  <div class="slide">
+    <div class="pill">Activity 26 ✊</div>
+    <h2>Rock, paper, scissors</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">You pick. The computer picks randomly. <b>if</b> decides.</div>
+        <div class="chips" id="rpsChips">
+          <button class="chip" data-rps="✊">✊ rock</button>
+          <button class="chip" data-rps="✋">✋ paper</button>
+          <button class="chip" data-rps="✌️">✌️ scissors</button>
+        </div>
+        <div class="codeline" style="margin-top:.4em"><span class="kw">if</span> you == computer:
+<br>    <span class="kw">print</span>(<span class="str">"draw"</span>)</div>
+        <div class="bar"><button class="btn ghost" id="rpsReset">↺ reset score</button></div>
+      </div>
+      <div style="text-align:center">
+        <div class="screen"><span class="ln" style="font-size:clamp(34px,7vmin,80px)" id="rpsFaces">❔ vs ❔</span>
+          <span class="ln" id="rpsResult">pick one</span></div>
+        <p class="msg" id="rpsScore">you 0 — computer 0</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">import random
+
+you = "✊"
+computer = random.choice(["✊", "✋", "✌️"])
+print(you, computer)
+
+if you == computer:
+    print("draw 🤝")</div>
+      <div class="ihint">Run it until you get a draw.</div>
+    </div>
+  </div>
+
+  <!-- 28 DICE RACE -->
+  <div class="slide">
+    <div class="pill">Activity 27 🏁</div>
+    <h2>Race to 20</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Every roll adds to your total. First to 20 wins.</div>
+        <div class="codeline">total = total + random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)</div>
+        <div class="bar">
+          <button class="btn go" id="raceRoll">🎲 ROLL</button>
+          <button class="btn ghost" id="raceReset">↺ new race</button>
+        </div>
+      </div>
+      <div>
+        <div class="rlabel">you <span id="raceYouN">0</span></div>
+        <div class="racebar"><div class="fill" id="raceYou"></div></div>
+        <div class="rlabel">computer <span id="raceCpuN">0</span></div>
+        <div class="racebar"><div class="fill" id="raceCpu"></div></div>
+        <p class="msg" id="raceMsg">Press ROLL.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">import random
+
+total = 0
+
+for i in range(5):
+    total = total + random.randint(1, 6)
+    print(total)</div>
+      <div class="ihint">Run it. Did you pass 20 in five rolls?</div>
+    </div>
+  </div>
+
+  <!-- 29 PAINT -->
+  <div class="slide">
+    <div class="pill">Activity 28 🎨</div>
+    <h2>Paint anything you like</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Pick a colour. Click squares. Every row is one <b>print</b>.</div>
+        <div class="chips" id="paintPal"></div>
+        <div class="bar">
+          <button class="btn ghost" id="paintFill">fill a row</button>
+          <button class="btn ghost" id="paintClear">clear</button>
+        </div>
+        <p class="msg" id="paintMsg">squares filled: 0</p>
+      </div>
+      <div>
+        <div class="paint" id="paintGrid"></div>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">print("🟦🟦🟦🟦")
+print("🟦🟥🟥🟦")
+print("🟦🟦🟦🟦")</div>
+      <div class="ihint">Run it. Then draw your own picture, one print per row.</div>
+    </div>
+  </div>
+
+  <!-- 30 PATTERN MAKER -->
+  <div class="slide">
+    <div class="pill">Activity 29 ✨</div>
+    <h2>Make your own pattern</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Your loop. Your emoji. Your shape.</div>
+        <div class="chips" id="pmChips"></div>
+        <div class="slider" style="margin-top:.4em">
+          <label>rows <input id="pmRows" type="range" min="1" max="8" value="5"><output id="pmRowsOut">5</output></label>
+        </div>
+        <div class="chips">
+          <button class="chip on" data-pm="grow">grow ↗</button>
+          <button class="chip" data-pm="shrink">shrink ↘</button>
+          <button class="chip" data-pm="tower">tower ▮</button>
+        </div>
+        <div class="bar"><button class="btn go" id="pmRun">▶ RUN slowly</button></div>
+      </div>
+      <div>
+        <div class="codeline" id="pmCode"></div>
+        <div class="plabel" style="margin-top:.4em">Screen</div>
+        <div class="screen" id="pmScreen" style="min-height:8em"></div>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">for i in range(6):
+    print("⭐" * (i + 1))</div>
+      <div class="ihint">Run it. Then try (6 - i) instead, for the other shape.</div>
+    </div>
+  </div>
+
+  <!-- 31 FINAL PROGRAM -->
+  <div class="slide">
+    <div class="pill">Activity 30 🧩</div>
+    <h2>Run a real program</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Every line here you already used today.</div>
+        <div class="codeline"><span class="kw">import</span> random
+<br>
+<br>bag = [<span class="str">"🐢"</span>, <span class="str">"🐙"</span>, <span class="str">"🦊"</span>]
+<br>lucky = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)
+<br>
+<br><span class="kw">for</span> thing <span class="kw">in</span> bag:
+<br>    <span class="kw">print</span>(thing * lucky)
+<br>
+<br><span class="kw">if</span> lucky &gt; <span class="num">3</span>:
+<br>    <span class="kw">print</span>(<span class="str">"big luck 🍀"</span>)
+<br><span class="kw">else</span>:
+<br>    <span class="kw">print</span>(<span class="str">"small luck 🌱"</span>)</div>
+      </div>
+      <div>
+        <div class="bar"><button class="btn go" id="finalRun">▶ RUN</button></div>
+        <div class="plabel">Screen</div>
+        <div class="screen" id="finalScreen" style="min-height:7em"></div>
+        <p class="msg" id="finalMsg">Press RUN. Guess the luck first.</p>
+      </div>
+    </div>
+    <div class="ide">
+      <span class="itag">👉 Now in your IDE</span>
+      <div class="icode">import random
+
+bag = ["🐢", "🐙", "🦊"]
+lucky = random.randint(1, 6)
+
+for thing in bag:
+    print(thing * lucky)
+
+if lucky > 3:
+    print("big luck 🍀")
+else:
+    print("small luck 🌱")</div>
+      <div class="ihint">Type the whole thing. Run it three times.</div>
+    </div>
+  </div>
+
+  <!-- 32 CLOSE -->
+  <div class="slide center-all">
+    <div class="pill">Done ✅</div>
+    <div class="emoji">🚀</div>
+    <h2>You wrote real Python today</h2>
+    <p class="big" style="margin-top:.3em;color:var(--accent-2);">Next: your own game.</p>
+    <p class="bilingual">다음 시간에는 나만의 게임을 만들어요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 33</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* =======================================================================
+   Experience-lesson activities. Click-driven, no animation loops.
+   Every activity has a 🎲 button that makes a fresh challenge, so a
+   two-hour lesson never runs out of material.
+   ======================================================================= */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function on(el, fn) { if (el) el.addEventListener('click', function (e) { fn(e); el.blur(); }); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function rint(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function sample(a, n) { return shuffle(a.slice()).slice(0, n); }
+  function say(el, t, cls) { if (el) { el.textContent = t; el.className = 'msg' + (cls ? ' ' + cls : ''); } }
+  function line(txt) { return '<span class="ln">' + (txt || '&nbsp;') + '</span>'; }
+  var MONS = ['🐙', '🐍', '🦁', '🐢', '👾', '🐸', '🦊', '🐼'];
+  var FOOD = ['🍎', '🍌', '🍇', '🍕', '🍩', '🍓', '🥕', '🍪'];
+
+  /* prints lines one at a time into a screen element */
+  function slowPrint(screen, arr, klass, done) {
+    var i = 0; screen.innerHTML = '';
+    (function next() {
+      if (i >= arr.length) { if (done) done(); return; }
+      var s = document.createElement('span');
+      s.className = 'ln' + (klass ? ' ' + klass : '');
+      s.innerHTML = arr[i] === '' ? '&nbsp;' : arr[i];
+      screen.appendChild(s); i++;
+      setTimeout(next, 380);
+    })();
+  }
+
+  /* ---------- ROBOT (shared builder) ---------- */
+  function makeRobot(cfg) {
+    var grid = $(cfg.grid); if (!grid) return;
+    var W = 5, H = 4, bot, goal, walls = [], prog = [], running = false;
+    var STEP = { R: [1, 0], L: [-1, 0], U: [0, -1], D: [0, 1] };
+    var ICON = { R: '▶', L: '◀', U: '▲', D: '▼' };
+    function isWall(x, y) { return walls.some(function (w) { return w[0] === x && w[1] === y; }); }
+    function newMaze() {
+      bot = { x: 0, y: H - 1 }; walls = [];
+      do { goal = { x: rint(0, W - 1), y: rint(0, H - 1) }; } while (goal.x === bot.x && goal.y === bot.y);
+      if (cfg.walls) {
+        var tries = 0;
+        while (walls.length < 4 && tries < 40) {
+          tries++;
+          var wx = rint(0, W - 1), wy = rint(0, H - 1);
+          if ((wx === bot.x && wy === bot.y) || (wx === goal.x && wy === goal.y) || isWall(wx, wy)) continue;
+          walls.push([wx, wy]);
+        }
+      }
+      prog = []; running = false; draw(); drawQ();
+      say($(cfg.msg), cfg.start, '');
+    }
+    function draw(cur) {
+      grid.style.gridTemplateColumns = 'repeat(' + W + ', auto)';
+      grid.innerHTML = '';
+      for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
+        var c = document.createElement('div');
+        c.className = 'cell' + (goal.x === x && goal.y === y ? ' goal' : '') + (isWall(x, y) ? ' wall' : '');
+        var b = cur || bot;
+        c.textContent = (b.x === x && b.y === y) ? '🤖' : (goal.x === x && goal.y === y ? '⭐' : (isWall(x, y) ? '🧱' : ''));
+        grid.appendChild(c);
+      }
+    }
+    function drawQ(idx) {
+      var q = $(cfg.queue); q.innerHTML = '';
+      prog.forEach(function (k, i) {
+        var s = document.createElement('span');
+        s.className = 'qitem' + (i === idx ? ' now' : '');
+        s.textContent = ICON[k]; q.appendChild(s);
+      });
+    }
+    document.querySelectorAll('[' + cfg.attr + ']').forEach(function (b) {
+      on(b, function () { if (running || prog.length >= 12) return; prog.push(b.getAttribute(cfg.attr)); drawQ(); });
+    });
+    on($(cfg.clear), function () { if (!running) { prog = []; drawQ(); draw(); } });
+    on($(cfg.newBtn), newMaze);
+    on($(cfg.run), function () {
+      if (running || !prog.length) return;
+      running = true;
+      var p = { x: bot.x, y: bot.y }, i = 0;
+      (function stepOnce() {
+        if (i >= prog.length) {
+          running = false;
+          if (p.x === goal.x && p.y === goal.y) say($(cfg.msg), '⭐ Got it! That was a program.', 'good');
+          else say($(cfg.msg), 'Not there yet. Change the steps and RUN again.', 'bad');
+          return;
+        }
+        var d = STEP[prog[i]];
+        var nx = Math.max(0, Math.min(W - 1, p.x + d[0]));
+        var ny = Math.max(0, Math.min(H - 1, p.y + d[1]));
+        if (isWall(nx, ny)) {
+          running = false; drawQ(i); draw(p);
+          say($(cfg.msg), '🧱 Bumped a wall. Go around it.', 'bad');
+          return;
+        }
+        p.x = nx; p.y = ny; drawQ(i); draw(p); i++;
+        setTimeout(stepOnce, 420);
+      })();
+    });
+    newMaze();
+  }
+  makeRobot({ grid: 'botGrid', queue: 'botQ', attr: 'data-bot', run: 'botRun', clear: 'botClear', newBtn: 'botNew', msg: 'botMsg', walls: false, start: 'Get the robot to the ⭐' });
+  makeRobot({ grid: 'bot2Grid', queue: 'bot2Q', attr: 'data-bot2', run: 'bot2Run', clear: 'bot2Clear', newBtn: 'bot2New', msg: 'bot2Msg', walls: true, start: 'Get to the ⭐ without hitting a wall.' });
+
+  /* ---------- ORDERED CHIP BUILDER (say it / emoji) ---------- */
+  function makeBuilder(cfg) {
+    var chipBox = $(cfg.chips); if (!chipBox) return;
+    var target = [], chosen = [];
+    function render() {
+      var txt = chosen.join(cfg.join);
+      $(cfg.slot).textContent = txt || '…';
+      $(cfg.slot).className = 'slot' + (chosen.length ? ' filled' : '');
+      chipBox.querySelectorAll('.chip').forEach(function (c) {
+        c.classList.toggle('on', chosen.indexOf(c.dataset.w) >= 0);
+      });
+    }
+    function newOne() {
+      target = cfg.next(); chosen = []; chipBox.innerHTML = '';
+      shuffle(target.slice()).forEach(function (w) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = w; b.dataset.w = w;
+        b.addEventListener('click', function () {
+          var i = chosen.indexOf(w);
+          if (i >= 0) chosen.splice(i, 1); else chosen.push(w);
+          render(); b.blur();
+        });
+        chipBox.appendChild(b);
+      });
+      $(cfg.target).textContent = target.join(cfg.join);
+      $(cfg.screen).innerHTML = ''; say($(cfg.msg), cfg.start, ''); render();
+    }
+    on($(cfg.run), function () {
+      var out = chosen.join(cfg.join);
+      $(cfg.screen).innerHTML = cfg.raw ? (out || '&nbsp;') : line(out);
+      if (out === target.join(cfg.join)) say($(cfg.msg), '✓ Exactly right!', 'good');
+      else say($(cfg.msg), 'Close — compare with the target.', 'bad');
+    });
+    on($(cfg.newBtn), newOne);
+    newOne();
+  }
+  makeBuilder({
+    chips: 'sayChips', slot: 'saySlot', target: 'sayTarget', screen: 'sayScreen',
+    msg: 'sayMsg', run: 'sayRun', newBtn: 'sayNew', join: ' ',
+    start: 'Pick the words in order. Then RUN.',
+    next: function () {
+      return pick([
+        ['I', 'love', 'pizza'], ['my', 'cat', 'is', 'fast'], ['coding', 'is', 'fun'],
+        ['hello', 'from', 'Korea'], ['I', 'am', 'a', 'coder'], ['games', 'are', 'cool'],
+        ['my', 'robot', 'can', 'jump'], ['python', 'is', 'easy'], ['I', 'made', 'this']
+      ]).slice();
+    }
+  });
+  makeBuilder({
+    chips: 'emoChips', slot: 'emoSlot', target: 'emoTarget', screen: 'emoScreen',
+    msg: 'emoMsg', run: 'emoRun', newBtn: 'emoNew', join: '', raw: true,
+    start: 'Same order as the target.',
+    next: function () { return sample(MONS.concat(FOOD), rint(3, 5)); }
+  });
+
+  /* ---------- REPEAT ROW ---------- */
+  (function () {
+    var s = $('armySlider'); if (!s) return;
+    var emoji = '🐙', want = 5;
+    function draw() {
+      var n = +s.value;
+      $('armyOut').textContent = n; $('armyN').textContent = n;
+      $('armyEmoji').textContent = emoji; $('armyScreen').textContent = emoji.repeat(n);
+    }
+    function newOne() {
+      emoji = pick(MONS); want = rint(2, 12);
+      $('armyTarget').textContent = emoji.repeat(want);
+      s.value = 1; draw(); say($('armyMsg'), 'Match the target, then check.', '');
+    }
+    s.addEventListener('input', draw);
+    on($('armyCheck'), function () {
+      if (+s.value === want) say($('armyMsg'), '✓ Perfect — ' + want + ' of them.', 'good');
+      else say($('armyMsg'), (+s.value < want ? 'Too few.' : 'Too many.') + ' Count again.', 'bad');
+    });
+    on($('armyNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- ORDER THE LINES ---------- */
+  (function () {
+    var box = $('ordChips'); if (!box) return;
+    var lines = [], placed = [];
+    function render() {
+      $('ordCode').innerHTML = placed.length
+        ? placed.map(function (t) { return '<span class="ln">print("' + t + '")</span>'; }).join('')
+        : '<span class="ln" style="color:var(--com)">click a line…</span>';
+      box.querySelectorAll('.chip').forEach(function (c) {
+        c.classList.toggle('on', placed.indexOf(c.dataset.t) >= 0);
+      });
+      if (placed.length === lines.length) {
+        if (placed.join('|') === lines.join('|')) say($('ordMsg'), '✓ Same order as the screen!', 'good');
+        else say($('ordMsg'), 'Read the target from the top again.', 'bad');
+      }
+    }
+    function newOne() {
+      var sets = [
+        ['ready', 'set', 'GO 🏁'], ['3', '2', '1', '🚀'], ['🥚', '🐣', '🐥'],
+        ['wake up', 'eat', 'school'], ['🌱', '🌿', '🌳'], ['red', 'green', 'blue']
+      ];
+      lines = pick(sets).slice(); placed = [];
+      $('ordTarget').innerHTML = lines.map(line).join('');
+      box.innerHTML = '';
+      shuffle(lines.slice()).forEach(function (t) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = 'print("' + t + '")'; b.dataset.t = t;
+        b.addEventListener('click', function () {
+          if (placed.indexOf(t) >= 0) return;
+          placed.push(t); render(); b.blur();
+        });
+        box.appendChild(b);
+      });
+      say($('ordMsg'), 'Which line prints first?', ''); render();
+    }
+    on($('ordReset'), function () { placed = []; say($('ordMsg'), 'Which line prints first?', ''); render(); });
+    on($('ordNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- LEN OF WORD ---------- */
+  (function () {
+    var box = $('lenChips'); if (!box) return;
+    var WORDS = ['CAT', 'PYTHON', 'CODE', 'BANANA', 'ROBOT', 'GAME', 'DRAGON', 'PIZZA'];
+    var word = 'CAT';
+    function newOne() {
+      word = pick(WORDS);
+      $('lenWord').textContent = word;
+      $('lenStrip').innerHTML = word.split('').map(function (ch, i) {
+        return '<span class="item"><span class="ix">' + i + '</span>' + ch + '</span>';
+      }).join('');
+      var opts = shuffle([word.length, word.length + 1, Math.max(1, word.length - 1), word.length + 2]);
+      box.innerHTML = '';
+      opts.forEach(function (n) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = n;
+        b.addEventListener('click', function () {
+          if (n === word.length) say($('lenMsg'), '✓ ' + word + ' has ' + n + ' letters.', 'good');
+          else say($('lenMsg'), 'Not ' + n + '. Point at each letter and count.', 'bad');
+          b.blur();
+        });
+        box.appendChild(b);
+      });
+      say($('lenMsg'), 'Count the letters, then pick.', '');
+    }
+    on($('lenNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- ITERATE A STRING ---------- */
+  (function () {
+    var btn = $('strRun'); if (!btn) return;
+    var WORDS = ['CAT', 'CODE', 'PYTHON', 'GAME', 'ROBOT', 'PIZZA'];
+    var word = 'CAT', busy = false;
+    function newOne() {
+      word = pick(WORDS);
+      $('strWord').textContent = word;
+      $('strStrip').innerHTML = word.split('').map(function (ch) { return '<span class="item">' + ch + '</span>'; }).join('');
+      $('strScreen').innerHTML = '';
+      say($('strMsg'), 'Guess how many lines before you press RUN.', '');
+    }
+    on(btn, function () {
+      if (busy) return; busy = true;
+      var items = $('strStrip').querySelectorAll('.item'), i = 0;
+      items.forEach(function (it) { it.classList.remove('hit', 'done'); });
+      $('strScreen').innerHTML = '';
+      (function next() {
+        if (i >= word.length) {
+          busy = false;
+          say($('strMsg'), word.length + ' letters → ' + word.length + ' lines.', 'good');
+          return;
+        }
+        items.forEach(function (it) { it.classList.remove('hit'); });
+        items[i].classList.add('hit', 'done');
+        var s = document.createElement('span');
+        s.className = 'ln'; s.textContent = word[i];
+        $('strScreen').appendChild(s); i++;
+        setTimeout(next, 420);
+      })();
+    });
+    on($('strNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- SPELL CHALLENGE ---------- */
+  (function () {
+    var box = $('spellChips'); if (!box) return;
+    var WORDS = ['PYTHON', 'BANANA', 'DRAGON', 'COOKIE', 'MONSTER', 'SCHOOL'];
+    var word = 'PYTHON', guess = null;
+    function newOne() {
+      word = pick(WORDS); guess = null;
+      $('spellWord').textContent = word;
+      $('spellScreen').innerHTML = '';
+      box.innerHTML = '';
+      shuffle([word.length, word.length + 1, word.length - 1, word.length + 2]).forEach(function (n) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = n;
+        b.addEventListener('click', function () {
+          guess = n;
+          box.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+          b.classList.add('on'); b.blur();
+          say($('spellMsg'), 'Now press RUN to check.', '');
+        });
+        box.appendChild(b);
+      });
+      say($('spellMsg'), 'Pick a number first.', '');
+    }
+    on($('spellRun'), function () {
+      if (guess === null) { say($('spellMsg'), 'Pick a number first.', 'bad'); return; }
+      slowPrint($('spellScreen'), word.split(''), '', function () {
+        if (guess === word.length) say($('spellMsg'), '✓ ' + word.length + ' lines. You called it.', 'good');
+        else say($('spellMsg'), 'It was ' + word.length + ', not ' + guess + '. Count the letters.', 'bad');
+      });
+    });
+    on($('spellNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- MAKE A LIST ---------- */
+  (function () {
+    var box = $('mkChips'); if (!box) return;
+    var bag = [];
+    function render() {
+      $('mkCode').innerHTML = 'bag = [' + bag.map(function (e) { return '<span class="str">"' + e + '"</span>'; }).join(', ') + ']';
+      $('mkStrip').innerHTML = bag.map(function (e, i) {
+        return '<span class="item"><span class="ix">' + i + '</span>' + e + '</span>';
+      }).join('');
+      say($('mkMsg'), 'Things in the list: ' + bag.length, bag.length ? 'good' : '');
+    }
+    sample(MONS.concat(FOOD), 8).forEach(function (e) {
+      var b = document.createElement('button');
+      b.className = 'chip'; b.textContent = e;
+      b.addEventListener('click', function () { if (bag.length < 8) bag.push(e); render(); b.blur(); });
+      box.appendChild(b);
+    });
+    on($('mkUndo'), function () { bag.pop(); render(); });
+    on($('mkClear'), function () { bag = []; render(); });
+    render();
+  })();
+
+  /* ---------- ITERATE A LIST ---------- */
+  (function () {
+    var btn = $('itRun'); if (!btn) return;
+    var bag = [], busy = false;
+    function newOne() {
+      bag = sample(MONS.concat(FOOD), rint(3, 5));
+      $('itemList').textContent = bag.map(function (e) { return '"' + e + '"'; }).join(', ');
+      $('itStrip').innerHTML = bag.map(function (e, i) {
+        return '<span class="item"><span class="ix">' + i + '</span>' + e + '</span>';
+      }).join('');
+      $('itScreen').innerHTML = '';
+      say($('itMsg'), bag.length + ' things — so how many lines?', '');
+    }
+    on(btn, function () {
+      if (busy) return; busy = true;
+      var items = $('itStrip').querySelectorAll('.item'), i = 0;
+      items.forEach(function (it) { it.classList.remove('hit', 'done'); });
+      $('itScreen').innerHTML = '';
+      (function next() {
+        if (i >= bag.length) {
+          busy = false;
+          say($('itMsg'), bag.length + ' things → ' + bag.length + ' lines.', 'good');
+          return;
+        }
+        items.forEach(function (it) { it.classList.remove('hit'); });
+        items[i].classList.add('hit', 'done');
+        var s = document.createElement('span');
+        s.className = 'ln big-emoji'; s.textContent = bag[i];
+        $('itScreen').appendChild(s); i++;
+        setTimeout(next, 430);
+      })();
+    });
+    on($('itNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- INDEX ---------- */
+  (function () {
+    var s = $('ixSlider'); if (!s) return;
+    var bag = [];
+    function draw() {
+      var n = +s.value;
+      $('ixOut').textContent = n; $('ixN').textContent = n;
+      $('ixStrip').querySelectorAll('.item').forEach(function (it, i) { it.classList.toggle('hit', i === n); });
+      $('ixScreen').textContent = bag[n] || '';
+    }
+    function newOne() {
+      bag = sample(MONS.concat(FOOD), 5);
+      $('ixStrip').innerHTML = bag.map(function (e, i) {
+        return '<span class="item"><span class="ix">' + i + '</span>' + e + '</span>';
+      }).join('');
+      s.value = 0; draw();
+    }
+    s.addEventListener('input', draw);
+    on($('ixNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- INDEX CHALLENGE ---------- */
+  (function () {
+    var box = $('igChips'); if (!box) return;
+    var bag = [], wantIx = 0;
+    function newOne() {
+      bag = sample(MONS.concat(FOOD), 5);
+      wantIx = rint(0, bag.length - 1);
+      $('igTarget').textContent = bag[wantIx];
+      $('igSlot').textContent = '?'; $('igSlot').className = 'slot';
+      $('igStrip').innerHTML = bag.map(function (e) { return '<span class="item">' + e + '</span>'; }).join('');
+      box.innerHTML = '';
+      bag.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = i;
+        b.addEventListener('click', function () {
+          $('igSlot').textContent = i; $('igSlot').className = 'slot filled';
+          $('igStrip').querySelectorAll('.item').forEach(function (it, k) { it.classList.toggle('hit', k === i); });
+          if (i === wantIx) say($('igMsg'), '✓ Yes — ' + bag[i] + ' is at index ' + i + '.', 'good');
+          else say($('igMsg'), 'That is ' + bag[i] + '. Count from 0 again.', 'bad');
+          b.blur();
+        });
+        box.appendChild(b);
+      });
+      say($('igMsg'), 'Pick the index number.', '');
+    }
+    on($('igNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- APPEND ---------- */
+  (function () {
+    var box = $('apChips'); if (!box) return;
+    var target = [], bag = [], palette = [];
+    function render() {
+      $('apCode').innerHTML = 'bag = [' + bag.map(function (e) { return '<span class="str">"' + e + '"</span>'; }).join(', ') + ']';
+      $('apStrip').innerHTML = bag.map(function (e, i) {
+        return '<span class="item"><span class="ix">' + i + '</span>' + e + '</span>';
+      }).join('');
+    }
+    function newOne() {
+      target = sample(MONS.concat(FOOD), rint(3, 5));
+      palette = shuffle(target.concat(sample(MONS.concat(FOOD), 3))).slice(0, 7);
+      bag = [];
+      $('apTarget').textContent = target.join(' ');
+      box.innerHTML = '';
+      palette.forEach(function (e) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = e;
+        b.addEventListener('click', function () { if (bag.length < 8) bag.push(e); render(); b.blur(); });
+        box.appendChild(b);
+      });
+      render(); say($('apMsg'), 'Same things, same order.', '');
+    }
+    on($('apUndo'), function () { bag.pop(); render(); });
+    on($('apCheck'), function () {
+      if (bag.join('') === target.join('')) say($('apMsg'), '✓ Exactly the same bag!', 'good');
+      else if (bag.length !== target.length) say($('apMsg'), 'You have ' + bag.length + ', target has ' + target.length + '.', 'bad');
+      else say($('apMsg'), 'Right number, wrong order. Check from the left.', 'bad');
+    });
+    on($('apNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- LEN OF LIST ---------- */
+  (function () {
+    var box = $('llChips'); if (!box) return;
+    var bag = [];
+    function newOne() {
+      bag = sample(MONS.concat(FOOD), rint(3, 7));
+      $('llStrip').innerHTML = bag.map(function (e) { return '<span class="item">' + e + '</span>'; }).join('');
+      box.innerHTML = '';
+      shuffle([bag.length, bag.length + 1, Math.max(1, bag.length - 1), bag.length + 2]).forEach(function (n) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = n;
+        b.addEventListener('click', function () {
+          if (n === bag.length) say($('llMsg'), '✓ ' + n + ' things in the bag.', 'good');
+          else say($('llMsg'), 'Not ' + n + '. Touch each one and count.', 'bad');
+          b.blur();
+        });
+        box.appendChild(b);
+      });
+      say($('llMsg'), 'Count them, then pick.', '');
+    }
+    on($('llNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- LIST TIMES ---------- */
+  (function () {
+    var s = $('ltSlider'); if (!s) return;
+    var bag = [], busy = false;
+    function label() { $('ltOut').textContent = s.value; $('ltN').textContent = s.value; }
+    function newOne() {
+      bag = sample(MONS, rint(2, 4));
+      $('ltScreen').innerHTML = '';
+      say($('ltMsg'), bag.length + ' things in the bag. How many rows?', '');
+    }
+    s.addEventListener('input', label);
+    on($('ltRun'), function () {
+      if (busy) return; busy = true;
+      var n = +s.value;
+      slowPrint($('ltScreen'), bag.map(function (e) { return e.repeat(n); }), 'big-emoji', function () {
+        busy = false;
+        say($('ltMsg'), bag.length + ' rows, each ' + n + ' wide.', 'good');
+      });
+    });
+    on($('ltNew'), newOne);
+    label(); newOne();
+  })();
+
+  /* ---------- PATTERN ---------- */
+  (function () {
+    var s = $('patSlider'); if (!s) return;
+    var emoji = '🐙', mode = 'i', want = { rows: 3, mode: 'i', emoji: '🐙' }, busy = false;
+    function rowsFor(rows, m, e) {
+      var out = [];
+      for (var i = 0; i < rows; i++) out.push(e.repeat(m === 'i' ? i : 3));
+      return out;
+    }
+    function paint(el, arr) {
+      el.innerHTML = arr.map(function (r) { return '<span class="ln big-emoji">' + (r || '&nbsp;') + '</span>'; }).join('');
+    }
+    function draw() {
+      $('patOut').textContent = s.value; $('patRows').textContent = s.value;
+      $('patEmoji').textContent = emoji;
+      $('patMode').textContent = mode === 'i' ? 'i' : '3';
+      document.querySelectorAll('[data-pat]').forEach(function (b) { b.classList.toggle('on', b.dataset.pat === mode); });
+      paint($('patScreen'), rowsFor(+s.value, mode, emoji));
+    }
+    function newOne() {
+      want = { rows: rint(3, 6), mode: Math.random() < 0.5 ? 'i' : 'same', emoji: pick(MONS) };
+      paint($('patTarget'), rowsFor(want.rows, want.mode, want.emoji));
+      emoji = want.emoji; mode = 'i'; s.value = 1; draw();
+      say($('patMsg'), 'Match the target picture.', '');
+    }
+    document.querySelectorAll('[data-pat]').forEach(function (b) { on(b, function () { mode = b.dataset.pat; draw(); }); });
+    s.addEventListener('input', draw);
+    on($('patRun'), function () {
+      if (busy) return; busy = true;
+      slowPrint($('patScreen'), rowsFor(+s.value, mode, emoji), 'big-emoji', function () { busy = false; });
+    });
+    on($('patCheck'), function () {
+      if (+s.value === want.rows && mode === want.mode) say($('patMsg'), '✓ Same picture!', 'good');
+      else if (mode !== want.mode) say($('patMsg'), 'Do the rows grow, or stay the same?', 'bad');
+      else say($('patMsg'), 'Count the rows in the target.', 'bad');
+    });
+    on($('patNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- COUNTDOWN ---------- */
+  (function () {
+    var s = $('cdSlider'); if (!s) return;
+    var busy = false;
+    function label() { $('cdOut').textContent = s.value; $('cdN').textContent = s.value; }
+    s.addEventListener('input', label);
+    on($('cdRun'), function () {
+      if (busy) return; busy = true;
+      var n = +s.value, arr = [];
+      for (var k = n; k > 0; k--) arr.push(String(k));
+      arr.push('🚀 LIFT OFF');
+      slowPrint($('cdScreen'), arr, '', function () {
+        busy = false; say($('cdMsg'), 'It stopped at 1 — never 0.', 'good');
+      });
+    });
+    label();
+  })();
+
+  /* ---------- STORY MACHINE ---------- */
+  (function () {
+    var a = $('mlA'); if (!a) return;
+    var POOL = {
+      A: ['My cat', 'A robot', 'My teacher', 'A dragon', 'My brother', 'A ninja', 'The bus driver', 'A tiny wizard'],
+      B: ['eats', 'throws', 'paints', 'hides', 'sings to', 'races', 'high-fives'],
+      C: ['1000 pizzas', 'a purple sock', 'my homework', 'a tiny whale', 'the moon', 'a hot chicken', 'my maths book']
+    };
+    var choice = { A: null, B: null, C: null };
+    function fill(box, key) {
+      box.innerHTML = '';
+      sample(POOL[key], 4).forEach(function (w) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = w;
+        b.addEventListener('click', function () {
+          choice[key] = w;
+          box.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+          b.classList.add('on'); b.blur(); box2();
+        });
+        box.appendChild(b);
+      });
+    }
+    function box2() {
+      var parts = [choice.A, choice.B, choice.C].map(function (p) { return p || '…'; });
+      $('mlBox').textContent = '"' + parts.join(' ') + '"';
+    }
+    function newWords() {
+      choice = { A: null, B: null, C: null };
+      fill(a, 'A'); fill($('mlB'), 'B'); fill($('mlC'), 'C');
+      $('mlScreen').innerHTML = ''; box2();
+      say($('mlMsg'), 'Every mix makes a new story.', '');
+    }
+    on($('mlRun'), function () {
+      if (!choice.A || !choice.B || !choice.C) { say($('mlMsg'), 'Pick one from every row first.', 'bad'); return; }
+      $('mlScreen').innerHTML = line(choice.A + ' ' + choice.B + ' ' + choice.C);
+      say($('mlMsg'), 'The box held it. print showed it.', 'good');
+    });
+    on($('mlNew'), newWords);
+    newWords();
+  })();
+
+  /* ---------- RULE MAKER ---------- */
+  (function () {
+    var s = $('ruleSlider'); if (!s) return;
+    var age = 10, wantYes = true;
+    function draw() {
+      var lim = +s.value, yes = age > lim;
+      $('ruleOut').textContent = lim; $('ruleLimit').textContent = lim; $('ruleAge').textContent = age;
+      $('ruleScreen').textContent = yes ? 'YES ✅' : 'NO ❌';
+      $('ruleYes').classList.toggle('live', yes);
+      $('ruleNo').classList.toggle('live', !yes);
+    }
+    function newTask() {
+      age = rint(3, 17); wantYes = Math.random() < 0.5;
+      $('ruleTask').textContent = 'age is ' + age + ' — make the screen say ' + (wantYes ? 'YES ✅' : 'NO ❌');
+      s.value = rint(0, 20); draw();
+      say($('ruleMsg'), 'Move the rule number to match the task.', '');
+    }
+    s.addEventListener('input', draw);
+    on($('ruleCheck'), function () {
+      if ((age > +s.value) === wantYes) say($('ruleMsg'), '✓ Yes! Your rule works.', 'good');
+      else say($('ruleMsg'), 'Not yet — move the number the other way.', 'bad');
+    });
+    on($('ruleNew'), newTask);
+    newTask();
+  })();
+
+  /* ---------- COMPARE ---------- */
+  (function () {
+    var box = $('cmpChips'); if (!box) return;
+    var A = 3, B = 7, wantTrue = true;
+    function newOne() {
+      A = rint(1, 20); B = rint(1, 20);
+      while (B === A) B = rint(1, 20);
+      wantTrue = Math.random() < 0.5;
+      $('cmpA').textContent = A; $('cmpB').textContent = B;
+      $('cmpTask').textContent = wantTrue ? 'True' : 'False';
+      $('cmpSlot').textContent = '?'; $('cmpSlot').className = 'slot';
+      $('cmpScreen').textContent = '—';
+      box.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+      say($('cmpMsg'), 'Which sign makes it ' + (wantTrue ? 'True' : 'False') + '?', '');
+    }
+    box.querySelectorAll('[data-cmp]').forEach(function (b) {
+      on(b, function () {
+        var sign = b.dataset.cmp === '>' ? '>' : '<';
+        var res = sign === '>' ? A > B : A < B;
+        $('cmpSlot').textContent = sign; $('cmpSlot').className = 'slot filled';
+        $('cmpScreen').textContent = res ? 'True' : 'False';
+        box.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+        b.classList.add('on');
+        if (res === wantTrue) say($('cmpMsg'), '✓ Right sign!', 'good');
+        else say($('cmpMsg'), 'That gives ' + res + '. Try the other sign.', 'bad');
+      });
+    });
+    on($('cmpNew'), newOne);
+    newOne();
+  })();
+
+  /* ---------- MOOD ---------- */
+  (function () {
+    var s = $('moodSlider'); if (!s) return;
+    function upd() {
+      var v = +s.value;
+      $('moodOut').textContent = v;
+      $('moodFace').textContent = v > 70 ? '😀 great' : (v > 30 ? '🙂 ok' : '😴 sleepy');
+    }
+    s.addEventListener('input', upd); upd();
+  })();
+
+  /* ---------- LUCKY LOOT ---------- */
+  (function () {
+    var btn = $('lootRun'); if (!btn) return;
+    var BOX = ['💎', '🍪', '🗝️', '🪙', '🧦', '👑'];
+    var busy = false;
+    on(btn, function () {
+      if (busy) return; busy = true;
+      var loot = [], i = 0;
+      $('lootStrip').innerHTML = ''; $('lootScreen').textContent = '';
+      (function next() {
+        if (i >= 5) {
+          busy = false;
+          $('lootScreen').textContent = '[' + loot.join(', ') + ']';
+          say($('lootMsg'), loot.indexOf('👑') >= 0 ? '👑 A crown! Run it again.' : 'Run it again — a new bag every time.', 'good');
+          return;
+        }
+        var got = pick(BOX); loot.push(got);
+        var s = document.createElement('span');
+        s.className = 'item hit'; s.textContent = got;
+        $('lootStrip').appendChild(s); i++;
+        setTimeout(next, 420);
+      })();
+    });
+  })();
+
+  /* ---------- GUESS MY NUMBER ---------- */
+  (function () {
+    var pad = $('guessPad'); if (!pad) return;
+    var secret = rint(1, 20), tries = 0;
+    function log(t, good) {
+      var ln = document.createElement('span');
+      ln.className = 'ln'; ln.textContent = t;
+      if (good) ln.style.color = 'var(--fn)';
+      $('guessScreen').appendChild(ln);
+      while ($('guessScreen').childElementCount > 4) $('guessScreen').removeChild($('guessScreen').firstChild);
+    }
+    function newGame() {
+      secret = rint(1, 20); tries = 0;
+      $('guessScreen').innerHTML = ''; log('I picked a number. Guess!');
+      pad.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+    }
+    for (var n = 1; n <= 20; n++) {
+      (function (v) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = v;
+        b.addEventListener('click', function () {
+          tries++; b.classList.add('on');
+          if (v < secret) log('guess ' + v + ' → higher ⬆');
+          else if (v > secret) log('guess ' + v + ' → lower ⬇');
+          else log('guess ' + v + ' → you got it! 🎉 (' + tries + ' tries)', true);
+          b.blur();
+        });
+        pad.appendChild(b);
+      })(n);
+    }
+    on($('guessNew'), newGame);
+    newGame();
+  })();
+
+  /* ---------- ROCK PAPER SCISSORS ---------- */
+  (function () {
+    var box = $('rpsChips'); if (!box) return;
+    var you = 0, cpu = 0;
+    var BEATS = { '✊': '✌️', '✋': '✊', '✌️': '✋' };
+    function score() { say($('rpsScore'), 'you ' + you + ' — computer ' + cpu, ''); }
+    box.querySelectorAll('[data-rps]').forEach(function (b) {
+      on(b, function () {
+        var mine = b.dataset.rps, theirs = pick(['✊', '✋', '✌️']);
+        $('rpsFaces').textContent = mine + ' vs ' + theirs;
+        var res;
+        if (mine === theirs) res = 'draw 🤝';
+        else if (BEATS[mine] === theirs) { you++; res = 'you win 🎉'; }
+        else { cpu++; res = 'computer wins 🤖'; }
+        $('rpsResult').textContent = res; score();
+      });
+    });
+    on($('rpsReset'), function () { you = 0; cpu = 0; score(); $('rpsFaces').textContent = '❔ vs ❔'; $('rpsResult').textContent = 'pick one'; });
+    score();
+  })();
+
+  /* ---------- DICE RACE ---------- */
+  (function () {
+    var btn = $('raceRoll'); if (!btn) return;
+    var you = 0, cpu = 0, over = false;
+    function draw() {
+      $('raceYou').style.width = Math.min(100, you / 20 * 100) + '%';
+      $('raceCpu').style.width = Math.min(100, cpu / 20 * 100) + '%';
+      $('raceYouN').textContent = you; $('raceCpuN').textContent = cpu;
+    }
+    on(btn, function () {
+      if (over) return;
+      var a = rint(1, 6), b = rint(1, 6);
+      you += a; cpu += b; draw();
+      if (you >= 20 || cpu >= 20) {
+        over = true;
+        say($('raceMsg'), you >= 20 && cpu >= 20 ? 'Both made it — draw!' : (you >= 20 ? '🏁 You win!' : '🤖 Computer wins!'), 'good');
+      } else say($('raceMsg'), 'you rolled ' + a + ', computer rolled ' + b, '');
+    });
+    on($('raceReset'), function () { you = 0; cpu = 0; over = false; draw(); say($('raceMsg'), 'Press ROLL.', ''); });
+    draw();
+  })();
+
+  /* ---------- PAINT ---------- */
+  (function () {
+    var g = $('paintGrid'); if (!g) return;
+    var N = 8, brush = '🟦', cells = [];
+    var PAL = ['🟦', '🟥', '🟨', '🟩', '⬜', '🟪'];
+    var pal = $('paintPal');
+    PAL.forEach(function (p, i) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (i === 0 ? ' on' : ''); b.textContent = p;
+      b.addEventListener('click', function () {
+        brush = p;
+        pal.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+        b.classList.add('on'); b.blur();
+      });
+      pal.appendChild(b);
+    });
+    function count() {
+      var n = cells.filter(function (c) { return c.textContent; }).length;
+      say($('paintMsg'), 'squares filled: ' + n, '');
+    }
+    g.style.gridTemplateColumns = 'repeat(' + N + ', auto)';
+    for (var i = 0; i < N * N; i++) {
+      var c = document.createElement('div');
+      c.className = 'px';
+      c.addEventListener('click', function (e) {
+        var t = e.currentTarget;
+        t.textContent = t.textContent === brush ? '' : brush;
+        count();
+      });
+      g.appendChild(c); cells.push(c);
+    }
+    on($('paintClear'), function () { cells.forEach(function (c) { c.textContent = ''; }); count(); });
+    on($('paintFill'), function () {
+      var r = rint(0, N - 1);
+      for (var k = 0; k < N; k++) cells[r * N + k].textContent = brush;
+      count();
+    });
+    count();
+  })();
+
+  /* ---------- PATTERN MAKER ---------- */
+  (function () {
+    var rows = $('pmRows'); if (!rows) return;
+    var emoji = '⭐', shape = 'grow', busy = false;
+    var PAL = ['⭐', '🐢', '🍕', '💎', '🔥', '🌸'];
+    var box = $('pmChips');
+    PAL.forEach(function (e, i) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (i === 0 ? ' on' : ''); b.textContent = e;
+      b.addEventListener('click', function () {
+        emoji = e;
+        box.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+        b.classList.add('on'); b.blur(); draw();
+      });
+      box.appendChild(b);
+    });
+    document.querySelectorAll('[data-pm]').forEach(function (b) {
+      on(b, function () {
+        shape = b.dataset.pm;
+        document.querySelectorAll('[data-pm]').forEach(function (c) { c.classList.toggle('on', c === b); });
+        draw();
+      });
+    });
+    function build() {
+      var n = +rows.value, out = [];
+      for (var i = 0; i < n; i++) {
+        var k = shape === 'grow' ? i + 1 : (shape === 'shrink' ? n - i : 3);
+        out.push(emoji.repeat(k));
+      }
+      return out;
+    }
+    function draw() {
+      $('pmRowsOut').textContent = rows.value;
+      var mult = shape === 'grow' ? '(i + 1)' : (shape === 'shrink' ? '(' + rows.value + ' - i)' : '3');
+      $('pmCode').innerHTML = '<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">' + rows.value + '</span>):<br>' +
+        '&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">print</span>(<span class="str">"' + emoji + '"</span> * ' + mult + ')';
+      $('pmScreen').innerHTML = build().map(function (r) { return '<span class="ln big-emoji">' + r + '</span>'; }).join('');
+    }
+    rows.addEventListener('input', draw);
+    on($('pmRun'), function () {
+      if (busy) return; busy = true;
+      slowPrint($('pmScreen'), build(), 'big-emoji', function () { busy = false; });
+    });
+    draw();
+  })();
+
+  /* ---------- FINAL PROGRAM ---------- */
+  (function () {
+    var btn = $('finalRun'); if (!btn) return;
+    var BAG = ['🐢', '🐙', '🦊'];
+    on(btn, function () {
+      var lucky = rint(1, 6);
+      var arr = BAG.map(function (e) { return e.repeat(lucky); });
+      arr.push(lucky > 3 ? 'big luck 🍀' : 'small luck 🌱');
+      slowPrint($('finalScreen'), arr, 'big-emoji', function () {
+        say($('finalMsg'), 'lucky = ' + lucky + '. Press RUN again.', 'good');
+      });
+    });
+  })();
+})();
+</script>
+</body>
+</html>

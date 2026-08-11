@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mini Project 3 — Monster Waves (a loop inside a loop)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ================= deck-local: activities + sim ================= */
+  .stepnum {
+    display: inline-block; font-family: "JetBrains Mono", monospace; font-weight: 800;
+    color: var(--accent-2); letter-spacing: .08em; font-size: clamp(13px, 1.8vmin, 18px);
+    margin-bottom: .2em;
+  }
+  .stars { color: var(--num); font-weight: 800; }
+
+  /* clickable / highlightable code box */
+  .codebox {
+    background: var(--code-bg); border-radius: .6em; padding: .7em .9em;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(14px, 2.3vmin, 21px); line-height: 1.55;
+    border: 1px solid var(--soft); margin: .4em 0;
+  }
+  .codebox .cl {
+    display: block; white-space: pre; border-radius: .3em; padding: .05em .35em;
+    border-left: 3px solid transparent; color: var(--code-ink);
+  }
+  .codebox .cl.hot { background: rgba(56,208,224,.16); border-left-color: var(--accent); }
+  .codebox .cl.warm { background: rgba(139,92,246,.16); border-left-color: var(--accent-2); }
+  .codebox.pick .cl { cursor: pointer; }
+  .codebox.pick .cl:hover { background: rgba(255,255,255,.06); }
+  .codebox .cl.right { background: rgba(80,250,123,.16); border-left-color: var(--fn); }
+  .codebox .cl.wrong { background: rgba(255,107,107,.16); border-left-color: #ff6b6b; }
+
+  /* activity bar */
+  .actbar {
+    display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; justify-content: center;
+    margin: .5em 0 .2em;
+  }
+  .abtn {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(13px, 1.9vmin, 18px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--accent); border-radius: .55em;
+    padding: .4em .9em; cursor: pointer;
+  }
+  .abtn:hover { background: rgba(56,208,224,.16); }
+  .abtn.ghost { border-color: var(--soft); color: var(--com); }
+  .abtn[disabled] { opacity: .35; cursor: default; }
+
+  /* live variable chips */
+  .chips { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin: .4em 0; }
+  .chip {
+    font-family: "JetBrains Mono", monospace; background: var(--panel);
+    border: 2px solid var(--soft); border-radius: .55em; padding: .3em .8em;
+    font-size: clamp(14px, 2.1vmin, 20px); color: var(--com);
+  }
+  .chip b { color: var(--accent); font-size: 1.15em; }
+  .chip.v b { color: var(--accent-2); }
+
+  .feedback {
+    min-height: 1.6em; text-align: center; font-weight: 700;
+    font-size: clamp(14px, 2.1vmin, 20px); margin-top: .3em; color: var(--com);
+  }
+  .feedback.good { color: var(--fn); }
+  .feedback.bad  { color: #ff8b8b; }
+
+  /* two-up layout for activity slides */
+  .two-up {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;
+    width: 100%;
+  }
+  @media (max-width: 820px) { .two-up { grid-template-columns: 1fr; } }
+
+  /* parsons */
+  .parsons-src, .parsons-out {
+    background: var(--panel); border: 2px solid var(--soft); border-radius: .6em;
+    padding: .5em; min-height: 6.2em;
+  }
+  .parsons-out { border-style: dashed; border-color: var(--accent); }
+  .pline {
+    display: block; white-space: pre; font-family: "JetBrains Mono", monospace;
+    font-size: clamp(13px, 2vmin, 19px); color: var(--code-ink);
+    background: var(--code-bg); border-radius: .4em; padding: .3em .5em;
+    margin: .3em 0; cursor: pointer; border: 1px solid var(--soft);
+  }
+  .pline:hover { border-color: var(--accent); }
+  .pline.placed { cursor: default; border-color: var(--fn); }
+  .pline.shake { animation: pshake .3s; border-color: #ff6b6b; }
+  @keyframes pshake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .panel-label {
+    font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.5vmin, 14px);
+    color: var(--com); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2em;
+  }
+
+  /* count table */
+  .ctable { width: 100%; border-collapse: collapse; margin: .4em 0; font-size: clamp(14px, 2.2vmin, 21px); }
+  .ctable th, .ctable td {
+    border: 1px solid var(--soft); padding: .4em .5em; text-align: center;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .ctable th { color: var(--accent); font-size: .82em; letter-spacing: .04em; }
+  .ctable td.hide { color: transparent; background: var(--panel); cursor: pointer; }
+  .ctable td.hide:hover { background: rgba(56,208,224,.14); }
+  .ctable td.shown { color: var(--fn); font-weight: 800; }
+  .ctable tr.total td { border-top: 3px solid var(--accent-2); color: var(--accent-2); font-weight: 800; }
+
+  /* live sim */
+  .sim-wrap {
+    display: flex; flex-direction: column-reverse; gap: .7rem; align-items: center;
+    width: 100%; margin: .2em 0; padding-bottom: 3.4rem;
+  }
+  canvas.sim {
+    width: min(940px, 96%); aspect-ratio: 1.95 / 1; max-height: 54vh;
+    display: block; background: #05080d;
+    border: 1px solid var(--soft); border-radius: .6em; box-shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+  .sim-ctl {
+    display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(13px, 1.7vmin, 18px); color: var(--com);
+  }
+  .sim-ctl label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .sim-ctl output { color: var(--accent); min-width: 1.4em; text-align: right; font-weight: 800; }
+  .sim-ctl input[type=range] { accent-color: var(--accent); width: clamp(120px, 20vw, 220px); }
+
+  .outmini {
+    background: #05080d; border: 1px solid var(--soft); border-radius: .5em;
+    padding: .4em .6em; font-family: "JetBrains Mono", monospace;
+    font-size: clamp(14px, 2.2vmin, 20px); min-height: 6.5em; color: var(--ink);
+  }
+  .outmini .ol { display: block; line-height: 1.35; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Mini Project 3 · Monster Waves 🌊</div>
+
+  <!-- 1. Title + Objective -->
+  <div class="slide active center-all">
+    <div class="pill">Mini Project · Part 3</div>
+    <div class="emoji">🌊</div>
+    <h1>Monster Waves</h1>
+    <p class="big" style="margin-top:.4em;color:var(--accent-2);">A loop <span class="sub">inside</span> a loop.</p>
+    <p class="bilingual">반복문 안에 반복문</p>
+  </div>
+
+  <!-- 2. Recap & Retrieve -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Part 2: one loop, one list</h2>
+    <div class="recap-q">
+      <div class="label">Remember</div>
+      <div class="q">This loop prints how many rows?</div>
+<pre>monsters = [<span class="str">"🐙"</span>, <span class="str">"🐍"</span>, <span class="str">"🦁"</span>, <span class="str">"🐢"</span>]
+
+<span class="kw">for</span> monster <span class="kw">in</span> monsters:
+    <span class="fn">print</span>(monster)</pre>
+      <details>
+        <summary>Show the answer</summary>
+        <div class="ans">4 rows — one for each thing in the list.</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- 3. Predict — his own code -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Your code from last lesson</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">What does this print?</div>
+<pre>monsters = [<span class="str">'🐙'</span>, <span class="str">'🐍'</span>, <span class="str">'🦁'</span>, <span class="str">'🐢'</span>]
+
+<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> monsters:
+        <span class="fn">print</span>(i * <span class="num">4</span>)</pre>
+      <details>
+        <summary>Reveal</summary>
+        <div class="ans">12 rows. Every row has <b>4</b> monsters. Nothing grows.</div>
+      </details>
+    </div>
+    <p class="bilingual">먼저 예상 → 그다음 확인</p>
+  </div>
+
+  <!-- 4. Your plan vs the computer -->
+  <div class="slide">
+    <div class="pill">Compare 🔍</div>
+    <h2>Your plan vs the real output</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">Your plan</span>
+<pre>🐙🐙🐙🐙
+🐍🐍🐍🐍
+🦁🦁🦁🦁
+🐢🐢🐢🐢
+🐙 x8 … 🐢 x8
+🐙 x12 … 🐢 x12</pre>
+        <p style="margin-top:.4em">4 → 8 → 12. Growing waves.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">Real output</span>
+<pre>🐙🐙🐙🐙
+🐍🐍🐍🐍
+🦁🦁🦁🦁
+🐢🐢🐢🐢
+… same again
+… same again</pre>
+        <p style="margin-top:.4em">4 → 4 → 4. No growth.</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Today we fix it. The plan was right.</p>
+  </div>
+
+  <!-- 5. Vocab Preview -->
+  <div class="slide">
+    <div class="pill purple">Words</div>
+    <h2>Three new words</h2>
+    <div class="vocab-table">
+      <span class="term">outer loop</span>
+      <span class="gloss">the loop on the outside — it counts the waves</span>
+      <span class="ko">바깥쪽 반복문</span>
+
+      <span class="term">inner loop</span>
+      <span class="gloss">the loop inside — it runs fully every time</span>
+      <span class="ko">안쪽 반복문</span>
+
+      <span class="term">nested</span>
+      <span class="gloss">one thing sitting inside another thing</span>
+      <span class="ko">중첩</span>
+    </div>
+  </div>
+
+  <!-- 6. Concept — no code on purpose -->
+  <div class="slide center-all">
+    <div class="pill">Idea 💡</div>
+    <h2>Two workers, not one</h2>
+    <p class="big" style="margin-top:.4em">Outer worker shouts <span class="sub">"WAVE 1!"</span></p>
+    <p class="big">Inner worker sends <span class="sub">every</span> monster.</p>
+    <p class="big">Then outer shouts <span class="sub">"WAVE 2!"</span></p>
+    <p style="margin-top:.7em">Outer moves <b>once</b>. Inner runs <b>all the way</b>.</p>
+    <p class="bilingual">바깥 1번 = 안쪽 전부 1바퀴</p>
+  </div>
+
+  <!-- 7. STEP 1 — name the boxes -->
+  <div class="slide">
+    <span class="stepnum">STEP 1</span>
+    <h2>Give the boxes real names</h2>
+    <div class="two-up">
+      <div>
+        <div class="panel-label">Hard to read</div>
+<pre><span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> monsters:</pre>
+      </div>
+      <div>
+        <div class="panel-label">Easy to read</div>
+<pre><span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> monsters:</pre>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>wave</code> holds a <b>number</b>: 1, 2, 3. <code>monster</code> holds an <b>emoji</b>.</p>
+    <p class="bilingual">이름이 뜻을 말해줘요</p>
+  </div>
+
+  <!-- 8. ACTIVITY 1 — step the loop yourself -->
+  <div class="slide">
+    <div class="pill">Activity 1 🎮</div>
+    <h2>Step the loop yourself</h2>
+    <div class="two-up">
+      <div>
+        <div class="codebox" id="trCode">
+          <span class="cl" data-l="0">monsters = ["🐙", "🐍", "🦁", "🐢"]</span>
+          <span class="cl" data-l="1">for wave in range(1, 4):</span>
+          <span class="cl" data-l="2">    for monster in monsters:</span>
+          <span class="cl" data-l="3">        print(monster * wave)</span>
+        </div>
+        <div class="chips">
+          <span class="chip">wave = <b id="trWave">–</b></span>
+          <span class="chip v">monster = <b id="trMon">–</b></span>
+        </div>
+      </div>
+      <div>
+        <div class="panel-label">▸ Output</div>
+        <div class="outmini" id="trOut"></div>
+      </div>
+    </div>
+    <div class="actbar">
+      <button class="abtn" id="trStep">▶ Step</button>
+      <button class="abtn" id="trWaveBtn">⏩ Finish this wave</button>
+      <button class="abtn ghost" id="trReset">↺ Reset</button>
+    </div>
+    <p class="feedback" id="trMsg">Press Step. Say the numbers out loud.</p>
+  </div>
+
+  <!-- 9. ACTIVITY 2 — bug hunt -->
+  <div class="slide">
+    <div class="pill">Activity 2 🐛</div>
+    <h2>Click the line that kills the growth</h2>
+    <div class="codebox pick" id="bugCode">
+      <span class="cl" data-k="0">monsters = ["🐙", "🐍", "🦁", "🐢"]</span>
+      <span class="cl" data-k="1">for wave in range(1, 4):</span>
+      <span class="cl" data-k="2">    for monster in monsters:</span>
+      <span class="cl" data-k="3">        print(monster * 4)</span>
+    </div>
+    <p class="feedback" id="bugMsg">Which line never changes?</p>
+    <div class="actbar"><button class="abtn ghost" id="bugReset">↺ Try again</button></div>
+  </div>
+
+  <!-- 10. STEP 2 — use wave -->
+  <div class="slide">
+    <span class="stepnum">STEP 2</span>
+    <h2>Put <code>wave</code> inside the print</h2>
+<pre>monsters = [<span class="str">"🐙"</span>, <span class="str">"🐍"</span>, <span class="str">"🦁"</span>, <span class="str">"🐢"</span>]
+
+<span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> monsters:
+        <span class="fn">print</span>(monster * wave)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output — first 6 of 12 rows</div>
+      <div class="out-line" style="opacity:1">🐙 &nbsp;<span class="com">← wave 1 starts</span></div>
+      <div class="out-line" style="opacity:1">🐍</div>
+      <div class="out-line" style="opacity:1">🦁</div>
+      <div class="out-line" style="opacity:1">🐢</div>
+      <div class="out-line" style="opacity:1">🐙🐙 &nbsp;<span class="com">← wave 2 starts</span></div>
+      <div class="out-line" style="opacity:1">🐍🐍</div>
+    </div>
+    <p style="margin-top:.4em">The number now comes from the <b>outer</b> loop.</p>
+  </div>
+
+  <!-- 11. ACTIVITY 3 — live sim -->
+  <div class="slide">
+    <div class="pill">Activity 3 🎛️</div>
+    <h2>Move both sliders — watch the waves</h2>
+    <div class="sim-wrap">
+      <canvas id="waveSim" class="sim"></canvas>
+      <div class="sim-ctl">
+        <label>waves <input id="simWaves" type="range" min="1" max="4" step="1" value="3"><output id="simWavesOut">3</output></label>
+        <label>list size <input id="simList" type="range" min="1" max="4" step="1" value="4"><output id="simListOut">4</output></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. Common Mistake — indentation -->
+  <div class="slide">
+    <div class="pill">Careful ⚠</div>
+    <h2>The inner loop must be indented</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">Broken</span>
+<pre><span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+<span class="kw">for</span> monster <span class="kw">in</span> monsters:
+    <span class="fn">print</span>(monster * wave)</pre>
+        <p style="margin-top:.4em"><code>IndentationError</code>. The outer loop has nothing inside it, so Python stops before running.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">Fixed</span>
+<pre><span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> monsters:
+        <span class="fn">print</span>(monster * wave)</pre>
+        <p style="margin-top:.4em">4 spaces, then 8. Inside means indented.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. ACTIVITY 4 — parsons -->
+  <div class="slide">
+    <div class="pill">Activity 4 🧩</div>
+    <h2>Click the lines in the right order</h2>
+    <div class="two-up">
+      <div>
+        <div class="panel-label">Mixed up</div>
+        <div class="parsons-src" id="paSrc"></div>
+      </div>
+      <div>
+        <div class="panel-label">Your program</div>
+        <div class="parsons-out" id="paOut"></div>
+      </div>
+    </div>
+    <p class="feedback" id="paMsg">Indentation is part of the answer.</p>
+    <div class="actbar"><button class="abtn ghost" id="paReset">↺ Shuffle again</button></div>
+  </div>
+
+  <!-- 14. STEP 3 — his target -->
+  <div class="slide">
+    <span class="stepnum">STEP 3</span>
+    <h2>Your 4 → 8 → 12 plan, working</h2>
+<pre><span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> monsters:
+        <span class="fn">print</span>(monster * wave * <span class="num">4</span>)
+
+<span class="fn">print</span>(<span class="str">"🔥 ALL WAVES SENT!"</span>)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output (first row of each wave)</div>
+      <div class="out-line" style="opacity:1">🐙🐙🐙🐙 &nbsp;<span class="com">← wave 1 × 4 = 4</span></div>
+      <div class="out-line" style="opacity:1">🐙🐙🐙🐙🐙🐙🐙🐙 &nbsp;<span class="com">← wave 2 × 4 = 8</span></div>
+      <div class="out-line" style="opacity:1">🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙 &nbsp;<span class="com">← wave 3 × 4 = 12</span></div>
+    </div>
+    <p style="margin-top:.4em">Exactly what your comments predicted. 🎉</p>
+  </div>
+
+  <!-- 15. ACTIVITY 5 — count the army -->
+  <div class="slide">
+    <div class="pill">Activity 5 🧮</div>
+    <h2>How big is the army? Click to check</h2>
+    <table class="ctable" id="ctab">
+      <tr><th>wave</th><th>rows</th><th>monsters per row</th><th>monsters this wave</th></tr>
+      <tr><td>1</td><td>4</td><td class="hide" data-v="4">4</td><td class="hide" data-v="16">16</td></tr>
+      <tr><td>2</td><td>4</td><td class="hide" data-v="8">8</td><td class="hide" data-v="32">32</td></tr>
+      <tr><td>3</td><td>4</td><td class="hide" data-v="12">12</td><td class="hide" data-v="48">48</td></tr>
+      <tr class="total"><td colspan="3">TOTAL</td><td class="hide" data-v="96">96</td></tr>
+    </table>
+    <p class="feedback" id="ctMsg">Guess first, then click the box.</p>
+  </div>
+
+  <!-- 16. Careful 2 — swap the loops -->
+  <div class="slide">
+    <div class="pill">Careful ⚠</div>
+    <h2>Swap them — different picture</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Now the list is outside. What changes?</div>
+<pre><span class="kw">for</span> monster <span class="kw">in</span> monsters:
+    <span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+        <span class="fn">print</span>(monster * wave)</pre>
+      <details>
+        <summary>Reveal</summary>
+        <div class="ans">Same 12 rows — but grouped by monster: 🐙 grows 1,2,3, then 🐍 grows 1,2,3.</div>
+      </details>
+    </div>
+    <p class="bilingual">순서가 바뀌면 그림도 바뀌어요</p>
+  </div>
+
+  <!-- 17. ACTIVITY 6 — faded modify 1 -->
+  <div class="slide">
+    <div class="pill">Activity 6 ✏️</div>
+    <h2>Fill the blanks: 5 waves</h2>
+<pre>monsters = [<span class="str">"🐍"</span>, <span class="str">"🦁"</span>]
+
+<span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="str">___</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> <span class="str">___</span>:
+        <span class="fn">print</span>(monster * <span class="str">___</span>)</pre>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="q">How many rows will it print?</div>
+      <details>
+        <summary>Show the answer</summary>
+        <div class="ans"><code>range(1, 6)</code>, <code>monsters</code>, <code>wave</code> → 5 waves × 2 monsters = <b>10 rows</b>.</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- 18. ACTIVITY 7 — faded modify 2 -->
+  <div class="slide">
+    <div class="pill">Activity 7 ✏️</div>
+    <h2>Make the waves shrink</h2>
+<pre><span class="kw">for</span> wave <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>, <span class="num">0</span>, <span class="str">___</span>):
+    <span class="kw">for</span> monster <span class="kw">in</span> monsters:
+        <span class="fn">print</span>(monster * wave)</pre>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="q">Which step makes 3, 2, 1?</div>
+      <details>
+        <summary>Show the answer</summary>
+        <div class="ans"><code>-1</code> — count backwards. Big wave first, then smaller.</div>
+      </details>
+    </div>
+    <p class="bilingual">거꾸로 세기</p>
+  </div>
+
+  <!-- 19. Code Talk Frame -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The outer loop runs <code>____</code> times. Each time, the inner loop runs <code>____</code> times. So we get <code>____</code> rows."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 20. Make / Your Turn -->
+  <div class="slide">
+    <div class="pill">Build it 🔨</div>
+    <h2>Fix your own file</h2>
+    <ul class="check-list">
+      <li>Open <code>main.py</code> in the IDE.</li>
+      <li>Rename <code>_</code> to <code>wave</code> and <code>i</code> to <code>monster</code>.</li>
+      <li>Change <code>* 4</code> to <code>* wave * 4</code>.</li>
+      <li>Run it. Check: 4, then 8, then 12.</li>
+      <li>Print a battle cry after the loops.</li>
+    </ul>
+  </div>
+
+  <!-- 21. Stretch -->
+  <div class="slide">
+    <div class="pill">Bonus 🌶️</div>
+    <h2>Go further</h2>
+    <ul class="check-list">
+      <li><span class="stars">★</span> 5 waves instead of 3.</li>
+      <li><span class="stars">★★</span> Print <code>"WAVE"</code> and the number before each wave starts.</li>
+      <li><span class="stars">★★★</span> Waves grow 1,2,3 then shrink 3,2,1 — two outer loops.</li>
+    </ul>
+  </div>
+
+  <!-- 22. Close & Bridge -->
+  <div class="slide center-all">
+    <div class="pill">Done ✅</div>
+    <h2>A loop inside a loop</h2>
+    <p class="big" style="margin-top:.4em">outer = waves · inner = monsters</p>
+    <p style="margin-top:.8em">Next time: a counter — the computer counts all 96 for you.</p>
+    <p class="bilingual">다음 시간: 반복하며 숫자 세기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 22</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* ===================================================================
+   Deck-local activities. Nothing here touches the shared deck.js.
+   Buttons blur() after a click so SPACE doesn't re-fire them while
+   deck.js is also using SPACE to advance the slide.
+   =================================================================== */
+(function () {
+  var MONSTERS = ['🐙', '🐍', '🦁', '🐢'];
+  var WAVES = 3;
+
+  function on(el, fn) {
+    if (!el) return;
+    el.addEventListener('click', function (e) { fn(e); el.blur(); });
+  }
+
+  /* ---------- ACTIVITY 1: step the loop ---------- */
+  (function () {
+    var box = document.getElementById('trCode');
+    if (!box) return;
+    var out = document.getElementById('trOut');
+    var wEl = document.getElementById('trWave'), mEl = document.getElementById('trMon');
+    var msg = document.getElementById('trMsg');
+    var lines = box.querySelectorAll('.cl');
+
+    // every (wave, monster) pair the two loops will produce, in order
+    var EV = [];
+    for (var w = 1; w <= WAVES; w++) {
+      for (var m = 0; m < MONSTERS.length; m++) EV.push({ w: w, m: m });
+    }
+    var pos = -1;
+
+    function light(n, cls) {
+      lines.forEach(function (l) { l.classList.remove('hot', 'warm'); });
+      if (n >= 0 && lines[n]) lines[n].classList.add(cls || 'hot');
+    }
+    function reset() {
+      pos = -1;
+      out.innerHTML = ''; wEl.textContent = '–'; mEl.textContent = '–';
+      light(0, 'warm');
+      msg.textContent = 'Press Step. Say the numbers out loud.';
+      msg.className = 'feedback';
+    }
+    function step() {
+      if (pos >= EV.length - 1) {
+        light(-1);
+        wEl.textContent = 'done'; mEl.textContent = '–';
+        msg.textContent = '12 rows. Outer ran 3 times, inner ran 4 times each.';
+        msg.className = 'feedback good';
+        return;
+      }
+      pos++;
+      var e = EV[pos];
+      var mon = MONSTERS[e.m];
+      light(e.m === 0 ? 1 : 3, e.m === 0 ? 'warm' : 'hot');
+      wEl.textContent = e.w; mEl.textContent = mon;
+      var ln = document.createElement('span');
+      ln.className = 'ol';
+      ln.textContent = mon.repeat(e.w);
+      out.appendChild(ln);
+      while (out.childElementCount > 7) out.removeChild(out.firstChild);
+      msg.textContent = 'print(monster * wave) → ' + mon + ' × ' + e.w;
+      msg.className = 'feedback';
+    }
+    on(document.getElementById('trStep'), step);
+    on(document.getElementById('trWaveBtn'), function () {
+      if (pos >= EV.length - 1) { step(); return; }
+      var target = EV[pos + 1].w;
+      while (pos < EV.length - 1 && EV[pos + 1].w === target) step();
+    });
+    on(document.getElementById('trReset'), reset);
+    reset();
+  })();
+
+  /* ---------- ACTIVITY 2: bug hunt ---------- */
+  (function () {
+    var box = document.getElementById('bugCode');
+    if (!box) return;
+    var msg = document.getElementById('bugMsg');
+    var lines = box.querySelectorAll('.cl');
+    var NOTE = {
+      0: 'That is the list. It is fine — 4 monsters.',
+      1: 'The outer loop is fine. wave becomes 1, 2, 3.',
+      2: 'The inner loop is fine. It walks the whole list.',
+      3: '✓ Yes! The 4 is frozen. It should be wave * 4.'
+    };
+    function clear() {
+      lines.forEach(function (l) { l.classList.remove('right', 'wrong'); });
+    }
+    lines.forEach(function (l) {
+      l.addEventListener('click', function () {
+        clear();
+        var k = +l.dataset.k;
+        l.classList.add(k === 3 ? 'right' : 'wrong');
+        msg.textContent = NOTE[k];
+        msg.className = 'feedback ' + (k === 3 ? 'good' : 'bad');
+      });
+    });
+    on(document.getElementById('bugReset'), function () {
+      clear();
+      msg.textContent = 'Which line never changes?';
+      msg.className = 'feedback';
+    });
+  })();
+
+  /* ---------- ACTIVITY 4: parsons ---------- */
+  (function () {
+    var src = document.getElementById('paSrc');
+    if (!src) return;
+    var out = document.getElementById('paOut');
+    var msg = document.getElementById('paMsg');
+    var ORDER = [
+      'monsters = ["🐙", "🐍", "🦁", "🐢"]',
+      'for wave in range(1, 4):',
+      '    for monster in monsters:',
+      '        print(monster * wave)'
+    ];
+    var next = 0;
+
+    function build() {
+      next = 0;
+      src.innerHTML = ''; out.innerHTML = '';
+      msg.textContent = 'Indentation is part of the answer.';
+      msg.className = 'feedback';
+      var order = ORDER.map(function (t, i) { return i; });
+      // shuffle, but never hand back the already-correct order
+      var tries = 0;
+      do {
+        for (var i = order.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+        }
+        tries++;
+      } while (tries < 8 && order.every(function (v, i) { return v === i; }));
+      order.forEach(function (i) {
+        var el = document.createElement('span');
+        el.className = 'pline';
+        el.textContent = ORDER[i];
+        el.dataset.i = i;
+        el.addEventListener('click', function () { pick(el); });
+        src.appendChild(el);
+      });
+    }
+    function pick(el) {
+      if (el.classList.contains('placed')) return;
+      if (+el.dataset.i === next) {
+        el.classList.add('placed');
+        el.style.cursor = 'default';
+        out.appendChild(el);
+        next++;
+        if (next === ORDER.length) {
+          msg.textContent = '✓ Built it. Outer loop, then inner loop, then the print.';
+          msg.className = 'feedback good';
+        } else {
+          msg.textContent = 'Good. ' + (ORDER.length - next) + ' to go.';
+          msg.className = 'feedback good';
+        }
+      } else {
+        el.classList.add('shake');
+        setTimeout(function () { el.classList.remove('shake'); }, 320);
+        msg.textContent = 'Not that one yet. What must Python know first?';
+        msg.className = 'feedback bad';
+      }
+    }
+    on(document.getElementById('paReset'), build);
+    build();
+  })();
+
+  /* ---------- ACTIVITY 5: count table ---------- */
+  (function () {
+    var tab = document.getElementById('ctab');
+    if (!tab) return;
+    var msg = document.getElementById('ctMsg');
+    var cells = tab.querySelectorAll('td.hide');
+    var left = cells.length;
+    cells.forEach(function (c) {
+      c.addEventListener('click', function () {
+        if (!c.classList.contains('hide')) return;
+        c.classList.remove('hide');
+        c.classList.add('shown');
+        left--;
+        if (left === 0) {
+          msg.textContent = '96 monsters from 5 lines of code.';
+          msg.className = 'feedback good';
+        }
+      });
+    });
+  })();
+})();
+</script>
+<script>
+/* ---------- ACTIVITY 3: live nested-loop sim (canvas) ---------- */
+(function () {
+  var cv = document.getElementById('waveSim');
+  var sW = document.getElementById('simWaves'), sL = document.getElementById('simList');
+  var oW = document.getElementById('simWavesOut'), oL = document.getElementById('simListOut');
+  if (!cv || !sW || !sL) return;
+
+  var slide = cv.closest('.slide');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var C = {
+    bg: '#05080d', panel: '#101823', line: '#2a3444', ink: '#e8eef6', dim: '#8b9ab0',
+    kw: '#ff79c6', str: '#f1fa8c', num: '#bd93f9', fn: '#50fa7b', hi: '#38d0e0', vi: '#a78bfa'
+  };
+  var MONO = '"JetBrains Mono","Fira Code",monospace';
+  var EMOJI = '"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';
+  var POOL = ['🐙', '🐍', '🦁', '🐢'];
+
+  var waves = +sW.value, listN = +sL.value;
+  var shown = 0;               // rows stamped so far
+  var t = 0, holding = 0;
+  var ROW_MS = 430, HOLD_MS = 1500;
+
+  function rows() { return waves * listN; }
+  function reset() { shown = 0; t = 0; holding = 0; }
+
+  sW.addEventListener('input', function () { waves = +sW.value; oW.textContent = waves; reset(); });
+  sL.addEventListener('input', function () { listN = +sL.value; oL.textContent = listN; reset(); });
+
+  function fit() {
+    var w = cv.clientWidth || 800, h = cv.clientHeight || 450;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  var s = fit();
+  window.addEventListener('resize', function () { s = fit(); });
+
+  function step(dt) {
+    if (holding > 0) { holding -= dt; if (holding <= 0) reset(); return; }
+    t += dt;
+    while (t >= ROW_MS && shown < rows()) { t -= ROW_MS; shown++; }
+    if (shown >= rows()) holding = HOLD_MS;
+  }
+
+  function draw(ctx, w, h) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, w, h);
+
+    var pad = w * 0.03;
+    var codeW = w * 0.38;
+    // fit the listing: it is (listN + 9) lines tall and ~29 chars wide
+    var LINES = listN + 9.5;
+    var fs = Math.max(9, Math.min(
+      Math.round(w * 0.019),
+      Math.floor((h - pad * 2.6) / (LINES * 1.5))
+    ));
+    var lineH = fs * 1.5;
+
+    // --- code panel ---
+    ctx.fillStyle = C.panel; ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.rect(pad, pad, codeW, h - pad * 2); ctx.fill(); ctx.stroke();
+
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    var cx = pad + fs * 0.8;
+    var cy = pad + fs * 1.1;
+
+    // live loop variables
+    var curWave = shown > 0 ? Math.ceil(shown / listN) : 0;
+    var curIdx = shown > 0 ? (shown - 1) % listN : -1;
+
+    function row(parts) {
+      var px = cx;
+      parts.forEach(function (p) {
+        ctx.fillStyle = p[1];
+        ctx.font = (p[2] || '700 ' + fs + 'px ' + MONO);
+        ctx.fillText(p[0], px, cy);
+        px += ctx.measureText(p[0]).width;
+      });
+      cy += lineH;
+    }
+
+    row([['monsters = [', C.ink]]);
+    var em = '700 ' + fs + 'px ' + EMOJI;
+    for (var k = 0; k < listN; k++) {
+      var active = k === curIdx;
+      row([
+        ['    "' + POOL[k] + '",', active ? C.hi : C.str, em],
+        [active ? '  ←' : '', C.hi]
+      ]);
+    }
+    row([[']', C.ink]]);
+    cy += lineH * 0.4;
+    row([['for ', C.kw], ['wave ', C.ink], ['in ', C.kw], ['range', C.fn], ['(', C.ink],
+         ['1', C.num], [', ', C.ink], [String(waves + 1), C.num], ['):', C.ink]]);
+    row([['    for ', C.kw], ['monster ', C.ink], ['in ', C.kw], ['monsters:', C.ink]]);
+    row([['        print', C.fn], ['(monster * wave)', C.ink]]);
+    cy += lineH * 0.5;
+    row([['wave = ', C.dim], [curWave ? String(curWave) : '-', C.vi, '800 ' + Math.round(fs * 1.3) + 'px ' + MONO]]);
+    row([['monster = ', C.dim], [curIdx >= 0 ? POOL[curIdx] : '-', C.ink, '700 ' + Math.round(fs * 1.3) + 'px ' + EMOJI]]);
+
+    // --- army area: one COLUMN per wave, one ROW per monster ---
+    // Each column is a full trip through the inner loop, so the picture
+    // itself shows "outer once = inner all the way".
+    var ax = pad * 2 + codeW;
+    var aw = w - ax - pad;
+    var ah = h - pad * 2;
+    var labelH = Math.max(12, h * 0.06);
+    var colW = aw / waves;
+    var cell = Math.min((colW * 0.92) / waves, (ah - labelH) / (listN + 0.4));
+    var startY = pad + labelH + ((ah - labelH) - cell * listN) / 2;
+
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    for (var wv = 1; wv <= waves; wv++) {
+      var colX = ax + (wv - 1) * colW;
+      var doneRows = Math.max(0, Math.min(listN, shown - (wv - 1) * listN));
+
+      // wave label
+      ctx.fillStyle = doneRows > 0 ? C.vi : 'rgba(139,154,176,.3)';
+      ctx.font = '800 ' + Math.max(10, Math.round(labelH * 0.62)) + 'px ' + MONO;
+      ctx.textAlign = 'center';
+      ctx.fillText('wave ' + wv, colX + colW / 2, pad + labelH * 0.2);
+      ctx.textAlign = 'left';
+
+      for (var mi = 0; mi < listN; mi++) {
+        var alive = mi < doneRows;
+        var y = startY + mi * cell;
+        var rowW = cell * wv;
+        var x0 = colX + (colW - rowW) / 2;
+        ctx.globalAlpha = alive ? 1 : 0.18;
+        ctx.font = Math.round(cell * 0.8) + 'px ' + EMOJI;
+        for (var c = 0; c < wv; c++) {
+          ctx.fillText(POOL[mi], x0 + c * cell, y + cell * 0.1);
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // divider between waves
+      if (wv < waves) {
+        ctx.strokeStyle = 'rgba(139,154,176,.18)'; ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(colX + colW, pad + labelH * 0.9);
+        ctx.lineTo(colX + colW, h - pad);
+        ctx.stroke();
+      }
+    }
+  }
+
+  var last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!slide.classList.contains('active')) { last = 0; return; }
+    var dt = last ? Math.min(ts - last, 100) : 16;
+    last = ts;
+    if (cv.clientWidth && cv.width !== Math.round(cv.clientWidth * dpr)) s = fit();
+    step(dt);
+    draw(s.ctx, s.w, s.h);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

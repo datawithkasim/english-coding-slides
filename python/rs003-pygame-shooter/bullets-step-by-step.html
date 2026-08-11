@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bullets, Step by Step — Mina's Shooter</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .lab { width: 100%; margin: .2em 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; align-items: start; }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+  .plabel { font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.5vmin, 14px);
+            letter-spacing: .1em; text-transform: uppercase; color: var(--com); margin-bottom: .3em; }
+  .rule { font-family: "JetBrains Mono", monospace; color: var(--com);
+          font-size: clamp(13px, 1.9vmin, 18px); margin-bottom: .4em; }
+  .rule b { color: var(--accent); }
+
+  /* TYPE THIS block */
+  .type { border: 2px solid var(--fn); border-radius: .6em; background: rgba(80,250,123,.05); padding: .5em .75em; margin: .45em 0; }
+  .type .ttag { display: block; font-family: "JetBrains Mono", monospace; font-weight: 800;
+                font-size: clamp(11px, 1.5vmin, 14px); letter-spacing: .08em; color: var(--fn);
+                text-transform: uppercase; margin-bottom: .25em; }
+  .type .where { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: clamp(12px, 1.7vmin, 16px); margin-bottom: .35em; }
+  .type pre { margin: 0; }
+
+  .check { border: 2px solid var(--accent); border-radius: .6em; background: rgba(56,208,224,.06); padding: .5em .75em; margin: .45em 0;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 1.9vmin, 18px); color: var(--ink); }
+  .check .ctag { display: block; font-weight: 800; font-size: clamp(11px, 1.5vmin, 14px); letter-spacing: .08em;
+                 color: var(--accent); text-transform: uppercase; margin-bottom: .25em; }
+
+  .warn { border: 2px dashed #ffb454; border-radius: .6em; background: rgba(255,180,84,.07); padding: .5em .75em; margin: .45em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 1.9vmin, 18px); color: var(--ink); }
+  .warn .wtag { display: block; font-weight: 800; font-size: clamp(11px, 1.5vmin, 14px); letter-spacing: .08em;
+                color: #ffb454; text-transform: uppercase; margin-bottom: .25em; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; margin: .45em 0; }
+  .chip { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: clamp(13px, 2vmin, 19px);
+          background: var(--panel); color: var(--ink); border: 2px solid var(--soft); border-radius: .5em;
+          padding: .3em .75em; cursor: pointer; }
+  .chip:hover { border-color: var(--accent); background: rgba(56,208,224,.12); }
+  .chip.on { border-color: var(--accent); background: rgba(56,208,224,.22); }
+
+  .btn { font-family: "JetBrains Mono", monospace; font-weight: 800; font-size: clamp(13px, 1.9vmin, 18px);
+         background: var(--panel); color: var(--ink); border: 2px solid var(--accent);
+         border-radius: .55em; padding: .38em .85em; cursor: pointer; }
+  .btn:hover { background: rgba(56,208,224,.18); }
+  .btn.ghost { border-color: var(--soft); color: var(--com); }
+  .btn.go { border-color: var(--fn); color: var(--fn); }
+  .bar { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: center; margin: .5em 0 .2em; }
+
+  .slider { display: flex; gap: .7rem; align-items: center; justify-content: center; flex-wrap: wrap;
+            font-family: "JetBrains Mono", monospace; color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+  .slider label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .slider input[type=range] { accent-color: var(--accent); width: clamp(130px, 20vw, 260px); }
+  .slider output { color: var(--accent); font-weight: 800; min-width: 2.2em; text-align: right; }
+
+  .msg { text-align: center; font-weight: 800; min-height: 1.5em; margin-top: .3em;
+         font-size: clamp(13px, 2vmin, 19px); color: var(--com); }
+  .msg.good { color: var(--fn); }
+  .msg.bad { color: #ff8b8b; }
+
+  /* game window mock */
+  .win { position: relative; background: #98fb98; border: 2px solid var(--soft); border-radius: .4em;
+         width: 100%; aspect-ratio: 1/1; max-height: 46vh; overflow: hidden; margin: 0 auto; }
+  .win .obj { position: absolute; }
+  .win .plr { background: #00ffff; }
+  .win .eny { background: #000; }
+  .win .blt { background: #f00; }
+  .win .tag { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 11px; color: #14532d; }
+  .axis { font-family: "JetBrains Mono", monospace; color: var(--com); font-size: clamp(12px,1.7vmin,16px); text-align: center; }
+
+  /* step ladder */
+  .ladder { list-style: none; padding: 0; margin: .3em 0; }
+  .ladder li { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.1vmin, 20px);
+               padding: .25em .5em .25em 2.4em; position: relative; color: var(--ink); border-left: 3px solid var(--soft); margin-left: .6em; }
+  .ladder li .n { position: absolute; left: -0.85em; top: .28em; width: 1.6em; height: 1.6em; border-radius: 50%;
+                  background: var(--soft); color: var(--ink); font-size: .72em; font-weight: 800;
+                  display: flex; align-items: center; justify-content: center; }
+  .ladder li.done { color: var(--fn); } .ladder li.done .n { background: var(--fn); color: #04220f; }
+  .ladder li.now { color: var(--accent); } .ladder li.now .n { background: var(--accent); color: #04202a; }
+
+  /* frame loop jobs */
+  .jobs { display: grid; grid-template-columns: repeat(5, 1fr); gap: .4rem; }
+  .job { border: 2px solid var(--soft); border-radius: .5em; padding: .45em .3em; text-align: center; cursor: pointer;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.6vmin, 15px); color: var(--com); }
+  .job.on { border-color: var(--accent); color: var(--ink); background: rgba(56,208,224,.14); }
+  .job b { display: block; font-size: 1.5em; }
+
+  /* list visual */
+  .listbox { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; min-height: 2.4em;
+             border: 2px dashed var(--soft); border-radius: .5em; padding: .4em; }
+  .lit { border: 2px solid var(--accent); border-radius: .4em; padding: .15em .5em; color: var(--ink);
+         font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2vmin, 19px); }
+  .lit.skip { border-color: #ff6b6b; opacity: .45; }
+  .lit.now { background: rgba(56,208,224,.25); }
+  .lit.gone { border-style: dashed; opacity: .3; text-decoration: line-through; }
+
+  /* timeline */
+  .tl { position: relative; height: 2.6em; background: #0d131c; border: 2px solid var(--soft); border-radius: .5em; overflow: hidden; }
+  .tl .mark { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+  .tl .cool { position: absolute; top: 0; bottom: 0; background: rgba(255,107,107,.25); }
+  .tl .lbl { position: absolute; bottom: 2px; font-family: "JetBrains Mono", monospace; font-size: 10px; color: var(--com); }
+
+  code, .mono { font-family: "JetBrains Mono", monospace; }
+  .grid2 { display: grid; grid-template-columns: auto 1fr; gap: .3rem .8rem; font-family: "JetBrains Mono", monospace;
+           font-size: clamp(13px, 2vmin, 19px); align-items: center; }
+  .grid2 .k { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Pygame Shooter · Bullets 🔫</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="pill">Today's Lesson</div>
+    <div class="emoji">🔫</div>
+    <h1>Make the ship shoot</h1>
+    <p class="big" style="margin-top:.3em;color:var(--accent-2);">Seven small steps. Run the game after every one.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide">
+    <div class="pill purple">Where you are</div>
+    <h2>Your game already does this</h2>
+    <div class="lab two">
+      <div>
+        <ul class="check-list">
+          <li>Window opens, 400 × 400</li>
+          <li>Cyan player moves with arrow keys</li>
+          <li>Player stops at the edges</li>
+          <li>Black enemies spawn at random times</li>
+          <li>Enemies fall down the screen</li>
+          <li>Score goes up when an enemy escapes</li>
+          <li>Game ends when an enemy touches you</li>
+        </ul>
+      </div>
+      <div>
+        <div class="win" id="mock1">
+          <div class="obj plr" style="left:44%;top:44%;width:12%;height:12%"></div>
+          <div class="obj eny" style="left:20%;top:8%;width:10%;height:12%"></div>
+          <div class="obj eny" style="left:66%;top:30%;width:10%;height:12%"></div>
+          <div class="tag" style="left:6px;top:4px">score = 3</div>
+        </div>
+        <p class="msg">That is a lot already. Today it shoots back.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide">
+    <div class="pill">The gaps</div>
+    <h2>Five empty lines are waiting for you</h2>
+    <div class="lab two">
+      <div>
+<pre>bullet_width = <span class="com">???</span>
+bullet_height = <span class="com">???</span>
+bullet_colour = <span class="com">???</span>
+bullet_speed = <span class="com">???</span>
+bullets = []</pre>
+<pre style="margin-top:.5em"><span class="kw">if</span> keys[pygame.K_SPACE]:
+    bullet_x = <span class="com">???</span>
+    bullet_y = <span class="com">???</span></pre>
+      </div>
+      <div>
+        <div class="rule">A bullet needs four facts and one home.</div>
+        <div class="grid2">
+          <span class="k">width / height</span><span>how big it looks</span>
+          <span class="k">colour</span><span>what colour to draw</span>
+          <span class="k">speed</span><span>how fast it flies</span>
+          <span class="k">bullets = []</span><span>the list that holds every bullet on screen</span>
+        </div>
+        <p class="msg">Same idea as <code>enemies = []</code> — you already did that.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide">
+    <div class="pill purple">The plan</div>
+    <h2>Seven steps. Tick them off.</h2>
+    <ul class="ladder">
+      <li><span class="n">1</span>Fill the bullet variables</li>
+      <li><span class="n">2</span>Make one bullet when SPACE is pressed</li>
+      <li><span class="n">3</span>Draw the bullets</li>
+      <li><span class="n">4</span>Move the bullets up</li>
+      <li><span class="n">5</span>Add a cooldown so it is not a firehose</li>
+      <li><span class="n">6</span>Delete bullets that leave the screen</li>
+      <li><span class="n">7</span>Bullet hits enemy → both disappear, score up</li>
+      <li><span class="n">8</span>After the break: enemies that take two hits</li>
+    </ul>
+    <p class="msg">Run the game after every single step.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide">
+    <div class="pill">How it works 🔁</div>
+    <h2>One frame = five jobs, in this order</h2>
+    <div class="lab">
+      <div class="jobs" id="jobs">
+        <div class="job on" data-job="0"><b>⌨️</b>read keys</div>
+        <div class="job" data-job="1"><b>➡️</b>move things</div>
+        <div class="job" data-job="2"><b>💥</b>check hits</div>
+        <div class="job" data-job="3"><b>🎨</b>draw</div>
+        <div class="job" data-job="4"><b>🖥️</b>flip</div>
+      </div>
+      <div class="check" style="margin-top:.6em"><span class="ctag">What that job does in your game</span><span id="jobText">Arrow keys move the player. SPACE will make a bullet.</span></div>
+      <p class="msg">Click each job. Every new line today goes into one of these five.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide">
+    <span class="pill">Step 1 · Variables</span>
+    <h2>Fill the five blank lines</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Find <code>bullet_width =</code>. Replace those five lines.</div>
+<pre>bullet_width = <span class="num">6</span>
+bullet_height = <span class="num">16</span>
+bullet_colour = RED
+bullet_speed = <span class="num">12</span>
+bullets = []</pre>
+        </div>
+        <div class="check"><span class="ctag">Run it</span>Nothing changes yet. That is correct — a variable does not draw anything.</div>
+      </div>
+      <div>
+        <div class="plabel">Size compared to your player</div>
+        <div class="win">
+          <div class="obj plr" style="left:44%;top:60%;width:12.5%;height:12.5%"></div>
+          <div class="obj blt" style="left:47.5%;top:52%;width:1.5%;height:4%"></div>
+          <div class="tag" style="left:57%;top:52%">bullet 6 × 16</div>
+          <div class="tag" style="left:57%;top:64%">player 50 × 50</div>
+        </div>
+        <p class="msg">Thin and tall. Like a laser.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide">
+    <div class="pill purple">Why those numbers?</div>
+    <h2>You can change any of them later</h2>
+    <div class="lab two">
+      <div>
+        <div class="grid2">
+          <span class="k">bullet_width = 6</span><span>thin, so it looks fast</span>
+          <span class="k">bullet_height = 16</span><span>tall, so you can see it fly</span>
+          <span class="k">bullet_colour = RED</span><span>RED is already defined at the top of your file</span>
+          <span class="k">bullet_speed = 12</span><span>faster than enemy_speed = 15? No — try it and see</span>
+        </div>
+        <div class="warn" style="margin-top:.5em"><span class="wtag">Careful</span>Write <code>RED</code>, not <code>"RED"</code>. Quotes make it a word, not a colour.</div>
+      </div>
+      <div>
+        <div class="plabel">Try sizes</div>
+        <div class="win">
+          <div class="obj blt" id="szBullet" style="left:49%;top:35%;width:1.5%;height:4%"></div>
+        </div>
+        <div class="slider" style="margin-top:.5em">
+          <label>width <input id="szW" type="range" min="2" max="30" value="6"><output id="szWo">6</output></label>
+          <label>height <input id="szH" type="range" min="4" max="60" value="16"><output id="szHo">16</output></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide">
+    <span class="pill">Step 2 · Spawn</span>
+    <h2>Where exactly does the bullet start?</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">It must leave the <b>middle top</b> of your player.</div>
+        <div class="grid2">
+          <span class="k">player_x</span><span>the LEFT edge of the player</span>
+          <span class="k">+ player_width // 2</span><span>slide right to the middle</span>
+          <span class="k">- bullet_width // 2</span><span>slide back by half the bullet</span>
+          <span class="k">bullet_y = player_y</span><span>the TOP edge of the player</span>
+        </div>
+        <p class="msg" id="spawnMath">player_x 175 + 25 − 3 = bullet_x 197</p>
+      </div>
+      <div>
+        <div class="win" id="spawnWin">
+          <div class="obj plr" id="spPlr" style="top:55%;width:12.5%;height:12.5%"></div>
+          <div class="obj blt" id="spBlt" style="top:51%;width:1.5%;height:4%"></div>
+        </div>
+        <div class="slider" style="margin-top:.5em">
+          <label>player_x <input id="spX" type="range" min="0" max="350" value="175"><output id="spXo">175</output></label>
+        </div>
+        <p class="msg">Move the player. The bullet always lines up.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide">
+    <span class="pill">Step 2 · Spawn</span>
+    <h2>Type the spawn lines</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Find <code>if keys[pygame.K_SPACE]:</code> and fill it in.</div>
+<pre>    <span class="kw">if</span> keys[pygame.K_SPACE]:
+        bullet_x = player_x + (player_width // <span class="num">2</span>) - (bullet_width // <span class="num">2</span>)
+        bullet_y = player_y
+        bullets.<span class="fn">append</span>([bullet_x, bullet_y])</pre>
+        </div>
+        <div class="warn"><span class="wtag">Indentation</span>The three lines sit <b>4 spaces further right</b> than the <code>if</code>. Same as your enemy spawn block.</div>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">Run it</span>Press SPACE. You still see nothing — but the list is filling up. Nobody told the game to draw them yet.</div>
+        <div class="plabel" style="margin-top:.5em">bullets list</div>
+        <div class="listbox" id="spawnList"></div>
+        <div class="bar">
+          <button class="btn go" id="spawnPress">press SPACE</button>
+          <button class="btn ghost" id="spawnClear">clear</button>
+        </div>
+        <p class="msg" id="spawnMsg">len(bullets) = 0</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide">
+    <span class="pill">Step 3 · Draw</span>
+    <h2>Draw order decides what is on top</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Later lines paint <b>over</b> earlier lines.</div>
+        <ul class="ladder">
+          <li class="done"><span class="n">1</span>screen.fill(green)</li>
+          <li class="done"><span class="n">2</span>enemies</li>
+          <li class="done"><span class="n">3</span>player</li>
+          <li class="now"><span class="n">4</span>bullets ← your new lines</li>
+          <li><span class="n">5</span>score text</li>
+        </ul>
+      </div>
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">In the drawing section, right AFTER the line that draws the player.</div>
+<pre>    <span class="kw">for</span> bullet <span class="kw">in</span> bullets:
+        pygame.draw.<span class="fn">rect</span>(screen, bullet_colour, (bullet[<span class="num">0</span>], bullet[<span class="num">1</span>], bullet_width, bullet_height))</pre>
+        </div>
+        <div class="check"><span class="ctag">Run it</span>Press SPACE. A red dot appears on your ship — and stays there. It does not move yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide">
+    <div class="pill purple">Read the line</div>
+    <h2>What <code>bullet[0]</code> and <code>bullet[1]</code> mean</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Every bullet is a small list: <b>[x, y]</b> — same shape as your enemies.</div>
+        <div class="listbox" style="justify-content:flex-start">
+          <span class="lit">bullet[0] → x → left/right</span>
+          <span class="lit">bullet[1] → y → up/down</span>
+        </div>
+        <p class="msg">Counting starts at 0. Always.</p>
+      </div>
+      <div>
+        <div class="plabel">Your enemies use the exact same shape</div>
+<pre>enemies.<span class="fn">append</span>([enemy_x, enemy_y])
+enemy[<span class="num">0</span>]  <span class="com"># x</span>
+enemy[<span class="num">1</span>]  <span class="com"># y</span></pre>
+        <p class="msg">If you can read one, you can read the other.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 -->
+  <div class="slide">
+    <span class="pill">Step 4 · Move</span>
+    <h2>Up means y gets SMALLER</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">In pygame, y = 0 is the <b>top</b> of the window.</div>
+        <div class="slider" style="margin-top:.4em">
+          <label>bullet y <input id="yS" type="range" min="0" max="360" value="300"><output id="yOut">300</output></label>
+        </div>
+        <div class="check" style="margin-top:.5em"><span class="ctag">So</span><code>bullet[1] = bullet[1] - bullet_speed</code> flies UP.<br><code>+ bullet_speed</code> would fall down like an enemy.</div>
+      </div>
+      <div>
+        <div class="win" id="yWin">
+          <div class="obj plr" style="left:44%;top:80%;width:12.5%;height:12.5%"></div>
+          <div class="obj blt" id="yBullet" style="left:48.5%;width:1.5%;height:4%"></div>
+          <div class="tag" style="left:4px;top:2px">y = 0 (top)</div>
+          <div class="tag" style="left:4px;bottom:2px">y = 400 (bottom)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 -->
+  <div class="slide">
+    <span class="pill">Step 4 · Move</span>
+    <h2>Type the move loop</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Right under your <code># move enemies #</code> block.</div>
+<pre>    <span class="com"># move bullets #</span>
+    <span class="kw">for</span> bullet <span class="kw">in</span> bullets:
+        bullet[<span class="num">1</span>] = bullet[<span class="num">1</span>] - bullet_speed</pre>
+        </div>
+        <div class="check"><span class="ctag">Run it</span>Press SPACE. The bullet flies up and off the top. 🎉</div>
+      </div>
+      <div>
+        <div class="plabel">Watch one bullet's y</div>
+        <div class="listbox" id="moveList"></div>
+        <div class="bar">
+          <button class="btn go" id="moveStep">▶ one frame</button>
+          <button class="btn ghost" id="moveReset">↺ reset</button>
+        </div>
+        <p class="msg" id="moveMsg">y starts at 300</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 -->
+  <div class="slide">
+    <div class="pill purple">Try it</div>
+    <h2>Change one number, feel the difference</h2>
+    <div class="lab two">
+      <div>
+        <div class="grid2">
+          <span class="k">bullet_speed = 4</span><span>slow, easy to see, easy to dodge</span>
+          <span class="k">bullet_speed = 12</span><span>feels right for most games</span>
+          <span class="k">bullet_speed = 40</span><span>almost teleports — can miss thin enemies</span>
+        </div>
+        <div class="warn" style="margin-top:.5em"><span class="wtag">Why 40 misses</span>Between two frames the bullet jumps 40 pixels. If the enemy is only 50 tall, it can hop right past it.</div>
+      </div>
+      <div>
+        <div class="win">
+          <div class="obj eny" style="left:44%;top:22%;width:10%;height:12.5%"></div>
+          <div class="obj blt" id="spdBullet" style="left:48.5%;top:80%;width:1.5%;height:4%"></div>
+        </div>
+        <div class="slider" style="margin-top:.5em">
+          <label>bullet_speed <input id="spdS" type="range" min="2" max="40" value="12"><output id="spdO">12</output></label>
+        </div>
+        <div class="bar"><button class="btn go" id="spdFire">▶ fire</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 -->
+  <div class="slide">
+    <span class="pill">Step 5 · Cooldown</span>
+    <h2>Hold SPACE right now and you get 60 bullets a second</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">The loop runs 60 times a second. Each turn makes a bullet.</div>
+        <div class="win">
+          <div class="obj plr" style="left:44%;top:80%;width:12.5%;height:12.5%"></div>
+          <div class="obj blt" style="left:48.5%;top:74%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:68%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:62%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:56%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:50%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:44%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:38%;width:1.5%;height:4%"></div>
+          <div class="obj blt" style="left:48.5%;top:32%;width:1.5%;height:4%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">The fix</span>Remember the clock time of the last shot. Only shoot again once enough time has passed.</div>
+        <div class="plabel" style="margin-top:.5em">You already have these two lines</div>
+<pre>bullet_cooldown = <span class="num">300</span>
+bullet_lastshot = <span class="num">0</span></pre>
+        <p class="msg">300 means 300 milliseconds — about a third of a second.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 -->
+  <div class="slide">
+    <div class="pill purple">See the cooldown</div>
+    <h2>Press the button fast. Most presses do nothing.</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><b>now</b> is the game clock in milliseconds.</div>
+<pre><span class="kw">if</span> now - bullet_lastshot &gt; bullet_cooldown:
+    <span class="com"># allowed to shoot</span>
+    bullet_lastshot = now</pre>
+        <div class="slider" style="margin-top:.5em">
+          <label>cooldown <input id="cdS" type="range" min="60" max="800" step="20" value="300"><output id="cdO">300</output></label>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="cdFire">🔫 press SPACE</button>
+          <button class="btn ghost" id="cdReset">↺ reset</button>
+        </div>
+      </div>
+      <div>
+        <div class="plabel">Game clock →</div>
+        <div class="tl" id="cdTl"></div>
+        <p class="msg" id="cdMsg">Green line = a bullet was made. Red band = too soon.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 -->
+  <div class="slide">
+    <span class="pill">Step 5 · Cooldown</span>
+    <h2>Type the cooldown in</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Change the SPACE line you wrote in step 2. Add one more line at the end.</div>
+<pre>    <span class="kw">if</span> keys[pygame.K_SPACE] <span class="kw">and</span> now - bullet_lastshot &gt; bullet_cooldown:
+        bullet_x = player_x + (player_width // <span class="num">2</span>) - (bullet_width // <span class="num">2</span>)
+        bullet_y = player_y
+        bullets.<span class="fn">append</span>([bullet_x, bullet_y])
+        bullet_lastshot = now</pre>
+        </div>
+      </div>
+      <div>
+        <div class="warn"><span class="wtag">Check first</span><code>now = pygame.time.get_ticks()</code> must already be ABOVE this line. It is — you wrote it earlier.</div>
+        <div class="check"><span class="ctag">Run it</span>Hold SPACE. Bullets come out spaced apart, not as a wall.</div>
+        <div class="check"><span class="ctag">Then try</span>Change 300 to 100. Hold SPACE again. Change it to 800. Pick the one that feels best.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="slide">
+    <span class="pill">Step 6 · Clean up</span>
+    <h2>Bullets that fly off the top never come back</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">They are gone from the screen — but still in the list.</div>
+        <div class="plabel">bullets list after 30 shots</div>
+        <div class="listbox" id="leakList"></div>
+        <div class="bar">
+          <button class="btn go" id="leakFire">🔫 fire 10</button>
+          <button class="btn ghost" id="leakClean">🧹 clean up</button>
+        </div>
+        <p class="msg" id="leakMsg">len(bullets) = 0</p>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">Why it matters</span>The move loop runs over every bullet, every frame — even the invisible ones. A thousand ghosts make the game lag.</div>
+        <div class="check"><span class="ctag">The rule</span>If <code>bullet[1] &lt; 0</code>, the bullet is above the window. Delete it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 19 -->
+  <div class="slide">
+    <div class="pill purple">The trap</div>
+    <h2>Never delete from a list you are looping over</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Python walks by position. Delete one, and everything shuffles left.</div>
+        <div class="listbox" id="trapList"></div>
+        <div class="bar">
+          <button class="btn go" id="trapStep">▶ next turn</button>
+          <button class="btn ghost" id="trapReset">↺ reset</button>
+        </div>
+        <p class="msg" id="trapMsg">Watch which item the loop skips.</p>
+      </div>
+      <div>
+        <div class="warn"><span class="wtag">The fix</span><code>bullets[:]</code> means "a copy of the list". Loop over the copy, delete from the real one.</div>
+<pre><span class="kw">for</span> bullet <span class="kw">in</span> bullets[:]:   <span class="com"># copy</span>
+    bullets.<span class="fn">remove</span>(bullet)   <span class="com"># real list</span></pre>
+        <p class="msg">Two characters. Whole class of bugs gone.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 -->
+  <div class="slide">
+    <span class="pill">Step 6 · Clean up</span>
+    <h2>Type the clean-up loop</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Right under your move-bullets loop.</div>
+<pre>    <span class="com"># delete bullets that left the screen #</span>
+    <span class="kw">for</span> bullet <span class="kw">in</span> bullets[:]:
+        <span class="kw">if</span> bullet[<span class="num">1</span>] &lt; <span class="num">0</span> - bullet_height:
+            bullets.<span class="fn">remove</span>(bullet)</pre>
+        </div>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">Run it</span>Everything looks the same. That is the point — the tidy-up is invisible.</div>
+        <div class="check"><span class="ctag">Prove it works</span>Add <code>print(len(bullets))</code> under the loop. Fire, watch the console count up and then back to 0. Delete the print after.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 21 -->
+  <div class="slide">
+    <span class="pill">Step 7 · Hits</span>
+    <h2>Two rectangles, one question</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule"><code>colliderect</code> answers True or False. Nothing else.</div>
+        <div class="win" id="colWin">
+          <div class="obj eny" id="colEnemy" style="left:44%;top:20%;width:10%;height:12.5%"></div>
+          <div class="obj blt" id="colBullet" style="left:48.5%;width:1.5%;height:4%"></div>
+        </div>
+        <div class="slider" style="margin-top:.4em">
+          <label>bullet y <input id="colS" type="range" min="0" max="360" value="300"><output id="colO">300</output></label>
+        </div>
+      </div>
+      <div>
+<pre>bullet_rect = pygame.<span class="fn">Rect</span>(bullet[<span class="num">0</span>], bullet[<span class="num">1</span>], bullet_width, bullet_height)
+enemy_rect = pygame.<span class="fn">Rect</span>(enemy[<span class="num">0</span>], enemy[<span class="num">1</span>], enemy_width, enemy_height)
+
+<span class="kw">if</span> bullet_rect.<span class="fn">colliderect</span>(enemy_rect):</pre>
+        <div class="check" style="margin-top:.5em"><span class="ctag">Right now it says</span><span class="mono" id="colOut" style="font-size:1.3em;color:var(--com)">False</span></div>
+        <p class="msg">You already use colliderect for the player. Same tool.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22 -->
+  <div class="slide">
+    <div class="pill purple">Every bullet vs every enemy</div>
+    <h2>A loop inside a loop</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">3 bullets and 4 enemies = <b>12</b> checks, every frame.</div>
+        <div class="bar">
+          <button class="btn go" id="nestStep">▶ next check</button>
+          <button class="btn ghost" id="nestReset">↺ reset</button>
+        </div>
+        <p class="msg" id="nestMsg">Click through the checks.</p>
+      </div>
+      <div>
+        <div id="nestGrid" style="display:grid;gap:4px;justify-content:center"></div>
+        <p class="msg">Rows = bullets. Columns = enemies.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 -->
+  <div class="slide">
+    <span class="pill">Step 7 · Hits</span>
+    <h2>Type the hit check</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Under your clean-up loop, BEFORE the drawing section.</div>
+<pre>    <span class="com"># bullet hits enemy #</span>
+    <span class="kw">for</span> bullet <span class="kw">in</span> bullets[:]:
+        bullet_rect = pygame.<span class="fn">Rect</span>(bullet[<span class="num">0</span>], bullet[<span class="num">1</span>], bullet_width, bullet_height)
+        <span class="kw">for</span> enemy <span class="kw">in</span> enemies[:]:
+            enemy_rect = pygame.<span class="fn">Rect</span>(enemy[<span class="num">0</span>], enemy[<span class="num">1</span>], enemy_width, enemy_height)
+            <span class="kw">if</span> bullet_rect.<span class="fn">colliderect</span>(enemy_rect):
+                bullets.<span class="fn">remove</span>(bullet)
+                enemies.<span class="fn">remove</span>(enemy)
+                score = score + <span class="num">10</span>
+                <span class="kw">break</span></pre>
+        </div>
+      </div>
+      <div>
+        <div class="warn"><span class="wtag">Both lists get [:]</span>You delete from both inside the loop, so both need a copy.</div>
+        <div class="warn"><span class="wtag">Why break</span>The bullet is gone after one hit. <code>break</code> stops it trying to hit a second enemy — which would crash.</div>
+        <div class="check"><span class="ctag">Run it</span>Shoot an enemy. It vanishes. Score jumps by 10. 🎉</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 -->
+  <div class="slide">
+    <div class="pill">If it crashed</div>
+    <h2><span class="mono">ValueError: list.remove(x): x not in list</span></h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">This means you tried to delete the same thing twice.</div>
+        <div class="grid2">
+          <span class="k">Missing break?</span><span>one bullet hits two enemies, tries to remove itself twice</span>
+          <span class="k">Missing [:]?</span><span>the loop lost its place after a delete</span>
+        </div>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">Read the red text</span>The last line of the error tells you the line number in your file. Go there first.</div>
+        <div class="check"><span class="ctag">Then check</span>1. Both loops end in <code>[:]</code> · 2. <code>break</code> is the last line of the if · 3. <code>break</code> is indented under the <code>if</code>, not under the for</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 25 -->
+  <div class="slide">
+    <div class="pill purple">Now fix an old bug</div>
+    <h2>Your escape-score loop has the same trap</h2>
+    <div class="lab two">
+      <div>
+        <div class="plabel">Your code right now</div>
+<pre><span class="kw">for</span> enemy <span class="kw">in</span> enemies:
+    <span class="kw">if</span> enemy[<span class="num">1</span>] &gt; S_HEIGHT:
+        enemies.<span class="fn">remove</span>(enemy)
+        score += <span class="num">1</span></pre>
+        <p class="msg bad">Deleting inside a plain loop — the same skip bug you just saw.</p>
+      </div>
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">Change one line: add <code>[:]</code> after <code>enemies</code>.</div>
+<pre><span class="kw">for</span> enemy <span class="kw">in</span> enemies[:]:</pre>
+        </div>
+        <div class="check"><span class="ctag">Run it</span>Let two enemies fall past at the same time. Both should score now.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26 -->
+  <div class="slide">
+    <div class="pill">Checkpoint 🏁</div>
+    <h2>Your whole bullet system, in order</h2>
+    <div class="lab two">
+      <div>
+        <div class="plabel">Setup, above the loop</div>
+<pre>bullet_width = <span class="num">6</span>
+bullet_height = <span class="num">16</span>
+bullet_colour = RED
+bullet_speed = <span class="num">12</span>
+bullets = []
+bullet_cooldown = <span class="num">300</span>
+bullet_lastshot = <span class="num">0</span></pre>
+        <div class="plabel" style="margin-top:.5em">Inside the loop — shoot</div>
+<pre>    <span class="kw">if</span> keys[pygame.K_SPACE] <span class="kw">and</span> now - bullet_lastshot &gt; bullet_cooldown:
+        bullet_x = player_x + (player_width // <span class="num">2</span>) - (bullet_width // <span class="num">2</span>)
+        bullet_y = player_y
+        bullets.<span class="fn">append</span>([bullet_x, bullet_y])
+        bullet_lastshot = now</pre>
+      </div>
+      <div>
+        <div class="plabel">Inside the loop — move, clean, hit</div>
+<pre>    <span class="kw">for</span> bullet <span class="kw">in</span> bullets:
+        bullet[<span class="num">1</span>] = bullet[<span class="num">1</span>] - bullet_speed
+
+    <span class="kw">for</span> bullet <span class="kw">in</span> bullets[:]:
+        <span class="kw">if</span> bullet[<span class="num">1</span>] &lt; <span class="num">0</span> - bullet_height:
+            bullets.<span class="fn">remove</span>(bullet)
+
+    <span class="kw">for</span> bullet <span class="kw">in</span> bullets[:]:
+        bullet_rect = pygame.<span class="fn">Rect</span>(bullet[<span class="num">0</span>], bullet[<span class="num">1</span>], bullet_width, bullet_height)
+        <span class="kw">for</span> enemy <span class="kw">in</span> enemies[:]:
+            enemy_rect = pygame.<span class="fn">Rect</span>(enemy[<span class="num">0</span>], enemy[<span class="num">1</span>], enemy_width, enemy_height)
+            <span class="kw">if</span> bullet_rect.<span class="fn">colliderect</span>(enemy_rect):
+                bullets.<span class="fn">remove</span>(bullet)
+                enemies.<span class="fn">remove</span>(enemy)
+                score = score + <span class="num">10</span>
+                <span class="kw">break</span></pre>
+        <div class="plabel" style="margin-top:.4em">Drawing section</div>
+<pre>    <span class="kw">for</span> bullet <span class="kw">in</span> bullets:
+        pygame.draw.<span class="fn">rect</span>(screen, bullet_colour, (bullet[<span class="num">0</span>], bullet[<span class="num">1</span>], bullet_width, bullet_height))</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26b BREAK -->
+  <div class="slide center-all">
+    <div class="pill purple">Halfway ☕</div>
+    <div class="emoji">🧍</div>
+    <h2>Stand up. Shake it out.</h2>
+    <p class="big" style="margin-top:.3em">Then play your own game for one minute.</p>
+    <p style="margin-top:.6em">Notice one thing you want to change. Tell me what it is.</p>
+  </div>
+
+  <!-- 26c PART 8 GOAL -->
+  <div class="slide">
+    <span class="pill">Step 8 · Tough enemies</span>
+    <h2>One shot is too easy. Make them take two.</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">A tough enemy needs to <b>remember</b> how many hits it has left.</div>
+        <div class="check"><span class="ctag">Where can it remember?</span>Inside its own list — the same list that already holds x and y.</div>
+        <div class="plabel" style="margin-top:.5em">Now</div>
+<pre>[enemy_x, enemy_y]</pre>
+        <div class="plabel" style="margin-top:.4em">After</div>
+<pre>[enemy_x, enemy_y, <span class="num">2</span>]</pre>
+      </div>
+      <div>
+        <div class="plabel">Click to shoot it</div>
+        <div class="win" id="hpWin">
+          <div class="obj eny" id="hpEnemy" style="left:40%;top:30%;width:20%;height:20%"></div>
+        </div>
+        <div class="bar">
+          <button class="btn go" id="hpHit">🔫 hit it</button>
+          <button class="btn ghost" id="hpReset">↺ new enemy</button>
+        </div>
+        <p class="msg" id="hpMsg">enemy = [160, 120, 2]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26d PART 8 INDEXES -->
+  <div class="slide">
+    <div class="pill purple">Before you type</div>
+    <h2>Adding a third slot breaks nothing</h2>
+    <div class="lab two">
+      <div>
+        <div class="grid2">
+          <span class="k">enemy[0]</span><span>x — still slot 0</span>
+          <span class="k">enemy[1]</span><span>y — still slot 1</span>
+          <span class="k">enemy[2]</span><span>health — the new slot</span>
+        </div>
+        <p class="msg">Every line you already wrote keeps working. You only added to the end.</p>
+      </div>
+      <div>
+        <div class="listbox" style="justify-content:center">
+          <span class="lit">160<br><span style="font-size:.7em;color:var(--com)">enemy[0]</span></span>
+          <span class="lit">120<br><span style="font-size:.7em;color:var(--com)">enemy[1]</span></span>
+          <span class="lit now">2<br><span style="font-size:.7em;color:var(--com)">enemy[2]</span></span>
+        </div>
+        <div class="warn" style="margin-top:.5em"><span class="wtag">Careful</span>Old enemies already on screen have only two slots. Restart the game after this change, or <code>enemy[2]</code> will crash.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26e PART 8 SPAWN -->
+  <div class="slide">
+    <span class="pill">Step 8 · Type it</span>
+    <h2>Give every new enemy 2 health</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">In your <code># spawn in enemies #</code> block. Change one line.</div>
+<pre>        enemies.<span class="fn">append</span>([enemy_x, enemy_y, <span class="num">2</span>])</pre>
+        </div>
+        <div class="check"><span class="ctag">Run it</span>Everything still works. Nothing looks different yet.</div>
+      </div>
+      <div>
+        <div class="type"><span class="ttag">Then type this</span>
+          <div class="where">In the bullet-hit block, replace <code>enemies.remove(enemy)</code> with these three lines.</div>
+<pre>                enemy[<span class="num">2</span>] = enemy[<span class="num">2</span>] - <span class="num">1</span>
+                <span class="kw">if</span> enemy[<span class="num">2</span>] &lt;= <span class="num">0</span>:
+                    enemies.<span class="fn">remove</span>(enemy)
+                    score = score + <span class="num">10</span></pre>
+        </div>
+        <div class="warn"><span class="wtag">Keep</span><code>bullets.remove(bullet)</code> and <code>break</code> stay exactly where they were.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26f PART 8 COLOUR -->
+  <div class="slide">
+    <span class="pill">Step 8 · Show it</span>
+    <h2>A hurt enemy should look hurt</h2>
+    <div class="lab two">
+      <div>
+        <div class="type"><span class="ttag">Type this</span>
+          <div class="where">In the drawing section, replace your enemy draw loop.</div>
+<pre>    <span class="kw">for</span> enemy <span class="kw">in</span> enemies:
+        <span class="kw">if</span> enemy[<span class="num">2</span>] == <span class="num">2</span>:
+            colour = BLACK
+        <span class="kw">else</span>:
+            colour = RED
+        pygame.draw.<span class="fn">rect</span>(screen, colour, (enemy[<span class="num">0</span>], enemy[<span class="num">1</span>], enemy_width, enemy_height))</pre>
+        </div>
+      </div>
+      <div>
+        <div class="check"><span class="ctag">Run it</span>Shoot an enemy once. It turns red and keeps coming. Shoot again — gone, +10.</div>
+        <div class="plabel" style="margin-top:.5em">What you should see</div>
+        <div class="win">
+          <div class="obj eny" style="left:14%;top:24%;width:14%;height:16%"></div>
+          <div class="obj eny" style="left:43%;top:24%;width:14%;height:16%;background:#ff0000"></div>
+          <div class="tag" style="left:14%;top:44%">2 health</div>
+          <div class="tag" style="left:43%;top:44%">1 health</div>
+          <div class="obj plr" style="left:44%;top:80%;width:12.5%;height:12.5%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26g PART 8 PREDICT -->
+  <div class="slide">
+    <div class="pill">Predict 🔮</div>
+    <h2>Answer before you test it</h2>
+    <div class="lab two">
+      <div>
+        <div class="rule">Three enemies on screen. All at full health.</div>
+        <div class="plabel">How many bullets must hit to clear them all?</div>
+        <div class="chips" id="hpQuiz"></div>
+        <p class="msg" id="hpQuizMsg">Pick one, then go and count in your game.</p>
+      </div>
+      <div>
+        <div class="plabel">And how much score?</div>
+        <div class="chips" id="hpQuiz2"></div>
+        <p class="msg" id="hpQuiz2Msg">Score only lands when health reaches 0.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 27 -->
+  <div class="slide">
+    <div class="pill">Error first aid 🚑</div>
+    <h2>Four errors you might see today</h2>
+    <div class="lab">
+      <div class="grid2">
+        <span class="k">NameError: bullet_colour</span><span>the variable is spelled differently, or written below where you used it</span>
+        <span class="k">IndentationError</span><span>a line is not lined up. Inside the while loop = 4 spaces. Inside an if inside it = 8.</span>
+        <span class="k">ValueError: x not in list</span><span>deleted twice — missing <code>break</code> or missing <code>[:]</code></span>
+        <span class="k">Bullets appear but freeze</span><span>the move loop is missing, or it is below the draw section</span>
+      </div>
+      <div class="check" style="margin-top:.6em"><span class="ctag">Always</span>Read the LAST line of the red text first. It names the problem. The line above names the file line number.</div>
+    </div>
+  </div>
+
+  <!-- 28 -->
+  <div class="slide">
+    <div class="pill purple">Make it yours</div>
+    <h2>Change three numbers. Keep what feels best.</h2>
+    <div class="lab two">
+      <div>
+        <div class="grid2">
+          <span class="k">bullet_colour</span><span>RED · GREEN · CYAN · WHITE — all defined at the top of your file</span>
+          <span class="k">bullet_speed</span><span>4 slow · 12 normal · 25 fast</span>
+          <span class="k">bullet_cooldown</span><span>100 machine gun · 300 rifle · 800 sniper</span>
+          <span class="k">score = score + 10</span><span>points per kill — pick your own number</span>
+        </div>
+      </div>
+      <div>
+        <div class="win">
+          <div class="obj plr" style="left:44%;top:78%;width:12.5%;height:12.5%"></div>
+          <div class="obj blt" id="mixB1" style="left:48.5%;top:60%"></div>
+          <div class="obj blt" id="mixB2" style="left:48.5%;top:44%"></div>
+          <div class="obj blt" id="mixB3" style="left:48.5%;top:28%"></div>
+        </div>
+        <div class="chips" id="mixColours"></div>
+        <div class="slider">
+          <label>size <input id="mixSize" type="range" min="2" max="24" value="6"><output id="mixOut">6</output></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 29 -->
+  <div class="slide">
+    <div class="pill">If there is time 🌶️</div>
+    <h2>Pick one. Only one.</h2>
+    <div class="lab two">
+      <div>
+        <ul class="check-list">
+          <li><b>Tough enemies</b> — enemies need two hits. Store health in the list: <code>[x, y, 2]</code></li>
+          <li><b>Double shot</b> — append two bullets, one a little left, one a little right</li>
+          <li><b>Miss counter</b> — count bullets that leave the top, print your accuracy</li>
+        </ul>
+      </div>
+      <div>
+        <div class="warn"><span class="wtag">Before you start</span>Write down what you expect to see FIRST. Then build it. Then compare.</div>
+        <div class="check"><span class="ctag">Rule</span>One change at a time. Run it. Only then make the next change.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 30 -->
+  <div class="slide center-all">
+    <div class="pill">Done ✅</div>
+    <div class="emoji">🚀</div>
+    <h2>Your ship shoots back</h2>
+    <p class="big" style="margin-top:.3em;color:var(--accent-2);">Lists · loops · copies · collisions · timers</p>
+    <p style="margin-top:.6em">Next time: enemies that shoot at <em>you</em>.</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 36</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* All widgets are click/slider driven — no animation loops. */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function on(el, fn) { if (el) el.addEventListener('click', function (e) { fn(e); el.blur(); }); }
+  function say(el, t, cls) { if (el) { el.textContent = t; el.className = 'msg' + (cls ? ' ' + cls : ''); } }
+  var W = 400; // game window is 400x400, mocks are percentage based
+
+  /* ---- frame-loop jobs ---- */
+  (function () {
+    var box = $('jobs'); if (!box) return;
+    var TXT = [
+      'Arrow keys move the player. SPACE will make a bullet.',
+      'Enemies fall. Bullets fly up. Nothing is drawn yet.',
+      'Did a bullet touch an enemy? Did an enemy touch you?',
+      'Green background, then enemies, then player, then bullets, then score.',
+      'Show the finished picture, then wait for the next frame.'
+    ];
+    box.querySelectorAll('.job').forEach(function (j) {
+      on(j, function () {
+        box.querySelectorAll('.job').forEach(function (o) { o.classList.remove('on'); });
+        j.classList.add('on');
+        $('jobText').textContent = TXT[+j.dataset.job];
+      });
+    });
+  })();
+
+  /* ---- bullet size preview ---- */
+  (function () {
+    var w = $('szW'); if (!w) return;
+    function upd() {
+      $('szWo').textContent = w.value; $('szHo').textContent = $('szH').value;
+      var b = $('szBullet');
+      b.style.width = (+w.value / W * 100) + '%';
+      b.style.height = (+$('szH').value / W * 100) + '%';
+    }
+    w.addEventListener('input', upd); $('szH').addEventListener('input', upd); upd();
+  })();
+
+  /* ---- spawn position ---- */
+  (function () {
+    var s = $('spX'); if (!s) return;
+    function upd() {
+      var px = +s.value, pw = 50, bw = 6;
+      var bx = px + Math.floor(pw / 2) - Math.floor(bw / 2);
+      $('spXo').textContent = px;
+      $('spPlr').style.left = (px / W * 100) + '%';
+      $('spBlt').style.left = (bx / W * 100) + '%';
+      $('spawnMath').textContent = 'player_x ' + px + ' + 25 − 3 = bullet_x ' + bx;
+    }
+    s.addEventListener('input', upd); upd();
+  })();
+
+  /* ---- spawn list ---- */
+  (function () {
+    var btn = $('spawnPress'); if (!btn) return;
+    var n = 0;
+    function draw() {
+      $('spawnList').innerHTML = '';
+      for (var i = 0; i < n; i++) {
+        var s = document.createElement('span');
+        s.className = 'lit'; s.textContent = '[197, 175]';
+        $('spawnList').appendChild(s);
+      }
+      say($('spawnMsg'), 'len(bullets) = ' + n, n ? 'good' : '');
+    }
+    on(btn, function () { if (n < 10) n++; draw(); });
+    on($('spawnClear'), function () { n = 0; draw(); });
+    draw();
+  })();
+
+  /* ---- y axis ---- */
+  (function () {
+    var s = $('yS'); if (!s) return;
+    function upd() {
+      $('yOut').textContent = s.value;
+      $('yBullet').style.top = (+s.value / W * 100) + '%';
+    }
+    s.addEventListener('input', upd); upd();
+  })();
+
+  /* ---- move stepper ---- */
+  (function () {
+    var btn = $('moveStep'); if (!btn) return;
+    var y = 300, speed = 12, hist = [];
+    function draw() {
+      $('moveList').innerHTML = hist.map(function (v, i) {
+        return '<span class="lit' + (i === hist.length - 1 ? ' now' : '') + '">y = ' + v + '</span>';
+      }).join('');
+      say($('moveMsg'), y < 0 ? 'y = ' + y + ' → above the window' : 'y = ' + y, y < 0 ? 'good' : '');
+    }
+    function reset() { y = 300; hist = [300]; draw(); }
+    on(btn, function () { y = y - speed; hist.push(y); if (hist.length > 8) hist.shift(); draw(); });
+    on($('moveReset'), reset);
+    reset();
+  })();
+
+  /* ---- speed demo ---- */
+  (function () {
+    var s = $('spdS'); if (!s) return;
+    var busy = false;
+    s.addEventListener('input', function () { $('spdO').textContent = s.value; });
+    on($('spdFire'), function () {
+      if (busy) return; busy = true;
+      var y = 320, sp = +s.value, b = $('spdBullet');
+      (function step() {
+        y -= sp;
+        b.style.top = (Math.max(-10, y) / W * 100) + '%';
+        if (y > -10) setTimeout(step, 60);
+        else { b.style.top = '80%'; busy = false; }
+      })();
+    });
+    $('spdO').textContent = s.value;
+  })();
+
+  /* ---- cooldown timeline ---- */
+  (function () {
+    var fire = $('cdFire'); if (!fire) return;
+    var t0 = 0, clock = 0, last = -99999, shots = [], blocked = 0;
+    var SPAN = 4000;
+    function draw() {
+      var tl = $('cdTl'); tl.innerHTML = '';
+      shots.forEach(function (s) {
+        var band = document.createElement('div');
+        band.className = 'cool';
+        band.style.left = (s / SPAN * 100) + '%';
+        band.style.width = Math.min(100, (+$('cdS').value / SPAN * 100)) + '%';
+        tl.appendChild(band);
+        var m = document.createElement('div');
+        m.className = 'mark'; m.style.left = (s / SPAN * 100) + '%';
+        m.style.background = 'var(--fn)';
+        tl.appendChild(m);
+      });
+      var nowMark = document.createElement('div');
+      nowMark.className = 'mark'; nowMark.style.left = (Math.min(clock, SPAN) / SPAN * 100) + '%';
+      tl.appendChild(nowMark);
+    }
+    $('cdS').addEventListener('input', function () { $('cdO').textContent = $('cdS').value; draw(); });
+    on(fire, function () {
+      clock += 120;
+      if (clock > SPAN) { clock = 0; shots = []; last = -99999; blocked = 0; }
+      if (clock - last > +$('cdS').value) {
+        last = clock; shots.push(clock);
+        say($('cdMsg'), 'now = ' + clock + ' → BANG 🔫  (bullets: ' + shots.length + ')', 'good');
+      } else {
+        blocked++;
+        say($('cdMsg'), 'now = ' + clock + ' → too soon, nothing happens (' + blocked + ' presses wasted)', 'bad');
+      }
+      draw();
+    });
+    on($('cdReset'), function () { clock = 0; shots = []; last = -99999; blocked = 0; draw(); say($('cdMsg'), 'Green line = a bullet was made. Red band = too soon.', ''); });
+    draw();
+  })();
+
+  /* ---- leak demo ---- */
+  (function () {
+    var btn = $('leakFire'); if (!btn) return;
+    var n = 0;
+    function draw() {
+      var box = $('leakList'); box.innerHTML = '';
+      for (var i = 0; i < n; i++) {
+        var s = document.createElement('span');
+        s.className = 'lit' + (i < n - 3 ? ' gone' : '');
+        s.textContent = '[197, ' + (-20 * (n - i)) + ']';
+        box.appendChild(s);
+      }
+      say($('leakMsg'), 'len(bullets) = ' + n + (n > 6 ? '  ← most are off screen' : ''), n > 6 ? 'bad' : '');
+    }
+    on(btn, function () { n = Math.min(20, n + 10); draw(); });
+    on($('leakClean'), function () { n = 0; draw(); say($('leakMsg'), 'len(bullets) = 0  ← tidy', 'good'); });
+    draw();
+  })();
+
+  /* ---- remove-while-looping trap ---- */
+  (function () {
+    var btn = $('trapStep'); if (!btn) return;
+    var items, idx, removed;
+    function reset() {
+      items = ['A', 'B', 'C', 'D']; idx = -1; removed = [];
+      draw(); say($('trapMsg'), 'Watch which item the loop skips.', '');
+    }
+    function draw(skipped) {
+      $('trapList').innerHTML = items.map(function (v, i) {
+        var cls = 'lit';
+        if (i === idx) cls += ' now';
+        if (skipped === i) cls += ' skip';
+        return '<span class="' + cls + '">' + v + '</span>';
+      }).join('');
+    }
+    on(btn, function () {
+      idx++;
+      if (idx >= items.length) {
+        say($('trapMsg'), 'Loop finished. ' + (removed.length ? removed.join(' and ') + ' deleted — but C was never even looked at.' : ''), 'bad');
+        return;
+      }
+      var cur = items[idx];
+      // delete every item, like a buggy clean-up loop
+      items.splice(idx, 1); removed.push(cur);
+      draw(idx);
+      say($('trapMsg'), 'Deleted ' + cur + '. Everything shuffled left — so the loop jumps over ' + (items[idx] || 'nothing') + '.', 'bad');
+    });
+    on($('trapReset'), reset);
+    reset();
+  })();
+
+  /* ---- colliderect ---- */
+  (function () {
+    var s = $('colS'); if (!s) return;
+    function upd() {
+      var y = +s.value;
+      $('colO').textContent = y;
+      $('colBullet').style.top = (y / W * 100) + '%';
+      // enemy rect: top 20% => y 80, height 12.5% => 50
+      var hit = (y < 80 + 50) && (y + 16 > 80);
+      $('colOut').textContent = hit ? 'True' : 'False';
+      $('colOut').style.color = hit ? 'var(--fn)' : 'var(--com)';
+      $('colEnemy').style.outline = hit ? '3px solid #50fa7b' : 'none';
+    }
+    s.addEventListener('input', upd); upd();
+  })();
+
+  /* ---- nested loop grid ---- */
+  (function () {
+    var btn = $('nestStep'); if (!btn) return;
+    var B = 3, E = 4, step = -1;
+    function draw() {
+      var g = $('nestGrid');
+      g.style.gridTemplateColumns = 'repeat(' + E + ', auto)';
+      g.innerHTML = '';
+      for (var b = 0; b < B; b++) for (var e = 0; e < E; e++) {
+        var k = b * E + e;
+        var d = document.createElement('div');
+        d.style.cssText = 'width:clamp(38px,6vmin,64px);height:clamp(30px,5vmin,52px);border:2px solid ' +
+          (k === step ? 'var(--accent)' : (k < step ? 'var(--soft)' : 'var(--soft)')) +
+          ';border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:12px;color:' +
+          (k === step ? 'var(--ink)' : 'var(--com)') + ';background:' + (k === step ? 'rgba(56,208,224,.2)' : (k < step ? 'rgba(255,255,255,.03)' : 'transparent'));
+        d.textContent = 'b' + b + '·e' + e;
+        g.appendChild(d);
+      }
+    }
+    on(btn, function () {
+      step++;
+      if (step >= B * E) { step = B * E - 1; say($('nestMsg'), 'All 12 checks done — and that was ONE frame.', 'bad'); }
+      else say($('nestMsg'), 'Check ' + (step + 1) + ' of 12: bullet ' + Math.floor(step / E) + ' against enemy ' + (step % E), '');
+      draw();
+    });
+    on($('nestReset'), function () { step = -1; draw(); say($('nestMsg'), 'Click through the checks.', ''); });
+    draw();
+  })();
+
+  /* ---- enemy health demo ---- */
+  (function () {
+    var btn = $('hpHit'); if (!btn) return;
+    var hp = 2;
+    function draw() {
+      var e = $('hpEnemy');
+      if (hp <= 0) { e.style.display = 'none'; say($('hpMsg'), 'health 0 → enemies.remove(enemy) → score + 10', 'good'); return; }
+      e.style.display = 'block';
+      e.style.background = hp === 2 ? '#000' : '#ff0000';
+      say($('hpMsg'), 'enemy = [160, 120, ' + hp + ']  ← health is slot 2', '');
+    }
+    on(btn, function () { if (hp > 0) hp--; draw(); });
+    on($('hpReset'), function () { hp = 2; draw(); });
+    draw();
+  })();
+
+  /* ---- health quiz ---- */
+  (function () {
+    var box = $('hpQuiz'); if (!box) return;
+    function build(el, opts, right, msgEl, goodText) {
+      opts.forEach(function (n) {
+        var b = document.createElement('button');
+        b.className = 'chip'; b.textContent = n;
+        b.addEventListener('click', function () {
+          el.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('on'); });
+          b.classList.add('on'); b.blur();
+          if (n === right) say(msgEl, '✓ ' + goodText, 'good');
+          else say(msgEl, 'Not quite — each enemy takes 2 hits. Count again.', 'bad');
+        });
+        el.appendChild(b);
+      });
+    }
+    build(box, [3, 5, 6, 9], 6, $('hpQuizMsg'), '3 enemies × 2 hits = 6 bullets on target.');
+    build($('hpQuiz2'), [10, 20, 30, 60], 30, $('hpQuiz2Msg'), '3 kills × 10 points = 30.');
+  })();
+
+  /* ---- make it yours ---- */
+  (function () {
+    var box = $('mixColours'); if (!box) return;
+    var COLS = [['RED', '#ff0000'], ['GREEN', '#00ff00'], ['CYAN', '#00ffff'], ['WHITE', '#ffffff']];
+    var size = 6;
+    function apply(c) {
+      ['mixB1', 'mixB2', 'mixB3'].forEach(function (id) { $(id).style.background = c; });
+    }
+    function applySize() {
+      ['mixB1', 'mixB2', 'mixB3'].forEach(function (id) {
+        $(id).style.width = (size / W * 100) + '%';
+        $(id).style.height = (size * 2.6 / W * 100) + '%';
+      });
+    }
+    COLS.forEach(function (c, i) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (i === 0 ? ' on' : ''); b.textContent = c[0];
+      b.addEventListener('click', function () {
+        box.querySelectorAll('.chip').forEach(function (o) { o.classList.remove('on'); });
+        b.classList.add('on'); apply(c[1]); b.blur();
+      });
+      box.appendChild(b);
+    });
+    $('mixSize').addEventListener('input', function () {
+      size = +$('mixSize').value; $('mixOut').textContent = size; applySize();
+    });
+    apply('#ff0000'); applySize();
+  })();
+})();
+</script>
+</body>
+</html>
