@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PyGame Starter 07 — Score and Lives</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ============ deck-local: live HUD sim (slot 7) ============ */
+  .sim-wrap {
+    display: flex; flex-direction: column-reverse; gap: .7rem; align-items: center;
+    width: 100%; margin: .2em 0; padding-bottom: 3.4rem;
+  }
+  canvas.sim {
+    width: min(900px, 96%); aspect-ratio: 16 / 9; max-height: 46vh;
+    display: block; background: #0f143c;
+    border: 1px solid var(--soft); border-radius: .6em;
+    box-shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+  .sim-ctl {
+    display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(13px, 1.8vmin, 18px); color: var(--com);
+  }
+  .sim-ctl label { display: flex; gap: .45em; align-items: center; color: var(--ink); }
+  .sim-ctl input[type=checkbox] { accent-color: var(--accent); width: 1.1em; height: 1.1em; }
+  .abtn {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(13px, 1.9vmin, 18px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--accent); border-radius: .55em;
+    padding: .4em .9em; cursor: pointer;
+  }
+  .abtn:hover { background: rgba(56,208,224,.16); }
+  .abtn.ghost { border-color: var(--soft); color: var(--com); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">PyGame Starter · Project 7 · Score and Lives</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Project 7</div>
+    <div class="emoji">🏆</div>
+    <h1>Score<br>and Lives</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">By the end you'll <span class="sub">count</span> points and <span class="sub">stop</span> the game.</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time: coins and hits</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which method tells you two Rects touch?</div>
+<pre>player = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">100</span>, <span class="num">40</span>, <span class="num">40</span>)
+coin   = pygame.<span class="fn">Rect</span>(<span class="num">120</span>, <span class="num">110</span>, <span class="num">20</span>, <span class="num">20</span>)</pre>
+      <details>
+        <summary>Show answer</summary>
+        <div class="ans"><code>player.colliderect(coin)</code> → <code>True</code></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+<pre>score = <span class="num">0</span>
+frames = <span class="num">0</span>
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    <span class="kw">if</span> frames % <span class="num">10</span> == <span class="num">0</span>:
+        score += <span class="num">10</span>
+    frames += <span class="num">1</span>
+
+<span class="fn">print</span>(score)</pre>
+      <details>
+        <summary>Reveal output</summary>
+        <div class="ans">60 — six adds, at frames 0, 10, 20, 30, 40, 50.</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">score</span>
+      <span class="gloss">a number that grows when you do well</span>
+      <span class="ko">점수</span>
+
+      <span class="term">lives</span>
+      <span class="gloss">how many tries you have left</span>
+      <span class="ko">목숨</span>
+
+      <span class="term">flag</span>
+      <span class="gloss">a True/False switch that stops the loop</span>
+      <span class="ko">깃발 변수</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — NO CODE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Idea 💡</div>
+    <h2>The loop is a heartbeat</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">score ↑</span><span class="val">0 → 10 → 20</span></div>
+      <div class="varbox" style="border-color:#dc3545"><span class="name" style="color:#ff8b8b">lives ↓</span><span class="val">3 → 2 → 1</span></div>
+      <div class="varbox" style="border-color:var(--accent-2)"><span class="name" style="color:var(--accent-2)">running</span><span class="val">True → False</span></div>
+    </div>
+    <p style="margin-top:.4em">One beat = one frame. The numbers stay alive between beats.</p>
+    <p style="margin-top:.3em">The flag is a switch. Flip it and the heart stops.</p>
+    <p class="bilingual">반복문은 심장, 깃발은 스위치</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Code</div>
+    <h2>Run it</h2>
+<pre>score = <span class="num">0</span>
+frames = <span class="num">0</span>
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    <span class="kw">if</span> frames % <span class="num">10</span> == <span class="num">0</span>:
+        score += <span class="num">10</span>
+    pygame.draw.<span class="fn">rect</span>(screen, YELLOW, (<span class="num">20</span>, <span class="num">20</span>, score, <span class="num">30</span>))
+    frames += <span class="num">1</span>
+
+<span class="fn">print</span>(<span class="str">"score +10"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">score +10</div>
+    </div>
+    <p style="margin-top:.4em">Bar width <b>is</b> the score. Bigger score, longer bar.</p>
+  </div>
+
+  <!-- Slot 7: Investigate (live HUD sim) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it! 🎛️</div>
+    <h2>Lose a life. Watch the bar.</h2>
+    <div class="sim-wrap">
+      <canvas id="hudSim" class="sim"></canvas>
+      <div class="sim-ctl">
+        <button class="abtn" id="hudHit">💥 lose a life</button>
+        <button class="abtn ghost" id="hudReplay">↺ replay</button>
+        <label><input type="checkbox" id="hudGuard" checked> <code>if lives &gt; 0:</code> guard</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Where does <code>score = 0</code> go?</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">✗ broken</span>
+<pre>frames = <span class="num">0</span>
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    score = <span class="num">0</span>
+    <span class="kw">if</span> frames % <span class="num">10</span> == <span class="num">0</span>:
+        score += <span class="num">10</span>
+    frames += <span class="num">1</span>
+<span class="fn">print</span>(score)   <span class="com"># 0</span></pre>
+        <p style="margin-top:.4em">The score resets every frame. It never grows.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">✓ fixed</span>
+<pre>score = <span class="num">0</span>
+frames = <span class="num">0</span>
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    <span class="kw">if</span> frames % <span class="num">10</span> == <span class="num">0</span>:
+        score += <span class="num">10</span>
+    frames += <span class="num">1</span>
+<span class="fn">print</span>(score)   <span class="com"># 60</span></pre>
+        <p style="margin-top:.4em">The score sits outside the loop. It keeps its value.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Modify (Faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Try it</div>
+    <h2>Fill the three blanks</h2>
+<pre>lives = <span class="num">3</span>
+score = <span class="num">0</span>
+high_score = <span class="num">0</span>
+frames = <span class="num">0</span>
+<span class="kw">while</span> frames &lt; <span class="num">200</span>:
+    <span class="kw">if</span> frames % <span class="num">40</span> == <span class="num">0</span> <span class="kw">and</span> frames &gt; <span class="num">0</span>:
+        lives <span class="str">___</span> <span class="num">1</span>
+    <span class="kw">if</span> lives <span class="str">___</span> <span class="num">0</span>:
+        score += <span class="num">1</span>
+    high_score = <span class="str">___</span>(high_score, score)
+    frames += <span class="num">1</span></pre>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="q">Which three go in?</div>
+      <details>
+        <summary>Show answer</summary>
+        <div class="ans"><code>-=</code> · <code>&gt;</code> · <code>max</code></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 10: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The score goes up when <span class="blank"></span>. Lives go down when <span class="blank"></span>. The game stops when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Your turn!</div>
+    <h2>Timed coin grab 🪙</h2>
+    <ul class="check-list">
+      <li>A round lasts <b>30</b> frames.</li>
+      <li>Every 5 frames: <code>coins += 1</code></li>
+      <li>Each frame: <code>score = coins * 10</code></li>
+      <li>At frame 30: <code>running = False</code></li>
+      <li>Draw coins, a green score bar, a red time bar.</li>
+      <li>After the loop: <code>print("round done")</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 12: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="emoji">🔤</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Numbers stay alive</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: text and fonts — show the score as real words.</p>
+    <p class="bilingual">다음 시간: 점수를 글자로</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 12</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* ===================================================================
+   SLOT 7 — live HUD sim. Vanilla canvas, no dependencies.
+   Draws in a virtual 640 x 360 pygame-style space so every number
+   below is a real coordinate from the lesson:
+     score bar   -> rect (20, 20, score * 4, 30)   YELLOW (255,220,0)
+     life circle -> centre (30 + i * 40, 70) r 12  RED    (220,60,60)
+     game over   -> rect (220, 200, 200, 80)       RED
+   Controls blur() after use so deck.js keeps SPACE for the slides.
+   =================================================================== */
+(function () {
+  var cv = document.getElementById('hudSim');
+  if (!cv) return;
+  var btnHit = document.getElementById('hudHit');
+  var btnRep = document.getElementById('hudReplay');
+  var cbGuard = document.getElementById('hudGuard');
+  var slide = cv.closest('.slide');
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  var VW = 640, VH = 360;
+  var NAVY = 'rgb(15, 20, 60)';
+  var YELLOW = 'rgb(255, 220, 0)';
+  var RED = 'rgb(220, 60, 60)';
+  var GREEN = 'rgb(40, 180, 80)';
+  var INK = '#e8eef6';
+  var DIM = '#8a97b8';
+  var MONO = '"JetBrains Mono","Fira Code",monospace';
+
+  var FRAME_MS = 95;   // one game frame
+  var GRACE = 35;      // frames the loop limps on after lives hit 0
+  var BAR_MAX = 600;   // visual cap for the score bar
+
+  var score, lives, frames, running, dead, deathFrame, acc;
+
+  function reset() {
+    score = 0; lives = 3; frames = 0;
+    running = true; dead = false; deathFrame = 0; acc = 0;
+  }
+  reset();
+
+  function tick() {
+    if (!running) return;
+    // step 4's rule: the guard decides whether the score may grow
+    if (!cbGuard.checked || lives > 0) score += 1;
+    frames += 1;
+    if (dead && frames - deathFrame >= GRACE) running = false;  // flag flips
+  }
+
+  function loseLife() {
+    if (!running) return;
+    if (lives > 0) lives -= 1;
+    if (lives <= 0 && !dead) { dead = true; deathFrame = frames; }
+  }
+
+  function on(el, ev, fn) {
+    if (!el) return;
+    el.addEventListener(ev, function (e) { fn(e); el.blur(); });
+  }
+  on(btnHit, 'click', loseLife);
+  on(btnRep, 'click', reset);
+  on(cbGuard, 'change', function () {});
+
+  function fit() {
+    var w = cv.clientWidth || 800, h = cv.clientHeight || 450;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    return { ctx: cv.getContext('2d'), w: w, h: h };
+  }
+  var S = fit();
+  window.addEventListener('resize', function () { S = fit(); });
+
+  function text(ctx, str, x, y, size, color, align) {
+    ctx.fillStyle = color;
+    ctx.font = '700 ' + size + 'px ' + MONO;
+    ctx.textAlign = align || 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(str, x, y);
+  }
+
+  function draw(ctx, w, h) {
+    var sc = Math.min(w / VW, h / VH);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = NAVY; ctx.fillRect(0, 0, w, h);
+    ctx.translate((w - VW * sc) / 2, (h - VH * sc) / 2);
+    ctx.scale(sc, sc);
+
+    var frozen = cbGuard.checked && lives <= 0;
+
+    // --- score bar: rect (20, 20, score * 4, 30) ---
+    ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1;
+    ctx.strokeRect(20.5, 20.5, BAR_MAX, 30);
+    ctx.fillStyle = frozen ? 'rgba(255,220,0,.45)' : YELLOW;
+    ctx.fillRect(20, 20, Math.min(score * 4, BAR_MAX), 30);
+
+    // --- lives: circles at (30 + i * 40, 70) r 12 ---
+    for (var i = 0; i < 3; i++) {
+      var alive = i < lives;
+      ctx.beginPath();
+      ctx.arc(30 + i * 40, 70, 12, 0, Math.PI * 2);
+      ctx.fillStyle = alive ? RED : 'rgba(220,60,60,.18)';
+      ctx.fill();
+    }
+
+    // --- live variable read-out ---
+    text(ctx, 'score = ' + score, 20, 102, 20, frozen ? DIM : YELLOW);
+    text(ctx, 'lives = ' + lives, 230, 102, 20, RED);
+    text(ctx, 'frames = ' + frames, 420, 102, 20, INK);
+    text(ctx, 'running = ' + (running ? 'True' : 'False'), 20, 132, 20, running ? GREEN : RED);
+
+    // --- what the guard is doing right now ---
+    if (dead) {
+      if (cbGuard.checked) text(ctx, 'guard on  -  score frozen', 20, 162, 17, GREEN);
+      else text(ctx, 'no guard  -  score still grows!', 20, 162, 17, YELLOW);
+    }
+
+    // --- game over box: rect (220, 200, 200, 80) ---
+    if (dead) {
+      ctx.fillStyle = RED;
+      ctx.fillRect(220, 200, 200, 80);
+      text(ctx, 'GAME OVER', 320, 230, 22, '#ffffff', 'center');
+      if (!running) text(ctx, 'the while loop stopped', 320, 288, 16, DIM, 'center');
+    }
+
+    // --- the line of code that is running ---
+    var line = cbGuard.checked ? 'if lives > 0:   score += 1' : 'score += 1';
+    text(ctx, line, 20, 322, 18, cbGuard.checked ? '#ff79c6' : DIM);
+  }
+
+  var last = 0;
+  function loop(ts) {
+    requestAnimationFrame(loop);
+    if (!slide.classList.contains('active')) { last = 0; return; }
+    var dt = last ? Math.min(ts - last, 200) : 16;
+    last = ts;
+    if (cv.clientWidth && cv.width !== Math.round(cv.clientWidth * dpr)) S = fit();
+    acc += dt;
+    while (acc >= FRAME_MS) { acc -= FRAME_MS; tick(); }
+    draw(S.ctx, S.w, S.h);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

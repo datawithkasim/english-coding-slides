@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concept — Conditional Priority (and / or / not)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ---- Truth table ---- */
+  .truth {
+    border-collapse: collapse;
+    margin: .5em auto;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    box-shadow: 0 6px 0 var(--soft);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .truth caption {
+    caption-side: top;
+    font-family: "Inter", sans-serif;
+    font-weight: 800;
+    color: var(--accent-2);
+    font-size: clamp(16px, 2.8vmin, 26px);
+    margin-bottom: .35em;
+  }
+  .truth th, .truth td {
+    border: 2px solid var(--soft);
+    padding: .4em 1em;
+    text-align: center;
+    font-weight: 800;
+    font-size: clamp(15px, 2.7vmin, 26px);
+  }
+  .truth th { background: var(--code-bg); color: #f5f5f5; letter-spacing: .04em; }
+  .truth td { background: #fff; }
+  .truth td.T { color: #0a8a3e; }
+  .truth td.F { color: #c0392b; }
+  .truth td.res { background: #fff6ee; }
+  .truth td.res.T { background: #eafbf0; }
+  .truth td.res.F { background: #fff0ee; }
+
+  /* ---- Priority reduction (auto-looping, CSS only) ---- */
+  .reduce {
+    background: var(--code-bg);
+    border-radius: 14px;
+    padding: 1em 1.2em;
+    display: flex; flex-direction: column; gap: .45em;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    color: #f5f5f5;
+    font-size: clamp(16px, 3vmin, 28px);
+    margin: .4em auto;
+    max-width: min(900px, 96%);
+  }
+  .reduce .rline { font-weight: 800; opacity: 0; }
+  .reduce .rline b { color: var(--num); background: rgba(189,147,249,.18); padding: 0 .25em; border-radius: 5px; }
+  .reduce .rline .box { color: var(--str); background: rgba(241,250,140,.16); padding: 0 .25em; border-radius: 5px; outline: 2px solid var(--str); }
+  .reduce .rline.done { color: var(--fn); }
+  .reduce .rnote {
+    font-family: "Inter", sans-serif; font-weight: 700;
+    font-size: clamp(12px, 2vmin, 17px); color: var(--com); opacity: 0;
+    padding-left: 1.2em;
+  }
+  .reduce > *:nth-child(1) { animation: rvl 12s infinite 0s; }
+  .reduce > *:nth-child(2) { animation: rvl 12s infinite 2s; }
+  .reduce > *:nth-child(3) { animation: rvl 12s infinite 4s; }
+  .reduce > *:nth-child(4) { animation: rvl 12s infinite 6s; }
+  .reduce > *:nth-child(5) { animation: rvl 12s infinite 8s; }
+  @keyframes rvl {
+    0%, 3%    { opacity: 0; transform: translateX(-8px); }
+    7%, 95%   { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; }
+  }
+
+  /* ---- Precedence ladder ---- */
+  .ladder { display: flex; flex-direction: column; gap: .5em; margin: .5em auto; max-width: min(760px,96%); }
+  .ladder .rung {
+    display: flex; align-items: center; gap: .8em;
+    background: #fff; border-radius: 14px; padding: .6em 1em;
+    box-shadow: 0 4px 0 var(--soft); border-left: 6px solid var(--accent);
+  }
+  .ladder .rung .rank {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    color: #fff; background: var(--accent); border-radius: 999px;
+    width: 1.9em; height: 1.9em; display: flex; align-items: center; justify-content: center;
+    font-size: clamp(15px, 2.6vmin, 22px); flex: 0 0 auto;
+  }
+  .ladder .rung code { font-size: clamp(16px, 2.8vmin, 26px); }
+  .ladder .rung .why { margin-left: auto; font-size: clamp(12px, 2vmin, 17px); color: var(--com); font-weight: 700; }
+  .ladder .rung.two { border-left-color: var(--accent-2); }
+  .ladder .rung.two .rank { background: var(--accent-2); }
+  .ladder .rung.three { border-left-color: #8a8a9a; }
+  .ladder .rung.three .rank { background: #8a8a9a; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Concept · Conditional Priority</div>
+
+  <!-- 1. Title -->
+  <div class="slide active center-all">
+    <div class="pill">Concept</div>
+    <div class="emoji">⚖️</div>
+    <h1>Conditional<br>Priority</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Which part of a condition runs <span class="sub">first</span>?</p>
+    <p class="bilingual">조건문 우선순위 — and / or / not 순서</p>
+  </div>
+
+  <!-- 2. Boolean recap -->
+  <div class="slide">
+    <div class="pill purple">Start here</div>
+    <h2>Every condition is True or False</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">3 &gt; 1</span><span class="val" style="color:#0a8a3e">True</span></div>
+      <div class="varbox"><span class="name">5 == 2</span><span class="val" style="color:#c0392b">False</span></div>
+      <div class="varbox"><span class="name">"a" in "cat"</span><span class="val" style="color:#0a8a3e">True</span></div>
+    </div>
+    <p class="big center" style="margin-top:.3em">These two words are called <span class="sub">Booleans</span>.</p>
+    <p class="bilingual">참(True) / 거짓(False) 두 가지뿐</p>
+  </div>
+
+  <!-- 3. Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>3 joining words</h2>
+    <div class="vocab-table">
+      <span class="term">and</span>
+      <span class="gloss">True only if BOTH sides are True</span>
+      <span class="ko">그리고 — 둘 다 참</span>
+
+      <span class="term">or</span>
+      <span class="gloss">True if EITHER side is True</span>
+      <span class="ko">또는 — 하나라도 참</span>
+
+      <span class="term">not</span>
+      <span class="gloss">flips True ↔ False</span>
+      <span class="ko">아니다 — 뒤집기</span>
+    </div>
+  </div>
+
+  <!-- 4. Truth table AND -->
+  <div class="slide center-all">
+    <div class="pill">Truth table</div>
+    <h2><code>and</code> — both must be True</h2>
+    <table class="truth">
+      <caption>A and B</caption>
+      <tr><th>A</th><th>B</th><th>A and B</th></tr>
+      <tr><td class="T">True</td><td class="T">True</td><td class="res T">True</td></tr>
+      <tr><td class="T">True</td><td class="F">False</td><td class="res F">False</td></tr>
+      <tr><td class="F">False</td><td class="T">True</td><td class="res F">False</td></tr>
+      <tr><td class="F">False</td><td class="F">False</td><td class="res F">False</td></tr>
+    </table>
+    <p class="bilingual">한 곳이라도 거짓이면 전체 거짓</p>
+  </div>
+
+  <!-- 5. Truth table OR -->
+  <div class="slide center-all">
+    <div class="pill">Truth table</div>
+    <h2><code>or</code> — one is enough</h2>
+    <table class="truth">
+      <caption>A or B</caption>
+      <tr><th>A</th><th>B</th><th>A or B</th></tr>
+      <tr><td class="T">True</td><td class="T">True</td><td class="res T">True</td></tr>
+      <tr><td class="T">True</td><td class="F">False</td><td class="res T">True</td></tr>
+      <tr><td class="F">False</td><td class="T">True</td><td class="res T">True</td></tr>
+      <tr><td class="F">False</td><td class="F">False</td><td class="res F">False</td></tr>
+    </table>
+    <p class="bilingual">하나라도 참이면 전체 참</p>
+  </div>
+
+  <!-- 6. Truth table NOT -->
+  <div class="slide center-all">
+    <div class="pill">Truth table</div>
+    <h2><code>not</code> — the flipper</h2>
+    <table class="truth">
+      <caption>not A</caption>
+      <tr><th>A</th><th>not A</th></tr>
+      <tr><td class="T">True</td><td class="res F">False</td></tr>
+      <tr><td class="F">False</td><td class="res T">True</td></tr>
+    </table>
+    <p class="big center" style="margin-top:.3em"><code>not</code> takes just ONE side and flips it.</p>
+    <p class="bilingual">참 ↔ 거짓 뒤집기</p>
+  </div>
+
+  <!-- 7. The problem -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>What does this give?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">print</span>(<span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span> <span class="kw">and</span> <span class="kw">False</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">True — because <code>and</code> runs before <code>or</code>.</div></details>
+    </div>
+    <p style="margin-top:.5em">Read left-to-right you might say <span style="color:#c0392b;font-weight:700">False</span>. Python says <span style="color:#0a8a3e;font-weight:700">True</span>. Priority decides.</p>
+  </div>
+
+  <!-- 8. Precedence ladder -->
+  <div class="slide">
+    <div class="pill purple">The rule</div>
+    <h2>Priority order 🪜</h2>
+    <div class="ladder">
+      <div class="rung"><span class="rank">1</span><code>not</code><span class="why">flips first</span></div>
+      <div class="rung two"><span class="rank">2</span><code>and</code><span class="why">then joins</span></div>
+      <div class="rung three"><span class="rank">3</span><code>or</code><span class="why">last</span></div>
+    </div>
+    <p class="big center" style="margin-top:.3em"><code>not</code> → <code>and</code> → <code>or</code></p>
+    <p class="bilingual">그리고 비교( &gt; &lt; == )는 이 셋보다 먼저!</p>
+  </div>
+
+  <!-- 9. Reduction animation -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2>Solve it step by step</h2>
+    <div class="reduce">
+      <div class="rline">True or False and False</div>
+      <div class="rnote">① and binds tighter → do <span class="box">False and False</span> first</div>
+      <div class="rline">True or <b>False</b></div>
+      <div class="rnote">② now the or</div>
+      <div class="rline done">➜ True ✓</div>
+    </div>
+  </div>
+
+  <!-- 10. Comparison-first note -->
+  <div class="slide">
+    <div class="pill">Also know</div>
+    <h2>Comparisons run before and / or</h2>
+<pre>age = <span class="num">15</span>
+<span class="fn">print</span>(age <span class="kw">&gt;=</span> <span class="num">12</span> <span class="kw">and</span> age <span class="kw">&lt;</span> <span class="num">18</span>)</pre>
+    <p style="margin-top:.5em">Python does the maths first:</p>
+    <div class="reduce" style="animation:none">
+      <div class="rline" style="opacity:1;animation:none">True and True</div>
+      <div class="rline done" style="opacity:1;animation:none">➜ True ✓</div>
+    </div>
+    <p class="bilingual">비교 먼저 → 그다음 and / or</p>
+  </div>
+
+  <!-- 11. Parentheses override -->
+  <div class="slide">
+    <div class="pill">Override</div>
+    <h2>Brackets beat everything ( )</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">default priority</span>
+<pre>True <span class="kw">or</span> False <span class="kw">and</span> False</pre>
+        <p style="margin-top:.4em">and first → <b>True</b></p>
+      </div>
+      <div class="col bad"><span class="tag">with brackets</span>
+<pre>(True <span class="kw">or</span> False) <span class="kw">and</span> False</pre>
+        <p style="margin-top:.4em">or first → <b>False</b></p>
+      </div>
+    </div>
+    <p class="big center" style="margin-top:.3em">Unsure? Add <code>( )</code> to be safe + clear.</p>
+  </div>
+
+  <!-- 12. Real example animated -->
+  <div class="slide">
+    <div class="pill">Real code</div>
+    <h2>Can they ride? 🎢</h2>
+<pre>can_ride = tall_enough <span class="kw">and</span> has_ticket <span class="kw">or</span> is_vip</pre>
+    <p style="margin-top:.4em"><code>and</code> groups first, so Python reads it as:</p>
+    <div class="viz viz-if" style="margin-top:.4em">
+      <div class="if-input">
+        <span class="case case-a">is_vip = True</span>
+        <span class="case case-b">is_vip = False</span>
+      </div>
+      <div class="if-cond">(tall and ticket) or is_vip</div>
+      <div class="if-branches">
+        <div class="if-branch true">can_ride = True</div>
+        <div class="if-branch false">check tall + ticket</div>
+      </div>
+    </div>
+    <p class="bilingual">VIP는 무조건 탑승 — or 가 마지막이라</p>
+  </div>
+
+  <!-- 13. Debug -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong group</h2>
+<pre><span class="com"># want: adult AND (member or vip)</span>
+ok = is_adult <span class="kw">and</span> is_member <span class="kw">or</span> is_vip</pre>
+    <div class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">A non-adult VIP passes! and grouped with is_member only.</div>
+      <p style="margin-top:.4em">Add brackets: <code>is_adult and (is_member or is_vip)</code></p>
+      <p class="bilingual">원하는 묶음이면 괄호로 강제</p>
+    </div>
+  </div>
+
+  <!-- 14. Quiz -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">quiz</span></div>
+    <h2>Pick the answer</h2>
+    <div class="mcq" data-correct="0" data-explain="not runs first → not True is False; False and True is False.">
+      <div class="q"><code>not True and True</code> gives…</div>
+      <div class="opts">
+        <button class="opt">False</button>
+        <button class="opt">True</button>
+        <button class="opt">Error</button>
+      </div>
+      <div class="qfeedback"></div>
+    </div>
+  </div>
+
+  <!-- 15. Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">quiz</span></div>
+    <h2>One more</h2>
+    <div class="mcq" data-correct="0" data-explain="and first: False and True = False; then True or False = True.">
+      <div class="q"><code>True or False and True</code> gives…</div>
+      <div class="opts">
+        <button class="opt">True</button>
+        <button class="opt">False</button>
+      </div>
+      <div class="qfeedback"></div>
+    </div>
+  </div>
+
+  <!-- 16. Score -->
+
+  <!-- 17. Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Say it out loud 🗣️</h2>
+    <ul class="check-list">
+      <li>Order of priority: <code>not</code> → <code>and</code> → <code>or</code></li>
+      <li>Comparisons ( <code>&gt; &lt; ==</code> ) happen first</li>
+      <li>Brackets <code>( )</code> beat all of them</li>
+      <li>When unsure — add brackets to make it clear</li>
+    </ul>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 17</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

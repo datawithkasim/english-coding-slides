@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill Loops · Growing Trees</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); }
+  pre.tiny { font-size: clamp(10px, 1.4vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { color: #4a5670; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  .stat { display: flex; gap: 1.5em; justify-content: center; flex-wrap: wrap; margin: .4em 0; }
+  .stat div { text-align: center; }
+  .stat .n { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             font-size: clamp(22px, 5vmin, 50px); line-height: 1; }
+  .stat .t { color: var(--com); font-size: clamp(11px, 1.6vmin, 15px);
+             text-transform: uppercase; letter-spacing: .08em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 340px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.4em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .78em; }
+  table.vt td { color: var(--accent); }
+  table.vt td.b { color: #ffb86c; }
+  table.vt tr.on td { background: rgba(56,208,224,.1); }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Fill Loops · 3 🌳</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="emoji">🌳</div>
+    <h1>Growing trees</h1>
+    <p class="line" style="margin-top:.3em">Each one bigger than the last.</p>
+    <p class="bilingual">나무가 하나씩 더 커져요</p>
+  </div>
+
+  <!-- 2  one tree = 2 fills -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <p class="line big">One tree.<br><b>Two</b> fills.</p>
+        <p class="line quiet" style="margin-top:.5em">A thin trunk.<br>A fat box of leaves.</p>
+        <p class="bilingual">나무 하나 = 기둥 1개 + 잎 상자 1개</p>
+      </div>
+      <div>
+        <canvas class="sim" id="oneC" width="300" height="330" style="max-width:280px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3  the trunk -->
+  <div class="slide center-all">
+<pre>blocks.fill(<span style="color:var(--str)">OAK_LOG</span>,
+    pos(x, <span style="color:var(--num)">0</span>, z),
+    pos(x, trunk_h, z), REPLACE)</pre>
+    <p class="line" style="margin-top:.6em">Same x. Same z.<br>Only <b>y</b> is different.</p>
+    <p class="quiet">That is what makes a straight pole.</p>
+    <p class="bilingual">x와 z가 같으면 기둥이 돼요</p>
+  </div>
+
+  <!-- 4  the leaves -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+<pre class="tiny">blocks.fill(<span style="color:var(--str)">OAK_LEAVES</span>,
+    pos(x - leaf, trunk_h + <span style="color:var(--num)">1</span>, z - leaf),
+    pos(x + leaf, trunk_h + <span style="color:var(--num)">3</span>, z + leaf),
+    REPLACE)</pre>
+        <p class="line" style="margin-top:.5em"><b>minus</b> on one corner.<br><b>plus</b> on the other.</p>
+        <p class="bilingual">한쪽은 빼고, 한쪽은 더해요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="leafC" width="324" height="324" style="max-width:300px"></canvas>
+        <div class="slid"><span>leaf</span><input type="range" id="lS" min="1" max="5" value="2"><span class="out" id="lSo">2</span></div>
+        <div class="readout">width <b id="lW">5</b> &nbsp;·&nbsp; <b id="lN">75</b> blocks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5  two counters -->
+  <div class="slide center-all">
+<pre>    trunk_h = trunk_h + <span style="color:var(--num)">2</span>
+    leaf    = leaf + <span style="color:var(--num)">1</span>
+    x       = x + <span style="color:var(--num)">8</span></pre>
+    <p class="line" style="margin-top:.6em">Taller by <b>2</b>. Wider by <b>1</b>. Along by <b>8</b>.</p>
+    <p class="bilingual">키는 2, 잎은 1, 자리는 8씩</p>
+  </div>
+
+  <!-- 6  step through -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="stepC" width="380" height="300" style="max-width:380px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="stBack">◀</button>
+          <button class="btn" id="stFwd">grow ▶</button>
+          <button class="btn alt" id="stReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>i</th><th>x</th><th>trunk_h</th><th>leaf</th></tr>
+          <tr id="rw1"><td>1</td><td>4</td><td>4</td><td>2</td></tr>
+          <tr id="rw2"><td>2</td><td>12</td><td>6</td><td>3</td></tr>
+          <tr id="rw3"><td>3</td><td>20</td><td>8</td><td>4</td></tr>
+        </table>
+        <div class="readout" style="margin-top:.5em"><b id="stN">0</b> blocks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7  the code -->
+  <div class="slide center-all">
+<pre class="tiny"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
+    x = <span style="color:var(--num)">4</span>
+    z = <span style="color:var(--num)">8</span>
+    trunk_h = <span style="color:var(--num)">4</span>
+    leaf = <span style="color:var(--num)">2</span>
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">4</span>):
+        blocks.fill(<span style="color:var(--str)">OAK_LOG</span>,
+            pos(x, <span style="color:var(--num)">0</span>, z), pos(x, trunk_h, z), REPLACE)
+        blocks.fill(<span style="color:var(--str)">OAK_LEAVES</span>,
+            pos(x - leaf, trunk_h + <span style="color:var(--num)">1</span>, z - leaf),
+            pos(x + leaf, trunk_h + <span style="color:var(--num)">3</span>, z + leaf), REPLACE)
+<span class="hot">        trunk_h = trunk_h + <span style="color:var(--num)">2</span></span>
+<span class="hot">        leaf = leaf + <span style="color:var(--num)">1</span></span>
+<span class="hot">        x = x + <span style="color:var(--num)">8</span></span>
+player.on_chat(<span style="color:var(--str)">"trees"</span>, on_chat)</pre>
+  </div>
+
+  <!-- 8  why x + 8 -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <p class="line big">Why <b>+ 8</b>?</p>
+        <p class="line quiet" style="margin-top:.5em">Tree 3 is 9 wide.<br>Too close and they merge.</p>
+        <p class="bilingual">간격이 좁으면 나무가 붙어요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="gapC" width="380" height="240" style="max-width:380px"></canvas>
+        <div class="slid"><span>x +</span><input type="range" id="gS" min="3" max="12" value="8"><span class="out" id="gSo">8</span></div>
+        <div class="readout" id="gMsg">no overlap</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9  build -->
+  <div class="slide center-all">
+    <div class="pill purple">Your turn</div>
+    <p class="line big" style="margin:.3em 0 .4em">Add a 4th tree.</p>
+    <div class="skel" style="max-width:24em">
+<pre><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">1</span>, <span class="blank">???</span>):</pre></div>
+    <p class="quiet">Then check your <code>del</code> still reaches it.</p>
+    <p class="bilingual">del 범위도 늘려야 해요</p>
+  </div>
+
+  <!-- 10  tune -->
+  <div class="slide center-all">
+    <p class="line big" style="margin-bottom:.4em">Three dials.</p>
+    <canvas class="sim" id="tuneC" width="380" height="270" style="max-width:380px"></canvas>
+    <div class="slid"><span>trees</span><input type="range" id="tN" min="1" max="6" value="3"><span class="out" id="tNo">3</span></div>
+    <div class="slid"><span>taller +</span><input type="range" id="tH" min="0" max="5" value="2"><span class="out" id="tHo">2</span></div>
+    <div class="slid"><span>wider +</span><input type="range" id="tW" min="0" max="3" value="1"><span class="out" id="tWo">1</span></div>
+    <div class="readout"><b id="tB">486</b> blocks</div>
+  </div>
+
+  <!-- 11  del -->
+  <div class="slide center-all">
+<pre>blocks.fill(<span style="color:var(--str)">AIR</span>,
+    pos(<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>), pos(<span style="color:var(--num)">30</span>,<span style="color:var(--num)">20</span>,<span style="color:var(--num)">20</span>), REPLACE)</pre>
+    <p class="line" style="margin-top:.6em">Trees reach x <b>24</b>.</p>
+    <p class="quiet">A 15 box leaves the last tree behind.</p>
+    <p class="bilingual">마지막 나무까지 지워야 해요</p>
+  </div>
+
+  <!-- 12  challenges -->
+  <div class="slide center-all">
+    <div class="pill">Try these</div>
+    <ul class="tick" style="max-width:22em;text-align:left;margin-top:.5em">
+      <li>Shrinking 🍂 use <code>-</code> not <code>+</code></li>
+      <li>Fat trunk 🪵 2 blocks wide</li>
+      <li>Forest 🌲 a second row, new z</li>
+    </ul>
+    <p class="quiet" style="margin-top:.6em">Block name goes <b>inside</b> <code>fill</code>. Not a variable.</p>
+    <p class="bilingual">블록 이름은 변수에 넣지 마세요</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="slide center-all">
+    <div class="emoji">🌳</div>
+    <p class="line big">Two counters. One loop.</p>
+  </div>
+
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var LOG = '#6b4a2b', LEAF = '#4f7a2a', LEAF2 = '#5f8f33';
+
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t')); if (t) t.classList.toggle('hid'); b.blur();
+    });
+  });
+
+  // side elevation: x across, y up. world is WORLD_W wide, WORLD_H tall
+  function elevation(ctx, W, H, worldW, worldH) {
+    var cell = Math.min(W / worldW, (H - 8) / worldH);
+    var ox = (W - worldW * cell) / 2, oy = H - 4;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    return { cell: cell, ox: ox, oy: oy };
+  }
+  function box(ctx, g, x0, y0, x1, y1, colour) {
+    ctx.fillStyle = colour;
+    var w = (x1 - x0 + 1) * g.cell, h = (y1 - y0 + 1) * g.cell;
+    ctx.fillRect(g.ox + x0 * g.cell, g.oy - (y1 + 1) * g.cell, w - 1, h - 1);
+  }
+  function tree(ctx, g, x, trunkH, leaf) {
+    box(ctx, g, x, 0, x, trunkH, LOG);
+    box(ctx, g, x - leaf, trunkH + 1, x + leaf, trunkH + 3, LEAF);
+  }
+
+  /* one tree */
+  (function () {
+    var c = $('oneC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = elevation(ctx, c.width, c.height, 11, 13);
+    tree(ctx, g, 5, 4, 2);
+    ctx.font = '12px monospace'; ctx.fillStyle = '#8a97b8';
+    ctx.fillText('leaves', 6, 24);
+    ctx.fillText('trunk', 6, c.height - 44);
+  })();
+
+  /* leaf size */
+  (function () {
+    var c = $('leafC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var leaf = +$('lS').value, w = 2 * leaf + 1;
+      $('lSo').textContent = leaf; $('lW').textContent = w;
+      $('lN').textContent = w * 3 * w;
+      var N = 13, cell = Math.min(c.width, c.height) / N;
+      var ox = (c.width - N * cell) / 2, oy = (c.height - N * cell) / 2;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+      for (var i = 0; i <= N; i++) {
+        ctx.beginPath(); ctx.moveTo(ox + i * cell, oy); ctx.lineTo(ox + i * cell, oy + N * cell); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(ox, oy + i * cell); ctx.lineTo(ox + N * cell, oy + i * cell); ctx.stroke();
+      }
+      var cxi = 6;
+      ctx.fillStyle = 'rgba(79,122,42,.75)';
+      ctx.fillRect(ox + (cxi - leaf) * cell, oy + (cxi - leaf) * cell, w * cell, w * cell);
+      ctx.fillStyle = LOG;
+      ctx.fillRect(ox + cxi * cell + 2, oy + cxi * cell + 2, cell - 4, cell - 4);
+      ctx.font = '12px monospace'; ctx.fillStyle = '#8a97b8';
+      ctx.fillText('top down', 6, 16);
+    }
+    $('lS').addEventListener('input', upd); upd();
+  })();
+
+  /* step through */
+  (function () {
+    var c = $('stepC'); if (!c) return;
+    var ctx = c.getContext('2d'), step = 0;
+    function draw() {
+      var g = elevation(ctx, c.width, c.height, 30, 14);
+      var x = 4, th = 4, leaf = 2, total = 0;
+      for (var i = 1; i <= 3; i++) {
+        if (i <= step) {
+          tree(ctx, g, x, th, leaf);
+          total += (th + 1) + (2 * leaf + 1) * 3 * (2 * leaf + 1);
+        }
+        var row = $('rw' + i);
+        if (row) row.className = (i === step) ? 'on' : '';
+        x += 8; th += 2; leaf += 1;
+      }
+      $('stN').textContent = total;
+    }
+    $('stFwd').addEventListener('click', function () { if (step < 3) step++; draw(); this.blur(); });
+    $('stBack').addEventListener('click', function () { if (step > 0) step--; draw(); this.blur(); });
+    $('stReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* gap */
+  (function () {
+    var c = $('gapC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var gap = +$('gS').value;
+      $('gSo').textContent = gap;
+      var g = elevation(ctx, c.width, c.height, Math.max(30, 4 + gap * 3 + 6), 14);
+      var x = 4, th = 4, leaf = 2, clash = false, prevRight = -99;
+      for (var i = 1; i <= 3; i++) {
+        if (x - leaf <= prevRight) clash = true;
+        prevRight = x + leaf;
+        tree(ctx, g, x, th, leaf);
+        x += gap; th += 2; leaf += 1;
+      }
+      $('gMsg').innerHTML = clash
+        ? '<span style="color:#ff5555">leaves overlap</span>'
+        : '<span style="color:var(--fn)">no overlap</span>';
+    }
+    $('gS').addEventListener('input', upd); upd();
+  })();
+
+  /* tune */
+  (function () {
+    var c = $('tuneC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('tN').value, dh = +$('tH').value, dw = +$('tW').value;
+      $('tNo').textContent = n; $('tHo').textContent = dh; $('tWo').textContent = dw;
+      var maxLeaf = 2 + dw * (n - 1), span = 4 + 8 * (n - 1) + maxLeaf + 2;
+      var maxH = 4 + dh * (n - 1) + 4;
+      var g = elevation(ctx, c.width, c.height, Math.max(span, 12), Math.max(maxH, 10));
+      var x = 4, th = 4, leaf = 2, total = 0;
+      for (var i = 1; i <= n; i++) {
+        tree(ctx, g, x, th, leaf);
+        total += (th + 1) + (2 * leaf + 1) * 3 * (2 * leaf + 1);
+        x += 8; th += dh; leaf += dw;
+      }
+      $('tB').textContent = total;
+    }
+    ['tN', 'tH', 'tW'].forEach(function (id) { $(id).addEventListener('input', upd); });
+    upd();
+  })();
+})();
+</script>
+</body>
+</html>

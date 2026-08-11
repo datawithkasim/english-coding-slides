@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concept — Looping Dictionaries & While Loops</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ---- Dictionary LOOP (sequential row highlight, CSS only) ---- */
+  .dloop { display: flex; flex-direction: column; gap: clamp(.5em,1.4vmin,.9em); margin: .3em auto; max-width: min(820px,96%); }
+  .dloop .d-table {
+    background: #2a2a3e; border-radius: 12px; padding: .55em .9em;
+    font-family: "JetBrains Mono","Fira Code",monospace; color: #f5f5f5;
+    font-size: clamp(15px, 2.7vmin, 24px);
+  }
+  .dloop .d-row {
+    display: flex; gap: .55em; align-items: center;
+    padding: .3em .5em; border-radius: 8px;
+    border: 2px solid transparent;
+  }
+  .dloop .d-brace { color: var(--com); }
+  .dloop .d-key { color: var(--str); font-weight: 800; min-width: 5.5em; }
+  .dloop .d-sep { color: var(--com); }
+  .dloop .d-val { color: var(--num); font-weight: 800; }
+  /* pointer arrow shown on the active row */
+  .dloop .d-row .d-ptr { margin-left: auto; opacity: 0; color: var(--accent); font-weight: 800; }
+
+  .dloop .d-row.r1 { animation: dlrow1 9s infinite; }
+  .dloop .d-row.r2 { animation: dlrow2 9s infinite; }
+  .dloop .d-row.r3 { animation: dlrow3 9s infinite; }
+  .dloop .d-row.r1 .d-ptr { animation: dlptr1 9s infinite; }
+  .dloop .d-row.r2 .d-ptr { animation: dlptr2 9s infinite; }
+  .dloop .d-row.r3 .d-ptr { animation: dlptr3 9s infinite; }
+  @keyframes dlrow1 { 0%,1%{background:transparent;border-color:transparent} 3%,29%{background:rgba(255,120,73,.20);border-color:var(--accent)} 31%,100%{background:transparent;border-color:transparent} }
+  @keyframes dlrow2 { 0%,33%{background:transparent;border-color:transparent} 36%,62%{background:rgba(255,120,73,.20);border-color:var(--accent)} 64%,100%{background:transparent;border-color:transparent} }
+  @keyframes dlrow3 { 0%,66%{background:transparent;border-color:transparent} 69%,95%{background:rgba(255,120,73,.20);border-color:var(--accent)} 97%,100%{background:transparent;border-color:transparent} }
+  @keyframes dlptr1 { 0%,2%{opacity:0} 4%,29%{opacity:1} 31%,100%{opacity:0} }
+  @keyframes dlptr2 { 0%,34%{opacity:0} 37%,62%{opacity:1} 64%,100%{opacity:0} }
+  @keyframes dlptr3 { 0%,67%{opacity:0} 70%,95%{opacity:1} 97%,100%{opacity:0} }
+
+  .dloop .output-box .out-line { opacity: 0; }
+  .dloop .output-box .o1 { animation: dlo1 9s infinite; }
+  .dloop .output-box .o2 { animation: dlo2 9s infinite; }
+  .dloop .output-box .o3 { animation: dlo3 9s infinite; }
+  @keyframes dlo1 { 0%,7%{opacity:0;transform:translateX(-6px)} 11%,96%{opacity:1;transform:none} 99%,100%{opacity:0} }
+  @keyframes dlo2 { 0%,40%{opacity:0;transform:translateX(-6px)} 44%,96%{opacity:1;transform:none} 99%,100%{opacity:0} }
+  @keyframes dlo3 { 0%,73%{opacity:0;transform:translateX(-6px)} 77%,96%{opacity:1;transform:none} 99%,100%{opacity:0} }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Concept · Loops — Dicts & While</div>
+
+  <!-- 1. Title -->
+  <div class="slide active center-all">
+    <div class="pill">Concept</div>
+    <div class="emoji">🔁</div>
+    <h1>Loops:<br>Dicts &amp; While</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Walk through a <span class="sub">dictionary</span> + repeat with <span class="sub">while</span>.</p>
+    <p class="bilingual">딕셔너리 반복 + while 반복문</p>
+  </div>
+
+  <!-- 2. Dict recap -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>A dictionary = key → value pairs</h2>
+<pre>scores = {<span class="str">"Min"</span>: <span class="num">90</span>, <span class="str">"Ye"</span>: <span class="num">75</span>, <span class="str">"Bo"</span>: <span class="num">88</span>}</pre>
+    <div class="varbox-row" style="margin-top:.6em">
+      <div class="varbox"><span class="name">"Min"</span><span class="val">90</span></div>
+      <div class="varbox"><span class="name">"Ye"</span><span class="val">75</span></div>
+      <div class="varbox"><span class="name">"Bo"</span><span class="val">88</span></div>
+    </div>
+    <p class="bilingual">키(key)로 값(value)을 찾는 상자</p>
+  </div>
+
+  <!-- 3. Looping concept + animation -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2><code>for key in scores:</code> visits each key</h2>
+    <div class="dloop">
+      <div class="d-table">
+        <div class="d-row"><span class="d-brace">{</span></div>
+        <div class="d-row r1"><span class="d-key">"Min"</span><span class="d-sep">:</span><span class="d-val">90</span><span class="d-ptr">◄ key</span></div>
+        <div class="d-row r2"><span class="d-key">"Ye"</span><span class="d-sep">:</span><span class="d-val">75</span><span class="d-ptr">◄ key</span></div>
+        <div class="d-row r3"><span class="d-key">"Bo"</span><span class="d-sep">:</span><span class="d-val">88</span><span class="d-ptr">◄ key</span></div>
+        <div class="d-row"><span class="d-brace">}</span></div>
+      </div>
+      <div class="output-box">
+        <div class="out-label">▸ print(key)</div>
+        <div class="out-line o1">Min</div>
+        <div class="out-line o2">Ye</div>
+        <div class="out-line o3">Bo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. key gives value -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2>Use the key to grab its value</h2>
+<pre><span class="kw">for</span> name <span class="kw">in</span> scores:
+    <span class="fn">print</span>(name, scores[name])</pre>
+    <div class="viz viz-dict" style="margin-top:.5em">
+      <div class="d-table">
+        <div class="d-row"><span class="d-key">"Min"</span><span class="d-sep">:</span><span class="d-val">90</span></div>
+        <div class="d-row"><span class="d-key">"Ye"</span><span class="d-sep">:</span><span class="d-val">75</span></div>
+        <div class="d-row"><span class="d-key">"Bo"</span><span class="d-sep">:</span><span class="d-val">88</span></div>
+      </div>
+      <div class="d-lookup">scores[<span class="d-qs"><span class="d-q d-q1">"Min"</span><span class="d-q d-q2">"Bo"</span></span>]</div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line d-out d-out1">90</div>
+        <div class="out-line d-out d-out2">88</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. keys/values/items vocab -->
+  <div class="slide">
+    <div class="pill">3 ways</div>
+    <h2>Choose what to loop</h2>
+    <div class="vocab-table">
+      <span class="term">.keys()</span>
+      <span class="gloss">just the keys — "Min", "Ye", "Bo"</span>
+      <span class="ko">키만</span>
+
+      <span class="term">.values()</span>
+      <span class="gloss">just the values — 90, 75, 88</span>
+      <span class="ko">값만</span>
+
+      <span class="term">.items()</span>
+      <span class="gloss">both together — key AND value</span>
+      <span class="ko">키 + 값 함께</span>
+    </div>
+    <p style="margin-top:.4em">Plain <code>for x in scores:</code> gives the <b>keys</b> (same as <code>.keys()</code>).</p>
+  </div>
+
+  <!-- 6. items() animation -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2><code>.items()</code> grabs both at once</h2>
+<pre><span class="kw">for</span> name, score <span class="kw">in</span> scores.<span class="fn">items</span>():
+    <span class="fn">print</span>(name, <span class="str">"got"</span>, score)</pre>
+    <div class="dloop">
+      <div class="d-table">
+        <div class="d-row r1"><span class="d-key">"Min"</span><span class="d-sep">:</span><span class="d-val">90</span><span class="d-ptr">◄ name, score</span></div>
+        <div class="d-row r2"><span class="d-key">"Ye"</span><span class="d-sep">:</span><span class="d-val">75</span><span class="d-ptr">◄ name, score</span></div>
+        <div class="d-row r3"><span class="d-key">"Bo"</span><span class="d-sep">:</span><span class="d-val">88</span><span class="d-ptr">◄ name, score</span></div>
+      </div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line o1">Min got 90</div>
+        <div class="out-line o2">Ye got 75</div>
+        <div class="out-line o3">Bo got 88</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Trace activity -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What is <code>total</code> at the end?</h2>
+<pre>scores = {<span class="str">"Min"</span>: <span class="num">90</span>, <span class="str">"Ye"</span>: <span class="num">75</span>, <span class="str">"Bo"</span>: <span class="num">88</span>}
+total = <span class="num">0</span>
+<span class="kw">for</span> v <span class="kw">in</span> scores.<span class="fn">values</span>():
+    total = total + v</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">v</div>
+      <div class="cell head"><code>90</code></div>
+      <div class="cell head"><code>75</code></div>
+      <div class="cell head"><code>88</code></div>
+
+      <div class="cell">total</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">90</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">165</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">253</span></details></div>
+    </div>
+  </div>
+
+  <!-- 8. While intro -->
+  <div class="slide center-all">
+    <div class="pill purple">New loop</div>
+    <div class="emoji">🔂</div>
+    <h1 style="font-size:clamp(36px,7vmin,72px)">The while loop</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Repeat <span class="sub">while a condition stays True</span>.</p>
+    <p class="bilingual">조건이 참인 동안 계속 반복</p>
+  </div>
+
+  <!-- 9. for vs while -->
+  <div class="slide">
+    <div class="pill">for vs while</div>
+    <h2>Two jobs, two loops</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">for</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="fn">print</span>(i)</pre>
+        <p style="margin-top:.4em">Know the count → <b>for</b></p>
+      </div>
+      <div class="col bad"><span class="tag">while</span>
+<pre><span class="kw">while</span> lives <span class="kw">&gt;</span> <span class="num">0</span>:
+    play()</pre>
+        <p style="margin-top:.4em">Repeat till something changes → <b>while</b></p>
+      </div>
+    </div>
+    <p class="bilingual">횟수 아는 for · 조건 기반 while</p>
+  </div>
+
+  <!-- 10. While animation -->
+  <div class="slide">
+    <div class="pill">Watch it 👀</div>
+    <h2>Count up while <code>count &lt; 3</code></h2>
+    <div class="viz viz-while">
+      <div class="wh-var"><span class="vname">count</span> = <span class="vval"><span>0</span><span>1</span><span>2</span><span>3</span></span></div>
+      <div class="wh-cond">count &lt; 3</div>
+      <div class="wh-body">print(count)  ·  count += 1</div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line">0</div>
+        <div class="out-line">1</div>
+        <div class="out-line">2</div>
+        <div class="out-line wh-exit">→ 3 is not &lt; 3, exit</div>
+      </div>
+    </div>
+    <p class="bilingual">조건이 거짓 되면 멈춤</p>
+  </div>
+
+  <!-- 11. Infinite loop warning -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The forever loop</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ never stops</span>
+<pre>n = <span class="num">5</span>
+<span class="kw">while</span> n <span class="kw">&gt;</span> <span class="num">0</span>:
+    <span class="fn">print</span>(n)</pre>
+        <p style="margin-top:.4em">n never changes → infinite</p>
+      </div>
+      <div class="col good"><span class="tag">✓ makes progress</span>
+<pre>n = <span class="num">5</span>
+<span class="kw">while</span> n <span class="kw">&gt;</span> <span class="num">0</span>:
+    <span class="fn">print</span>(n)
+    n = n <span class="kw">-</span> <span class="num">1</span></pre>
+        <p style="margin-top:.4em">n shrinks → reaches 0, stops</p>
+      </div>
+    </div>
+    <p class="bilingual">while 안에서 조건 값을 꼭 바꿔라</p>
+  </div>
+
+  <!-- 12. Debug -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong loop</h2>
+<pre><span class="com"># print every score</span>
+<span class="kw">for</span> s <span class="kw">in</span> scores:
+    <span class="fn">print</span>(s)</pre>
+    <div class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">Prints the names (keys), not the numbers.</div>
+      <p style="margin-top:.4em">Loop values: <code>for s in scores.values():</code> — or print <code>scores[s]</code>.</p>
+      <p class="bilingual">그냥 for는 키가 나온다 — 값은 .values()</p>
+    </div>
+  </div>
+
+  <!-- 13. Quiz 1 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">quiz</span></div>
+    <h2>Pick the answer</h2>
+    <div class="mcq" data-correct="0" data-explain="A plain for over a dict walks the keys.">
+      <div class="q"><code>for x in scores:</code> — what is <code>x</code> each time?</div>
+      <div class="opts">
+        <button class="opt">a key</button>
+        <button class="opt">a value</button>
+        <button class="opt">both together</button>
+      </div>
+      <div class="qfeedback"></div>
+    </div>
+  </div>
+
+  <!-- 14. Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">quiz</span></div>
+    <h2>One more</h2>
+    <div class="mcq" data-correct="0" data-explain="If the condition never becomes False, the loop runs forever.">
+      <div class="q">A <code>while</code> loop whose condition stays True forever will…</div>
+      <div class="opts">
+        <button class="opt">run forever (infinite loop)</button>
+        <button class="opt">run exactly once</button>
+        <button class="opt">skip the body</button>
+      </div>
+      <div class="qfeedback"></div>
+    </div>
+  </div>
+
+  <!-- 15. Score -->
+
+  <!-- 16. Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Remember 🧠</h2>
+    <ul class="check-list">
+      <li><code>for key in d:</code> → keys · <code>d[key]</code> → value</li>
+      <li><code>.items()</code> → key AND value in one loop</li>
+      <li><code>while</code> repeats until its condition is False</li>
+      <li>Always change the condition inside — or it loops forever</li>
+    </ul>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 16</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

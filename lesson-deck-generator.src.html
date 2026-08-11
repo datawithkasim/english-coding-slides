@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lesson → Deck · English Coding</title>
+<style>
+  :root{--bg:#faf6f0;--ink:#1a1a2e;--accent:#ff7849;--accent2:#6b4ee6;--soft:#ecdcc8;--line:#e3d6c4;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;line-height:1.5}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  header .logo{font-size:34px}
+  header h1{font-size:26px;font-weight:800}
+  header .tag{font-size:13px;color:#8a7a66;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .sub{color:#7a6a56;font-size:15px;margin:2px 0 20px 46px}
+  .grid{display:grid;grid-template-columns:minmax(360px,440px) 1fr;gap:22px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;box-shadow:0 4px 0 var(--soft)}
+  .card h2{font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent2);margin-bottom:14px}
+  label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px;color:#4a4258}
+  input[type=text],input[type=password],textarea,select{width:100%;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fffdfa;color:var(--ink)}
+  textarea{resize:vertical;min-height:120px;line-height:1.5}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+  .row{display:flex;gap:10px}
+  .row>*{flex:1}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;user-select:none;background:#fffdfa}
+  .chip input{display:none}
+  .chip.on{background:rgba(255,120,73,.12);border-color:var(--accent);color:#b5501f}
+  .btnrow{display:flex;gap:10px;margin-top:18px}
+  button.act{flex:1;border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;font-size:15px;cursor:pointer;transition:transform .06s,filter .15s}
+  button.act:active{transform:translateY(1px)}
+  button.primary{background:var(--accent);color:#fff}
+  button.primary:hover{filter:brightness(1.05)}
+  button.ghost{background:#fff;border:2px solid var(--accent2);color:var(--accent2)}
+  button.ghost:hover{background:rgba(107,78,230,.06)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .status{margin-top:12px;font-size:13px;min-height:20px;font-weight:600}
+  .status.err{color:#c0392b}
+  .status.ok{color:#0a8a3e}
+  .status.work{color:var(--accent2)}
+  details.keybox{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  details.keybox summary{cursor:pointer;font-size:13px;font-weight:700;color:#7a6a56;list-style:none}
+  details.keybox summary::-webkit-details-marker{display:none}
+  details.keybox summary::before{content:"⚙ ";}
+  .hint{font-size:12px;color:#9a8a76;margin-top:4px;line-height:1.4}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .preview-head h2{font-size:15px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent2)}
+  .preview-head .acts{display:flex;gap:8px}
+  .miniact{border:2px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink);display:inline-block}
+  .miniact:hover{border-color:var(--accent)}
+  .miniact:disabled{opacity:.4;cursor:not-allowed}
+  /* match results */
+  .matchpanel{margin-bottom:14px}
+  .verdict{border-radius:14px;padding:12px 16px;font-weight:700;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  .verdict.hit{background:rgba(10,138,62,.10);border:1px solid #2bb673;color:#0a6b34}
+  .verdict.miss{background:rgba(255,120,73,.10);border:1px solid var(--accent);color:#a8461c}
+  .mlist{display:flex;flex-direction:column;gap:8px}
+  .mitem{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:0 3px 0 var(--soft)}
+  .mitem .mbar{flex:0 0 46px;text-align:center;font-weight:800;font-size:13px;color:var(--accent2)}
+  .mitem .mmeta{flex:1;min-width:0}
+  .mitem .mtitle{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mitem .mtrack{font-size:12px;color:#9a8a76}
+  .mitem.top{border-color:#2bb673;box-shadow:0 3px 0 #cdeed8}
+  .gennew{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .gennew .lbl{font-size:13px;color:#7a6a56;font-weight:600}
+  .frame{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 0 var(--soft)}
+  #preview{width:100%;height:60vh;min-height:440px;border:0;display:block;background:var(--bg)}
+  .empty{height:60vh;min-height:440px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#b3a48f;text-align:center;padding:30px}
+  .empty .big{font-size:52px;margin-bottom:10px}
+  code{background:var(--soft);padding:.05em .35em;border-radius:5px;font-family:"JetBrains Mono",Consolas,monospace;font-size:.9em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">🎬</span>
+    <h1>Lesson&nbsp;→&nbsp;Deck</h1>
+    <span class="tag">English Coding</span>
+  </header>
+  <p class="sub">Type what you're covering. It first checks the <b id="deckCount">0</b> decks you already have — reuse a match, or make a fresh one.</p>
+
+  <div class="grid">
+    <!-- ============ INPUT ============ -->
+    <div class="card">
+      <h2>1 · Your lesson</h2>
+
+      <label for="topic">What are you covering? *</label>
+      <textarea id="topic" placeholder="e.g. while loops — what they are, the condition, counting up, and the infinite-loop trap. Students already know for-loops."></textarea>
+
+      <div class="row">
+        <div>
+          <label for="course">Course / level</label>
+          <input type="text" id="course" placeholder="RS002 · ESL beginners">
+        </div>
+        <div>
+          <label for="nslides">Slides</label>
+          <input type="text" id="nslides" value="14">
+        </div>
+      </div>
+
+      <label>Include (for new decks)</label>
+      <div class="chips" id="chips">
+        <label class="chip on"><input type="checkbox" value="animations" checked>🎞 Animations</label>
+        <label class="chip on"><input type="checkbox" value="truthtable" checked>▦ Truth table</label>
+        <label class="chip on"><input type="checkbox" value="quiz" checked>❓ Quiz + score</label>
+        <label class="chip on"><input type="checkbox" value="debug" checked>🐛 Debug</label>
+        <label class="chip on"><input type="checkbox" value="trace" checked>🔍 Trace activity</label>
+        <label class="chip on"><input type="checkbox" value="korean" checked>🇰🇷 Korean bilingual</label>
+        <label class="chip"><input type="checkbox" value="predict">🤔 Predict</label>
+        <label class="chip"><input type="checkbox" value="vocab">📖 Vocab</label>
+      </div>
+
+      <label for="notes">Anything else? (optional)</label>
+      <input type="text" id="notes" placeholder="tone, a specific example, what to avoid…">
+
+      <div class="btnrow">
+        <button class="act primary" id="find">🔍 Find or make</button>
+        <button class="act ghost" id="brief" title="No key needed — copies a prompt you can paste to Solon">📋 Copy brief</button>
+      </div>
+      <div class="status" id="status"></div>
+
+      <details class="keybox" id="keybox">
+        <summary>API key &amp; model (only needed to make NEW decks)</summary>
+        <label for="key">Anthropic API key</label>
+        <input type="password" id="key" placeholder="sk-ant-…" autocomplete="off">
+        <div class="hint">Saved only in this browser (localStorage). Sent only to Anthropic. Get one at console.anthropic.com. Reusing an existing deck needs no key.</div>
+        <label for="model">Model</label>
+        <select id="model">
+          <option value="claude-sonnet-5">Sonnet 5 — fast, great (default)</option>
+          <option value="claude-opus-4-8">Opus 4.8 — best quality, slower</option>
+          <option value="claude-haiku-4-5-20251001">Haiku 4.5 — cheapest</option>
+        </select>
+      </details>
+    </div>
+
+    <!-- ============ RESULT ============ -->
+    <div>
+      <div class="preview-head">
+        <h2>2 · Result</h2>
+        <div class="acts">
+          <button class="miniact" id="openTab" disabled>↗ Open</button>
+          <button class="miniact" id="download" disabled>⬇ Download .html</button>
+          <button class="miniact" id="copyHtml" disabled>⧉ Copy HTML</button>
+        </div>
+      </div>
+
+      <div class="matchpanel" id="matchpanel" style="display:none"></div>
+
+      <div class="frame">
+        <div class="empty" id="empty">
+          <div class="big">🎬</div>
+          <div>Type your lesson, hit <b>Find or make</b>.<br>Existing matches show here; new decks preview here too.</div>
+        </div>
+        <iframe id="preview" style="display:none" title="Deck preview"></iframe>
+      </div>
+      <p class="hint" style="margin-top:8px">Reuse = opens a deck you already have. New = a self-contained file you can download and double-click (no internet needed).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Bundled house assets (self-contained generated decks) ===== -->
+<script type="text/plain" id="houseCss">__HOUSE_CSS__</script>
+<script type="text/plain" id="houseJs">__HOUSE_JS__</script>
+
+<!-- ===== Manifest of existing decks (rebuilt by scripts/build-deck-generator.py) ===== -->
+<script type="application/json" id="deckManifest">__DECK_MANIFEST__</script>
+
+<!-- ===== Extra reusable deck components (truth table, dict-loop, reduction, ladder) ===== -->
+<script type="text/plain" id="extraCss">
+/* ---- Truth table ---- */
+.truth{border-collapse:collapse;margin:.5em auto;font-family:"JetBrains Mono","Fira Code",monospace;box-shadow:0 6px 0 var(--soft);border-radius:12px;overflow:hidden}
+.truth caption{caption-side:top;font-family:"Inter",sans-serif;font-weight:800;color:var(--accent-2);font-size:clamp(16px,2.8vmin,26px);margin-bottom:.35em}
+.truth th,.truth td{border:2px solid var(--soft);padding:.4em 1em;text-align:center;font-weight:800;font-size:clamp(15px,2.7vmin,26px)}
+.truth th{background:var(--code-bg);color:#f5f5f5;letter-spacing:.04em}
+.truth td{background:#fff}
+.truth td.T{color:#0a8a3e}
+.truth td.F{color:#c0392b}
+.truth td.res{background:#fff6ee}
+.truth td.res.T{background:#eafbf0}
+.truth td.res.F{background:#fff0ee}
+/* ---- Precedence / priority ladder ---- */
+.ladder{display:flex;flex-direction:column;gap:.5em;margin:.5em auto;max-width:min(760px,96%)}
+.ladder .rung{display:flex;align-items:center;gap:.8em;background:#fff;border-radius:14px;padding:.6em 1em;box-shadow:0 4px 0 var(--soft);border-left:6px solid var(--accent)}
+.ladder .rung .rank{font-family:"JetBrains Mono",monospace;font-weight:800;color:#fff;background:var(--accent);border-radius:999px;width:1.9em;height:1.9em;display:flex;align-items:center;justify-content:center;font-size:clamp(15px,2.6vmin,22px);flex:0 0 auto}
+.ladder .rung code{font-size:clamp(16px,2.8vmin,26px)}
+.ladder .rung .why{margin-left:auto;font-size:clamp(12px,2vmin,17px);color:var(--com);font-weight:700}
+.ladder .rung.two{border-left-color:var(--accent-2)}
+.ladder .rung.two .rank{background:var(--accent-2)}
+.ladder .rung.three{border-left-color:#8a8a9a}
+.ladder .rung.three .rank{background:#8a8a9a}
+/* ---- Step-by-step reduction (auto-loops, up to 5 lines) ---- */
+.reduce{background:var(--code-bg);border-radius:14px;padding:1em 1.2em;display:flex;flex-direction:column;gap:.45em;font-family:"JetBrains Mono","Fira Code",monospace;color:#f5f5f5;font-size:clamp(16px,3vmin,28px);margin:.4em auto;max-width:min(900px,96%)}
+.reduce .rline{font-weight:800;opacity:0}
+.reduce .rline b{color:var(--num);background:rgba(189,147,249,.18);padding:0 .25em;border-radius:5px}
+.reduce .rline .box{color:var(--str);background:rgba(241,250,140,.16);padding:0 .25em;border-radius:5px;outline:2px solid var(--str)}
+.reduce .rline.done{color:var(--fn)}
+.reduce .rnote{font-family:"Inter",sans-serif;font-weight:700;font-size:clamp(12px,2vmin,17px);color:var(--com);opacity:0;padding-left:1.2em}
+.reduce>*:nth-child(1){animation:rvl 12s infinite 0s}
+.reduce>*:nth-child(2){animation:rvl 12s infinite 2s}
+.reduce>*:nth-child(3){animation:rvl 12s infinite 4s}
+.reduce>*:nth-child(4){animation:rvl 12s infinite 6s}
+.reduce>*:nth-child(5){animation:rvl 12s infinite 8s}
+@keyframes rvl{0%,3%{opacity:0;transform:translateX(-8px)}7%,95%{opacity:1;transform:none}98%,100%{opacity:0}}
+/* ---- Dictionary LOOP (sequential row highlight, 3 rows) ---- */
+.dloop{display:flex;flex-direction:column;gap:clamp(.5em,1.4vmin,.9em);margin:.3em auto;max-width:min(820px,96%)}
+.dloop .d-table{background:#2a2a3e;border-radius:12px;padding:.55em .9em;font-family:"JetBrains Mono","Fira Code",monospace;color:#f5f5f5;font-size:clamp(15px,2.7vmin,24px)}
+.dloop .d-row{display:flex;gap:.55em;align-items:center;padding:.3em .5em;border-radius:8px;border:2px solid transparent}
+.dloop .d-brace{color:var(--com)}
+.dloop .d-key{color:var(--str);font-weight:800;min-width:5.5em}
+.dloop .d-sep{color:var(--com)}
+.dloop .d-val{color:var(--num);font-weight:800}
+.dloop .d-row .d-ptr{margin-left:auto;opacity:0;color:var(--accent);font-weight:800}
+.dloop .d-row.r1{animation:dlrow1 9s infinite}
+.dloop .d-row.r2{animation:dlrow2 9s infinite}
+.dloop .d-row.r3{animation:dlrow3 9s infinite}
+.dloop .d-row.r1 .d-ptr{animation:dlptr1 9s infinite}
+.dloop .d-row.r2 .d-ptr{animation:dlptr2 9s infinite}
+.dloop .d-row.r3 .d-ptr{animation:dlptr3 9s infinite}
+@keyframes dlrow1{0%,1%{background:transparent;border-color:transparent}3%,29%{background:rgba(255,120,73,.20);border-color:var(--accent)}31%,100%{background:transparent;border-color:transparent}}
+@keyframes dlrow2{0%,33%{background:transparent;border-color:transparent}36%,62%{background:rgba(255,120,73,.20);border-color:var(--accent)}64%,100%{background:transparent;border-color:transparent}}
+@keyframes dlrow3{0%,66%{background:transparent;border-color:transparent}69%,95%{background:rgba(255,120,73,.20);border-color:var(--accent)}97%,100%{background:transparent;border-color:transparent}}
+@keyframes dlptr1{0%,2%{opacity:0}4%,29%{opacity:1}31%,100%{opacity:0}}
+@keyframes dlptr2{0%,34%{opacity:0}37%,62%{opacity:1}64%,100%{opacity:0}}
+@keyframes dlptr3{0%,67%{opacity:0}70%,95%{opacity:1}97%,100%{opacity:0}}
+.dloop .output-box .out-line{opacity:0}
+.dloop .output-box .o1{animation:dlo1 9s infinite}
+.dloop .output-box .o2{animation:dlo2 9s infinite}
+.dloop .output-box .o3{animation:dlo3 9s infinite}
+@keyframes dlo1{0%,7%{opacity:0;transform:translateX(-6px)}11%,96%{opacity:1;transform:none}99%,100%{opacity:0}}
+@keyframes dlo2{0%,40%{opacity:0;transform:translateX(-6px)}44%,96%{opacity:1;transform:none}99%,100%{opacity:0}}
+@keyframes dlo3{0%,73%{opacity:0;transform:translateX(-6px)}77%,96%{opacity:1;transform:none}99%,100%{opacity:0}}
+</script>
+
+<!-- ===== System guide taught to Claude ===== -->
+<script type="text/plain" id="sysGuide">
+You author single-file HTML slide decks for "English Coding", a Korean coding school teaching text-based coding (Python, JavaScript) to ESL students (Korean kids/teens). You will be given a lesson topic. Output the SLIDES ONLY.
+
+## OUTPUT CONTRACT — read carefully
+- Output a sequence of `<div class="slide">...</div>` blocks and NOTHING else.
+- No `<!DOCTYPE>`, no `<html>/<head>/<body>`, no `<style>`, no `<script>`, no `<div class="nav">`, no markdown, no code fences, no commentary before or after.
+- The wrapper page supplies the stage, footer, nav, all CSS and JS. You supply only the `.slide` divs.
+- The FIRST slide must be `<div class="slide active center-all">` (title). Every other slide is `<div class="slide">`.
+- Aim for the requested slide count (±1).
+
+## VOICE (ESL-aware)
+- Short sentences. Concrete. One idea per slide. Encouraging.
+- Under-prescribe; show, don't lecture. Prefer a picture/animation over a paragraph.
+- If Korean bilingual is requested: add ONE `<p class="bilingual">…</p>` of simple Korean per content slide (a short gloss, not a translation of everything).
+- Keep code tiny and runnable. Use realistic kid-friendly examples (games, scores, pets, food).
+
+## SLIDE GRAMMAR
+Title slide:
+<div class="slide active center-all"><div class="pill">Concept</div><div class="emoji">🔁</div><h1>Big Title</h1><p class="big" style="margin-top:.5em;color:var(--accent-2);">One-line promise with a <span class="sub">keyword</span>.</p><p class="bilingual">한 줄 소개</p></div>
+
+Normal content slide:
+<div class="slide"><div class="pill">Label</div><h2>Slide heading</h2> …content… <p class="bilingual">한국어 한 줄</p></div>
+- `.pill` is a tangerine tag; `.pill.purple` is violet. Good labels: Concept, Recap, Predict 🤔, Vocab, Watch it 👀, Try it, ⚠️ Watch out, 🐛 Debug, Quick check, Your turn!
+- Add `<span class="activity-tag">activity</span>` inside a pill for student tasks.
+
+Code blocks — use `<pre>` with syntax spans (do NOT use a real highlighter):
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="fn">print</span>(<span class="str">"hi"</span>)  <span class="com"># comment</span></pre>
+Classes: `.kw` keyword (pink), `.str` string (yellow), `.num` number (purple), `.fn` function/builtin (green), `.com` comment (grey). Inline code: `<code>x = 5</code>`. Escape `<` as &lt; and `>` as &gt; inside code.
+
+## COMPONENTS (use several; pick what fits the topic)
+
+Vocab table:
+<div class="vocab-table"><span class="term">word</span><span class="gloss">short meaning</span><span class="ko">한국어</span> …repeat triples…</div>
+
+Var boxes:
+<div class="varbox-row"><div class="varbox"><span class="name">score</span><span class="val">90</span></div>…</div>
+
+Checklist:
+<ul class="check-list"><li>point</li><li>point</li></ul>
+
+Compare (broken vs fixed, or A vs B):
+<div class="compare-row"><div class="col bad"><span class="tag">✗ broken</span><pre>…</pre><p>why</p></div><div class="col good"><span class="tag">✓ fixed</span><pre>…</pre><p>why</p></div></div>
+
+Predict card (reveal on click):
+<div class="predict-card"><div class="label">Predict</div><pre>…code…</pre><details><summary>Reveal</summary><div class="ans">answer</div></details></div>
+
+Debug card:
+<div class="pill">🐛 Debug<span class="activity-tag">activity</span></div><h2>Find the bug</h2><pre>…</pre>
+<div class="debug-card"><summary>Reveal fix</summary><div class="err">what goes wrong</div><p>the fix</p></div>
+
+Trace grid (student predicts values; details hide answers). cols-4 = 4 value columns:
+<div class="trace-grid cols-4"><div class="cell head">v</div><div class="cell head"><code>1</code></div><div class="cell head"><code>2</code></div><div class="cell head"><code>3</code></div><div class="cell">total</div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>…</div>
+
+MCQ quiz (auto-scored by the page — options are shuffled, so DON'T write "A/B/C"; put the CORRECT option FIRST via data-correct="0"):
+<div class="mcq" data-correct="0" data-explain="one-line why."><div class="q">Question with <code>code</code>?</div><div class="opts"><button class="opt">correct answer</button><button class="opt">wrong</button><button class="opt">wrong</button></div><div class="qfeedback"></div></div>
+If you add quizzes, also add ONE score slide near the end:
+<div class="slide center-all mcq-score"><div class="emoji">🏁</div><h2>Your score</h2><div class="score-val">0 / 0</div><div class="score-msg"></div><button class="quiz-reset">Reset quiz</button></div>
+
+Truth table (great for booleans / and-or-not / comparisons). Mark each cell class T or F; result column adds `res`:
+<table class="truth"><caption>A and B</caption><tr><th>A</th><th>B</th><th>A and B</th></tr><tr><td class="T">True</td><td class="T">True</td><td class="res T">True</td></tr><tr><td class="T">True</td><td class="F">False</td><td class="res F">False</td></tr>…</table>
+
+Priority ladder (operator precedence, ranked list):
+<div class="ladder"><div class="rung"><span class="rank">1</span><code>not</code><span class="why">first</span></div><div class="rung two"><span class="rank">2</span><code>and</code><span class="why">then</span></div><div class="rung three"><span class="rank">3</span><code>or</code><span class="why">last</span></div></div>
+
+Step-by-step reduction (auto-loops; show how an expression collapses; 3–5 children total, alternate `.rline` and `.rnote`, last is `.rline.done`):
+<div class="reduce"><div class="rline">True or False and False</div><div class="rnote">① do <span class="box">False and False</span> first</div><div class="rline">True or <b>False</b></div><div class="rnote">② now the or</div><div class="rline done">➜ True ✓</div></div>
+
+## ANIMATIONS (CSS auto-loops — just emit the markup, they play themselves)
+
+Loop THROUGH a dictionary (row-by-row highlight + accumulating output) — exactly 3 rows, classes r1/r2/r3 and o1/o2/o3:
+<div class="dloop"><div class="d-table"><div class="d-row"><span class="d-brace">{</span></div><div class="d-row r1"><span class="d-key">"Min"</span><span class="d-sep">:</span><span class="d-val">90</span><span class="d-ptr">◄ key</span></div><div class="d-row r2"><span class="d-key">"Ye"</span><span class="d-sep">:</span><span class="d-val">75</span><span class="d-ptr">◄ key</span></div><div class="d-row r3"><span class="d-key">"Bo"</span><span class="d-sep">:</span><span class="d-val">88</span><span class="d-ptr">◄ key</span></div><div class="d-row"><span class="d-brace">}</span></div></div><div class="output-box"><div class="out-label">▸ print(key)</div><div class="out-line o1">Min</div><div class="out-line o2">Ye</div><div class="out-line o3">Bo</div></div></div>
+
+Dictionary LOOKUP (two keys queried in turn):
+<div class="viz viz-dict"><div class="d-table"><div class="d-row"><span class="d-key">"hp"</span><span class="d-sep">:</span><span class="d-val">35</span></div><div class="d-row"><span class="d-key">"type"</span><span class="d-sep">:</span><span class="d-val">"electric"</span></div><div class="d-row"><span class="d-key">"name"</span><span class="d-sep">:</span><span class="d-val">"Pikachu"</span></div></div><div class="d-lookup">pokemon[<span class="d-qs"><span class="d-q d-q1">"hp"</span><span class="d-q d-q2">"name"</span></span>]</div><div class="output-box"><div class="out-label">▸ Output</div><div class="out-line d-out d-out1">35</div><div class="out-line d-out d-out2">"Pikachu"</div></div></div>
+
+WHILE loop (var updates, condition pulses, body fires, exits). The vval spans are the successive values; give 3 outputs + exit:
+<div class="viz viz-while"><div class="wh-var"><span class="vname">count</span> = <span class="vval"><span>0</span><span>1</span><span>2</span><span>3</span></span></div><div class="wh-cond">count &lt; 3</div><div class="wh-body">print(count); count += 1</div><div class="output-box"><div class="out-label">▸ Output</div><div class="out-line">0</div><div class="out-line">1</div><div class="out-line">2</div><div class="out-line wh-exit">→ exit loop</div></div></div>
+
+IF / ELSE (cycles a true case then a false case). case-a/case-b are the two inputs:
+<div class="viz viz-if"><div class="if-input"><span class="case case-a">age = 14</span><span class="case case-b">age = 9</span></div><div class="if-cond">age &gt;= 13</div><div class="if-branches"><div class="if-branch true">print("teen")</div><div class="if-branch false">print("kid")</div></div><div class="if-output"><div class="out-label">▸ Output</div><div class="out-line out-a">teen</div><div class="out-line out-b">kid</div></div></div>
+
+FOR-loop iteration over a small list (highlights each item, shows value). Use viz-3 (3 items), viz-4 (4), or viz-5 (5). Item count must match the class number, and out-line count = items+1 (first is a label line):
+<div class="viz viz-4"><div class="iter-row"><div class="iter-item">"a"</div><div class="iter-item">"b"</div><div class="iter-item">"c"</div><div class="iter-item">"d"</div></div><div class="output-box"><div class="out-label">▸ print(x)</div><div class="out-line">a</div><div class="out-line">b</div><div class="out-line">c</div><div class="out-line">d</div></div></div>
+
+Variable RE-ASSIGNMENT timeline (code lines light in order; box shows current value). 4 lines + 4 values:
+<div class="viz viz-reassign"><div class="ra-code"><div class="ra-line">x = 1</div><div class="ra-line">x = x + 4</div><div class="ra-line">x = x * 2</div><div class="ra-line">x = x - 3</div></div><div class="ra-box"><span class="ra-name">x</span><span class="ra-vals"><span>1</span><span>5</span><span>10</span><span>7</span></span></div></div>
+
+## SUGGESTED FLOW (adapt to the topic and slide count)
+Title → recap/hook → concept (with an animation) → worked example → 1–2 animations that show it running → a truth table or trace if it fits → common mistake / debug → quiz (2 Qs) → score → your-turn/exit. Lead with pictures and animations; keep prose minimal.
+</script>
+
+<!-- ===== App logic ===== -->
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const houseCss = $('houseCss').textContent;
+  const houseJs  = $('houseJs').textContent;
+  const extraCss = $('extraCss').textContent;
+  const sysGuide = $('sysGuide').textContent;
+  const statusEl = $('status');
+  let manifest = [];
+  try{ manifest = JSON.parse($('deckManifest').textContent) || []; }catch(e){ manifest = []; }
+  $('deckCount').textContent = manifest.length;
+  let lastDeck = '';
+
+  document.querySelectorAll('.chip').forEach(c=>{
+    const cb = c.querySelector('input');
+    cb.addEventListener('change',()=>c.classList.toggle('on',cb.checked));
+  });
+
+  $('key').value = localStorage.getItem('ec_anthropic_key') || '';
+  $('model').value = localStorage.getItem('ec_model') || 'claude-sonnet-5';
+  $('key').addEventListener('change',()=>localStorage.setItem('ec_anthropic_key',$('key').value.trim()));
+  $('model').addEventListener('change',()=>localStorage.setItem('ec_model',$('model').value));
+
+  function setStatus(msg,cls){ statusEl.className='status '+(cls||''); statusEl.textContent=msg; }
+  function checkedIncludes(){ return [...document.querySelectorAll('.chip input:checked')].map(i=>i.value); }
+
+  // ---------- matching over existing decks ----------
+  const STOP = new Set(('the a an and or of to in on for with what how is are be we you they it that this then just already know students student lesson cover covering about into use using make made give want your my our new them also so if while do does done get got one two three not but all can will each every').split(' '));
+  function tokens(s){
+    return (s||'').toLowerCase().replace(/[^a-z0-9+#. ]/g,' ').split(/\s+/)
+      .map(w=>w.replace(/\.+$/,'')).filter(w=>w.length>=3 && !STOP.has(w));
+  }
+  function scoreDeck(qToks, deck){
+    if(!qToks.length) return 0;
+    const title = deck.tt.toLowerCase();
+    const body = deck.kw.toLowerCase();
+    let hit=0, strong=0;
+    const seen = new Set();
+    qToks.forEach(t=>{
+      if(seen.has(t)) return; seen.add(t);
+      const inTitle = title.indexOf(t)!==-1;
+      const inBody  = body.indexOf(t)!==-1;
+      if(inTitle){ hit++; strong++; }
+      else if(inBody){ hit++; }
+    });
+    const uniq = seen.size||1;
+    return Math.round(100*(hit + strong*0.5)/(uniq*1.5));
+  }
+  function findMatches(){
+    const q = tokens($('topic').value+' '+$('notes').value+' '+$('course').value);
+    return manifest.map(d=>({d,score:scoreDeck(q,d)}))
+      .filter(x=>x.score>0)
+      .sort((a,b)=>b.score-a.score)
+      .slice(0,5);
+  }
+  function renderMatches(matches){
+    const p = $('matchpanel');
+    const best = matches[0];
+    const strong = best && best.score>=55;
+    let html = '';
+    if(strong){
+      html += '<div class="verdict hit">✓ You already have a close match — reuse it instead of remaking.</div>';
+    }else if(matches.length){
+      html += '<div class="verdict miss">🤔 Nothing looks like a strong match. Closest existing decks below — or make a new one.</div>';
+    }else{
+      html += '<div class="verdict miss">🤔 No existing deck touches this. Make a new one below.</div>';
+    }
+    if(matches.length){
+      html += '<div class="mlist">'+matches.map((m,i)=>
+        '<div class="mitem'+(i===0&&strong?' top':'')+'">'
+        +'<div class="mbar">'+m.score+'%</div>'
+        +'<div class="mmeta"><div class="mtitle">'+escapeHtml(m.d.tt)+'</div><div class="mtrack">'+escapeHtml(m.d.track)+'</div></div>'
+        +'<a class="miniact" href="'+encodeURI(m.d.path)+'" target="_blank" rel="noopener">Open ↗</a>'
+        +'</div>').join('')+'</div>';
+    }
+    html += '<div class="gennew"><span class="lbl">Not quite what you need?</span>'
+         +  '<button class="act primary" id="genNew" style="flex:0 0 auto;padding:10px 16px;font-size:14px">✨ Make a new deck</button></div>';
+    p.innerHTML = html;
+    p.style.display='block';
+    $('genNew').addEventListener('click',generate);
+  }
+  function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function onFind(){
+    const topic = $('topic').value.trim();
+    if(!topic){ setStatus('Type what you’re covering first.','err'); $('topic').focus(); return; }
+    const matches = findMatches();
+    renderMatches(matches);
+    if(matches[0] && matches[0].score>=55) setStatus('Found '+matches.length+' possible match'+(matches.length>1?'es':'')+' in your decks.','ok');
+    else setStatus('No strong match — review the closest, or make a new deck.','work');
+  }
+
+  // ---------- build user prompt / new deck ----------
+  function buildUserPrompt(){
+    const topic=$('topic').value.trim(), course=$('course').value.trim();
+    const n=($('nslides').value.trim()||'14'), notes=$('notes').value.trim();
+    const inc=checkedIncludes(), wantKo=inc.includes('korean');
+    const incLabels={animations:'auto-playing CSS animations',truthtable:'at least one truth table',quiz:'2 auto-scored MCQ quiz slides + a score slide',debug:'a find-the-bug debug slide',trace:'a trace-the-values activity',predict:'a predict-the-output card',vocab:'a vocab table'};
+    let lines=[];
+    lines.push('Lesson topic:\n'+topic);
+    if(course) lines.push('Course / level: '+course);
+    lines.push('Target slide count: '+n);
+    const musts=inc.filter(k=>k!=='korean').map(k=>incLabels[k]).filter(Boolean);
+    if(musts.length) lines.push('Must include: '+musts.join('; ')+'.');
+    lines.push('Korean bilingual lines: '+(wantKo?'YES — one simple Korean gloss per content slide.':'NO — English only.'));
+    if(notes) lines.push('Extra notes: '+notes);
+    lines.push('\nRemember: output ONLY the slide divs, first slide is `slide active center-all`, no wrapper/markdown/fences.');
+    return lines.join('\n');
+  }
+  function assembleDeck(title, footer, slidesHtml, count){
+    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n'
+      + '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
+      + '<title>'+esc(title)+'</title>\n<style>\n'+houseCss+'\n'+extraCss+'\n</style>\n</head>\n<body>\n'
+      + '<div class="stage">\n<div class="footer-tag">'+esc(footer)+'</div>\n'
+      + slidesHtml + '\n'
+      + '<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / '+(count||1)+'</span><button id="next">›</button></div>\n'
+      + '</div>\n<script>\n'+houseJs+'\n<\/script>\n</body>\n</html>';
+  }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function cleanSlides(raw){
+    let t=raw.trim().replace(/^```[a-zA-Z]*\s*/,'').replace(/```\s*$/,'').trim();
+    const first=t.indexOf('<div class="slide'); if(first>0) t=t.slice(first);
+    const lastClose=t.lastIndexOf('</div>'); if(lastClose!==-1) t=t.slice(0,lastClose+6);
+    if(t.indexOf('class="slide active')===-1) t=t.replace('<div class="slide','<div class="slide active center-all',1);
+    return t.trim();
+  }
+  function showDeck(deckHtml){
+    lastDeck=deckHtml;
+    const f=$('preview');
+    $('empty').style.display='none'; f.style.display='block'; f.srcdoc=deckHtml;
+    ['openTab','download','copyHtml'].forEach(id=>$(id).disabled=false);
+  }
+  async function generate(){
+    const topic=$('topic').value.trim();
+    if(!topic){ setStatus('Type what you’re covering first.','err'); $('topic').focus(); return; }
+    const key=$('key').value.trim();
+    if(!key){ setStatus('Add your Anthropic API key below (⚙) to make a new deck, or use “Copy brief”.','err'); $('keybox').open=true; $('key').focus(); return; }
+    localStorage.setItem('ec_anthropic_key',key);
+    const model=$('model').value; localStorage.setItem('ec_model',model);
+    $('find').disabled=true; $('brief').disabled=true; const gn=$('genNew'); if(gn) gn.disabled=true;
+    setStatus('Making a new deck with '+model+'… (usually 15–40s)','work');
+    const titleGuess=(topic.split(/[\n.·—-]/)[0]||'Lesson').trim().slice(0,60);
+    const footer='English Coding · '+($('course').value.trim()||'Concept');
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:model,max_tokens:8192,system:sysGuide,messages:[{role:'user',content:buildUserPrompt()}]})
+      });
+      if(!res.ok){ let detail=''; try{const j=await res.json();detail=j.error&&j.error.message?j.error.message:JSON.stringify(j);}catch(e){detail=await res.text();} throw new Error('HTTP '+res.status+' — '+detail); }
+      const data=await res.json();
+      const text=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
+      if(!text.trim()) throw new Error('Empty response from model.');
+      const slides=cleanSlides(text);
+      if(slides.indexOf('class="slide')===-1) throw new Error('Model did not return slide markup. Try again or switch model.');
+      const count=(slides.match(/class="slide/g)||[]).length;
+      showDeck(assembleDeck(titleGuess,footer,slides,count));
+      setStatus('✓ New deck ready — '+count+' slides. Download or Open to present.','ok');
+    }catch(err){
+      let m=err.message||String(err);
+      if(/Failed to fetch|NetworkError/i.test(m)) m+='  (network/CORS — check the key and your connection)';
+      setStatus('✗ '+m,'err');
+    }finally{
+      $('find').disabled=false; $('brief').disabled=false; const g=$('genNew'); if(g) g.disabled=false;
+    }
+  }
+  function copyBrief(){
+    const topic=$('topic').value.trim();
+    if(!topic){ setStatus('Type what you’re covering first.','err'); $('topic').focus(); return; }
+    const brief='Make an English Coding slide deck (house style, self-contained HTML) for this lesson.\n\n'+buildUserPrompt()
+      +'\n\nFirst check Desktop/dev/english-coding-slides for an existing deck that already covers this; reuse it if so. Otherwise use the house components: animations (viz-dict, dloop, viz-while, viz-if, viz-3/4/5), truth tables, mcq quiz + score, trace-grid, debug-card, compare-row, syntax-highlighted <pre>. Save new decks in Desktop/dev/english-coding-slides/python/concepts/.';
+    navigator.clipboard.writeText(brief).then(
+      ()=>setStatus('📋 Brief copied — paste it to Solon in chat.','ok'),
+      ()=>setStatus('Copy failed — select the box text manually.','err'));
+  }
+
+  $('find').addEventListener('click',onFind);
+  $('brief').addEventListener('click',copyBrief);
+  $('download').addEventListener('click',()=>{
+    if(!lastDeck) return;
+    const name=((($('topic').value.trim().split(/[\n.·—-]/)[0])||'deck').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'deck')+'.html';
+    const blob=new Blob([lastDeck],{type:'text/html'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  });
+  $('openTab').addEventListener('click',()=>{ if(!lastDeck) return; const w=window.open('','_blank'); w.document.open(); w.document.write(lastDeck); w.document.close(); });
+  $('copyHtml').addEventListener('click',()=>{ if(!lastDeck) return; navigator.clipboard.writeText(lastDeck).then(()=>setStatus('⧉ Deck HTML copied.','ok'),()=>setStatus('Copy failed.','err')); });
+  $('topic').addEventListener('keydown',e=>{ if((e.ctrlKey||e.metaKey)&&e.key==='Enter') onFind(); });
+})();
+</script>
+</body>
+</html>

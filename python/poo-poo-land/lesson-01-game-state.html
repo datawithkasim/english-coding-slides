@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poo Poo Land — Game State (global)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+/* ==================================================================
+   POO POO LAND — dark game-screen theme (overrides base for this deck)
+   Dyslexia-tuned: Verdana, big type, generous spacing, bold+colour
+   for emphasis (never italics), controllable motion, reduced-motion guard.
+================================================================== */
+:root{
+  --bg1:#141129; --bg2:#221c46;
+  --ink:#f5efe4; --dim:#b7afce;
+  --orange:#ff8a4c; --purple:#9b7bff; --pink:#ff7bd0;
+  --green:#4ee6a0; --yellow:#ffce4d; --red:#ff5d6c; --blue:#6cc7ff;
+  --card:#2b2456; --card2:#372d68; --line:rgba(255,255,255,.14);
+}
+html,body{ height:100%; overflow:hidden;
+  background:radial-gradient(120% 100% at 50% 0%, var(--bg2), var(--bg1) 70%);
+  color:var(--ink);
+  font-family:Verdana,Tahoma,"Trebuchet MS","Segoe UI",sans-serif;
+}
+.stage{ background:transparent; }
+.slide{ padding:5.6rem 6% 4.2rem; }
+.slide.center-all{ padding:5.6rem 6% 4.2rem; }
+
+/* readable dyslexia spacing */
+p,li,.big,.frame,.q,.desc{ line-height:1.7; word-spacing:.05em; letter-spacing:.01em; }
+h1{ color:var(--ink); text-shadow:0 4px 0 rgba(0,0,0,.25); }
+h2{ color:var(--yellow); }
+.bilingual{ color:var(--dim); opacity:1; }
+.footer-tag{ color:var(--dim); opacity:.5; }
+.com{ font-style:normal; }
+.pill{ box-shadow:0 4px 0 rgba(0,0,0,.35); }
+code{ background:#191634; color:var(--green); border:1px solid var(--line); }
+pre{ box-shadow:0 8px 0 rgba(0,0,0,.32), 0 0 0 2px var(--line); font-size:clamp(15px,3vmin,32px); }
+.nav button,.counter{ background:rgba(10,8,24,.85); }
+
+/* ---------- Persistent GAME HUD (rides every slide) ---------- */
+.pp-hud{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:60;
+  display:flex; align-items:center; gap:.75em;
+  background:rgba(14,11,32,.82); backdrop-filter:blur(9px);
+  border:2px solid var(--line); border-radius:999px;
+  padding:.42em .5em .42em .9em; box-shadow:0 10px 34px rgba(0,0,0,.5);
+  font-weight:800; font-size:clamp(13px,2.1vmin,19px);
+}
+.pp-hud .stat{ display:flex; align-items:center; gap:.4em; }
+.pp-hud .em{ font-size:1.35em; line-height:1; }
+.pp-hud .bar{ width:clamp(70px,14vmin,140px); height:12px; border-radius:999px; background:#0d0a20; overflow:hidden; border:1px solid var(--line); }
+.pp-hud .bar>i{ display:block; height:100%; width:100%; background:var(--green); transition:width .35s ease, background .35s ease; }
+.pp-hud .num{ font-family:"JetBrains Mono",monospace; min-width:1.6em; text-align:right; transition:transform .15s; }
+.pp-hud .num.bump{ transform:scale(1.35); }
+#hud-life{ color:var(--red); } #hud-pts{ color:var(--yellow); }
+.pp-hud .tag{ background:var(--purple); color:#100c26; border-radius:999px; padding:.2em .7em; font-size:.72em; letter-spacing:.02em; }
+
+/* ---------- generic themed card ---------- */
+.card{ background:linear-gradient(180deg,var(--card2),var(--card)); border:2px solid var(--line);
+  border-radius:20px; padding:1.1em 1.3em; box-shadow:0 10px 0 rgba(0,0,0,.28); }
+.lead{ font-size:clamp(20px,3.6vmin,34px); font-weight:800; }
+.muted{ color:var(--dim); }
+.kbd{ font-family:"JetBrains Mono",monospace; background:#191634; color:var(--green); padding:.08em .4em; border-radius:7px; border:1px solid var(--line); }
+
+/* chunky buttons */
+.btn{ font:inherit; font-weight:800; font-size:clamp(14px,2.3vmin,20px); color:var(--ink);
+  background:var(--card2); border:2px solid var(--line); border-bottom:5px solid rgba(0,0,0,.45);
+  border-radius:14px; padding:.62em .9em; cursor:pointer; transition:transform .08s, filter .12s; }
+.btn:hover{ filter:brightness(1.18); }
+.btn:active{ transform:translateY(3px); border-bottom-width:2px; }
+.btn:disabled{ opacity:.4; cursor:not-allowed; }
+.btn.p{ background:linear-gradient(180deg,#a98cff,#7e5cff); color:#140f33; border-color:#c9b6ff; }
+.btn.o{ background:linear-gradient(180deg,#ffa268,#ff7a3d); color:#3a1400; border-color:#ffc4a3; }
+.btn.g{ background:linear-gradient(180deg,#5cf0ac,#33cf88); color:#04381f; border-color:#a8ffd8; }
+
+/* ---------- title ---------- */
+.wordmark{ font-size:clamp(40px,10vmin,120px); font-weight:900; line-height:.95; letter-spacing:-.01em;
+  background:linear-gradient(180deg,#fff,#ffc9a3 60%,var(--orange)); -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 6px 0 rgba(0,0,0,.28); }
+.spriterow{ font-size:clamp(44px,10vmin,110px); display:flex; gap:.18em; justify-content:center; }
+.spriterow span{ animation:bob 2.2s ease-in-out infinite; }
+.spriterow span:nth-child(2){ animation-delay:.3s } .spriterow span:nth-child(3){ animation-delay:.6s }
+.spriterow span:nth-child(4){ animation-delay:.9s } .spriterow span:nth-child(5){ animation-delay:1.2s }
+@keyframes bob{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-14px) } }
+
+/* ---------- global mechanic ---------- */
+.gm{ display:grid; grid-template-columns:1fr; gap:.7em; max-width:760px; }
+.gm-wall{ position:relative; background:linear-gradient(180deg,#39306e,#2a2352); border:2px solid var(--line);
+  border-radius:16px; padding:.7em 1.1em; display:flex; align-items:center; gap:.6em; overflow:visible; }
+.gm-wall .lbl{ font-weight:800; color:var(--purple); font-size:clamp(14px,2.4vmin,20px); }
+.gm-num{ margin-left:auto; font-family:"JetBrains Mono",monospace; font-weight:900;
+  font-size:clamp(30px,6vmin,54px); color:var(--yellow); transition:transform .15s; }
+.gm-num.bump{ transform:scale(1.3); }
+.gm-pop{ position:absolute; right:1em; top:50%; font-family:"JetBrains Mono",monospace; font-weight:900;
+  font-size:clamp(20px,3.6vmin,30px); color:var(--green); opacity:0; pointer-events:none; }
+.gm-pop.go{ animation:rise .9s ease-out; }
+@keyframes rise{ 0%{ opacity:0; transform:translateY(10px) } 20%{ opacity:1 } 100%{ opacity:0; transform:translateY(-46px) } }
+.gm-fn{ position:relative; background:#191634; border:2px solid var(--line); border-radius:16px; padding:.9em 1.1em;
+  font-family:"JetBrains Mono",monospace; font-size:clamp(14px,2.5vmin,22px); line-height:1.55; white-space:pre-wrap; }
+.gm-fn .hl{ background:rgba(255,138,76,.22); border-radius:6px; padding:0 .2em; }
+.gm-ghost{ margin-top:.6em; border:2px dashed var(--red); color:var(--red); border-radius:10px; padding:.4em .7em;
+  font-weight:800; font-size:.82em; opacity:0; transform:translateY(-6px); transition:opacity .2s, transform .2s; }
+.gm-ghost.show{ opacity:1; transform:none; }
+.gm-err{ color:var(--red); font-weight:900; font-size:clamp(15px,2.6vmin,22px); min-height:1.4em; opacity:0; }
+.gm-err.show{ opacity:1; animation:shake .35s; }
+@keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.gm-row{ display:flex; gap:.5em; flex-wrap:wrap; }
+.gm-log{ font-weight:800; color:var(--dim); font-size:clamp(14px,2.3vmin,19px); min-height:1.5em; }
+.gm-log.ok{ color:var(--green); } .gm-log.no{ color:var(--red); }
+
+/* ---------- battle arena ---------- */
+.arena{ display:grid; grid-template-columns:1fr auto 1fr; gap:.6em 1em; align-items:end; max-width:860px; }
+.fighter{ text-align:center; background:linear-gradient(180deg,var(--card2),var(--card)); border:2px solid var(--line);
+  border-radius:18px; padding:.8em .6em; box-shadow:0 8px 0 rgba(0,0,0,.28); }
+.fighter .sprite{ font-size:clamp(46px,9vmin,88px); line-height:1; display:inline-block; }
+.fighter .sprite.hit{ animation:hit .3s; } @keyframes hit{ 0%,100%{transform:none} 30%{transform:translateX(-8px) rotate(-6deg)} 60%{transform:translateX(8px) rotate(6deg)} }
+.fighter .sprite.idle{ animation:bob 2.4s ease-in-out infinite; }
+.fighter .name{ font-weight:900; font-size:clamp(15px,2.6vmin,22px); margin:.15em 0; }
+.fighter .hpbar{ height:15px; border-radius:999px; background:#0d0a20; border:1px solid var(--line); overflow:hidden; }
+.fighter .hpbar>i{ display:block; height:100%; width:100%; background:var(--green); transition:width .4s ease, background .4s; }
+.fighter .hpnum{ font-family:"JetBrains Mono",monospace; font-weight:800; margin-top:.15em; font-size:clamp(13px,2.2vmin,18px); }
+.fighter .dmg{ display:block; height:1.2em; font-family:"JetBrains Mono",monospace; font-weight:900; color:var(--red); opacity:0; font-size:clamp(15px,2.6vmin,22px); }
+.fighter .dmg.go{ animation:rise .8s ease-out; }
+.arena .vs{ font-size:clamp(26px,5vmin,44px); align-self:center; }
+.ar-ctrl{ grid-column:1 / -1; display:flex; gap:.5em; justify-content:center; flex-wrap:wrap; margin-top:.3em; }
+.ar-log{ grid-column:1 / -1; text-align:center; font-weight:800; color:var(--yellow); font-size:clamp(15px,2.6vmin,22px); min-height:1.5em; }
+
+/* ---------- drawers (KeyError debug) ---------- */
+.drawers{ display:flex; gap:.5em; flex-wrap:wrap; }
+.drawer{ background:var(--card2); border:2px solid var(--line); border-radius:12px; padding:.55em .9em; font-weight:800;
+  font-family:"JetBrains Mono",monospace; font-size:clamp(13px,2.3vmin,19px); }
+.drawer.miss{ border-style:dashed; border-color:var(--red); color:var(--red); }
+
+/* ---------- compare ---------- */
+.vs2{ display:grid; grid-template-columns:1fr 1fr; gap:.8em; }
+.vs2 .col{ border-radius:16px; padding:.9em; border:2px solid var(--line); }
+.vs2 .bad{ background:rgba(255,93,108,.1); border-color:var(--red); }
+.vs2 .good{ background:rgba(78,230,160,.1); border-color:var(--green); }
+.vs2 .col .h{ font-weight:900; margin-bottom:.35em; font-size:clamp(15px,2.5vmin,20px); }
+.vs2 .bad .h{ color:var(--red); } .vs2 .good .h{ color:var(--green); }
+.vs2 pre{ font-size:clamp(12px,2.1vmin,18px); box-shadow:none; }
+
+/* ---------- vocab ---------- */
+.vgrid{ display:grid; gap:.6em; }
+.vrow{ display:grid; grid-template-columns:auto 1fr auto; gap:1em; align-items:center; background:var(--card2);
+  border:2px solid var(--line); border-radius:14px; padding:.6em 1em; }
+.vrow .t{ font-family:"JetBrains Mono",monospace; font-weight:900; color:var(--green); font-size:clamp(15px,2.6vmin,22px); }
+.vrow .g{ font-weight:700; } .vrow .k{ color:var(--purple); font-weight:800; }
+
+/* ---------- checklist ---------- */
+.todo{ list-style:none; padding:0; display:grid; gap:.5em; }
+.todo li{ background:var(--card2); border:2px solid var(--line); border-left:6px solid var(--green); border-radius:12px;
+  padding:.6em .9em; font-size:clamp(15px,2.6vmin,22px); font-weight:700; }
+
+/* ---------- reveal ---------- */
+details.rv{ margin-top:.6em; }
+details.rv summary{ cursor:pointer; list-style:none; font-weight:900; color:var(--orange); font-size:clamp(15px,2.6vmin,20px); }
+details.rv summary::after{ content:" 👀 reveal"; } details.rv[open] summary::after{ content:" ⬇"; }
+details.rv .a{ margin-top:.5em; font-weight:800; color:var(--green); font-size:clamp(16px,2.8vmin,24px); }
+
+/* ---------- MCQ restyle (deck.js drives logic) ---------- */
+.mcq .q{ font-size:clamp(18px,3vmin,26px); font-weight:800; }
+.mcq .opts{ gap:.5em; }
+.mcq .opt{ background:var(--card2); color:var(--ink); border:2px solid var(--line); border-radius:12px;
+  font-weight:700; font-size:clamp(14px,2.4vmin,19px); }
+.mcq .opt:hover:not(.disabled){ border-color:var(--orange); background:var(--card); }
+.mcq .opt.right{ border-color:var(--green); background:rgba(78,230,160,.16); }
+.mcq .opt.wrong{ border-color:var(--red); background:rgba(255,93,108,.14); }
+.mcq .opt code{ background:#191634; }
+.mcq .qfeedback.good{ background:rgba(78,230,160,.14); color:var(--green); border:1px solid var(--green); }
+.mcq .qfeedback.bad{ background:rgba(255,93,108,.12); color:var(--red); border:1px solid var(--red); }
+.mcq .qmeta{ color:var(--dim); }
+.mcq-score .score-val{ color:var(--yellow); }
+.quiz-reset{ color:var(--orange); border-color:var(--orange); }
+.quiz-reset:hover{ background:var(--orange); color:#2a1400; }
+
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+@media (max-width:760px){ .arena{ grid-template-columns:1fr auto 1fr; } .vs2{ grid-template-columns:1fr; } }
+</style>
+</head><body>
+<div class="stage">
+  <div class="footer-tag">RS002+ · Poo Poo Land · Game State</div>
+
+  <!-- PERSISTENT GAME HUD -->
+  <div class="pp-hud">
+    <div class="stat"><span class="em">❤️</span><span class="bar"><i id="hud-lifebar"></i></span><span class="num" id="hud-life">50</span></div>
+    <div class="stat"><span class="em">⭐</span><span class="num" id="hud-pts">0</span></div>
+    <span class="tag">↺ REMEMBERS</span>
+  </div>
+
+<!-- 1 Title -->
+<div class="slide active center-all">
+  <div class="spriterow"><span>💩</span><span>🥟</span><span>🍖</span><span>🍚</span><span>🥬</span></div>
+  <div class="wordmark">POO POO LAND</div>
+  <p class="lead" style="margin-top:.5em;color:var(--purple)">Game State + <span class="kbd">global</span></p>
+  <p class="bilingual">게임이 <b>기억하는</b> 숫자 (life ❤️, points ⭐)</p>
+</div>
+
+<!-- 2 Recap -->
+<div class="slide">
+  <div class="pill purple">Recap</div>
+  <h2>Last time…</h2>
+  <div class="card" style="max-width:760px">
+    <p class="lead">Which word sends a value <b style="color:var(--orange)">back out</b> of a function?</p>
+    <details class="rv"><summary>show answer</summary><div class="a"><span class="kbd">return</span> — hands a value back.</div></details>
+  </div>
+</div>
+
+<!-- 3 Predict -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>What happens?</h2>
+<pre><span class="num">points</span> = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">fight</span>():
+    points = points + <span class="num">25</span>
+    <span class="fn">print</span>(points)
+
+<span class="fn">fight</span>()</pre>
+  <details class="rv" style="margin-top:.7em"><summary>guess first</summary>
+    <div class="a">💥 <b style="color:var(--red)">Crash!</b> <span class="kbd">UnboundLocalError</span> — no <span class="kbd">global</span> yet.</div></details>
+</div>
+
+<!-- 4 Vocab -->
+<div class="slide">
+  <div class="pill">Vocab</div>
+  <h2>3 words</h2>
+  <div class="vgrid" style="max-width:820px">
+    <div class="vrow"><span class="t">global</span><span class="g">let a function change an outside number</span><span class="k">전역</span></div>
+    <div class="vrow"><span class="t">game state</span><span class="g">the numbers your game remembers now</span><span class="k">게임 상태</span></div>
+    <div class="vrow"><span class="t">outside</span><span class="g">on the wall, not inside a function</span><span class="k">함수 밖</span></div>
+  </div>
+</div>
+
+<!-- 5 Concept — INTERACTIVE global mechanic -->
+<div class="slide">
+  <div class="pill o">Play it 🎮</div>
+  <h2>Does it reach the wall?</h2>
+  <div class="gm">
+    <div class="gm-wall"><span class="lbl">🧱 WALL · global</span><span class="gm-num" id="gm-num">0</span><span class="gm-pop" id="gm-pop">+25</span></div>
+    <div class="gm-fn" id="gm-fn">def fight():
+    <span class="hl">points = points + 25</span>
+      <div class="gm-ghost" id="gm-ghost">👻 new empty local "points"</div>
+    </div>
+    <div class="gm-err" id="gm-err">💥 UnboundLocalError</div>
+    <div class="gm-row">
+      <button class="btn p" id="gm-tog">🔓 global: ON</button>
+      <button class="btn o" id="gm-run">▶ run fight()</button>
+      <button class="btn" id="gm-rst">↺</button>
+    </div>
+    <div class="gm-log" id="gm-log">Run it. With <b>global</b> the +25 reaches the wall.</div>
+  </div>
+</div>
+
+<!-- 6 Battle — INTERACTIVE arena -->
+<div class="slide">
+  <div class="pill o">Battle ⚔️</div>
+  <h2>Fight a Poo Poo monster</h2>
+  <div class="arena">
+    <div class="fighter">
+      <span class="dmg" id="ar-edmg"></span>
+      <span class="sprite idle" id="ar-espr">😖</span>
+      <div class="name" id="ar-ename">awkward</div>
+      <div class="hpbar"><i id="ar-ehp"></i></div>
+      <div class="hpnum"><span id="ar-ehpn">100</span> hp</div>
+    </div>
+    <div class="vs">⚔️</div>
+    <div class="fighter">
+      <span class="dmg" id="ar-ydmg"></span>
+      <span class="sprite idle">🦸</span>
+      <div class="name">YOU</div>
+      <div class="hpbar"><i id="ar-yhp"></i></div>
+      <div class="hpnum">❤️ <span id="ar-yhpn">50</span></div>
+    </div>
+    <div class="ar-ctrl">
+      <button class="btn o" id="ar-atk">👊 Attack</button>
+      <button class="btn p" id="ar-next">↪ Next monster</button>
+      <button class="btn g" id="ar-rst">↺ Reset game</button>
+    </div>
+    <div class="ar-log" id="ar-log">A wild <b>awkward</b> appears! 💩</div>
+  </div>
+  <p class="muted" style="margin-top:.5em;font-weight:800">⬆ Your ❤️ and ⭐ up top keep changing — and <b style="color:var(--green)">remember</b> on every slide. That is <span class="kbd">global</span> game state.</p>
+</div>
+
+<!-- 7 Worked example -->
+<div class="slide">
+  <div class="pill">Code</div>
+  <h2>How it works</h2>
+<pre style="font-size:clamp(13px,2.2vmin,23px)">life = <span class="num">50</span>
+points = <span class="num">0</span>
+
+<span class="kw">def</span> <span class="fn">fight</span>():
+    <span class="kw">global</span> life, points
+    life = life - <span class="num">10</span>
+    points = points + <span class="num">25</span>
+
+<span class="fn">fight</span>()   <span class="com"># ❤️40  ⭐25</span>
+<span class="fn">fight</span>()   <span class="com"># ❤️30  ⭐50</span></pre>
+  <p class="muted" style="margin-top:.5em;font-weight:800"><span class="kbd">global life, points</span> = "change the ones on the wall."</p>
+</div>
+
+<!-- 8 Common mistake -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2>Forgot <span class="kbd">global</span></h2>
+  <div class="vs2" style="max-width:880px">
+    <div class="col bad"><div class="h">✗ crashes</div>
+<pre><span class="kw">def</span> <span class="fn">fight</span>():
+    points = points + <span class="num">25</span></pre>
+      <p class="muted" style="font-weight:800;margin-top:.4em">makes a <b style="color:var(--red)">new empty local</b> → <span class="kbd">UnboundLocalError</span></p>
+    </div>
+    <div class="col good"><div class="h">✓ works</div>
+<pre><span class="kw">def</span> <span class="fn">fight</span>():
+    <span class="kw">global</span> points
+    points = points + <span class="num">25</span></pre>
+      <p class="muted" style="font-weight:800;margin-top:.4em">uses the <b style="color:var(--green)">outside</b> points 👍</p>
+    </div>
+  </div>
+</div>
+
+<!-- 9 Debug 1 — chicken KeyError (their bug) -->
+<div class="slide">
+  <div class="pill">🐛 Your bug 1</div>
+  <h2><span class="kbd">monsters["chicken"]</span></h2>
+  <div class="drawers" style="margin:.4em 0 .7em">
+    <div class="drawer">awkward</div><div class="drawer">mandu</div>
+    <div class="drawer">donkatsu</div><div class="drawer">riceeeeeeeey</div>
+    <div class="drawer miss">chicken ❌</div>
+  </div>
+  <div class="card" style="max-width:820px"><p class="lead">No <b>chicken</b> key → <span class="kbd">KeyError</span>.</p>
+    <p class="muted" style="font-weight:800;margin-top:.4em">Fix: add it first, or <span class="kbd">.get("chicken")</span> returns <span class="kbd">None</span> (no crash).</p></div>
+</div>
+
+<!-- 10 Debug 2 — broken entry dict (their bug) -->
+<div class="slide">
+  <div class="pill">🐛 Your bug 2</div>
+  <h2>The broken monster</h2>
+  <div class="vs2" style="max-width:880px">
+    <div class="col bad"><div class="h">✗ SyntaxError</div>
+<pre><span class="str">"entry"</span>: {
+    <span class="str">"attack name"</span>: <span class="str">"kimche"</span>
+    <span class="str">""</span>
+}</pre></div>
+    <div class="col good"><div class="h">✓ fixed</div>
+<pre><span class="str">"entry"</span>: {
+    <span class="str">"attack name"</span>: <span class="str">"kimche"</span>,
+    <span class="str">"attack damage"</span>: <span class="num">15</span>,
+    <span class="str">"health"</span>: <span class="num">90</span>,
+}</pre></div>
+  </div>
+  <p class="muted" style="font-weight:800;margin-top:.5em">A dict needs <b style="color:var(--green)">key: value,</b> pairs with commas.</p>
+</div>
+
+<!-- 11 Modify faded -->
+<div class="slide">
+  <div class="pill">Try it ✏️</div>
+  <h2>Fill the blanks</h2>
+<pre>life = <span class="num">50</span>
+
+<span class="kw">def</span> <span class="fn">heal</span>():
+    ______ life          <span class="com"># change outside life</span>
+    life = life __ <span class="num">20</span>     <span class="com"># add 20</span></pre>
+  <p class="muted" style="font-weight:800;margin-top:.6em"><b>Hint:</b> the keyword that reaches the wall, and the <b>+</b> operator.</p>
+</div>
+
+<!-- 12 Quiz 1 -->
+
+<!-- 13 Quiz 2 -->
+
+<!-- 14 Quiz 3 -->
+
+<!-- 15 Score -->
+
+<!-- 16 Your turn -->
+<div class="slide">
+  <div class="pill o">Your turn 🚀</div>
+  <h2>Upgrade Poo Poo Land</h2>
+  <ul class="todo" style="max-width:820px">
+    <li>Add <span class="kbd">heal()</span>: <span class="kbd">global life</span> → <span class="kbd">life = life + 20</span></li>
+    <li>Fix the <span class="kbd">"chicken"</span> KeyError</li>
+    <li>Fix the broken <span class="kbd">"entry"</span> monster</li>
+    <li>Make points go <b>down</b> 100 when you use a monster</li>
+  </ul>
+</div>
+
+<!-- 17 Close -->
+<div class="slide center-all">
+  <div class="spriterow"><span>🧱</span><span>❤️</span><span>⭐</span></div>
+  <h1 style="font-size:clamp(34px,7vmin,64px)">State = memory</h1>
+  <p class="lead" style="margin-top:.4em;color:var(--purple)"><span class="kbd">global</span> lets a function change it.</p>
+  <p class="bilingual">다음엔 <b>while</b> 반복으로 life가 0 될 때까지 싸우는 진짜 게임 루프!</p>
+</div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 17</span><button id="next">›</button></div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+/* ============ shared game state (drives the persistent HUD) ============ */
+(function(){
+  var S={ life:50, maxLife:50, points:0 };
+  var $=function(id){ return document.getElementById(id); };
+  var hudLife=$('hud-life'), hudPts=$('hud-pts'), hudBar=$('hud-lifebar');
+  function bump(el){ if(!el) return; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+  function pop(el,txt){ if(!el) return; el.textContent=txt; el.classList.remove('go'); void el.offsetWidth; el.classList.add('go'); }
+  function color(pct){ return pct>50?'#4ee6a0':(pct>25?'#ffce4d':'#ff5d6c'); }
+  function renderHUD(){
+    hudLife.textContent=S.life; hudPts.textContent=S.points;
+    var p=Math.max(0,Math.min(100,S.life/S.maxLife*100));
+    hudBar.style.width=p+'%'; hudBar.style.background=color(p);
+  }
+
+  /* ---------- Battle arena ---------- */
+  var MON=[
+    {spr:'😖',name:'awkward',atk:'poopy magic',dmg:20,hp:100},
+    {spr:'🥟',name:'mandu',atk:'poopy',dmg:10,hp:150},
+    {spr:'🍖',name:'donkatsu',atk:'ddong ddong beam',dmg:70,hp:10},
+    {spr:'🍚',name:'riceeeeeeeey',atk:'haha beam',dmg:20,hp:120}
+  ];
+  var PLAYER_DMG=40, mi=0, ehp=MON[0].hp;
+  var espr=$('ar-espr'),ename=$('ar-ename'),ehpBar=$('ar-ehp'),ehpn=$('ar-ehpn'),
+      yhpBar=$('ar-yhp'),yhpn=$('ar-yhpn'),log=$('ar-log'),
+      edmg=$('ar-edmg'),ydmg=$('ar-ydmg'),atk=$('ar-atk'),next=$('ar-next');
+  function loadMon(){
+    var m=MON[mi]; ehp=m.hp;
+    espr.textContent=m.spr; ename.textContent=m.name;
+    log.innerHTML='A wild <b>'+m.name+'</b> appears! 💩';
+    next.disabled=true; atk.disabled=S.life<=0;
+    renderArena();
+  }
+  function renderArena(){
+    var m=MON[mi];
+    var ep=Math.max(0,ehp/m.hp*100);
+    ehpBar.style.width=ep+'%'; ehpBar.style.background=color(ep); ehpn.textContent=Math.max(0,ehp);
+    var yp=Math.max(0,S.life/S.maxLife*100);
+    yhpBar.style.width=yp+'%'; yhpBar.style.background=color(yp); yhpn.textContent=S.life;
+  }
+  function attack(){
+    if(S.life<=0 || ehp<=0) return;
+    var m=MON[mi];
+    ehp=Math.max(0,ehp-PLAYER_DMG);
+    espr.classList.remove('hit'); void espr.offsetWidth; espr.classList.add('hit');
+    pop(edmg,'-'+PLAYER_DMG);
+    S.points+=25; bump(hudPts);
+    if(ehp<=0){
+      log.innerHTML='💥 <b>'+m.name+'</b> defeated!  ⭐ +25';
+      next.disabled=false; renderHUD(); renderArena(); return;
+    }
+    /* monster hits back */
+    S.life=Math.max(0,S.life-m.dmg); bump(hudLife); pop(ydmg,'-'+m.dmg);
+    if(S.life<=0){ log.innerHTML='😵 <b>'+m.atk+'</b> knocked you out! Press ↺ Reset.'; atk.disabled=true; }
+    else{ log.innerHTML='👊 Hit! Then <b>'+m.name+'</b> used <b>'+m.atk+'</b> (-'+m.dmg+' ❤️)'; }
+    renderHUD(); renderArena();
+  }
+  if(atk){
+    atk.addEventListener('click',attack);
+    next.addEventListener('click',function(){ mi=(mi+1)%MON.length; loadMon(); });
+    $('ar-rst').addEventListener('click',function(){
+      S.life=S.maxLife; S.points=0; mi=0; bump(hudLife); bump(hudPts);
+      renderHUD(); loadMon();
+    });
+    loadMon();
+  }
+
+  /* ---------- Global mechanic ---------- */
+  var gmOn=true, gmVal=0;
+  var gNum=$('gm-num'),gPop=$('gm-pop'),gGhost=$('gm-ghost'),gErr=$('gm-err'),
+      gLog=$('gm-log'),gTog=$('gm-tog');
+  function gmReset(){ gmVal=0; if(gNum)gNum.textContent='0'; if(gGhost)gGhost.classList.remove('show');
+    if(gErr)gErr.classList.remove('show'); if(gLog){gLog.textContent='Run it. With global the +25 reaches the wall.'; gLog.className='gm-log';} }
+  if(gTog){
+    gTog.addEventListener('click',function(){
+      gmOn=!gmOn; gTog.textContent=gmOn?'🔓 global: ON':'🔒 global: OFF';
+      gTog.classList.toggle('p',gmOn); gTog.classList.toggle('btn',true); gmReset();
+    });
+    $('gm-run').addEventListener('click',function(){
+      if(gmOn){
+        gGhost.classList.remove('show'); gErr.classList.remove('show');
+        gmVal+=25; gNum.textContent=gmVal; bump(gNum); pop(gPop,'+25');
+        gLog.className='gm-log ok'; gLog.innerHTML='✓ Reached the wall! points = '+gmVal;
+      }else{
+        gGhost.classList.add('show'); gErr.classList.add('show');
+        gLog.className='gm-log no'; gLog.innerHTML='✗ Blocked. Wall stays 0. Needs global.';
+      }
+    });
+    $('gm-rst').addEventListener('click',gmReset);
+  }
+  function bumpG(){}
+
+  renderHUD();
+})();
+</script>
+</body></html>

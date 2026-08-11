@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maze Madness — The Signal Maze</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+/* ---- self-contained sim styling (scoped sm-) ---- */
+.sm-wrap{display:flex;gap:clamp(.6em,2vmin,1.4em);align-items:flex-start;flex-wrap:wrap;justify-content:center;width:100%}
+.sm-canvas{background:var(--panel);border-radius:14px;border:1px solid var(--soft);image-rendering:pixelated;width:min(46vmin,420px);height:auto;flex:none}
+.sm-side{display:flex;flex-direction:column;gap:.5em;min-width:min(300px,90vw);flex:1 1 300px}
+.sm-row{display:flex;justify-content:space-between;align-items:baseline;background:var(--panel);border:1px solid var(--soft);border-radius:10px;padding:.4em .7em;font-size:clamp(13px,2vmin,18px)}
+.sm-row b{font-family:ui-monospace,Consolas,monospace;color:var(--accent)}
+.sm-row.bad b{color:#ff7b7b}
+.sm-row.good b{color:#5be08a}
+.sm-ctrls{display:flex;gap:.5em;align-items:center;flex-wrap:wrap}
+.sm-ctrls button{background:var(--soft);color:var(--ink);border:0;border-radius:10px;padding:.4em .9em;font-size:clamp(13px,2vmin,17px);font-weight:700;cursor:pointer}
+.sm-ctrls button:hover{background:var(--accent);color:#04121a}
+.sm-key{display:grid;grid-template-columns:auto 1fr;gap:.25em .55em;align-items:center;font-size:clamp(12px,1.9vmin,16px)}
+.sm-sw{width:1.05em;height:1.05em;border-radius:4px;display:inline-block}
+.sm-log{font-family:ui-monospace,Consolas,monospace;font-size:clamp(12px,1.9vmin,16px);color:var(--fn);background:var(--code-bg);border-radius:10px;padding:.45em .7em;min-height:2.2em}
+/* ---- call-count race bars ---- */
+.sm-bars{display:flex;flex-direction:column;gap:.8em;width:min(900px,94%);margin-top:.6em}
+.sm-bar{background:var(--panel);border:1px solid var(--soft);border-radius:12px;padding:.55em .8em}
+.sm-bar .lbl{display:flex;justify-content:space-between;font-size:clamp(13px,2.1vmin,19px);margin-bottom:.35em}
+.sm-bar .track{height:1.3em;background:var(--code-bg);border-radius:8px;overflow:hidden}
+.sm-bar .fill{height:100%;border-radius:8px;transform-origin:left center}
+.sm-bar.slow .fill{background:linear-gradient(90deg,#e04b4b,#ff9d5c);animation:grow-slow 6s ease-out infinite}
+.sm-bar.fast .fill{background:linear-gradient(90deg,#3ddc84,#38d0e0);animation:grow-fast 6s ease-out infinite}
+@keyframes grow-slow{0%{width:0}70%{width:100%}100%{width:100%}}
+@keyframes grow-fast{0%{width:0}19%{width:27%}70%{width:27%}100%{width:27%}}
+.sk{color:var(--accent-2);font-weight:800}
+</style>
+</head><body>
+<div class="stage"><div class="footer-tag">Maze Madness · Lesson 9 · Signal Maze</div>
+
+<!-- 1 -->
+<div class="slide active center-all"><div class="pill">Lesson 9</div><div class="emoji">🚦</div>
+<h1>The Signal<br>Maze</h1>
+<p class="big" style="margin-top:.6em;color:var(--accent-2);">The walls tell the agent what to do. Your job is to make it listen.</p>
+<p class="bilingual">벽의 색깔이 명령이에요. 에이전트가 그 색을 읽게 만들어요 (영어코딩)</p></div>
+
+<!-- 2 -->
+<div class="slide center-all"><div class="pill purple">Big picture</div>
+<h2>Colour = command 🎨</h2>
+<div class="emoji">🧱🟡🟢🔴</div>
+<p class="big">Most walls are grey cobblestone. But at every corner there is <span class="sub">one coloured block</span>.</p>
+<p style="margin-top:.5em">The agent walks straight until something blocks it. Then it looks at the colour and obeys.</p>
+<p class="bilingual">회색 벽은 그냥 벽, 색깔 블록은 명령이에요</p></div>
+
+<!-- 3 -->
+<div class="slide"><div class="pill">The rules</div><h2>Five signals, five actions</h2>
+<div class="sm-key" style="max-width:900px;margin:.7em auto 0;grid-template-columns:auto auto 1fr;gap:.5em .8em;font-size:clamp(14px,2.4vmin,21px)">
+<span class="sm-sw" style="background:#f2c14e"></span><code>GOLD_BLOCK</code><span>turn <b>LEFT</b></span>
+<span class="sm-sw" style="background:#3ddc84"></span><code>EMERALD_BLOCK</code><span>turn <b>RIGHT</b></span>
+<span class="sm-sw" style="background:#e04b4b"></span><code>REDSTONE_BLOCK</code><span>a <b>door</b> — break it, then walk through</span>
+<span class="sm-sw" style="background:#3b6fe0"></span><code>LAPIS_LAZULI_BLOCK</code><span>a <b>low wall</b> — hop up, over, down</span>
+<span class="sm-sw" style="background:#5be0e0"></span><code>DIAMOND_BLOCK</code><span>the <b>GOAL</b> — stop</span>
+</div>
+<p style="margin-top:.8em">Anything else (plain cobblestone) → turn right and try again.</p>
+<p class="bilingual">금=왼쪽, 에메랄드=오른쪽, 레드스톤=문, 청금석=넘기, 다이아=골인</p></div>
+
+<!-- 4 -->
+<div class="slide"><div class="pill">Watch it!</div><h2>The whole run, live 🤖</h2>
+<div class="sm-wrap">
+  <canvas id="smMaze" class="sm-canvas" width="510" height="510"></canvas>
+  <div class="sm-side">
+    <div class="sm-ctrls">
+      <button id="smPlay">▶ play</button>
+      <button id="smStep">↷ one step</button>
+      <button id="smReset">⟲ reset</button>
+      <label style="font-size:clamp(12px,1.9vmin,16px)">speed
+        <input id="smSpeed" type="range" min="40" max="600" step="20" value="220" style="vertical-align:middle">
+      </label>
+    </div>
+    <div class="sm-log" id="smLog">ready — press play</div>
+    <div class="sm-row"><span>loop turns so far</span><b id="smSteps">0</b></div>
+    <div class="sm-row good"><span>questions asked — <i>read once</i></span><b id="smQ1">0</b></div>
+    <div class="sm-row bad"><span>questions asked — <i>ask every time</i></span><b id="smQ2">0</b></div>
+    <div class="sm-key" style="margin-top:.2em">
+      <span class="sm-sw" style="background:#f2c14e"></span><span>gold → left</span>
+      <span class="sm-sw" style="background:#3ddc84"></span><span>emerald → right</span>
+      <span class="sm-sw" style="background:#e04b4b"></span><span>redstone → door</span>
+      <span class="sm-sw" style="background:#3b6fe0"></span><span>lapis → hop</span>
+      <span class="sm-sw" style="background:#5be0e0"></span><span>diamond → goal</span>
+    </div>
+  </div>
+</div>
+<p class="bilingual">에이전트가 벽에 닿을 때만 색을 읽어요</p></div>
+
+<!-- 5 -->
+<div class="slide"><div class="pill purple">Why it lags</div><h2>📡 Every question is a trip</h2>
+<p class="big"><code>if</code> and <code>elif</code> are <span class="sub">free</span>. <code>agent.inspect()</code> is <span style="color:#ff7b7b">not</span> — it stops your code and waits for Minecraft to answer.</p>
+<div class="sm-bars">
+  <div class="sm-bar slow"><div class="lbl"><span>calling <code>agent.inspect()</code> inside every <code>elif</code></span><span><b style="color:#ff7b7b">126 questions ≈ 25 s</b></span></div><div class="track"><div class="fill"></div></div></div>
+  <div class="sm-bar fast"><div class="lbl"><span>reading it <b>once</b> into a variable</span><span><b style="color:#5be08a">34 questions ≈ 7 s</b></span></div><div class="track"><div class="fill"></div></div></div>
+</div>
+<p style="margin-top:.7em">Same maze. Same 28 loop turns. <span class="sub">Same answer, 3.7× faster.</span></p>
+<p class="bilingual">질문 한 번에 게임을 한 번 기다려요. 질문을 줄이면 빨라져요</p></div>
+
+<!-- 6 -->
+<div class="slide"><div class="pill">Concept</div><h2>Read once. Compare many times.</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.9em;margin-top:.6em;max-width:1200px;margin-inline:auto">
+<div><p style="margin:0 0 .3em;color:#ff7b7b;font-weight:800">✗ slow — 5 trips</p>
+<pre style="margin:0"><span style="color:var(--kw)">if</span> <span class="fn">agent.inspect</span>(...) == GOLD_BLOCK:
+<span style="color:var(--kw)">elif</span> <span class="fn">agent.inspect</span>(...) == EMERALD_BLOCK:
+<span style="color:var(--kw)">elif</span> <span class="fn">agent.inspect</span>(...) == REDSTONE_BLOCK:
+<span style="color:var(--kw)">elif</span> <span class="fn">agent.inspect</span>(...) == LAPIS_LAZULI_BLOCK:
+<span style="color:var(--kw)">elif</span> <span class="fn">agent.inspect</span>(...) == DIAMOND_BLOCK:</pre></div>
+<div><p style="margin:0 0 .3em;color:#5be08a;font-weight:800">✓ fast — 1 trip</p>
+<pre style="margin:0">sign_ahead = <span class="fn">agent.inspect</span>(...)
+
+<span style="color:var(--kw)">if</span> sign_ahead == GOLD_BLOCK:
+<span style="color:var(--kw)">elif</span> sign_ahead == EMERALD_BLOCK:
+<span style="color:var(--kw)">elif</span> sign_ahead == REDSTONE_BLOCK:
+<span style="color:var(--kw)">elif</span> sign_ahead == LAPIS_LAZULI_BLOCK:
+<span style="color:var(--kw)">elif</span> sign_ahead == DIAMOND_BLOCK:</pre></div>
+</div>
+<p style="margin-top:.7em">A variable is a <span class="sub">pocket</span>. Put the answer in the pocket, then look in your pocket as many times as you like — for free.</p>
+<p class="bilingual">한 번 읽어서 변수에 넣고, 그 변수를 계속 비교해요</p></div>
+
+<!-- 7 -->
+<div class="slide"><span class="slot-badge">PREDICT</span><div class="pill">Predict 🤔</div><h2>How many trips does this take?</h2>
+<div class="predict-card"><div class="label">The wall ahead is <b>LAPIS_LAZULI_BLOCK</b>. Count the <code>agent.inspect()</code> trips.</div>
+<pre>if agent.inspect(AgentInspection.BLOCK, FORWARD) == GOLD_BLOCK:
+    agent.turn(TurnDirection.LEFT)
+elif agent.inspect(AgentInspection.BLOCK, FORWARD) == EMERALD_BLOCK:
+    agent.turn(TurnDirection.RIGHT)
+elif agent.inspect(AgentInspection.BLOCK, FORWARD) == LAPIS_LAZULI_BLOCK:
+    agent.move(UP, 1)</pre>
+<details><summary>Reveal answer</summary><div class="ans"><b>3 trips.</b> Python checks the conditions top to bottom, and each one calls <code>agent.inspect()</code> again. Store it once in <code>sign_ahead</code> and it drops to <b>1</b>.</div></details></div></div>
+
+<!-- 8 -->
+<div class="slide"><div class="pill">Build it · 1</div><h2>Get the maze on the ground</h2>
+<p style="margin:.2em 0 .6em">🎯 <b>Your job:</b> paste the starter file, build the maze, and find all 5 coloured blocks with your own eyes. 4 steps.</p>
+<ul class="check-list">
+<li>Stand in a <b>flat empty area</b>. Press <code>C</code> → MakeCode → New Project → flip the top toggle to <b>Python</b>.</li>
+<li>Select all the sample code, delete it, paste in <code>signal_maze_starter.py</code>.</li>
+<li>Back in the game, type <code>maze</code> in chat. The maze appears next to you and the agent lands at the start.</li>
+<li>Walk around the outside and find each coloured block. <b>Check:</b> you can name all 5 colours and what they mean.</li>
+</ul>
+<p class="bilingual">먼저 미로를 직접 눈으로 보고 색을 확인해요</p></div>
+
+<!-- 9 -->
+<div class="slide"><div class="pill">Build it · 2</div><h2>The loop, and the free step</h2>
+<p style="margin:.2em 0 .5em">🎯 <b>Your job:</b> inside <code>on_run()</code>, make the agent walk forward while nothing blocks it. Fill the 3 blanks.</p>
+<pre>def on_run():
+    steps = <span class="sk">____</span>
+    <span style="color:var(--kw)">while</span> steps &lt; 300:
+        steps += 1
+
+        <span style="color:var(--kw)">if</span> <span style="color:var(--kw)">not</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+            <span class="fn">agent.<span class="sk">____</span></span>(FORWARD, <span class="sk">____</span>)</pre>
+<p style="margin-top:.6em"><b>Check:</b> type <code>maze</code>, then <code>run</code>. The agent should walk to the first wall and then just stop. That is correct for now.</p>
+<p class="bilingual">막히지 않았으면 한 칸 전진 — 여기까지가 1단계</p></div>
+
+<!-- 10 -->
+<div class="slide"><div class="pill">Build it · 3</div><h2>Read the sign — once</h2>
+<p style="margin:.2em 0 .5em">🎯 <b>Your job:</b> add the <code>else:</code> branch that reads the wall into a variable. 2 blanks.</p>
+<pre>        <span style="color:var(--kw)">if</span> <span style="color:var(--kw)">not</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+            <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        <span style="color:var(--kw)">else</span>:
+            <span class="sk">____</span> = <span class="fn">agent.<span class="sk">____</span></span>(AgentInspection.BLOCK, FORWARD)</pre>
+<p style="margin-top:.6em">Name the variable <code>sign_ahead</code>. This line runs <span class="sub">only when something is in front</span> — not on every step.</p>
+<p style="margin-top:.3em"><b>Check:</b> nothing new happens yet. No error message = you are fine.</p>
+<p class="bilingual">벽이 있을 때만 한 번 읽어서 sign_ahead 에 담아요</p></div>
+
+<!-- 11 -->
+<div class="slide"><div class="pill">Build it · 4</div><h2>Left and right</h2>
+<p style="margin:.2em 0 .5em">🎯 <b>Your job:</b> turn on gold, turn on emerald. Indent these <b>inside</b> the <code>else:</code>. 4 blanks.</p>
+<pre>            sign_ahead = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+
+            <span style="color:var(--kw)">if</span> sign_ahead == <span class="sk">____</span>:
+                <span class="fn">agent.turn</span>(TurnDirection.<span class="sk">____</span>)
+
+            <span style="color:var(--kw)">elif</span> sign_ahead == <span class="sk">____</span>:
+                <span class="fn">agent.turn</span>(TurnDirection.<span class="sk">____</span>)</pre>
+<p style="margin-top:.6em"><b>Check:</b> run it. The agent should now walk south, turn <b>left</b> at the gold block, walk east, and stop at the red block.</p>
+<p class="bilingual">금 = 왼쪽, 에메랄드 = 오른쪽</p></div>
+
+<!-- 12 -->
+<div class="slide"><div class="pill">Build it · 5</div><h2>Door, hop, goal</h2>
+<p style="margin:.2em 0 .5em">🎯 <b>Your job:</b> add the last three signals. 5 blanks.</p>
+<pre style="font-size:clamp(11px,1.9vmin,17px)">            <span style="color:var(--kw)">elif</span> sign_ahead == REDSTONE_BLOCK:
+                <span class="fn">agent.<span class="sk">____</span></span>(FORWARD)          <span style="color:var(--com)"># break the door</span>
+                <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+
+            <span style="color:var(--kw)">elif</span> sign_ahead == LAPIS_LAZULI_BLOCK:
+                <span class="fn">agent.move</span>(<span class="sk">____</span>, <span class="num">1</span>)         <span style="color:var(--com)"># up onto the ledge</span>
+                <span class="fn">agent.move</span>(FORWARD, <span class="sk">____</span>)      <span style="color:var(--com)"># over the top</span>
+                <span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)            <span style="color:var(--com)"># back to the floor</span>
+
+            <span style="color:var(--kw)">elif</span> sign_ahead == DIAMOND_BLOCK:
+                <span class="fn">player.say</span>(<span style="color:var(--str)">"GOAL!"</span>)
+                <span class="sk">____</span>                        <span style="color:var(--com)"># leave the while loop</span></pre>
+<p style="margin-top:.5em"><b>Check:</b> the agent reaches the diamond and <code>GOAL!</code> appears in chat.</p>
+<p class="bilingual">문은 부수고, 낮은 벽은 넘고, 다이아에서 멈춰요</p></div>
+
+<!-- 13 -->
+<div class="slide"><div class="pill">Check · 1 of 2</div><h2>Compare with yours — the loop</h2>
+<pre style="font-size:clamp(12px,2.05vmin,18px)">def on_run():
+    steps = <span class="num">0</span>
+    <span style="color:var(--kw)">while</span> steps &lt; <span class="num">300</span>:
+        steps += <span class="num">1</span>
+
+        <span style="color:var(--kw)">if</span> <span style="color:var(--kw)">not</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+            <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        <span style="color:var(--kw)">else</span>:
+            sign_ahead = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+            <span style="color:var(--com)">... the five branches go here (next slide) ...</span></pre>
+<p style="margin-top:.6em">One <code>detect</code> per turn. One <code>inspect</code>, and only when something is in the way.</p></div>
+
+<!-- 13b -->
+<div class="slide"><div class="pill">Check · 2 of 2</div><h2>Compare with yours — the five signals</h2>
+<pre style="font-size:clamp(11px,1.95vmin,17px)">            <span style="color:var(--kw)">if</span> sign_ahead == GOLD_BLOCK:
+                <span class="fn">agent.turn</span>(TurnDirection.LEFT)
+            <span style="color:var(--kw)">elif</span> sign_ahead == EMERALD_BLOCK:
+                <span class="fn">agent.turn</span>(TurnDirection.RIGHT)
+            <span style="color:var(--kw)">elif</span> sign_ahead == REDSTONE_BLOCK:
+                <span class="fn">agent.destroy</span>(FORWARD)
+                <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+            <span style="color:var(--kw)">elif</span> sign_ahead == LAPIS_LAZULI_BLOCK:
+                <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+                <span class="fn">agent.move</span>(FORWARD, <span class="num">2</span>)
+                <span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)
+            <span style="color:var(--kw)">elif</span> sign_ahead == DIAMOND_BLOCK:
+                <span class="fn">player.say</span>(<span style="color:var(--str)">"GOAL!"</span>)
+                <span style="color:var(--kw)">break</span>
+            <span style="color:var(--kw)">else</span>:
+                <span class="fn">agent.turn</span>(TurnDirection.RIGHT)</pre></div>
+
+<!-- 14 -->
+<div class="slide"><div class="pill">🐛 Debug</div><h2>What's wrong with this code?</h2>
+<p style="margin-bottom:.4em">Goal: hop the lapis wall and land on the far side. It runs, but the agent gets stuck.</p>
+<div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">elif sign_ahead == LAPIS_LAZULI_BLOCK:
+    agent.move(UP, 1)
+    agent.move(FORWARD, 1)
+    agent.move(DOWN, 1)</pre></div>
+<p style="margin-top:.6em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Draw it on paper first — then click next.</p></div>
+
+<!-- 15 -->
+<div class="slide"><div class="pill">🐛 Debug</div><h2>The bug</h2>
+<div class="debug-reveal"><b>Bug:</b> <code>FORWARD, 1</code> lands the agent <i>on top of the lapis block itself</i>. Moving <code>DOWN</code> from there pushes it straight back into the block. You need <b>2</b> steps forward — one to clear the block, one to land in the corridor behind it.</div>
+<div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">fixed</div><pre style="margin-top:.4em">elif sign_ahead == LAPIS_LAZULI_BLOCK:
+    agent.move(UP, 1)
+    agent.move(FORWARD, 2)
+    agent.move(DOWN, 1)</pre></div></div>
+
+<!-- 16 -->
+<div class="slide"><div class="pill">Vocab</div><h2>New words today</h2><div class="vocab-table">
+<span class="term">inspect</span><span class="gloss">ask the game what block is there, and get the answer back</span><span class="ko">블록 확인하기</span>
+<span class="term">detect</span><span class="gloss">ask the game a yes/no question: is anything there?</span><span class="ko">감지하다</span>
+<span class="term">store in a variable</span><span class="gloss">keep an answer in a name so you can reuse it for free</span><span class="ko">변수에 저장</span>
+<span class="term">dispatch</span><span class="gloss">pick which action to run based on a value you read</span><span class="ko">값에 따라 갈라지기</span>
+<span class="term">round trip</span><span class="gloss">code asks the game and waits — the slow part</span><span class="ko">왕복 통신</span>
+</div></div>
+
+<!-- 17 -->
+<div class="slide"><div class="pill">Your turn!</div><h2>Finish the run 🏁</h2>
+<p style="margin:.2em 0 .6em">🎯 <b>Your job:</b> solve the maze, then change it.</p>
+<ul class="check-list">
+<li>Get the agent all the way to the diamond block.</li>
+<li>Count your <code>agent.inspect()</code> lines. There should be <b>exactly one</b>.</li>
+<li><b>Make it yours:</b> open <code>on_maze()</code> and move one signal block to a new spot, or swap a colour. Run it again.</li>
+<li>Send a video of the agent reaching the goal on KakaoTalk.</li>
+</ul>
+<p class="bilingual">완주 영상을 카카오톡으로 보내주세요</p></div>
+
+<!-- 18 -->
+<div class="slide center-all"><div class="emoji">🏆</div>
+<h1 style="font-size:clamp(36px,6.5vmin,60px)">Signals solved!</h1>
+<p class="big" style="margin-top:.5em;color:var(--accent-2);">One read, five actions, no lag.</p>
+<p class="bilingual">한 번 읽고 다섯 가지 행동 — 그리고 안 느려요</p></div>
+
+<div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 19</span><button id="next">›</button></div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+/* ================= Signal Maze simulator =================
+   Mirrors signal_maze_starter.py exactly: same carves, same signs,
+   same start cell (1,1) facing SOUTH. */
+(function () {
+  var cv = document.getElementById('smMaze');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var N = 17, CELL = 30;
+
+  var CARVES = [[1,1,1,7],[1,7,9,7],[9,7,9,14],[9,14,13,14],
+                [1,3,6,3],[6,3,6,5],[5,10,9,10],[13,7,13,13],[11,11,15,11]];
+  var SIGNS = [[1,8,'gold'],[6,7,'redstone'],[10,7,'emerald'],
+               [9,12,'lapis'],[9,15,'gold'],[14,14,'diamond']];
+
+  /* how many inspect() trips the "ask every time" version costs,
+     = the position of that block in the elif chain */
+  var CHAIN = { gold:1, emerald:2, redstone:3, lapis:4, diamond:5 };
+  var CHAIN_MISS = 5;             /* clear path falls through all 5 tests */
+
+  var COL = { wall:'#46536e', floor:'#080b11', gold:'#f2c14e', emerald:'#3ddc84',
+              redstone:'#e04b4b', lapis:'#4a80f0', diamond:'#5be0e0' };
+
+  var DIRS = [{dx:0,dz:1},{dx:1,dz:0},{dx:0,dz:-1},{dx:-1,dz:0}]; /* S E N W */
+
+  var grid, ax, az, adir, steps, q1, q2, done, animFrom, animT, animDur, playing, timer;
+  var elLog = document.getElementById('smLog'), elSteps = document.getElementById('smSteps'),
+      elQ1 = document.getElementById('smQ1'), elQ2 = document.getElementById('smQ2'),
+      elPlay = document.getElementById('smPlay'), elSpeed = document.getElementById('smSpeed');
+
+  function buildGrid() {
+    grid = [];
+    for (var z = 0; z < N; z++) { grid.push([]); for (var x = 0; x < N; x++) grid[z].push('wall'); }
+    CARVES.forEach(function (c) {
+      var x0 = Math.min(c[0], c[2]), x1 = Math.max(c[0], c[2]);
+      var z0 = Math.min(c[1], c[3]), z1 = Math.max(c[1], c[3]);
+      for (var z = z0; z <= z1; z++) for (var x = x0; x <= x1; x++) grid[z][x] = 'floor';
+    });
+    SIGNS.forEach(function (s) { grid[s[1]][s[0]] = s[2]; });
+  }
+
+  function reset() {
+    buildGrid();
+    ax = 1; az = 1; adir = 0; steps = 0; q1 = 0; q2 = 0; done = false;
+    animFrom = null; animT = 1; animDur = 1;
+    setPlaying(false);
+    log('ready — press play');
+    draw();
+    readout();
+  }
+
+  function log(t) { if (elLog) elLog.textContent = t; }
+  function readout() {
+    if (elSteps) elSteps.textContent = steps;
+    if (elQ1) elQ1.textContent = q1;
+    if (elQ2) elQ2.textContent = q2;
+  }
+
+  function tick() {
+    if (done) return;
+    steps++;
+    var d = DIRS[adir];
+    var fx = ax + d.dx, fz = az + d.dz;
+    var front = (fx < 0 || fz < 0 || fx >= N || fz >= N) ? 'wall' : grid[fz][fx];
+
+    if (front === 'floor') {
+      q1 += 1;                    /* one detect */
+      q2 += CHAIN_MISS;           /* five inspects, all missing */
+      moveTo(fx, fz, 1);
+      log('path clear → move forward');
+    } else {
+      q1 += 2;                    /* detect + one inspect */
+      q2 += (CHAIN[front] || CHAIN_MISS);
+      if (front === 'gold')          { adir = (adir + 1) % 4; log('GOLD → turn left'); }
+      else if (front === 'emerald')  { adir = (adir + 3) % 4; log('EMERALD → turn right'); }
+      else if (front === 'redstone') { grid[fz][fx] = 'floor'; moveTo(fx, fz, 1); log('REDSTONE → break the door, walk through'); }
+      else if (front === 'lapis')    { moveTo(ax + d.dx * 2, az + d.dz * 2, 2); log('LAPIS → up, over, down'); }
+      else if (front === 'diamond')  { done = true; setPlaying(false); log('DIAMOND → GOAL! solved in ' + steps + ' loop turns'); }
+      else                           { adir = (adir + 3) % 4; log('plain wall → turn right'); }
+    }
+    readout();
+  }
+
+  function moveTo(nx, nz, cells) {
+    animFrom = { x: ax, z: az }; animT = 0; animDur = cells;
+    ax = nx; az = nz;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    for (var z = 0; z < N; z++) for (var x = 0; x < N; x++) {
+      var k = grid[z][x];
+      ctx.fillStyle = COL[k] || COL.wall;
+      ctx.fillRect(x * CELL, z * CELL, CELL - 1, CELL - 1);
+      if (k !== 'wall' && k !== 'floor') {
+        ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(x * CELL + 2.5, z * CELL + 2.5, CELL - 6, CELL - 6);
+      }
+    }
+    /* agent, lerped between cells */
+    var px = ax, pz = az;
+    if (animFrom && animT < 1) {
+      px = animFrom.x + (ax - animFrom.x) * animT;
+      pz = animFrom.z + (az - animFrom.z) * animT;
+    }
+    var cx = px * CELL + CELL / 2, cz = pz * CELL + CELL / 2;
+    var d = DIRS[adir], a = Math.atan2(d.dz, d.dx);
+    ctx.save(); ctx.translate(cx, cz); ctx.rotate(a);
+    ctx.fillStyle = '#38d0e0'; ctx.strokeStyle = '#04121a'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(13, 0); ctx.lineTo(-9, 9); ctx.lineTo(-4, 0); ctx.lineTo(-9, -9);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+
+  var last = 0;
+  function frame(t) {
+    var dt = last ? (t - last) : 16; last = t;
+    var ms = parseInt(elSpeed ? elSpeed.value : 220, 10);
+    if (animT < 1) { animT = Math.min(1, animT + dt / (ms * animDur)); draw(); }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  function setPlaying(on) {
+    playing = on;
+    if (elPlay) elPlay.textContent = on ? '⏸ pause' : '▶ play';
+    clearInterval(timer);
+    if (on) timer = setInterval(function () {
+      if (done) { setPlaying(false); return; }
+      tick();
+    }, parseInt(elSpeed ? elSpeed.value : 220, 10));
+  }
+
+  if (elPlay) elPlay.onclick = function () { if (done) reset(); setPlaying(!playing); };
+  document.getElementById('smStep').onclick = function () { setPlaying(false); tick(); };
+  document.getElementById('smReset').onclick = reset;
+  if (elSpeed) elSpeed.oninput = function () { if (playing) setPlaying(true); };
+
+  reset();
+})();
+</script>
+</body></html>

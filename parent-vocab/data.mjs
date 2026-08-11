@@ -59,7 +59,7 @@ export const CURRICULA = [
     ],
   },
   {
-    code: "RS003", title: "Pygame Turret Game", icon: "🎮", track: "Replit / Python",
+    code: "RS003", title: "Pygame Shooter Game", icon: "🎮", track: "Replit / Python",
     blurb: "First graphics game — pygame, coordinates, loops.",
     terms: [
       { t: "pygame.init()", d: "wake up the pygame engine", w: "W1", ex: "pygame.init()" },

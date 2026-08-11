@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PyGame Starter 8 — Text and Fonts</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ============ deck-local: mental model, mini screenshot, live sim ============ */
+
+  /* slot 5 — three-stage mental model */
+  .model-row {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: .8em; margin: .5em 0; align-items: stretch;
+  }
+  .model-box {
+    background: var(--panel); border: 3px solid var(--soft); border-radius: 16px;
+    padding: .8em .7em; text-align: center; box-shadow: 0 5px 0 var(--soft);
+  }
+  .model-box .no {
+    font-family: "JetBrains Mono", monospace; color: var(--com);
+    font-size: clamp(11px, 1.7vmin, 14px); font-weight: 800; letter-spacing: .12em;
+  }
+  .model-box .ico { font-size: clamp(28px, 6vmin, 52px); line-height: 1.1; }
+  .model-box .nm {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    color: var(--accent); font-size: clamp(15px, 2.6vmin, 22px); margin-top: .15em;
+  }
+  .model-box .ds {
+    font-size: clamp(13px, 2.1vmin, 18px); color: var(--ink); opacity: .85;
+    margin-top: .25em; line-height: 1.35;
+  }
+  .model-box.b2 { border-color: var(--accent-2); }
+  .model-box.b2 .nm { color: var(--accent-2); }
+  .model-box.b3 { border-color: var(--accent); }
+
+  /* slot 6 — code beside a tiny mock window */
+  .shotrow {
+    display: grid; grid-template-columns: 1fr auto; gap: .8em;
+    align-items: start; margin-top: .5em;
+  }
+  .minishot {
+    position: relative; background: #fafafa; border: 1px solid var(--soft);
+    border-radius: .5em; width: clamp(150px, 24vh, 250px); aspect-ratio: 4 / 3;
+  }
+  .minishot .mstext {
+    position: absolute; left: 40.6%; top: 45.8%;
+    color: #141414; font-family: "Inter", system-ui, sans-serif; font-weight: 800;
+    font-size: clamp(11px, 2vmin, 19px); line-height: 1;
+  }
+  .minishot .mstag {
+    position: absolute; right: .45em; bottom: .3em; color: #98a2b3;
+    font-family: "JetBrains Mono", monospace; font-size: clamp(9px, 1.3vmin, 12px);
+  }
+
+  /* slot 7 — live sim */
+  .sim-wrap {
+    display: flex; flex-direction: column; gap: .55rem; align-items: center;
+    width: 100%; margin: .2em 0; padding-bottom: 3.2rem;
+  }
+  canvas.sim {
+    width: min(760px, 94%, 60vh); aspect-ratio: 4 / 3;
+    display: block; background: #05080d;
+    border: 1px solid var(--soft); border-radius: .6em;
+    box-shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+  .sim-ctl {
+    display: flex; gap: 1.1rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(12px, 1.7vmin, 17px); color: var(--com);
+  }
+  .sim-ctl label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .sim-ctl output { color: var(--accent); min-width: 2.2em; text-align: right; font-weight: 800; }
+  .sim-ctl input[type=range] { accent-color: var(--accent); width: clamp(110px, 18vw, 200px); }
+  .abtn {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(12px, 1.7vmin, 17px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--accent); border-radius: .55em;
+    padding: .35em .8em; cursor: pointer;
+  }
+  .abtn:hover { background: rgba(56,208,224,.16); }
+
+  .codestrip {
+    background: var(--code-bg); border: 1px solid var(--soft); border-radius: .5em;
+    padding: .45em .8em; width: min(760px, 94%);
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(11px, 1.75vmin, 16px); line-height: 1.55; color: var(--code-ink);
+  }
+  .codestrip .cl { display: block; white-space: pre; border-radius: .3em; padding: .02em .35em; }
+  .codestrip .cl.hot { background: rgba(56,208,224,.18); }
+
+  /* slot 9 — two faded snippets side by side */
+  .two-up {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; width: 100%;
+  }
+  @media (max-width: 820px) { .two-up { grid-template-columns: 1fr; } }
+  .panel-label {
+    font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.5vmin, 14px);
+    color: var(--com); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2em;
+  }
+  .two-up pre { font-size: clamp(12px, 2vmin, 18px); padding: .7em .8em; max-width: 100%; }
+  .hintline { font-size: clamp(12px, 1.9vmin, 16px); opacity: .8; margin-top: .35em; }
+
+  .ans-fold { margin-top: .5em; }
+  .ans-fold summary {
+    cursor: pointer; color: var(--accent); font-weight: 700;
+    font-size: clamp(13px, 2.1vmin, 18px); list-style: none;
+  }
+  .ans-fold summary::after { content: " 🔍"; }
+  .ans-fold[open] summary::after { content: " 👇"; }
+  .ans-fold .ans {
+    margin-top: .3em; color: var(--accent-2); font-weight: 700;
+    font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2.2vmin, 19px);
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · PyGame Starter · Project 8</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Project 8</div>
+    <div class="emoji">🔤</div>
+    <h1>Text and<br>Fonts</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">You will <span class="sub">render</span> words and <span class="sub">blit</span> them on screen.</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your score already counts</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">After the loop, what is <code>score</code>?</div>
+<pre>score = <span class="num">0</span>
+
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    score += <span class="num">1</span></pre>
+      <details>
+        <summary>Show answer</summary>
+        <div class="ans">60 — but the player sees nothing.</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What appears on screen?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>font = pygame.font.<span class="fn">Font</span>(<span class="kw">None</span>, <span class="num">36</span>)
+text = font.<span class="fn">render</span>(<span class="str">"Hello"</span>, <span class="kw">True</span>, BLACK)
+
+screen.<span class="fn">fill</span>(WHITE)
+pygame.display.<span class="fn">flip</span>()</pre>
+      <details>
+        <summary>Reveal</summary>
+        <div class="ans">Nothing! An empty white window.</div>
+      </details>
+    </div>
+    <p style="margin-top:.5em"><code>render</code> makes a picture. <code>blit</code> pastes it. No blit, no words.</p>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Three new words</h2>
+    <div class="vocab-table">
+      <span class="term">font</span>
+      <span class="gloss">the shape and size of the letters</span>
+      <span class="ko">글꼴</span>
+
+      <span class="term">render</span>
+      <span class="gloss">make a small picture of the words</span>
+      <span class="ko">그림으로 만들기</span>
+
+      <span class="term">blit</span>
+      <span class="gloss">paste one picture onto another picture</span>
+      <span class="ko">붙여넣기</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Stamp, carve, press</h2>
+    <div class="model-row">
+      <div class="model-box">
+        <div class="no">1</div>
+        <div class="ico">🖋️</div>
+        <div class="nm">font</div>
+        <div class="ds">Choose the stamp.</div>
+      </div>
+      <div class="model-box b2">
+        <div class="no">2</div>
+        <div class="ico">🧩</div>
+        <div class="nm">render</div>
+        <div class="ds">Carve a tiny picture of the words.</div>
+      </div>
+      <div class="model-box b3">
+        <div class="no">3</div>
+        <div class="ico">📌</div>
+        <div class="nm">blit</div>
+        <div class="ds">Press that picture onto the screen.</div>
+      </div>
+    </div>
+    <p style="margin-top:.3em">The <code>(x, y)</code> is the picture's top-left corner.</p>
+    <p class="bilingual">글꼴 → 그림 → 화면에 붙이기</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Code</div>
+    <h2>Run it</h2>
+<pre>font = pygame.font.<span class="fn">Font</span>(<span class="kw">None</span>, <span class="num">48</span>)
+text = font.<span class="fn">render</span>(<span class="str">"Hello"</span>, <span class="kw">True</span>, BLACK)   <span class="com"># BLACK = (20, 20, 20)</span>
+
+screen.<span class="fn">fill</span>(WHITE)
+screen.<span class="fn">blit</span>(text, (<span class="num">260</span>, <span class="num">220</span>))
+pygame.display.<span class="fn">flip</span>()
+
+<span class="fn">print</span>(<span class="str">"hi shown"</span>)</pre>
+    <div class="shotrow">
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line" style="opacity:1">hi shown</div>
+      </div>
+      <div class="minishot">
+        <span class="mstext">Hello</span>
+        <span class="mstag">640 × 480</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate — live sim -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it! 🎛️</div>
+    <h2>One point, two anchors</h2>
+    <div class="sim-wrap">
+      <canvas id="txtSim" class="sim"></canvas>
+      <div class="sim-ctl">
+        <label>Font(None, <input id="simSize" type="range" min="24" max="96" step="2" value="72"><output id="simSizeOut">72</output>)</label>
+        <button class="abtn" id="simMode">anchor: blit(text, (320, 240))</button>
+      </div>
+      <div class="codestrip" id="simCode"></div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Common Mistake -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The frozen score</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">✗ broken</span>
+<pre>text = font.<span class="fn">render</span>(<span class="str">f"Score: {score}"</span>, <span class="kw">True</span>, BLACK)
+
+<span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    score += <span class="num">1</span>
+    screen.<span class="fn">blit</span>(text, (<span class="num">20</span>, <span class="num">20</span>))</pre>
+        <p style="margin-top:.4em">Rendered once. The picture never changes. Screen shows <code>Score: 0</code> forever.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">✓ fixed</span>
+<pre><span class="kw">while</span> frames &lt; <span class="num">60</span>:
+    score += <span class="num">1</span>
+    text = font.<span class="fn">render</span>(<span class="str">f"Score: {score}"</span>, <span class="kw">True</span>, BLACK)
+    screen.<span class="fn">blit</span>(text, (<span class="num">20</span>, <span class="num">20</span>))</pre>
+        <p style="margin-top:.4em">Rendered every frame. The number climbs to 60.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Modify (Faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Try it</div>
+    <h2>Fill the blanks</h2>
+    <div class="two-up">
+      <div>
+        <div class="panel-label">Colour by score</div>
+<pre><span class="kw">if</span> score &lt; <span class="str">___</span>:
+    color = (<span class="num">220</span>, <span class="num">60</span>, <span class="num">60</span>)
+<span class="kw">else</span>:
+    color = (<span class="num">40</span>, <span class="num">180</span>, <span class="num">80</span>)
+text = font.<span class="fn">render</span>(<span class="str">f"Score: {score}"</span>, <span class="kw">True</span>, <span class="str">___</span>)</pre>
+        <p class="hintline">Red below 30. Green at 30 and up.</p>
+      </div>
+      <div>
+        <div class="panel-label">Your own .ttf font</div>
+<pre><span class="kw">try</span>:
+    font = pygame.font.<span class="fn">Font</span>(<span class="str">"myfont.ttf"</span>, <span class="num">40</span>)
+<span class="kw">except</span> <span class="str">___</span>:
+    font = pygame.font.<span class="fn">Font</span>(<span class="str">___</span>, <span class="num">40</span>)</pre>
+        <p class="hintline">The file may be missing. Fall back to the built-in font.</p>
+      </div>
+    </div>
+    <details class="ans-fold">
+      <summary>Show answers</summary>
+      <div class="ans">30 · color &nbsp;|&nbsp; FileNotFoundError · None</div>
+    </details>
+  </div>
+
+  <!-- Slot 10: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell your teacher</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>font.render</code> makes a <span class="blank"></span>. <code>screen.blit</code> puts it at <span class="blank"></span>."</div>
+      <div class="pair-prompt">Say it in Korean first, then in English.</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the HUD 🎮</h2>
+    <ul class="check-list">
+      <li>Grey screen: <code>screen.fill((40, 40, 50))</code></li>
+      <li>Top-left: white <code>(250, 250, 250)</code>, size <code>28</code>, <code>f"Score: {score}"</code> at <code>(20, 20)</code></li>
+      <li>Top-right: red <code>(220, 60, 60)</code>, size <code>28</code>, <code>f"Lives: {lives}"</code> at <code>(500, 20)</code></li>
+      <li>Centre: yellow <code>(255, 220, 0)</code>, size <code>64</code>, <code>"READY!"</code> with <code>get_rect(center=(320, 240))</code></li>
+      <li>Each frame <code>score += 5</code>. Keep <code>lives = 3</code>.</li>
+      <li>After 60 frames: <code>print("HUD done")</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 12: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="emoji">🔊</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Score on screen!</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next project: sound and music.</p>
+    <p class="bilingual">다음 프로젝트: 소리와 음악</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 12</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* ===================================================================
+   Slot 7 — live text playground on a mock 640x480 PyGame screen.
+   Vanilla JS, no dependencies, works from file://.
+   Buttons blur() after a click so SPACE stays with deck.js.
+   =================================================================== */
+(function () {
+  var cv      = document.getElementById('txtSim');
+  var sizeIn  = document.getElementById('simSize');
+  var sizeOut = document.getElementById('simSizeOut');
+  var modeBtn = document.getElementById('simMode');
+  var codeEl  = document.getElementById('simCode');
+  if (!cv || !sizeIn || !modeBtn || !codeEl) return;
+
+  var slide = cv.closest('.slide');
+  var dpr   = Math.min(window.devicePixelRatio || 1, 2);
+
+  var SW = 640, SH = 480;                  // the mock pygame screen
+  var SANS  = '"Inter", system-ui, sans-serif';
+  var MONO  = '"JetBrains Mono","Fira Code",monospace';
+
+  var WHITE  = '#fafafa';                  // (250, 250, 250)
+  var RED    = '#dc3c3c';                  // (220, 60, 60)
+  var GREEN  = '#28b450';                  // (40, 180, 80)
+  var CYAN   = '#38d0e0';
+  var DIM    = '#9aa3b0';
+
+  var bigSize  = +sizeIn.value;
+  var centered = false;
+  var score    = 0;
+  var acc      = 0;
+
+  function paintCode() {
+    var K = '<span class="kw">', S = '<span class="str">', N = '<span class="num">',
+        F = '<span class="fn">', E = '</span>';
+    var head =
+      '<span class="cl">big  = pygame.font.' + F + 'Font' + E + '(' + K + 'None' + E + ', ' + N + bigSize + E + ')' + E +
+      '<span class="cl">text = big.' + F + 'render' + E + '(' + S + '"GAME OVER"' + E + ', ' + K + 'True' + E + ', RED)' + E;
+    if (centered) {
+      codeEl.innerHTML = head +
+        '<span class="cl hot">rect = text.' + F + 'get_rect' + E + '(center=(' + N + '320' + E + ', ' + N + '240' + E + '))' + E +
+        '<span class="cl hot">screen.' + F + 'blit' + E + '(text, rect)' + E;
+    } else {
+      codeEl.innerHTML = head +
+        '<span class="cl hot">screen.' + F + 'blit' + E + '(text, (' + N + '320' + E + ', ' + N + '240' + E + '))' + E;
+    }
+  }
+
+  sizeIn.addEventListener('input', function () {
+    bigSize = +sizeIn.value;
+    sizeOut.textContent = bigSize;
+    paintCode();
+  });
+  modeBtn.addEventListener('click', function () {
+    centered = !centered;
+    modeBtn.textContent = centered
+      ? 'anchor: get_rect(center=(320, 240))'
+      : 'anchor: blit(text, (320, 240))';
+    paintCode();
+    modeBtn.blur();
+  });
+  paintCode();
+
+  function fit() {
+    var w = cv.clientWidth || 640, h = cv.clientHeight || 480;
+    cv.width  = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  var s = fit();
+  window.addEventListener('resize', function () { s = fit(); });
+
+  function step(dt) {
+    acc += dt;
+    while (acc >= 70) { acc -= 70; score = (score + 1) % 61; }
+  }
+
+  function dashRect(ctx, x, y, w, h) {
+    ctx.save();
+    ctx.setLineDash([6, 5]);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(56,208,224,.85)';
+    ctx.strokeRect(x, y, w, h);
+    ctx.restore();
+  }
+
+  function draw(ctx, w, h) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#05080d';
+    ctx.fillRect(0, 0, w, h);
+
+    // letterbox the 640x480 screen inside whatever box the CSS gives us
+    var k  = Math.min(w / SW, h / SH);
+    var ox = (w - SW * k) / 2, oy = (h - SH * k) / 2;
+
+    ctx.save();
+    ctx.translate(ox, oy);
+    ctx.scale(k, k);
+    ctx.beginPath();
+    ctx.rect(0, 0, SW, SH);
+    ctx.clip();
+
+    // the pygame window
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(0, 0, SW, SH);
+
+    // faint centre guides
+    ctx.save();
+    ctx.setLineDash([4, 6]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(0,0,0,.16)';
+    ctx.beginPath(); ctx.moveTo(320, 0); ctx.lineTo(320, SH);
+    ctx.moveTo(0, 240); ctx.lineTo(SW, 240);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
+
+    // --- the score, font size 36, blitted at (20, 20) ---
+    ctx.font = '800 36px ' + SANS;
+    ctx.fillStyle = score < 30 ? RED : GREEN;
+    ctx.fillText('Score: ' + score, 20, 20);
+
+    ctx.font = '600 15px ' + MONO;
+    ctx.fillStyle = DIM;
+    ctx.fillText('score < 30 -> red     score >= 30 -> green', 20, 66);
+
+    // --- the big message ---
+    var f = '800 ' + bigSize + 'px ' + SANS;
+    ctx.font = f;
+    var msg = 'GAME OVER';
+    var tw  = ctx.measureText(msg).width;
+    var th  = bigSize;                      // ~ font.get_height() in pygame
+    var tx  = centered ? 320 - tw / 2 : 320;
+    var ty  = centered ? 240 - th / 2 : 240;
+
+    ctx.fillStyle = RED;
+    ctx.fillText(msg, tx, ty);
+
+    // the Surface render() carved
+    dashRect(ctx, tx, ty, tw, th);
+
+    // the anchor point (320, 240) — same numbers, two meanings
+    ctx.beginPath();
+    ctx.arc(320, 240, 7, 0, Math.PI * 2);
+    ctx.fillStyle = CYAN;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#0b1118';
+    ctx.stroke();
+
+    // keep the label clear of the big text: bottom-left corner
+    ctx.beginPath();
+    ctx.arc(28, 424, 6, 0, Math.PI * 2);
+    ctx.fillStyle = CYAN;
+    ctx.fill();
+    ctx.font = '700 17px ' + MONO;
+    ctx.fillStyle = '#374151';
+    ctx.fillText(centered ? '(320, 240) = center' : '(320, 240) = top-left', 44, 415);
+
+    ctx.font = '600 14px ' + MONO;
+    ctx.fillStyle = DIM;
+    ctx.fillText('640 x 480', 542, 452);
+
+    ctx.restore();
+  }
+
+  var last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!slide || !slide.classList.contains('active')) { last = 0; return; }
+    var dt = last ? Math.min(ts - last, 100) : 16;
+    last = ts;
+    if (cv.clientWidth && cv.width !== Math.round(cv.clientWidth * dpr)) s = fit();
+    step(dt);
+    draw(s.ctx, s.w, s.h);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

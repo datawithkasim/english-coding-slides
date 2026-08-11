@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent  # english-coding-slides/
 COURSE_GLOBS = [
     "python/rs001-text-adventure/week-*.html",
     "python/rs002-pokedex/week-*.html",
-    "python/rs003-pygame-turret/week-*.html",
+    "python/rs003-pygame-shooter/week-*.html",
     "python/rs004-platformer/week-*.html",
     "webdev/web001-css/week-*.html",
     "webdev/web002-javascript/week-*.html",
@@ -65,7 +65,7 @@ SLOT_BADGE_RE = re.compile(r'<span class="slot-badge">\s*SLOT\s*(\d+)\s*</span>'
 LANG_BY_COURSE = {
     "rs001-text-adventure": "python",
     "rs002-pokedex": "python",
-    "rs003-pygame-turret": "python",
+    "rs003-pygame-shooter": "python",
     "rs004-platformer": "python",
     "web001-css": "html",         # weeks 1 = HTML, 2-7 = CSS; treat as html/css family
     "web002-javascript": "js",
@@ -371,19 +371,19 @@ WEEK_VOCAB = {
         ("end condition", "what makes the loop stop", "종료 조건"),
     ],
 
-    # rs003-pygame-turret
+    # rs003-pygame-shooter
     "week-01-pygame-window": [
         ("pygame.init()", "wake up the pygame engine", "파이게임 시작"),
         ("display.set_mode", "open a game window of a given size", "창 만들기"),
         ("event loop", "the loop that checks for clicks and keys", "이벤트 루프"),
         ("QUIT event", "the signal that the user closed the window", "종료 이벤트"),
     ],
-    "week-02-turret-base": [
+    "week-02-ship-body": [
         ("surface", "any drawable image in pygame", "표면 (그림판)"),
         ("blit", "paste one surface onto another", "이미지 붙이기"),
         ("rect", "rectangle that holds x, y, width, height", "사각형 영역"),
     ],
-    "week-03-functions-gun": [
+    "week-03-functions-ship": [
         ("def", "keyword that defines a function", "함수 정의"),
         ("parameter", "input the function expects", "매개변수"),
         ("call site", "the place where you use the function", "함수 호출 위치"),
@@ -651,9 +651,9 @@ WEEK_RECAP = {
     "week-07-random-battle": ("Last week: what does a function need to send a value back?", "A <code>return</code> statement. Without it, the function returns <code>None</code>."),
     "week-08-final-showdown": ("Last week: how do you pick one Pokémon from a list at random?", "<code>random.choice(team)</code> — import random first."),
 
-    # rs003-pygame-turret
-    "week-02-turret-base": ("Last week: what does <code>pygame.init()</code> do?", "Starts up pygame's subsystems so you can use display, fonts, sound."),
-    "week-03-functions-gun": ("Last week: how do you paste an image onto the screen?", "<code>screen.blit(surface, (x, y))</code> — blit = paste at position."),
+    # rs003-pygame-shooter
+    "week-02-ship-body": ("Last week: what does <code>pygame.init()</code> do?", "Starts up pygame's subsystems so you can use display, fonts, sound."),
+    "week-03-functions-ship": ("Last week: how do you paste an image onto the screen?", "<code>screen.blit(surface, (x, y))</code> — blit = paste at position."),
     "week-04-keyboard-movement": ("Last week: what does a function 'return' to the caller?", "Whatever value follows the <code>return</code> keyword. Default is <code>None</code>."),
     "week-05-limit-range": ("Last week: how do you check if the left arrow is held down?", "<code>keys = pygame.key.get_pressed()</code> then <code>if keys[pygame.K_LEFT]:</code>."),
     "week-06-for-loops": ("Last week: how do you stop the player going past the screen edge?", "Clamp the x value: <code>x = max(0, min(x, SCREEN_WIDTH))</code>."),
@@ -726,12 +726,12 @@ WEEK_MODIFY = {
     "week-07-random-battle": ("import ___\nteam = ['Pikachu', 'Charmander', 'Bulbasaur']\nfighter = random.___(team)\nprint(f'{fighter} steps up!')", "Module name. Method that picks one item from a list."),
     "week-08-final-showdown": ("hp = 30\n___ hp > 0:\n    damage = random.randint(5, 15)\n    hp ___ damage\n    print(f'HP: {hp}')\nprint('Knocked out!')", "Loop keyword that repeats while a condition is true. Compound-assign operator that subtracts in place."),
 
-    # rs003-pygame-turret
-    "week-01-pygame-window": ("import pygame\npygame.___()\nscreen = pygame.display.set_mode((___, ___))\npygame.display.set_caption('Turret')\nrunning = True\nwhile running:\n    for event in pygame.event.get():\n        if event.type == pygame.___:\n            running = False", "Function that starts pygame. Window width and height. Event type for the close button."),
-    "week-02-turret-base": ("turret = pygame.image.load('turret.png')\nturret_rect = turret.get_rect()\nturret_rect.center = (___, ___)   # center bottom of screen\nscreen.fill((0, 0, 0))\nscreen.___(turret, turret_rect)", "Half the screen width, near the bottom. Method that pastes one surface onto another."),
-    "week-03-functions-gun": ("def draw_gun(screen, x, y):\n    pygame.draw.rect(screen, (200, 200, 200), (x, y, 10, 40))\n\n# call site\n___(screen, 400, 300)", "Call the function with the surface and two coordinates."),
-    "week-04-keyboard-movement": ("keys = pygame.key.___()\nif keys[pygame.K_LEFT]:\n    turret_x ___ 5\nif keys[pygame.K_RIGHT]:\n    turret_x ___ 5", "Method that returns the current pressed-key state. Left arrow subtracts; right arrow adds."),
-    "week-05-limit-range": ("turret_x = ___(0, min(turret_x, SCREEN_WIDTH - turret_width))", "Clamp pattern — outer function picks the larger of two values."),
+    # rs003-pygame-shooter
+    "week-01-pygame-window": ("import pygame\npygame.___()\nscreen = pygame.display.set_mode((___, ___))\npygame.display.set_caption('Ship')\nrunning = True\nwhile running:\n    for event in pygame.event.get():\n        if event.type == pygame.___:\n            running = False", "Function that starts pygame. Window width and height. Event type for the close button."),
+    "week-02-ship-body": ("ship = pygame.image.load('ship.png')\nship_rect = ship.get_rect()\nship_rect.center = (___, ___)   # center bottom of screen\nscreen.fill((0, 0, 0))\nscreen.___(ship, ship_rect)", "Half the screen width, near the bottom. Method that pastes one surface onto another."),
+    "week-03-functions-ship": ("def draw_ship(screen, x, y):\n    pygame.draw.rect(screen, (200, 200, 200), (x, y, 10, 40))\n\n# call site\n___(screen, 400, 300)", "Call the function with the surface and two coordinates."),
+    "week-04-keyboard-movement": ("keys = pygame.key.___()\nif keys[pygame.K_LEFT]:\n    ship_x ___ 5\nif keys[pygame.K_RIGHT]:\n    ship_x ___ 5", "Method that returns the current pressed-key state. Left arrow subtracts; right arrow adds."),
+    "week-05-limit-range": ("ship_x = ___(0, min(ship_x, SCREEN_WIDTH - ship_width))", "Clamp pattern — outer function picks the larger of two values."),
     "week-06-for-loops": ("# fire 5 bullets in a fan\n___ angle in range(-30, 31, 15):\n    bullet = make_bullet(angle)\n    bullets.append(bullet)", "Loop keyword for iterating a sequence."),
     "week-07-multiple-functions": ("def update_bullets():\n    ___\n\ndef draw_everything():\n    ___\n\nwhile running:\n    update_bullets()\n    draw_everything()", "Single-keyword placeholder used when a function has no body yet."),
     "week-08-final-mini-game": ("score = 0\nlives = 3\nwhile lives > 0:\n    if bullet_hit_enemy():\n        score ___ 10\n    if enemy_hit_player():\n        lives ___ 1\nprint(f'Final score: {score}')", "Compound-assignment operators — gain points, lose lives."),
@@ -806,10 +806,10 @@ WEEK_PREDICT = {
     "week-07-random-battle": ("import random\nrandom.seed(1)\nprint(random.choice(['A', 'B', 'C']))", "B", "python"),
     "week-08-final-showdown": ("hp = 30\nwhile hp > 0:\n    hp -= 10\nprint(hp)", "0", "python"),
 
-    # rs003-pygame-turret
+    # rs003-pygame-shooter
     "week-01-pygame-window": ("import pygame\npygame.init()\nscreen = pygame.display.set_mode((400, 300))\nprint(screen.get_size())", "(400, 300)", "python"),
-    "week-02-turret-base": ("rect = pygame.Rect(10, 20, 50, 50)\nprint(rect.right)", "60", "python"),
-    "week-03-functions-gun": ("def fire(power):\n    return power * 2\nprint(fire(5))", "10", "python"),
+    "week-02-ship-body": ("rect = pygame.Rect(10, 20, 50, 50)\nprint(rect.right)", "60", "python"),
+    "week-03-functions-ship": ("def fire(power):\n    return power * 2\nprint(fire(5))", "10", "python"),
     "week-04-keyboard-movement": ("x = 100\nx -= 5  # left arrow\nprint(x)", "95", "python"),
     "week-05-limit-range": ("x = -10\nx = max(0, min(x, 400))\nprint(x)", "0", "python"),
     "week-06-for-loops": ("for i in range(3):\n    print('shot', i)", "shot 0\nshot 1\nshot 2", "python"),
@@ -916,7 +916,7 @@ GENERIC_EDGES_BY_KEYWORD = [
         ("Use secrets for security", "For passwords/tokens, use <code>secrets</code>, not <code>random</code>."),
         ("choice() needs non-empty", "<code>random.choice([])</code> raises IndexError."),
     ]),
-    (["pygame", "game", "turret", "platform"], [
+    (["pygame", "game", "shooter", "ship", "platform"], [
         ("Frame rate matters", "Without a clock, the game runs as fast as the CPU allows — chaos."),
         ("Coordinates start top-left", "y increases as you go DOWN, not up."),
         ("Always handle QUIT", "Forget pygame.event.QUIT and your window won't close."),

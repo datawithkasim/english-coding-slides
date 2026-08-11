@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PyGame Starter · Project 6 — Collision Detection</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* ============ deck-local: overlap figure + live sim ============ */
+
+  /* Slot 5 — two-boxes-overlap figure (no code, on purpose) */
+  .ovfig { display: block; margin: .3em auto; width: min(92%, 78vh); max-height: 42vh; }
+  .ovfig .bx-b { fill: rgba(60,100,220,.55); stroke: #3c64dc; stroke-width: 3; }
+  .ovfig .bx-r { fill: rgba(220,60,60,.55);  stroke: #dc3c3c; stroke-width: 3; }
+  .ovfig .ov   { fill: rgba(56,208,224,.9);  stroke: #38d0e0; stroke-width: 3;
+                 animation: ovPulse 2.4s ease-in-out infinite; }
+  .ovfig .bar-b { fill: #3c64dc; }
+  .ovfig .bar-r { fill: #dc3c3c; }
+  .ovfig .hl   { fill: none; stroke: var(--accent); stroke-width: 3; stroke-dasharray: 7 5; }
+  .ovfig text  { fill: var(--ink); font-family: "JetBrains Mono", monospace;
+                 font-weight: 800; font-size: 19px; }
+  .ovfig text.acc { fill: var(--accent); }
+  @keyframes ovPulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+  /* Slot 9 — two snippets side by side */
+  .two-up { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; width: 100%; }
+  @media (max-width: 820px) { .two-up { grid-template-columns: 1fr; } }
+  .two-up pre {
+    font-size: clamp(12px, 2.1vmin, 19px);
+    white-space: pre-wrap; word-break: break-word; max-width: 100%;
+  }
+  .panel-label {
+    font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.5vmin, 14px);
+    color: var(--com); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2em;
+  }
+
+  /* Slot 7 — live collision sim */
+  .sim-wrap {
+    display: flex; flex-direction: column; gap: .6rem; align-items: center;
+    width: 100%; margin: .2em 0; padding-bottom: 3.2rem;
+  }
+  canvas.sim {
+    width: min(96%, 105vh); aspect-ratio: 2.3 / 1; max-height: 46vh;
+    display: block; background: #05080d;
+    border: 1px solid var(--soft); border-radius: .6em; box-shadow: 0 12px 34px rgba(0,0,0,.45);
+  }
+  .sim-ctl {
+    display: flex; gap: .9rem; align-items: center; flex-wrap: wrap; justify-content: center;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: clamp(12px, 1.7vmin, 18px); color: var(--com);
+  }
+  .sim-ctl label { display: flex; gap: .5em; align-items: center; color: var(--ink); }
+  .sim-ctl output { color: var(--accent); min-width: 1.6em; text-align: right; font-weight: 800; }
+  .sim-ctl input[type=range] { accent-color: var(--accent); width: clamp(90px, 16vw, 190px); }
+  .abtn {
+    font-family: "JetBrains Mono", monospace; font-weight: 800;
+    font-size: clamp(12px, 1.7vmin, 17px);
+    background: var(--panel); color: var(--ink);
+    border: 2px solid var(--soft); border-radius: .55em;
+    padding: .4em .85em; cursor: pointer;
+  }
+  .abtn:hover { background: rgba(56,208,224,.16); }
+  .abtn.on { background: var(--accent); border-color: var(--accent); color: #04121a; }
+  .abtn.ghost { border-color: var(--soft); color: var(--com); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · PyGame Starter · Project 6</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Project 6</div>
+    <div class="emoji">💥</div>
+    <h1>Collision<br>Detection</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Today you'll <span class="sub">test</span> if two boxes touch — then <span class="sub">react</span>.</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — project 5, four-way keyboard movement -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Project 5 — four arrow keys</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which key makes <code>y</code> smaller?</div>
+<pre>x, y = <span class="num">320</span>, <span class="num">240</span>
+
+<span class="kw">if</span> event.key == pygame.K_RIGHT: x += <span class="num">20</span>
+<span class="kw">elif</span> event.key == pygame.K_LEFT:  x -= <span class="num">20</span>
+<span class="kw">elif</span> event.key == pygame.K_UP:    y -= <span class="num">20</span>
+<span class="kw">elif</span> event.key == pygame.K_DOWN:  y += <span class="num">20</span></pre>
+      <details><summary>Show answer</summary><div class="ans">K_UP. On screen, up means a smaller y.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict — moving rect meets a still rect -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>The blue box slides right</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">What prints — and how many times?</div>
+<pre>player = pygame.<span class="fn">Rect</span>(<span class="num">50</span>, <span class="num">220</span>, <span class="num">60</span>, <span class="num">60</span>)
+enemy  = pygame.<span class="fn">Rect</span>(<span class="num">400</span>, <span class="num">220</span>, <span class="num">60</span>, <span class="num">60</span>)
+hit = <span class="kw">False</span>
+
+<span class="com"># every frame:</span>
+player.x += <span class="num">5</span>
+<span class="kw">if not</span> hit <span class="kw">and</span> player.<span class="fn">colliderect</span>(enemy):
+    hit = <span class="kw">True</span>
+    <span class="fn">print</span>(<span class="str">"collide!"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">collide! — one time only.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview — 3 Tier-3 terms -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Three new words</h2>
+    <div class="vocab-table">
+      <span class="term">pygame.Rect(x, y, w, h)</span>
+      <span class="gloss">a box that remembers its own spot and size</span>
+      <span class="ko">사각형 상자 객체</span>
+
+      <span class="term">a.colliderect(b)</span>
+      <span class="gloss">True when two rects overlap</span>
+      <span class="ko">사각형끼리 겹침</span>
+
+      <span class="term">box.collidepoint(x, y)</span>
+      <span class="gloss">True when one point sits inside</span>
+      <span class="ko">점이 안에 있음</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — NO CODE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>When do two boxes touch?</h2>
+    <svg class="ovfig" viewBox="0 0 640 330" role="img" aria-label="Two boxes overlapping in x and in y">
+      <rect class="bx-b" x="100" y="40"  width="170" height="130" rx="6"/>
+      <rect class="bx-r" x="220" y="90"  width="170" height="130" rx="6"/>
+      <rect class="ov"   x="220" y="90"  width="50"  height="80"/>
+
+      <rect class="bar-b" x="100" y="248" width="170" height="10" rx="5"/>
+      <rect class="bar-r" x="220" y="266" width="170" height="10" rx="5"/>
+      <rect class="hl"    x="216" y="240" width="58"  height="44" rx="6"/>
+      <text class="acc" x="96" y="308">x ranges overlap ✓</text>
+
+      <rect class="bar-b" x="440" y="40" width="10" height="130" rx="5"/>
+      <rect class="bar-r" x="458" y="90" width="10" height="130" rx="5"/>
+      <rect class="hl"    x="432" y="86" width="44" height="88"  rx="6"/>
+      <text class="acc" x="492" y="132">y ranges</text>
+      <text class="acc" x="492" y="158">overlap ✓</text>
+    </svg>
+    <p class="center">Both must overlap. One alone is not enough.</p>
+    <p class="bilingual center">가로도 겹치고 세로도 겹쳐야 충돌</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) — code next to its output -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run ▶</div>
+    <h2>Run it</h2>
+<pre><span class="kw">while</span> frames &lt; <span class="num">300</span>:
+    screen.<span class="fn">fill</span>(WHITE)
+    player.x += <span class="num">5</span>
+    <span class="kw">if not</span> hit <span class="kw">and</span> player.<span class="fn">colliderect</span>(enemy):
+        hit = <span class="kw">True</span>
+        <span class="fn">print</span>(<span class="str">"collide!"</span>)
+    pygame.draw.<span class="fn">rect</span>(screen, BLUE, player)
+    pygame.draw.<span class="fn">rect</span>(screen, RED, enemy)
+    pygame.display.<span class="fn">flip</span>()
+    frames += <span class="num">1</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div class="out-line" style="opacity:1">collide!</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate — live canvas sim -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it! 🎛️</div>
+    <h2>Frame by frame</h2>
+    <div class="sim-wrap">
+      <canvas id="colSim" class="sim"></canvas>
+      <div class="sim-ctl">
+        <button class="abtn on" id="modeHit">1 · colliderect</button>
+        <button class="abtn" id="modeWall">2 · wall (undo)</button>
+        <label>speed <input id="simSpeed" type="range" min="2" max="15" step="1" value="5"><output id="simSpeedOut">5</output></label>
+        <button class="abtn ghost" id="simReplay">↺ replay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Common Mistake — no flag, prints every frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Print once, not every frame</h2>
+    <div class="compare-row">
+      <div class="col bad">
+        <span class="tag">✗ broken</span>
+<pre><span class="com"># each frame:</span>
+player.x += <span class="num">5</span>
+<span class="kw">if</span> player.<span class="fn">colliderect</span>(enemy):
+    <span class="fn">print</span>(<span class="str">"collide!"</span>)</pre>
+        <p>Overlap lasts 23 frames → prints <b>23 times</b>.</p>
+      </div>
+      <div class="col good">
+        <span class="tag">✓ fixed</span>
+<pre>hit = <span class="kw">False</span>   <span class="com"># before the loop</span>
+
+<span class="com"># each frame:</span>
+player.x += <span class="num">5</span>
+<span class="kw">if not</span> hit <span class="kw">and</span> player.<span class="fn">colliderect</span>(enemy):
+    hit = <span class="kw">True</span>
+    <span class="fn">print</span>(<span class="str">"collide!"</span>)</pre>
+        <p>The flag remembers. Prints <b>once</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Modify (Faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Try it ✏️</div>
+    <h2>Fill in the blanks</h2>
+    <div class="two-up">
+      <div>
+        <div class="panel-label">point inside a box</div>
+<pre>box = pygame.<span class="fn">Rect</span>(<span class="num">280</span>, <span class="num">180</span>, <span class="num">120</span>, <span class="num">120</span>)
+
+<span class="kw">if not</span> inside <span class="kw">and</span> box.<span class="str">___</span>(px, py):
+    inside = <span class="kw">True</span>
+    <span class="fn">print</span>(<span class="str">"inside point"</span>)</pre>
+      </div>
+      <div>
+        <div class="panel-label">color on hit</div>
+<pre>colliding = player.<span class="fn">colliderect</span>(enemy)
+
+color = RED <span class="str">___</span> colliding <span class="str">___</span> GREEN</pre>
+      </div>
+    </div>
+    <p style="margin-top:.6em"><b>Hint:</b> one method name, then two keywords.</p>
+  </div>
+
+  <!-- Slot 10: Code Talk Frame — the enemy list loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell me what it does</h2>
+<pre><span class="kw">for</span> e <span class="kw">in</span> enemies:
+    <span class="kw">if</span> player.<span class="fn">colliderect</span>(e):
+        <span class="kw">if not</span> met:
+            met = <span class="kw">True</span>
+            <span class="fn">print</span>(<span class="str">"enemy met"</span>)
+        <span class="kw">break</span></pre>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The loop checks <code>player</code> against <span class="blank"></span>. When <code>colliderect</code> gives <span class="blank"></span>, we <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Make / Your Turn — step 7 mini project -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Collect 5 coins 🪙</h2>
+<pre>coins = [
+    pygame.<span class="fn">Rect</span>(<span class="num">150</span>, <span class="num">100</span>, <span class="num">30</span>, <span class="num">30</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">280</span>, <span class="num">200</span>, <span class="num">30</span>, <span class="num">30</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">400</span>, <span class="num">120</span>, <span class="num">30</span>, <span class="num">30</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">500</span>, <span class="num">280</span>, <span class="num">30</span>, <span class="num">30</span>),
+    pygame.<span class="fn">Rect</span>(<span class="num">360</span>, <span class="num">360</span>, <span class="num">30</span>, <span class="num">30</span>),
+]</pre>
+    <ul class="check-list">
+      <li>Walk <code>coins[:]</code> — a copy. Remove each coin you touch.</li>
+      <li>At <code>len(collected) == 5</code>, print <code>5 coins</code> once.</li>
+    </ul>
+  </div>
+
+  <!-- Slot 12: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="emoji">🏁</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Rects know when they touch</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next project: score and lives.</p>
+    <p class="bilingual">다음 프로젝트: 점수와 생명</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 12</span><button id="next">›</button>
+  </div>
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+/* ===================================================================
+   Slot 7 — live collision sim. Vanilla JS, no dependencies.
+   Two modes:
+     1) colliderect  — blue player slides into the red enemy, flashes red
+     2) wall (undo)  — blue player moves, collides with the gray wall,
+                       undoes the move and stops dead (project step 5)
+   Buttons blur() after a click so SPACE keeps belonging to deck.js.
+   The rAF loop idles while this slide is not active.
+   =================================================================== */
+(function () {
+  var cv = document.getElementById('colSim');
+  if (!cv) return;
+  var slide = cv.closest('.slide');
+  var sSpeed  = document.getElementById('simSpeed');
+  var oSpeed  = document.getElementById('simSpeedOut');
+  var bHit    = document.getElementById('modeHit');
+  var bWall   = document.getElementById('modeWall');
+  var bReplay = document.getElementById('simReplay');
+
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var MONO = '"JetBrains Mono","Fira Code",monospace';
+  var C = {
+    bg: '#05080d', panel: '#101823', line: '#2a3444', ink: '#e8eef6', dim: '#8b9ab0',
+    kw: '#ff79c6', str: '#f1fa8c', num: '#bd93f9', fn: '#50fa7b', hi: '#38d0e0',
+    white: '#fafafa', blue: '#3c64dc', red: '#dc3c3c', gray: '#787878', label: '#6b7280'
+  };
+
+  /* the real pygame window + the real rects from the lesson */
+  var W = 640, H = 480;
+  var ENEMY = { x: 400, y: 220, w: 60, h: 60 };
+  var WALL  = { x: 400, y: 200, w: 40, h: 100 };
+
+  var HIT_LINES = [
+    [['player.x += ', C.ink], ['speed', C.num]],
+    [['if not ', C.kw], ['hit ', C.ink], ['and ', C.kw], ['player.colliderect', C.fn], ['(enemy):', C.ink]],
+    [['    hit = ', C.ink], ['True', C.kw]],
+    [['    print', C.fn], ['(', C.ink], ['"collide!"', C.str], [')', C.ink]]
+  ];
+  var WALL_LINES = [
+    [['player.x += ', C.ink], ['speed', C.num]],
+    [['if ', C.kw], ['player.colliderect', C.fn], ['(wall):', C.ink]],
+    [['    player.x -= ', C.ink], ['speed', C.num], ['  # undo', C.dim]],
+    [['    print', C.fn], ['(', C.ink], ['"blocked"', C.str], [')', C.ink]]
+  ];
+
+  var TICK = 55, HOLD = 1900;
+  var mode = 'hit';
+  var speed = +sSpeed.value;
+  var px, fno, hit, blocked, undone, colliding, out, acc, hold;
+
+  function reset() {
+    px = 50; fno = 0; hit = false; blocked = false; undone = false;
+    colliding = false; out = []; acc = 0; hold = 0;
+  }
+  reset();
+
+  function overlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+  function playerRect() { return { x: px, y: 220, w: 60, h: 60 }; }
+
+  function tick() {
+    fno++;
+    undone = false;
+    px += speed;
+    if (mode === 'hit') {
+      colliding = overlap(playerRect(), ENEMY);
+      if (colliding && !hit) { hit = true; out.push('collide!'); }
+      if (px > W) hold = HOLD;
+    } else {
+      if (overlap(playerRect(), WALL)) {
+        px -= speed;
+        undone = true;
+        colliding = true;
+        if (!blocked) { blocked = true; out.push('blocked'); }
+        hold = HOLD;
+      } else {
+        colliding = false;
+      }
+    }
+  }
+
+  function step(dt) {
+    if (hold > 0) { hold -= dt; if (hold <= 0) reset(); return; }
+    acc += dt;
+    while (acc >= TICK) { acc -= TICK; tick(); if (hold > 0) break; }
+  }
+
+  function fit() {
+    var w = cv.clientWidth || 800, h = cv.clientHeight || 350;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  var s = fit();
+  window.addEventListener('resize', function () { s = fit(); });
+
+  function box(ctx, r, sc, vx, vy, fill, stroke) {
+    ctx.fillStyle = fill;
+    ctx.fillRect(vx + r.x * sc, vy + r.y * sc, r.w * sc, r.h * sc);
+    if (stroke) {
+      ctx.strokeStyle = stroke; ctx.lineWidth = 3;
+      ctx.strokeRect(vx + r.x * sc, vy + r.y * sc, r.w * sc, r.h * sc);
+    }
+  }
+
+  function draw(ctx, w, h) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, w, h);
+
+    var pad = w * 0.028;
+    var codeW = w * 0.42;
+    var fsW = Math.floor((codeW * 0.93) / (42 * 0.6));   /* fit ~42 mono chars */
+    var fsH = Math.floor((h - pad * 2) / (12.5 * 1.6));
+    var fs = Math.max(8, Math.min(fsW, fsH, 22));
+    var lineH = fs * 1.6;
+
+    /* ---- code panel ---- */
+    ctx.fillStyle = C.panel; ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.rect(pad, pad, codeW, h - pad * 2); ctx.fill(); ctx.stroke();
+
+    var lines = (mode === 'hit') ? HIT_LINES : WALL_LINES;
+    var lit = (mode === 'hit') ? colliding : undone;
+    var cx = pad + fs * 0.9, cy = pad + fs * 1.1;
+
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    for (var i = 0; i < lines.length; i++) {
+      if (lit && i >= 1) {
+        ctx.fillStyle = 'rgba(56,208,224,.16)';
+        ctx.fillRect(pad + 2, cy - fs * 0.2, codeW - 4, lineH);
+      }
+      var lx = cx;
+      for (var j = 0; j < lines[i].length; j++) {
+        ctx.font = '700 ' + fs + 'px ' + MONO;
+        ctx.fillStyle = lines[i][j][1];
+        ctx.fillText(lines[i][j][0], lx, cy);
+        lx += ctx.measureText(lines[i][j][0]).width;
+      }
+      cy += lineH;
+    }
+
+    /* ---- live values ---- */
+    cy += lineH * 0.55;
+    ctx.font = '700 ' + fs + 'px ' + MONO;
+    var pairs = [['frame     ', String(fno)], ['player.x  ', String(px)]];
+    for (var p = 0; p < pairs.length; p++) {
+      ctx.fillStyle = C.dim; ctx.fillText(pairs[p][0], cx, cy);
+      ctx.fillStyle = C.hi;  ctx.fillText(pairs[p][1], cx + ctx.measureText(pairs[p][0]).width, cy);
+      cy += lineH;
+    }
+
+    /* ---- printed output ---- */
+    cy += lineH * 0.45;
+    ctx.fillStyle = C.dim; ctx.font = '700 ' + Math.round(fs * 0.85) + 'px ' + MONO;
+    ctx.fillText('▸ Output', cx, cy);
+    cy += lineH * 0.95;
+    ctx.font = '700 ' + fs + 'px ' + MONO; ctx.fillStyle = C.str;
+    for (var k = 0; k < out.length; k++) { ctx.fillText(out[k], cx, cy); cy += lineH; }
+
+    /* ---- verdict label ---- */
+    var labelH = Math.max(18, h * 0.11);
+    var gx = pad * 2 + codeW;
+    var gw = w - gx - pad;
+    var lfs = Math.max(10, Math.round(labelH * 0.46));
+    var target = (mode === 'hit') ? 'enemy' : 'wall';
+    var verdict = colliding ? 'True' : 'False';
+    ctx.font = '800 ' + lfs + 'px ' + MONO;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    var t1 = 'player.colliderect(' + target + ') → ';
+    var t1w = ctx.measureText(t1).width;
+    var t2w = ctx.measureText(verdict).width;
+    var tx = gx + Math.max(0, (gw - t1w - t2w) / 2);
+    ctx.fillStyle = C.dim; ctx.fillText(t1, tx, pad + labelH * 0.08);
+    ctx.fillStyle = colliding ? C.fn : C.dim;
+    ctx.fillText(verdict, tx + t1w, pad + labelH * 0.08);
+    if (undone) {
+      ctx.font = '800 ' + Math.round(lfs * 0.85) + 'px ' + MONO;
+      ctx.fillStyle = C.hi;
+      ctx.textAlign = 'center';
+      ctx.fillText('↩ undo — player.x -= speed', gx + gw / 2, pad + labelH * 0.62);
+      ctx.textAlign = 'left';
+    }
+
+    /* ---- game viewport: the real 640x480 pygame window ---- */
+    var gy = pad + labelH;
+    var gh = h - pad * 2 - labelH;
+    var sc = Math.min(gw / W, gh / H);
+    var vw = W * sc, vh = H * sc;
+    var vx = gx + (gw - vw) / 2, vy = gy + (gh - vh) / 2;
+
+    ctx.fillStyle = C.white;
+    ctx.fillRect(vx, vy, vw, vh);
+    ctx.strokeStyle = C.line; ctx.lineWidth = 1;
+    ctx.strokeRect(vx, vy, vw, vh);
+
+    /* everything below is clipped to the window, so a player that runs
+       off the right edge leaves the screen instead of the canvas */
+    ctx.save();
+    ctx.beginPath(); ctx.rect(vx, vy, vw, vh); ctx.clip();
+
+    if (mode === 'hit') {
+      box(ctx, ENEMY, sc, vx, vy, C.red);
+      box(ctx, playerRect(), sc, vx, vy, colliding ? C.red : C.blue, colliding ? C.hi : null);
+    } else {
+      box(ctx, WALL, sc, vx, vy, C.gray);
+      box(ctx, playerRect(), sc, vx, vy, C.blue, undone ? C.red : null);
+    }
+
+    /* small labels — player above, target below, so they never collide */
+    ctx.fillStyle = C.label;
+    ctx.font = '700 ' + Math.max(9, Math.round(24 * sc)) + 'px ' + MONO;
+    ctx.textAlign = 'center';
+    ctx.fillText('player', vx + (px + 30) * sc, vy + 186 * sc);
+    if (mode === 'hit') ctx.fillText('enemy', vx + 430 * sc, vy + 292 * sc);
+    else ctx.fillText('wall', vx + 420 * sc, vy + 312 * sc);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
+  /* ---- controls ---- */
+  function on(el, fn) {
+    if (!el) return;
+    el.addEventListener('click', function (e) { fn(e); el.blur(); });
+  }
+  function setMode(m) {
+    mode = m;
+    bHit.classList.toggle('on', m === 'hit');
+    bWall.classList.toggle('on', m === 'wall');
+    reset();
+  }
+  on(bHit, function () { setMode('hit'); });
+  on(bWall, function () { setMode('wall'); });
+  on(bReplay, reset);
+  sSpeed.addEventListener('input', function () {
+    speed = +sSpeed.value; oSpeed.textContent = speed; reset();
+  });
+
+  /* ---- loop ---- */
+  var last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (!slide.classList.contains('active')) { last = 0; return; }
+    var dt = last ? Math.min(ts - last, 100) : 16;
+    last = ts;
+    if (cv.clientWidth && cv.width !== Math.round(cv.clientWidth * dpr)) s = fit();
+    step(dt);
+    draw(s.ctx, s.w, s.h);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill Loops · DNA Spiral</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { color: #4a5670; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  .stat { display: flex; gap: 1.5em; justify-content: center; flex-wrap: wrap; margin: .4em 0; }
+  .stat div { text-align: center; }
+  .stat .n { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             font-size: clamp(22px, 5vmin, 50px); line-height: 1; }
+  .stat .t { color: var(--com); font-size: clamp(11px, 1.6vmin, 15px);
+             text-transform: uppercase; letter-spacing: .08em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+  table.vt td.b { color: #ffb86c; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Fill Loops · 2 🧬</div>
+
+  <!-- 1 -->
+  <div class="slide active center-all">
+    <div class="emoji">🧬</div>
+    <h1>DNA spiral</h1>
+    <p class="line" style="margin-top:.3em">Two strands. Always opposite.</p>
+    <p class="bilingual">두 가닥이 서로 반대편에서 감아 올라가요</p>
+  </div>
+
+  <!-- 2  the ring -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <p class="line big">A circle of<br><b>8</b> spots.</p>
+        <p class="line quiet" style="margin-top:.5em">Looking down from above.</p>
+        <p class="bilingual">위에서 본 모습. 자리는 8개</p>
+      </div>
+      <div>
+        <canvas class="sim" id="ringC" width="324" height="324" style="max-width:300px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3  the two lists -->
+  <div class="slide center-all">
+<pre>XS = [<span style="color:var(--num)"> 6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)"> 0</span>, <span style="color:var(--num)"> 4</span>]
+ZS = [<span style="color:var(--num)"> 0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)"> 4</span>, <span style="color:var(--num)"> 0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]</pre>
+    <p class="line" style="margin-top:.6em">Spot <b>k</b> is <code>XS[k]</code>, <code>ZS[k]</code>.</p>
+    <p class="bilingual">리스트 두 개가 8개 자리를 기억해요</p>
+  </div>
+
+  <!-- 4  modulo -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+<pre>k = i % <span style="color:var(--num)">8</span></pre>
+        <p class="line" style="margin-top:.5em"><b>%</b> makes it<br>go round again.</p>
+        <p class="bilingual">%는 8이 되면 다시 0으로 돌아가요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="modC" width="360" height="250" style="max-width:360px"></canvas>
+        <div class="slid"><span>i</span><input type="range" id="mI" min="0" max="23" value="0"><span class="out" id="mIo">0</span></div>
+        <div class="readout"><b id="mK">0</b> = <span id="mEq">0 % 8</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5  opposite -->
+  <div class="slide">
+    <div class="two">
+      <div>
+<pre>k = i % <span style="color:var(--num)">8</span>
+j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></pre>
+        <p class="line" style="margin-top:.5em">Strand B is <b>4 spots</b> away.<br>Always.</p>
+        <p class="bilingual">반대편은 4칸 떨어진 자리</p>
+      </div>
+      <div>
+        <canvas class="sim" id="oppC" width="324" height="324" style="max-width:300px"></canvas>
+        <div class="slid"><span>k</span><input type="range" id="oK" min="0" max="7" value="0"><span class="out" id="oKo">0</span></div>
+        <div class="readout">k <b id="oA">0</b> &nbsp; j <b id="oB">4</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6  y climbs -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="sideC" width="330" height="330" style="max-width:320px"></canvas>
+        <div class="slid"><span>steps</span><input type="range" id="sN" min="1" max="24" value="24"><span class="out" id="sNo">24</span></div>
+      </div>
+      <div>
+<pre>y = i</pre>
+        <p class="line" style="margin-top:.5em">Up <b>one</b> every step.<br>That makes it a spiral.</p>
+        <div class="readout" style="margin-top:.5em"><b id="sT">3</b> turns</div>
+        <p class="bilingual">한 칸씩 올라가서 나선이 돼요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7  step through -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="stepC" width="324" height="324" style="max-width:300px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="stBack">◀</button>
+          <button class="btn" id="stFwd">step ▶</button>
+          <button class="btn alt" id="stReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>i</th><th>k</th><th>j</th><th>y</th></tr>
+          <tr><td id="tI">0</td><td id="tK">0</td><td class="b" id="tJ">4</td><td id="tY">0</td></tr>
+        </table>
+        <div class="readout" style="margin-top:.5em">
+          A <b id="tA">(14, 0, 8)</b><br>B <b id="tB">(2, 0, 8)</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8  the code -->
+  <div class="slide center-all">
+<pre class="tiny">XS = [<span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>]
+ZS = [<span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]
+
+<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">24</span>):
+<span class="hot">        k = i % <span style="color:var(--num)">8</span></span>
+<span class="hot">        j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></span>
+        ax = <span style="color:var(--num)">8</span> + XS[k]
+        az = <span style="color:var(--num)">8</span> + ZS[k]
+        bx = <span style="color:var(--num)">8</span> + XS[j]
+        bz = <span style="color:var(--num)">8</span> + ZS[j]
+        blocks.fill(GOLD_BLOCK,
+            pos(ax, i, az), pos(ax + <span style="color:var(--num)">1</span>, i, az + <span style="color:var(--num)">1</span>), REPLACE)
+        blocks.fill(EMERALD_BLOCK,
+            pos(bx, i, bz), pos(bx + <span style="color:var(--num)">1</span>, i, bz + <span style="color:var(--num)">1</span>), REPLACE)
+player.on_chat(<span style="color:var(--str)">"dna"</span>, on_chat)</pre>
+    <p class="quiet" style="margin-top:.4em">Each spot is a <b>2 x 2</b> square.</p>
+  </div>
+
+  <!-- 9  rungs -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+<pre><span style="color:var(--kw)">if</span> i % <span style="color:var(--num)">4</span> == <span style="color:var(--num)">0</span>:
+    blocks.fill(<span style="color:var(--str)">QUARTZ_BLOCK</span>,
+        pos(ax, i, az),
+        pos(bx, i, bz), REPLACE)</pre>
+        <p class="line" style="margin-top:.5em">A bar every <b>4</b> steps.</p>
+        <p class="bilingual">4칸마다 다리를 놓아요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="rungC" width="330" height="330" style="max-width:320px"></canvas>
+        <div class="slid"><span>every</span><input type="range" id="rE" min="1" max="8" value="4"><span class="out" id="rEo">4</span></div>
+        <div class="readout"><b id="rN">6</b> bars</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10  build -->
+  <div class="slide center-all">
+    <div class="pill purple">Your turn</div>
+    <p class="line big" style="margin:.3em 0 .4em">Make it wider.</p>
+    <div class="skel" style="max-width:28em">
+<pre>XS = [<span class="blank">???</span>, <span class="blank">???</span>, <span style="color:var(--num)">0</span>, ...]
+ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <span class="blank">???</span>, ...]</pre></div>
+    <p class="quiet">Change 6 and 4 together. Keep the ring round.</p>
+    <p class="bilingual">6과 4를 같이 바꿔야 동그래요</p>
+  </div>
+
+  <!-- 11  tune -->
+  <div class="slide center-all">
+    <p class="line big" style="margin-bottom:.4em">Three dials.</p>
+    <canvas class="sim" id="tuneC" width="330" height="300" style="max-width:330px"></canvas>
+    <div class="slid"><span>radius</span><input type="range" id="tR" min="2" max="7" value="6"><span class="out" id="tRo">6</span></div>
+    <div class="slid"><span>steps</span><input type="range" id="tS" min="8" max="40" value="24"><span class="out" id="tSo">24</span></div>
+    <div class="slid"><span>square</span><input type="range" id="tQ" min="1" max="3" value="2"><span class="out" id="tQo">2</span></div>
+    <div class="readout"><b id="tB2">192</b> blocks</div>
+  </div>
+
+  <!-- 12  del -->
+  <div class="slide center-all">
+<pre>blocks.fill(<span style="color:var(--str)">AIR</span>,
+    pos(<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>), pos(<span style="color:var(--num)">20</span>,<span style="color:var(--num)">30</span>,<span style="color:var(--num)">20</span>), REPLACE)</pre>
+    <p class="line" style="margin-top:.6em">This one is <b>30</b> tall.</p>
+    <p class="quiet">Your old <code>del</code> only reached 15.</p>
+    <p class="bilingual">이번엔 30까지 지워야 해요</p>
+  </div>
+
+  <!-- 13  challenges -->
+  <div class="slide center-all">
+    <div class="pill">Try these</div>
+    <ul class="tick" style="max-width:22em;text-align:left;margin-top:.5em">
+      <li>Third strand 🧬 <code>(k + 2) % 8</code></li>
+      <li>Colour change 🎨 every turn</li>
+      <li>Two spirals 🌀 side by side</li>
+    </ul>
+    <p class="quiet" style="margin-top:.6em">Block name goes <b>inside</b> <code>fill</code>. Not a variable.</p>
+    <p class="bilingual">블록 이름은 변수에 넣지 마세요</p>
+  </div>
+
+  <!-- 14 -->
+  <div class="slide center-all">
+    <div class="emoji">🧬</div>
+    <p class="line big">Lists + <b>%</b> = spirals.</p>
+  </div>
+
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var XS = [6, 4, 0, -4, -6, -4, 0, 4];
+  var ZS = [0, 4, 6, 4, 0, -4, -6, -4];
+  var CX = 8, CZ = 8, GOLD = '#ffb020', EM = '#50fa7b';
+
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t')); if (t) t.classList.toggle('hid'); b.blur();
+    });
+  });
+
+  // top-down grid, square cells, 18 x 18 world
+  function topGrid(ctx, W, H) {
+    var N = 18, cell = Math.min(W, H) / N;
+    var ox = (W - N * cell) / 2, oy = (H - N * cell) / 2;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    for (var g = 0; g <= N; g++) {
+      ctx.beginPath(); ctx.moveTo(ox + g * cell, oy); ctx.lineTo(ox + g * cell, oy + N * cell); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, oy + g * cell); ctx.lineTo(ox + N * cell, oy + g * cell); ctx.stroke();
+    }
+    return { cell: cell, ox: ox, oy: oy };
+  }
+  function sq(ctx, g, x, z, size, colour) {
+    ctx.fillStyle = colour;
+    ctx.fillRect(g.ox + x * g.cell + 1, g.oy + z * g.cell + 1, size * g.cell - 2, size * g.cell - 2);
+  }
+
+  /* ring */
+  (function () {
+    var c = $('ringC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = topGrid(ctx, c.width, c.height);
+    ctx.font = '13px monospace'; ctx.textAlign = 'center';
+    for (var k = 0; k < 8; k++) {
+      sq(ctx, g, CX + XS[k], CZ + ZS[k], 2, 'rgba(56,208,224,.55)');
+      ctx.fillStyle = '#0d1117';
+      ctx.fillText(String(k), g.ox + (CX + XS[k] + 1) * g.cell, g.oy + (CZ + ZS[k] + 1.35) * g.cell);
+    }
+    ctx.fillStyle = '#8a97b8';
+    ctx.fillText('+', g.ox + (CX + 1) * g.cell, g.oy + (CZ + 1.3) * g.cell);
+    ctx.textAlign = 'left';
+  })();
+
+  /* modulo dial */
+  (function () {
+    var c = $('modC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var i = +$('mI').value, k = i % 8;
+      $('mIo').textContent = i; $('mK').textContent = k;
+      $('mEq').textContent = i + ' % 8';
+      var W = c.width, H = c.height;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      var cx = W / 2, cy = H / 2 + 6, R = Math.min(W, H) / 2 - 34;
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.stroke();
+      ctx.font = '15px monospace'; ctx.textAlign = 'center';
+      for (var s = 0; s < 8; s++) {
+        var a = -Math.PI / 2 + s * Math.PI / 4;
+        var x = cx + R * Math.cos(a), y = cy + R * Math.sin(a);
+        var on = (s === k);
+        ctx.fillStyle = on ? '#38d0e0' : '#1c2432';
+        ctx.beginPath(); ctx.arc(x, y, 15, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = on ? '#0d1117' : '#8a97b8';
+        ctx.fillText(String(s), x, y + 5);
+      }
+      ctx.font = 'bold 22px monospace'; ctx.fillStyle = '#ffb86c';
+      ctx.fillText('i = ' + i, cx, cy + 7);
+      ctx.textAlign = 'left';
+    }
+    $('mI').addEventListener('input', upd); upd();
+  })();
+
+  /* opposite */
+  (function () {
+    var c = $('oppC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var k = +$('oK').value, j = (k + 4) % 8;
+      $('oKo').textContent = k; $('oA').textContent = k; $('oB').textContent = j;
+      var g = topGrid(ctx, c.width, c.height);
+      for (var s = 0; s < 8; s++) sq(ctx, g, CX + XS[s], CZ + ZS[s], 2, 'rgba(35,43,58,.9)');
+      ctx.strokeStyle = 'rgba(138,151,184,.7)'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(g.ox + (CX + XS[k] + 1) * g.cell, g.oy + (CZ + ZS[k] + 1) * g.cell);
+      ctx.lineTo(g.ox + (CX + XS[j] + 1) * g.cell, g.oy + (CZ + ZS[j] + 1) * g.cell);
+      ctx.stroke();
+      sq(ctx, g, CX + XS[k], CZ + ZS[k], 2, GOLD);
+      sq(ctx, g, CX + XS[j], CZ + ZS[j], 2, EM);
+    }
+    $('oK').addEventListener('input', upd); upd();
+  })();
+
+  // side view painter shared by a few slides
+  function sideView(ctx, W, H, steps, radius, size, rungEvery) {
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    var cell = Math.min(W / 18, (H - 12) / Math.max(steps + size, 12));
+    var ox = (W - 18 * cell) / 2, oy = H - 6;
+    function X(k) { return Math.round(radius * (XS[k] / 6)); }
+    if (rungEvery) {
+      ctx.strokeStyle = 'rgba(200,210,235,.55)'; ctx.lineWidth = 2;
+      for (var r = 0; r < steps; r += rungEvery) {
+        var k = r % 8, j = (k + 4) % 8;
+        ctx.beginPath();
+        ctx.moveTo(ox + (8 + X(k) + size / 2) * cell, oy - (r + size / 2) * cell);
+        ctx.lineTo(ox + (8 + X(j) + size / 2) * cell, oy - (r + size / 2) * cell);
+        ctx.stroke();
+      }
+    }
+    for (var i = 0; i < steps; i++) {
+      var k2 = i % 8, j2 = (k2 + 4) % 8;
+      ctx.fillStyle = GOLD;
+      ctx.fillRect(ox + (8 + X(k2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
+      ctx.fillStyle = EM;
+      ctx.fillRect(ox + (8 + X(j2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
+    }
+  }
+
+  /* y climbs */
+  (function () {
+    var c = $('sideC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('sN').value;
+      $('sNo').textContent = n;
+      $('sT').textContent = (n / 8).toFixed(1).replace('.0', '');
+      sideView(ctx, c.width, c.height, n, 6, 2, 0);
+    }
+    $('sN').addEventListener('input', upd); upd();
+  })();
+
+  /* step through */
+  (function () {
+    var c = $('stepC'); if (!c) return;
+    var ctx = c.getContext('2d'), step = 0;
+    function draw() {
+      var g = topGrid(ctx, c.width, c.height);
+      for (var s = 0; s < 8; s++) sq(ctx, g, CX + XS[s], CZ + ZS[s], 2, 'rgba(35,43,58,.85)');
+      for (var i = 0; i <= step; i++) {
+        var k = i % 8, j = (k + 4) % 8, last = (i === step);
+        sq(ctx, g, CX + XS[k], CZ + ZS[k], 2, last ? GOLD : 'rgba(255,176,32,.28)');
+        sq(ctx, g, CX + XS[j], CZ + ZS[j], 2, last ? EM : 'rgba(80,250,123,.28)');
+      }
+      var kk = step % 8, jj = (kk + 4) % 8;
+      $('tI').textContent = step; $('tK').textContent = kk;
+      $('tJ').textContent = jj; $('tY').textContent = step;
+      $('tA').textContent = '(' + (CX + XS[kk]) + ', ' + step + ', ' + (CZ + ZS[kk]) + ')';
+      $('tB').textContent = '(' + (CX + XS[jj]) + ', ' + step + ', ' + (CZ + ZS[jj]) + ')';
+    }
+    $('stFwd').addEventListener('click', function () { if (step < 23) step++; draw(); this.blur(); });
+    $('stBack').addEventListener('click', function () { if (step > 0) step--; draw(); this.blur(); });
+    $('stReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* rungs */
+  (function () {
+    var c = $('rungC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var e = +$('rE').value;
+      $('rEo').textContent = e;
+      $('rN').textContent = Math.ceil(24 / e);
+      sideView(ctx, c.width, c.height, 24, 6, 2, e);
+    }
+    $('rE').addEventListener('input', upd); upd();
+  })();
+
+  /* tune */
+  (function () {
+    var c = $('tuneC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var r = +$('tR').value, n = +$('tS').value, q = +$('tQ').value;
+      $('tRo').textContent = r; $('tSo').textContent = n; $('tQo').textContent = q;
+      $('tB2').textContent = 2 * n * q * q;
+      sideView(ctx, c.width, c.height, n, r, q, 4);
+    }
+    ['tR', 'tS', 'tQ'].forEach(function (id) { $(id).addEventListener('input', upd); });
+    upd();
+  })();
+})();
+</script>
+</body>
+</html>

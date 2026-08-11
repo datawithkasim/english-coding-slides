@@ -36,6 +36,41 @@
     <p style="margin-top:.8em;font-size:clamp(14px,2.2vmin,17px);opacity:.85">Recursion = function calls itself. DP = recursion + memoization. Solves big problems by combining small answers.</p>
   </div>
 
+  <!-- SEE IT: the mental model -->
+  <div class="slide">
+    <div class="pill purple">The idea</div>
+    <h2>Recursion = call down, then return up</h2>
+    <p style="max-width:66%">A recursive function calls a <b>smaller copy of itself</b>, then waits. The paused calls stack up until the <b>base case</b> — the smallest problem it can answer without recursing. Then each waiting call gets its answer and combines back up.</p>
+    <p class="tsim-note" style="margin-top:.7em">There's no loop. The stack of paused calls <b>is</b> the memory of where you were.</p>
+  </div>
+
+  <!-- SEE IT: interactive call stack -->
+  <div class="slide">
+    <div class="pill">See it</div>
+    <h2>Watch the call stack build &amp; unwind</h2>
+    <div class="tsim-wrap">
+      <canvas class="tsim" data-sim="recursion"></canvas>
+      <div class="tsim-ctl">
+        <label>fact(n), n = <output>4</output><input id="tsimRecN" type="range" min="2" max="6" step="1" value="4"></label>
+        <span class="tsim-note">calls stack down to the base case, then values multiply back up</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEE IT: worked trace -->
+  <div class="slide">
+    <div class="pill">Worked example</div>
+    <h2>fact(4), traced by hand</h2>
+<pre>fact(4) = 4 * fact(3)
+        = 4 * (3 * fact(2))
+        = 4 * (3 * (2 * fact(1)))
+        = 4 * (3 * (2 * 1))      ← base case: fact(1) = 1
+        = 4 * (3 * 2)
+        = 4 * 6
+        = 24</pre>
+    <p class="tsim-note" style="margin-top:.5em">Each line waits for the line below it — exactly the stack in the sim.</p>
+  </div>
+
   <!-- 4: Code -->
   <div class="slide">
     <div class="pill">Code</div>
@@ -171,5 +206,6 @@ fib(100)   # instant
   </div>
 </div>
 <script src="../../../assets/deck.js"></script>
+<script src="../../../assets/teachsim.js"></script>
 </body>
 </html>
