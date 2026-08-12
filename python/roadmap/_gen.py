@@ -892,7 +892,7 @@ CATEGORIES = [
 
         ("hash-table", "Hash table",
          "Map keys to values using a hash function. O(1) average lookup. Python dict and set are hash tables.",
-         "users = {'kasim': 12, 'Mina': 10}\nusers['kasim']           # O(1)\n'Mina' in users           # O(1)\n\n# behind the scenes:\n# hash(key) % capacity",
+         "users = {'kasim': 12, 'mina': 10}\nusers['kasim']           # O(1)\n'mina' in users           # O(1)\n\n# behind the scenes:\n# hash(key) % capacity",
          [("O(1) avg lookup", "hash function"),
           ("Python dict / set", "implementation"),
           ("collisions", "open addressing in CPython"),
