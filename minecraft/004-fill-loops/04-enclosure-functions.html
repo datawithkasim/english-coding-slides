@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Helper Functions · Six Enclosures, One Recipe</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  /* centred slides would centre each code line and wreck the indentation */
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em auto;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 17px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink);
+        text-align: left; width: fit-content; max-width: 100%; }
+  pre .ln { color: #3d4759; user-select: none; display: inline-block; width: 2em;
+            text-align: right; padding-right: .6em; margin-right: .6em; }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .bad { display: block; background: rgba(255,85,85,.16); }
+  pre .dim { color: #4a5670; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  .stat { display: flex; gap: 1.6em; justify-content: center; flex-wrap: wrap; margin: .5em 0; }
+  .stat div { text-align: center; }
+  .stat .n { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             font-size: clamp(24px, 5.5vmin, 56px); line-height: 1; }
+  .stat .t { color: var(--com); font-size: clamp(11px, 1.6vmin, 15px);
+             text-transform: uppercase; letter-spacing: .08em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 400px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2.1vmin, 20px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .2em .7em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+  table.vt td.fill { color: #ffb86c; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .steps { counter-reset: s; list-style: none; padding-left: 0;
+           font-size: clamp(14px, 2.2vmin, 21px); max-width: 900px; margin: .3em auto; }
+  .steps li { counter-increment: s; margin: .4em 0; padding-left: 2.1em; position: relative; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: .05em;
+           width: 1.5em; height: 1.5em; border-radius: 50%; border: 2px solid var(--accent-2);
+           color: var(--accent-2); font-family: "JetBrains Mono", monospace;
+           font-size: .8em; display: flex; align-items: center; justify-content: center; }
+
+  .stamp { display: flex; gap: .5em; justify-content: center; align-items: flex-end; flex-wrap: wrap; }
+  .stamp .box { width: clamp(42px, 8vmin, 76px); height: clamp(42px, 8vmin, 76px);
+                border: 3px solid var(--fn); border-radius: .3em; background: rgba(80,250,123,.08);
+                display: flex; align-items: center; justify-content: center;
+                font-family: "JetBrains Mono", monospace; color: var(--fn);
+                font-size: clamp(11px, 1.8vmin, 16px); }
+  .stamp .box.q { border-color: var(--accent-2); color: var(--accent-2);
+                  background: rgba(139,92,246,.08); }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 1000px; margin: .4em auto; }
+  @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+  .card { border: 2px solid var(--soft); border-radius: .6em; padding: .6em .8em; }
+  .card .h { font-family: "JetBrains Mono", monospace; color: var(--com);
+             font-size: clamp(11px, 1.6vmin, 15px); text-transform: uppercase; letter-spacing: .08em; }
+  .card.red { border-color: #ff5555; }
+  .card.green { border-color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Fill Loops · 4 · Helper Functions 🦙</div>
+
+  <!-- 1 · title -->
+  <div class="slide active center-all">
+    <div class="emoji">🦙</div>
+    <h1>One recipe.<br>Six enclosures.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Today you write the cage <b>once</b> and place it anywhere.</p>
+    <p class="bilingual">우리를 한 번만 만들고, 여러 번 놓기</p>
+  </div>
+
+  <!-- 2 · recap -->
+  <div class="slide center-all">
+    <div class="pill purple">Recap</div>
+    <h2>Last time you built this</h2>
+<pre><span class="ln">1</span>blocks.fill(OAK_FENCE,
+<span class="ln">2</span>    pos(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">1</span>),
+<span class="ln">3</span>    pos(<span style="color:var(--num)">5</span>, <span style="color:var(--num)">3</span>, <span style="color:var(--num)">5</span>), FillOperation.HOLLOW)
+<span class="ln">4</span>blocks.fill(GRASS,
+<span class="ln">5</span>    pos(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">1</span>),
+<span class="ln">6</span>    pos(<span style="color:var(--num)">5</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">5</span>), FillOperation.REPLACE)
+<span class="ln">7</span>mobs.spawn(LLAMA, pos(<span style="color:var(--num)">3</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">3</span>))</pre>
+    <p class="line" style="margin-top:.5em">Cage, grass floor, llama inside.</p>
+  </div>
+
+  <!-- 3 · predict -->
+  <div class="slide center-all">
+    <div class="pill">Predict 🤔</div>
+    <h2>You want six cages.<br>How many lines?</h2>
+    <div class="stat" style="margin-top:.6em">
+      <div><div class="n" style="color:#ff5555">42</div><div class="t">copy &amp; paste</div></div>
+      <div><div class="n" style="color:var(--fn)">9</div><div class="t">with a function</div></div>
+    </div>
+    <span class="rev" data-t="p1">Why so few?</span>
+    <p class="line hid" id="p1">The cage is written <b>once</b>. The six calls are one line each.</p>
+  </div>
+
+  <!-- 4 · vocab -->
+  <div class="slide center-all">
+    <div class="pill">Vocab</div>
+    <h2>Four words</h2>
+    <div class="vocab-table">
+      <span class="term">function</span><span class="gloss">a named recipe you can run again</span><span class="ko">함수</span>
+      <span class="term">parameter</span><span class="gloss">a blank in the recipe</span><span class="ko">매개변수</span>
+      <span class="term">argument</span><span class="gloss">the value you put in the blank</span><span class="ko">인자</span>
+      <span class="term">call</span><span class="gloss">run the recipe once</span><span class="ko">호출</span>
+    </div>
+  </div>
+
+  <!-- 5 · concept, no code -->
+  <div class="slide center-all">
+    <div class="pill">Concept</div>
+    <h2>A function is a stamp</h2>
+    <div class="stamp" style="margin:.5em 0">
+      <div class="box q">stamp</div>
+      <div style="color:var(--com);font-size:2em">→</div>
+      <div class="box">x=0</div><div class="box">x=6</div><div class="box">x=12</div><div class="box">x=18</div>
+    </div>
+    <p class="line">One stamp. You choose where it lands.</p>
+    <p class="bilingual">도장은 하나, 찍는 위치는 마음대로</p>
+  </div>
+
+  <!-- 6 · what changes -->
+  <div class="slide center-all">
+    <h2>What changes between cage 1 and cage 2?</h2>
+    <div class="two" style="margin-top:.4em">
+<pre><span class="dim">cage 1</span>
+blocks.fill(OAK_FENCE,
+    pos(<span class="hot" style="display:inline;background:rgba(255,184,108,.25)"> 0 </span>, 0, 0),
+    pos(<span class="hot" style="display:inline;background:rgba(255,184,108,.25)"> 4 </span>, 3, 4), FillOperation.HOLLOW)</pre>
+<pre><span class="dim">cage 2</span>
+blocks.fill(OAK_FENCE,
+    pos(<span class="hot" style="display:inline;background:rgba(255,184,108,.25)"> 6 </span>, 0, 0),
+    pos(<span class="hot" style="display:inline;background:rgba(255,184,108,.25)">10 </span>, 3, 4), FillOperation.HOLLOW)</pre>
+    </div>
+    <p class="line" style="margin-top:.5em">Only the <b>x</b> numbers move. Everything else repeats.</p>
+  </div>
+
+  <!-- 7 · the blank -->
+  <div class="slide center-all">
+    <h2>So make x a blank</h2>
+    <div class="skel">
+<pre><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(<span class="blank">x</span>: number):
+    blocks.fill(OAK_FENCE,
+        pos(<span class="blank">x</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">0</span>),
+        pos(<span class="blank">x</span> + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">3</span>, <span style="color:var(--num)">4</span>), FillOperation.HOLLOW)</pre>
+    </div>
+    <p class="line">Every orange <b>x</b> gets filled in when you call it.</p>
+  </div>
+
+  <!-- 8 · full function -->
+  <div class="slide center-all">
+    <div class="pill">Code</div>
+    <h2>The whole recipe</h2>
+<pre><span class="ln">1</span><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number, z: number):
+<span class="ln">2</span>    blocks.fill(OAK_FENCE,
+<span class="ln">3</span>        pos(x, <span style="color:var(--num)">0</span>, z),
+<span class="ln">4</span>        pos(x + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">3</span>, z + <span style="color:var(--num)">4</span>), FillOperation.HOLLOW)
+<span class="ln">5</span>    blocks.fill(GRASS,
+<span class="ln">6</span>        pos(x, <span style="color:var(--num)">0</span>, z),
+<span class="ln">7</span>        pos(x + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, z + <span style="color:var(--num)">4</span>), FillOperation.REPLACE)
+<span class="ln">8</span>    mobs.spawn(LLAMA, pos(x + <span style="color:var(--num)">2</span>, <span style="color:var(--num)">1</span>, z + <span style="color:var(--num)">2</span>))</pre>
+    <p class="line" style="margin-top:.4em">Nothing runs yet. You only <b>described</b> the cage.</p>
+  </div>
+
+  <!-- 9 · calling it -->
+  <div class="slide center-all">
+    <h2>Now run it twice</h2>
+<pre><span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">0</span>)
+<span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">6</span>, <span style="color:var(--num)">0</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div>Two cages, six blocks apart, one llama each.</div>
+    </div>
+  </div>
+
+  <!-- 10 · trace activity -->
+  <div class="slide center-all">
+    <div class="pill">Your turn ✍️</div>
+    <h2>Fill the table</h2>
+<pre><span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">12</span>, <span style="color:var(--num)">6</span>)</pre>
+    <table class="vt">
+      <tr><th>inside the function</th><th>value</th></tr>
+      <tr><td>x</td><td class="fill">?</td></tr>
+      <tr><td>z</td><td class="fill">?</td></tr>
+      <tr><td>x + 4</td><td class="fill">?</td></tr>
+      <tr><td>z + 2</td><td class="fill">?</td></tr>
+    </table>
+    <span class="rev" data-t="t1">Check</span>
+    <p class="line hid" id="t1">x=<b>12</b> z=<b>6</b> x+4=<b>16</b> z+2=<b>8</b></p>
+  </div>
+
+  <!-- 11 · sim: spacing -->
+  <div class="slide center-all">
+    <h2>Watch the calls land</h2>
+    <canvas class="sim" id="gridC" width="400" height="240"></canvas>
+    <div class="slid"><span>cages</span><input type="range" id="gN" min="1" max="6" value="3"><span class="out" id="gNo">3</span></div>
+    <div class="slid"><span>gap</span><input type="range" id="gG" min="5" max="10" value="6"><span class="out" id="gGo">6</span></div>
+    <p class="readout">make_cage(i * <b><span id="gGo2">6</span></b>, 0)</p>
+  </div>
+
+  <!-- 12 · common mistake -->
+  <div class="slide center-all">
+    <div class="pill" style="border-color:#ff5555;color:#ff5555">Common mistake</div>
+    <h2>The blank never gets used</h2>
+    <div class="cards">
+      <div class="card red">
+        <div class="h">broken</div>
+<pre><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number):
+<span class="bad">    blocks.fill(OAK_FENCE,
+        pos(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">1</span>),</span>
+        pos(<span style="color:var(--num)">5</span>, <span style="color:var(--num)">3</span>, <span style="color:var(--num)">5</span>), FillOperation.HOLLOW)</pre>
+      </div>
+      <div class="card green">
+        <div class="h">fixed</div>
+<pre><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number):
+    blocks.fill(OAK_FENCE,
+        pos(<span style="color:var(--accent)">x</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">1</span>),
+        pos(<span style="color:var(--accent)">x</span> + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">3</span>, <span style="color:var(--num)">5</span>), FillOperation.HOLLOW)</pre>
+      </div>
+    </div>
+    <p class="line">Broken: all six cages stack in one spot.</p>
+  </div>
+
+  <!-- 13 · debug 1 -->
+  <div class="slide center-all">
+    <div class="pill purple">Debug 1</div>
+    <h2>Nothing appears. Why?</h2>
+<pre><span class="ln">1</span><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number, z: number):
+<span class="ln">2</span>    blocks.fill(OAK_FENCE,
+<span class="ln">3</span>        pos(x, <span style="color:var(--num)">0</span>, z),
+<span class="ln">4</span>        pos(x + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">3</span>, z + <span style="color:var(--num)">4</span>), FillOperation.HOLLOW)</pre>
+    <span class="rev" data-t="d1">Answer</span>
+    <p class="line hid" id="d1">You defined the recipe and never <b>called</b> it. Add <code>make_cage(0, 0)</code>.</p>
+  </div>
+
+  <!-- 14 · debug 2, his real bug -->
+  <div class="slide center-all">
+    <div class="pill purple">Debug 2</div>
+    <h2>The llama vanishes</h2>
+<pre><span class="ln">1</span><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number, z: number):
+<span class="bad"><span class="ln">2</span>    mobs.spawn(LLAMA, pos(x + <span style="color:var(--num)">2</span>, <span style="color:var(--num)">1</span>, z + <span style="color:var(--num)">2</span>))</span>
+<span class="ln">3</span>    blocks.fill(OAK_FENCE,
+<span class="ln">4</span>        pos(x, <span style="color:var(--num)">0</span>, z),
+<span class="ln">5</span>        pos(x + <span style="color:var(--num)">4</span>, <span style="color:var(--num)">3</span>, z + <span style="color:var(--num)">4</span>), FillOperation.HOLLOW)</pre>
+    <span class="rev" data-t="d2">Answer</span>
+    <p class="line hid" id="d2">The llama spawns first, then the fill runs over it. Spawn <b>last</b>.</p>
+  </div>
+
+  <!-- 15 · debug 3 -->
+  <div class="slide center-all">
+    <div class="pill purple">Debug 3</div>
+    <h2>Cage 2 sits inside cage 1</h2>
+<pre><span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">0</span>)
+<span class="bad"><span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">2</span>, <span style="color:var(--num)">0</span>)</span></pre>
+    <p class="quiet">The cage is 5 blocks wide, from x to x + 4.</p>
+    <span class="rev" data-t="d3">Answer</span>
+    <p class="line hid" id="d3">2 is smaller than 5, so they overlap. Use <b>6</b> or more.</p>
+  </div>
+
+  <!-- 16 · practice A -->
+  <div class="slide center-all">
+    <div class="pill">Practice A ✍️</div>
+    <h2>Build the function yourself</h2>
+    <ol class="steps">
+      <li>Type <code>def make_cage(x: number, z: number):</code></li>
+      <li>Indent, then fill OAK_FENCE from <code>pos(x, 0, z)</code> to <code>pos(x + 4, 3, z + 4)</code> with HOLLOW</li>
+      <li>Fill GRASS across the floor layer only, y stays 0</li>
+      <li>Spawn the llama on the last line, at <code>pos(x + 2, 1, z + 2)</code></li>
+      <li>Below the function, call <code>make_cage(0, 0)</code> and run</li>
+    </ol>
+    <p class="line">Stop when one cage works.</p>
+  </div>
+
+  <!-- 17 · loop -->
+  <div class="slide center-all">
+    <h2>Six calls, or one loop</h2>
+    <div class="two">
+<pre><span class="dim">six calls</span>
+make_cage(<span style="color:var(--num)">0</span>, 0)
+make_cage(<span style="color:var(--num)">6</span>, 0)
+make_cage(<span style="color:var(--num)">12</span>, 0)
+make_cage(<span style="color:var(--num)">18</span>, 0)
+make_cage(<span style="color:var(--num)">24</span>, 0)
+make_cage(<span style="color:var(--num)">30</span>, 0)</pre>
+<pre><span class="dim">one loop</span>
+<span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">6</span>):
+    make_cage(i * <span style="color:var(--num)">6</span>, <span style="color:var(--num)">0</span>)</pre>
+    </div>
+    <p class="line" style="margin-top:.4em">Same six cages. <b>i</b> counts 0, 1, 2, 3, 4, 5.</p>
+  </div>
+
+  <!-- 18 · practice B -->
+  <div class="slide center-all">
+    <div class="pill">Practice B ✍️</div>
+    <h2>Fill the blanks, then run</h2>
+    <div class="skel">
+<pre><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span class="blank">???</span>):
+    make_cage(i * <span class="blank">???</span>, <span style="color:var(--num)">0</span>)</pre>
+    </div>
+    <ul class="tick">
+      <li>You want six cages</li>
+      <li>Each cage is 5 wide, so leave a gap</li>
+    </ul>
+    <span class="rev" data-t="pb">Check</span>
+    <p class="line hid" id="pb"><code>range(6)</code> and <code>i * 6</code></p>
+  </div>
+
+  <!-- 19 · two rows sim -->
+  <div class="slide center-all">
+    <h2>A zoo needs rows</h2>
+<pre><span style="color:var(--kw)">for</span> row <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">2</span>):
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">3</span>):
+        make_cage(i * <span style="color:var(--num)">6</span>, row * <span style="color:var(--num)">6</span>)</pre>
+    <canvas class="sim" id="rowC" width="400" height="200"></canvas>
+    <p class="readout"><b id="rowN">6</b> cages, 2 rows of 3</p>
+  </div>
+
+  <!-- 20 · practice C -->
+  <div class="slide center-all">
+    <div class="pill">Practice C ✍️</div>
+    <h2>Add a gate to every cage</h2>
+    <p class="line">A gate is a hole in the fence. Air blocks make holes.</p>
+    <div class="skel">
+<pre><span class="dim">last line inside make_cage</span>
+blocks.fill(AIR,
+    pos(x + <span class="blank">???</span>, <span style="color:var(--num)">1</span>, z),
+    pos(x + <span class="blank">???</span>, <span style="color:var(--num)">2</span>, z), FillOperation.REPLACE)</pre>
+    </div>
+    <span class="rev" data-t="pc">Check</span>
+    <p class="line hid" id="pc">Both blanks are <b>2</b>. That is the middle of the front wall.</p>
+  </div>
+
+  <!-- 21 · animal parameter -->
+  <div class="slide center-all">
+    <h2>One more blank: the animal</h2>
+<pre><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x: number, z: number, <span class="blank">animal</span>: number):
+    <span class="dim">... fills stay the same ...</span>
+    mobs.spawn(<span class="blank">animal</span>, pos(x + <span style="color:var(--num)">2</span>, <span style="color:var(--num)">1</span>, z + <span style="color:var(--num)">2</span>))
+
+<span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">0</span>, LLAMA)
+<span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">6</span>, <span style="color:var(--num)">0</span>, COW)
+<span style="color:var(--fn)">make_cage</span>(<span style="color:var(--num)">12</span>, <span style="color:var(--num)">0</span>, PIG)</pre>
+    <p class="line" style="margin-top:.3em">Three cages. Three animals. Still one recipe.</p>
+  </div>
+
+  <!-- 22 · quiz -->
+  <div class="slide center-all">
+    <div class="pill">Quick check</div>
+    <h2>Two questions</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="h">1</div>
+        <p class="line">In <code>make_cage(12, 6)</code>, what is 12?</p>
+        <span class="rev" data-t="q1">Answer</span>
+        <p class="line hid" id="q1">An <b>argument</b>. It fills the parameter x.</p>
+      </div>
+      <div class="card">
+        <div class="h">2</div>
+        <p class="line">Your loop runs <code>range(6)</code>. Highest value of i?</p>
+        <span class="rev" data-t="q2">Answer</span>
+        <p class="line hid" id="q2"><b>5</b>. It starts at 0.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 · code talk -->
+  <div class="slide center-all">
+    <div class="pill">Say it out loud</div>
+    <h2>Explain your function</h2>
+    <div class="frame-card">
+      <p class="line">My function is called <span class="blank">______</span>.</p>
+      <p class="line">It takes <span class="blank">______</span> and <span class="blank">______</span>.</p>
+      <p class="line">I call it <span class="blank">______</span> times, and each cage moves <span class="blank">______</span> blocks.</p>
+    </div>
+    <p class="bilingual">소리 내어 설명해 보기</p>
+  </div>
+
+  <!-- 24 · make -->
+  <div class="slide center-all">
+    <div class="pill">Make 🏗️</div>
+    <h2>Build your zoo</h2>
+    <ol class="steps">
+      <li>Six enclosures from one loop</li>
+      <li>A different animal in at least three of them</li>
+      <li>A gate in every cage</li>
+      <li>One big OAK_FENCE wall around the whole zoo</li>
+    </ol>
+    <p class="quiet">Run after every step. Fix one thing at a time.</p>
+  </div>
+
+  <!-- 25 · stretch -->
+  <div class="slide center-all">
+    <div class="pill purple">Stretch</div>
+    <h2>If you finish early</h2>
+    <ul class="tick">
+      <li>★ Make the cage size a parameter too</li>
+      <li>★★ Give each cage a roof, then a hole in the roof</li>
+      <li>★★★ Write <code>make_zoo(rows, cols)</code> that calls <code>make_cage</code> for you</li>
+    </ul>
+  </div>
+
+  <!-- 26 · exit -->
+  <div class="slide center-all">
+    <div class="pill">Exit ticket</div>
+    <h2>One sentence</h2>
+    <p class="big">What would break if you deleted the <code>z</code> parameter?</p>
+    <span class="rev" data-t="ex">One good answer</span>
+    <p class="line hid" id="ex">Every cage would sit in the same row. You could only move sideways.</p>
+  </div>
+
+  <!-- 27 · close -->
+  <div class="slide center-all">
+    <div class="emoji">🦙</div>
+    <h1>You wrote it once.</h1>
+    <p class="big" style="color:var(--accent-2)">Next time your function builds the whole zoo by itself.</p>
+    <p class="bilingual">다음 시간: 함수가 동물원 전체를 만들어요</p>
+  </div>
+
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  /* reveal buttons */
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t'));
+      if (t) t.classList.toggle('hid');
+    });
+  });
+
+  /* cage drawing helper: one cage footprint of 5x5 with a llama dot */
+  function cage(ctx, px, pz, cell) {
+    var w = 5 * cell;
+    ctx.fillStyle = 'rgba(80,250,123,.10)';
+    ctx.fillRect(px, pz, w, w);
+    ctx.strokeStyle = '#50fa7b';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px + 1, pz + 1, w - 2, w - 2);
+    ctx.fillStyle = '#38d0e0';
+    ctx.beginPath();
+    ctx.arc(px + w / 2, pz + w / 2, Math.max(2, cell * .5), 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* sim 1: a row of cages, count and gap */
+  (function () {
+    var c = $('gridC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('gN').value, gap = +$('gG').value;
+      $('gNo').textContent = n;
+      $('gGo').textContent = gap;
+      $('gGo2').textContent = gap;
+      ctx.fillStyle = '#0d1117';
+      ctx.fillRect(0, 0, c.width, c.height);
+      /* scale so the widest setting still fits inside the canvas */
+      var span = (n - 1) * gap + 5;
+      var cell = Math.min(14, (c.width - 30) / span);
+      ctx.fillStyle = '#ffb86c';
+      ctx.fillRect(6, c.height / 2 - 8, 7, 16);
+      for (var i = 0; i < n; i++) {
+        cage(ctx, 20 + i * gap * cell, c.height / 2 - 5 * cell / 2, cell);
+      }
+    }
+    $('gN').addEventListener('input', upd);
+    $('gG').addEventListener('input', upd);
+    upd();
+  })();
+
+  /* sim 2: two rows of three */
+  (function () {
+    var c = $('rowC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, c.width, c.height);
+    var cell = 8, n = 0;
+    for (var row = 0; row < 2; row++) {
+      for (var i = 0; i < 3; i++) {
+        cage(ctx, 30 + i * 6 * cell, 20 + row * 6 * cell, cell);
+        n++;
+      }
+    }
+    if ($('rowN')) $('rowN').textContent = n;
+  })();
+})();
+</script>
+</body>
+</html>
