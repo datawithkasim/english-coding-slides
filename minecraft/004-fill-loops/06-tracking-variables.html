@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fill Loops · Tracking Variables</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left;
+        display: inline-block; }
+  pre.tiny { font-size: clamp(10px, 1.4vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { color: #4a5670; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: visible; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .55em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .78em; }
+  table.vt td { color: var(--accent); }
+  table.vt td.q { color: #ffb86c; }
+  table.vt tr.on td { background: rgba(56,208,224,.1); }
+
+  table.nm { border-collapse: collapse; margin: .4em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.8vmin, 17px); }
+  table.nm th, table.nm td { border: 1px solid var(--soft); padding: .2em .55em; }
+  table.nm th { color: var(--com); font-size: .8em; }
+  table.nm td { color: var(--code-ink); }
+  table.nm td.log { color: #c08a55; }
+  table.nm td.lf { color: #7fb04a; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .tag { display: inline-block; font-family: "JetBrains Mono", monospace;
+         font-size: clamp(11px, 1.7vmin, 16px); border-radius: .35em; padding: .1em .5em; }
+  .tag.same { color: #8a97b8; border: 1px solid #3a445c; }
+  .tag.up { color: #ffb86c; border: 1px solid #ffb86c; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Fill Loops · 6 🔢</div>
+
+  <!-- 1  title -->
+  <div class="slide active center-all">
+    <div class="emoji">🔢</div>
+    <h1>Why so many<br>numbers?</h1>
+    <p class="line" style="margin-top:.3em">Today you <b>count</b>, then <b>track</b>, then code.</p>
+    <p class="bilingual">숫자를 먼저 세고, 그다음에 코드를 써요</p>
+  </div>
+
+  <!-- 2  recap -->
+  <div class="slide center-all">
+    <div class="pill purple">Recap</div>
+    <p class="line big" style="margin:.4em 0">What does a variable do?</p>
+    <span class="rev" data-t="a2">show answer</span>
+    <div id="a2" class="hid">
+      <p class="line">It <b>holds</b> a number.<br>It can <b>change</b> later.</p>
+      <p class="quiet">A box with a name on it.</p>
+    </div>
+    <p class="bilingual">변수는 이름 붙인 상자예요</p>
+  </div>
+
+  <!-- 3  predict: loop with no updates -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+        <div class="pill">Predict 🤔</div>
+<pre class="tiny"><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">3</span>):
+    blocks.fill(<span style="color:var(--str)">OAK_LOG</span>,
+        pos(<span style="color:var(--num)">2</span>,<span style="color:var(--num)">0</span>,<span style="color:var(--num)">2</span>),
+        pos(<span style="color:var(--num)">2</span>,<span style="color:var(--num)">3</span>,<span style="color:var(--num)">2</span>), REPLACE)</pre>
+        <p class="line" style="margin-top:.4em">3 loops. How many trunks do you see?</p>
+        <p class="bilingual">몇 개가 보일까요?</p>
+      </div>
+      <div>
+        <canvas class="sim" id="pC" width="340" height="300" style="max-width:320px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="pRun">run ▶</button>
+          <button class="btn alt" id="pFix">add updates</button>
+        </div>
+        <div class="readout" id="pMsg">nothing built yet</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4  concept: loop + variables -->
+  <div class="slide center-all">
+    <p class="line big">The loop says <b>do it again</b>.</p>
+    <p class="line big" style="margin-top:.3em">The variables say <b>do it here</b>.</p>
+    <p class="quiet" style="margin-top:.6em">Same numbers every time = one tree, built 3 times.</p>
+    <p class="bilingual">반복문은 횟수, 변수는 위치를 정해요</p>
+  </div>
+
+  <!-- 5  one box = 6 numbers -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+        <p class="line big">One <code>fill</code>.<br><b>6</b> numbers.</p>
+        <p class="line quiet" style="margin-top:.5em">A corner to start from.<br>A corner to stop at.</p>
+        <p class="bilingual">시작 모서리 3개, 끝 모서리 3개</p>
+      </div>
+      <div>
+        <canvas class="sim" id="sixC" width="330" height="300" style="max-width:310px"></canvas>
+        <div class="readout">from <b>(2,&nbsp;0,&nbsp;2)</b> to <b>(2,&nbsp;3,&nbsp;2)</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6  two boxes = 12 numbers + names -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+        <p class="line big">Two boxes.<br><b>12</b> numbers.</p>
+        <p class="quiet" style="margin-top:.4em">Trunk is one box. Leaves are another box.</p>
+        <table class="nm">
+          <tr><th></th><th>start</th><th>end</th></tr>
+          <tr><td class="log">trunk</td><td class="log">x_start<br>y_start<br>z_start</td><td class="log">x_end<br>y_end<br>z_end</td></tr>
+          <tr><td class="lf">leaves</td><td class="lf">leaf_x_start<br>leaf_y_start<br>leaf_z_start</td><td class="lf">leaf_x_end<br>leaf_y_end<br>leaf_z_end</td></tr>
+        </table>
+        <p class="bilingual">상자 하나에 숫자 6개, 상자 2개면 12개예요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="twoC" width="330" height="330" style="max-width:300px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7  count, don't guess -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="cntC" width="360" height="300" style="max-width:360px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="cntNum">show numbers</button>
+        </div>
+      </div>
+      <div>
+        <p class="line big">Count it.<br>Do not guess it.</p>
+        <p class="line quiet" style="margin-top:.5em">Read the screen.<br>Write the numbers down.<br>Then find the rule.</p>
+        <p class="bilingual">머리로 생각하지 말고, 화면을 보고 세어요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8  stretch vs slide -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="mvC" width="360" height="260" style="max-width:360px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="mvStretch">end only ▶</button>
+          <button class="btn" id="mvSlide">start + end ▶</button>
+          <button class="btn alt" id="mvReset">reset</button>
+        </div>
+        <div class="readout" id="mvMsg">from z 2 to z 4</div>
+      </div>
+      <div>
+        <p class="line big">Two tools.</p>
+        <p class="line" style="margin-top:.5em">End only = it <b>stretches</b>.</p>
+        <p class="line">Start and end = it <b>moves</b>.</p>
+        <p class="quiet" style="margin-top:.4em">Trunk grows taller: y_end only.<br>Next tree along: z_start and z_end.</p>
+        <p class="bilingual">끝만 바꾸면 늘어나고, 둘 다 바꾸면 옮겨져요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9  tracker: predict then reveal -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="trC" width="380" height="290" style="max-width:380px"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="trBack">◀</button>
+          <button class="btn" id="trFwd">loop ▶</button>
+          <button class="btn alt" id="trReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <p class="line">Say the next row <b>out loud</b> first.</p>
+        <table class="vt">
+          <tr><th>i</th><th>y_end</th><th>z_start</th><th>z_end</th></tr>
+          <tr id="tr1"><td>1</td><td>3</td><td>2</td><td>2</td></tr>
+          <tr id="tr2"><td>2</td><td class="q">?</td><td class="q">?</td><td class="q">?</td></tr>
+          <tr id="tr3"><td>3</td><td class="q">?</td><td class="q">?</td><td class="q">?</td></tr>
+        </table>
+        <p class="quiet" style="text-align:center">+1 taller &nbsp;·&nbsp; +4 along</p>
+        <p class="bilingual">다음 값을 먼저 말해 보고 확인해요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10  which change, which stay -->
+  <div class="slide center-all">
+    <p class="line big" style="margin-bottom:.3em">Which ones change?</p>
+    <table class="nm" style="font-size:clamp(12px,2vmin,19px)">
+      <tr><td>x_start · x_end</td><td><span class="tag same">same</span></td></tr>
+      <tr><td>y_start</td><td><span class="tag same">same</span></td></tr>
+      <tr><td>y_end</td><td><span class="tag up">+ 1</span></td></tr>
+      <tr><td>z_start · z_end</td><td><span class="tag up">+ 4</span></td></tr>
+    </table>
+    <p class="quiet" style="margin-top:.5em">Leaves follow the same rules, one box higher.</p>
+    <p class="bilingual">x는 그대로, y_end는 1씩, z는 4씩 늘어요</p>
+  </div>
+
+  <!-- 11  inside the loop -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <p class="quiet">outside 😖</p>
+<pre class="tiny"><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">3</span>):
+    blocks.fill(...)
+z_start = z_start + <span style="color:var(--num)">4</span>
+z_end = z_end + <span style="color:var(--num)">4</span></pre>
+        <p class="quiet">Runs once, at the end. 3 trees in one spot.</p>
+      </div>
+      <div>
+        <p class="quiet">inside 😀</p>
+<pre class="tiny"><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">3</span>):
+    blocks.fill(...)
+<span class="hot">    z_start = z_start + <span style="color:var(--num)">4</span>
+</span><span class="hot">    z_end = z_end + <span style="color:var(--num)">4</span></span></pre>
+        <p class="quiet">Runs every loop. 3 trees in a row.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="text-align:center">업데이트는 반복문 안에 들여쓰기 해요</p>
+  </div>
+
+  <!-- 12  full code -->
+  <div class="slide center-all">
+<pre class="tiny"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
+    x_start = <span style="color:var(--num)">2</span>;  y_start = <span style="color:var(--num)">0</span>;  z_start = <span style="color:var(--num)">2</span>
+    x_end = <span style="color:var(--num)">2</span>;  y_end = <span style="color:var(--num)">3</span>;  z_end = <span style="color:var(--num)">2</span>
+    leaf_x_start = <span style="color:var(--num)">1</span>;  leaf_y_start = <span style="color:var(--num)">4</span>;  leaf_z_start = <span style="color:var(--num)">1</span>
+    leaf_x_end = <span style="color:var(--num)">3</span>;  leaf_y_end = <span style="color:var(--num)">6</span>;  leaf_z_end = <span style="color:var(--num)">3</span>
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">3</span>):
+        blocks.fill(<span style="color:var(--str)">OAK_LOG</span>,
+            pos(x_start, y_start, z_start),
+            pos(x_end, y_end, z_end), REPLACE)
+        blocks.fill(<span style="color:var(--str)">OAK_LEAVES</span>,
+            pos(leaf_x_start, leaf_y_start, leaf_z_start),
+            pos(leaf_x_end, leaf_y_end, leaf_z_end), REPLACE)
+<span class="hot">        y_end = y_end + <span style="color:var(--num)">1</span>
+</span><span class="hot">        z_start = z_start + <span style="color:var(--num)">4</span>;  z_end = z_end + <span style="color:var(--num)">4</span>
+</span><span class="hot">        leaf_y_start = leaf_y_start + <span style="color:var(--num)">1</span>;  leaf_y_end = leaf_y_end + <span style="color:var(--num)">1</span>
+</span><span class="hot">        leaf_z_start = leaf_z_start + <span style="color:var(--num)">4</span>;  leaf_z_end = leaf_z_end + <span style="color:var(--num)">4</span></span>
+player.on_chat(<span style="color:var(--str)">"trees"</span>, on_chat)</pre>
+  </div>
+
+  <!-- 13  modify + your turn -->
+  <div class="slide center-all">
+    <div class="pill purple">Your turn</div>
+    <p class="line big" style="margin:.3em 0 .3em">Fill the blanks. Then make 5 trees.</p>
+    <div class="skel">
+<pre>leaf_y_start = leaf_y_start + <span class="blank">?</span>
+leaf_z_start = leaf_z_start + <span class="blank">?</span>
+leaf_z_end   = leaf_z_end + <span class="blank">?</span></pre></div>
+    <span class="rev" data-t="a13">show answer</span>
+    <div id="a13" class="hid"><p class="line">+ <b>1</b>, + <b>4</b>, + <b>4</b></p></div>
+    <p class="quiet" style="margin-top:.4em">Leaves must move with the trunk, or they float.</p>
+    <p class="bilingual">잎도 기둥과 같이 움직여야 해요</p>
+  </div>
+
+  <!-- 14  close -->
+  <div class="slide center-all">
+    <div class="emoji">🌳</div>
+    <p class="line big">6 numbers per box.</p>
+    <p class="line big" style="margin-top:.2em">Count first. Code second.</p>
+  </div>
+
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var LOG = '#6b4a2b', LEAF = '#4f7a2a', DOT = '#38d0e0';
+
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t')); if (t) t.classList.toggle('hid'); b.blur();
+    });
+  });
+
+  /* side view: z runs across, y runs up */
+  function grid(ctx, W, H, worldZ, worldY) {
+    var cell = Math.min(W / worldZ, (H - 8) / worldY);
+    var ox = (W - worldZ * cell) / 2, oy = H - 4;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    for (var i = 0; i <= worldZ; i++) {
+      ctx.beginPath(); ctx.moveTo(ox + i * cell, oy); ctx.lineTo(ox + i * cell, oy - worldY * cell); ctx.stroke();
+    }
+    for (var j = 0; j <= worldY; j++) {
+      ctx.beginPath(); ctx.moveTo(ox, oy - j * cell); ctx.lineTo(ox + worldZ * cell, oy - j * cell); ctx.stroke();
+    }
+    return { cell: cell, ox: ox, oy: oy };
+  }
+  function box(ctx, g, z0, y0, z1, y1, colour) {
+    ctx.fillStyle = colour;
+    ctx.fillRect(g.ox + z0 * g.cell, g.oy - (y1 + 1) * g.cell,
+                 (z1 - z0 + 1) * g.cell - 1, (y1 - y0 + 1) * g.cell - 1);
+  }
+  function dot(ctx, g, z, y, label) {
+    var cx = g.ox + (z + 0.5) * g.cell, cy = g.oy - (y + 0.5) * g.cell;
+    ctx.fillStyle = DOT;
+    ctx.beginPath(); ctx.arc(cx, cy, Math.max(3, g.cell * 0.22), 0, 6.3); ctx.fill();
+    if (label) {
+      ctx.font = '12px monospace'; ctx.fillStyle = DOT;
+      ctx.fillText(label, cx + 8, cy + 4);
+    }
+  }
+  function label(ctx, text, x, y, colour) {
+    ctx.font = '12px monospace'; ctx.fillStyle = colour || '#8a97b8';
+    ctx.fillText(text, x, y);
+  }
+  /* one tree at loop step i (1-based), using Leo's numbers */
+  function trunkAt(ctx, g, i) {
+    box(ctx, g, 2 + 4 * (i - 1), 0, 2 + 4 * (i - 1), 3 + (i - 1), LOG);
+  }
+  function treeAt(ctx, g, i) {
+    var yEnd = 3 + (i - 1), zT = 2 + 4 * (i - 1);
+    var lz0 = 1 + 4 * (i - 1), lz1 = 3 + 4 * (i - 1);
+    var ly0 = 4 + (i - 1), ly1 = 6 + (i - 1);
+    box(ctx, g, zT, 0, zT, yEnd, LOG);
+    box(ctx, g, lz0, ly0, lz1, ly1, LEAF);
+  }
+
+  /* 3  predict */
+  (function () {
+    var c = $('pC'); if (!c) return;
+    var ctx = c.getContext('2d'), mode = 0;
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 14, 11);
+      if (mode === 0) { label(ctx, 'empty', 8, 16); $('pMsg').textContent = 'nothing built yet'; return; }
+      if (mode === 1) {
+        for (var k = 0; k < 3; k++) trunkAt(ctx, g, 1);
+        label(ctx, 'x3 here', 8, 16, '#ff5555');
+        $('pMsg').innerHTML = '3 trunks. <b>Same spot.</b> You see 1.';
+      } else {
+        for (var i = 1; i <= 3; i++) trunkAt(ctx, g, i);
+        $('pMsg').innerHTML = 'variables changed. <b>3 trunks.</b>';
+      }
+    }
+    $('pRun').addEventListener('click', function () { mode = 1; draw(); this.blur(); });
+    $('pFix').addEventListener('click', function () { mode = 2; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* 5  six numbers */
+  (function () {
+    var c = $('sixC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = grid(ctx, c.width, c.height, 8, 8);
+    box(ctx, g, 2, 0, 2, 3, LOG);
+    dot(ctx, g, 2, 0, 'from');
+    dot(ctx, g, 2, 3, 'to');
+    label(ctx, 'z →', c.width - 34, c.height - 10);
+    label(ctx, 'y ↑', 8, 16);
+  })();
+
+  /* 6  two boxes */
+  (function () {
+    var c = $('twoC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = grid(ctx, c.width, c.height, 8, 9);
+    treeAt(ctx, g, 1);
+    label(ctx, '6 numbers', 8, 18, '#7fb04a');
+    label(ctx, '6 numbers', 8, c.height - 12, '#c08a55');
+  })();
+
+  /* 7  count it */
+  (function () {
+    var c = $('cntC'); if (!c) return;
+    var ctx = c.getContext('2d'), on = false;
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 14, 11);
+      treeAt(ctx, g, 1); treeAt(ctx, g, 2);
+      if (on) {
+        dot(ctx, g, 2, 3, 'z 2');
+        dot(ctx, g, 6, 4, 'z 6');
+        label(ctx, '2 to 6 = + 4', 8, 18, '#ffb86c');
+      } else {
+        label(ctx, 'how far apart?', 8, 18);
+      }
+    }
+    $('cntNum').addEventListener('click', function () { on = !on; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* 8  stretch vs slide */
+  (function () {
+    var c = $('mvC'); if (!c) return;
+    var ctx = c.getContext('2d'), z0 = 2, z1 = 4;
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 12, 7);
+      box(ctx, g, z0, 0, z1, 2, LOG);
+      dot(ctx, g, z0, 0); dot(ctx, g, z1, 2);
+      $('mvMsg').innerHTML = 'from z <b>' + z0 + '</b> to z <b>' + z1 + '</b> · width ' + (z1 - z0 + 1);
+    }
+    $('mvStretch').addEventListener('click', function () {
+      if (z1 < 11) z1 += 4; draw(); this.blur();
+    });
+    $('mvSlide').addEventListener('click', function () {
+      if (z1 < 11) { z0 += 4; z1 += 4; } draw(); this.blur();
+    });
+    $('mvReset').addEventListener('click', function () { z0 = 2; z1 = 4; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* 9  tracker */
+  (function () {
+    var c = $('trC'); if (!c) return;
+    var ctx = c.getContext('2d'), step = 0;
+    var vals = [[3, 2, 2], [4, 6, 6], [5, 10, 10]];
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 14, 11);
+      for (var i = 1; i <= 3; i++) {
+        if (i <= step) treeAt(ctx, g, i);
+        var row = $('tr' + i);
+        if (!row) continue;
+        row.className = (i === step) ? 'on' : '';
+        var td = row.getElementsByTagName('td');
+        for (var k = 0; k < 3; k++) {
+          if (i <= step) { td[k + 1].textContent = vals[i - 1][k]; td[k + 1].className = ''; }
+          else { td[k + 1].textContent = '?'; td[k + 1].className = 'q'; }
+        }
+      }
+    }
+    $('trFwd').addEventListener('click', function () { if (step < 3) step++; draw(); this.blur(); });
+    $('trBack').addEventListener('click', function () { if (step > 0) step--; draw(); this.blur(); });
+    $('trReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>
