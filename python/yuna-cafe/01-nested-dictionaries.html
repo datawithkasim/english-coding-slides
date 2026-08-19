@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuna · Dictionaries Inside Dictionaries</title>
+</head>
+<body>
+<div class="deck">
+
+<!-- ============ TITLE ============ -->
+<section class="slide title-slide" data-accent="gold">
+  <div class="title-badge">YUNA · YOUR CAFE MENU · PART 1</div>
+  <h1>Dictionaries <span class="glow">inside dictionaries</span></h1>
+  <p class="subtitle">Five small upgrades to your own <code>main.py</code></p>
+  <div class="filerow">
+    <span class="pill start">now &nbsp;<code>main.py</code>&nbsp; <em>(prints whole boxes)</em></span>
+    <span class="arrow">&rarr;</span>
+    <span class="pill end">end &nbsp;<code>main.py</code>&nbsp; <em>(menu + order total)</em></span>
+  </div>
+  <p class="teach-note">🎯 <b>Goal:</b> by the end, your file prints a café menu with prices, lists the ingredients of every item, and adds up the price of one order.</p>
+  <div class="hint">&rarr; / Space next &nbsp;·&nbsp; &larr; back &nbsp;·&nbsp; F fullscreen &nbsp;·&nbsp; click a step to tick it off</div>
+</section>
+
+<!-- ============ HOW TO USE ============ -->
+<section class="slide" data-accent="slate">
+  <div class="kicker"><span class="num">◷</span> HOW TO USE THIS <span class="tag tag-time">read first</span></div>
+  <h2>You can do this on your own</h2>
+  <ul class="discover">
+    <li><span class="q">1</span> Open <code>main.py</code> in your IDE. Keep this page beside it.</li>
+    <li><span class="q">2</span> Numbered steps tell you what to type. Type it yourself.</li>
+    <li><span class="q">3</span> Click a step when you finish it. It ticks off.</li>
+    <li><span class="q">4</span> Every part ends with a <b>✅ Run check</b>. Press Run and compare your output.</li>
+    <li class="warn"><span class="q">!</span> If your output is different, go back one slide. Do not skip ahead.</li>
+  </ul>
+  <p class="takeaway">Keep your old code. You add to it, you do not delete it.</p>
+</section>
+
+<!-- ============ AGENDA ============ -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">◷</span> AGENDA <span class="tag tag-time">6 parts</span></div>
+  <h2>What you will build</h2>
+  <table class="agenda">
+    <thead><tr><th>#</th><th>Part</th><th class="mins">New lines</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>What your file does right now</td><td class="mins">read</td></tr>
+      <tr><td>1</td><td>Get one price out of the box</td><td class="mins">2</td></tr>
+      <tr><td>2</td><td>Name and price together with <code>.items()</code></td><td class="mins">2</td></tr>
+      <tr><td>3</td><td>Ingredients: a loop inside a loop</td><td class="mins">4</td></tr>
+      <tr><td>4</td><td>A menu with f-strings</td><td class="mins">3</td></tr>
+      <tr><td>5</td><td>Add up one order</td><td class="mins">7</td></tr>
+      <tr><td>6</td><td>Stretch: your own café</td><td class="mins">free</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============ PART 0 ============ -->
+<section class="slide" data-accent="slate">
+  <div class="kicker"><span class="num">00</span> YOUR FILE NOW <span class="tag tag-code">main.py</span></div>
+  <h2>This is the code you wrote</h2>
+  <div class="compare">
+    <div class="panel">
+      <div class="phdr">main.py · your code</div>
+<pre class="code">starbucks = {
+    "americano": {
+        "price": 6000,
+        "ingredients": ["coffee beans", "hot water", "ice"]
+    },
+    "peach ice tea": {
+        "price": 3000,
+        "ingredients": ["ice", "peach tea", "water"]
+    },
+    "apple pie": {
+        "price": 4000,
+        "ingredients": ["apple jam", "bread", "suger"]
+    }
+}
+
+print(starbucks.values())
+
+for key in starbucks.values():
+    print(key)</pre>
+    </div>
+    <div class="panel">
+      <div class="phdr">▸ what it printed</div>
+<pre class="out">dict_values([{'price': 6000, 'ingredients': [...]}, ...])
+{'price': 6000, 'ingredients': ['coffee beans', 'hot water', 'ice']}
+{'price': 3000, 'ingredients': ['ice', 'peach tea', 'water']}
+{'price': 4000, 'ingredients': ['apple jam', 'bread', 'suger']}</pre>
+      <div class="pnote">The code works. It prints a whole box each time, not the price. Today you pull single pieces out.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONCEPT: BOX IN BOX ============ -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">01</span> THE IDEA <span class="tag tag-why">why it prints a box</span></div>
+  <h2>Your value is another dictionary</h2>
+  <p class="lead sm">A dictionary is <b>key &rarr; value</b>. In your menu, every value is a second dictionary.</p>
+  <div class="nestviz">
+    <div class="nrow"><span class="nkey">"americano"</span><span class="narr">&rarr;</span><span class="nbox">{ "price": 6000, "ingredients": [...] }</span></div>
+    <div class="nrow"><span class="nkey">"peach ice tea"</span><span class="narr">&rarr;</span><span class="nbox">{ "price": 3000, "ingredients": [...] }</span></div>
+    <div class="nrow"><span class="nkey">"apple pie"</span><span class="narr">&rarr;</span><span class="nbox">{ "price": 4000, "ingredients": [...] }</span></div>
+  </div>
+  <p class="takeaway">The big box holds three small boxes. One key opens a small box. A second key opens what is inside it.</p>
+  <p class="bilingual">딕셔너리 안에 딕셔너리. 열쇠 두 개가 필요해요.</p>
+</section>
+
+<!-- ============ CONCEPT: TWO-STEP LOOKUP ANIMATION ============ -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">02</span> WATCH IT <span class="tag tag-sim">two keys, two steps</span></div>
+  <h2><code>starbucks["americano"]["price"]</code></h2>
+  <div class="lookviz">
+    <div class="lk-outer">
+      <div class="lk-cap">starbucks</div>
+      <div class="lk-row s1"><span class="lk-k">"americano"</span><span class="lk-v">{...}</span><span class="lk-ptr">◄ key 1</span></div>
+      <div class="lk-row"><span class="lk-k">"peach ice tea"</span><span class="lk-v">{...}</span></div>
+      <div class="lk-row"><span class="lk-k">"apple pie"</span><span class="lk-v">{...}</span></div>
+    </div>
+    <div class="lk-inner">
+      <div class="lk-cap">the small box you opened</div>
+      <div class="lk-row s2"><span class="lk-k">"price"</span><span class="lk-v">6000</span><span class="lk-ptr">◄ key 2</span></div>
+      <div class="lk-row"><span class="lk-k">"ingredients"</span><span class="lk-v">[...]</span></div>
+    </div>
+    <div class="lk-out">
+      <div class="lk-cap">▸ Output</div>
+      <div class="lk-line s3">6000</div>
+    </div>
+  </div>
+  <p class="lead sm">The first key picks the drink. The second key picks the price inside that drink.</p>
+</section>
+
+<!-- ============ PART 1 STEPS ============ -->
+<section class="slide" data-accent="green">
+  <div class="kicker"><span class="num">03</span> PART 1 <span class="tag tag-steps">2 new lines</span></div>
+  <h2>Print one price</h2>
+  <ol class="steps">
+    <li>Go to the <b>bottom</b> of <code>main.py</code>, under your old <code>for</code> loop.</li>
+    <li>Press Enter to make an empty line.</li>
+    <li>Type: <code>print(starbucks["americano"]["price"])</code></li>
+    <li>On the next line type: <code>print(starbucks["apple pie"]["ingredients"])</code></li>
+    <li>Press <b>Run</b>.</li>
+  </ol>
+  <div class="worked">
+    <div class="h">✅ Run check · the last two lines of your output</div>
+<pre>6000
+['apple jam', 'bread', 'suger']</pre>
+  </div>
+</section>
+
+<!-- ============ COMMON MISTAKE 1 ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">04</span> COMMON MISTAKE <span class="tag tag-why">KeyError</span></div>
+  <h2>The key must match letter for letter</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">breaks</div>
+<pre class="code">print(starbucks["Americano"]["price"])</pre>
+      <div class="pnote"><code>KeyError: 'Americano'</code><br>A capital A is a different key.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">works</div>
+<pre class="code">print(starbucks["americano"]["price"])</pre>
+      <div class="pnote">Same spelling, same capitals, same spaces.</div>
+    </div>
+  </div>
+  <p class="takeaway"><code>KeyError</code> means Python looked for that key and found nothing. Check your spelling first.</p>
+</section>
+
+<!-- ============ COMMON MISTAKE 2 ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">05</span> YOUR OLD LOOP <span class="tag tag-why">name vs content</span></div>
+  <h2>You called it <code>key</code>, but it holds a value</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">your line</div>
+<pre class="code">for key in starbucks.values():
+    print(key)</pre>
+      <div class="pnote"><code>.values()</code> gives you the small boxes. So <code>key</code> is a whole box, not a name.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">clearer name</div>
+<pre class="code">for info in starbucks.values():
+    print(info["price"])</pre>
+      <div class="pnote">Now the name says what it holds, and you take the price out of it.</div>
+    </div>
+  </div>
+  <p class="takeaway">Change your old loop to this new version before Part 2.</p>
+</section>
+
+<!-- ============ THREE WAYS ============ -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">06</span> THREE WAYS TO LOOP <span class="tag tag-code">pick one</span></div>
+  <h2>Names, boxes, or both</h2>
+  <table class="agenda waysbig">
+    <thead><tr><th>Loop</th><th>The loop variable holds</th><th class="mins">Prints</th></tr></thead>
+    <tbody>
+      <tr><td><code>for name in starbucks:</code></td><td>the name only</td><td class="mins">americano</td></tr>
+      <tr><td><code>for info in starbucks.values():</code></td><td>the small box only</td><td class="mins">{'price': 6000, ...}</td></tr>
+      <tr><td><code>for name, info in starbucks.items():</code></td><td>name <b>and</b> box</td><td class="mins">americano 6000</td></tr>
+    </tbody>
+  </table>
+  <p class="takeaway">You want the name and the price together, so use <code>.items()</code>.</p>
+  <p class="bilingual">.items() = 이름과 내용 한 번에</p>
+</section>
+
+<!-- ============ PART 2 STEPS ============ -->
+<section class="slide" data-accent="green">
+  <div class="kicker"><span class="num">07</span> PART 2 <span class="tag tag-steps">2 new lines</span></div>
+  <h2>Name and price in one loop</h2>
+  <ol class="steps">
+    <li>Go to the bottom of <code>main.py</code> again.</li>
+    <li>Type: <code>for name, info in starbucks.items():</code></li>
+    <li>Press Enter. Check the next line starts 4 spaces in. Type the 4 spaces if it does not.</li>
+    <li>Type: <code>print(name, info["price"])</code></li>
+    <li>Press <b>Run</b>.</li>
+  </ol>
+  <div class="worked">
+    <div class="h">✅ Run check · the last three lines</div>
+<pre>americano 6000
+peach ice tea 3000
+apple pie 4000</pre>
+  </div>
+</section>
+
+<!-- ============ ITEMS ANIMATION ============ -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">08</span> WATCH IT <span class="tag tag-sim">one row per turn</span></div>
+  <h2><code>.items()</code> gives you two things each turn</h2>
+  <div class="itemviz">
+    <div class="iv-table">
+      <div class="iv-row r1"><span class="iv-name">"americano"</span><span class="iv-sep">:</span><span class="iv-box">{ "price": 6000 }</span><span class="iv-ptr">◄ turn 1</span></div>
+      <div class="iv-row r2"><span class="iv-name">"peach ice tea"</span><span class="iv-sep">:</span><span class="iv-box">{ "price": 3000 }</span><span class="iv-ptr">◄ turn 2</span></div>
+      <div class="iv-row r3"><span class="iv-name">"apple pie"</span><span class="iv-sep">:</span><span class="iv-box">{ "price": 4000 }</span><span class="iv-ptr">◄ turn 3</span></div>
+    </div>
+    <div class="iv-out">
+      <div class="lk-cap">▸ print(name, info["price"])</div>
+      <div class="iv-line o1">americano 6000</div>
+      <div class="iv-line o2">peach ice tea 3000</div>
+      <div class="iv-line o3">apple pie 4000</div>
+    </div>
+  </div>
+  <p class="lead sm"><code>name</code> takes the left side. <code>info</code> takes the right side.</p>
+</section>
+
+<!-- ============ PART 3 STEPS ============ -->
+<section class="slide" data-accent="green">
+  <div class="kicker"><span class="num">09</span> PART 3 <span class="tag tag-steps">4 new lines</span></div>
+  <h2>A loop inside a loop</h2>
+  <ol class="steps">
+    <li>Go to the bottom of <code>main.py</code>.</li>
+    <li>Type: <code>for name, info in starbucks.items():</code></li>
+    <li>Next line, 4 spaces in: <code>print(name)</code></li>
+    <li>Next line, same 4 spaces: <code>for item in info["ingredients"]:</code></li>
+    <li>Next line, now 8 spaces in: <code>print("-", item)</code></li>
+    <li>Press <b>Run</b>.</li>
+  </ol>
+  <p class="takeaway">The inside loop runs all the way through before the outside loop takes its next turn.</p>
+</section>
+
+<!-- ============ PART 3 CHECK ============ -->
+<section class="slide" data-accent="green">
+  <div class="kicker"><span class="num">10</span> PART 3 <span class="tag tag-time">✅ run check</span></div>
+  <h2>Your output should end like this</h2>
+  <div class="compare">
+    <div class="panel new">
+      <div class="phdr">main.py · new lines</div>
+<pre class="code">for name, info in starbucks.items():
+    print(name)
+    for item in info["ingredients"]:
+        print("-", item)</pre>
+      <div class="pnote">Two indents matter here: 4 spaces for <code>print(name)</code>, 8 spaces for <code>print("-", item)</code>.</div>
+    </div>
+    <div class="panel">
+      <div class="phdr">▸ Output</div>
+<pre class="out">americano
+- coffee beans
+- hot water
+- ice
+peach ice tea
+- ice
+- peach tea
+- water
+apple pie
+- apple jam
+- bread
+- suger</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INDENT MISTAKE ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">11</span> COMMON MISTAKE <span class="tag tag-why">indent</span></div>
+  <h2>The inside loop must sit inside</h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">wrong indent</div>
+<pre class="code">for name, info in starbucks.items():
+    print(name)
+for item in info["ingredients"]:
+    print("-", item)</pre>
+      <div class="pnote">The second loop sits outside now. You get the ingredients of the last drink only.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">right indent</div>
+<pre class="code">for name, info in starbucks.items():
+    print(name)
+    for item in info["ingredients"]:
+        print("-", item)</pre>
+      <div class="pnote">Both loops sit under the first <code>for</code>, so every drink gets its list.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 4 STEPS ============ -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">12</span> PART 4 <span class="tag tag-steps">3 new lines</span></div>
+  <h2>Print a real menu</h2>
+  <ol class="steps">
+    <li>Go to the bottom of <code>main.py</code>.</li>
+    <li>Type: <code>print("=== MENU ===")</code></li>
+    <li>Next line: <code>for name, info in starbucks.items():</code></li>
+    <li>Next line, 4 spaces in: <code>print(f"{name} ..... {info['price']} won")</code></li>
+    <li>Press <b>Run</b>.</li>
+  </ol>
+  <div class="worked">
+    <div class="h">✅ Run check</div>
+<pre>=== MENU ===
+americano ..... 6000 won
+peach ice tea ..... 3000 won
+apple pie ..... 4000 won</pre>
+  </div>
+</section>
+
+<!-- ============ QUOTE RULE ============ -->
+<section class="slide" data-accent="red">
+  <div class="kicker"><span class="num">13</span> QUOTE RULE <span class="tag tag-why">inside f-strings</span></div>
+  <h2>Use <code>'</code> inside <code>"</code></h2>
+  <div class="compare">
+    <div class="panel old">
+      <div class="phdr">risky</div>
+<pre class="code">print(f"{name} {info["price"]} won")</pre>
+      <div class="pnote">The same quote twice. Older Python closes the string early and shows a <code>SyntaxError</code>.</div>
+    </div>
+    <div class="panel new">
+      <div class="phdr">safe</div>
+<pre class="code">print(f"{name} {info['price']} won")</pre>
+      <div class="pnote">Double quotes outside, single quotes inside. This always works.</div>
+    </div>
+  </div>
+  <p class="takeaway">Rule to remember: outside <code>"</code>, inside <code>'</code>.</p>
+</section>
+
+<!-- ============ PART 5 STEPS ============ -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">14</span> PART 5 <span class="tag tag-steps">7 new lines</span></div>
+  <h2>Add up one order</h2>
+  <ol class="steps tight">
+    <li>Go to the bottom of <code>main.py</code>.</li>
+    <li>Type: <code>order = ["americano", "apple pie"]</code></li>
+    <li>Next line: <code>total = 0</code></li>
+    <li>Next line: <code>for name in order:</code></li>
+    <li>Next line, 4 spaces in: <code>price = starbucks[name]["price"]</code></li>
+    <li>Next line, same 4 spaces: <code>total = total + price</code></li>
+    <li>Next line, same 4 spaces: <code>print(f"added {name}: {price} won")</code></li>
+    <li>Next line, back to 0 spaces: <code>print(f"TOTAL: {total} won")</code></li>
+    <li>Press <b>Run</b>.</li>
+  </ol>
+</section>
+
+<!-- ============ PART 5 CHECK ============ -->
+<section class="slide" data-accent="pink">
+  <div class="kicker"><span class="num">14</span> PART 5 <span class="tag tag-time">✅ run check</span></div>
+  <h2>Your order adds up</h2>
+  <div class="compare">
+    <div class="panel new">
+      <div class="phdr">main.py · new lines</div>
+<pre class="code">order = ["americano", "apple pie"]
+total = 0
+for name in order:
+    price = starbucks[name]["price"]
+    total = total + price
+    print(f"added {name}: {price} won")
+print(f"TOTAL: {total} won")</pre>
+      <div class="pnote">The last line sits at 0 spaces, so it runs once at the end, not once per item.</div>
+    </div>
+    <div class="panel">
+      <div class="phdr">▸ Output</div>
+<pre class="out">added americano: 6000 won
+added apple pie: 4000 won
+TOTAL: 10000 won</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACE ============ -->
+<section class="slide" data-accent="purple">
+  <div class="kicker"><span class="num">15</span> CHECK YOURSELF <span class="tag tag-time">30s</span></div>
+  <h2>What is <code>total</code> after each turn?</h2>
+  <table class="agenda trace">
+    <thead><tr><th>Turn</th><th><code>name</code></th><th><code>price</code></th><th class="mins"><code>total</code></th></tr></thead>
+    <tbody>
+      <tr><td>start</td><td>-</td><td>-</td><td class="mins">0</td></tr>
+      <tr><td>1</td><td>americano</td><td>6000</td><td class="mins">6000</td></tr>
+      <tr><td>2</td><td>apple pie</td><td>4000</td><td class="mins">10000</td></tr>
+    </tbody>
+  </table>
+  <p class="takeaway"><code>total = total + price</code> keeps the old number and adds the new one. That is why <code>total = 0</code> goes before the loop.</p>
+</section>
+
+<!-- ============ FULL FILE ============ -->
+<section class="slide" data-accent="slate">
+  <div class="kicker"><span class="num">16</span> YOUR FILE NOW <span class="tag tag-code">compare</span></div>
+  <h2>The new part of <code>main.py</code></h2>
+  <div class="panel solo tiny">
+    <div class="phdr">main.py · everything you added today (your menu dictionary and your first loop stay on top)</div>
+<pre class="code">print(starbucks["americano"]["price"])
+print(starbucks["apple pie"]["ingredients"])
+
+for name, info in starbucks.items():
+    print(name, info["price"])
+
+for name, info in starbucks.items():
+    print(name)
+    for item in info["ingredients"]:
+        print("-", item)
+
+print("=== MENU ===")
+for name, info in starbucks.items():
+    print(f"{name} ..... {info['price']} won")
+
+order = ["americano", "apple pie"]
+total = 0
+for name in order:
+    price = starbucks[name]["price"]
+    total = total + price
+    print(f"added {name}: {price} won")
+print(f"TOTAL: {total} won")</pre>
+  </div>
+</section>
+
+<!-- ============ STRETCH ============ -->
+<section class="slide" data-accent="gold">
+  <div class="kicker"><span class="num">17</span> STRETCH <span class="tag tag-steps">pick one</span></div>
+  <h2>Make it your café</h2>
+  <ul class="discover">
+    <li><span class="q">★</span> Add a fourth item to <code>starbucks</code> with a price and three ingredients. Run again and check it appears in the menu.
+      <span class="hint">Copy one block, change the words, keep the comma between items.</span></li>
+    <li><span class="q">★★</span> Print how many ingredients each item has.
+      <span class="hint"><code>print(name, len(info["ingredients"]))</code></span></li>
+    <li><span class="q">★★★</span> Find the cheapest item in your menu.
+      <span class="hint">Start with <code>low = 999999</code> and <code>cheapest = ""</code>, then compare inside the loop.</span></li>
+  </ul>
+  <div class="worked">
+    <div class="h">★★★ output shape (try it before you look)</div>
+<pre>cheapest: peach ice tea (3000 won)</pre>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="slide" data-accent="cyan">
+  <div class="kicker"><span class="num">→</span> NEXT <span class="tag tag-time">30s</span></div>
+  <h2>What you learned</h2>
+  <ul class="discover">
+    <li><span class="q">1</span> A value can be another dictionary, so you need two keys.</li>
+    <li><span class="q">2</span> <code>.items()</code> hands you the name and the box in one loop.</li>
+    <li><span class="q">3</span> A loop inside a loop walks a list that lives inside a box.</li>
+    <li><span class="q">4</span> An f-string puts values inside your sentence: <code>f"{name} ..."</code></li>
+    <li><span class="q">5</span> A total starts at 0 outside the loop and grows inside it.</li>
+  </ul>
+  <p class="takeaway">Next time: your dungeon uses the same shape. One dictionary per monster, with hp and attacks inside.</p>
+</section>
+
+</div>
+
+<!-- ============ NAV CHROME ============ -->
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="counter" id="counter">1 / 1</div>
+<button class="edge edge-left" id="prevBtn" aria-label="previous">&lsaquo;</button>
+<button class="edge edge-right" id="nextBtn" aria-label="next">&rsaquo;</button>
+
+<style>
+:root{
+  --bg:#0a0d13; --bg2:#0f141d; --panel:#121926; --ink:#e8eef6; --dim:#93a1b5;
+  --line:#22303f; --accent:#38d0e0;
+  --old:#ff6b6b; --oldbg:#1c1213; --oldln:#3a1f22;
+  --new:#5ee6a0; --newbg:#0f1a16; --newln:#1f3a2c;
+  --k:#ff8bd0; --s:#f2c078; --c:#5fd0e6; --n:#f0a35e; --cm:#5b6b7c; --fn:#8bd4ff;
+  --mono:"Cascadia Code","JetBrains Mono","Fira Code",Consolas,"Courier New",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+.deck,.slide{margin:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(1200px 700px at 70% -10%,#141c28 0%,var(--bg) 60%);
+  color:var(--ink); font-family:var(--sans); overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.slide{
+  position:fixed; inset:0; display:none; flex-direction:column;
+  justify-content:center; padding:clamp(2rem,4.5vw,5rem) clamp(2.4rem,6vw,7rem);
+  opacity:0; transition:opacity .28s ease;
+}
+.slide.active{display:flex; opacity:1}
+.slide[data-accent="cyan"]{--accent:#38d0e0}
+.slide[data-accent="red"]{--accent:#ff7a6b}
+.slide[data-accent="purple"]{--accent:#b79bff}
+.slide[data-accent="gold"]{--accent:#ffcf5c}
+.slide[data-accent="pink"]{--accent:#ff8bd0}
+.slide[data-accent="green"]{--accent:#5ee6a0}
+.slide[data-accent="slate"]{--accent:#9fb2c6}
+
+/* kicker / headings */
+.kicker{
+  font-family:var(--mono); font-size:clamp(.85rem,1.35vw,1.15rem);
+  letter-spacing:.12em; color:var(--accent); text-transform:uppercase;
+  display:flex; align-items:center; gap:.7em; margin-bottom:.5em;
+}
+.kicker .num{
+  background:var(--accent); color:#06090e; font-weight:700;
+  padding:.08em .5em; border-radius:.35em;
+}
+.tag{
+  margin-left:auto; font-size:.82em; letter-spacing:.1em; padding:.15em .7em;
+  border:1px solid var(--line); border-radius:2em; color:var(--dim);
+}
+.tag-why{border-color:var(--accent); color:var(--accent)}
+.tag-code{border-color:#3a5570; color:#7fb2d6}
+.tag-steps{border-color:#5a7a4a; color:#9bd67f}
+.tag-time{border-color:#6a5a3a; color:#e6c477}
+h1{font-size:clamp(2.6rem,7vw,5.5rem); line-height:1; margin:.1em 0 .25em; letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.9vw,3rem); line-height:1.05; margin:.1em 0 .6em; letter-spacing:-.01em}
+.glow{color:var(--accent); text-shadow:0 0 26px color-mix(in srgb,var(--accent) 55%,transparent)}
+code{font-family:var(--mono); background:#1a2433; color:#cfe0f0; padding:.08em .38em; border-radius:.3em; font-size:.9em; border:1px solid #223145}
+
+/* title slide */
+.title-slide{justify-content:center}
+.title-badge{
+  font-family:var(--mono); align-self:flex-start; color:var(--accent);
+  border:1px solid var(--accent); border-radius:2em; padding:.35em 1.1em;
+  letter-spacing:.16em; font-size:clamp(.7rem,1.3vw,1rem); margin-bottom:1.2em;
+}
+.subtitle{font-size:clamp(1.1rem,2.6vw,2rem); color:var(--dim); margin:.2em 0 1.4em; font-weight:500}
+.filerow{display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1.6em}
+.pill{font-size:clamp(.85rem,1.5vw,1.15rem); padding:.55em 1em; border-radius:.6em; border:1px solid var(--line); background:var(--bg2)}
+.pill em{color:var(--dim); font-style:normal; font-size:.85em}
+.pill.start{border-color:var(--oldln)} .pill.end{border-color:var(--newln)}
+.filerow .arrow{color:var(--accent); font-size:1.8em; font-weight:700}
+.teach-note{max-width:60ch; color:#c3d0de; font-size:clamp(.95rem,1.7vw,1.35rem); line-height:1.5; border-left:3px solid var(--accent); padding-left:1em; margin:.4em 0 1.6em}
+.hint{font-family:var(--mono); color:var(--dim); font-size:clamp(.72rem,1.2vw,.95rem); letter-spacing:.03em}
+
+/* body text */
+.lead{font-size:clamp(1.05rem,2.05vw,1.55rem); line-height:1.5; max-width:66ch; margin:.35em 0; color:#d5dfeb}
+.lead.sm{font-size:clamp(.95rem,1.7vw,1.3rem); margin-bottom:.5em}
+.challenges{font-size:clamp(1.05rem,2vw,1.5rem); line-height:1.6; max-width:64ch; margin:.5em 0; list-style:none; padding-left:0}
+.challenges li{padding:.55em .9em; margin:.5em 0; background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:.4em; font-size:clamp(.95rem,1.7vw,1.3rem)}
+.takeaway{font-size:clamp(1rem,1.9vw,1.4rem); line-height:1.5; color:#e8eef6; background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent),transparent); border-radius:.5em; padding:.7em 1em; max-width:70ch; margin:.7em 0}
+.ref{margin-top:1.1em; font-size:clamp(.85rem,1.5vw,1.15rem); color:var(--dim); line-height:1.5; max-width:78ch; border-top:1px solid var(--line); padding-top:.9em}
+
+/* agenda table */
+table.agenda{border-collapse:collapse; width:min(900px,92%); font-size:clamp(1rem,2vw,1.5rem)}
+table.agenda th,table.agenda td{text-align:left; padding:.55em .9em; border-bottom:1px solid var(--line)}
+table.agenda thead th{font-family:var(--mono); color:var(--accent); font-size:.72em; letter-spacing:.12em; text-transform:uppercase}
+table.agenda td:first-child{font-family:var(--mono); color:var(--accent); font-weight:700; width:2.5em}
+table.agenda .mins{text-align:right; font-family:var(--mono); color:#d5dfeb; width:8em}
+
+/* code panels */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:clamp(1rem,2vw,1.8rem); align-items:start}
+@media (max-width:1000px){.compare{grid-template-columns:1fr}}
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:.7em; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.panel.solo{max-width:1100px}
+.phdr{font-family:var(--mono); font-size:clamp(.78rem,1.3vw,1.02rem); padding:.6em 1em; letter-spacing:.03em; border-bottom:1px solid var(--line); color:var(--dim)}
+.panel.old .phdr{background:var(--oldbg); border-bottom-color:var(--oldln); color:#ffb3ab}
+.panel.new .phdr{background:var(--newbg); border-bottom-color:var(--newln); color:#a6f0c8}
+.panel.old{border-color:var(--oldln)} .panel.new{border-color:var(--newln)}
+.phdr::before{content:""; display:inline-block; width:.7em; height:.7em; border-radius:50%; margin-right:.6em; vertical-align:middle}
+.panel.old .phdr::before{background:var(--old)} .panel.new .phdr::before{background:var(--new)}
+pre.code{
+  margin:0; padding:1em 1.15em; font-family:var(--mono);
+  font-size:clamp(.86rem,1.18vw,1.12rem); line-height:1.5; color:#dbe6f2;
+  white-space:pre-wrap; overflow-wrap:anywhere; tab-size:4;
+}
+.pnote{font-size:clamp(.8rem,1.4vw,1.05rem); color:var(--dim); padding:.7em 1.1em; border-top:1px solid var(--line); line-height:1.45; background:var(--bg2)}
+/* syntax colors */
+.tk-k{color:var(--k); font-weight:600}
+.tk-s{color:var(--s)}
+.tk-c{color:var(--cm); font-style:italic}
+.tk-n{color:var(--n)}
+.tk-b{color:var(--c)}
+.tk-fn{color:var(--fn)}
+
+/* micro-steps checklist */
+ol.steps{list-style:none; counter-reset:step; padding:0; margin:.3em 0; max-width:92ch; font-size:clamp(.95rem,1.7vw,1.3rem)}
+ol.steps.tight{font-size:clamp(.88rem,1.5vw,1.15rem)}
+ol.steps li{
+  counter-increment:step; position:relative; padding:.5em .8em .5em 3.1em;
+  margin:.32em 0; border:1px solid var(--line); border-radius:.5em; background:var(--bg2);
+  line-height:1.42; cursor:pointer; transition:.15s;
+}
+ol.steps.tight li{padding:.4em .7em .4em 2.9em; margin:.24em 0}
+ol.steps li::before{
+  content:counter(step); position:absolute; left:.55em; top:50%; transform:translateY(-50%);
+  width:1.7em; height:1.7em; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:.85em;
+  background:#1c2635; color:var(--accent); border:1px solid var(--line); border-radius:.4em;
+}
+ol.steps li:hover{border-color:var(--accent)}
+ol.steps li.done{opacity:.5; border-color:var(--new)}
+ol.steps li.done::before{content:"✓"; background:var(--new); color:#06120b; border-color:var(--new)}
+ol.steps li.done > *{text-decoration:line-through}
+
+/* nav chrome */
+.progress{position:fixed; top:0; left:0; right:0; height:4px; background:#131a24; z-index:20}
+.progress-bar{height:100%; width:0; background:linear-gradient(90deg,var(--accent),#7fe0ff); transition:width .28s ease}
+.counter{position:fixed; bottom:1rem; right:1.3rem; font-family:var(--mono); color:var(--dim); font-size:.9rem; z-index:20; letter-spacing:.08em}
+.edge{position:fixed; top:0; bottom:0; width:8%; border:0; background:transparent; color:transparent; font-size:3rem; cursor:pointer; z-index:15; transition:.2s}
+.edge-left{left:0} .edge-right{right:0}
+.edge:hover{color:var(--dim); background:linear-gradient(90deg,rgba(255,255,255,.04),transparent)}
+.edge-right:hover{background:linear-gradient(270deg,rgba(255,255,255,.04),transparent)}
+
+/* guided-discovery */
+.tag-discover{border-color:var(--accent); color:var(--accent)}
+ul.discover{list-style:none; padding:0; margin:.4em 0; max-width:92ch; font-size:clamp(.95rem,1.75vw,1.34rem)}
+ul.discover li{position:relative; padding:.5em .95em; margin:.42em 0; border-left:3px solid var(--accent); background:var(--bg2); border-radius:.45em; line-height:1.45}
+ul.discover li.warn{border-left-color:var(--old)}
+ul.discover .q{color:var(--accent); font-family:var(--mono); font-weight:700; margin-right:.4em}
+ul.discover .hint{display:block; color:var(--dim); font-size:.86em; margin-top:.25em}
+ul.discover .hint::before{content:"↳ "}
+.trythis{margin-top:1em; font-family:var(--mono); font-size:clamp(.84rem,1.5vw,1.15rem); color:var(--ink); background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 16%,transparent),transparent); padding:.7em 1em; border-radius:.5em; border-left:3px solid var(--accent)}
+.worked{max-width:1100px; margin:.9em auto 0; background:#0a1017; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:.5em; overflow:hidden}
+.worked .h{font-family:var(--mono); color:var(--accent); font-size:clamp(.74rem,1.25vw,.95rem); letter-spacing:.06em; padding:.55em 1em; border-bottom:1px solid var(--line); background:var(--bg2)}
+.worked pre{margin:0; padding:.8em 1.1em; font-family:var(--mono); font-size:clamp(.8rem,1.18vw,1.05rem); line-height:1.55; white-space:pre; overflow-x:auto; color:#dbe6f2}
+
+
+/* ---- deck extras: nested dictionary visuals ---- */
+.slide{overflow-y:auto; scrollbar-width:thin}
+.slide::-webkit-scrollbar{width:6px}
+.slide::-webkit-scrollbar-thumb{background:#22303f; border-radius:3px}
+.bilingual{font-size:clamp(.85rem,1.5vw,1.15rem); color:var(--dim); margin-top:.6em}
+pre.out{margin:0; padding:1em 1.15em; font-family:var(--mono); font-size:clamp(.82rem,1.12vw,1.05rem); line-height:1.5; color:#a6f0c8; white-space:pre-wrap; overflow-wrap:anywhere}
+table.agenda.waysbig{font-size:clamp(.85rem,1.55vw,1.2rem)}
+table.agenda.waysbig td:first-child{font-family:var(--mono); color:#cfe0f0; width:auto; font-weight:400}
+table.agenda.trace td:first-child{width:5em}
+.panel.tiny pre.code{font-size:clamp(.66rem,.88vw,.88rem); line-height:1.38; padding:.7em 1em}
+.panel.tiny .phdr{font-size:clamp(.7rem,1.1vw,.9rem)}
+
+/* box in box */
+.nestviz{display:flex; flex-direction:column; gap:.6rem; margin:.5em 0 .2em; width:min(1000px,96%)}
+.nrow{display:flex; align-items:center; gap:.8rem; background:var(--panel); border:1px solid var(--line); border-radius:.6em; padding:.55em .9em; font-family:var(--mono); font-size:clamp(.82rem,1.45vw,1.12rem)}
+.nkey{color:var(--s); font-weight:700; min-width:9em}
+.narr{color:var(--accent); font-weight:700}
+.nbox{color:#cfe0f0; background:#182231; border:1px dashed #35506b; border-radius:.4em; padding:.25em .6em}
+
+/* two-step lookup */
+.lookviz{display:grid; grid-template-columns:1.15fr 1fr; grid-template-areas:"outer inner" "outer out"; gap:1rem; width:min(1050px,96%); margin:.4em 0}
+@media (max-width:900px){.lookviz{grid-template-columns:1fr; grid-template-areas:"outer" "inner" "out"}}
+.lk-outer{grid-area:outer} .lk-inner{grid-area:inner} .lk-out{grid-area:out}
+.lk-outer,.lk-inner,.lk-out{background:var(--panel); border:1px solid var(--line); border-radius:.6em; padding:.6em .8em}
+.lk-cap{font-family:var(--mono); font-size:clamp(.7rem,1.15vw,.92rem); color:var(--dim); letter-spacing:.06em; margin-bottom:.4em}
+.lk-row{display:flex; gap:.6em; align-items:center; padding:.32em .5em; border-radius:.45em; border:2px solid transparent; font-family:var(--mono); font-size:clamp(.8rem,1.35vw,1.08rem)}
+.lk-k{color:var(--s); font-weight:700; min-width:8.5em}
+.lk-v{color:var(--n)}
+.lk-ptr{margin-left:auto; color:var(--accent); font-weight:700; opacity:0}
+.lk-line{font-family:var(--mono); font-size:clamp(1rem,2vw,1.6rem); color:#5ee6a0; opacity:0}
+.lk-inner{opacity:.25}
+.slide.active .lk-row.s1{animation:lkrow 6s infinite}
+.slide.active .lk-row.s1 .lk-ptr{animation:lkptr 6s infinite}
+.slide.active .lk-inner{animation:lkbox 6s infinite}
+.slide.active .lk-row.s2{animation:lkrow2 6s infinite}
+.slide.active .lk-row.s2 .lk-ptr{animation:lkptr2 6s infinite}
+.slide.active .lk-line.s3{animation:lkout 6s infinite}
+@keyframes lkrow{0%,4%{background:transparent;border-color:transparent} 8%,92%{background:rgba(56,208,224,.18);border-color:var(--accent)} 97%,100%{background:transparent;border-color:transparent}}
+@keyframes lkptr{0%,5%{opacity:0} 10%,92%{opacity:1} 97%,100%{opacity:0}}
+@keyframes lkbox{0%,25%{opacity:.25} 33%,92%{opacity:1} 97%,100%{opacity:.25}}
+@keyframes lkrow2{0%,33%{background:transparent;border-color:transparent} 40%,92%{background:rgba(56,208,224,.18);border-color:var(--accent)} 97%,100%{background:transparent;border-color:transparent}}
+@keyframes lkptr2{0%,35%{opacity:0} 42%,92%{opacity:1} 97%,100%{opacity:0}}
+@keyframes lkout{0%,60%{opacity:0;transform:translateX(-8px)} 68%,92%{opacity:1;transform:none} 97%,100%{opacity:0}}
+
+/* items loop */
+.itemviz{display:flex; flex-direction:column; gap:.9rem; width:min(1000px,96%); margin:.4em 0}
+.iv-table,.iv-out{background:var(--panel); border:1px solid var(--line); border-radius:.6em; padding:.6em .85em}
+.iv-row{display:flex; gap:.6em; align-items:center; padding:.34em .5em; border-radius:.45em; border:2px solid transparent; font-family:var(--mono); font-size:clamp(.8rem,1.35vw,1.08rem)}
+.iv-name{color:var(--s); font-weight:700; min-width:9em}
+.iv-sep{color:var(--cm)}
+.iv-box{color:#cfe0f0}
+.iv-ptr{margin-left:auto; color:var(--accent); font-weight:700; opacity:0}
+.iv-line{font-family:var(--mono); font-size:clamp(.9rem,1.7vw,1.3rem); color:#5ee6a0; opacity:0; padding:.1em 0}
+.slide.active .iv-row.r1{animation:ivr1 9s infinite} .slide.active .iv-row.r1 .iv-ptr{animation:ivp1 9s infinite}
+.slide.active .iv-row.r2{animation:ivr2 9s infinite} .slide.active .iv-row.r2 .iv-ptr{animation:ivp2 9s infinite}
+.slide.active .iv-row.r3{animation:ivr3 9s infinite} .slide.active .iv-row.r3 .iv-ptr{animation:ivp3 9s infinite}
+.slide.active .iv-line.o1{animation:ivo1 9s infinite}
+.slide.active .iv-line.o2{animation:ivo2 9s infinite}
+.slide.active .iv-line.o3{animation:ivo3 9s infinite}
+@keyframes ivr1{0%,1%{background:transparent;border-color:transparent} 3%,29%{background:rgba(255,207,92,.18);border-color:var(--accent)} 31%,100%{background:transparent;border-color:transparent}}
+@keyframes ivr2{0%,33%{background:transparent;border-color:transparent} 36%,62%{background:rgba(255,207,92,.18);border-color:var(--accent)} 64%,100%{background:transparent;border-color:transparent}}
+@keyframes ivr3{0%,66%{background:transparent;border-color:transparent} 69%,95%{background:rgba(255,207,92,.18);border-color:var(--accent)} 97%,100%{background:transparent;border-color:transparent}}
+@keyframes ivp1{0%,2%{opacity:0} 4%,29%{opacity:1} 31%,100%{opacity:0}}
+@keyframes ivp2{0%,34%{opacity:0} 37%,62%{opacity:1} 64%,100%{opacity:0}}
+@keyframes ivp3{0%,67%{opacity:0} 70%,95%{opacity:1} 97%,100%{opacity:0}}
+@keyframes ivo1{0%,7%{opacity:0;transform:translateX(-6px)} 11%,96%{opacity:1;transform:none} 99%,100%{opacity:0}}
+@keyframes ivo2{0%,40%{opacity:0;transform:translateX(-6px)} 44%,96%{opacity:1;transform:none} 99%,100%{opacity:0}}
+@keyframes ivo3{0%,73%{opacity:0;transform:translateX(-6px)} 77%,96%{opacity:1;transform:none} 99%,100%{opacity:0}}
+</style>
+
+<script>
+(function(){
+  var KW = new Set(["def","return","if","elif","else","for","in","is","not","and","or","None","True","False","while","break","continue","import","from","as","pass","del"]);
+  var BUILTIN = new Set(["min","max","range","len","int","float","abs","list","print","items","values","keys","append"]);
+
+  function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  function highlight(code){
+    var out="", i=0, n=code.length, prevWasDef=false;
+    function isIdStart(c){return /[A-Za-z_]/.test(c);}
+    function isId(c){return /[A-Za-z0-9_]/.test(c);}
+    while(i<n){
+      var c=code[i];
+      if(c==="#"){ var j=i; while(j<n && code[j]!=="\n") j++; out+='<span class="tk-c">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(c==='"'||c==="'"){ var q=c,j=i+1; while(j<n){ if(code[j]==="\\"){j+=2;continue;} if(code[j]===q){j++;break;} j++; } out+='<span class="tk-s">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(/[0-9]/.test(c)){ var j=i; while(j<n && /[0-9.]/.test(code[j])) j++; out+='<span class="tk-n">'+esc(code.slice(i,j))+'</span>'; i=j; continue; }
+      if(isIdStart(c)){
+        var j=i; while(j<n && isId(code[j])) j++;
+        var word=code.slice(i,j);
+        var k=j; while(k<n && code[k]===" ") k++;
+        var cls="";
+        if(KW.has(word)) cls="tk-k";
+        else if(prevWasDef) cls="tk-fn";
+        else if(code[k]==="(") cls="tk-fn";
+        else if(BUILTIN.has(word)) cls="tk-b";
+        if(cls) out+='<span class="'+cls+'">'+esc(word)+'</span>'; else out+=esc(word);
+        prevWasDef = (word==="def");
+        i=j; continue;
+      }
+      out+=esc(c); i++;
+    }
+    return out;
+  }
+
+  document.querySelectorAll("pre.code").forEach(function(pre){
+    pre.innerHTML = highlight(pre.textContent);
+  });
+
+  document.querySelectorAll("ol.steps li").forEach(function(li){
+    li.addEventListener("click", function(){ li.classList.toggle("done"); });
+  });
+
+  var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var cur=0;
+  var bar=document.getElementById("progressBar");
+  var counter=document.getElementById("counter");
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,idx){ s.classList.toggle("active", idx===cur); });
+    bar.style.width=((cur+1)/slides.length*100)+"%";
+    counter.textContent=(cur+1)+" / "+slides.length;
+    try{ location.hash=cur+1; }catch(e){}
+  }
+  function next(){ show(cur+1); } function prev(){ show(cur-1); }
+  document.getElementById("nextBtn").onclick=next;
+  document.getElementById("prevBtn").onclick=prev;
+  document.addEventListener("keydown", function(e){
+    if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){ e.preventDefault(); next(); }
+    else if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); prev(); }
+    else if(e.key==="Home"){ show(0); }
+    else if(e.key==="End"){ show(slides.length-1); }
+    else if(e.key==="f"||e.key==="F"){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); } else { document.exitFullscreen&&document.exitFullscreen(); } }
+  });
+  window.addEventListener("hashchange", function(){
+    var h=parseInt((location.hash||"").replace("#",""),10);
+    if(!isNaN(h) && h-1!==cur) show(h-1);
+  });
+  var startH=parseInt((location.hash||"").replace("#",""),10);
+  show(isNaN(startH)?0:startH-1);
+})();
+</script>
+</body>
+</html>
