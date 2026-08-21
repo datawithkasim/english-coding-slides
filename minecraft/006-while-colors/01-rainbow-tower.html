@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rainbow Tower · while loops + colours</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  .goal { font-size: clamp(15px, 2.4vmin, 22px); color: var(--fn);
+          border-left: 3px solid var(--fn); padding-left: .7em; margin: -.2em 0 .7em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  /* ============ MakeCode block look ============ */
+  .bstack { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+  .bstack.mid { margin: 0 auto; align-items: flex-start; width: fit-content; max-width: 100%; }
+
+  .blk {
+    display: inline-flex; align-items: center; flex-wrap: wrap; gap: .35em;
+    color: #fff; font-weight: 700; letter-spacing: .01em;
+    border-radius: .32em; padding: .34em .62em;
+    font-size: clamp(10px, 1.75vmin, 17px); line-height: 1.35;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.20);
+  }
+  .blk.hat { border-radius: 1.4em .32em .32em .32em; padding-top: .5em; }
+  .blk.tiny { font-size: clamp(9px, 1.45vmin, 14px); padding: .26em .5em; }
+
+  /* toolbox colour families */
+  .k-player { background: #D83B01; }
+  .k-blocks { background: #8A7A3C; }
+  .k-loops  { background: #107C10; }
+  .k-logic  { background: #00838F; }
+  .k-vars   { background: #A80000; }
+  .k-pos    { background: #56789C; }
+  .k-math   { background: #5C2D91; }
+
+  /* value slots */
+  .num { background: #fff; color: #1a2030; border-radius: 999px;
+         padding: .02em .55em; font-weight: 700; font-size: .95em; }
+  .rep { border-radius: 999px; padding: .06em .6em; color: #fff;
+         font-weight: 700; font-size: .92em; box-shadow: inset 0 -2px 0 rgba(0,0,0,.2); }
+  .dd { background: rgba(0,0,0,.30); border-radius: .25em;
+        padding: .06em .5em; font-weight: 700; font-size: .95em; }
+  .dd::after { content: " \25BE"; opacity: .75; }
+  .oval { border-radius: 999px; padding: .1em .7em; }
+  .empty { border: 2px dashed #ffb86c; background: rgba(255,184,108,.16);
+           color: #ffb86c; border-radius: 999px; padding: .02em .85em;
+           font-weight: 700; font-size: .95em; }
+  .swatchdot { display: inline-block; width: .85em; height: .85em; border-radius: .15em;
+               border: 1px solid rgba(0,0,0,.35); vertical-align: -.08em; margin-right: .25em; }
+
+  /* C-shaped blocks (while / if) */
+  .cwrap { display: flex; flex-direction: column; align-items: flex-start; }
+  .cwrap > .blk { border-radius: .32em .32em 0 0; }
+  .crail { display: flex; align-self: stretch; }
+  .crail > .rail { flex: 0 0 13px; }
+  .crail > .inner { display: flex; flex-direction: column; align-items: flex-start;
+                    gap: 3px; padding: 3px 0 3px 7px; }
+  .cfoot { height: 11px; min-width: 96px; border-radius: 0 0 .32em .32em;
+           box-shadow: inset 0 -2px 0 rgba(0,0,0,.2); }
+  .rail.k-loops, .cfoot.k-loops { background: #107C10; }
+  .rail.k-logic, .cfoot.k-logic { background: #00838F; }
+  .rail.k-player, .cfoot.k-player { background: #D83B01; }
+
+  .glow { outline: 3px solid #ffb86c; outline-offset: 2px; border-radius: .35em; }
+  .dim  { opacity: .35; }
+
+  .tbox { display: inline-flex; align-items: center; gap: .4em; border: 1px solid var(--soft);
+          border-radius: .4em; padding: .18em .6em; font-size: clamp(11px, 1.8vmin, 16px);
+          color: var(--com); font-weight: 600; }
+  .tbox i { width: .9em; height: .9em; border-radius: 50%; display: inline-block; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 300px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+  button.btn.warn { border-color: #ff5555; color: #ff5555; }
+  button.btn.warn:hover { background: rgba(255,85,85,.15); }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 320px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  .state { font-family: "JetBrains Mono", monospace; text-align: center; margin-top: .5em;
+           font-size: clamp(13px, 2.1vmin, 20px); }
+  .state .k { color: var(--com); }
+  .state .v { color: var(--num); font-weight: 700; }
+  .chip { display: inline-block; font-family: "JetBrains Mono", monospace;
+          font-size: clamp(12px, 2vmin, 18px); border: 2px solid var(--soft);
+          border-radius: .35em; padding: .1em .6em; color: var(--com); margin-top: .35em; }
+  .chip.on  { border-color: var(--fn); color: var(--fn); }
+  .chip.off { border-color: #ff5555; color: #ff5555; }
+
+  .parts { display: grid; gap: .5em; max-width: 820px; margin: 0 auto; }
+  .part { display: grid; grid-template-columns: 2.2em 1fr; gap: .7em; align-items: center;
+          border-left: 3px solid var(--accent); padding: .35em .6em; background: rgba(56,208,224,.06);
+          border-radius: 0 .4em .4em 0; }
+  .part .n { font-family: "JetBrains Mono", monospace; font-size: clamp(18px, 3vmin, 30px);
+             color: var(--accent); font-weight: 700; text-align: center; }
+  .part .t { font-size: clamp(14px, 2.2vmin, 21px); }
+
+  .swatches { display: flex; gap: .5em; justify-content: center; flex-wrap: wrap; margin-top: .6em; }
+  .sw { display: flex; flex-direction: column; align-items: center; gap: .25em; }
+  .sw i { display: block; width: clamp(28px, 5.2vmin, 50px); height: clamp(28px, 5.2vmin, 50px);
+          border-radius: .3em; border: 2px solid rgba(255,255,255,.14); }
+  .sw span { font-family: "JetBrains Mono", monospace; font-size: clamp(9px, 1.4vmin, 13px);
+             color: var(--com); }
+
+  .steps { display: grid; gap: .4em; max-width: 940px; }
+  .steps .s { border-left: 3px solid var(--accent-2); padding: .28em .7em;
+              font-size: clamp(13px, 2.1vmin, 20px); }
+  .steps .s b { color: var(--accent-2); }
+
+  .stretch { display: grid; gap: .5em; max-width: 900px; margin: 0 auto; }
+  .stretch div { border: 1px solid var(--soft); border-radius: .45em; padding: .4em .8em;
+                 font-size: clamp(13px, 2.1vmin, 20px); }
+  .stretch .st { color: #ffb86c; font-family: "JetBrains Mono", monospace; margin-right: .5em; }
+
+  .frame-card { border: 2px solid var(--accent); border-radius: .6em; padding: .7em 1em;
+                max-width: 880px; margin: .3em auto; font-size: clamp(15px, 2.5vmin, 24px);
+                line-height: 1.7; }
+  .frame-card u { color: #ffb86c; text-decoration-style: dotted; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">While Loops · Rainbow Tower</div>
+
+  <!-- 1 · title -->
+  <div class="slide active center-all">
+    <div class="emoji">🌈</div>
+    <h1>Rainbow<br>Tower</h1>
+    <p class="line big" style="margin-top:.4em;color:var(--accent-2)">One loop. Six colours.</p>
+    <p class="bilingual">while 반복문 하나로 무지개 탑을 쌓아요</p>
+  </div>
+
+  <!-- 2 · predict -->
+  <div class="slide center-all">
+    <div class="pill">Predict 🤔</div>
+    <h2>What gets built?</h2>
+    <div class="bstack mid">
+      <div class="blk k-vars">set <span class="dd">level</span> to <span class="num">0</span></div>
+      <div class="cwrap">
+        <div class="blk k-loops">while <span class="rep k-logic oval"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span> do</div>
+        <div class="crail"><div class="rail k-loops"></div><div class="inner">
+          <div class="blk k-blocks">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> from <span class="rep k-pos oval">~ -3 ~ <span class="rep k-vars">level</span> ~ -15</span> to <span class="rep k-pos oval">~ 3 ~ <span class="rep k-vars">level</span> ~ -9</span> with <span class="dd">Replace</span></div>
+          <div class="blk k-vars">change <span class="dd">level</span> by <span class="num">1</span></div>
+        </div></div>
+        <div class="cfoot k-loops"></div>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.6em">How many layers? What colour?</p>
+    <span class="rev" data-t="p1">show answer</span>
+    <p class="line hid" id="p1"><b>6 layers</b>, all red. We add the other colours later.</p>
+  </div>
+
+  <!-- 3 · vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words</h2>
+    <div class="parts">
+      <div class="part"><div class="n">1</div><div class="t"><b>while</b> = keep repeating as long as the answer stays yes</div></div>
+      <div class="part"><div class="n">2</div><div class="t"><b>condition</b> = the yes/no question in the slot. Here: <span class="rep k-logic oval" style="font-size:.85em"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span></div></div>
+      <div class="part"><div class="n">3</div><div class="t"><b>counter</b> = the variable that climbs. Here: <span class="rep k-vars">level</span></div></div>
+    </div>
+    <p class="bilingual" style="text-align:center">조건이 참인 동안 계속 반복</p>
+  </div>
+
+  <!-- 4 · concept -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <p class="line big">Before every turn,<br>Minecraft asks<br>the question.</p>
+        <p class="line quiet" style="margin-top:.6em">Yes, run the blocks inside. No, jump out of the loop.</p>
+        <p class="bilingual">답이 '예'일 때만 한 번 더 반복해요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="askC" width="300" height="260"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="askStep">ask ▶</button>
+          <button class="btn alt" id="askReset">reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · SEE IT -->
+  <div class="slide">
+    <div class="two wide-right">
+      <div>
+        <p class="line big">Watch one turn<br>at a time.</p>
+        <div class="bstack" style="margin:.5em 0">
+          <div class="blk tiny k-vars">set <span class="dd">level</span> to <span class="num">0</span></div>
+          <div class="cwrap">
+            <div class="blk tiny k-loops">while <span class="rep k-logic oval" style="font-size:.85em"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span> do</div>
+            <div class="crail"><div class="rail k-loops"></div><div class="inner">
+              <div class="blk tiny k-blocks">fill this level</div>
+              <div class="blk tiny k-vars">change <span class="dd">level</span> by <span class="num">1</span></div>
+            </div></div>
+            <div class="cfoot k-loops"></div>
+          </div>
+        </div>
+        <p class="line quiet">Press step. The tower grows one layer per turn.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="towC" width="300" height="330" style="max-width:250px"></canvas>
+        <div class="state">
+          <span class="k">level =</span> <span class="v" id="towL">0</span>
+          &nbsp;&nbsp;<span class="chip" id="towCond">level &lt; 6 → ?</span>
+        </div>
+        <div style="text-align:center">
+          <button class="btn" id="towStep">step ▶</button>
+          <button class="btn" id="towRun">run all</button>
+          <button class="btn alt" id="towReset">reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · three parts -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>Every while loop needs three blocks</h2>
+    <div class="two">
+      <div>
+        <div class="bstack">
+          <div class="blk k-vars glow">set <span class="dd">level</span> to <span class="num">0</span></div>
+          <div class="cwrap">
+            <div class="blk k-loops glow">while <span class="rep k-logic oval"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span> do</div>
+            <div class="crail"><div class="rail k-loops"></div><div class="inner">
+              <div class="blk k-blocks dim">fill this level</div>
+              <div class="blk k-vars glow">change <span class="dd">level</span> by <span class="num">1</span></div>
+            </div></div>
+            <div class="cfoot k-loops"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="parts">
+          <div class="part"><div class="n">1</div><div class="t"><b>Start.</b> Give the counter a first value.</div></div>
+          <div class="part"><div class="n">2</div><div class="t"><b>Check.</b> The question in the while slot.</div></div>
+          <div class="part"><div class="n">3</div><div class="t"><b>Change.</b> The counter has to move.</div></div>
+        </div>
+        <p class="line" style="margin-top:.6em">Miss block <b>3</b> and the loop never ends.</p>
+        <p class="bilingual">시작 · 확인 · 변화, 셋 다 있어야 해요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · mistake 1 -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <div class="pill" style="background:#ff5555">Common mistake 1</div>
+        <p class="line big">No <b>change</b> block,<br>no ending.</p>
+        <p class="line quiet" style="margin-top:.5em">
+          <span class="rep k-vars">level</span> stays 0. The question answers yes forever and Code Builder freezes.</p>
+        <p class="bilingual">숫자가 안 늘면 무한 반복이에요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="infC" width="300" height="240"></canvas>
+        <div class="state">
+          <span class="k">turns:</span> <span class="v" id="infN">0</span>
+          &nbsp;&nbsp;<span class="chip" id="infCond">level &lt; 6 → ?</span>
+        </div>
+        <div style="text-align:center">
+          <button class="btn warn" id="infBad">run without it</button>
+          <button class="btn" id="infGood">run with it</button>
+          <button class="btn alt" id="infReset">reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 · mistake 2 -->
+  <div class="slide">
+    <div class="pill" style="background:#ff5555">Common mistake 2</div>
+    <h2>Right block, wrong slot</h2>
+    <div class="two">
+      <div>
+        <p class="line quiet" style="margin-bottom:.4em">Dropped <b>inside</b> the if branch:</p>
+        <div class="bstack">
+          <div class="cwrap">
+            <div class="blk k-logic">if <span class="rep k-logic oval" style="background:#00646e"><span class="rep k-vars">level</span> = <span class="num">0</span></span> then</div>
+            <div class="crail"><div class="rail k-logic"></div><div class="inner">
+              <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> …</div>
+              <div class="blk k-vars glow">change <span class="dd">level</span> by <span class="num">1</span></div>
+            </div></div>
+            <div class="cfoot k-logic"></div>
+          </div>
+        </div>
+        <p class="line quiet" style="margin-top:.4em">Only level 0 is red, so only that branch runs. The counter moves once, then stops.</p>
+      </div>
+      <div>
+        <p class="line quiet" style="margin-bottom:.4em">Correct, <b>after</b> the whole if:</p>
+        <div class="bstack">
+          <div class="cwrap">
+            <div class="blk k-logic">if <span class="rep k-logic oval" style="background:#00646e"><span class="rep k-vars">level</span> = <span class="num">0</span></span> then</div>
+            <div class="crail"><div class="rail k-logic"></div><div class="inner">
+              <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> …</div>
+            </div></div>
+            <div class="cfoot k-logic"></div>
+          </div>
+          <div class="blk k-vars glow">change <span class="dd">level</span> by <span class="num">1</span></div>
+        </div>
+        <p class="line quiet" style="margin-top:.4em">The change block sits at the bottom of the while, lined up with the if.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · colours -->
+  <div class="slide">
+    <div class="pill">Colour</div>
+    <h2>The loop paints. The <b>if</b> picks.</h2>
+    <div class="bstack mid" style="margin-top:.2em">
+      <div class="cwrap">
+        <div class="blk k-logic tiny">if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">0</span></span> then</div>
+        <div class="crail"><div class="rail k-logic"></div><div class="inner">
+          <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> …</div>
+        </div></div>
+        <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">1</span></span> then</div>
+        <div class="crail"><div class="rail k-logic"></div><div class="inner">
+          <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#f9801d"></i>Orange Wool</span> …</div>
+        </div></div>
+        <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">2</span></span> then</div>
+        <div class="crail"><div class="rail k-logic"></div><div class="inner">
+          <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#fed83d"></i>Yellow Wool</span> …</div>
+        </div></div>
+        <div class="cfoot k-logic"></div>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.5em;text-align:center">Each turn <span class="rep k-vars">level</span> holds a new number, so a different branch runs.</p>
+  </div>
+
+  <!-- 10 · build 1 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 1</div>
+    <h2>Open Code Builder</h2>
+    <p class="goal">🎯 Your job: get an empty Blocks project open. 4 steps.</p>
+    <div class="steps">
+      <div class="s"><b>1.</b> Press <b>C</b> in Minecraft. Choose <b>MakeCode</b>.</div>
+      <div class="s"><b>2.</b> New Project. Name it <b>rainbow</b>.</div>
+      <div class="s"><b>3.</b> Leave the toggle on <b>Blocks</b>. Do not switch to Python.</div>
+      <div class="s"><b>4.</b> Drag the grey sample blocks to the bin.</div>
+    </div>
+    <p class="line quiet" style="margin-top:.6em">Categories you need today:</p>
+    <div style="display:flex;gap:.5em;flex-wrap:wrap;margin-top:.3em">
+      <span class="tbox"><i style="background:#D83B01"></i>Player</span>
+      <span class="tbox"><i style="background:#8A7A3C"></i>Blocks</span>
+      <span class="tbox"><i style="background:#56789C"></i>Positions</span>
+      <span class="tbox"><i style="background:#107C10"></i>Loops</span>
+      <span class="tbox"><i style="background:#00838F"></i>Logic</span>
+      <span class="tbox"><i style="background:#A80000"></i>Variables</span>
+    </div>
+  </div>
+
+  <!-- 11 · build 2 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 2</div>
+    <h2>Hat block and counter</h2>
+    <p class="goal">🎯 Your job: drag 3 blocks and make 1 variable.</p>
+    <div class="two">
+      <div>
+        <div class="steps">
+          <div class="s"><b>1.</b> <b>Player</b> → drag <b>on chat command</b> onto the workspace. Type <b>rainbow</b> in its box.</div>
+          <div class="s"><b>2.</b> <b>Variables</b> → Make a Variable. Name it <b>level</b>.</div>
+          <div class="s"><b>3.</b> Drag <b>set level to 0</b> inside the hat block.</div>
+          <div class="s"><b>4.</b> <b>Loops</b> → drag <b>while</b> under it, still inside the hat.</div>
+        </div>
+      </div>
+      <div>
+        <div class="bstack">
+          <div class="blk hat k-player">on chat command <span class="dd">"rainbow"</span></div>
+          <div class="crail"><div class="rail k-player"></div><div class="inner">
+            <div class="blk k-vars">set <span class="dd">level</span> to <span class="num">0</span></div>
+            <div class="cwrap">
+              <div class="blk k-loops">while <span class="empty">? ? ?</span> do</div>
+              <div class="crail"><div class="rail k-loops"></div><div class="inner"></div></div>
+              <div class="cfoot k-loops"></div>
+            </div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 · build 3 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 3</div>
+    <h2>Fill the while slot</h2>
+    <p class="goal">🎯 Your job: build the yes/no question and drop it in the empty slot.</p>
+    <div class="two">
+      <div>
+        <div class="steps">
+          <div class="s"><b>1.</b> <b>Logic</b> → find the compare block <span class="rep k-logic oval" style="font-size:.85em"><span class="num">0</span> &lt; <span class="num">0</span></span>.</div>
+          <div class="s"><b>2.</b> Drop it into the white slot on the while block.</div>
+          <div class="s"><b>3.</b> <b>Variables</b> → drag the round <span class="rep k-vars">level</span> into the left side.</div>
+          <div class="s"><b>4.</b> Type <b>6</b> on the right side. Check the sign says <b>&lt;</b>.</div>
+        </div>
+      </div>
+      <div>
+        <div class="bstack">
+          <div class="cwrap">
+            <div class="blk k-loops glow">while <span class="rep k-logic oval"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span> do</div>
+            <div class="crail"><div class="rail k-loops"></div><div class="inner"></div></div>
+            <div class="cfoot k-loops"></div>
+          </div>
+        </div>
+        <p class="line quiet" style="margin-top:.7em">Read it out loud: while level is less than six, do the blocks inside.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 · build 4 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 4</div>
+    <h2>The fill block, and the important drag</h2>
+    <p class="goal">🎯 Your job: put <span class="rep k-vars">level</span> into the middle number of both positions.</p>
+    <div class="steps" style="margin-bottom:.5em">
+      <div class="s"><b>1.</b> <b>Blocks</b> → drag <b>fill</b> inside the while loop.</div>
+      <div class="s"><b>2.</b> Type the six numbers: <b>-3, 0, -15</b> and <b>3, 0, -9</b>.</div>
+      <div class="s"><b>3.</b> <b>Variables</b> → drag <span class="rep k-vars">level</span> on top of each <b>0</b> in the middle. That is the height.</div>
+    </div>
+    <div class="bstack mid">
+      <div class="blk k-blocks glow">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> from <span class="rep k-pos oval">~ <span class="num">-3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-15</span></span> to <span class="rep k-pos oval">~ <span class="num">3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-9</span></span> with <span class="dd">Replace</span></div>
+    </div>
+    <p class="line quiet" style="text-align:center;margin-top:.5em">The middle number is Y. Y is height. Because <span class="rep k-vars">level</span> climbs, every turn paints higher up.</p>
+  </div>
+
+  <!-- 14 · build 5 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 5</div>
+    <h2>Six colours, one if block</h2>
+    <p class="goal">🎯 Your job: wrap the fill in an if, then add 5 more branches.</p>
+    <div class="steps">
+      <div class="s"><b>1.</b> <b>Logic</b> → drag <b>if then else</b> inside the while, above the fill.</div>
+      <div class="s"><b>2.</b> Move the fill block inside the <b>if</b> part.</div>
+      <div class="s"><b>3.</b> Condition: <span class="rep k-logic oval" style="font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">0</span></span>. Change the sign from &lt; to =.</div>
+      <div class="s"><b>4.</b> Click the <b>+</b> on the if block four times. That adds four <b>else if</b> branches.</div>
+      <div class="s"><b>5.</b> Right-click the fill block → <b>Duplicate</b>. Drop one copy in each branch.</div>
+      <div class="s"><b>6.</b> Change each copy's colour dropdown, and each branch's number: 1, 2, 3, 4. Last one is <b>else</b>.</div>
+    </div>
+    <div class="swatches" style="margin-top:.4em">
+      <div class="sw"><i style="background:#b02e26"></i><span>0 Red</span></div>
+      <div class="sw"><i style="background:#f9801d"></i><span>1 Orange</span></div>
+      <div class="sw"><i style="background:#fed83d"></i><span>2 Yellow</span></div>
+      <div class="sw"><i style="background:#80c71f"></i><span>3 Lime</span></div>
+      <div class="sw"><i style="background:#8932b8"></i><span>4 Purple</span></div>
+      <div class="sw"><i style="background:#f38baa"></i><span>else Pink</span></div>
+    </div>
+  </div>
+
+  <!-- 15 · build 6 -->
+  <div class="slide">
+    <div class="pill purple">Build · step 6</div>
+    <h2>Make it stop, then run it</h2>
+    <p class="goal">🎯 Your job: add the change block, then a second hat block to clear up.</p>
+    <div class="two">
+      <div>
+        <div class="steps">
+          <div class="s"><b>1.</b> <b>Variables</b> → drag <b>change level by 1</b> under the whole if block, still inside the while.</div>
+          <div class="s"><b>2.</b> Build the clear-up stack on the right.</div>
+          <div class="s"><b>3.</b> Back in game, type <b>rainbow</b> in chat.</div>
+          <div class="s"><b>4.</b> Type <b>clearrainbow</b> to wipe it and try again.</div>
+        </div>
+        <p class="line quiet" style="margin-top:.5em">The tower appears about 12 blocks in front of you.</p>
+      </div>
+      <div>
+        <div class="bstack">
+          <div class="blk hat k-player">on chat command <span class="dd">"clearrainbow"</span></div>
+          <div class="crail"><div class="rail k-player"></div><div class="inner">
+            <div class="blk k-blocks tiny">fill <span class="dd">Air</span> from <span class="rep k-pos oval">~ <span class="num">-3</span> ~ <span class="num">0</span> ~ <span class="num">-15</span></span> to <span class="rep k-pos oval">~ <span class="num">3</span> ~ <span class="num">30</span> ~ <span class="num">-9</span></span> with <span class="dd">Replace</span></div>
+          </div></div>
+        </div>
+        <p class="line quiet" style="margin-top:.6em">One fill, no loop. Air erases everything in the box.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 · full program -->
+  <div class="slide center-all">
+    <div class="pill">Check</div>
+    <h2>Compare with yours</h2>
+    <span class="rev" data-t="full">show the whole program</span>
+    <div class="hid" id="full">
+      <div class="bstack mid">
+        <div class="blk hat k-player tiny">on chat command <span class="dd">"rainbow"</span></div>
+        <div class="crail"><div class="rail k-player"></div><div class="inner">
+          <div class="blk k-vars tiny">set <span class="dd">level</span> to <span class="num">0</span></div>
+          <div class="cwrap">
+            <div class="blk k-loops tiny">while <span class="rep k-logic oval" style="font-size:.85em"><span class="rep k-vars">level</span> &lt; <span class="num">6</span></span> do</div>
+            <div class="crail"><div class="rail k-loops"></div><div class="inner">
+              <div class="cwrap">
+                <div class="blk k-logic tiny">if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">0</span></span> then</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#b02e26"></i>Red Wool</span> from <span class="rep k-pos oval">~ <span class="num">-3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-15</span></span> to <span class="rep k-pos oval">~ <span class="num">3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-9</span></span> with <span class="dd">Replace</span></div>
+                </div></div>
+                <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">1</span></span> then</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#f9801d"></i>Orange Wool</span> from <span class="rep k-pos oval">~ <span class="num">-3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-15</span></span> to <span class="rep k-pos oval">~ <span class="num">3</span> ~ <span class="rep k-vars">level</span> ~ <span class="num">-9</span></span> with <span class="dd">Replace</span></div>
+                </div></div>
+                <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">2</span></span> then</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#fed83d"></i>Yellow Wool</span> …</div>
+                </div></div>
+                <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">3</span></span> then</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#80c71f"></i>Lime Wool</span> …</div>
+                </div></div>
+                <div class="blk k-logic tiny" style="border-radius:0">else if <span class="rep k-logic oval" style="background:#00646e;font-size:.85em"><span class="rep k-vars">level</span> = <span class="num">4</span></span> then</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#8932b8"></i>Purple Wool</span> …</div>
+                </div></div>
+                <div class="blk k-logic tiny" style="border-radius:0">else</div>
+                <div class="crail"><div class="rail k-logic"></div><div class="inner">
+                  <div class="blk k-blocks tiny">fill <span class="dd"><i class="swatchdot" style="background:#f38baa"></i>Pink Wool</span> …</div>
+                </div></div>
+                <div class="cfoot k-logic"></div>
+              </div>
+              <div class="blk k-vars tiny">change <span class="dd">level</span> by <span class="num">1</span></div>
+            </div></div>
+            <div class="cfoot k-loops"></div>
+          </div>
+        </div></div>
+      </div>
+      <p class="line quiet" style="margin-top:.5em">The four short fills use the same two positions as the first one.</p>
+    </div>
+  </div>
+
+  <!-- 17 · modify 1 -->
+  <div class="slide">
+    <div class="two">
+      <div>
+        <div class="pill">Modify 1</div>
+        <p class="line big">Change one number.<br>Change the whole tower.</p>
+        <div class="bstack" style="margin:.5em 0">
+          <div class="blk k-loops">while <span class="rep k-logic oval"><span class="rep k-vars">level</span> &lt; <span class="num" style="background:#ffb86c">6</span></span> do</div>
+        </div>
+        <p class="line quiet">Drag the slider. Past 6, every extra layer comes out pink, because <b>else</b> catches every number above 4.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="hC" width="300" height="330" style="max-width:240px"></canvas>
+        <div class="slid"><span>&lt;</span><input type="range" id="hR" min="1" max="14" value="6"><span class="out" id="hRo">6</span></div>
+        <div class="readout"><b id="hN">294</b> blocks</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18 · modify 2 -->
+  <div class="slide">
+    <div class="pill">Modify 2</div>
+    <h2>Swap a colour</h2>
+    <p class="goal">🎯 Your job: open one fill block's colour dropdown, pick a new wool, then run <b>clearrainbow</b> and <b>rainbow</b> again.</p>
+    <p class="line quiet">All of these sit in the same dropdown. Search the box at the top of it.</p>
+    <div class="swatches">
+      <div class="sw"><i style="background:#b02e26"></i><span>Red</span></div>
+      <div class="sw"><i style="background:#f9801d"></i><span>Orange</span></div>
+      <div class="sw"><i style="background:#fed83d"></i><span>Yellow</span></div>
+      <div class="sw"><i style="background:#80c71f"></i><span>Lime</span></div>
+      <div class="sw"><i style="background:#5e7c16"></i><span>Green</span></div>
+      <div class="sw"><i style="background:#3ab3da"></i><span>Light Blue</span></div>
+      <div class="sw"><i style="background:#8932b8"></i><span>Purple</span></div>
+      <div class="sw"><i style="background:#f38baa"></i><span>Pink</span></div>
+      <div class="sw"><i style="background:#e9ecec"></i><span>White</span></div>
+      <div class="sw"><i style="background:#1d1c21"></i><span>Black</span></div>
+    </div>
+  </div>
+
+  <!-- 19 · stretch -->
+  <div class="slide">
+    <div class="pill purple">Stretch</div>
+    <h2>If you finish early</h2>
+    <div class="stretch">
+      <div><span class="st">★</span> Make it wider. Change <b>-3</b> and <b>3</b> to <b>-6</b> and <b>6</b> in every fill block.</div>
+      <div><span class="st">★★</span> Make it taller. Change the <b>6</b> in the while slot to <b>12</b>, and duplicate two more else-if branches.</div>
+      <div><span class="st">★★★</span> Make a rainbow staircase. Drop <span class="rep k-vars">level</span> into the last number of both positions too, so each layer also moves forward.</div>
+    </div>
+  </div>
+
+  <!-- 20 · say it -->
+  <div class="slide center-all">
+    <div class="pill">Say it</div>
+    <h2>Explain your tower</h2>
+    <div class="frame-card">
+      My counter starts at <u>_____</u>.<br>
+      The loop keeps going while <u>_____</u>.<br>
+      Each turn it paints level <u>_____</u> and then changes <u>_____</u>.
+    </div>
+    <p class="bilingual">친구에게 설명하듯 소리 내어 말해 보세요</p>
+  </div>
+
+  <!-- 21 · close -->
+  <div class="slide center-all">
+    <div class="emoji">🧱</div>
+    <h2 style="color:var(--accent)">Next time</h2>
+    <p class="line big">Same loop.<br>The colour picks itself.</p>
+    <p class="line quiet" style="margin-top:.5em">Six branches turn into one block.</p>
+    <p class="bilingual">다음엔 if 없이 색을 고르는 방법을 배워요</p>
+  </div>
+
+  <div class="nav"><button id="prev">‹</button><span class="counter" id="counter">1 / 21</span><button id="next">›</button></div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* reveal buttons */
+  var revs = document.querySelectorAll('.rev');
+  for (var r = 0; r < revs.length; r++) {
+    revs[r].addEventListener('click', function () {
+      var t = $(this.dataset.t);
+      if (!t) return;
+      t.classList.toggle('hid');
+      this.textContent = t.classList.contains('hid') ? 'show' : 'hide';
+    });
+  }
+
+  var COLS = ['#b02e26', '#f9801d', '#fed83d', '#80c71f', '#8932b8', '#f38baa'];
+  function colFor(level) { return level < 5 ? COLS[level] : COLS[5]; }
+
+  /* ---------- slide 4 : the question ---------- */
+  (function () {
+    var c = $('askC'); if (!c) return;
+    var ctx = c.getContext('2d'), lv = 0;
+
+    function draw() {
+      var W = c.width, H = c.height;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+
+      ctx.font = '600 17px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#8a97b8';
+      ctx.fillText('is  level < 6  ?', W / 2, 42);
+
+      ctx.font = '700 38px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#bd93f9';
+      ctx.fillText('level = ' + lv, W / 2, 100);
+
+      var yes = lv < 6;
+      ctx.font = '700 30px "JetBrains Mono", monospace';
+      ctx.fillStyle = yes ? '#50fa7b' : '#ff5555';
+      ctx.fillText(yes ? 'YES' : 'NO', W / 2, 152);
+
+      ctx.font = '500 14px Inter, sans-serif';
+      ctx.fillStyle = '#8a97b8';
+      ctx.fillText(yes ? 'run the blocks inside, then ask again' : 'jump out of the loop', W / 2, 186);
+
+      ctx.strokeStyle = yes ? 'rgba(80,250,123,.6)' : 'rgba(138,151,184,.22)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(W / 2 - 96, 202, 192, 40);
+      ctx.fillStyle = yes ? '#e8eef6' : '#3d4759';
+      ctx.font = '500 14px "JetBrains Mono", monospace';
+      ctx.fillText('paint a layer', W / 2, 227);
+    }
+    $('askStep').addEventListener('click', function () {
+      if (lv < 7) lv++;
+      draw(); this.blur();
+    });
+    $('askReset').addEventListener('click', function () { lv = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* ---------- shared tower drawing ---------- */
+  function drawTower(ctx, W, H, layers, cap) {
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    var gy = H - 26;
+    ctx.strokeStyle = '#2b3547'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, gy + 0.5); ctx.lineTo(W, gy + 0.5); ctx.stroke();
+
+    var maxL = Math.max(cap || 6, 6);
+    var lh = Math.min(26, (gy - 14) / maxL);
+    var bw = Math.min(150, W - 90);
+    var x0 = (W - bw) / 2;
+
+    for (var i = 0; i < layers; i++) {
+      ctx.fillStyle = colFor(i);
+      ctx.fillRect(x0, gy - (i + 1) * lh, bw, lh - 2);
+      ctx.fillStyle = 'rgba(255,255,255,.10)';
+      ctx.fillRect(x0, gy - (i + 1) * lh, bw, 3);
+    }
+
+    ctx.fillStyle = '#38d0e0';
+    ctx.fillRect(x0 - 26, gy - 22, 10, 22);
+
+    ctx.font = '500 11px "JetBrains Mono", monospace';
+    ctx.textAlign = 'right';
+    for (var k = 0; k < Math.min(layers, 14); k++) {
+      ctx.fillStyle = '#4a5670';
+      ctx.fillText(String(k), x0 + bw + 22, gy - k * lh - lh / 2 + 4);
+    }
+    ctx.textAlign = 'center';
+  }
+
+  /* ---------- slide 5 : step through ---------- */
+  (function () {
+    var c = $('towC'); if (!c) return;
+    var ctx = c.getContext('2d'), lv = 0, timer = null;
+
+    function paint() {
+      drawTower(ctx, c.width, c.height, lv, 6);
+      $('towL').textContent = lv;
+      var chip = $('towCond'), yes = lv < 6;
+      chip.textContent = 'level < 6 → ' + (yes ? 'YES' : 'NO');
+      chip.className = 'chip ' + (yes ? 'on' : 'off');
+    }
+    function step() { if (lv < 6) lv++; paint(); }
+
+    $('towStep').addEventListener('click', function () {
+      clearInterval(timer); timer = null; step(); this.blur();
+    });
+    $('towRun').addEventListener('click', function () {
+      clearInterval(timer); lv = 0; paint();
+      timer = setInterval(function () {
+        if (lv >= 6) { clearInterval(timer); timer = null; return; }
+        step();
+      }, 420);
+      this.blur();
+    });
+    $('towReset').addEventListener('click', function () {
+      clearInterval(timer); timer = null; lv = 0; paint(); this.blur();
+    });
+    paint();
+  })();
+
+  /* ---------- slide 7 : infinite loop ---------- */
+  (function () {
+    var c = $('infC'); if (!c) return;
+    var ctx = c.getContext('2d'), lv = 0, turns = 0, timer = null, bad = false;
+
+    function paint() {
+      var W = c.width, H = c.height;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center';
+
+      ctx.font = '700 34px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#bd93f9';
+      ctx.fillText('level = ' + lv, W / 2, 60);
+
+      var yes = lv < 6;
+      ctx.font = '700 26px "JetBrains Mono", monospace';
+      ctx.fillStyle = yes ? '#50fa7b' : '#ff5555';
+      ctx.fillText(yes ? 'YES' : 'NO', W / 2, 104);
+
+      var w = Math.min(turns, 40) / 40 * (W - 60);
+      ctx.fillStyle = bad ? '#ff5555' : '#50fa7b';
+      ctx.fillRect(30, 128, w, 14);
+      ctx.strokeStyle = '#2b3547'; ctx.lineWidth = 1;
+      ctx.strokeRect(30, 128, W - 60, 14);
+
+      if (bad && turns > 12) {
+        ctx.fillStyle = '#ff5555';
+        ctx.font = '700 20px "JetBrains Mono", monospace';
+        ctx.fillText('FROZEN', W / 2, 186);
+        ctx.font = '500 13px Inter, sans-serif';
+        ctx.fillStyle = '#8a97b8';
+        ctx.fillText('level never moved', W / 2, 210);
+      } else if (!bad && lv >= 6) {
+        ctx.fillStyle = '#50fa7b';
+        ctx.font = '700 20px "JetBrains Mono", monospace';
+        ctx.fillText('DONE', W / 2, 186);
+        ctx.font = '500 13px Inter, sans-serif';
+        ctx.fillStyle = '#8a97b8';
+        ctx.fillText('6 turns, then it stopped', W / 2, 210);
+      } else {
+        ctx.font = '500 14px Inter, sans-serif';
+        ctx.fillStyle = '#8a97b8';
+        ctx.fillText(bad ? 'the blocks run again...' : 'counting up...', W / 2, 196);
+      }
+
+      $('infN').textContent = turns;
+      var chip = $('infCond');
+      chip.textContent = 'level < 6 → ' + (yes ? 'YES' : 'NO');
+      chip.className = 'chip ' + (yes ? 'on' : 'off');
+    }
+
+    function run(isBad) {
+      clearInterval(timer);
+      bad = isBad; lv = 0; turns = 0; paint();
+      timer = setInterval(function () {
+        if (!bad && lv >= 6) { clearInterval(timer); timer = null; paint(); return; }
+        if (bad && turns >= 40) { clearInterval(timer); timer = null; paint(); return; }
+        turns++;
+        if (!bad) lv++;
+        paint();
+      }, 260);
+    }
+    $('infBad').addEventListener('click', function () { run(true); this.blur(); });
+    $('infGood').addEventListener('click', function () { run(false); this.blur(); });
+    $('infReset').addEventListener('click', function () {
+      clearInterval(timer); timer = null; lv = 0; turns = 0; bad = false; paint(); this.blur();
+    });
+    paint();
+  })();
+
+  /* ---------- slide 17 : height slider ---------- */
+  (function () {
+    var c = $('hC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('hR').value;
+      $('hRo').textContent = n;
+      $('hN').textContent = n * 7 * 7;
+      drawTower(ctx, c.width, c.height, n, 14);
+    }
+    $('hR').addEventListener('input', upd);
+    upd();
+  })();
+})();
+</script>
+</body>
+</html>
