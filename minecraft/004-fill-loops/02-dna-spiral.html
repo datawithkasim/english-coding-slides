@@ -19,22 +19,30 @@
 
   pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
         font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
-        line-height: 1.55; overflow-x: auto; color: var(--code-ink); }
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
   pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
   pre .hot { display: block; background: rgba(255,184,108,.16); }
-  pre .dim { color: #4a5670; }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
 
   .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
           padding: .5em .8em; margin: .5em 0; }
-  .skel pre { background: transparent; padding: 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; }
   .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
-
-  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
-         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
-         color: var(--accent-2); background: transparent;
-         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
-  .rev:hover { background: rgba(139,92,246,.15); }
-  .hid { display: none; }
 
   .stat { display: flex; gap: 1.5em; justify-content: center; flex-wrap: wrap; margin: .4em 0; }
   .stat div { text-align: center; }
@@ -73,6 +81,22 @@
           border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
   .chip.on { border-color: var(--fn); color: var(--fn); }
 
+  /* roadmap: four mini previews */
+  .road { display: flex; gap: clamp(.6em, 2vmin, 1.4em); justify-content: center;
+          flex-wrap: wrap; margin-top: .5em; }
+  .road .rd { text-align: center; }
+  .road canvas { width: clamp(84px, 16vmin, 130px); height: auto; background: #0d1117;
+                 border: 2px solid var(--soft); border-radius: .4em; }
+  .road .rl { font-family: "JetBrains Mono", monospace; font-weight: 700;
+              color: var(--accent); font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .road .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  /* version badge on section slides */
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
   ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
   ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
   ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
@@ -82,21 +106,82 @@
 <div class="stage">
   <div class="footer-tag">Fill Loops · 2 🧬</div>
 
-  <!-- 1 -->
+  <!-- 1  title -->
   <div class="slide active center-all">
     <div class="emoji">🧬</div>
     <h1>DNA spiral</h1>
-    <p class="line" style="margin-top:.3em">Two strands. Always opposite.</p>
-    <p class="bilingual">두 가닥이 서로 반대편에서 감아 올라가요</p>
+    <p class="line" style="margin-top:.3em">Too big for one go.<br>We build it <b>4 times</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 tower</span><span class="chip">v2 spiral</span>
+      <span class="chip">v3 twin</span><span class="chip">v4 rungs</span>
+    </div>
+    <p class="bilingual">한 번에 만들면 너무 어려워요. 4단계로 나눠서 만들어요</p>
   </div>
 
-  <!-- 2  the ring -->
+  <!-- 2  roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan.</p>
+    <div class="road">
+      <div class="rd"><canvas id="road1" width="110" height="170"></canvas><div class="rl">v1</div><div class="rt">tower</div></div>
+      <div class="rd"><canvas id="road2" width="110" height="170"></canvas><div class="rl">v2</div><div class="rt">spiral</div></div>
+      <div class="rd"><canvas id="road3" width="110" height="170"></canvas><div class="rl">v3</div><div class="rt">twin</div></div>
+      <div class="rd"><canvas id="road4" width="110" height="170"></canvas><div class="rl">v4</div><div class="rt">rungs</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Each version = the last one + a few lines.</p>
+    <p class="bilingual">탑, 나선, 쌍둥이, 다리 순서로 업그레이드해요</p>
+  </div>
+
+  <!-- 3  v1 concept -->
   <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
     <div class="two">
       <div>
-        <p class="line big">A circle of<br><b>8</b> spots.</p>
-        <p class="line quiet" style="margin-top:.5em">Looking down from above.</p>
-        <p class="bilingual">위에서 본 모습. 자리는 8개</p>
+        <p class="line big">v1: a tower.</p>
+<pre><span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">24</span>):</pre>
+        <p class="line" style="margin-top:.4em">i counts <b>0, 1, 2 … 23</b>.</p>
+<pre>pos(<span style="color:var(--num)">14</span>, <span style="color:#ffb86c">i</span>, <span style="color:var(--num)">8</span>)</pre>
+        <p class="line">i sits in the <b>middle</b> spot.<br>The middle spot is <b>height</b>.</p>
+        <p class="bilingual">i가 0부터 23까지 세요. i가 곧 높이예요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="towerC" width="330" height="330" style="max-width:320px"></canvas>
+        <div class="slid"><span>i</span><input type="range" id="tw" min="1" max="24" value="24"><span class="out" id="two_">24</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4  v1 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+<pre><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">24</span>):
+        blocks.fill(GOLD_BLOCK,
+            pos(<span style="color:var(--num)">14</span>, i, <span style="color:var(--num)">8</span>), pos(<span style="color:var(--num)">15</span>, i, <span style="color:var(--num)">9</span>), REPLACE)
+player.on_chat(<span style="color:var(--str)">"dna"</span>, on_chat)</pre>
+    <p class="where">📍 New file. Type all of it.</p>
+    <p class="line" style="margin-top:.4em">Chat <b>dna</b> → gold tower, <b>24</b> tall.</p>
+    <p class="quiet">Each floor is a 2 x 2 square.</p>
+    <p class="bilingual">전부 입력하고 채팅에 dna 라고 치세요</p>
+  </div>
+
+  <!-- 5  del -->
+  <div class="slide center-all">
+<pre>blocks.fill(<span style="color:var(--str)">AIR</span>,
+    pos(<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>), pos(<span style="color:var(--num)">20</span>,<span style="color:var(--num)">30</span>,<span style="color:var(--num)">20</span>), REPLACE)</pre>
+    <p class="where">📍 Inside your old <code>del</code> command. Change 15 to <code>30</code>.</p>
+    <p class="line" style="margin-top:.5em">Chat <b>del</b> before <b>every</b> rebuild.</p>
+    <p class="quiet">This build is 24 tall. Old del only reached 15.</p>
+    <p class="bilingual">다시 만들기 전에 항상 먼저 지워요</p>
+  </div>
+
+  <!-- 6  v2 concept: the ring -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v2: the tower<br><b>walks in a circle</b>.</p>
+        <p class="line quiet" style="margin-top:.5em">A circle of 8 spots.<br>Looking down from above.</p>
+        <p class="bilingual">위에서 본 모습이에요. 자리는 8개</p>
       </div>
       <div>
         <canvas class="sim" id="ringC" width="324" height="324" style="max-width:300px"></canvas>
@@ -104,20 +189,31 @@
     </div>
   </div>
 
-  <!-- 3  the two lists -->
-  <div class="slide center-all">
-<pre>XS = [<span style="color:var(--num)"> 6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)"> 0</span>, <span style="color:var(--num)"> 4</span>]
-ZS = [<span style="color:var(--num)"> 0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)"> 4</span>, <span style="color:var(--num)"> 0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]</pre>
-    <p class="line" style="margin-top:.6em">Spot <b>k</b> is <code>XS[k]</code>, <code>ZS[k]</code>.</p>
-    <p class="bilingual">리스트 두 개가 8개 자리를 기억해요</p>
+  <!-- 7  the two lists -->
+  <div class="slide">
+    <div class="two wide-left">
+      <div>
+<pre>XS = [<span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>]
+ZS = [<span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]</pre>
+        <p class="line" style="margin-top:.5em">Spot <b>k</b> is at<br><code>XS[k]</code>, <code>ZS[k]</code>.</p>
+        <p class="quiet" style="margin-top:.4em">Slide k. Watch the spot move.</p>
+        <p class="bilingual">리스트 두 개가 자리 8개의 좌표를 기억해요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="listC" width="324" height="324" style="max-width:300px"></canvas>
+        <div class="slid"><span>k</span><input type="range" id="lK" min="0" max="7" value="0"><span class="out" id="lKo">0</span></div>
+        <div class="readout">XS[<b id="lKa">0</b>] = <b id="lX">6</b> &nbsp; ZS[<b id="lKb">0</b>] = <b id="lZ">0</b></div>
+      </div>
+    </div>
   </div>
 
-  <!-- 4  modulo -->
+  <!-- 8  modulo -->
   <div class="slide">
     <div class="two wide-right">
       <div>
 <pre>k = i % <span style="color:var(--num)">8</span></pre>
-        <p class="line" style="margin-top:.5em"><b>%</b> makes it<br>go round again.</p>
+        <p class="line" style="margin-top:.5em">i goes to 23.<br>Spots stop at 7.</p>
+        <p class="line"><b>%</b> makes it<br>go round again.</p>
         <p class="bilingual">%는 8이 되면 다시 0으로 돌아가요</p>
       </div>
       <div>
@@ -128,14 +224,57 @@ ZS = [<span style="color:var(--num)"> 0</span>, <span style="color:var(--num)">4
     </div>
   </div>
 
-  <!-- 5  opposite -->
+  <!-- 9  v2: the line that changes -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big" style="margin-bottom:.4em">One line <b>changes</b>.</p>
+    <div style="max-width:34em;width:100%;text-align:left">
+      <div class="tag-old">OLD — delete this</div>
+      <div class="was"><pre>pos(<span style="color:var(--num)">14</span>, i, <span style="color:var(--num)">8</span>), pos(<span style="color:var(--num)">15</span>, i, <span style="color:var(--num)">9</span>), REPLACE)</pre></div>
+      <div class="tag-new">NEW — type this instead</div>
+      <div class="now"><pre>pos(ax, i, az), pos(ax + <span style="color:var(--num)">1</span>, i, az + <span style="color:var(--num)">1</span>), REPLACE)</pre></div>
+    </div>
+    <p class="line" style="margin-top:.5em"><b>14</b> can never move.<br><b>ax</b> changes every turn.</p>
+    <p class="bilingual">14는 못 움직여요. ax는 매번 바뀌어요</p>
+  </div>
+
+  <!-- 10  v2 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+<pre class="tiny"><span class="hot">XS = [<span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>]</span><span class="hot">ZS = [<span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]</span><span class="dim"><span style="color:var(--kw)">def</span> on_chat():</span><span class="dim">    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(0, 24):</span><span class="hot">        k = i % <span style="color:var(--num)">8</span></span><span class="hot">        ax = <span style="color:var(--num)">8</span> + XS[k]</span><span class="hot">        az = <span style="color:var(--num)">8</span> + ZS[k]</span><span class="dim">        blocks.fill(GOLD_BLOCK,</span><span class="hot">            pos(ax, i, az), pos(ax + <span style="color:var(--num)">1</span>, i, az + <span style="color:var(--num)">1</span>), REPLACE)</span><span class="dim">player.on_chat("dna", on_chat)</span></pre>
+    <p class="where">📍 Lists go <b>above</b> <code>def on_chat():</code></p>
+    <p class="where">📍 k, ax, az go <b>under</b> <code>for i in range(0, 24):</code></p>
+    <p class="quiet" style="margin-top:.3em">Bright lines are new. Grey lines stay from v1.</p>
+    <p class="bilingual">밝은 줄이 새로 들어가는 줄이에요</p>
+  </div>
+
+  <!-- 11  v2 run -->
   <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="oneC" width="330" height="330" style="max-width:320px"></canvas>
+        <div class="slid"><span>steps</span><input type="range" id="oN" min="1" max="24" value="24"><span class="out" id="oNo">24</span></div>
+      </div>
+      <div>
+        <p class="line big">del, then dna.</p>
+        <p class="line" style="margin-top:.5em">Round <b>and</b> up<br>= a spiral.</p>
+        <div class="readout" style="margin-top:.5em"><b id="oT">3</b> turns</div>
+        <p class="bilingual">탑이 돌면서 올라가요. 나선 완성</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12  v3 concept: opposite -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
     <div class="two">
       <div>
-<pre>k = i % <span style="color:var(--num)">8</span>
-j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></pre>
-        <p class="line" style="margin-top:.5em">Strand B is <b>4 spots</b> away.<br>Always.</p>
-        <p class="bilingual">반대편은 4칸 떨어진 자리</p>
+        <p class="line big">v3: the twin.</p>
+<pre>j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></pre>
+        <p class="line" style="margin-top:.4em">Strand B is <b>4 spots</b> away.<br>Always.</p>
+        <p class="quiet" style="margin-top:.4em">5 + 4 = 9. No spot 9. % wraps it to 1.</p>
+        <p class="bilingual">반대편은 4칸 떨어진 자리예요</p>
       </div>
       <div>
         <canvas class="sim" id="oppC" width="324" height="324" style="max-width:300px"></canvas>
@@ -145,24 +284,19 @@ j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num
     </div>
   </div>
 
-  <!-- 6  y climbs -->
-  <div class="slide">
-    <div class="two wide-left">
-      <div>
-        <canvas class="sim" id="sideC" width="330" height="330" style="max-width:320px"></canvas>
-        <div class="slid"><span>steps</span><input type="range" id="sN" min="1" max="24" value="24"><span class="out" id="sNo">24</span></div>
-      </div>
-      <div>
-<pre>y = i</pre>
-        <p class="line" style="margin-top:.5em">Up <b>one</b> every step.<br>That makes it a spiral.</p>
-        <div class="readout" style="margin-top:.5em"><b id="sT">3</b> turns</div>
-        <p class="bilingual">한 칸씩 올라가서 나선이 돼요</p>
-      </div>
-    </div>
+  <!-- 13  v3 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+<pre class="tiny"><span class="dim">    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(0, 24):</span><span class="dim">        k = i % 8</span><span class="dim">        ax = 8 + XS[k]</span><span class="dim">        az = 8 + ZS[k]</span><span class="hot">        j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></span><span class="hot">        bx = <span style="color:var(--num)">8</span> + XS[j]</span><span class="hot">        bz = <span style="color:var(--num)">8</span> + ZS[j]</span><span class="dim">        blocks.fill(GOLD_BLOCK,</span><span class="dim">            pos(ax, i, az), pos(ax + 1, i, az + 1), REPLACE)</span><span class="hot">        blocks.fill(EMERALD_BLOCK,</span><span class="hot">            pos(bx, i, bz), pos(bx + <span style="color:var(--num)">1</span>, i, bz + <span style="color:var(--num)">1</span>), REPLACE)</span></pre>
+    <p class="where">📍 j, bx, bz go <b>under</b> <code>az = 8 + ZS[k]</code></p>
+    <p class="where">📍 The green fill goes <b>under</b> the gold fill. Same indent.</p>
+    <p class="quiet" style="margin-top:.3em">b is for strand B. Same idea, spot j instead of k.</p>
+    <p class="bilingual">금 fill 아래에 초록 fill을 추가해요</p>
   </div>
 
-  <!-- 7  step through -->
+  <!-- 14  step through -->
   <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
     <div class="two wide-left">
       <div>
         <canvas class="sim" id="stepC" width="324" height="324" style="max-width:300px"></canvas>
@@ -173,48 +307,45 @@ j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num
         </div>
       </div>
       <div>
+        <p class="line">One loop turn<br>= <b>two</b> squares.</p>
         <table class="vt">
-          <tr><th>i</th><th>k</th><th>j</th><th>y</th></tr>
+          <tr><th>i</th><th>k</th><th>j</th><th>height</th></tr>
           <tr><td id="tI">0</td><td id="tK">0</td><td class="b" id="tJ">4</td><td id="tY">0</td></tr>
         </table>
         <div class="readout" style="margin-top:.5em">
           A <b id="tA">(14, 0, 8)</b><br>B <b id="tB">(2, 0, 8)</b>
         </div>
+        <p class="bilingual">버튼을 눌러서 한 걸음씩 확인해요</p>
       </div>
     </div>
   </div>
 
-  <!-- 8  the code -->
-  <div class="slide center-all">
-<pre class="tiny">XS = [<span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>]
-ZS = [<span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]
-
-<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
-    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">24</span>):
-<span class="hot">        k = i % <span style="color:var(--num)">8</span></span>
-<span class="hot">        j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span></span>
-        ax = <span style="color:var(--num)">8</span> + XS[k]
-        az = <span style="color:var(--num)">8</span> + ZS[k]
-        bx = <span style="color:var(--num)">8</span> + XS[j]
-        bz = <span style="color:var(--num)">8</span> + ZS[j]
-        blocks.fill(GOLD_BLOCK,
-            pos(ax, i, az), pos(ax + <span style="color:var(--num)">1</span>, i, az + <span style="color:var(--num)">1</span>), REPLACE)
-        blocks.fill(EMERALD_BLOCK,
-            pos(bx, i, bz), pos(bx + <span style="color:var(--num)">1</span>, i, bz + <span style="color:var(--num)">1</span>), REPLACE)
-player.on_chat(<span style="color:var(--str)">"dna"</span>, on_chat)</pre>
-    <p class="quiet" style="margin-top:.4em">Each spot is a <b>2 x 2</b> square.</p>
+  <!-- 15  v3 run -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="twoC" width="330" height="330" style="max-width:320px"></canvas>
+        <div class="slid"><span>steps</span><input type="range" id="wN" min="1" max="24" value="24"><span class="out" id="wNo">24</span></div>
+      </div>
+      <div>
+        <p class="line big">del, then dna.</p>
+        <p class="line" style="margin-top:.5em">Two spirals.<br>They never touch.</p>
+        <p class="bilingual">나선 두 개가 마주 보고 올라가요</p>
+      </div>
+    </div>
   </div>
 
-  <!-- 9  rungs -->
+  <!-- 16  v4 concept: rungs -->
   <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
     <div class="two wide-right">
       <div>
-<pre><span style="color:var(--kw)">if</span> i % <span style="color:var(--num)">4</span> == <span style="color:var(--num)">0</span>:
-    blocks.fill(<span style="color:var(--str)">QUARTZ_BLOCK</span>,
-        pos(ax, i, az),
-        pos(bx, i, bz), REPLACE)</pre>
-        <p class="line" style="margin-top:.5em">A bar every <b>4</b> steps.</p>
-        <p class="bilingual">4칸마다 다리를 놓아요</p>
+        <p class="line big">v4: the rungs.</p>
+<pre><span style="color:var(--kw)">if</span> i % <span style="color:var(--num)">4</span> == <span style="color:var(--num)">0</span>:</pre>
+        <p class="line" style="margin-top:.4em">A bar every <b>4</b> steps.</p>
+        <p class="quiet" style="margin-top:.4em">True at i = 0, 4, 8, 12, 16, 20.</p>
+        <p class="bilingual">4칸마다 다리를 하나씩 놓아요</p>
       </div>
       <div>
         <canvas class="sim" id="rungC" width="330" height="330" style="max-width:320px"></canvas>
@@ -224,7 +355,44 @@ player.on_chat(<span style="color:var(--str)">"dna"</span>, on_chat)</pre>
     </div>
   </div>
 
-  <!-- 10  build -->
+  <!-- 17  v4 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+<pre><span class="dim">        blocks.fill(EMERALD_BLOCK,</span><span class="dim">            pos(bx, i, bz), pos(bx + 1, i, bz + 1), REPLACE)</span><span class="hot">        <span style="color:var(--kw)">if</span> i % <span style="color:var(--num)">4</span> == <span style="color:var(--num)">0</span>:</span><span class="hot">            blocks.fill(QUARTZ_BLOCK,</span><span class="hot">                pos(ax, i, az),</span><span class="hot">                pos(bx, i, bz), REPLACE)</span></pre>
+    <p class="where">📍 Goes <b>under</b> the green fill. <code>if</code> lines up with <code>blocks.fill</code>.</p>
+    <p class="where">📍 The quartz fill goes in <b>4 more spaces</b>.</p>
+    <p class="quiet" style="margin-top:.3em">The bar runs from A to B: corner (ax, az) to corner (bx, bz).</p>
+    <p class="bilingual">초록 fill 아래에 if를 추가해요</p>
+  </div>
+
+  <!-- 18  full code -->
+  <div class="slide center-all">
+    <div class="pill">v4 = the whole thing</div>
+<pre class="tiny">XS = [<span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>]
+ZS = [<span style="color:var(--num)">0</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">6</span>, <span style="color:var(--num)">4</span>, <span style="color:var(--num)">0</span>, <span style="color:var(--num)">-4</span>, <span style="color:var(--num)">-6</span>, <span style="color:var(--num)">-4</span>]
+
+<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">on_chat</span>():
+    <span style="color:var(--kw)">for</span> i <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">0</span>, <span style="color:var(--num)">24</span>):
+        k = i % <span style="color:var(--num)">8</span>
+        ax = <span style="color:var(--num)">8</span> + XS[k]
+        az = <span style="color:var(--num)">8</span> + ZS[k]
+        j = (k + <span style="color:var(--num)">4</span>) % <span style="color:var(--num)">8</span>
+        bx = <span style="color:var(--num)">8</span> + XS[j]
+        bz = <span style="color:var(--num)">8</span> + ZS[j]
+        blocks.fill(GOLD_BLOCK,
+            pos(ax, i, az), pos(ax + <span style="color:var(--num)">1</span>, i, az + <span style="color:var(--num)">1</span>), REPLACE)
+        blocks.fill(EMERALD_BLOCK,
+            pos(bx, i, bz), pos(bx + <span style="color:var(--num)">1</span>, i, bz + <span style="color:var(--num)">1</span>), REPLACE)
+        <span style="color:var(--kw)">if</span> i % <span style="color:var(--num)">4</span> == <span style="color:var(--num)">0</span>:
+            blocks.fill(QUARTZ_BLOCK,
+                pos(ax, i, az),
+                pos(bx, i, bz), REPLACE)
+player.on_chat(<span style="color:var(--str)">"dna"</span>, on_chat)</pre>
+    <p class="quiet" style="margin-top:.4em">Check yours line by line.</p>
+    <p class="bilingual">이게 완성된 전체 코드예요</p>
+  </div>
+
+  <!-- 19  build: wider -->
   <div class="slide center-all">
     <div class="pill purple">Your turn</div>
     <p class="line big" style="margin:.3em 0 .4em">Make it wider.</p>
@@ -235,7 +403,7 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     <p class="bilingual">6과 4를 같이 바꿔야 동그래요</p>
   </div>
 
-  <!-- 11  tune -->
+  <!-- 20  tune -->
   <div class="slide center-all">
     <p class="line big" style="margin-bottom:.4em">Three dials.</p>
     <canvas class="sim" id="tuneC" width="330" height="300" style="max-width:330px"></canvas>
@@ -245,16 +413,7 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     <div class="readout"><b id="tB2">192</b> blocks</div>
   </div>
 
-  <!-- 12  del -->
-  <div class="slide center-all">
-<pre>blocks.fill(<span style="color:var(--str)">AIR</span>,
-    pos(<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>,<span style="color:var(--num)">0</span>), pos(<span style="color:var(--num)">20</span>,<span style="color:var(--num)">30</span>,<span style="color:var(--num)">20</span>), REPLACE)</pre>
-    <p class="line" style="margin-top:.6em">This one is <b>30</b> tall.</p>
-    <p class="quiet">Your old <code>del</code> only reached 15.</p>
-    <p class="bilingual">이번엔 30까지 지워야 해요</p>
-  </div>
-
-  <!-- 13  challenges -->
+  <!-- 21  challenges -->
   <div class="slide center-all">
     <div class="pill">Try these</div>
     <ul class="tick" style="max-width:22em;text-align:left;margin-top:.5em">
@@ -266,10 +425,11 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     <p class="bilingual">블록 이름은 변수에 넣지 마세요</p>
   </div>
 
-  <!-- 14 -->
+  <!-- 22  close -->
   <div class="slide center-all">
     <div class="emoji">🧬</div>
     <p class="line big">Lists + <b>%</b> = spirals.</p>
+    <p class="quiet" style="margin-top:.4em">You built it four times. That is how real builds work.</p>
   </div>
 
 </div>
@@ -280,12 +440,6 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
   var XS = [6, 4, 0, -4, -6, -4, 0, 4];
   var ZS = [0, 4, 6, 4, 0, -4, -6, -4];
   var CX = 8, CZ = 8, GOLD = '#ffb020', EM = '#50fa7b';
-
-  document.querySelectorAll('.rev').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var t = $(b.getAttribute('data-t')); if (t) t.classList.toggle('hid'); b.blur();
-    });
-  });
 
   // top-down grid, square cells, 18 x 18 world
   function topGrid(ctx, W, H) {
@@ -304,7 +458,57 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     ctx.fillRect(g.ox + x * g.cell + 1, g.oy + z * g.cell + 1, size * g.cell - 2, size * g.cell - 2);
   }
 
-  /* ring */
+  // side view painter. mode: 'tower' (strand A stuck on spot 0),
+  // 'one' (strand A walks the ring), 'two' (both strands, optional rungs)
+  function sideView(ctx, W, H, steps, radius, size, rungEvery, mode) {
+    mode = mode || 'two';
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    var cell = Math.min(W / 18, (H - 12) / Math.max(steps + size, 12));
+    var ox = (W - 18 * cell) / 2, oy = H - 6;
+    function X(k) { return Math.round(radius * (XS[k] / 6)); }
+    function kOf(i) { return mode === 'tower' ? 0 : i % 8; }
+    if (rungEvery && mode === 'two') {
+      ctx.strokeStyle = 'rgba(200,210,235,.55)'; ctx.lineWidth = 2;
+      for (var r = 0; r < steps; r += rungEvery) {
+        var k = r % 8, j = (k + 4) % 8;
+        ctx.beginPath();
+        ctx.moveTo(ox + (8 + X(k) + size / 2) * cell, oy - (r + size / 2) * cell);
+        ctx.lineTo(ox + (8 + X(j) + size / 2) * cell, oy - (r + size / 2) * cell);
+        ctx.stroke();
+      }
+    }
+    for (var i = 0; i < steps; i++) {
+      var k2 = kOf(i);
+      ctx.fillStyle = GOLD;
+      ctx.fillRect(ox + (8 + X(k2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
+      if (mode === 'two') {
+        var j2 = (i % 8 + 4) % 8;
+        ctx.fillStyle = EM;
+        ctx.fillRect(ox + (8 + X(j2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
+      }
+    }
+  }
+
+  /* roadmap minis */
+  [['road1', 'tower', 0], ['road2', 'one', 0], ['road3', 'two', 0], ['road4', 'two', 4]]
+    .forEach(function (r) {
+      var c = $(r[0]); if (!c) return;
+      sideView(c.getContext('2d'), c.width, c.height, 24, 6, 2, r[2], r[1]);
+    });
+
+  /* v1 tower */
+  (function () {
+    var c = $('towerC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('tw').value;
+      $('two_').textContent = n;
+      sideView(ctx, c.width, c.height, n, 6, 2, 0, 'tower');
+    }
+    $('tw').addEventListener('input', upd); upd();
+  })();
+
+  /* ring (static) */
   (function () {
     var c = $('ringC'); if (!c) return;
     var ctx = c.getContext('2d'), g = topGrid(ctx, c.width, c.height);
@@ -317,6 +521,27 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     ctx.fillStyle = '#8a97b8';
     ctx.fillText('+', g.ox + (CX + 1) * g.cell, g.oy + (CZ + 1.3) * g.cell);
     ctx.textAlign = 'left';
+  })();
+
+  /* lists: pick spot k */
+  (function () {
+    var c = $('listC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var k = +$('lK').value;
+      $('lKo').textContent = k; $('lKa').textContent = k; $('lKb').textContent = k;
+      $('lX').textContent = XS[k]; $('lZ').textContent = ZS[k];
+      var g = topGrid(ctx, c.width, c.height);
+      ctx.font = '13px monospace'; ctx.textAlign = 'center';
+      for (var s = 0; s < 8; s++) {
+        var on = (s === k);
+        sq(ctx, g, CX + XS[s], CZ + ZS[s], 2, on ? GOLD : 'rgba(35,43,58,.9)');
+        ctx.fillStyle = on ? '#0d1117' : '#8a97b8';
+        ctx.fillText(String(s), g.ox + (CX + XS[s] + 1) * g.cell, g.oy + (CZ + ZS[s] + 1.35) * g.cell);
+      }
+      ctx.textAlign = 'left';
+    }
+    $('lK').addEventListener('input', upd); upd();
   })();
 
   /* modulo dial */
@@ -349,6 +574,19 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     $('mI').addEventListener('input', upd); upd();
   })();
 
+  /* v2 run: single strand */
+  (function () {
+    var c = $('oneC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('oN').value;
+      $('oNo').textContent = n;
+      $('oT').textContent = (n / 8).toFixed(1).replace('.0', '');
+      sideView(ctx, c.width, c.height, n, 6, 2, 0, 'one');
+    }
+    $('oN').addEventListener('input', upd); upd();
+  })();
+
   /* opposite */
   (function () {
     var c = $('oppC'); if (!c) return;
@@ -367,44 +605,6 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
       sq(ctx, g, CX + XS[j], CZ + ZS[j], 2, EM);
     }
     $('oK').addEventListener('input', upd); upd();
-  })();
-
-  // side view painter shared by a few slides
-  function sideView(ctx, W, H, steps, radius, size, rungEvery) {
-    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
-    var cell = Math.min(W / 18, (H - 12) / Math.max(steps + size, 12));
-    var ox = (W - 18 * cell) / 2, oy = H - 6;
-    function X(k) { return Math.round(radius * (XS[k] / 6)); }
-    if (rungEvery) {
-      ctx.strokeStyle = 'rgba(200,210,235,.55)'; ctx.lineWidth = 2;
-      for (var r = 0; r < steps; r += rungEvery) {
-        var k = r % 8, j = (k + 4) % 8;
-        ctx.beginPath();
-        ctx.moveTo(ox + (8 + X(k) + size / 2) * cell, oy - (r + size / 2) * cell);
-        ctx.lineTo(ox + (8 + X(j) + size / 2) * cell, oy - (r + size / 2) * cell);
-        ctx.stroke();
-      }
-    }
-    for (var i = 0; i < steps; i++) {
-      var k2 = i % 8, j2 = (k2 + 4) % 8;
-      ctx.fillStyle = GOLD;
-      ctx.fillRect(ox + (8 + X(k2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
-      ctx.fillStyle = EM;
-      ctx.fillRect(ox + (8 + X(j2)) * cell, oy - (i + size) * cell, size * cell - 1, size * cell - 1);
-    }
-  }
-
-  /* y climbs */
-  (function () {
-    var c = $('sideC'); if (!c) return;
-    var ctx = c.getContext('2d');
-    function upd() {
-      var n = +$('sN').value;
-      $('sNo').textContent = n;
-      $('sT').textContent = (n / 8).toFixed(1).replace('.0', '');
-      sideView(ctx, c.width, c.height, n, 6, 2, 0);
-    }
-    $('sN').addEventListener('input', upd); upd();
   })();
 
   /* step through */
@@ -431,6 +631,18 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
     draw();
   })();
 
+  /* v3 run: both strands */
+  (function () {
+    var c = $('twoC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var n = +$('wN').value;
+      $('wNo').textContent = n;
+      sideView(ctx, c.width, c.height, n, 6, 2, 0, 'two');
+    }
+    $('wN').addEventListener('input', upd); upd();
+  })();
+
   /* rungs */
   (function () {
     var c = $('rungC'); if (!c) return;
@@ -439,7 +651,7 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
       var e = +$('rE').value;
       $('rEo').textContent = e;
       $('rN').textContent = Math.ceil(24 / e);
-      sideView(ctx, c.width, c.height, 24, 6, 2, e);
+      sideView(ctx, c.width, c.height, 24, 6, 2, e, 'two');
     }
     $('rE').addEventListener('input', upd); upd();
   })();
@@ -452,7 +664,7 @@ ZS = [<span style="color:var(--num)">0</span>, <span class="blank">???</span>, <
       var r = +$('tR').value, n = +$('tS').value, q = +$('tQ').value;
       $('tRo').textContent = r; $('tSo').textContent = n; $('tQo').textContent = q;
       $('tB2').textContent = 2 * n * q * q;
-      sideView(ctx, c.width, c.height, n, r, q, 4);
+      sideView(ctx, c.width, c.height, n, r, q, 4, 'two');
     }
     ['tR', 'tS', 'tQ'].forEach(function (id) { $(id).addEventListener('input', upd); });
     upd();
