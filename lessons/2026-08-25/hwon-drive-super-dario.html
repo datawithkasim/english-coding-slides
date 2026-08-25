@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drive Super Dario · Hwon</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px);
+               user-select: none; -webkit-user-select: none; touch-action: none; }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  /* roadmap: four mini previews */
+  .road { display: flex; gap: clamp(.6em, 2vmin, 1.4em); justify-content: center;
+          flex-wrap: wrap; margin-top: .5em; }
+  .road .rd { text-align: center; }
+  .road canvas { width: clamp(84px, 16vmin, 130px); height: auto; background: #87cde1;
+                 border: 2px solid var(--soft); border-radius: .4em; }
+  .road .rl { font-family: "JetBrains Mono", monospace; font-weight: 700;
+              color: var(--accent); font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .road .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  /* version badge on section slides */
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+
+  .dpad { display: grid; grid-template-columns: repeat(3, auto); gap: .25em;
+          justify-content: center; margin-top: .4em; }
+  .dpad button.btn { margin: 0; min-width: 2.6em; }
+  .dpad .sp { visibility: hidden; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Super Dario · Drive 🍄</div>
+
+  <!-- 1 title -->
+  <div class="slide active center-all">
+    <div class="emoji">🕹️</div>
+    <h1>Drive Super Dario</h1>
+    <p class="line" style="margin-top:.3em">Arrow keys move him to the <b>bread</b>.<br>Too big for one go — we build it <b>4 times</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 quit</span><span class="chip">v2 one key</span>
+      <span class="chip">v3 four keys</span><span class="chip">v4 walls</span>
+    </div>
+  </div>
+
+  <!-- 2 recap -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Your code so far</h2>
+    <p class="line">Two dictionaries. Two rectangles on a sky-blue screen.</p>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="label">Quick check — you say it</div>
+      <div class="q"><code>(20, 100, 40, 40)</code> — which number is <b>how far down</b>?</div>
+      <details><summary>Show answer</summary><div class="ans">100. The second number. Order: across, down, wide, tall.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Click the ✕</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Run your game. Click the ✕ on the window. What happens?</div>
+      <details><summary>Reveal</summary><div class="ans">Nothing. Nobody is listening. Today we fix that first.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">event</span>
+      <span class="gloss">something that just happened — a click, a key press</span>
+      <span class="ko"></span>
+      <span class="term">queue</span>
+      <span class="gloss">a waiting line. Events wait in it until you read them</span>
+      <span class="ko"></span>
+      <span class="term">boundary</span>
+      <span class="gloss">the edge of the screen. Walls stop Dario there</span>
+      <span class="ko"></span>
+    </div>
+  </div>
+
+  <!-- 5 roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan.</p>
+    <div class="road">
+      <div class="rd"><canvas id="road1" width="110" height="110"></canvas><div class="rl">v1</div><div class="rt">✕ works</div></div>
+      <div class="rd"><canvas id="road2" width="110" height="110"></canvas><div class="rl">v2</div><div class="rt">slide right</div></div>
+      <div class="rd"><canvas id="road3" width="110" height="110"></canvas><div class="rl">v3</div><div class="rt">all 4 ways</div></div>
+      <div class="rd"><canvas id="road4" width="110" height="110"></canvas><div class="rl">v4</div><div class="rt">walls</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Each version = the last one + a few lines. Run after every one.</p>
+  </div>
+
+  <!-- 6 warmup: move the bread -->
+  <div class="slide center-all">
+    <div class="pill">Warm-up · you type</div>
+    <p class="line big" style="margin-bottom:.4em">Move the bread away.</p>
+    <div style="max-width:30em;width:100%;text-align:left">
+      <div class="tag-old">OLD — bread sits on Dario</div>
+      <div class="was"><pre>    <span class="str">'x'</span>: <span class="num">20</span>,         <span class="com"># left and right</span>
+    <span class="str">'y'</span>: <span class="num">100</span>,</pre></div>
+      <div class="tag-new">NEW — bottom right corner</div>
+      <div class="now"><pre>    <span class="str">'x'</span>: <span class="num">320</span>,        <span class="com"># left and right</span>
+    <span class="str">'y'</span>: <span class="num">300</span>,</pre></div>
+    </div>
+    <p class="where">📍 Inside the <code>bread</code> dictionary only. Dario stays at 20, 100.</p>
+    <p class="quiet">Now there is somewhere to drive to.</p>
+  </div>
+
+  <!-- 7 warmup: his real bug -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛</div>
+    <h2>Wide and tall are swapped</h2>
+    <p class="line">Rect order is across, down, <b>wide</b>, <b>tall</b>. Your draw sends <code>'h'</code> first.</p>
+    <div style="max-width:34em;width:100%;text-align:left;margin-top:.3em">
+      <div class="tag-old">OLD — 'h' where wide goes</div>
+      <div class="was"><pre>        super_dario[<span class="str">'h'</span>],
+        super_dario[<span class="str">'w'</span>]</pre></div>
+      <div class="tag-new">NEW — wide first, then tall</div>
+      <div class="now"><pre>        super_dario[<span class="str">'w'</span>],
+        super_dario[<span class="str">'h'</span>]</pre></div>
+    </div>
+    <p class="where">📍 Both draw calls — Dario <b>and</b> bread. Run: bread stands tall now.</p>
+  </div>
+
+  <!-- 8 v1 concept -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v1: the quit button.</p>
+        <p class="line" style="margin-top:.4em">Every click waits in a <b>queue</b>.<br>Your loop must <b>read</b> the queue.</p>
+        <p class="quiet" style="margin-top:.4em">Press ✕, then make the loop read. Watch <code>running</code>.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="evC" width="360" height="220"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="evX">press ✕</button>
+          <button class="btn alt" id="evRead">loop reads</button>
+        </div>
+        <div class="readout">running = <b id="evR">True</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 v1 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+<pre><span class="dim">running = <span class="kw">True</span></span><span class="dim"><span class="kw">while</span> running:</span><span class="hot">    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():</span><span class="hot">        <span class="kw">if</span> event.type == pygame.QUIT:</span><span class="hot">            running = <span class="kw">False</span></span><span class="dim">    <span class="com"># -------- 3. RENDERING LAYER --------</span></span></pre>
+    <p class="where">📍 Under <code>while running:</code>, above <code># -------- 3. RENDERING LAYER --------</code></p>
+    <p class="where">📍 Indent 4 spaces. You type it — no copy.</p>
+    <p class="quiet" style="margin-top:.3em">Bright lines are new. Grey lines are already in your file.</p>
+  </div>
+
+  <!-- 10 v1 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big">Run it.</p>
+    <ul class="tick" style="text-align:left;max-width:22em">
+      <li>Game looks the same. That is correct.</li>
+      <li>Click ✕ — the window closes.</li>
+      <li>Your loop is listening now.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">v1 done. Smallest version that obeys you.</p>
+  </div>
+
+  <!-- 11 v2 concept -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v2: one key.</p>
+        <p class="line" style="margin-top:.4em"><code>get_pressed()</code> asks:<br>which keys are held <b>right now</b>?</p>
+        <p class="quiet" style="margin-top:.4em">60 times a second. Held key = True.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="holdC" width="360" height="200"></canvas>
+        <div style="text-align:center"><button class="btn" id="holdBtn">hold →</button></div>
+        <div class="slid"><span>speed</span><input type="range" id="hSp" min="1" max="20" value="6"><span class="out" id="hSpO">6</span></div>
+        <div class="readout">keys[K_RIGHT] = <b id="hK">False</b> &nbsp; x = <b id="hX">20</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 v2 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+<pre><span class="dim">    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():</span><span class="dim">        <span class="kw">if</span> event.type == pygame.QUIT:</span><span class="dim">            running = <span class="kw">False</span></span><span class="hot">    keys = pygame.key.get_pressed()</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT]:</span><span class="hot">        super_dario[<span class="str">'x'</span>] += super_dario[<span class="str">'speed'</span>]</span><span class="dim">    <span class="com"># -------- 3. RENDERING LAYER --------</span></span></pre>
+    <p class="where">📍 Under <code>running = False</code>. Same indent as <code>for</code> — 4 spaces.</p>
+    <p class="quiet" style="margin-top:.3em"><code>+=</code> means: add to what is there. x grows → Dario goes right.</p>
+  </div>
+
+  <!-- 13 v2 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big">Run it.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>Hold → &nbsp;Dario slides right.</li>
+      <li>Let go — he stops.</li>
+      <li>Keep holding… he leaves the screen. 😱</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">Escaping is a real problem. v4 fixes it.</p>
+  </div>
+
+  <!-- 14 investigate: frame trace -->
+  <div class="slide">
+    <div class="pill">Watch it! 🔬</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="trC" width="360" height="160"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="trStep">next frame ▶</button>
+          <button class="btn alt" id="trReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <p class="line">One frame =<br>one loop turn.</p>
+        <table class="vt">
+          <tr><th>frame</th><th>x</th></tr>
+          <tr><td id="trF">0</td><td id="trX">20</td></tr>
+        </table>
+        <div class="readout">x = 20 + 6 × <b id="trF2">0</b></div>
+        <p class="quiet" style="margin-top:.4em">60 frames a second. Small steps look smooth.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 v3 concept -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v3: four keys.</p>
+        <p class="line" style="margin-top:.4em">Same pattern, four times.</p>
+        <table class="vt">
+          <tr><th>key</th><th>change</th></tr>
+          <tr><td>→</td><td>'x' + speed</td></tr>
+          <tr><td>←</td><td>'x' − speed</td></tr>
+          <tr><td>↑</td><td>'y' − speed</td></tr>
+          <tr><td>↓</td><td>'y' + speed</td></tr>
+        </table>
+        <p class="quiet" style="margin-top:.4em">Up is minus — y counts <b>down</b> from the top.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="dpC" width="300" height="300" style="max-width:300px"></canvas>
+        <div class="dpad">
+          <span class="sp"></span><button class="btn" data-d="up">↑</button><span class="sp"></span>
+          <button class="btn" data-d="left">←</button><button class="btn" data-d="down">↓</button><button class="btn" data-d="right">→</button>
+        </div>
+        <div class="readout" id="dpMsg">hold a button — reach the bread 🍞</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 v3 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+<pre><span class="dim">    keys = pygame.key.get_pressed()</span><span class="dim">    <span class="kw">if</span> keys[pygame.K_RIGHT]:</span><span class="dim">        super_dario[<span class="str">'x'</span>] += super_dario[<span class="str">'speed'</span>]</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_LEFT]:</span><span class="hot">        super_dario[<span class="str">'x'</span>] -= super_dario[<span class="str">'speed'</span>]</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_UP]:</span><span class="hot">        super_dario[<span class="str">'y'</span>] -= super_dario[<span class="str">'speed'</span>]</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_DOWN]:</span><span class="hot">        super_dario[<span class="str">'y'</span>] += super_dario[<span class="str">'speed'</span>]</span></pre>
+    <p class="where">📍 Under the <code>K_RIGHT</code> block. Same indent — 4 spaces.</p>
+    <p class="quiet" style="margin-top:.3em">You type LEFT alone first. Run. Then UP and DOWN.</p>
+  </div>
+
+  <!-- 17 v3 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <p class="line big">Run it. Drive to the bread.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>All four arrows work.</li>
+      <li>Two keys at once = diagonal.</li>
+      <li>Park Dario on the bread. 🍞</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">Still escapes off the edge though.</p>
+  </div>
+
+  <!-- 18 v4 concept -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v4: walls.</p>
+        <p class="line" style="margin-top:.4em">x is Dario's <b>left side</b>.<br>He is 40 wide.</p>
+        <p class="line">Biggest x = 400 − 40 = <b>360</b>.</p>
+        <p class="quiet" style="margin-top:.4em">Too far? Push him back to the edge.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="waC" width="360" height="200"></canvas>
+        <div class="slid"><span>x</span><input type="range" id="waX" min="0" max="450" value="200"><span class="out" id="waXO">200</span></div>
+        <div style="text-align:center"><button class="btn alt" id="waT">walls: OFF</button></div>
+        <div class="readout" id="waMsg">no walls — he can leave</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 19 v4 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+<pre class="tiny"><span class="dim">    <span class="kw">if</span> keys[pygame.K_DOWN]:</span><span class="dim">        super_dario[<span class="str">'y'</span>] += super_dario[<span class="str">'speed'</span>]</span><span class="hot">    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:</span><span class="hot">        super_dario[<span class="str">'x'</span>] = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:</span><span class="hot">        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]</span><span class="hot">    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:</span><span class="hot">        super_dario[<span class="str">'y'</span>] = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]:</span><span class="hot">        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]</span><span class="dim">    <span class="com"># -------- 3. RENDERING LAYER --------</span></span></pre>
+    <p class="where">📍 Under the <code>K_DOWN</code> block, above the rendering comment.</p>
+    <p class="quiet" style="margin-top:.3em">Four walls, same shape: too far? put him back.</p>
+  </div>
+
+  <!-- 20 v4 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <p class="line big">Run it. Try to escape.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>Hold → at the edge. He stops at 360.</li>
+      <li>Try all four edges.</li>
+      <li>You cannot leave. That is v4.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">Game complete. Now check every line.</p>
+  </div>
+
+  <!-- 21 full program 1/2 -->
+  <div class="slide center-all">
+    <div class="pill">Full program · top half</div>
+<pre class="tiny"><span class="kw">import</span> pygame
+
+<span class="com"># --- INITIALIZATION ---</span>
+pygame.init()
+
+WIDTH, HEIGHT = <span class="num">400</span>, <span class="num">400</span>
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption(<span class="str">"Super Dario!!!"</span>)
+clock = pygame.time.Clock()
+font = pygame.font.Font(pygame.font.get_default_font(), <span class="num">14</span>)
+
+<span class="com"># --- COLORS --- (your ten colour lines stay exactly as they are)</span>
+BACKGROUND_COLOR = (<span class="num">135</span>, <span class="num">205</span>, <span class="num">225</span>)
+
+super_dario = {
+    <span class="str">'x'</span>: <span class="num">20</span>,   <span class="str">'y'</span>: <span class="num">100</span>,
+    <span class="str">'h'</span>: <span class="num">40</span>,   <span class="str">'w'</span>: <span class="num">40</span>,
+    <span class="str">'color'</span>: RED,  <span class="str">'speed'</span>: <span class="num">6</span>,
+}
+bread = {
+    <span class="str">'x'</span>: <span class="num">320</span>,  <span class="str">'y'</span>: <span class="num">300</span>,
+    <span class="str">'h'</span>: <span class="num">20</span>,   <span class="str">'w'</span>: <span class="num">15</span>,
+    <span class="str">'color'</span>: RED,  <span class="str">'speed'</span>: <span class="num">3</span>,
+}</pre>
+    <p class="quiet" style="margin-top:.3em">Check line by line. Only bread's x and y changed here.</p>
+  </div>
+
+  <!-- 22 full program 2/2 -->
+  <div class="slide center-all">
+    <div class="pill">Full program · the loop</div>
+<pre class="tiny">running = <span class="kw">True</span>
+<span class="kw">while</span> running:
+    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():
+        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+
+    keys = pygame.key.get_pressed()
+    <span class="kw">if</span> keys[pygame.K_RIGHT]:
+        super_dario[<span class="str">'x'</span>] += super_dario[<span class="str">'speed'</span>]
+    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        super_dario[<span class="str">'x'</span>] -= super_dario[<span class="str">'speed'</span>]
+    <span class="kw">if</span> keys[pygame.K_UP]:
+        super_dario[<span class="str">'y'</span>] -= super_dario[<span class="str">'speed'</span>]
+    <span class="kw">if</span> keys[pygame.K_DOWN]:
+        super_dario[<span class="str">'y'</span>] += super_dario[<span class="str">'speed'</span>]
+
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>: super_dario[<span class="str">'x'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]: super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>: super_dario[<span class="str">'y'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]: super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span>
+    screen.fill(BACKGROUND_COLOR)
+    pygame.draw.rect(screen, RED, (super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>]))
+    pygame.draw.rect(screen, PINK, (bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>]))
+    pygame.display.flip()
+    clock.tick(<span class="num">60</span>)
+
+pygame.quit()</pre>
+    <p class="quiet" style="margin-top:.3em">Wall ifs can sit on one line each — same meaning.</p>
+  </div>
+
+  <!-- 23 modify (faded) -->
+  <div class="slide center-all">
+    <div class="pill">Your turn · fill the blanks</div>
+    <p class="line big" style="margin-bottom:.4em">Add WASD driving.</p>
+    <div class="skel" style="max-width:38em">
+<pre>    <span class="kw">if</span> keys[pygame.K_d]:
+        super_dario[<span class="blank">???</span>] += super_dario[<span class="str">'speed'</span>]
+    <span class="kw">if</span> keys[pygame.K_<span class="blank">???</span>]:
+        super_dario[<span class="str">'x'</span>] -= super_dario[<span class="str">'speed'</span>]</pre></div>
+    <p class="quiet">D goes right. Which key goes left? Which dictionary key changes?</p>
+  </div>
+
+  <!-- 24 code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"When I hold <span class="blank"></span>, the code adds <span class="blank"></span> to <span class="blank"></span> every frame."</div>
+      <div class="pair-prompt">Your words, your code. Point at the line while you say it.</div>
+    </div>
+  </div>
+
+  <!-- 25 quiz 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="event.get() hands you the queue; that if catches the ✕ click.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Which line hears the ✕ click?</div>
+    <div class="opts">
+      <button class="opt"><code>if event.type == pygame.QUIT:</code></button>
+      <button class="opt"><code>screen.fill(BACKGROUND_COLOR)</code></button>
+      <button class="opt"><code>clock.tick(60)</code></button>
+      <button class="opt"><code>pygame.display.flip()</code></button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 26 quiz 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="x is his left side. 400 − 40 = 360 keeps all of him on screen.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Dario is 40 wide. Screen is 400. Biggest allowed <code>'x'</code>?</div>
+    <div class="opts">
+      <button class="opt">360</button>
+      <button class="opt">400</button>
+      <button class="opt">440</button>
+      <button class="opt">0</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 27 stretch: bread runs -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch ★</div>
+    <p class="line big" style="margin-bottom:.4em">The bread runs away.</p>
+<pre><span class="hot">    bread[<span class="str">'x'</span>] += bread[<span class="str">'speed'</span>]</span><span class="hot">    <span class="kw">if</span> bread[<span class="str">'x'</span>] &lt; <span class="num">0</span> <span class="kw">or</span> bread[<span class="str">'x'</span>] &gt; WIDTH - bread[<span class="str">'w'</span>]:</span><span class="hot">        bread[<span class="str">'speed'</span>] = -bread[<span class="str">'speed'</span>]</span></pre>
+    <p class="where">📍 Under Dario's wall lines, above the rendering comment.</p>
+    <p class="quiet" style="margin-top:.3em">Hits a wall → speed flips sign → it bounces.</p>
+  </div>
+
+  <!-- 28 stretch: colour when moving -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch ★★</div>
+    <p class="line big" style="margin-bottom:.4em">Green while driving.</p>
+<pre><span class="hot">    super_dario[<span class="str">'color'</span>] = RED</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT] <span class="kw">or</span> keys[pygame.K_LEFT] <span class="kw">or</span> keys[pygame.K_UP] <span class="kw">or</span> keys[pygame.K_DOWN]:</span><span class="hot">        super_dario[<span class="str">'color'</span>] = GREEN</span></pre>
+    <div style="max-width:34em;width:100%;text-align:left;margin-top:.3em">
+      <div class="tag-old">OLD — draw call uses RED</div>
+      <div class="was"><pre>pygame.draw.rect(screen, RED, (</pre></div>
+      <div class="tag-new">NEW — draw call reads the dictionary</div>
+      <div class="now"><pre>pygame.draw.rect(screen, super_dario[<span class="str">'color'</span>], (</pre></div>
+    </div>
+    <p class="where">📍 Colour lines go under <code>get_pressed()</code>. Change Dario's draw call only.</p>
+  </div>
+
+  <!-- 29 exit ticket -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Exit ticket</div>
+    <h2>Three jobs of the loop</h2>
+    <div class="recap-q">
+      <div class="label">You say them — no peeking</div>
+      <div class="q">Today the game loop got three new jobs. Name them.</div>
+      <details><summary>Show answer</summary><div class="ans">Listen for events. Read the held keys. Push Dario back at the walls.</div></details>
+    </div>
+  </div>
+
+  <!-- 30 close -->
+  <div class="slide center-all">
+    <div class="emoji">🍞</div>
+    <p class="line big">You can drive. He cannot escape.</p>
+    <p class="quiet" style="margin-top:.4em">Next: Dario touches the bread — and eats it. Collision.</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var SKY = '#87cde1', DARIO = '#e33', BREAD = '#ffc0cb', INKD = '#123';
+
+  function world(ctx, W, H) {
+    ctx.fillStyle = SKY; ctx.fillRect(0, 0, W, H);
+  }
+  function box(ctx, x, y, w, h, c) {
+    ctx.fillStyle = c; ctx.fillRect(x, y, w, h);
+  }
+
+  /* ---------- roadmap minis ---------- */
+  (function () {
+    var draw = {
+      road1: function (ctx, W, H) {
+        world(ctx, W, H);
+        box(ctx, 10, 40, 24, 24, DARIO); box(ctx, 80, 78, 10, 14, BREAD);
+        ctx.fillStyle = '#fff'; ctx.fillRect(W - 26, 6, 20, 16);
+        ctx.strokeStyle = '#d33'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(W - 22, 9); ctx.lineTo(W - 10, 19); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W - 10, 9); ctx.lineTo(W - 22, 19); ctx.stroke();
+      },
+      road2: function (ctx, W, H) {
+        world(ctx, W, H);
+        box(ctx, 34, 40, 24, 24, DARIO); box(ctx, 80, 78, 10, 14, BREAD);
+        ctx.strokeStyle = INKD; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(14, 52); ctx.lineTo(30, 52); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(24, 46); ctx.lineTo(30, 52); ctx.lineTo(24, 58); ctx.stroke();
+      },
+      road3: function (ctx, W, H) {
+        world(ctx, W, H);
+        box(ctx, 44, 44, 24, 24, DARIO); box(ctx, 84, 82, 10, 14, BREAD);
+        ctx.strokeStyle = INKD; ctx.lineWidth = 3;
+        [[56, 38, 56, 22], [56, 74, 56, 90], [38, 56, 22, 56], [74, 56, 90, 56]].forEach(function (a) {
+          ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(a[2], a[3]); ctx.stroke();
+        });
+      },
+      road4: function (ctx, W, H) {
+        world(ctx, W, H);
+        ctx.strokeStyle = '#1f7f2f'; ctx.lineWidth = 6; ctx.strokeRect(3, 3, W - 6, H - 6);
+        box(ctx, W - 34, 40, 24, 24, DARIO); box(ctx, 20, 78, 10, 14, BREAD);
+      }
+    };
+    Object.keys(draw).forEach(function (id) {
+      var c = $(id); if (!c) return;
+      draw[id](c.getContext('2d'), c.width, c.height);
+    });
+  })();
+
+  /* ---------- v1 event queue ---------- */
+  (function () {
+    var c = $('evC'); if (!c) return;
+    var ctx = c.getContext('2d'), queue = [], running = true;
+    function draw() {
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      // mini window
+      ctx.fillStyle = running ? SKY : '#39424e';
+      ctx.fillRect(16, 30, 150, 150);
+      ctx.fillStyle = '#fff'; ctx.fillRect(138, 34, 24, 18);
+      ctx.strokeStyle = '#d33'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(143, 38); ctx.lineTo(157, 48); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(157, 38); ctx.lineTo(143, 48); ctx.stroke();
+      if (running) { ctx.fillStyle = DARIO; ctx.fillRect(36, 90, 30, 30); }
+      ctx.font = '12px monospace'; ctx.fillStyle = '#8a97b8';
+      ctx.fillText(running ? 'your game' : 'closed', 16, 196);
+      // queue
+      ctx.fillText('the queue', 210, 24);
+      for (var i = 0; i < 4; i++) {
+        ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2;
+        ctx.strokeRect(210, 34 + i * 38, 130, 30);
+        if (queue[i]) {
+          ctx.fillStyle = '#ffb86c'; ctx.fillRect(212, 36 + i * 38, 126, 26);
+          ctx.fillStyle = '#0d1117'; ctx.fillText(queue[i], 240, 54 + i * 38);
+        }
+      }
+    }
+    $('evX').addEventListener('click', function () {
+      if (queue.length < 4 && running) queue.push('QUIT event');
+      draw(); this.blur();
+    });
+    $('evRead').addEventListener('click', function () {
+      if (queue.length) { queue = []; running = false; }
+      $('evR').textContent = running ? 'True' : 'False';
+      draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- v2 hold to move ---------- */
+  (function () {
+    var c = $('holdC'); if (!c) return;
+    var ctx = c.getContext('2d'), x = 20, held = false, timer = null;
+    function draw() {
+      world(ctx, c.width, c.height);
+      box(ctx, 310, 130, 15, 20, BREAD);
+      box(ctx, x, 90, 40, 40, DARIO);
+      $('hX').textContent = Math.round(x);
+      $('hK').textContent = held ? 'True' : 'False';
+    }
+    function tick() { x += +$('hSp').value; if (x > c.width + 20) x = -40; draw(); }
+    function down(e) { e.preventDefault(); if (held) return; held = true; timer = setInterval(tick, 1000 / 60); draw(); }
+    function up() { held = false; clearInterval(timer); timer = null; draw(); }
+    var b = $('holdBtn');
+    b.addEventListener('mousedown', down); b.addEventListener('touchstart', down);
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) { b.addEventListener(ev, up); });
+    $('hSp').addEventListener('input', function () { $('hSpO').textContent = this.value; });
+    draw();
+  })();
+
+  /* ---------- frame trace ---------- */
+  (function () {
+    var c = $('trC'); if (!c) return;
+    var ctx = c.getContext('2d'), f = 0;
+    function draw() {
+      world(ctx, c.width, c.height);
+      var x = 20 + 6 * f;
+      // ghost trail
+      for (var i = 0; i < f; i++) {
+        ctx.fillStyle = 'rgba(227,51,51,.18)';
+        ctx.fillRect(20 + 6 * i, 60, 40, 40);
+      }
+      box(ctx, x, 60, 40, 40, DARIO);
+      $('trF').textContent = f; $('trF2').textContent = f;
+      $('trX').textContent = 20 + 6 * f;
+    }
+    $('trStep').addEventListener('click', function () { if (20 + 6 * (f + 1) < c.width - 40) f++; draw(); this.blur(); });
+    $('trReset').addEventListener('click', function () { f = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* ---------- v3 dpad drive ---------- */
+  (function () {
+    var c = $('dpC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var d = { x: 20, y: 20 }, bread = { x: 230, y: 240 }, dir = null, timer = null;
+    function overlap() {
+      return d.x < bread.x + 15 && d.x + 40 > bread.x && d.y < bread.y + 20 && d.y + 40 > bread.y;
+    }
+    function draw() {
+      world(ctx, c.width, c.height);
+      if (!overlap()) box(ctx, bread.x, bread.y, 15, 20, BREAD);
+      box(ctx, d.x, d.y, 40, 40, DARIO);
+      $('dpMsg').textContent = overlap() ? 'got the bread! 🍞😋' : 'hold a button — reach the bread 🍞';
+    }
+    function tick() {
+      var s = 4;
+      if (dir === 'right') d.x += s; if (dir === 'left') d.x -= s;
+      if (dir === 'up') d.y -= s; if (dir === 'down') d.y += s;
+      draw();
+    }
+    document.querySelectorAll('.dpad .btn').forEach(function (b) {
+      function down(e) { e.preventDefault(); dir = b.dataset.d; if (!timer) timer = setInterval(tick, 1000 / 60); }
+      function up() { dir = null; clearInterval(timer); timer = null; }
+      b.addEventListener('mousedown', down); b.addEventListener('touchstart', down);
+      ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(function (ev) { b.addEventListener(ev, up); });
+    });
+    draw();
+  })();
+
+  /* ---------- v4 walls ---------- */
+  (function () {
+    var c = $('waC'); if (!c) return;
+    var ctx = c.getContext('2d'), walls = false;
+    // sim world is 400 wide like his game, scaled to 360 canvas: factor .9
+    function draw() {
+      var xin = +$('waX').value, S = c.width / 400;
+      var maxX = 400 - 40;
+      var x = walls ? Math.max(0, Math.min(maxX, xin)) : xin;
+      world(ctx, c.width, c.height);
+      if (walls) {
+        ctx.strokeStyle = (xin !== x) ? '#ff5555' : '#1f7f2f';
+        ctx.lineWidth = 5; ctx.strokeRect(2, 2, c.width - 4, c.height - 4);
+      }
+      box(ctx, 320 * S, 150, 15, 20, BREAD);
+      box(ctx, x * S, 80, 40 * S, 40, DARIO);
+      $('waXO').textContent = xin;
+      if (!walls) $('waMsg').textContent = 'no walls — he can leave';
+      else if (xin > maxX) $('waMsg').textContent = xin + ' is too far → pushed back to 360';
+      else $('waMsg').textContent = 'inside — walls do nothing';
+    }
+    $('waX').addEventListener('input', draw);
+    $('waT').addEventListener('click', function () {
+      walls = !walls; this.textContent = 'walls: ' + (walls ? 'ON' : 'OFF');
+      draw(); this.blur();
+    });
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>
