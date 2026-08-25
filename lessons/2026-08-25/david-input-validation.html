@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ask Until Valid · David</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .terminal .line { font-size: inherit; line-height: 1.6; }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · David</div>
+
+  <!-- 1 · Slot 1: Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">David · Tue 21:00</div>
+    <div class="emoji">🛡️</div>
+    <h1>Ask Until<br>Valid</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">re-ask</span> + <span class="sub">name by purpose</span>.</p>
+    <p class="bilingual">올바른 입력까지 다시 묻기</p>
+  </div>
+
+  <!-- 2 · Slot 2: Recap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last lesson 🔁</h2>
+    <p class="line"><code>input()</code> · <code>if</code>/<code>elif</code> · <code>.lower()</code> · lists</p>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="label">Quick check</div>
+      <div class="q"><code>inventory = ["torch"]</code> — what does <code>if "torch" in inventory:</code> ask?</div>
+      <details><summary>Show answer</summary><div class="ans">Is <code>"torch"</code> inside the list? Yes → True.</div></details>
+    </div>
+    <p class="quiet">✓ You read the error message and fixed the bug yourself.</p>
+  </div>
+
+  <!-- 3 · Promise: names say purpose -->
+  <div class="slide">
+    <div class="pill purple">Your promise</div>
+    <h2>Names say what they hold</h2>
+    <div class="varbox-row">
+      <div class="varbox" style="border-color:#ff5555"><span class="name" style="color:#ff5555">question</span><span class="val">"strike" ❓</span></div>
+      <div class="varbox"><span class="name">strike_or_leave</span><span class="val">"strike" ✓</span></div>
+    </div>
+    <p class="line center"><code>question</code> holding an answer? Confusing.<br>Name every variable by its <b>purpose</b>.</p>
+    <p class="bilingual center">변수 이름은 목적을 말해요</p>
+  </div>
+
+  <!-- 4 · Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>The silent game</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>strike_or_leave = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>)
+
+<span class="kw">if</span> strike_or_leave == <span class="str">"strike"</span>:
+    <span class="fn">print</span>(<span class="str">"The rock splits. A diamond!"</span>)
+<span class="kw">elif</span> strike_or_leave == <span class="str">"leave"</span>:
+    <span class="fn">print</span>(<span class="str">"You walk back to the light."</span>)</pre>
+      <div class="q">Player types <code>Banana</code> — what prints?</div>
+      <details><summary>Reveal</summary><div class="ans">Nothing prints. No branch matches. The game goes silent.</div></details>
+    </div>
+  </div>
+
+  <!-- 5 · Slot 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 guard words</h2>
+    <div class="vocab-table">
+      <span class="term">while</span>
+      <span class="gloss">repeat as long as the condition is true</span>
+      <span class="ko">~ 동안 반복</span>
+
+      <span class="term">not in</span>
+      <span class="gloss">the value is missing from the list</span>
+      <span class="ko">~ 안에 없다</span>
+
+      <span class="term">valid</span>
+      <span class="gloss">allowed — on the list</span>
+      <span class="ko">유효한</span>
+    </div>
+  </div>
+
+  <!-- 6 · Slot 5: Concept -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Guard the door 🚪</h2>
+    <div class="bubble-card you" style="margin:.6em auto">"banana"</div>
+    <div class="bubble-card computer">Not a choice. Ask again.</div>
+    <p class="big center" style="margin-top:.6em">Reject invalid → ask again until valid.</p>
+    <p class="bilingual center">유효할 때까지 다시 묻기</p>
+  </div>
+
+  <!-- 7 · Roadmap -->
+  <div class="slide">
+    <div class="pill">Plan</div>
+    <h2>Four small versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🗣️</div><div class="name">v1 Ask</div><div class="ex">input + if/elif — you have this</div></div>
+      <div class="opt-card"><div class="ico">🧼</div><div class="name">v2 Clean</div><div class="ex">.lower()</div></div>
+      <div class="opt-card"><div class="ico">🛡️</div><div class="name">v3 Guard</div><div class="ex">while … not in</div></div>
+      <div class="opt-card"><div class="ico">📖</div><div class="name">v4 Story</div><div class="ex">branch + inventory</div></div>
+    </div>
+    <p class="quiet center" style="margin-top:.5em">8 steps. Copy each one. Run often.</p>
+  </div>
+
+  <!-- 8 · v1: your game now -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big">v1 — your game now</p>
+<pre>strike_or_leave = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>)
+
+<span class="kw">if</span> strike_or_leave == <span class="str">"strike"</span>:
+    <span class="fn">print</span>(<span class="str">"The rock splits. A diamond!"</span>)
+<span class="kw">elif</span> strike_or_leave == <span class="str">"leave"</span>:
+    <span class="fn">print</span>(<span class="str">"You walk back to the light."</span>)</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Output — you typed strike</div>
+      <div style="opacity:1">The rock splits. A diamond!</div>
+    </div>
+  </div>
+
+  <!-- 9 · STEP 1: .lower() (v2) -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="steptag">STEP 1 / 8</div>
+    <div class="find" style="max-width:36em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>strike_or_leave = input(</code></div>
+    <div style="max-width:36em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre>strike_or_leave = input("Strike or leave? ")</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre>strike_or_leave = input("Strike or leave? ").lower()</pre></div>
+    </div>
+    <p class="where">📍 Same line. Add <code>.lower()</code> at the end.</p>
+    <p class="why">🟣 Why: "STRIKE" becomes "strike" — capitals can't break it.</p>
+    <p class="chk">✅ Run. Type STRIKE → the diamond line prints.</p>
+  </div>
+
+  <!-- 10 · Slot 6: Run it — the guard loop (v3 target) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">Run it</div>
+    <h2>The guard loop</h2>
+<pre><span class="hot">valid_choices = ["strike", "leave"]</span><span class="dim">strike_or_leave = input("Strike or leave? ").lower()</span><span class="dim"> </span><span class="hot">while strike_or_leave not in valid_choices:</span><span class="hot">    print("Type strike or leave.")</span><span class="hot">    strike_or_leave = input("Strike or leave? ").lower()</span></pre>
+    <p class="line" style="margin-top:.4em">Four <b>new</b> lines guard the input. Steps 2–5 build them.</p>
+  </div>
+
+  <!-- 11 · Slot 7: Investigate — terminal trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Trace a real session 🔍</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">Strike or leave?</span> <span class="typed">banana</span></div>
+      <div class="line"><span class="echo">Type strike or leave.</span></div>
+      <div class="line"><span class="prompt">Strike or leave?</span> <span class="typed">GOLD</span></div>
+      <div class="line"><span class="echo">Type strike or leave.</span></div>
+      <div class="line"><span class="prompt">Strike or leave?</span> <span class="typed">LEAVE</span></div>
+      <div class="line"><span class="ok">→ strike_or_leave = "leave" ✅ loop ends</span></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">The loop repeats until the answer is valid.</p>
+  </div>
+
+  <!-- 12 · STEP 2: valid_choices list -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 2 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>strike_or_leave = input(</code></div>
+<pre style="max-width:38em;width:100%"><span class="hot">valid_choices = ["strike", "leave"]</span><span class="dim">strike_or_leave = input("Strike or leave? ").lower()</span></pre>
+    <p class="where">📍 New line goes <b>ABOVE</b> the input line. No indent.</p>
+    <p class="why">🟣 Why: the name says its purpose — the choices that are valid.</p>
+    <p class="chk">✅ Run. Nothing changes yet. Good.</p>
+  </div>
+
+  <!-- 13 · STEP 3: while line -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 3 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>strike_or_leave = input(</code></div>
+<pre style="max-width:38em;width:100%"><span class="dim">strike_or_leave = input("Strike or leave? ").lower()</span><span class="hot">while strike_or_leave not in valid_choices:</span></pre>
+    <p class="where">📍 Goes <b>UNDER</b> the input line. No indent. Colon at the end.</p>
+    <p class="why">🟣 Why: while the answer is not valid → repeat.</p>
+    <p class="chk">✅ Do not run yet — the loop needs a body.</p>
+  </div>
+
+  <!-- 14 · STEP 4: print inside loop -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 4 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>while strike_or_leave not in</code></div>
+<pre style="max-width:38em;width:100%"><span class="dim">while strike_or_leave not in valid_choices:</span><span class="hot">    print("Type strike or leave.")</span></pre>
+    <p class="where">📍 Under the while line. Indent 4 spaces.</p>
+    <p class="why">🟣 Why: tell the player what went wrong.</p>
+    <p class="chk">✅ Do not run — the loop would never end yet.</p>
+  </div>
+
+  <!-- 15 · STEP 5: re-ask inside loop -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 5 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>print("Type strike or leave.")</code></div>
+<pre style="max-width:38em;width:100%"><span class="dim">while strike_or_leave not in valid_choices:</span><span class="dim">    print("Type strike or leave.")</span><span class="hot">    strike_or_leave = input("Strike or leave? ").lower()</span></pre>
+    <p class="where">📍 Under the print. Indent 4 spaces — inside the loop.</p>
+    <p class="why">🟣 Why: a new answer each round — that is how the loop ends.</p>
+    <p class="chk">✅ Run. banana → asks again. LEAVE → accepted. v3 done!</p>
+  </div>
+
+  <!-- 16 · Slot 8: Common Mistake 1 — if/if -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>if</code> + <code>if</code> — both run</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>gold = 12
+<span class="kw">if</span> gold >= 10:
+    <span class="fn">print</span>(<span class="str">"You buy a torch."</span>)
+    gold = gold - 10
+<span class="kw">if</span> gold &lt; 10:
+    <span class="fn">print</span>(<span class="str">"Not enough gold."</span>)</pre>
+        <p>gold becomes 2 → second <code>if</code> also runs. Both print!</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>gold = 12
+<span class="kw">if</span> gold >= 10:
+    <span class="fn">print</span>(<span class="str">"You buy a torch."</span>)
+    gold = gold - 10
+<span class="kw">elif</span> gold &lt; 10:
+    <span class="fn">print</span>(<span class="str">"Not enough gold."</span>)</pre>
+        <p><code>elif</code> skips after a match. One prints.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 · Common Mistake 2 — the name lies -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The name lies</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>question = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>)
+<span class="kw">if</span> question == <span class="str">"strike"</span>:</pre>
+        <p><code>question</code> holds the player's <b>answer</b>. The name lies.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>strike_or_leave = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>)
+<span class="kw">if</span> strike_or_leave == <span class="str">"strike"</span>:</pre>
+        <p>The name says what it <b>holds</b>. Code reads itself.</p>
+      </div>
+    </div>
+    <p class="bilingual center">이름은 담긴 값을 말해요</p>
+  </div>
+
+  <!-- 18 · STEP 6: inventory (v4) -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="steptag">STEP 6 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>valid_choices = [</code></div>
+<pre style="max-width:38em;width:100%"><span class="hot">inventory = ["torch"]</span><span class="dim">valid_choices = ["strike", "leave"]</span></pre>
+    <p class="where">📍 New line 1 — <b>ABOVE</b> valid_choices. No indent.</p>
+    <p class="why">🟣 Why: your bag. The story checks it soon.</p>
+    <p class="chk">✅ Run. Nothing changes yet. Good.</p>
+  </div>
+
+  <!-- 19 · STEP 7: append diamond -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 7 / 8</div>
+    <div class="find" style="max-width:40em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>print("The rock splits. A diamond!")</code></div>
+<pre style="max-width:40em;width:100%"><span class="dim">if strike_or_leave == "strike":</span><span class="dim">    print("The rock splits. A diamond!")</span><span class="hot">    inventory.append("diamond")</span></pre>
+    <p class="where">📍 Under the diamond print. Indent 4 spaces.</p>
+    <p class="why">🟣 Why: the diamond goes into your bag.</p>
+    <p class="chk">✅ Run. Type strike. No error.</p>
+  </div>
+
+  <!-- 20 · STEP 8: torch check (OLD/NEW block) -->
+  <div class="slide center-all">
+    <div class="steptag">STEP 8 / 8</div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>elif strike_or_leave == "leave":</code></div>
+    <div style="max-width:38em;width:100%;text-align:left">
+      <div class="tag-old">OLD — two lines</div>
+      <div class="was"><pre>elif strike_or_leave == "leave":
+    print("You walk back to the light.")</pre></div>
+      <div class="tag-new">NEW — replace the print</div>
+      <div class="now"><pre>elif strike_or_leave == "leave":
+    if "torch" in inventory:
+        print("Your torch lights the way out.")
+    else:
+        print("You stumble in the dark...")</pre></div>
+    </div>
+    <p class="where">📍 New <code>if</code> indent 4. Its prints indent 8.</p>
+    <p class="why">🟣 Why: the story checks your bag.</p>
+    <p class="chk">✅ Run. Type leave → the torch line prints.</p>
+  </div>
+
+  <!-- 21 · v4 full program -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <p class="line big">v4 — check every line</p>
+<pre class="tiny">inventory = [<span class="str">"torch"</span>]
+valid_choices = [<span class="str">"strike"</span>, <span class="str">"leave"</span>]
+
+strike_or_leave = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>).<span class="fn">lower</span>()
+
+<span class="kw">while</span> strike_or_leave <span class="kw">not in</span> valid_choices:
+    <span class="fn">print</span>(<span class="str">"Type strike or leave."</span>)
+    strike_or_leave = <span class="fn">input</span>(<span class="str">"Strike or leave? "</span>).<span class="fn">lower</span>()
+
+<span class="kw">if</span> strike_or_leave == <span class="str">"strike"</span>:
+    <span class="fn">print</span>(<span class="str">"The rock splits. A diamond!"</span>)
+    inventory.<span class="fn">append</span>(<span class="str">"diamond"</span>)
+<span class="kw">elif</span> strike_or_leave == <span class="str">"leave"</span>:
+    <span class="kw">if</span> <span class="str">"torch"</span> <span class="kw">in</span> inventory:
+        <span class="fn">print</span>(<span class="str">"Your torch lights the way out."</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">"You stumble in the dark..."</span>)</pre>
+    <p class="quiet">Read it line by line. Yours must match. Blank lines: just for easy reading.</p>
+  </div>
+
+  <!-- 22 · Slot 9: Modify -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Try it</div>
+    <h2>A new door — fill the blanks</h2>
+<pre>valid_choices = [<span class="str">"open"</span>, <span class="str">"knock"</span>]
+open_or_knock = <span class="fn">input</span>(<span class="str">"Open or knock? "</span>).<span class="fn">lower</span>()
+
+<span class="kw">while</span> open_or_knock ___ ___ valid_choices:
+    <span class="fn">print</span>(<span class="str">"Type open or knock."</span>)
+    open_or_knock = _____(<span class="str">"Open or knock? "</span>).<span class="fn">lower</span>()</pre>
+    <p class="line" style="margin-top:.4em">Fill: two small words + one function.</p>
+  </div>
+
+  <!-- 23 · Slot 10: Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell me 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"While the answer is <span class="blank"></span> the list, the loop <span class="blank"></span> and asks again."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- 24 · Slot 11: Make -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Your turn!</div>
+    <h2>Guard YOUR adventure 🚀</h2>
+    <ul class="check-list">
+      <li>Pick one question in your adventure</li>
+      <li>Make a <code>valid_choices</code> list</li>
+      <li>Add the <code>while</code> re-ask loop</li>
+      <li>Name the variable by its purpose</li>
+    </ul>
+  </div>
+
+  <!-- 25 · OPTIONAL: naming quiz -->
+  <div class="slide">
+    <div class="pill purple">Quiz</div>
+    <h2>Best name? <span class="activity-tag">OPTIONAL</span></h2>
+    <p class="line">The variable stores the answer to <code>"Fight or run? "</code>. Click to check each.</p>
+    <div class="quiz-card">
+      <div class="q">Which name is best?</div>
+      <div class="opts">
+        <details><summary><code>x</code></summary><div class="ans">✗ Says nothing about what it holds.</div></details>
+        <details><summary><code>question</code></summary><div class="ans">✗ It holds an answer, not a question.</div></details>
+        <details><summary><code>fight_or_run</code></summary><div class="ans">✓ Purpose-named — you read it, you know it.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26 · OPTIONAL: edge cases -->
+  <div class="slide">
+    <div class="pill">⚠ Edge cases</div>
+    <h2>Gotchas <span class="activity-tag">OPTIONAL</span></h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">Player presses Enter</div><div class="edesc"><code>""</code> is not in the list — the loop asks again. Guard holds.</div></div>
+      <div class="edge-card"><div class="ehead">Spaces: " strike "</div><div class="edesc">Fails the check. <code>.strip()</code> removes edge spaces — see Stretch.</div></div>
+      <div class="edge-card"><div class="ehead">input() returns str</div><div class="edesc">Even "7" is text. Numbers need <code>int()</code>.</div></div>
+    </div>
+  </div>
+
+  <!-- 27 · OPTIONAL: debug (find it) -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>What's wrong? <span class="activity-tag">OPTIONAL</span></h2>
+    <div class="debug-box"><div class="debug-tag">buggy</div>
+<pre style="margin-top:.4em">left_or_right = <span class="fn">input</span>(<span class="str">"Left or right? "</span>).<span class="fn">lower</span>()
+<span class="kw">while</span> left_or_right <span class="kw">not in</span> [<span class="str">"left"</span>, <span class="str">"right"</span>]:
+    <span class="fn">print</span>(<span class="str">"Type left or right."</span>)</pre>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Think first — then click next.</p>
+  </div>
+
+  <!-- 28 · OPTIONAL: debug (the fix) -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The bug <span class="activity-tag">OPTIONAL</span></h2>
+    <div class="debug-reveal"><b>Bug:</b> <code>left_or_right</code> never changes inside the loop → infinite loop. Re-ask inside.</div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">fixed</div>
+<pre style="margin-top:.4em"><span class="kw">while</span> left_or_right <span class="kw">not in</span> [<span class="str">"left"</span>, <span class="str">"right"</span>]:
+    <span class="fn">print</span>(<span class="str">"Type left or right."</span>)
+    left_or_right = <span class="fn">input</span>(<span class="str">"Left or right? "</span>).<span class="fn">lower</span>()</pre>
+    </div>
+  </div>
+
+  <!-- 29 · OPTIONAL: stretch -->
+  <div class="slide">
+    <div class="pill purple">Stretch</div>
+    <h2>Level up <span class="activity-tag">OPTIONAL</span></h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a third choice: <code>"climb"</code></div>
+      <div class="item"><span class="lvl">★★</span>Add <code>.strip()</code> after <code>.lower()</code> — spaces can't break it</div>
+      <div class="item"><span class="lvl">★★★</span>Count wrong tries. After 3, print a hint</div>
+    </div>
+  </div>
+
+  <!-- 30 · Slot 12: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Ask until valid.<br>Name by purpose.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: surprise events with <code>random</code>.</p>
+    <p class="bilingual">다음 주: 랜덤 이벤트</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button>
+    <span class="counter" id="counter">1 / 30</span>
+    <button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

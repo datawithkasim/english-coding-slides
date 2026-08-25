@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS002 — Maze Walls (if inside repeat)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Ramp classes shared with the other 2026-08-25 decks (BRIEF v1→v4 rules):
+     new lines hot, old lines dim, OLD/NEW markers, 📍 placement lines. */
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; font-size: clamp(13px, 2.2vmin, 22px); padding: .5em .8em; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+  .vstep { display: flex; gap: .4em; justify-content: flex-start; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS002 · Minecraft Education · YURA · 2026-08-25</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Maze Project · Day 1</div>
+    <div class="emoji">🧱</div>
+    <h1>Wall, Wall, Gap:<br>The Maze Begins</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">repeat</span> + <span class="sub">count</span> + <span class="sub">decide</span>.</p>
+    <p class="bilingual">반복문이 세고 결정해요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — her aquarium, 2026-08-11 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your aquarium</h2>
+    <p>Glass <code>1,1,1 → 15,15,15</code> · water <code>2,2,2 → 14,14,14</code> · axolotl with <code>spawnAnimalAt</code> · <code>repeat</code> spawned more.</p>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Glass ends at 15. Why does water end at 14?</div>
+      <details><summary>Show answer</summary><div class="ans">One block inside the glass. You tried 0.5, then 13 — then found 14 yourself.</div></details>
+    </div>
+    <p class="bilingual">그때: 어디에 — 오늘: 어떤 무늬</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>How many columns?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):  <span class="com"># repeat 8 times</span>
+    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">1 column. Every pass stamps <code>pos(1, …)</code> — the same spot.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>New words today</h2>
+    <div class="vocab-table">
+      <span class="term">counter</span>
+      <span class="gloss">a variable that changes each pass</span>
+      <span class="ko">세는 변수</span>
+
+      <span class="term">==</span>
+      <span class="gloss">asks: are these equal?</span>
+      <span class="ko">같은가요?</span>
+
+      <span class="term">gap</span>
+      <span class="gloss">a hole you walk through</span>
+      <span class="ko">틈</span>
+
+      <span class="term">pattern</span>
+      <span class="gloss">wall, wall, gap — repeating</span>
+      <span class="ko">패턴</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>A stamp that walks 🖨️</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🔁</div><div class="name">repeat</div><div class="ex">stamp again</div></div>
+      <div class="opt-card"><div class="ico">🔢</div><div class="name">counter</div><div class="ex">step one right</div></div>
+      <div class="opt-card"><div class="ico">❓</div><div class="name">if</div><div class="ex">wall? or door?</div></div>
+    </div>
+    <p class="big center" style="margin-top:.6em">Every pass: step, ask, stamp.</p>
+    <p class="bilingual">도장이 걷고 골라요</p>
+  </div>
+
+  <!-- Slot 5b: The plan v1→v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5b</span>
+    <div class="pill purple">The plan</div>
+    <h2>One maze, four steps</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🧱</div><div class="name">v1</div><div class="ex">stamp 8 times</div></div>
+      <div class="opt-card"><div class="ico">🚶</div><div class="name">v2</div><div class="ex">make x walk</div></div>
+      <div class="opt-card"><div class="ico">🚪</div><div class="name">v3</div><div class="ex">if — carve a door</div></div>
+      <div class="opt-card"><div class="ico">↩️</div><div class="name">v4</div><div class="ex">turn the corner</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.6em">Run after every step.</p>
+  </div>
+
+  <!-- Slot 6: v1 — Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <h2>v1 — stamp 8 times</h2>
+<pre><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Builds</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+    </div>
+    <p class="where">📍 New file in Code Builder. Type both lines.</p>
+    <p class="quiet">We wanted a wall. The loop repeats — but nothing changes.</p>
+  </div>
+
+  <!-- Slot 6b: v2 — the counter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6b</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <h2>v2 — the counter walks</h2>
+<pre><span class="hot">x = <span class="num">1</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span><span class="hot">    x = x + <span class="num">1</span></span></pre>
+    <div class="tag-old">OLD — stuck at 1</div>
+    <div class="was"><pre><span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>)</pre></div>
+    <div class="tag-new">NEW — x moves</div>
+    <div class="now"><pre><span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>)</pre></div>
+    <p class="where">📍 <code>x = 1</code> above the loop. <code>x = x + 1</code> last inside — 4 spaces.</p>
+    <p class="quiet">Each pass x grows — each column lands one step right.</p>
+  </div>
+
+  <!-- Slot 6c: v2 — run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 6c</span>
+    <div class="vstep" style="justify-content:center"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <p class="big">Run it.</p>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Builds</div>
+      <div>🧱🧱🧱🧱🧱🧱🧱🧱</div>
+      <div>🧱🧱🧱🧱🧱🧱🧱🧱</div>
+      <div>🧱🧱🧱🧱🧱🧱🧱🧱</div>
+    </div>
+    <p style="margin-top:.5em">Solid wall! x walked 1 → 8.</p>
+    <p class="quiet">Same fill line — 8 different x.</p>
+  </div>
+
+  <!-- Slot 7: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>x walks the wall</h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">pass 1</div>
+        <div class="iter-item">pass 2</div>
+        <div class="iter-item">pass 3</div>
+        <div class="iter-item">pass 4</div>
+      </div>
+      <div class="var-row"><span class="label">x = </span><span class="var-vals"><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span><span class="var-val">4</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ Builds</div>
+        <div class="out-line">🧱 column at x = 1</div>
+        <div class="out-line">🧱 column at x = 2</div>
+        <div class="out-line">🧱 column at x = 3</div>
+        <div class="out-line">🧱 column at x = 4</div>
+      </div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Passes 5–8 keep walking to x = 8.</p>
+  </div>
+
+  <!-- Slot 7b: v3 concept — the if question -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7b</span>
+    <div class="pill">Concept</div>
+    <h2>Each pass asks: <code>x == 4</code>?</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">x = 4</span>
+        <span class="case case-b">x = 2</span>
+      </div>
+      <div class="if-cond">x == 4</div>
+      <div class="if-branches">
+        <div class="if-branch true">fill AIR — door ⬜</div>
+        <div class="if-branch false">fill STONE — wall 🧱</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Builds</div>
+        <div class="out-line out-a">door at 4</div>
+        <div class="out-line out-b">wall at 2</div>
+      </div>
+    </div>
+    <p class="bilingual">매 바퀴 질문 하나</p>
+  </div>
+
+  <!-- Slot 7c: v3 code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7c</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <h2>v3 — the if carves a door</h2>
+<pre><span class="dim">x = <span class="num">1</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):</span><span class="hot">    <span class="kw">if</span> x == <span class="num">4</span>:</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span><span class="hot">    <span class="kw">else</span>:</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span><span class="dim">    x = x + <span class="num">1</span></span></pre>
+    <div class="tag-old">OLD — always fills</div>
+    <div class="was"><pre>    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, …)</pre></div>
+    <div class="tag-new">NEW — 4 more spaces, under else</div>
+    <div class="now"><pre>        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, …)</pre></div>
+    <p class="where">📍 The if sits inside the loop, above the fill. <code>x = x + 1</code> stays last.</p>
+    <p class="quiet">Pass 4 answers True → AIR. Every other pass → STONE.</p>
+  </div>
+
+  <!-- Slot 7d: v3 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 7d</span>
+    <div class="vstep" style="justify-content:center"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <p class="big">Run it.</p>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Builds</div>
+      <div>🧱🧱🧱⬜🧱🧱🧱🧱</div>
+      <div>🧱🧱🧱⬜🧱🧱🧱🧱</div>
+      <div>🧱🧱🧱⬜🧱🧱🧱🧱</div>
+    </div>
+    <p style="margin-top:.5em">The ⬜ column is x = 4 — your door. Walk through it.</p>
+    <p class="bilingual">벽이 아니라 무늬!</p>
+  </div>
+
+  <!-- Slot 7e: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7e</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which pass builds the door?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div>
+      <div class="cell head">x</div>
+      <div class="cell head">x == 4?</div>
+      <div class="cell head">builds</div>
+
+      <div class="cell">3</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🧱 wall</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">4</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬜ door</span></details></div>
+
+      <div class="cell">5</div>
+      <div class="cell">5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🧱 wall</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Common Mistake — inner fill matches the outer shell -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Inner fill vs outer shell</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ leak</span>
+<pre><span class="com"># water ends ON the glass</span>
+<span class="fn">blocks.fill</span>(<span class="str">WATER</span>,
+  <span class="fn">pos</span>(<span class="num">2</span>,<span class="num">2</span>,<span class="num">2</span>), <span class="fn">pos</span>(<span class="num">15</span>,<span class="num">15</span>,<span class="num">15</span>), <span class="kw">REPLACE</span>)</pre>
+        <p>15 replaces your glass wall.</p></div>
+      <div class="col good"><span class="tag">✓ inside</span>
+<pre><span class="com"># water stays one block in</span>
+<span class="fn">blocks.fill</span>(<span class="str">WATER</span>,
+  <span class="fn">pos</span>(<span class="num">2</span>,<span class="num">2</span>,<span class="num">2</span>), <span class="fn">pos</span>(<span class="num">14</span>,<span class="num">14</span>,<span class="num">14</span>), <span class="kw">REPLACE</span>)</pre>
+        <p>14 stays inside — your discovery.</p></div>
+    </div>
+    <p style="margin-top:.4em">Today: a door fill must stay inside the wall.</p>
+    <p class="bilingual">안쪽 fill은 한 칸 작게 — 네가 찾은 14</p>
+  </div>
+
+  <!-- Slot 8b: Debug 1 — missing x = x + 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8b</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>One column again</h2>
+<pre>x = <span class="num">1</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</pre>
+    <div class="debug-card">
+      <div class="err">The wall never grows.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">x never changes. The counter forgot to walk.</p>
+<pre style="margin-top:.4em">    x = x + <span class="num">1</span></pre>
+        <p class="quiet">Last line inside the loop, under the fill.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 8c: Debug 2 — off-by-one pass count -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8c</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>One column missing</h2>
+<pre><span class="com"># wall columns 1 to 8</span>
+x = <span class="num">1</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">7</span>):</pre>
+    <div class="debug-card">
+      <div class="err">Wall stops at x = 7.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">1 to 8 is <b>8</b> columns: 8 − 1 + 1 = 8 passes → <code>range(8)</code>.</p>
+        <p class="bilingual">끝 칸도 세요 — 8칸은 8번</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 8d: Debug 3 — door fill matches the whole wall (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8d</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The wall vanished</h2>
+<pre>    <span class="kw">if</span> x == <span class="num">4</span>:
+        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">8</span>, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</pre>
+    <div class="debug-card">
+      <div class="err">Pass 4 deleted every column.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">That AIR fill runs x 1 to 8 — the whole wall. A door is one column:</p>
+<pre style="margin-top:.4em"><span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>)</pre>
+        <p class="quiet">Same trap as water 15.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 9: Modify (Faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Move the door to x = 6</h2>
+<pre>x = ___
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):
+    <span class="kw">if</span> x == ___:
+        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)
+    <span class="kw">else</span>:
+        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)
+    x = x + ___</pre>
+    <p style="margin-top:.5em">Three blanks — only one moves the door.</p>
+  </div>
+
+  <!-- Slot 9b: v4 code — wall B turns the corner -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9b</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <h2>v4 — turn the corner</h2>
+<pre><span class="dim"><span class="com"># wall A — x walks, door at 4</span></span><span class="dim">x = <span class="num">1</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):</span><span class="dim">    <span class="com"># … your v3 lines …</span></span><span class="dim">    x = x + <span class="num">1</span></span><span class="hot"><span class="com"># wall B — z walks, door at 6</span></span><span class="hot">z = <span class="num">1</span></span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">8</span>):</span><span class="hot">    <span class="kw">if</span> z == <span class="num">6</span>:</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, z), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, z), <span class="kw">REPLACE</span>)</span><span class="hot">    <span class="kw">else</span>:</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, z), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, z), <span class="kw">REPLACE</span>)</span><span class="hot">    z = z + <span class="num">1</span></span></pre>
+    <p class="where">📍 Below wall A, after its <code>x = x + 1</code>. Left edge — no spaces.</p>
+    <p class="quiet">Same shape, new counter z — it walks the other way.</p>
+  </div>
+
+  <!-- Slot 9c: v4 run — bird view -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 9c</span>
+    <div class="vstep" style="justify-content:center"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <p class="big">Run it. Bird view 🐦</p>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ From above</div>
+      <div>🧱🧱🧱⬜🧱🧱🧱🧱</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>⬜⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+      <div>🧱⬛⬛⬛⬛⬛⬛⬛</div>
+    </div>
+    <p style="margin-top:.5em">Wall A across, wall B down. Two doors.</p>
+    <p class="bilingual">첫 미로 코너 완성!</p>
+  </div>
+
+  <!-- Slot 10: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud 🗣️</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Each pass, <code>x</code> <span class="blank"></span>. When x equals <span class="blank"></span>, my loop builds <span class="blank"></span> instead of <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the corner 🚀</h2>
+    <ul class="check-list">
+      <li>Open your world, press <code>C</code> for Code Builder</li>
+      <li>Type v1. Run. One column?</li>
+      <li>Add <code>x</code> and <code>x = x + 1</code>. Run. Wall?</li>
+      <li>Add the <code>if</code>. Run. Door?</li>
+      <li>Wall B with <code>z</code>. Run. Corner!</li>
+      <li>Send the video</li>
+    </ul>
+  </div>
+
+  <!-- Slot 11b: Quick Quiz (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11b</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. x starts at 1. <code>x = x + 1</code> runs twice. x = ?</div>
+      <div class="opts">
+        <details><summary>A. 2</summary><div class="ans">That is once. Twice: 1 → 2 → 3.</div></details>
+        <details><summary>B. 3</summary><div class="ans">✓ 1 → 2 → 3.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>if x == 6:</code> fill AIR — where is the door?</div>
+      <div class="opts">
+        <details><summary>A. column 6</summary><div class="ans">✓ True only when x is exactly 6.</div></details>
+        <details><summary>B. column 7</summary><div class="ans">No — == means exactly 6.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 11c: Pattern — two doors with elif (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11c</span>
+    <div class="pill">Pattern<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two doors with <code>elif</code></h2>
+<pre><span class="hot">    <span class="kw">if</span> x == <span class="num">2</span>:</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span><span class="hot">    <span class="kw">elif</span> x == <span class="num">6</span>:</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">AIR</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span><span class="dim">    <span class="kw">else</span>:</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>), <span class="kw">REPLACE</span>)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Builds</div>
+      <div>🧱⬜🧱🧱🧱⬜🧱🧱</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">elif = a second question, asked only if the first was False.</p>
+    <p class="bilingual">elif = 두 번째 질문</p>
+  </div>
+
+  <!-- Slot 11d: Stretch (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11d</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Wall 12 long, 4 tall — change two numbers.</div>
+      <div class="item"><span class="lvl">★★</span>Glass windows: <code>elif x == 3</code> fills <code>GLASS</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Wall C closes the room — new counter.</div>
+    </div>
+  </div>
+
+  <!-- Slot 11e: Exit Ticket (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11e</span>
+    <div class="pill">🎟️ Exit ticket<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Say your answer</div>
+      <p style="margin-top:.4em">In one sentence: how does the loop know where the door goes?</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 문 자리를 어떻게 알까?</p>
+    </div>
+  </div>
+
+  <!-- Slot 12: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="emoji">🌀</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Repeat builds.<br>The counter walks.<br>The if decides.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: repeat inside repeat — the house begins.</p>
+    <p class="bilingual">다음: 반복 속 반복 — 집 짓기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

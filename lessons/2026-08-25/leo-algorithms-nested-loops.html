@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Staircase Algorithm · Leo</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  /* roadmap: four mini previews */
+  .road { display: flex; gap: clamp(.6em, 2vmin, 1.4em); justify-content: center;
+          flex-wrap: wrap; margin-top: .5em; }
+  .road .rd { text-align: center; }
+  .road canvas { width: clamp(84px, 16vmin, 130px); height: auto; background: #0d1117;
+                 border: 2px solid var(--soft); border-radius: .4em; }
+  .road .rl { font-family: "JetBrains Mono", monospace; font-weight: 700;
+              color: var(--accent); font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .road .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  /* version badge on section slides */
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Leo · Algorithms 🪜</div>
+
+  <!-- 1 title -->
+  <div class="slide active center-all">
+    <div class="emoji">🪜</div>
+    <h1>The Staircase<br>Algorithm</h1>
+    <p class="line" style="margin-top:.3em">An algorithm = <b>exact steps, in order</b>.<br>Today a loop <b>inside</b> a loop builds stairs.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 one row</span><span class="chip">v2 loop it</span>
+      <span class="chip">v3 stack layers</span><span class="chip">v4 staircase</span>
+    </div>
+    <p class="bilingual">알고리즘 — 정확한 순서의 레시피</p>
+  </div>
+
+  <!-- 2 recap -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Your trees</h2>
+    <p class="line">Every box = 6 numbers. Moving it means start <b>and</b> end change.</p>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="label">Quick check — you say it</div>
+      <div class="q">Move the trunk box <b>up</b> one block. Which variables change?</div>
+      <details><summary>Show answer</summary><div class="ans">y_start AND y_end. Both. +1 each.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Count the fills</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+        <span class="fn">blocks.fill</span>( ... )</pre>
+      <div class="q">How many fills run?</div>
+      <details><summary>Reveal</summary><div class="ans">12. The inner loop runs 4 times for every outer pass. 3 × 4.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">algorithm</span>
+      <span class="gloss">a recipe of exact steps, in exact order</span>
+      <span class="ko">알고리즘</span>
+      <span class="term">nested loop</span>
+      <span class="gloss">a loop inside another loop</span>
+      <span class="ko">반복문 속 반복문</span>
+      <span class="term">layer</span>
+      <span class="gloss">one flat level of a build</span>
+      <span class="ko">층</span>
+    </div>
+  </div>
+
+  <!-- 5 concept: algorithm -->
+  <div class="slide center-all">
+    <div class="pill">Concept</div>
+    <p class="line big" style="margin-bottom:.4em">An algorithm is a recipe.</p>
+    <div class="opt-grid" style="max-width:900px">
+      <div class="opt-card"><div class="ico">📜</div><div class="name">exact steps</div><div class="ex">no skipping</div></div>
+      <div class="opt-card"><div class="ico">🔢</div><div class="name">exact order</div><div class="ex">no swapping</div></div>
+      <div class="opt-card"><div class="ico">🤖</div><div class="name">just follow</div><div class="ex">no thinking</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.6em">Wrong order = wrong build. The computer never guesses.</p>
+    <p class="bilingual">알고리즘 = 순서가 정확한 레시피</p>
+  </div>
+
+  <!-- 6 concept: nested loop -->
+  <div class="slide">
+    <div class="pill">Concept</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="nestC" width="360" height="240"></canvas>
+        <div class="readout">inner → rows &nbsp;·&nbsp; outer ↑ layers</div>
+      </div>
+      <div>
+        <p class="line big">Loop inside loop.</p>
+        <p class="line" style="margin-top:.4em"><b>Outer</b> picks the layer.<br><b>Inner</b> builds every row in it.</p>
+        <p class="quiet" style="margin-top:.4em">Inner finishes completely. Then outer moves up one.</p>
+        <p class="bilingual">바깥 = 층, 안쪽 = 줄</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan.</p>
+    <div class="road">
+      <div class="rd"><canvas id="road1" width="110" height="110"></canvas><div class="rl">v1</div><div class="rt">one row</div></div>
+      <div class="rd"><canvas id="road2" width="110" height="110"></canvas><div class="rl">v2</div><div class="rt">a path</div></div>
+      <div class="rd"><canvas id="road3" width="110" height="110"></canvas><div class="rl">v3</div><div class="rt">a box</div></div>
+      <div class="rd"><canvas id="road4" width="110" height="110"></canvas><div class="rl">v4</div><div class="rt">stairs</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Side view. Each version = the last one + a few lines. Run after every one.</p>
+  </div>
+
+  <!-- 8 v1 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big" style="margin-bottom:.3em">v1: one row.</p>
+<pre><span class="kw">def</span> <span class="fn">on_stairs</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+        <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>),
+        <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">0</span>, <span class="num">0</span>), REPLACE)
+
+<span class="fn">player.on_chat</span>(<span class="str">"stairs"</span>, on_stairs)</pre>
+    <p class="where">📍 New file. Type all 5 lines — you type, no copy.</p>
+    <p class="quiet" style="margin-top:.3em">pos(0,0,0) → pos(7,0,0): one row, 8 blocks across.</p>
+  </div>
+
+  <!-- 9 v1 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big">Run it.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>In chat, type <b>stairs</b>.</li>
+      <li>One stone row appears. 8 across.</li>
+      <li>This row is the brick we repeat.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">v1 done. Smallest step of the recipe.</p>
+  </div>
+
+  <!-- 10 v2 concept + sim -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v2: loop the row.</p>
+        <p class="line" style="margin-top:.4em">Same fill, <b>5 times</b>.<br><code>z</code> slides it forward each pass.</p>
+        <p class="quiet" style="margin-top:.4em">Press loop ▶ — watch z change.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="pathC" width="360" height="180"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="paStep">loop ▶</button>
+          <button class="btn alt" id="paReset">reset</button>
+        </div>
+        <div class="readout" id="paMsg">no rows yet — z = 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 v2 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+<pre><span class="dim"><span class="kw">def</span> <span class="fn">on_stairs</span>():</span><span class="hot">    z = <span class="num">0</span></span><span class="hot">    <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="hot">            <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, z),</span><span class="hot">            <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">0</span>, z), REPLACE)</span><span class="hot">        z = z + <span class="num">1</span></span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"stairs"</span>, on_stairs)</span></pre>
+    <div style="max-width:34em;width:100%;text-align:left;margin-top:.3em">
+      <div class="tag-old">OLD — glued to z 0</div>
+      <div class="was"><pre>        pos(0, 0, <span class="num">0</span>),
+        pos(7, 0, <span class="num">0</span>), REPLACE)</pre></div>
+      <div class="tag-new">NEW — z is a variable now</div>
+      <div class="now"><pre>            pos(0, 0, z),
+            pos(7, 0, z), REPLACE)</pre></div>
+    </div>
+    <p class="where">📍 The fill moves right 4 spaces — it lives inside the loop now.</p>
+  </div>
+
+  <!-- 12 v2 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <p class="line big">Run it.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>Chat: <b>stairs</b>.</li>
+      <li>A flat stone path. 5 rows long.</li>
+      <li>Walk it. Still flat.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">We need UP. That is v3.</p>
+  </div>
+
+  <!-- 13 v3 concept -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v3: stack layers.</p>
+        <p class="line" style="margin-top:.4em">New <b>outer</b> loop.<br>Each pass: build a floor, then <code>y + 1</code>.</p>
+        <p class="quiet" style="margin-top:.4em">z = 0 restarts every layer — back to the front.</p>
+        <p class="bilingual">층마다 z는 0부터 다시</p>
+      </div>
+      <div>
+        <canvas class="sim" id="boxC" width="340" height="280" style="max-width:320px"></canvas>
+        <div class="readout">5 rows × 5 layers = a box</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 v3 code: wrap it -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_stairs</span>():</span><span class="hot">    y = <span class="num">0</span></span><span class="hot">    <span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">        z = <span class="num">0</span></span><span class="dim">        <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="dim">                <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, z),</span><span class="dim">                <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">0</span>, z), REPLACE)</span><span class="dim">            z = z + <span class="num">1</span></span><span class="hot">        y = y + <span class="num">1</span></span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"stairs"</span>, on_stairs)</span></pre>
+    <div style="max-width:34em;width:100%;text-align:left;margin-top:.3em">
+      <div class="tag-old">OLD — z = 0 at the top, runs once</div>
+      <div class="was"><pre>    z = <span class="num">0</span></pre></div>
+      <div class="tag-new">NEW — inside the layer loop, runs every layer</div>
+      <div class="now"><pre>        z = <span class="num">0</span></pre></div>
+    </div>
+    <p class="where">📍 <code>for row</code> and every line under it move right 4 spaces.</p>
+  </div>
+
+  <!-- 15 v3 code: fill learns y -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <p class="line big" style="margin-bottom:.3em">The fill learns y.</p>
+    <div style="max-width:36em;width:100%;text-align:left">
+      <div class="tag-old">OLD — height locked at 0</div>
+      <div class="was"><pre>                pos(0, <span class="num">0</span>, z),
+                pos(7, <span class="num">0</span>, z), REPLACE)</pre></div>
+      <div class="tag-new">NEW — height is the variable y</div>
+      <div class="now"><pre>                pos(0, y, z),
+                pos(7, y, z), REPLACE)</pre></div>
+    </div>
+    <p class="where">📍 Both <code>pos()</code> corners. y in BOTH — the row moves up whole.</p>
+    <p class="quiet" style="margin-top:.3em">One letter. The build gains a third direction.</p>
+  </div>
+
+  <!-- 16 v3 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <p class="line big">Run it.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>Chat: <b>stairs</b>.</li>
+      <li>A solid stone box. 5 long, 5 tall.</li>
+      <li>Not stairs yet — every layer is the same size.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">v4 shrinks the layers.</p>
+  </div>
+
+  <!-- 17 investigate: step the nested loop -->
+  <div class="slide">
+    <div class="pill">Watch it! 🔬</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="stepC" width="380" height="300"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="stFill">fill ▶</button>
+          <button class="btn" id="stLayer">finish layer ▶▶</button>
+          <button class="btn alt" id="stReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <p class="line">Say the next values <b>out loud</b> first.</p>
+        <table class="vt">
+          <tr><th>layer</th><th>row</th><th>y</th><th>z</th></tr>
+          <tr><td id="stL">—</td><td id="stR">—</td><td id="stY">—</td><td id="stZ">—</td></tr>
+        </table>
+        <p class="quiet" style="margin-top:.4em;text-align:center">Inner finishes → z back to 0, y + 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18 common mistake -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Start and end move together</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>y_end = y_end + <span class="num">1</span></pre>
+        <p>Only the top moves. The box <b>stretches</b>.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>y_start = y_start + <span class="num">1</span>
+y_end = y_end + <span class="num">1</span></pre>
+        <p>Start and end together. The box <b>moves</b>.</p>
+      </div>
+    </div>
+    <p class="quiet">Today y sits in both pos() corners — same rule, one letter.</p>
+    <p class="bilingual">시작과 끝은 같이 움직여요</p>
+  </div>
+
+  <!-- 19 v4 concept -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">v4: real stairs.</p>
+        <p class="line" style="margin-top:.4em">Each layer pass, <b>two</b> variables change:<br><code>y + 1</code> up · <code>rows − 1</code> shorter.</p>
+        <p class="quiet" style="margin-top:.4em">Shorter layer on a longer layer = a step.</p>
+        <p class="bilingual">한 층마다 줄이 하나 줄어요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="stairC" width="340" height="280" style="max-width:320px"></canvas>
+        <div class="readout">rows: <b>5 · 4 · 3 · 2 · 1</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 v4 code -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_stairs</span>():</span><span class="dim">    y = <span class="num">0</span></span><span class="hot">    rows = <span class="num">5</span></span><span class="dim">    <span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        z = <span class="num">0</span></span><span class="hot">        <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(rows):</span><span class="dim">            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="dim">                <span class="fn">pos</span>(<span class="num">0</span>, y, z),</span><span class="dim">                <span class="fn">pos</span>(<span class="num">7</span>, y, z), REPLACE)</span><span class="dim">            z = z + <span class="num">1</span></span><span class="dim">        y = y + <span class="num">1</span></span><span class="hot">        rows = rows - <span class="num">1</span></span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"stairs"</span>, on_stairs)</span></pre>
+    <div style="max-width:34em;width:100%;text-align:left;margin-top:.3em">
+      <div class="tag-old">OLD — always 5 rows</div>
+      <div class="was"><pre>        <span class="kw">for</span> row <span class="kw">in</span> range(<span class="num">5</span>):</pre></div>
+      <div class="tag-new">NEW — rows shrinks each layer</div>
+      <div class="now"><pre>        <span class="kw">for</span> row <span class="kw">in</span> range(rows):</pre></div>
+    </div>
+    <p class="where">📍 <code>rows = 5</code> under <code>y = 0</code>. &nbsp;<code>rows = rows - 1</code> under <code>y = y + 1</code>.</p>
+  </div>
+
+  <!-- 21 v4 run -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <p class="line big">Run it. Climb it.</p>
+    <ul class="tick" style="text-align:left;max-width:24em">
+      <li>Chat: <b>stairs</b>.</li>
+      <li>5 steps: 5 · 4 · 3 · 2 · 1 rows.</li>
+      <li>Jump to the top. 🏔️</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">You wrote an algorithm. The computer just followed it.</p>
+  </div>
+
+  <!-- 22 full program -->
+  <div class="slide center-all">
+    <div class="pill">Full program</div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">on_stairs</span>():
+    y = <span class="num">0</span>
+    rows = <span class="num">5</span>
+    <span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        z = <span class="num">0</span>
+        <span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(rows):
+            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+                <span class="fn">pos</span>(<span class="num">0</span>, y, z),
+                <span class="fn">pos</span>(<span class="num">7</span>, y, z), REPLACE)
+            z = z + <span class="num">1</span>
+        y = y + <span class="num">1</span>
+        rows = rows - <span class="num">1</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"stairs"</span>, on_stairs)</pre>
+    <p class="quiet" style="margin-top:.3em">Read it line by line, out loud. It is a recipe.</p>
+  </div>
+
+  <!-- 23 modify (faded) -->
+  <div class="slide center-all">
+    <div class="pill">Your turn · fill the blanks</div>
+    <p class="line big" style="margin-bottom:.4em">10 wide. 7 steps.</p>
+    <div class="skel" style="max-width:36em">
+<pre>    rows = <span class="blank">?</span>
+    <span class="kw">for</span> layer <span class="kw">in</span> range(<span class="blank">?</span>):
+        z = <span class="num">0</span>
+        <span class="kw">for</span> row <span class="kw">in</span> range(rows):
+            blocks.fill(<span class="str">STONE</span>,
+                pos(<span class="num">0</span>, y, z),
+                pos(<span class="blank">?</span>, y, z), REPLACE)</pre></div>
+    <span class="rev" data-t="a23">show answer</span>
+    <div id="a23" class="hid"><p class="line">7 · 7 · <b>9</b> — width 10 means x 0 to 9.</p></div>
+    <p class="quiet">Count from 0.</p>
+  </div>
+
+  <!-- 24 code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The outer loop picks the <span class="blank"></span>, the inner loop builds every <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 25 your turn -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Your staircase 🚀</h2>
+    <ul class="check-list">
+      <li>Change <code>STONE</code> to your block</li>
+      <li>Make it 7 steps — change <b>both</b> numbers</li>
+      <li>Run <b>stairs</b>, climb to the top</li>
+      <li>Screenshot it from the side</li>
+    </ul>
+  </div>
+
+  <!-- 26 quiz 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="The inner loop runs 3 times for every outer pass. 4 × 3 = 12.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q"><code>for layer in range(4):</code> then <code>for row in range(3):</code> — how many fills?</div>
+    <div class="opts">
+      <button class="opt">12</button>
+      <button class="opt">7</button>
+      <button class="opt">4</button>
+      <button class="opt">3</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 27 quiz 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="Without it, layer 2 starts where layer 1 finished — the rows fly off forward.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Why is <code>z = 0</code> INSIDE the layer loop?</div>
+    <div class="opts">
+      <button class="opt">Each new layer starts at the front again.</button>
+      <button class="opt">It makes the loop faster.</button>
+      <button class="opt">z must always stay 0.</button>
+      <button class="opt">It stops the loop.</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 28 stretch: gold top -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch ★</div>
+    <p class="line big" style="margin-bottom:.4em">A gold top step. 👑</p>
+<pre><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="hot">        <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>),</span><span class="hot">        <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span></pre>
+    <p class="where">📍 After both loops end. Same indent as <code>rows = 5</code> — 4 spaces, last lines before <code>player.on_chat</code>.</p>
+    <p class="quiet" style="margin-top:.3em">Top step is at y 4, z 0. It turns gold.</p>
+  </div>
+
+  <!-- 29 exit ticket -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Exit ticket</div>
+    <h2>Two changing variables</h2>
+    <div class="recap-q">
+      <div class="label">You say them — no peeking</div>
+      <div class="q">Every layer pass, two variables change. Name them and which way.</div>
+      <details><summary>Show answer</summary><div class="ans">y goes UP +1. rows goes DOWN −1.</div></details>
+    </div>
+  </div>
+
+  <!-- 30 close -->
+  <div class="slide center-all">
+    <div class="emoji">🪜</div>
+    <p class="line big">Exact steps + a loop inside a loop.</p>
+    <p class="quiet" style="margin-top:.4em">Next: algorithms that DELETE — carving with AIR.</p>
+    <p class="bilingual">다음: AIR로 조각하기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var STONE = '#7b8494', HOT = '#38d0e0', GOLD = '#d9a92b';
+
+  /* reveal buttons */
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t')); if (t) t.classList.toggle('hid'); b.blur();
+    });
+  });
+
+  /* side view: z runs across, y runs up (same picture as last lesson) */
+  function grid(ctx, W, H, worldZ, worldY) {
+    var cell = Math.min(W / worldZ, (H - 8) / worldY);
+    var ox = (W - worldZ * cell) / 2, oy = H - 4;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    for (var i = 0; i <= worldZ; i++) {
+      ctx.beginPath(); ctx.moveTo(ox + i * cell, oy); ctx.lineTo(ox + i * cell, oy - worldY * cell); ctx.stroke();
+    }
+    for (var j = 0; j <= worldY; j++) {
+      ctx.beginPath(); ctx.moveTo(ox, oy - j * cell); ctx.lineTo(ox + worldZ * cell, oy - j * cell); ctx.stroke();
+    }
+    return { cell: cell, ox: ox, oy: oy };
+  }
+  function box(ctx, g, z0, y0, z1, y1, colour) {
+    ctx.fillStyle = colour;
+    ctx.fillRect(g.ox + z0 * g.cell, g.oy - (y1 + 1) * g.cell,
+                 (z1 - z0 + 1) * g.cell - 1, (y1 - y0 + 1) * g.cell - 1);
+  }
+  function label(ctx, text, x, y, colour) {
+    ctx.font = '12px monospace'; ctx.fillStyle = colour || '#8a97b8';
+    ctx.fillText(text, x, y);
+  }
+
+  /* 6  nested loop picture: 3 layers x 5 rows, shaded by layer */
+  (function () {
+    var c = $('nestC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = grid(ctx, c.width, c.height, 8, 5);
+    var shades = ['#4f5a6b', '#6b7a8f', '#8a9ab3'];
+    for (var y = 0; y < 3; y++) for (var z = 0; z < 5; z++) box(ctx, g, z + 1, y, z + 1, y, shades[y]);
+    label(ctx, 'inner: row after row →', g.ox + g.cell, 16, HOT);
+    label(ctx, 'outer: up ↑', g.ox + 6.2 * g.cell, c.height - 12, '#8b5cf6');
+  })();
+
+  /* 7  roadmap minis */
+  (function () {
+    var draw = {
+      road1: function (ctx, W, H) {
+        var g = grid(ctx, W, H, 6, 6); box(ctx, g, 0, 0, 0, 0, STONE);
+      },
+      road2: function (ctx, W, H) {
+        var g = grid(ctx, W, H, 6, 6);
+        for (var z = 0; z < 5; z++) box(ctx, g, z, 0, z, 0, STONE);
+      },
+      road3: function (ctx, W, H) {
+        var g = grid(ctx, W, H, 6, 6);
+        for (var y = 0; y < 5; y++) for (var z = 0; z < 5; z++) box(ctx, g, z, y, z, y, STONE);
+      },
+      road4: function (ctx, W, H) {
+        var g = grid(ctx, W, H, 6, 6);
+        for (var y = 0; y < 5; y++) for (var z = 0; z < 5 - y; z++) box(ctx, g, z, y, z, y, STONE);
+      }
+    };
+    Object.keys(draw).forEach(function (id) {
+      var c = $(id); if (!c) return;
+      draw[id](c.getContext('2d'), c.width, c.height);
+    });
+  })();
+
+  /* 10  v2 path sim */
+  (function () {
+    var c = $('pathC'); if (!c) return;
+    var ctx = c.getContext('2d'), r = 0;
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 7, 3);
+      for (var z = 0; z < r; z++) box(ctx, g, z, 0, z, 0, z === r - 1 ? HOT : STONE);
+      if (r === 0) $('paMsg').innerHTML = 'no rows yet — z = <b>0</b>';
+      else if (r < 5) $('paMsg').innerHTML = 'row ' + (r - 1) + ' built at z = <b>' + (r - 1) + '</b>, then z + 1';
+      else $('paMsg').innerHTML = 'loop finished — <b>5 rows</b>';
+    }
+    $('paStep').addEventListener('click', function () { if (r < 5) r++; draw(); this.blur(); });
+    $('paReset').addEventListener('click', function () { r = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* 13  v3 box preview */
+  (function () {
+    var c = $('boxC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = grid(ctx, c.width, c.height, 7, 7);
+    for (var y = 0; y < 5; y++) for (var z = 0; z < 5; z++) box(ctx, g, z, y, z, y, STONE);
+    label(ctx, 'z →', c.width - 34, c.height - 10);
+    label(ctx, 'y ↑', 8, 16);
+  })();
+
+  /* 17  nested loop stepper (v3 box: 5 layers x 5 rows) */
+  (function () {
+    var c = $('stepC'); if (!c) return;
+    var ctx = c.getContext('2d'), idx = 0, TOTAL = 25;
+    function draw() {
+      var g = grid(ctx, c.width, c.height, 7, 7);
+      for (var k = 0; k < idx; k++) {
+        var ly = Math.floor(k / 5), rw = k % 5;
+        box(ctx, g, rw, ly, rw, ly, k === idx - 1 ? HOT : STONE);
+      }
+      if (idx === 0) {
+        $('stL').textContent = '—'; $('stR').textContent = '—';
+        $('stY').textContent = '—'; $('stZ').textContent = '—';
+      } else {
+        var last = idx - 1, L = Math.floor(last / 5), R = last % 5;
+        $('stL').textContent = L; $('stR').textContent = R;
+        $('stY').textContent = L; $('stZ').textContent = R;
+      }
+      label(ctx, idx + ' / ' + TOTAL + ' fills', 8, 16, HOT);
+    }
+    $('stFill').addEventListener('click', function () { if (idx < TOTAL) idx++; draw(); this.blur(); });
+    $('stLayer').addEventListener('click', function () {
+      if (idx < TOTAL) idx = Math.min(TOTAL, (Math.floor(idx / 5) + 1) * 5);
+      draw(); this.blur();
+    });
+    $('stReset').addEventListener('click', function () { idx = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* 19  v4 staircase preview */
+  (function () {
+    var c = $('stairC'); if (!c) return;
+    var ctx = c.getContext('2d'), g = grid(ctx, c.width, c.height, 7, 7);
+    for (var y = 0; y < 5; y++) for (var z = 0; z < 5 - y; z++) box(ctx, g, z, y, z, y, STONE);
+    label(ctx, 'z →', c.width - 34, c.height - 10);
+    label(ctx, 'y ↑', 8, 16);
+  })();
+})();
+</script>
+</body>
+</html>
