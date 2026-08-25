@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Builder Basics — Placing Blocks (Yura)</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  pre{background:var(--code-bg);border-radius:.5em;padding:.7em .9em;margin:.3em 0;
+      font-family:"JetBrains Mono",monospace;font-size:clamp(13px,2.1vmin,21px);
+      line-height:1.55;overflow-x:auto;color:var(--code-ink);text-align:left}
+  pre .hot{display:block;background:rgba(255,184,108,.16)}
+  pre .dim{display:block;color:#4a5670}
+  .where{font-family:"JetBrains Mono",monospace;color:#ffb86c;
+         font-size:clamp(12px,1.9vmin,17px);margin-top:.45em}
+  .where code{background:rgba(255,184,108,.12);color:#ffb86c}
+  .quiet{color:var(--com);font-size:clamp(13px,1.9vmin,18px)}
+  .blank{color:#ffb86c;background:rgba(255,184,108,.15);border-radius:.25em;padding:0 .35em}
+  .vstep{display:flex;gap:.4em;justify-content:center;margin-bottom:.6em;
+         font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.9vmin,17px)}
+  .vstep span{border:2px solid var(--soft);color:var(--com);border-radius:2em;padding:.1em .7em}
+  .vstep span.on{border-color:var(--accent);color:var(--accent);font-weight:700}
+  ul.tick{list-style:none;padding-left:0;font-size:clamp(15px,2.4vmin,24px)}
+  ul.tick li{font-size:inherit;margin:.35em 0;padding-left:1.4em;position:relative}
+  ul.tick li::before{content:"→";color:var(--accent);position:absolute;left:0}
+  .slide > .activity-tag{align-self:flex-start}
+  .slide.center-all > .activity-tag{align-self:center}
+</style></head><body>
+<div class="stage"><div class="footer-tag">Builder Basics · Yura · Lesson 2 · Placing Blocks</div>
+
+<!-- 1 · SLOT 1: Title -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">Lesson 2</div>
+  <div class="emoji">🧱</div>
+  <h1>Placing<br>Blocks</h1>
+  <p class="big" style="margin-top:.6em;color:var(--accent-2);">You will build a <span class="sub">line</span>, a <span class="sub">tower</span>, and <span class="sub">stairs</span></p>
+  <p class="bilingual">오늘: 블록 놓기 — 줄, 탑, 계단</p>
+</div>
+
+<!-- 2 · SLOT 2: Recap — her lesson 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap</div>
+  <h2>Last time: the agent walked</h2>
+  <p>You walked the L-shape with <code>move forward</code> and <code>turn right</code>.</p>
+  <div class="recap-q">
+    <div class="label">Quick check</div>
+    <div class="q">Does <code>turn right</code> change the agent's spot?</div>
+    <details><summary>Show answer</summary><div class="ans">No — turning changes facing only. Moving changes the spot.</div></details>
+  </div>
+  <p class="bilingual">지난주: 걷기 — 오늘: 짓기</p>
+</div>
+
+<!-- 3 · SLOT 3: Predict -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>Stacked, or floating?</h2>
+  <div class="predict-card">
+    <div class="label">Predict first — then reveal</div>
+<pre>move up by 1
+place block down
+move up by 1
+place block down</pre>
+    <details><summary>Reveal</summary><div class="ans">A floating gap! The agent rises first, so the two blocks have a 1-block hole between them.</div></details>
+  </div>
+</div>
+
+<!-- 4 · SLOT 4: Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>New words today</h2>
+  <div class="vocab-table">
+    <span class="term">place</span><span class="gloss">put one block where the agent is</span><span class="ko">놓다</span>
+    <span class="term">down</span><span class="gloss">the spot below the agent</span><span class="ko">아래로</span>
+    <span class="term">stack</span><span class="gloss">blocks piled on top of each other</span><span class="ko">쌓기</span>
+  </div>
+</div>
+
+<!-- 5 · SLOT 5: Concept (no code) -->
+<div class="slide">
+  <span class="slot-badge">SLOT 5</span>
+  <div class="pill">Concept</div>
+  <h2>Walk + drop = build</h2>
+  <div class="opt-grid two" style="margin-top:.6em">
+    <div class="opt-card"><div class="ico">🚶</div><div class="name">walk</div><div class="ex">lesson 1 — you know this</div></div>
+    <div class="opt-card"><div class="ico">🧱</div><div class="name">drop</div><div class="ex">today — leave a block behind</div></div>
+  </div>
+  <p style="margin-top:.6em">Every build is the same beat: <b>drop a block, take a step</b>.</p>
+  <p class="bilingual">놓고 → 이동 → 놓고 → 이동</p>
+</div>
+
+<!-- 6 · Roadmap -->
+<div class="slide center-all">
+  <div class="pill purple">The plan</div>
+  <h2>Four small builds</h2>
+  <div class="opt-grid two" style="margin-top:.4em;max-width:820px">
+    <div class="opt-card"><div class="ico">🧱</div><div class="name">v1 one block</div><div class="ex">place block down</div></div>
+    <div class="opt-card"><div class="ico">➡️</div><div class="name">v2 a line</div><div class="ex">drop, step, drop</div></div>
+    <div class="opt-card"><div class="ico">⬆️</div><div class="name">v3 a tower</div><div class="ex">drop, rise, drop</div></div>
+    <div class="opt-card"><div class="ico">🪜</div><div class="name">v4 stairs</div><div class="ex">forward AND up</div></div>
+  </div>
+  <p class="quiet" style="margin-top:.5em">Run after every version.</p>
+</div>
+
+<!-- 7 · SLOT 6: v1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 6</span>
+  <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+  <h2>v1 — one block</h2>
+<pre>place block down</pre>
+  <p class="where">📍 New program. Open Code Builder — press <code>C</code> in the world.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run</div>
+    <div>One block appears under the agent. Your first build.</div>
+  </div>
+</div>
+
+<!-- 8 · v2 code -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+  <h2>v2 — a line of 3</h2>
+<pre><span class="dim">place block down</span><span class="hot">move forward</span><span class="hot">place block down</span><span class="hot">move forward</span><span class="hot">place block down</span></pre>
+  <p class="where">📍 Under your <code>place block down</code> line. Bright = new.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run</div>
+    <div>3 blocks in a straight line. Drop, step, drop, step, drop.</div>
+  </div>
+</div>
+
+<!-- 9 · SLOT 7: Investigate -->
+<div class="slide">
+  <span class="slot-badge">SLOT 7</span>
+  <div class="pill">Watch it!</div>
+  <h2>One command at a time</h2>
+  <div class="terminal" style="margin-top:.4em">
+    <div class="line"><span class="typed">place block down</span>  <span class="ok">🧱 block 1</span></div>
+    <div class="line"><span class="typed">move forward</span>      <span class="echo">👣 step</span></div>
+    <div class="line"><span class="typed">place block down</span>  <span class="ok">🧱 block 2</span></div>
+    <div class="line"><span class="typed">move forward</span>      <span class="echo">👣 step</span></div>
+    <div class="line"><span class="typed">place block down</span>  <span class="ok">🧱 block 3</span></div>
+    <div class="line"><span class="ok">a line of 3 ✓</span></div>
+  </div>
+  <p class="quiet" style="margin-top:.4em">Top to bottom, one at a time — like lesson 1.</p>
+</div>
+
+<!-- 10 · SLOT 8: Trace -->
+<div class="slide">
+  <span class="slot-badge">SLOT 8</span>
+  <div class="pill">Trace it</div>
+  <h2>Count blocks and steps</h2>
+  <div class="trace-grid">
+    <div class="cell head">Command</div><div class="cell head">Blocks</div><div class="cell head">Total</div>
+    <div class="cell"><code>place block down</code></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    <div class="cell"><code>move forward</code></div><div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    <div class="cell"><code>place block down</code></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+  </div>
+  <p class="quiet" style="margin-top:.4em">Moving places nothing. Only <code>place</code> places.</p>
+</div>
+
+<!-- 11 · SLOT 9: Common Mistake -->
+<div class="slide">
+  <span class="slot-badge">SLOT 9</span>
+  <div class="pill">⚠️ Watch out</div>
+  <h2>Drop first, then step</h2>
+  <p style="margin-bottom:.3em">Goal: a block on the start spot, then one ahead.</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ step first</span><pre>move forward
+place block down</pre><p>Start spot stays empty — one block only.</p></div>
+    <div class="col good"><span class="tag">✓ drop first</span><pre>place block down
+move forward
+place block down</pre><p>Both spots get a block.</p></div>
+  </div>
+  <p class="bilingual">먼저 놓고, 그다음 이동</p>
+</div>
+
+<!-- 12 · v3 concept -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — turn the line upward</h2>
+  <div class="opt-grid two" style="margin-top:.6em">
+    <div class="opt-card"><div class="ico">➡️</div><div class="name">move forward</div><div class="ex">blocks in a line</div></div>
+    <div class="opt-card"><div class="ico">⬆️</div><div class="name">move up by 1</div><div class="ex">blocks stacked tall</div></div>
+  </div>
+  <p style="margin-top:.6em">Same beat, new direction. Step up instead of ahead.</p>
+  <p class="bilingual">방향만 바꾸면 탑이 돼요</p>
+</div>
+
+<!-- 13 · v3 code -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — a tower of 3</h2>
+<pre><span class="hot">place block down</span><span class="hot">move up by 1</span><span class="hot">place block down</span><span class="hot">move up by 1</span><span class="hot">place block down</span></pre>
+  <p class="where">📍 New program — or delete your line code first. Walk the agent to a fresh spot.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run</div>
+    <div>A tower 3 tall. Place at <b>every</b> level — no skipping.</div>
+  </div>
+</div>
+
+<!-- 14 · SLOT 10: Debug 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 10</span>
+  <div class="pill">🐛 Debug 1</div>
+  <h2>Three drops, one spot</h2>
+  <p style="margin-bottom:.3em">Goal: a line of 3. She got one messy spot.</p>
+<pre>place block down
+place block down
+place block down</pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">No steps between drops — all three land in the same place.</div>
+    <pre>place block down
+move forward
+place block down
+move forward
+place block down</pre>
+  </details></div>
+</div>
+
+<!-- 15 · SLOT 11: Debug 2 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 11</span>
+  <div class="pill">🐛 Debug 2</div>
+  <h2>The floating block</h2>
+  <p style="margin-bottom:.3em">Goal: a solid tower. There is a hole in the middle.</p>
+<pre>place block down
+move up by 1
+move up by 1
+place block down</pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">Two <code>move up</code> in a row — the middle level never gets a block.</div>
+    <pre>place block down
+move up by 1
+place block down
+move up by 1
+place block down</pre>
+    <p>One rise per drop. Place at every level.</p>
+  </details></div>
+</div>
+
+<!-- 16 · SLOT 12: Debug 3 (OPTIONAL) -->
+<div class="slide">
+  <span class="slot-badge">SLOT 12</span>
+  <div class="pill">🐛 Debug 3</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Two blocks missing</h2>
+  <p style="margin-bottom:.3em">Goal: a line of 5. Only 3 appeared.</p>
+<pre>place block down
+move forward
+place block down
+move forward
+place block down</pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">Count the <code>place</code> lines: 3. Five blocks need five drops.</div>
+    <p>Add two more <code>move forward</code> + <code>place block down</code> pairs.</p>
+  </details></div>
+</div>
+
+<!-- 17 · v4 concept -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>v4 — line + tower = stairs</h2>
+  <div class="opt-grid two" style="margin-top:.6em">
+    <div class="opt-card"><div class="ico">➡️⬆️</div><div class="name">each step</div><div class="ex">forward AND up</div></div>
+    <div class="opt-card"><div class="ico">🪜</div><div class="name">the result</div><div class="ex">steps that climb</div></div>
+  </div>
+  <p style="margin-top:.6em">Mix the two directions and the build climbs.</p>
+  <p class="bilingual">앞으로 + 위로 = 계단</p>
+</div>
+
+<!-- 18 · v4 code -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>v4 — stairs of 3</h2>
+<pre><span class="dim">place block down</span><span class="hot">move forward</span><span class="hot">move up by 1</span><span class="hot">place block down</span><span class="hot">move forward</span><span class="hot">move up by 1</span><span class="hot">place block down</span></pre>
+  <p class="where">📍 New program. After every drop: <code>move forward</code>, then <code>move up by 1</code>.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run</div>
+    <div>3 steps climbing like a staircase.</div>
+  </div>
+</div>
+
+<!-- 19 · v4 run -->
+<div class="slide center-all">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>Run it — climb your stairs 🪜</h2>
+  <ul class="tick" style="text-align:left;max-width:22em">
+    <li>v2 line on the ground ✓</li>
+    <li>v3 tower going up ✓</li>
+    <li>v4 stairs — walk up them yourself!</li>
+  </ul>
+  <p class="bilingual">계단 완성!</p>
+</div>
+
+<!-- 20 · SLOT 13: Modify 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 13</span>
+  <div class="pill">Try it</div>
+  <h2>Make the line longer</h2>
+<pre>place block down
+move forward
+place block down
+<span class="blank">___________</span>
+<span class="blank">_______________</span></pre>
+  <p style="margin-top:.6em">Add block number <b>3</b>. Which two lines finish it?</p>
+  <p class="quiet">The beat: one step, one drop.</p>
+</div>
+
+<!-- 21 · SLOT 14: Modify 2 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 14</span>
+  <div class="pill">Try it</div>
+  <h2>A tower of 5</h2>
+  <p>How many <code>place block down</code> lines? How many <code>move up by 1</code> lines?</p>
+  <details class="debug-card" style="margin-top:.5em"><summary>▸ Check your answer</summary>
+    <p style="margin-top:.4em"><b>5</b> places, <b>4</b> ups — the top block needs no rise after it.</p>
+  </details>
+  <p class="bilingual">맨 위 블록 다음엔 안 올라가요</p>
+</div>
+
+<!-- 22 · SLOT 15: Quick Quiz -->
+<div class="slide">
+  <span class="slot-badge">SLOT 15</span>
+  <div class="pill purple">Quick check</div>
+  <h2>Two questions</h2>
+  <div class="quiz-card">
+    <div class="q">1. Where does the block land?</div>
+    <div class="opts">
+      <details><summary>A. Below the agent</summary><div class="ans">✓ Under its feet.</div></details>
+      <details><summary>B. In front</summary><div class="ans">No — below.</div></details>
+    </div>
+  </div>
+  <div class="quiz-card">
+    <div class="q">2. A line repeats which pair?</div>
+    <div class="opts">
+      <details><summary>A. place, move forward</summary><div class="ans">✓ Drop, step, drop.</div></details>
+      <details><summary>B. place, place</summary><div class="ans">No — one pile.</div></details>
+    </div>
+  </div>
+</div>
+
+<!-- 23 · SLOT 16: Code Talk -->
+<div class="slide">
+  <span class="slot-badge">SLOT 16</span>
+  <div class="pill purple">Code Talk</div>
+  <h2>Say it out loud 🗣️</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame">"The agent places a block, then <span class="blank"></span>, so the blocks make <span class="blank"></span>."</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+  </div>
+</div>
+
+<!-- 24 · SLOT 17: Make / Your Turn -->
+<div class="slide">
+  <span class="slot-badge">SLOT 17</span>
+  <div class="pill">Your turn!</div>
+  <h2>Build all four 🚀</h2>
+  <ul class="check-list">
+    <li>Open your homework world + Code Builder (<code>C</code>)</li>
+    <li>v1: one block</li>
+    <li>v2: a line of 3</li>
+    <li>v3: a tower of 3</li>
+    <li>v4: stairs of 3 — climb them</li>
+    <li>Send a photo 📸</li>
+  </ul>
+</div>
+
+<!-- 25 · SLOT 18: Stretch -->
+<div class="slide">
+  <span class="slot-badge">SLOT 18</span>
+  <div class="pill">🚀 Stretch</div>
+  <h2>Pick a bonus</h2>
+  <div class="stretch-list">
+    <div class="item"><span class="lvl">★</span>Make the line 10 blocks long.</div>
+    <div class="item"><span class="lvl">★★</span>Use <code>turn right</code> to build a square outline.</div>
+    <div class="item"><span class="lvl">★★★</span>Stairs up 5 — then stairs back down.</div>
+  </div>
+</div>
+
+<!-- 26 · OPTIONAL: repeat preview -->
+<div class="slide">
+  <div class="pill">Sneak peek</div><span class="activity-tag">OPTIONAL</span>
+  <h2>The lazy way — <code>repeat</code></h2>
+<pre><span class="kw">repeat</span> <span class="num">5</span> times:
+    place block down
+    move forward</pre>
+  <p style="margin-top:.5em">One block says the pair, five times. Next lessons use this everywhere.</p>
+  <p class="bilingual">반복문 미리보기 — 다음 시간부터!</p>
+</div>
+
+<!-- 27 · OPTIONAL: Python bridge -->
+<div class="slide">
+  <div class="pill">Level up 🐍</div><span class="activity-tag">OPTIONAL</span>
+  <h2>The same idea in Python</h2>
+<pre><span class="fn">agent.place</span>(DOWN)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+<span class="fn">agent.place</span>(DOWN)</pre>
+  <p style="margin-top:.5em"><code>DOWN</code> = where the block goes. Same beat, different clothes.</p>
+  <p class="bilingual">블록 코드와 똑같은 동작</p>
+</div>
+
+<!-- 28 · OPTIONAL: MCQ -->
+<div class="slide mcq" data-correct="0" data-explain="Drop a block, rise one — that pair climbs.">
+  <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+  <div class="qmeta">Bonus question</div>
+  <div class="q">Which pair builds <b>upward</b>?</div>
+  <div class="opts">
+    <button class="opt"><code>place</code>, then <code>move up by 1</code></button>
+    <button class="opt"><code>place</code>, then <code>move forward</code></button>
+    <button class="opt"><code>turn right</code>, then <code>move forward</code></button>
+    <button class="opt"><code>move down</code>, twice</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 29 · SLOT 19: Exit Ticket -->
+<div class="slide">
+  <span class="slot-badge">SLOT 19</span>
+  <div class="pill">🎟️ Exit ticket</div>
+  <h2>Before you go…</h2>
+  <div class="exit">
+    <div class="label">Say your answer</div>
+    <p style="margin-top:.4em">The tower had a floating hole. What was missing?</p>
+    <p class="bilingual" style="margin-top:.4em">탑에 구멍 — 뭐가 빠졌을까요?</p>
+  </div>
+</div>
+
+<!-- 30 · SLOT 20: Close & Bridge -->
+<div class="slide center-all">
+  <span class="slot-badge">SLOT 20</span>
+  <div class="emoji">🪜</div>
+  <h1 style="font-size:clamp(36px,6vmin,56px)">Drop a block.<br>Take a step.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: <code>repeat</code> builds a whole bridge for you.</p>
+  <p class="bilingual">다음: 반복문으로 다리 만들기</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>

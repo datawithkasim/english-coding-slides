@@ -126,3 +126,16 @@ Facts (tracker 2026-08-11, JIYU [TASHKENT_LAMU]):
   her maze (loops + blocks she already knows).
 - First-lesson framing: more worked examples, gentler Modify steps; OPTIONAL
   extras push to a small 3D letter or heart
+
+## CORRECTION · YURA (added 2026-08-25 late evening)
+
+The maze-conditionals plan above was built from the 08-11 tracker LOG. The
+08-18 tracker DRAFT (her actual last lesson) shows she did agent basics
+instead: teleport `RL`, `agent.turn`, `agent.move("forward", n)`, building
+on/off, L-shaped structure. △ counts current block as step one (off-by-one);
+confuses `RL` with `R1`.
+
+Live deck is now `yura-placing-blocks.html` (Builder Basics L2: v1 one block →
+v2 line → v3 tower → v4 stairs; Common Mistakes = drop-before-step, floating
+gap). `yura-maze-conditionals.html` stays in the folder unlinked — maze day
+moves to a later week once agent basics stick.
