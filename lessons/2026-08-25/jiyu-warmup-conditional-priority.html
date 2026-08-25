@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minecraft — Warm-Up: Which Rule Wins? (Jiyu)</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  pre{background:var(--code-bg);border-radius:.5em;padding:.7em .9em;margin:.3em 0;
+      font-family:"JetBrains Mono",monospace;font-size:clamp(13px,2.1vmin,21px);
+      line-height:1.55;overflow-x:auto;color:var(--code-ink);text-align:left}
+  .quiet{color:var(--com);font-size:clamp(13px,1.9vmin,18px)}
+</style></head><body>
+<div class="stage"><div class="footer-tag">Minecraft · Jiyu · Warm-Up · Rule Order</div>
+
+<!-- 1 title -->
+<div class="slide active center-all">
+  <div class="pill">Pre-Lesson · Warm-Up</div>
+  <div class="emoji">🚦</div>
+  <h1>Which Rule<br>Wins?</h1>
+  <p class="big" style="margin-top:.6em;color:var(--accent-2);">The computer checks <span class="sub">top to bottom</span>. One winner.</p>
+  <p class="bilingual">우선순위 — 위에서 아래로, 승자는 하나</p>
+</div>
+
+<!-- 2 predict -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Gold ahead. What happens?</h2>
+  <div class="predict-card">
+    <div class="label">Both conditions are true — predict first</div>
+<pre>sign_ahead = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+<span class="kw">if</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span class="kw">elif</span> sign_ahead != AIR:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)</pre>
+    <details><summary>Reveal</summary><div class="ans">Left only. Gold is also "not air" — but the first true rule wins. The rest are skipped.</div></details>
+  </div>
+</div>
+
+<!-- 3 concept: the ladder -->
+<div class="slide">
+  <div class="pill">Concept</div>
+  <h2>A ladder of rules</h2>
+  <p style="margin-bottom:.3em">Emerald ahead. Watch the check walk down.</p>
+  <div class="match-flow">
+    <div class="row skip">if gold? <span class="verdict">✗ SKIP</span></div>
+    <div class="row hit">elif emerald? <span class="verdict">✓ RUNS</span></div>
+    <div class="row skip">elif redstone? <span class="verdict">NOT CHECKED</span></div>
+    <div class="row skip">else <span class="verdict">NOT CHECKED</span></div>
+  </div>
+  <p class="quiet" style="margin-top:.5em">After one hit, the ladder ends. Nothing below runs.</p>
+  <p class="bilingual">하나 맞으면 끝 — 아래는 안 봐요</p>
+</div>
+
+<!-- 4 if/if vs if/elif -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2><code>if if</code> ≠ <code>if elif</code></h2>
+  <p style="margin-bottom:.3em">Gold ahead — gold is also "not air".</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ two ifs — both run</span><pre><span class="kw">if</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span class="kw">if</span> sign_ahead != AIR:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)</pre><p>Two turns. The agent faces backwards.</p></div>
+    <div class="col good"><span class="tag">✓ elif — one winner</span><pre><span class="kw">if</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span class="kw">elif</span> sign_ahead != AIR:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)</pre><p>One turn. Left wins, right skipped.</p></div>
+  </div>
+</div>
+
+<!-- 5 worked example -->
+<div class="slide">
+  <div class="pill">Code</div>
+  <h2>Run it — emerald ahead</h2>
+<pre>sign_ahead = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+<span class="kw">if</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span class="kw">elif</span> sign_ahead == EMERALD_BLOCK:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span class="kw">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ What runs</div>
+    <div>gold? no → emerald? <b>yes → turn right</b> → else skipped.</div>
+  </div>
+</div>
+
+<!-- 6 common mistake: general rule swallows specific -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2>Big rule first eats the small rule</h2>
+  <p style="margin-bottom:.3em">Goal: gold turns left. But gold never gets its turn:</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ general first</span><pre><span class="kw">if</span> sign_ahead != AIR:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span class="kw">elif</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre><p>Gold is "not air" — rule 1 catches it first.</p></div>
+    <div class="col good"><span class="tag">✓ special first</span><pre><span class="kw">if</span> sign_ahead == GOLD_BLOCK:
+    <span class="fn">agent.turn</span>(LEFT_TURN)
+<span class="kw">elif</span> sign_ahead != AIR:
+    <span class="fn">agent.turn</span>(RIGHT_TURN)</pre><p>Special rule on top. General rule last.</p></div>
+  </div>
+  <p class="bilingual">특별한 규칙 먼저, 일반 규칙은 마지막에</p>
+</div>
+
+<!-- 7 trace -->
+<div class="slide">
+  <div class="pill">Trace</div>
+  <h2>Who wins each time?</h2>
+  <p style="margin-bottom:.3em">Rules: gold → left · emerald → right · else → forward.</p>
+  <div class="trace-grid">
+    <div class="cell head">sign_ahead</div><div class="cell head">winner</div><div class="cell head">agent does</div>
+    <div class="cell"><code>GOLD_BLOCK</code></div><div class="cell"><details><summary>?</summary><span class="reveal">if</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">turn left</span></details></div>
+    <div class="cell"><code>EMERALD_BLOCK</code></div><div class="cell"><details><summary>?</summary><span class="reveal">elif</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">turn right</span></details></div>
+    <div class="cell"><code>COBBLESTONE</code></div><div class="cell"><details><summary>?</summary><span class="reveal">else</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">move forward</span></details></div>
+  </div>
+</div>
+
+<!-- 8 modify: reorder -->
+<div class="slide">
+  <div class="pill">Try it</div>
+  <h2>Put the rules in order</h2>
+  <p style="margin-bottom:.3em">Diamond = the goal. It must never be missed. Which rule goes on top?</p>
+<pre>___ sign_ahead != AIR:        <span class="com"># any block → turn right</span>
+___ sign_ahead == DIAMOND_BLOCK:   <span class="com"># goal → stop!</span>
+___ :                         <span class="com"># nothing → walk on</span></pre>
+  <details class="debug-card" style="margin-top:.5em"><summary>▸ Show the order</summary>
+    <pre><span class="kw">if</span> sign_ahead == DIAMOND_BLOCK:   <span class="com"># special first</span>
+<span class="kw">elif</span> sign_ahead != AIR:       <span class="com"># general second</span>
+<span class="kw">else</span>:                         <span class="com"># nothing matched</span></pre>
+  </details>
+</div>
+
+<!-- 9 quiz -->
+<div class="slide mcq" data-correct="0" data-explain="First true rule wins. elif is only checked when everything above was false.">
+  <div class="pill purple">📝 Quiz</div>
+  <div class="qmeta">Question 1 of 1</div>
+  <div class="q">Gold ahead. <code>if</code> gold → left, <code>elif</code> gold → right. What happens?</div>
+  <div class="opts">
+    <button class="opt">Turns left only.</button>
+    <button class="opt">Turns right only.</button>
+    <button class="opt">Both turns.</button>
+    <button class="opt">An error.</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 10 close -->
+<div class="slide center-all">
+  <div class="emoji">🏆</div>
+  <h1 style="font-size:clamp(36px,6vmin,56px)">One check.<br>One winner.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Special rules on top. Now — pixel art. 🍉</p>
+  <p class="bilingual">이제 픽셀 아트 시작!</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 10</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>

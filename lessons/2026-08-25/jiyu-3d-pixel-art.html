@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minecraft — 3D Pixel Art (Jiyu)</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* pixel plan grid — same pattern as 000-builder-basics warm-up deck */
+  .pgrid{display:inline-grid;gap:3px;background:#cbd5e1;padding:6px;border-radius:10px;margin:.4em auto}
+  .pgrid .px{width:clamp(22px,4.4vmin,38px);height:clamp(22px,4.4vmin,38px);border-radius:5px;background:#fff;display:grid;place-items:center;font-weight:800;font-size:12px;color:#64748b}
+  .pgrid .g{background:#22c55e}
+  .pgrid .w{background:#f8fafc;outline:1px solid #cbd5e1}
+  .pgrid .r{background:#ef4444}
+  .pgrid .k{background:#1e293b}
+  .pgrid .p{background:#ec4899}
+  .pgrid .lbl{background:transparent;color:#475569;font-weight:800}
+  .pgrid.depth{box-shadow:8px -8px 0 #64748b}
+  .pgrid.mini .px{width:clamp(12px,2.2vmin,20px);height:clamp(12px,2.2vmin,20px);border-radius:3px}
+
+  /* code conventions — same as hwon/jason 2026-08-25 decks */
+  pre{background:var(--code-bg);border-radius:.5em;padding:.7em .9em;margin:.3em 0;
+      font-family:"JetBrains Mono",monospace;font-size:clamp(13px,2.1vmin,21px);
+      line-height:1.55;overflow-x:auto;color:var(--code-ink);text-align:left}
+  pre.tiny{font-size:clamp(10px,1.6vmin,15px)}
+  pre .hot{display:block;background:rgba(255,184,108,.16)}
+  pre .dim{display:block;color:#4a5670}
+  .where{font-family:"JetBrains Mono",monospace;color:#ffb86c;
+         font-size:clamp(12px,1.9vmin,17px);margin-top:.45em}
+  .where code{background:rgba(255,184,108,.12);color:#ffb86c}
+  .quiet{color:var(--com);font-size:clamp(13px,1.9vmin,18px)}
+  .was,.now{border-left:4px solid #ff5555;margin:.4em 0}
+  .now{border-left-color:var(--fn)}
+  .was pre,.now pre{margin:0;border-radius:0 .5em .5em 0}
+  .was pre{color:#8a97b8}
+  .tag-old,.tag-new{font-family:"JetBrains Mono",monospace;font-weight:700;
+         font-size:clamp(11px,1.7vmin,15px);letter-spacing:.08em}
+  .tag-old{color:#ff5555}
+  .tag-new{color:var(--fn)}
+  .blank{color:#ffb86c;background:rgba(255,184,108,.15);border-radius:.25em;padding:0 .35em}
+
+  .vstep{display:flex;gap:.4em;justify-content:center;margin-bottom:.6em;
+         font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.9vmin,17px)}
+  .vstep span{border:2px solid var(--soft);color:var(--com);border-radius:2em;padding:.1em .7em}
+  .vstep span.on{border-color:var(--accent);color:var(--accent);font-weight:700}
+
+  ul.tick{list-style:none;padding-left:0;font-size:clamp(15px,2.4vmin,24px)}
+  ul.tick li{font-size:inherit;margin:.35em 0;padding-left:1.4em;position:relative}
+  ul.tick li::before{content:"→";color:var(--accent);position:absolute;left:0}
+
+  .road{display:flex;gap:clamp(.6em,2vmin,1.4em);justify-content:center;flex-wrap:wrap;margin-top:.5em;align-items:end}
+  .road .rd{text-align:center}
+  .road .rl{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--accent);
+            font-size:clamp(13px,2.1vmin,19px);margin-top:.4em}
+  .road .rt{color:var(--com);font-size:clamp(11px,1.7vmin,15px)}
+
+  .slide > .activity-tag{align-self:flex-start}
+  .slide.center-all > .activity-tag{align-self:center}
+</style></head><body>
+<div class="stage"><div class="footer-tag">Minecraft · Jiyu · 3D Pixel Art · Lesson 1</div>
+
+<!-- 1 · SLOT 1: Title + Objective -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">Lesson 1</div>
+  <div class="emoji">🍉</div>
+  <h1>3D Pixel Art</h1>
+  <p class="big" style="margin-top:.6em;color:var(--accent-2);">You will <span class="sub">plan</span> a grid, <span class="sub">loop</span> the rows, <span class="sub">stack</span> a layer</p>
+  <p class="bilingual">오늘: 픽셀 아트 — 그리고 3D로!</p>
+</div>
+
+<!-- 2 · SLOT 2: Recap — her maze -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap</div>
+  <h2>Your maze carries over</h2>
+  <p>Maze: the agent walks and places. Today you name addresses.</p>
+  <div class="recap-q">
+    <div class="label">Quick check</div>
+    <div class="q">What did <code>agent.place(DOWN)</code> in your maze loop leave behind?</div>
+    <details><summary>Show answer</summary><div class="ans">One block every pass — a trail. Today it paints pictures.</div></details>
+  </div>
+  <p class="bilingual">미로에서 쓴 반복문이 오늘 그림을 그려요</p>
+</div>
+
+<!-- 3 · SLOT 3: Predict -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>What appears?</h2>
+  <div class="predict-card">
+    <div class="label">Predict first — then reveal</div>
+<pre>x = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.place</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>))
+    x = x + <span class="num">1</span></pre>
+    <details><summary>Reveal</summary><div class="ans">Five red blocks in a row. x counts 0, 1, 2, 3, 4 — one block each.</div></details>
+  </div>
+</div>
+
+<!-- 4 · SLOT 4: Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>New words today</h2>
+  <div class="vocab-table">
+    <span class="term">pixel</span><span class="gloss">one square of a picture — here, one block</span><span class="ko">픽셀</span>
+    <span class="term">grid</span><span class="gloss">squares in rows and columns, like graph paper</span><span class="ko">격자</span>
+    <span class="term">layer</span><span class="gloss">one flat sheet of blocks — 3D stacks layers</span><span class="ko">층</span>
+  </div>
+</div>
+
+<!-- 5 · SLOT 5: Concept (no code) -->
+<div class="slide center-all">
+  <span class="slot-badge">SLOT 5</span>
+  <div class="pill">Concept</div>
+  <h2>Every picture is tiny squares</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(5,auto)">
+    <span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span>
+    <span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span>
+  </div>
+  <p class="big" style="margin-top:.4em">Far away: a watermelon. Up close: 20 colored squares.</p>
+  <p class="bilingual">멀리서 보면 그림, 가까이선 색깔 네모</p>
+</div>
+
+<!-- 6 · Concept B: plan on the grid -->
+<div class="slide center-all">
+  <div class="pill">Plan first 📐</div>
+  <h2>Every square has an address</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+    <span class="px lbl">Y\X</span><span class="px lbl">0</span><span class="px lbl">1</span><span class="px lbl">2</span><span class="px lbl">3</span><span class="px lbl">4</span>
+    <span class="px lbl">3</span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px lbl">2</span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px lbl">1</span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span>
+    <span class="px lbl">0</span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span>
+  </div>
+  <p style="margin-top:.4em">Address = <b>(x, y)</b>. x across, y up. You stand at <b>(0, 0, 0)</b>.</p>
+  <p class="bilingual">주소 = (x, y) · 내가 선 곳이 (0,0,0)</p>
+</div>
+
+<!-- 7 · Roadmap -->
+<div class="slide center-all">
+  <div class="pill purple">The plan</div>
+  <h2>Four small versions</h2>
+  <div class="road">
+    <div class="rd"><div class="pgrid mini" style="grid-template-columns:repeat(5,auto)"><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span></div><div class="rl">v1</div><div class="rt">one row, by hand</div></div>
+    <div class="rd"><div class="pgrid mini" style="grid-template-columns:repeat(5,auto)"><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span></div><div class="rl">v2</div><div class="rt">a loop builds it</div></div>
+    <div class="rd"><div class="pgrid mini" style="grid-template-columns:repeat(5,auto)"><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span></div><div class="rl">v3</div><div class="rt">flat picture</div></div>
+    <div class="rd"><div class="pgrid mini depth" style="grid-template-columns:repeat(5,auto)"><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span></div><div class="rl">v4</div><div class="rt">3D — two layers</div></div>
+  </div>
+  <p class="quiet" style="margin-top:.5em">Run after every version.</p>
+</div>
+
+<!-- 8 · SLOT 6: Run v1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 6</span>
+  <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+  <h2>v1 — one row, by hand</h2>
+<pre><span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>))</pre>
+  <p class="where">📍 New file. Stand at your build spot — that spot is (0, 0, 0).</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run</div>
+    <div>A green row, 5 long. The rind. Only x changes: 0 → 4.</div>
+  </div>
+</div>
+
+<!-- 9 · v2 concept -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+  <h2>v2 — the loop counts x</h2>
+  <div class="opt-grid two" style="margin-top:.6em">
+    <div class="opt-card"><div class="ico">🏁</div><div class="name">x = 0</div><div class="ex">start at the left</div></div>
+    <div class="opt-card"><div class="ico">👉</div><div class="name">x = x + 1</div><div class="ex">next block right</div></div>
+  </div>
+  <p style="margin-top:.6em">Five lines say the same thing five times. A loop says it once.</p>
+  <p class="bilingual">x가 한 칸씩 오른쪽으로</p>
+</div>
+
+<!-- 10 · v2 code -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+  <h2>Swap five lines for one loop</h2>
+  <div class="tag-old">OLD — five lines by hand</div>
+  <div class="was"><pre><span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>))</pre></div>
+  <div class="tag-new">NEW — one loop, same row</div>
+  <div class="now"><pre>x = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>))
+    x = x + <span class="num">1</span></pre></div>
+  <p class="where">📍 Delete the five lines. Type the loop in their place.</p>
+  <p class="quiet">Run — the same green row. Less typing.</p>
+</div>
+
+<!-- 11 · SLOT 7: Investigate -->
+<div class="slide">
+  <span class="slot-badge">SLOT 7</span>
+  <div class="pill">Watch it!</div>
+  <h2>Watch x count</h2>
+  <div class="viz viz-5" style="margin-top:.4em">
+    <div class="iter-row">
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+    </div>
+    <div class="var-row"><span class="label">x = </span><span class="var-vals">
+      <span class="var-val">0</span>
+      <span class="var-val">1</span>
+      <span class="var-val">2</span>
+      <span class="var-val">3</span>
+      <span class="var-val">4</span>
+    </span></div>
+    <div class="output-box">
+      <div class="out-label">▸ blocks.place at</div>
+      <div class="out-line">🟩 (0, 0, 0)</div>
+      <div class="out-line">🟩 (1, 0, 0)</div>
+      <div class="out-line">🟩 (2, 0, 0)</div>
+      <div class="out-line">🟩 (3, 0, 0)</div>
+      <div class="out-line">🟩 (4, 0, 0)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 12 · v3 concept -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — stack the rows</h2>
+  <p>Copy the loop once per row. Change two things: <b>y</b> and the <b>color</b>.</p>
+  <div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+    <span class="px lbl">3</span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px lbl">2</span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px lbl">1</span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span>
+    <span class="px lbl">0</span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span>
+  </div>
+  <p>y 0 green ✓ · y 1 white · y 2 red · y 3 red</p>
+  <p class="bilingual">그림 = 줄을 쌓은 것</p>
+</div>
+
+<!-- 13 · v3 code A: white row -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — the white row</h2>
+<pre><span class="dim">x = <span class="num">0</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">    <span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>))</span><span class="dim">    x = x + <span class="num">1</span></span><span class="hot">x = <span class="num">0</span></span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.place</span>(WHITE_WOOL, <span class="fn">pos</span>(x, <span class="num">1</span>, <span class="num">0</span>))</span><span class="hot">    x = x + <span class="num">1</span></span></pre>
+  <p class="where">📍 Under the green loop, at the left edge — no indent on <code>x = 0</code>.</p>
+  <p class="quiet">Bright = new. Grey = already typed. Run — white above green.</p>
+</div>
+
+<!-- 14 · v3 code B: red rows -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — two red rows</h2>
+<pre><span class="dim">    x = x + <span class="num">1</span>      <span class="com"># end of the white loop</span></span><span class="hot">x = <span class="num">0</span></span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.place</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">0</span>))</span><span class="hot">    x = x + <span class="num">1</span></span><span class="hot">x = <span class="num">0</span></span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.place</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">3</span>, <span class="num">0</span>))</span><span class="hot">    x = x + <span class="num">1</span></span></pre>
+  <p class="where">📍 Under the white loop. Two copies — y is 2, then 3.</p>
+  <p class="quiet">Run — red on white on green.</p>
+</div>
+
+<!-- 15 · v3 run -->
+<div class="slide center-all">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>Run it 🍉</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(5,auto)">
+    <span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span>
+    <span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span>
+  </div>
+  <ul class="tick" style="text-align:left;max-width:20em">
+    <li>4 loops → 4 rows → 20 blocks.</li>
+    <li>Flat like paper — one layer.</li>
+  </ul>
+  <p class="bilingual">납작한 수박 완성!</p>
+</div>
+
+<!-- 16 · SLOT 8: Common Mistake -->
+<div class="slide">
+  <span class="slot-badge">SLOT 8</span>
+  <div class="pill">⚠️ Watch out</div>
+  <h2>Sideways picture</h2>
+  <p style="margin-bottom:.3em">The changing number must sit in the <b>x</b> seat.</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ broken</span><pre><span class="fn">blocks.place</span>(GREEN_WOOL,
+    <span class="fn">pos</span>(<span class="num">0</span>, x, <span class="num">0</span>))</pre><p>x in the y seat — the row climbs up.</p></div>
+    <div class="col good"><span class="tag">✓ fixed</span><pre><span class="fn">blocks.place</span>(GREEN_WOOL,
+    <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>))</pre><p>x first — the row runs across.</p></div>
+  </div>
+  <p class="bilingual">자리 바꾸면 그림이 옆으로 누워요</p>
+</div>
+
+<!-- 17 · v4 concept -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>v4 — a second layer</h2>
+  <div class="opt-grid two" style="margin-top:.6em">
+    <div class="opt-card"><div class="ico">🖼️</div><div class="name">front layer</div><div class="ex">z = 0</div></div>
+    <div class="opt-card"><div class="ico">🧊</div><div class="name">back layer</div><div class="ex">z = 1</div></div>
+  </div>
+  <p style="margin-top:.6em">One layer is paper. Two layers stand up — 3D.</p>
+  <p class="bilingual">층 하나 더 = 3D</p>
+</div>
+
+<!-- 18 · v4 code: place → fill -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>place → fill</h2>
+  <div class="tag-old">OLD — one block</div>
+  <div class="was"><pre>    <span class="fn">blocks.place</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>))</pre></div>
+  <div class="tag-new">NEW — front block to back block</div>
+  <div class="now"><pre>    <span class="fn">blocks.fill</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>))</pre></div>
+  <p class="where">📍 Same change in all four loops — green, white, red, red.</p>
+  <p class="quiet">fill stretches between two addresses. z 0 → z 1 = 2 deep.</p>
+</div>
+
+<!-- 19 · v4 full program -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>Check every line</h2>
+<pre class="tiny"><span class="dim">x = <span class="num">0</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">1</span>))</span><span class="dim">    x = x + <span class="num">1</span></span><span class="dim">x = <span class="num">0</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(WHITE_WOOL, <span class="fn">pos</span>(x, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">1</span>, <span class="num">1</span>))</span><span class="dim">    x = x + <span class="num">1</span></span><span class="dim">x = <span class="num">0</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">1</span>))</span><span class="dim">    x = x + <span class="num">1</span></span><span class="dim">x = <span class="num">0</span></span><span class="dim"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(RED_WOOL, <span class="fn">pos</span>(x, <span class="num">3</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">3</span>, <span class="num">1</span>))</span><span class="dim">    x = x + <span class="num">1</span></span></pre>
+  <p class="quiet" style="margin-top:.3em">Four loops. Four fill lines. Tick each line against your file.</p>
+</div>
+
+<!-- 20 · v4 run -->
+<div class="slide center-all">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>Run it — walk behind it</h2>
+  <ul class="tick" style="text-align:left;max-width:22em">
+    <li>From the front it looks the same.</li>
+    <li>Walk around — it has a back now.</li>
+    <li>3D pixel art. Done. 🍉</li>
+  </ul>
+</div>
+
+<!-- 21 · SLOT 9: Modify (faded) -->
+<div class="slide">
+  <span class="slot-badge">SLOT 9</span>
+  <div class="pill">Try it</div>
+  <h2>Make it deeper</h2>
+<pre>    <span class="fn">blocks.fill</span>(GREEN_WOOL, <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="blank">___</span>))</pre>
+  <p style="margin-top:.6em">Want it <b>4 blocks</b> deep? Fill the blank.</p>
+  <p class="quiet">Hint: z counts 0, 1, 2, 3 — the back address holds the last one.</p>
+</div>
+
+<!-- 22 · SLOT 10: Code Talk -->
+<div class="slide">
+  <span class="slot-badge">SLOT 10</span>
+  <div class="pill purple">Code Talk</div>
+  <h2>Say it out loud</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame">"<code>x = x + 1</code> moves the next block <span class="blank"></span> because <span class="blank"></span>."</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+  </div>
+</div>
+
+<!-- 23 · SLOT 11: Make / Your Turn -->
+<div class="slide">
+  <span class="slot-badge">SLOT 11</span>
+  <div class="pill">Your turn!</div>
+  <h2>Build your 수박 🚀</h2>
+  <ul class="check-list">
+    <li>Plan the grid on paper — 5 wide, 4 tall</li>
+    <li>v1: place one green row</li>
+    <li>v2: swap it for a loop</li>
+    <li>v3: four loops — green, white, red, red</li>
+    <li>v4: place → fill, back z = 1</li>
+    <li>Screenshot for Kasim 📸</li>
+  </ul>
+</div>
+
+<!-- 24 · OPTIONAL: seeds -->
+<div class="slide">
+  <div class="pill">Decorate</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Seeds 씨</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(5,auto)">
+    <span class="px r"></span><span class="px r"></span><span class="px r"></span><span class="px k"></span><span class="px r"></span>
+    <span class="px r"></span><span class="px k"></span><span class="px r"></span><span class="px r"></span><span class="px r"></span>
+    <span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span><span class="px w"></span>
+    <span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span><span class="px g"></span>
+  </div>
+<pre><span class="hot"><span class="fn">blocks.place</span>(BLACK_WOOL, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.place</span>(BLACK_WOOL, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</span></pre>
+  <p class="where">📍 Very bottom of the file, after the four loops. Front layer only — z 0.</p>
+</div>
+
+<!-- 25 · OPTIONAL: heart plan -->
+<div class="slide center-all">
+  <div class="pill">Level up 💗</div><span class="activity-tag">OPTIONAL</span>
+  <h2>A heart has gaps</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(6,auto)">
+    <span class="px lbl">4</span><span class="px"></span><span class="px p"></span><span class="px"></span><span class="px p"></span><span class="px"></span>
+    <span class="px lbl">3</span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span>
+    <span class="px lbl">2</span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span>
+    <span class="px lbl">1</span><span class="px"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px"></span>
+    <span class="px lbl">0</span><span class="px"></span><span class="px"></span><span class="px p"></span><span class="px"></span><span class="px"></span>
+  </div>
+  <p style="margin-top:.4em">A gap row cannot use one loop. Use <code>fill</code> — one per run.</p>
+  <p class="bilingual">빈칸 있는 줄은 fill 여러 번</p>
+</div>
+
+<!-- 26 · OPTIONAL: heart code -->
+<div class="slide">
+  <div class="pill">Level up 💗</div><span class="activity-tag">OPTIONAL</span>
+  <h2>One fill per run</h2>
+<pre><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">1</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">2</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">2</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">3</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">4</span>, <span class="num">0</span>))</span><span class="hot"><span class="fn">blocks.fill</span>(PINK_WOOL, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">4</span>, <span class="num">0</span>))</span></pre>
+  <p class="where">📍 New file. Stand at a fresh spot.</p>
+  <p class="quiet">One square = same address twice. 3D: every back z → 1.</p>
+</div>
+
+<!-- 27 · OPTIONAL: your letter -->
+<div class="slide center-all">
+  <div class="pill">Level up ✏️</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Or your letter — J</h2>
+  <div class="pgrid" style="grid-template-columns:repeat(5,auto)">
+    <span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span><span class="px p"></span>
+    <span class="px"></span><span class="px"></span><span class="px p"></span><span class="px"></span><span class="px"></span>
+    <span class="px"></span><span class="px"></span><span class="px p"></span><span class="px"></span><span class="px"></span>
+    <span class="px p"></span><span class="px"></span><span class="px p"></span><span class="px"></span><span class="px"></span>
+    <span class="px"></span><span class="px p"></span><span class="px p"></span><span class="px"></span><span class="px"></span>
+  </div>
+  <ul class="tick" style="text-align:left;max-width:20em;margin-top:.4em">
+    <li>Draw your grid on paper.</li>
+    <li>List each row's runs. One fill per run.</li>
+    <li>Back z → 1 for 3D.</li>
+  </ul>
+</div>
+
+<!-- 28 · OPTIONAL: MCQ 1 -->
+<div class="slide mcq" data-correct="0" data-explain="(x, y, z) = across, up, deep. The middle number is up.">
+  <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+  <div class="qmeta">Question 1 of 2</div>
+  <div class="q"><code>pos(2, 3, 0)</code> — which number means <b>up</b>?</div>
+  <div class="opts">
+    <button class="opt">3</button>
+    <button class="opt">2</button>
+    <button class="opt">0</button>
+    <button class="opt">The color decides.</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 29 · OPTIONAL: MCQ 2 -->
+<div class="slide mcq" data-correct="0" data-explain="The changing x must sit in the first seat — across.">
+  <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+  <div class="qmeta">Question 2 of 2</div>
+  <div class="q">Your picture lies sideways. Which line is wrong?</div>
+  <div class="opts">
+    <button class="opt"><code>blocks.place(RED_WOOL, pos(0, x, 0))</code></button>
+    <button class="opt"><code>x = x + 1</code></button>
+    <button class="opt"><code>for i in range(5):</code></button>
+    <button class="opt"><code>x = 0</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 30 · SLOT 12: Close & Bridge -->
+<div class="slide center-all">
+  <span class="slot-badge">SLOT 12</span>
+  <div class="emoji">🍉</div>
+  <h1 style="font-size:clamp(36px,6vmin,56px)">Squares make pictures.<br>Layers make 3D.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: one loop draws every row — a loop inside a loop.</p>
+  <p class="bilingual">다음: 반복문 속 반복문</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>
