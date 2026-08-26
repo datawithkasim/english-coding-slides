@@ -48,10 +48,14 @@ Still empty in his file — dx, dy = 0, 0 with his own design comments:
 - square: "3~4 per side, walk one side then turn 90"
 - hexagon: "120 degrees, 3 per side, turn and continue"
 
-Today (deck: `neo-formation-shapes.html`): implement his three empty patterns
-with one tool — the walker (walk `gap` px, after `side` ships turn). Square
-first, hexagon = same block with 2 numbers changed (6, 60; his 120° is the
-inside angle, walker turns 180−120=60), pizza = two cos/sin edges + arc crust.
+Update pre-lesson: NEO started square HIMSELF, parametric style —
+`half / per_side / side = i // per_side / pos = i % per_side / t = pos / per_side`,
+top edge done. Deck rebuilt around HIS approach (v2, replaces walker draft):
+square = add the 3 missing elif sides; hexagon = corners every 60° on a
+circle, slide between corners with t (his 120° is the inside angle);
+pizza = two cos/sin edges scaled by t + arc crust (angles 60→120).
 Test lab first (force pattern, count=12, timer 400→60 — closes TASK 2 △).
+Debugs: t from i not pos (runaway edge), append without parens (his Monday
+crash), // % swapped (zigzag), edge-2 t not restarted (broken slice).
 OPTIONAL: escape plans from his own comments (age timer flips vx/vy),
-360/sides any-shape table, crust angle trace.
+360/n any-shape table, crust angle trace.
