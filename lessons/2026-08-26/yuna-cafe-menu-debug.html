@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python — Cafe Menu: Debug &amp; Finish (Yuna · 2026-08-26)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Python · Cafe Menu Dicts · Yuna · 26 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Cafe Menu</div>
+    <div class="emoji">☕</div>
+    <h1>Debug &amp;<br>Finish</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">fix</span> 2 hidden errors + <span class="sub">finish</span> Jobs 2 and 3.</p>
+    <p class="bilingual">오류 2개 고치고, 남은 할 일 끝내요</p>
+  </div>
+
+  <!-- Slot 2: Recap — her own workspace lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your cafe so far</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your code</div>
+      <div class="q">1. How do you get the americano's price?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>starbucks["americano"]["price"]</code> — two hops.</div></details>
+      <div class="q" style="margin-top:.5em">2. Why TWO pairs of <code>[ ]</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">First finds the item, second opens its card.</div></details>
+      <div class="q" style="margin-top:.5em">3. What kind of thing is <code>"ingredients"</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">A list — square brackets, many things inside.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>menu = {<span class="str">"cola"</span>: {<span class="str">"price"</span>: <span class="num">2000</span>, <span class="str">"size"</span>: <span class="str">"L"</span>}}
+
+<span class="fn">print</span>(menu[<span class="str">"cola"</span>][<span class="str">"price"</span>])
+<span class="fn">print</span>(menu[<span class="str">"cola"</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">2000 — then the WHOLE card: {'price': 2000, 'size': 'L'}</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">nested dict</span>
+      <span class="gloss">a dictionary inside a dictionary</span>
+      <span class="ko">중첩 딕셔너리</span>
+
+      <span class="term">key : value</span>
+      <span class="gloss">name on the left, data on the right, colon between</span>
+      <span class="ko">키와 값</span>
+
+      <span class="term">SyntaxError</span>
+      <span class="gloss">Python can't read your grammar</span>
+      <span class="ko">문법 오류</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (NO CODE) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>A menu board of cards</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">"lemonade"</span><span class="val">📇 card</span></div>
+      <div class="varbox"><span class="name">card</span><span class="val">price · ingredients</span></div>
+    </div>
+    <p class="big center" style="margin-top:.5em">Every menu name points to a little card. The card holds a price and a list. Grammar: <b>quotes, colon, comma</b>.</p>
+    <p class="bilingual center">이름 → 카드, 문법은 따옴표·콜론·쉼표</p>
+  </div>
+
+  <!-- Slot 6: Run — the perfect item -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run ▶</div>
+    <h2>One perfect item</h2>
+<pre><span class="str">"mango juice"</span>: {
+    <span class="str">"price"</span>: <span class="num">5000</span>,
+    <span class="str">"ingredients"</span>: [<span class="str">"mango"</span>, <span class="str">"milk"</span>, <span class="str">"ice"</span>]
+},</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ The 4 grammar pieces</div>
+      <div style="opacity:1">quotes on every word · colon after every key · comma between items · } closes the card</div>
+    </div>
+    <p class="bilingual">네 가지: 따옴표 · 콜론 · 쉼표 · 중괄호</p>
+  </div>
+
+  <!-- Slot 7: Investigate — two-hop unboxing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Two hops to a price</h2>
+    <div class="clean-chain" style="margin-top:.5em">
+      <div class="cc-step s1">starbucks["lemonade"]</div>
+      <div class="arrow">hop 1 — find the card ↓</div>
+      <div class="cc-step s2">{"price": 3000, "ingredients": [...]}</div>
+      <div class="arrow">hop 2 — open the card ↓</div>
+      <div class="cc-step s3">["price"]</div>
+      <div class="cc-step s4">3000</div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Read the shop</h2>
+<pre>shop = {<span class="str">"cookie"</span>: {<span class="str">"price"</span>: <span class="num">1500</span>},
+        <span class="str">"milk"</span>: {<span class="str">"price"</span>: <span class="num">2500</span>},
+        <span class="str">"tea"</span>: {<span class="str">"price"</span>: <span class="num">3000</span>}}</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">code</div>
+      <div class="cell head"><code>shop["milk"]["price"]</code></div>
+      <div class="cell head"><code>shop["tea"]["price"]</code></div>
+      <div class="cell head"><code>shop["cookie"]</code></div>
+
+      <div class="cell">gives</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2500</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3000</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">{'price': 1500}</span></details></div>
+    </div>
+    <p style="margin-top:.5em">One hop = the whole card. Two hops = one value.</p>
+  </div>
+
+  <!-- Slot 9: Common Mistake — the missing colon (her latte) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Error 1 hides in your latte</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="str">"chocolate latte"</span>: {
+    <span class="str">"price"</span>: <span class="num">5000</span>,
+    <span class="str">"ingredients"</span> [<span class="str">"chocolate"</span>, <span class="str">"ice"</span>, <span class="str">"milk"</span>]
+}</pre>
+        <p style="margin-top:.4em">→ <code>SyntaxError: ':' expected after dictionary key</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="str">"chocolate latte"</span>: {
+    <span class="str">"price"</span>: <span class="num">5000</span>,
+    <span class="str">"ingredients"</span>: [<span class="str">"chocolate"</span>, <span class="str">"ice"</span>, <span class="str">"milk"</span>]
+}</pre>
+        <p style="margin-top:.4em">→ colon after <b>every</b> key.</p>
+      </div>
+    </div>
+    <p class="bilingual">키 뒤엔 항상 콜론</p>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — the missing quote (her cake) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Error 2 hides in your cake</h2>
+<pre><span class="str">"chocolate cake"</span>: {
+    <span class="str">"price"</span>: <span class="num">6000</span>,
+    <span class="str">"ingredients"</span>: [<span class="str">"chocolate"</span>, <span class="str">"bread"</span>, sugar<span class="str">"</span>]
+},</pre>
+    <div class="debug-card"><div class="err">SyntaxError: unterminated string literal</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>sugar"</code> lost its opening quote. Every word needs a full pair: <code>"sugar"</code>. Fix it, click RUN — the menu prints.</p>
+      <p class="bilingual">따옴표는 항상 짝으로</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — missing comma between items -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — cards glued together</h2>
+<pre><span class="str">"lemonade"</span>: {
+    <span class="str">"price"</span>: <span class="num">3000</span>
+}
+<span class="str">"chocolate latte"</span>: {
+    <span class="str">"price"</span>: <span class="num">5000</span>
+}</pre>
+    <div class="debug-card"><div class="err">SyntaxError: invalid syntax. Perhaps you forgot a comma?</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Python even guessed it. A comma after each <code>}</code> separates the cards: <code>},</code></p>
+      <p class="bilingual">카드 사이엔 쉼표</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — KeyError, exact names -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 4 — the picky waiter</h2>
+<pre>lemonade_price = starbucks[<span class="str">"Lemonade"</span>][<span class="str">"price"</span>]</pre>
+    <div class="debug-card"><div class="err">KeyError: 'Lemonade'</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The menu says <code>"lemonade"</code> — small L. Keys must match letter for letter, space for space.</p>
+      <p class="bilingual">키는 한 글자도 달라지면 안 돼요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 (faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>orange_juice_price = starbucks[___][___]
+
+<span class="fn">print</span>(___)</pre>
+    <p style="margin-top:.6em">Hint: the key has a space — <code>"orange juice"</code>. The variable uses <code>_</code> instead.</p>
+    <p class="bilingual">키엔 띄어쓰기, 변수엔 _</p>
+  </div>
+
+  <!-- Slot 14: JOB 2 — the 4 variable lines -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Code ▶</div>
+    <h2>Job 2 — one price, one variable</h2>
+<pre><span class="com"># replace  # TODO 5  — under your apple_pie_price line:</span>
+orange_juice_price = starbucks[<span class="str">"orange juice"</span>][<span class="str">"price"</span>]
+chocolate_cake_price = starbucks[<span class="str">"chocolate cake"</span>][<span class="str">"price"</span>]
+lemonade_price = starbucks[<span class="str">"lemonade"</span>][<span class="str">"price"</span>]
+chocolate_latte_price = starbucks[<span class="str">"chocolate latte"</span>][<span class="str">"price"</span>]</pre>
+    <p style="margin-top:.5em">Same shape as your three lines above it. Menu name in quotes, variable name with <code>_</code>.</p>
+  </div>
+
+  <!-- Slot 15: JOB 3 — the 4 prints -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Code ▶</div>
+    <h2>Job 3 — print every price</h2>
+<pre><span class="com"># replace  # TODO 6  — under print(apple_pie_price):</span>
+<span class="fn">print</span>(orange_juice_price)
+<span class="fn">print</span>(chocolate_cake_price)
+<span class="fn">print</span>(lemonade_price)
+<span class="fn">print</span>(chocolate_latte_price)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">4000 · 6000 · 3000 · 5000 — all seven prices on screen</div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>starbucks["apple pie"]</code> gives…</div>
+      <div class="opts">
+        <details><summary>A. the whole card, price + ingredients</summary><div class="ans">✓ One hop = the inner dictionary.</div></details>
+        <details><summary>B. 4000</summary><div class="ans">No — that needs <code>["price"]</code> too.</div></details>
+        <details><summary>C. "apple pie"</summary><div class="ans">No — that's the key you typed.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which line is legal?</div>
+      <div class="opts">
+        <details><summary>A. <code>"price": 5000,</code></summary><div class="ans">✓ Quotes, colon, comma.</div></details>
+        <details><summary>B. <code>"price" 5000,</code></summary><div class="ans">No — colon missing.</div></details>
+        <details><summary>C. <code>price: 5000,</code></summary><div class="ans">No — quotes missing.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The first <code>[ ]</code> finds the <span class="blank"></span>, the second <code>[ ]</code> takes the <span class="blank"></span>, and every key needs a <span class="blank"></span> after it."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 18: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Fix, finish, run</h2>
+    <ul class="check-list">
+      <li>Cake: give <code>sugar</code> its opening quote → <code>"sugar"</code></li>
+      <li>Latte: add the colon — <code>"ingredients":</code></li>
+      <li>Click RUN — the menu must print with no red</li>
+      <li>Job 2: the 4 variable lines at <code># TODO 5</code></li>
+      <li>Job 3: the 4 prints at <code># TODO 6</code> — RUN again</li>
+    </ul>
+  </div>
+
+  <!-- Slot 19: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Fix the old typo: <code>"suger"</code> → <code>"sugar"</code> in apple pie.</div>
+      <div class="item"><span class="lvl">★★</span>Add one brand-new item — all 4 grammar pieces.</div>
+      <div class="item"><span class="lvl">★★★</span>Print the TOTAL of all prices — next slides help.</div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">What's the difference between <code>starbucks["lemonade"]</code> and <code>starbucks["lemonade"]["price"]</code>?</p>
+      <p class="bilingual" style="margin-top:.4em">한 번 꺼내기 vs 두 번 꺼내기</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- Slot 21: OPTIONAL — the .items() loop she already uses -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your menu loop, decoded</h2>
+<pre><span class="kw">for</span> name, info <span class="kw">in</span> starbucks.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{name} ..... {info['price']}원"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Each round of the loop</div>
+      <div style="opacity:1">name = one key · info = that item's card · no [ ] needed</div>
+    </div>
+    <p class="bilingual">.items()가 키와 카드를 같이 줘요</p>
+  </div>
+
+  <!-- Slot 22: OPTIONAL — total price -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Buy everything 💸</h2>
+<pre><span class="com"># at the bottom of your file:</span>
+total = <span class="num">0</span>
+<span class="kw">for</span> name, info <span class="kw">in</span> starbucks.<span class="fn">items</span>():
+    total += info[<span class="str">"price"</span>]
+
+<span class="fn">print</span>(<span class="kw">f</span><span class="str">"Everything costs {total}원"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it · 7 items</div>
+      <div style="opacity:1">Everything costs 31000원</div>
+    </div>
+  </div>
+
+  <!-- Slot 23: OPTIONAL — which drinks have ice? -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Which items have ice?</h2>
+<pre><span class="kw">for</span> name, info <span class="kw">in</span> starbucks.<span class="fn">items</span>():
+    <span class="kw">if</span> <span class="str">"ice"</span> <span class="kw">in</span> info[<span class="str">"ingredients"</span>]:
+        <span class="fn">print</span>(name)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">americano · peach ice tea · chocolate latte</div>
+    </div>
+    <p style="margin-top:.4em"><code>in</code> checks a list — your first search engine.</p>
+  </div>
+
+  <!-- Slot 24: OPTIONAL — cheap menu filter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The 4000원 challenge</h2>
+<pre><span class="kw">for</span> name, info <span class="kw">in</span> starbucks.<span class="fn">items</span>():
+    <span class="kw">if</span> info[<span class="str">"price"</span>] &lt;= ___:
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{name} — cheap!"</span>)</pre>
+    <p style="margin-top:.6em">Fill the blank. Which items print? Guess first, then run.</p>
+    <p class="bilingual">예산 안의 메뉴만 골라요</p>
+  </div>
+
+  <!-- Slot 25: OPTIONAL — trace the whole card -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One hop or two?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">code</div>
+      <div class="cell head"><code>["lemonade"]["price"]</code></div>
+      <div class="cell head"><code>["lemonade"]["ingredients"]</code></div>
+      <div class="cell head"><code>["lemonade"]</code></div>
+
+      <div class="cell">gives</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3000</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">['lemon', 'lemon syrup', 'sparkling water']</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">the whole card</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Second hop picks WHICH part of the card you want.</p>
+  </div>
+
+  <!-- Slot 26: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Quotes, colon,<br>comma.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: take real orders — input + your menu.</p>
+    <p class="bilingual">다음 시간: 진짜 주문 받기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 26</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

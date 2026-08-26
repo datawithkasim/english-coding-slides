@@ -1,7 +1,7 @@
 # Today's decks — 2026-08-26 (Wed)
 
-Single-deck day: Kasim asked for NEO only, built from his live IDE state.
-Other Wednesday students (SEOHOO 15:00, RIHAN 16:00, JADEN 18:00, YUNA 19:00,
+Requested decks only: NEO (17:00) and YUNA (19:00), both built from live IDE
+state. Other Wednesday students (SEOHOO 15:00, RIHAN 16:00, JADEN 18:00,
 DANIEL LEE 20:00, ihyeon 21:00) intentionally not built.
 
 ## Hard rules for every deck
@@ -59,3 +59,27 @@ Debugs: t from i not pos (runaway edge), append without parens (his Monday
 crash), // % swapped (zigzag), edge-2 t not restarted (broken slice).
 OPTIONAL: escape plans from his own comments (age timer flips vx/vy),
 360/n any-shape table, crust angle trace.
+
+## YUNA · Wed 19:00 · Python — Cafe Menu Dicts
+
+Source: live IDE (app_user hockeygirl12, homework `main.py` updated
+2026-08-26 18:53 KST — minutes before lesson). Tracker last row 08-12
+("NO CLASS TODAY", promised "Review on her IDE progress").
+
+Covered (workspace + homework):
+- Nested dict `starbucks` with price + ingredients per item.
+- Chained access `starbucks["americano"]["price"]`, f-string prints.
+- JOB 1 done: added 4 items (orange juice, chocolate cake, lemonade,
+  chocolate latte).
+
+△ (real mistakes in her fresh code, used in deck):
+- △ chocolate cake: `sugar"]` — missing opening quote → SyntaxError.
+- △ chocolate latte: `"ingredients" [...]` — missing colon → SyntaxError.
+- File cannot run until both fixed. TODO 5/6 (JOB 2 variables, JOB 3
+  prints) untouched.
+
+Today (deck: `yuna-cafe-menu-debug.html`, 26 slides): dict grammar anatomy
+(quotes/colon/comma), fix her two exact errors (Common Mistake + Debug),
+missing-comma + KeyError debugs, finish JOB 2 (4 price variables) and
+JOB 3 (4 prints). OPTIONAL: .items() loop decoded, total price, "has ice"
+search, budget filter, one-hop-vs-two trace.
