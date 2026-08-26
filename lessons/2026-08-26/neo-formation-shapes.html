@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — Formation Shapes (Neo · 2026-08-26)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS003 · Pygame Turret Shooter · Neo · 26 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Formations</div>
+    <div class="emoji">🍕</div>
+    <h1>Formation<br>Shapes</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">walk</span> ships into a square, a hexagon — and a pizza.</p>
+    <p class="bilingual">걷고, 돌면 — 어떤 대형이든 만들어요</p>
+  </div>
+
+  <!-- Slot 2: Recap — Neo's own Monday lesson + Tuesday homework -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your Monday build</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your code</div>
+      <div class="q">1. Monday's crash: <code>'function' object is not subscriptable</code>. What was missing?</div>
+      <details><summary>Show answer</summary><div class="ans">The <code>()</code> — you appended the recipe, not a formation.</div></details>
+      <div class="q" style="margin-top:.5em">2. In your circle, what do <code>cos</code> and <code>sin</code> give?</div>
+      <details><summary>Show answer</summary><div class="ans">dx and dy — one point on the ring.</div></details>
+      <div class="q" style="margin-top:.5em">3. Your v-shape: why <code>abs(i - count // 2)</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">Distance from the middle — both arms rise equally.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) — the walker -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>x, y = <span class="num">0</span>, <span class="num">0</span>
+heading = <span class="num">0</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    <span class="fn">print</span>(<span class="fn">round</span>(x), <span class="fn">round</span>(y))
+    x += math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(heading)) * <span class="num">10</span>
+    y += math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(heading)) * <span class="num">10</span>
+    heading += <span class="num">90</span></pre>
+      <details><summary>Reveal output</summary><div class="ans">0 0 · 10 0 · 10 10 · 0 10 — four corners of a square.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">heading</span>
+      <span class="gloss">the direction the walker faces</span>
+      <span class="ko">진행 방향</span>
+
+      <span class="term">math.radians(d)</span>
+      <span class="gloss">turns degrees into what cos/sin expect</span>
+      <span class="ko">각도 단위 변환</span>
+
+      <span class="term">side</span>
+      <span class="gloss">how many ships before a turn</span>
+      <span class="ko">한 변의 개수</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — NO CODE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Drop, step, turn</h2>
+    <div class="iter-row" style="margin-top:.6em">
+      <div class="iter-item">🚀 →</div>
+      <div class="iter-item">🚀 →</div>
+      <div class="iter-item">🚀 →</div>
+      <div class="iter-item">↱ 90°</div>
+      <div class="iter-item">🚀 ↓</div>
+    </div>
+    <p class="big center" style="margin-top:.7em">A walker drops a ship, steps forward. After one side — it turns. Any shape is just walk + turn.</p>
+    <p class="bilingual center">놓고, 걷고, 돌기 — 그게 전부</p>
+  </div>
+
+  <!-- Slot 6: Test lab — homework TASK 2, finally -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Setup 🔧</div>
+    <h2>Test lab — 3 quick edits</h2>
+<pre><span class="com"># in make_formation() — add under each line:</span>
+pattern = random.<span class="fn">choice</span>([<span class="str">"circle"</span>, <span class="str">"pizza"</span>, ...])
+pattern = <span class="str">"square"</span>            <span class="com"># NEW — force it</span>
+count = random.<span class="fn">randint</span>(<span class="num">12</span>, <span class="num">16</span>)
+count = <span class="num">12</span>                     <span class="com"># NEW — 12 splits evenly</span>
+
+<span class="com"># in the spawn system — change 400 to 60:</span>
+<span class="kw">if</span> formation_timer &gt;= <span class="num">60</span> <span class="kw">and</span> boss <span class="kw">is not</span> <span class="kw">None</span>:</pre>
+    <p style="margin-top:.5em">Run → shoot one enemy → boss appears → formations every second. Undo all 3 at the end.</p>
+    <p class="bilingual">테스트 셋업 — 끝나면 원래대로</p>
+  </div>
+
+  <!-- Slot 7: Build 1 — walker init -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Code ▶</div>
+    <h2>Step 1 — wake the walker</h2>
+<pre>walk_x = <span class="num">0</span>
+walk_y = <span class="num">0</span>
+heading = <span class="num">0</span>
+gap = <span class="num">35</span>
+
+<span class="com">for i in range(count):      ← paste directly ABOVE this line</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Why here</div>
+      <div style="opacity:1">runs once per formation — one start point, one direction</div>
+    </div>
+    <p class="bilingual">for 바로 위에 — 한 번만 실행</p>
+  </div>
+
+  <!-- Slot 8: Build 2 — square branch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Code ▶</div>
+    <h2>Step 2 — the square</h2>
+<pre><span class="com">elif pattern == "square":
+    # 3 ~ 4 enemies on each side …   ← your comment, keep it</span>
+    <span class="com">↓ delete  dx, dy = 0, 0  — these lines replace it ↓</span>
+    side = count // <span class="num">4</span>
+    dx = walk_x
+    dy = walk_y
+    walk_x += math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(heading)) * gap
+    walk_y += math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(heading)) * gap
+    <span class="kw">if</span> (i + <span class="num">1</span>) % side == <span class="num">0</span>:
+        heading += <span class="num">90</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">12 ships · 3 per side · a closed square walks in</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Investigate — one lap, four sides -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One lap of the walker</h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">side 1</div><div class="iter-item">side 2</div>
+        <div class="iter-item">side 3</div><div class="iter-item">side 4</div>
+      </div>
+      <div class="var-row"><span class="label">heading = </span><span class="var-vals">
+        <span class="var-val">0 →</span><span class="var-val">90 ↓</span><span class="var-val">180 ←</span><span class="var-val">270 ↑</span>
+      </span></div>
+      <div class="output-box">
+        <div class="out-label">▸ ships placed</div>
+        <div class="out-line">1, 2, 3 walk right</div>
+        <div class="out-line">4, 5, 6 walk down</div>
+        <div class="out-line">7, 8, 9 walk left</div>
+        <div class="out-line">10, 11, 12 walk up — back home</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 10: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the lap</h2>
+<pre>count = <span class="num">12</span>       side = <span class="num">3</span>       heading += <span class="num">90</span></pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">ships</div>
+      <div class="cell head">1–3</div>
+      <div class="cell head">4–6</div>
+      <div class="cell head">7–9</div>
+      <div class="cell head">10–12</div>
+
+      <div class="cell"><code>heading</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">90</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">180</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">270</span></details></div>
+
+      <div class="cell">direction</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">→</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">↓</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">←</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">↑</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Turn number 4 points the walker home.</p>
+  </div>
+
+  <!-- Slot 11: Common Mistake — degrees vs radians -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Degrees are not radians</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>walk_x += math.<span class="fn">cos</span>(heading) * gap</pre>
+        <p style="margin-top:.4em">→ <code>cos(90)</code> as radians ≈ −0.45. The square melts into a scribble.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>walk_x += math.<span class="fn">cos</span>(
+    math.<span class="fn">radians</span>(heading)) * gap</pre>
+        <p style="margin-top:.4em">→ <code>radians(90)</code> first — cos gives 0, a clean corner.</p>
+      </div>
+    </div>
+    <p class="bilingual">cos/sin은 라디안만 먹어요</p>
+  </div>
+
+  <!-- Slot 12: DEBUG 1 — walker init inside the branch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — one lonely dot</h2>
+<pre><span class="kw">elif</span> pattern == <span class="str">"square"</span>:
+    walk_x = <span class="num">0</span>
+    walk_y = <span class="num">0</span>
+    heading = <span class="num">0</span>
+    dx = walk_x
+    dy = walk_y</pre>
+    <div class="debug-card"><div class="err">No error. One red dot — all 12 ships stacked on the anchor.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The walker resets every ship. Move the three <code>= 0</code> lines <b>above</b> <code>for i in range(count):</code> — once per formation.</p>
+      <p class="bilingual">초기화는 for 위에, 한 번만</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: DEBUG 2 — Monday's real crash, retrieval -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — an old enemy returns</h2>
+<pre><span class="kw">if</span> formation_timer &gt;= <span class="num">60</span> <span class="kw">and</span> boss <span class="kw">is not</span> <span class="kw">None</span>:
+    formations.<span class="fn">append</span>(make_formation)
+    formation_timer = <span class="num">0</span></pre>
+    <div class="debug-card"><div class="err">TypeError: 'function' object is not subscriptable</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>make_formation()</code> — the <code>()</code> cooks the recipe. Without it you append the recipe itself. You fixed this Tuesday. Never again. 😤</p>
+      <p class="bilingual">괄호가 함수를 실행해요</p>
+    </details>
+  </div>
+
+  <!-- Slot 14: DEBUG 3 — turning every ship -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — the shrunken square</h2>
+<pre>dx = walk_x
+dy = walk_y
+walk_x += math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(heading)) * gap
+walk_y += math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(heading)) * gap
+heading += <span class="num">90</span></pre>
+    <div class="debug-card"><div class="err">No crash. Only 4 dots — 12 ships loop one tiny box.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Turning after <b>every</b> ship walks a 1-step box, forever. Guard it: <code>if (i + 1) % side == 0:</code> — turn only after a full side.</p>
+      <p class="bilingual">한 변 끝나야 돌기</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: Modify (faded) — hexagon setup -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Hexagon = square ± 2 numbers</h2>
+<pre><span class="kw">elif</span> pattern == <span class="str">"hexagon"</span>:
+    side = count // ___
+    <span class="com"># …same walker lines as square…</span>
+    <span class="kw">if</span> (i + <span class="num">1</span>) % side == <span class="num">0</span>:
+        heading += ___</pre>
+    <p style="margin-top:.6em">A hexagon has 6 sides. Guess both blanks before the next slide.</p>
+    <p class="bilingual">숫자 두 개만 바꿔요</p>
+  </div>
+
+  <!-- Slot 16: Hexagon reveal — OLD/NEW -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Code ▶</div>
+    <h2>Step 3 — the hexagon</h2>
+<pre><span class="com">↓ copy the whole square block into hexagon, delete its dx, dy = 0, 0 ↓</span>
+<span class="com">side = count // 4        # OLD — square</span>
+side = count // <span class="num">6</span>        <span class="com"># NEW — hexagon</span>
+
+<span class="com">    heading += 90        # OLD — square</span>
+    heading += <span class="num">60</span>        <span class="com"># NEW — hexagon</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Your comment said 120°</div>
+      <div style="opacity:1">120° is the inside corner. The walker turns the outside: 180 − 120 = 60.</div>
+    </div>
+    <p class="bilingual">내각 120° = 바깥 회전 60°</p>
+  </div>
+
+  <!-- Slot 17: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. An octagon (8 sides) — <code>heading +=</code> …?</div>
+      <div class="opts">
+        <details><summary>A. 45</summary><div class="ans">✓ 360 ÷ 8. The turns must add up to one full lap.</div></details>
+        <details><summary>B. 60</summary><div class="ans">No — that closes after 6 turns.</div></details>
+        <details><summary>C. 90</summary><div class="ans">No — that's a square.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>walk_x = 0</code> runs…</div>
+      <div class="opts">
+        <details><summary>A. once per formation</summary><div class="ans">✓ Above the for — one start per shape.</div></details>
+        <details><summary>B. once per ship</summary><div class="ans">No — that was Bug 1, the lonely dot.</div></details>
+        <details><summary>C. every frame</summary><div class="ans">No — make_formation runs once per spawn.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 18: Pizza part 1 — the two straight edges -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Code ▶</div>
+    <h2>Step 4 — pizza edges</h2>
+<pre><span class="com">elif pattern == "pizza":
+    # ammount of enemies / 3 in the straigt edge…  ← your plan</span>
+    <span class="com">↓ delete  dx, dy = 0, 0 ↓</span>
+    third = count // <span class="num">3</span>
+    <span class="kw">if</span> i &lt; third:
+        dx = math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(<span class="num">60</span>)) * (i * gap)
+        dy = math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(<span class="num">60</span>)) * (i * gap)
+    <span class="kw">elif</span> i &lt; third * <span class="num">2</span>:
+        k = i - third
+        dx = math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(<span class="num">120</span>)) * (k * gap)
+        dy = math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(<span class="num">120</span>)) * (k * gap)</pre>
+    <p style="margin-top:.5em">Two lines of ships leave the tip — your circle math, walking straight.</p>
+  </div>
+
+  <!-- Slot 19: Pizza part 2 — the crust -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Code ▶</div>
+    <h2>Step 5 — the crust</h2>
+<pre>    <span class="com">↓ add under the elif from step 4, same indent ↓</span>
+    <span class="kw">else</span>:
+        k = i - third * <span class="num">2</span>
+        crust = count - third * <span class="num">2</span>
+        angle = <span class="num">60</span> + <span class="num">60</span> * k / (crust - <span class="num">1</span>)
+        dx = math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(angle)) * (third * gap)
+        dy = math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(angle)) * (third * gap)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it · count = 12</div>
+      <div style="opacity:1">crust ships at 60°, 80°, 100°, 120° — the arc between your edges 🍕</div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Pizza debug — i vs k -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 4 — the broken slice</h2>
+<pre><span class="kw">elif</span> i &lt; third * <span class="num">2</span>:
+    dx = math.<span class="fn">cos</span>(math.<span class="fn">radians</span>(<span class="num">120</span>)) * (i * gap)
+    dy = math.<span class="fn">sin</span>(math.<span class="fn">radians</span>(<span class="num">120</span>)) * (i * gap)</pre>
+    <div class="debug-card"><div class="err">No error. Edge 2 floats far from the tip — the slice split in half.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Here <code>i</code> is already 4, 5, 6, 7. Edge 2 must restart at 0: <code>k = i - third</code>, then use <code>k</code>.</p>
+      <p class="bilingual">두 번째 변은 0부터 다시</p>
+    </details>
+  </div>
+
+  <!-- Slot 21: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The walker drops a ship, then steps <span class="blank"></span> pixels. After <span class="blank"></span> ships it turns <span class="blank"></span> degrees, so the shape closes."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build all three</h2>
+    <ul class="check-list">
+      <li>Test lab on: force <code>"square"</code>, <code>count = 12</code>, timer <code>60</code></li>
+      <li>Walker lines above the <code>for</code> — run the square</li>
+      <li>Copy into hexagon — change <code>4 → 6</code>, <code>90 → 60</code></li>
+      <li>Pizza: edges, then crust — force <code>"pizza"</code> to test</li>
+      <li>Undo the test lab: <code>random.choice</code> back, timer <code>400</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Diamond: square code, but start <code>heading = 45</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Triangle: <code>side = count // 3</code>, turn <code>120</code> — your 120 lives!</div>
+      <div class="item"><span class="lvl">★★★</span>Escape plans from your comments — see the next slide.</div>
+    </div>
+  </div>
+
+  <!-- Slot 24: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">Your comment said hexagon = 120°. Why does the code say <code>heading += 60</code>?</p>
+      <p class="bilingual" style="margin-top:.4em">내각과 회전각의 차이, 한 줄로</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW — Neo works fast ================= -->
+
+  <!-- Slot 25: OPTIONAL — escape plans, from his own comments -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Escape plans — your idea</h2>
+<pre><span class="com"># 1. in the formation dict, under "pattern": pattern,</span>
+<span class="str">"age"</span>: <span class="num">0</span>,
+
+<span class="com"># 2. in the update loop, right after f["anchor_y"] += f["vy"]</span>
+f[<span class="str">"age"</span>] += <span class="num">1</span>
+<span class="kw">if</span> f[<span class="str">"age"</span>] &gt; <span class="num">240</span>:
+    <span class="kw">if</span> f[<span class="str">"pattern"</span>] == <span class="str">"square"</span>:
+        f[<span class="str">"vx"</span>], f[<span class="str">"vy"</span>] = -<span class="num">6</span>, <span class="num">0</span>
+    <span class="kw">elif</span> f[<span class="str">"pattern"</span>] == <span class="str">"pizza"</span>:
+        f[<span class="str">"vx"</span>], f[<span class="str">"vy"</span>] = -<span class="num">4</span>, <span class="num">4</span>
+    <span class="kw">else</span>:
+        f[<span class="str">"vx"</span>], f[<span class="str">"vy"</span>] = <span class="num">4</span>, -<span class="num">4</span></pre>
+    <p style="margin-top:.4em">240 frames = 4 seconds on screen, then gone — exactly your escape notes.</p>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — any shape, one number -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Any shape = 360 ÷ sides</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">shape</div>
+      <div class="cell head">triangle</div>
+      <div class="cell head">square</div>
+      <div class="cell head">pentagon</div>
+      <div class="cell head">hexagon</div>
+
+      <div class="cell">sides</div>
+      <div class="cell">3</div>
+      <div class="cell">4</div>
+      <div class="cell">5</div>
+      <div class="cell">6</div>
+
+      <div class="cell">turn</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">90</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">72</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+    </div>
+    <p style="margin-top:.5em">All the turns together = one full lap. Always 360.</p>
+    <p class="bilingual">회전각 합은 항상 360°</p>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — trace the crust -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Where does each crust ship sit?</h2>
+<pre>angle = <span class="num">60</span> + <span class="num">60</span> * k / (crust - <span class="num">1</span>)      <span class="com"># crust = 4</span></pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head"><code>k</code></div>
+      <div class="cell head">0</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+
+      <div class="cell"><code>angle</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">80</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">100</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+    </div>
+    <p style="margin-top:.5em">First crust ship touches edge 1, last touches edge 2. The arc seals the slice.</p>
+  </div>
+
+  <!-- Slot 28: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Walk, turn,<br>repeat.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: your formations open fire.</p>
+    <p class="bilingual">다음 시간: 대형이 공격해요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
