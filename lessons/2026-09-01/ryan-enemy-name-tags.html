@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PYGAME — Enemy Name Tags (Ryan · 2026-09-01)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.8em, 2.5vmin, 1.6em); justify-content: center;
+          flex-wrap: wrap; margin-top: .6em; }
+  .rd { text-align: center; }
+  .sqrow { display: flex; gap: .35em; justify-content: center; align-items: flex-end;
+           background: rgb(152,251,152); border: 2px solid var(--soft); border-radius: .4em;
+           padding: .6em .7em; min-height: 3em; }
+  .sq { width: clamp(16px, 3vmin, 26px); height: clamp(16px, 3vmin, 26px); border-radius: .15em; }
+  .sq.s2 { width: clamp(12px, 2.2vmin, 19px); height: clamp(12px, 2.2vmin, 19px); }
+  .sq.s3 { width: clamp(20px, 3.8vmin, 32px); height: clamp(20px, 3.8vmin, 32px); }
+  .rl { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent);
+        font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  .badge-row { display: flex; gap: clamp(.8em, 3vmin, 2em); justify-content: center; margin-top: .7em; }
+  .badge { text-align: center; }
+  .badge .bx { width: clamp(46px, 8vmin, 72px); height: clamp(46px, 8vmin, 72px);
+               background: #22252e; border: 2px solid var(--soft); border-radius: .4em; margin: 0 auto; }
+  .badge .nt { font-family: "JetBrains Mono", monospace; font-weight: 700;
+               background: #ffb86c; color: #0a0d13; border-radius: .25em;
+               padding: .05em .5em; font-size: clamp(12px, 2vmin, 17px);
+               display: inline-block; margin-top: -0.7em; position: relative; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">PyGame · My Awesome Game · Ryan · 1 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Enemy upgrade</div>
+    <div class="emoji">🏷️</div>
+    <h1>Enemy<br>Name Tags</h1>
+    <p class="line" style="margin-top:.4em">Your scouts, tanks, fleets — <b>finally different</b>.<br>9 small steps. Run after every version.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 tags</span><span class="chip">v2 colours</span>
+      <span class="chip">v3 speeds</span><span class="chip">v4 scores</span>
+    </div>
+    <p class="bilingual">적마다 이름표를 붙여요</p>
+  </div>
+
+  <!-- 2 · Recap — Ryan's own code -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Your code, 3 questions</h2>
+    <div class="recap-q">
+      <div class="q">1. Why <code>for bullet in bullets[:]:</code> — what is <code>[:]</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">A copy. You can remove from the real list safely.</div></details>
+      <div class="q" style="margin-top:.5em">2. Your comment: <code># why is this here?</code> — so, why?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>get_ticks()</code> = milliseconds since start. The cooldown needs the time <i>now</i>.</div></details>
+      <div class="q" style="margin-top:.5em">3. Why <code>break</code> after a bullet hits?</div>
+      <details><summary>Show answer</summary><div class="ans">That bullet is gone — stop checking it against more enemies.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 · Predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>enemy = [<span class="num">100</span>, <span class="num">0</span>, <span class="str">'tank'</span>]
+<span class="fn">print</span>(enemy[<span class="num">0</span>])
+<span class="fn">print</span>(enemy[<span class="num">2</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">100, then tank. Item 3 lives at index 2.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">name tag</span>
+      <span class="gloss">extra list item that says the type</span>
+      <span class="ko">이름표</span>
+
+      <span class="term">index</span>
+      <span class="gloss">position number — starts at 0</span>
+      <span class="ko">인덱스</span>
+
+      <span class="term">elif</span>
+      <span class="gloss">"else if" — the next check in a chain</span>
+      <span class="ko">아니면 이것</span>
+    </div>
+  </div>
+
+  <!-- 5 · Concept — NO CODE -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>One list, three stickers</h2>
+    <div class="badge-row">
+      <div class="badge"><div class="bx"></div><span class="nt">scout</span></div>
+      <div class="badge"><div class="bx"></div><span class="nt">tank</span></div>
+      <div class="badge"><div class="bx"></div><span class="nt">fleet</span></div>
+    </div>
+    <p class="line center" style="margin-top:.7em">Same boxes, different stickers.<br>The painter reads the sticker → picks the paint.</p>
+    <p class="bilingual center">리스트는 하나, 이름표로 구분해요</p>
+  </div>
+
+  <!-- 6 · Roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan — 9 steps</p>
+    <div class="road">
+      <div class="rd"><div class="sqrow"><div class="sq" style="background:#000"></div><div class="sq" style="background:#000"></div><div class="sq" style="background:#000"></div></div><div class="rl">v1 tags</div><div class="rt">steps 1–4</div></div>
+      <div class="rd"><div class="sqrow"><div class="sq" style="background:#00c840"></div><div class="sq s3" style="background:#fff"></div><div class="sq s2" style="background:#2545ff"></div></div><div class="rl">v2 colours</div><div class="rt">steps 5–7</div></div>
+      <div class="rd"><div class="sqrow"><div class="sq" style="background:#00c840">⬇</div><div class="sq s3" style="background:#fff">↓</div><div class="sq s2" style="background:#2545ff">⬇</div></div><div class="rl">v3 speeds</div><div class="rt">step 8</div></div>
+      <div class="rd"><div class="sqrow"><div class="sq" style="background:#00c840"></div><div class="sq s3" style="background:#fff"></div><div class="sq s2" style="background:#2545ff"></div></div><div class="rl">v4 scores</div><div class="rt">step 9</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">v1 looks the same as today. That is correct — tags first, looks later.</p>
+  </div>
+
+  <!-- 7 · v1 intro -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <h2>v1 — the third seat</h2>
+<pre>[scout_x, scout_y]                <span class="com"># today: 2 seats</span>
+[scout_x, scout_y, scout_name]    <span class="com"># v1: seat 3 = tag</span></pre>
+    <p class="line" style="margin-top:.5em">You already made <code>scout_name = <span class="str">'scout'</span></code>.<br>It sits unused. Time to hire it.</p>
+    <p class="bilingual">만들어 둔 변수를 드디어 써요</p>
+  </div>
+
+  <!-- 8 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 9</div>
+    <h2>Tag the scout</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>enemies.append([scout_x, scout_y])</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        enemies.append([scout_x, scout_y])</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        enemies.append([scout_x, scout_y, scout_name])</pre></div>
+    <div class="why">🟣 Every scout now carries its name.</div>
+    <div class="chk">✅ Run — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 9 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 9</div>
+    <h2>Tag the tank</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>enemies.append([tank_x, tank_y])</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        enemies.append([tank_x, tank_y])</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        enemies.append([tank_x, tank_y, tank_name])</pre></div>
+    <div class="why">🟣 Same pattern, second type.</div>
+    <div class="chk">✅ Run — still fine.</div>
+  </div>
+
+  <!-- 10 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 9</div>
+    <h2>Tag the fleet</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>enemies.append([fleet_x, fleet_y])</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        enemies.append([fleet_x, fleet_y])</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        enemies.append([fleet_x, fleet_y, fleet_name])</pre></div>
+    <div class="why">🟣 Third type tagged.</div>
+    <div class="chk">✅ Run — still fine.</div>
+  </div>
+
+  <!-- 11 · STEP 4 + v1 run -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 9</div>
+    <h2>Tag the basic enemy</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>enemies.append([enemy_x, enemy_y])</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        enemies.append([enemy_x, enemy_y])</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        enemies.append([enemy_x, enemy_y, <span class="str">'normal'</span>])</pre></div>
+    <div class="why">🟣 No name variable for this one — a plain string works. Quotes!</div>
+    <div class="chk">✅ v1 done. Run — looks identical. Every enemy secretly knows its name.</div>
+  </div>
+
+  <!-- 12 · v2 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <h2>v2 — the painter reads the tag</h2>
+    <p class="line">Your draw loop paints everyone <b>BLACK</b>, size 20×20.<br>Now it checks <code>enemy[<span class="num">2</span>]</code> first.</p>
+    <p class="line" style="margin-top:.5em">Bonus: the strange line <code>if enemy[:]:</code> does nothing — it dies here.</p>
+    <p class="bilingual">그리기 전에 이름표 확인</p>
+  </div>
+
+  <!-- 13 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 9</div>
+    <h2>Rewrite the draw loop</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code># -- enemy object -- #</code></div>
+    <div class="tag-old">OLD — the whole block, delete</div>
+    <div class="was"><pre class="tiny">    for enemy in enemies:
+       if enemy[:]:
+        pygame.draw.rect(screen, BLACK, (enemy[0], enemy[1], enemy_width, enemy_height))</pre></div>
+    <div class="tag-new">NEW — type this instead</div>
+    <div class="now"><pre class="tiny">    for enemy in enemies:
+        if enemy[2] == scout_name:
+            pygame.draw.rect(screen, scout_colour, (enemy[0], enemy[1], scout_width, scout_height))
+        else:
+            pygame.draw.rect(screen, BLACK, (enemy[0], enemy[1], enemy_width, enemy_height))</pre></div>
+    <div class="where">📍 Indent: <code>for</code> 4 spaces · <code>if</code> 8 · <code>draw</code> 12</div>
+    <div class="chk">✅ Run — scouts turn green. Everyone else still black.</div>
+  </div>
+
+  <!-- 14 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 9</div>
+    <h2>Add the tank branch</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>else:</code> <span class="quiet">— the one in your new draw loop</span></div>
+    <div class="tag-new">NEW — squeeze the elif in above else</div>
+    <div class="now"><pre class="tiny">    for enemy in enemies:
+        if enemy[2] == scout_name:
+            pygame.draw.rect(screen, scout_colour, (enemy[0], enemy[1], scout_width, scout_height))
+        elif enemy[2] == tank_name:
+            pygame.draw.rect(screen, tank_colour, (enemy[0], enemy[1], tank_width, tank_height))
+        else:
+            pygame.draw.rect(screen, BLACK, (enemy[0], enemy[1], enemy_width, enemy_height))</pre></div>
+    <div class="why">🟣 <code>elif</code> = "not a scout? maybe a tank."</div>
+    <div class="chk">✅ Run — big white squares appear.</div>
+  </div>
+
+  <!-- 15 · STEP 7 + v2 run -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 9</div>
+    <h2>Add the fleet branch</h2>
+    <div class="tag-new">NEW — one more elif, above else</div>
+    <div class="now"><pre class="tiny">        elif enemy[2] == fleet_name:
+            pygame.draw.rect(screen, fleet_colour, (enemy[0], enemy[1], fleet_width, fleet_height))</pre></div>
+    <div class="where">📍 Between the tank <code>elif</code> and the <code>else</code> · same indent as them (8)</div>
+    <div class="chk">✅ v2 done. Run — green, white, blue, black. Four looks!</div>
+    <p class="quiet" style="margin-top:.4em">White tank hard to see on the light green sky? Remember that — stretch time.</p>
+  </div>
+
+  <!-- 16 · v3 = STEP 8 -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="steptag">STEP 8 / 9</div>
+    <h2>Speeds — same trick, move loop</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code># move enemies #</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>    for enemy in enemies:
+        enemy[1] = enemy[1] + enemy_speed</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">    for enemy in enemies:
+        if enemy[2] == scout_name:
+            enemy[1] = enemy[1] + scout_speed
+        elif enemy[2] == tank_name:
+            enemy[1] = enemy[1] + tank_speed
+        elif enemy[2] == fleet_name:
+            enemy[1] = enemy[1] + fleet_speed
+        else:
+            enemy[1] = enemy[1] + enemy_speed</pre></div>
+    <div class="chk">✅ v3 done. Run — tanks crawl (1), scouts cruise (2), fleets dive (3).</div>
+  </div>
+
+  <!-- 17 · v4 = STEP 9 -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="steptag">STEP 9 / 9</div>
+    <h2>Big targets, big points</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>score = score + 10</code> <span class="quiet">— inside the bullet hit</span></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>                score = score + 10</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>                if enemy[2] == tank_name:
+                    score = score + 50
+                elif enemy[2] == scout_name:
+                    score = score + 20
+                else:
+                    score = score + 10</pre></div>
+    <div class="where">📍 Indent 16 — deep inside the hit check, above <code>break</code></div>
+    <div class="chk">✅ v4 done. Run — shoot a tank, score jumps 50.</div>
+  </div>
+
+  <!-- 18 · Trace activity -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Two enemies, two frames</h2>
+<pre>enemies = [[100, 0, <span class="str">'scout'</span>], [200, 0, <span class="str">'tank'</span>]]</pre>
+    <div class="trace-grid cols-3">
+      <div class="cell head"></div>
+      <div class="cell head">enemies[0]</div>
+      <div class="cell head">enemies[1]</div>
+
+      <div class="cell"><code>enemy[2]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">'scout'</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">'tank'</span></details></div>
+
+      <div class="cell">y after frame 1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">y after frame 2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">paint colour</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">GREEN</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">WHITE</span></details></div>
+    </div>
+  </div>
+
+  <!-- 19 · Common Mistake -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Bare word, no quotes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>if enemy[<span class="num">2</span>] == scout:</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>NameError: name 'scout' is not defined</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>if enemy[<span class="num">2</span>] == scout_name:
+<span class="com"># or the string itself:</span>
+if enemy[<span class="num">2</span>] == <span class="str">'scout'</span>:</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ compares against the tag string</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Bare <code>scout</code> is a variable that does not exist. The tag is a <b>string</b>.</p>
+    <p class="bilingual">따옴표 없으면 변수 취급</p>
+  </div>
+
+  <!-- 20 · Debug 1 — his real enemies loop -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — enemies get skipped</h2>
+<pre>    <span class="kw">for</span> enemy <span class="kw">in</span> enemies:
+        <span class="kw">if</span> enemy[<span class="num">1</span>] &gt; S_HEIGHT:
+            enemies.<span class="fn">remove</span>(enemy)
+            score = score + <span class="num">1</span></pre>
+    <div class="debug-card"><div class="err">This is in your game now. Two enemies leave together — only one gets counted.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Loop a copy: <code>for enemy in enemies[:]:</code> — the same trick you already use for bullets.</p>
+      <p class="bilingual">지우면서 돌 때는 복사본</p>
+    </details>
+  </div>
+
+  <!-- 21 · Debug 2 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — the crash</h2>
+<pre>enemies.append([enemy_x, enemy_y])   <span class="com"># forgot the tag</span>
+
+<span class="kw">if</span> enemy[<span class="num">2</span>] == scout_name:</pre>
+    <div class="debug-card"><div class="err">IndexError: list index out of range</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">One append missed its tag. Seat 2 is empty — <code>enemy[2]</code> falls off the list. Check all four appends.</p>
+      <p class="bilingual">append 네 곳 모두 이름표 확인</p>
+    </details>
+  </div>
+
+  <!-- 22 · Debug 3 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — one = too few</h2>
+<pre><span class="kw">if</span> enemy[<span class="num">2</span>] = tank_name:
+    score = score + <span class="num">50</span></pre>
+    <div class="debug-card"><div class="err">SyntaxError: invalid syntax. Maybe you meant '==' instead of '='?</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>=</code> puts a value in. <code>==</code> asks "are these equal?" A check needs <code>==</code>.</p>
+      <p class="bilingual">= 넣기, == 비교</p>
+    </details>
+  </div>
+
+  <!-- 23 · Quick Quiz -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>enemy[2]</code> holds…</div>
+      <div class="opts">
+        <details><summary>A. the x position</summary><div class="ans">No — that is enemy[0].</div></details>
+        <details><summary>B. the y position</summary><div class="ans">No — that is enemy[1].</div></details>
+        <details><summary>C. the name tag</summary><div class="ans">✓ Seat 3, index 2.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. The draw loop meets a tag with no matching <code>if</code>/<code>elif</code>. What happens?</div>
+      <div class="opts">
+        <details><summary>A. crash</summary><div class="ans">No — nothing is illegal here.</div></details>
+        <details><summary>B. the else draws it black</summary><div class="ans">✓ else is the safety net.</div></details>
+        <details><summary>C. invisible enemy</summary><div class="ans">No — else still paints it.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 · Code Talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Index 2 stores the enemy's <span class="blank"></span>, so the draw loop can pick the right <span class="blank"></span> and <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 25 · Your Turn -->
+  <div class="slide">
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Ship it</h2>
+    <ul class="check-list">
+      <li>Tag all 4 appends — steps 1–4</li>
+      <li>Draw loop: <code>if</code> / <code>elif</code> / <code>elif</code> / <code>else</code> on <code>enemy[2]</code></li>
+      <li>Move loop: same chain, per-type speed</li>
+      <li>Hit check: tank 50 · scout 20 · else 10</li>
+      <li>Fix Bug 1 for real: <code>enemies[:]</code></li>
+    </ul>
+  </div>
+
+  <!-- 26 · Stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>The white tank hides on the light sky. Give it a colour that pops — try <code>ORANGE</code> or <code>GOLD</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Balance: should scouts be the fastest? Retune all three speeds, then defend your numbers.</div>
+      <div class="item"><span class="lvl">★★★</span>True hitboxes — the hit check still uses 20×20 for everyone. Branch the <code>Rect</code> sizes too.</div>
+    </div>
+  </div>
+
+  <!-- 27 · OPTIONAL — one random enemy per spawn -->
+  <div class="slide">
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spawn a surprise</h2>
+    <p class="line">Now: all four spawn together, every time. Crowded. Roll the dice instead:</p>
+<pre>    <span class="kw">if</span> now &gt;= next_spawn:
+        pick = random.<span class="fn">choice</span>([<span class="str">'normal'</span>, scout_name, tank_name, fleet_name])
+        <span class="kw">if</span> pick == scout_name:
+            scout_x = random.<span class="fn">randint</span>(<span class="num">0</span>, S_WIDTH - scout_width)
+            enemies.<span class="fn">append</span>([scout_x, <span class="num">0</span> - scout_height, scout_name])
+        <span class="com"># ...same pattern for the other three picks</span>
+        next_spawn = now + random.<span class="fn">randint</span>(<span class="num">500</span>, <span class="num">1500</span>)</pre>
+    <p class="quiet" style="margin-top:.4em">One enemy per spawn, type unknown. Want more tanks? Put <code>tank_name</code> in the list twice.</p>
+  </div>
+
+  <!-- 28 · OPTIONAL — answer the comment -->
+  <div class="slide">
+    <div class="pill">Tidy<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Answer your own comment</h2>
+    <p class="line">You ask the time twice per frame. Once is enough.</p>
+    <div class="tag-old">OLD — spawn section</div>
+    <div class="was"><pre>    # spawn in enemies #
+    now = pygame.time.get_ticks()
+    if now &gt;= next_spawn:</pre></div>
+    <div class="tag-new">NEW — reuse the first now</div>
+    <div class="now"><pre>    # spawn in enemies #
+    if now &gt;= next_spawn:</pre></div>
+    <div class="why">🟣 <code>now</code> from the shooting check is still fresh — same frame.</div>
+    <div class="chk">✅ Run — and delete the <code># why is this here?</code> comment. Mystery solved.</div>
+  </div>
+
+  <!-- 29 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">Next week you add a <b>boss</b>. What goes in its list — and which index is the tag?</p>
+      <p class="bilingual" style="margin-top:.4em">보스 리스트에 뭐가 들어갈까요?</p>
+    </div>
+  </div>
+
+  <!-- 30 · Close & Bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One list.<br>Many enemies.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: they shoot back.</p>
+    <p class="bilingual">다음 시간: 적도 총알을 쏴요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
