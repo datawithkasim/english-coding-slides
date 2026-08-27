@@ -34,6 +34,38 @@ Then:
 - A deck teaching one growing program ramps v1→v2→v3→v4: new lines hot, old
   lines dim, OLD/NEW markers on changed lines.
 
+## LUCY · Thursday afternoon · IYF speech contest (added 2026-08-27)
+
+Not a coding student — essay/speech coaching for the 2026 IYF National
+Children's English Speech Contest. Not in roster.json or the tracker; source is
+the Notion transcript "LUCY [ESSAY COMP] @Monday 7:30 AM (GMT+7)" (2026-08-24)
+plus her completed homework worksheet (photos, 2026-08-27).
+
+Last session (2026-08-24, Notion transcript):
+- Built a 2.5-minute "My Dream" speech (veterinarian): Pom-pom the hamster
+  rescued from E-Mart — cardboard box, shivering, excrement, bald patches
+- Theme evolved from "eliminate suffering" to "be someone animals can depend on"
+- ~340 words (target 300–360); draft sent to mum as double-spaced PDF
+- Homework: worksheet exercises 1–6 + final copy rewrite
+
+Homework results (worksheet photos):
+- ✓ Timeline fixed — rescue one night, THEN 11 months, then the last morning
+- ✓ Opener now starts inside E-Mart ("Imagine you see loads of sick and
+  injured animals at E-Mart! Would you want to shop there?")
+- ✓ Realisation line in her own mouth: "I thought I could eliminate suffering.
+  But now I know I was greedy to feel that" — keep exactly
+- ✓ Ending circled: "That reminded me of the memories with Pom Pom!"
+- △ "animals take need of other people" → must become "animals depend on people"
+- △ Spelling: "obstical" → obstacle, "clumbsy" → clumsy
+- △ Final Copy page 2 nearly blank — speech unfinished, word-count box empty
+
+Today: apply the three fixes, finish page 2 (11 months + obstacle-course
+memory → last morning → realisation → dream → circled ending), word count,
+then contest rules (script = speech exactly; Zoom prelim Sept 19, no
+PowerPoint; judging 30/30/25/15).
+Topic slug: `lucy-finish-the-speech`. Deck adapts the 12-slot structure to
+speech coaching — compare-rows carry her exact draft lines vs fixes.
+
 ## ERIC KIM · 15:00 · Minecraft Python functions
 
 Last lesson (2026-08-20, tracker):
