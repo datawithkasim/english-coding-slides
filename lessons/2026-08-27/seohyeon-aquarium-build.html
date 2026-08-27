@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aquarium Build — Hollow Tank, Water, Fish (Seohyeon)</title><link rel="stylesheet" href="../../assets/style.css">
+<style>
+  pre{background:var(--code-bg);border-radius:.5em;padding:.7em .9em;margin:.3em 0;
+      font-family:"JetBrains Mono",monospace;font-size:clamp(13px,2.1vmin,21px);
+      line-height:1.55;overflow-x:auto;color:var(--code-ink);text-align:left}
+  pre .hot{display:block;background:rgba(255,184,108,.16)}
+  pre .bad{display:block;background:rgba(255,85,85,.16)}
+  pre .dim{display:block;color:#4a5670}
+  pre .mk{float:right;margin-left:1.2em;font-size:.62em;letter-spacing:.12em;
+          color:#ffb86c;border:1px solid #ffb86c;border-radius:2em;padding:0 .6em}
+  pre .mk.old{color:#ff5555;border-color:#ff5555}
+  .where{font-family:"JetBrains Mono",monospace;color:#ffb86c;
+         font-size:clamp(12px,1.9vmin,17px);margin-top:.45em}
+  .where code{background:rgba(255,184,108,.12);color:#ffb86c}
+  .quiet{color:var(--com);font-size:clamp(13px,1.9vmin,18px)}
+  .blank{color:#ffb86c;background:rgba(255,184,108,.15);border-radius:.25em;padding:0 .35em}
+  .vstep{display:flex;gap:.4em;justify-content:center;margin-bottom:.6em;
+         font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.9vmin,17px)}
+  .vstep span{border:2px solid var(--soft);color:var(--com);border-radius:2em;padding:.1em .7em}
+  .vstep span.on{border-color:var(--accent);color:var(--accent);font-weight:700}
+  .slide > .activity-tag{align-self:flex-start}
+  .slide.center-all > .activity-tag{align-self:center}
+</style></head><body>
+<div class="stage"><div class="footer-tag">Aquarium Build · Seohyeon · Minecraft MakeCode</div>
+
+<!-- 1 · SLOT 1: Title -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">Aquarium Day</div>
+  <div class="emoji">🐠</div>
+  <h1>Aquarium<br>Build</h1>
+  <p class="big" style="margin-top:.6em;color:var(--accent-2);">You will type the <span class="sub">tank</span>, the <span class="sub">water</span>, and the <span class="sub">fish</span></p>
+  <p class="bilingual">오늘: 나만의 수족관 — 직접 타이핑해요</p>
+</div>
+
+<!-- 2 · SLOT 2: Recap — her 08-20 lesson -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap</div>
+  <h2>Last week: glass, water, animals</h2>
+  <p>You built a glass house, poured water, and spawned animals with a loop.</p>
+  <div class="recap-q">
+    <div class="label">Quick check</div>
+    <div class="q">Which word made your glass build empty inside?</div>
+    <details><summary>Show answer</summary><div class="ans">HOLLOW — walls only. You fixed that one yourself.</div></details>
+  </div>
+</div>
+
+<!-- 3 · Extra: today's rule (her habit — waiting for the teacher to type) -->
+<div class="slide">
+  <div class="pill purple">Today's rule</div>
+  <h2>You type first</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ waiting</span><p style="margin-top:.5em">Watch teacher type. Copy it after.</p></div>
+    <div class="col good"><span class="tag">✓ trying</span><p style="margin-top:.5em">Type it. Run it. Fix it.</p></div>
+  </div>
+  <p style="margin-top:.5em">Wrong numbers are OK — fixing them is coding.</p>
+  <p class="bilingual">먼저 도전! 틀려도 괜찮아요</p>
+</div>
+
+<!-- 4 · SLOT 3: Predict -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>Six numbers — which two set the height?</h2>
+  <div class="predict-card">
+    <div class="label">Predict first — then reveal</div>
+<pre><span class="fn">blocks.fill</span>(GLASS,
+    <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">2</span>),
+    <span class="fn">pos</span>(<span class="num">10</span>, <span class="num">6</span>, <span class="num">10</span>),
+    FillOperation.HOLLOW)</pre>
+    <details><summary>Reveal</summary><div class="ans">The middle ones — y. Floor at 0, lid at 6.</div></details>
+  </div>
+</div>
+
+<!-- 5 · SLOT 4: Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>New words today</h2>
+  <div class="vocab-table">
+    <span class="term">coordinate</span><span class="gloss">a place number: x, y, z</span><span class="ko">좌표</span>
+    <span class="term">corner</span><span class="gloss">where the edges meet</span><span class="ko">모서리</span>
+    <span class="term">spawn</span><span class="gloss">make a mob appear</span><span class="ko">소환하다</span>
+  </div>
+</div>
+
+<!-- 6 · SLOT 5: Concept — no code -->
+<div class="slide">
+  <span class="slot-badge">SLOT 5</span>
+  <div class="pill">Concept</div>
+  <h2>Six numbers = two corners</h2>
+  <div class="varbox-row">
+    <div class="varbox"><span class="name">x</span><span class="val">2</span></div>
+    <div class="varbox"><span class="name">y</span><span class="val">0</span></div>
+    <div class="varbox"><span class="name">z</span><span class="val">2</span></div>
+  </div>
+  <p class="quiet" style="text-align:center">corner A — low, near</p>
+  <div class="varbox-row">
+    <div class="varbox"><span class="name">x</span><span class="val">10</span></div>
+    <div class="varbox"><span class="name">y</span><span class="val">6</span></div>
+    <div class="varbox"><span class="name">z</span><span class="val">10</span></div>
+  </div>
+  <p class="quiet" style="text-align:center">corner B — high, far</p>
+  <p class="bilingual">숫자 6개 = 모서리 2개</p>
+</div>
+
+<!-- 7 · Extra: coordinate-order drill -->
+<div class="slide">
+  <div class="pill">Drill</div>
+  <h2>Say the order: x, y, z</h2>
+  <div class="pair-up p3">
+    <div class="pair-row"><div class="pcell">x = 2</div><div class="pcell">y = 0</div><div class="pcell">z = 2</div></div>
+    <div class="connector">⇅</div>
+    <div class="pair-row b"><div class="pcell">x = 10</div><div class="pcell">y = 6</div><div class="pcell">z = 10</div></div>
+  </div>
+  <p style="margin-top:.5em">Both corners speak the same order.</p>
+  <p class="bilingual">순서는 언제나 x, y, z</p>
+</div>
+
+<!-- 8 · Extra: roadmap -->
+<div class="slide center-all">
+  <div class="pill purple">The plan</div>
+  <h2>Four steps to fish</h2>
+  <div class="opt-grid two" style="margin-top:.4em;max-width:820px">
+    <div class="opt-card"><div class="ico">🧊</div><div class="name">v1 glass cube</div><div class="ex">one big fill</div></div>
+    <div class="opt-card"><div class="ico">📦</div><div class="name">v2 hollow</div><div class="ex">empty inside</div></div>
+    <div class="opt-card"><div class="ico">💧</div><div class="name">v3 water</div><div class="ex">fill the inside</div></div>
+    <div class="opt-card"><div class="ico">🐠</div><div class="name">v4 fish</div><div class="ex">loop + spawn</div></div>
+  </div>
+  <p class="quiet" style="margin-top:.5em">Run after every step.</p>
+</div>
+
+<!-- 9 · SLOT 6: Run — v1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 6</span>
+  <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+  <h2>v1 — the glass shape</h2>
+<pre><span class="hot"><span class="fn">blocks.fill</span>(GLASS,</span><span class="hot">    <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">2</span>),</span><span class="hot">    <span class="fn">pos</span>(<span class="num">10</span>, <span class="num">6</span>, <span class="num">10</span>),</span><span class="hot">    FillOperation.REPLACE)</span></pre>
+  <p class="where">📍 Code Builder → new chat command <code>aqua</code>. You type — say each number.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run: aqua</div>
+    <div>A solid glass cube. No room for water yet.</div>
+  </div>
+</div>
+
+<!-- 10 · Extra: v2 hollow (OLD/NEW) -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+  <h2>v2 — make it hollow</h2>
+<pre><span class="dim">blocks.fill(GLASS,</span><span class="dim">    pos(2, 0, 2),</span><span class="dim">    pos(10, 6, 10),</span><span class="bad">    FillOperation.REPLACE)<span class="mk old">OLD</span></span><span class="hot">    FillOperation.HOLLOW)<span class="mk">NEW</span></span></pre>
+  <p class="where">📍 Change one word only.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run: aqua</div>
+    <div>Glass walls, floor, lid — empty inside.</div>
+  </div>
+  <p class="bilingual">hollow = 속이 빈</p>
+</div>
+
+<!-- 11 · SLOT 7: Investigate -->
+<div class="slide">
+  <span class="slot-badge">SLOT 7</span>
+  <div class="pill">Watch it!</div>
+  <h2>How fill reads your line</h2>
+  <div class="terminal" style="margin-top:.4em">
+    <div class="line"><span class="typed">GLASS</span>            <span class="echo">which block</span></div>
+    <div class="line"><span class="typed">pos(2, 0, 2)</span>     <span class="echo">corner A 📌</span></div>
+    <div class="line"><span class="typed">pos(10, 6, 10)</span>   <span class="echo">corner B 📌</span></div>
+    <div class="line"><span class="typed">HOLLOW</span>           <span class="echo">keep inside empty</span></div>
+    <div class="line"><span class="ok">glass tank ✓</span></div>
+  </div>
+  <p class="quiet" style="margin-top:.4em">Block → corner A → corner B → style.</p>
+</div>
+
+<!-- 12 · SLOT 8: Trace activity -->
+<div class="slide">
+  <span class="slot-badge">SLOT 8</span>
+  <div class="pill">Trace it</div>
+  <h2>Water goes one step inside</h2>
+  <div class="trace-grid cols-4">
+    <div class="cell head"></div><div class="cell head">x</div><div class="cell head">y</div><div class="cell head">z</div>
+    <div class="cell">glass A</div><div class="cell">2</div><div class="cell">0</div><div class="cell">2</div>
+    <div class="cell">water A</div><div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+    <div class="cell">glass B</div><div class="cell">10</div><div class="cell">6</div><div class="cell">10</div>
+    <div class="cell">water B</div><div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+  </div>
+  <p class="bilingual" style="margin-top:.4em">안쪽 = 유리 숫자 ±1</p>
+</div>
+
+<!-- 13 · SLOT 9: Common Mistake — the coordinate typo -->
+<div class="slide">
+  <span class="slot-badge">SLOT 9</span>
+  <div class="pill">⚠️ Watch out</div>
+  <h2>One wrong digit</h2>
+  <p style="margin-bottom:.3em">Goal: lid at y = 6.</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ 60</span><pre>pos(10, 60, 10)</pre><p>Glass tower to the clouds.</p></div>
+    <div class="col good"><span class="tag">✓ 6</span><pre>pos(10, 6, 10)</pre><p>After typing, read all six numbers out loud.</p></div>
+  </div>
+  <p class="bilingual">타이핑 후, 숫자 6개 소리 내서 읽기</p>
+</div>
+
+<!-- 14 · Extra: v3 water -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+  <h2>v3 — pour the water</h2>
+<pre><span class="dim">blocks.fill(GLASS,</span><span class="dim">    pos(2, 0, 2), pos(10, 6, 10),</span><span class="dim">    FillOperation.HOLLOW)</span><span class="hot"><span class="fn">blocks.fill</span>(WATER,</span><span class="hot">    <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">1</span>, <span class="num">3</span>),</span><span class="hot">    <span class="fn">pos</span>(<span class="num">9</span>, <span class="num">5</span>, <span class="num">9</span>),</span><span class="hot">    FillOperation.REPLACE)<span class="mk">NEW</span></span></pre>
+  <p class="where">📍 Under the glass fill. Water numbers = one step inside.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run: aqua</div>
+    <div>The tank fills. REPLACE swaps air → water.</div>
+  </div>
+</div>
+
+<!-- 15 · SLOT 10: Debug 1 — mistyped coordinate -->
+<div class="slide">
+  <span class="slot-badge">SLOT 10</span>
+  <div class="pill">🐛 Debug 1</div>
+  <h2>Water on the grass</h2>
+  <p style="margin-bottom:.3em">Goal: water inside the tank. It poured outside.</p>
+<pre><span class="dim">blocks.fill(WATER,</span><span class="bad">    pos(13, 1, 3),</span><span class="dim">    pos(9, 5, 9),</span><span class="dim">    FillOperation.REPLACE)</span></pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">13 is not 3 — one extra digit floods the lawn.</div>
+    <pre>    pos(<span class="num">3</span>, <span class="num">1</span>, <span class="num">3</span>),</pre>
+    <p>Check each number, digit by digit.</p>
+  </details></div>
+</div>
+
+<!-- 16 · SLOT 11: Debug 2 — the missing HOLLOW -->
+<div class="slide">
+  <span class="slot-badge">SLOT 11</span>
+  <div class="pill">🐛 Debug 2</div>
+  <h2>The solid tank</h2>
+  <p style="margin-bottom:.3em">Goal: a see-through tank. Got: solid glass — fish stuck!</p>
+<pre>blocks.fill(GLASS,
+    pos(2, 0, 2),
+    pos(10, 6, 10))</pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">The fourth part is missing, so fill made it solid.</div>
+    <pre>    pos(<span class="num">10</span>, <span class="num">6</span>, <span class="num">10</span>),
+    FillOperation.HOLLOW)</pre>
+    <p>Same bug as last week — you fixed it then too.</p>
+  </details></div>
+</div>
+
+<!-- 17 · SLOT 12: Debug 3 — y and z swapped -->
+<div class="slide">
+  <span class="slot-badge">SLOT 12</span>
+  <div class="pill">🐛 Debug 3</div>
+  <h2>The skyscraper tank</h2>
+  <p style="margin-bottom:.3em">Goal: wide tank, lid at 6. Got: a tall thin tower.</p>
+<pre><span class="dim">blocks.fill(GLASS,</span><span class="dim">    pos(2, 0, 2),</span><span class="bad">    pos(10, 10, 6),</span><span class="dim">    FillOperation.HOLLOW)</span></pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">y and z traded places. The order is always x, y, z.</div>
+    <pre>    pos(<span class="num">10</span>, <span class="num">6</span>, <span class="num">10</span>),</pre>
+  </details></div>
+</div>
+
+<!-- 18 · Extra: v4 fish loop -->
+<div class="slide">
+  <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+  <h2>v4 — add the fish</h2>
+<pre><span class="dim">blocks.fill(GLASS, ...)   # tank</span><span class="dim">blocks.fill(WATER, ...)   # water</span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">8</span>):</span><span class="hot">    <span class="fn">mobs.spawn</span>(TROPICAL_FISH,</span><span class="hot">        <span class="fn">pos</span>(<span class="num">6</span>, <span class="num">3</span>, <span class="num">6</span>))<span class="mk">NEW</span></span></pre>
+  <p class="where">📍 Bottom of <code>aqua</code>. range(8) = spawn 8 times.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run: aqua</div>
+    <div>8 fish appear mid-tank and swim.</div>
+  </div>
+</div>
+
+<!-- 19 · SLOT 13: Modify 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 13</span>
+  <div class="pill">Try it</div>
+  <h2>Your fish, your number</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> range(<span class="blank">___</span>):
+    <span class="fn">mobs.spawn</span>(<span class="blank">______</span>, <span class="fn">pos</span>(<span class="num">6</span>, <span class="num">3</span>, <span class="num">6</span>))</pre>
+  <p style="margin-top:.6em">Make <b>12 salmon</b>.</p>
+  <p class="quiet">Fish words: SALMON, COD, TROPICAL_FISH.</p>
+</div>
+
+<!-- 20 · SLOT 14: Modify 2 — harder -->
+<div class="slide">
+  <span class="slot-badge">SLOT 14</span>
+  <div class="pill">Try it</div>
+  <h2>Grow the tank</h2>
+  <p style="margin-bottom:.3em">New corner B: <code>pos(14, 8, 14)</code>. Fix the water.</p>
+<pre>blocks.fill(WATER,
+    pos(<span class="num">3</span>, <span class="num">1</span>, <span class="num">3</span>),
+    pos(<span class="blank">__</span>, <span class="blank">__</span>, <span class="blank">__</span>),
+    FillOperation.REPLACE)</pre>
+  <details class="debug-card" style="margin-top:.5em"><summary>▸ Check your answer</summary>
+    <p style="margin-top:.4em"><b>13, 7, 13</b> — one step inside 14, 8, 14.</p>
+  </details>
+</div>
+
+<!-- 21 · SLOT 15: Quick Quiz -->
+<div class="slide">
+  <span class="slot-badge">SLOT 15</span>
+  <div class="pill purple">Quick check</div>
+  <h2>Two questions</h2>
+  <div class="quiz-card">
+    <div class="q">1. In <code>pos(4, 9, 6)</code> — which number goes up?</div>
+    <div class="opts">
+      <details><summary>A. 9</summary><div class="ans">✓ The middle is y — up.</div></details>
+      <details><summary>B. 4</summary><div class="ans">No — first is x.</div></details>
+    </div>
+  </div>
+  <div class="quiz-card">
+    <div class="q">2. What does HOLLOW do?</div>
+    <div class="opts">
+      <details><summary>A. Keeps the inside empty</summary><div class="ans">✓ Walls only.</div></details>
+      <details><summary>B. Fills it solid</summary><div class="ans">No — that is REPLACE.</div></details>
+    </div>
+  </div>
+</div>
+
+<!-- 22 · Extra: interactive MCQ (OPTIONAL) -->
+<div class="slide mcq" data-correct="0" data-explain="Middle number = y. Layers 0, 1, 2, 3, 4 = five.">
+  <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+  <div class="qmeta">Bonus question</div>
+  <div class="q">Which fill is <b>5 blocks tall</b>?</div>
+  <div class="opts">
+    <button class="opt"><code>pos(0,0,0)</code> → <code>pos(8,4,8)</code></button>
+    <button class="opt"><code>pos(0,0,0)</code> → <code>pos(4,0,8)</code></button>
+    <button class="opt"><code>pos(0,0,0)</code> → <code>pos(8,0,4)</code></button>
+    <button class="opt"><code>pos(5,0,5)</code> → <code>pos(9,0,9)</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 23 · SLOT 16: Code Talk -->
+<div class="slide">
+  <span class="slot-badge">SLOT 16</span>
+  <div class="pill purple">Code Talk</div>
+  <h2>Say it out loud 🗣️</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame">"My tank goes from <code>pos(2, 0, 2)</code> to <span class="blank"></span> because corner B is <span class="blank"></span>."</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+  </div>
+</div>
+
+<!-- 24 · SLOT 17: Make / Your Turn -->
+<div class="slide">
+  <span class="slot-badge">SLOT 17</span>
+  <div class="pill">Your turn!</div>
+  <h2>Build your aquarium 🚀</h2>
+  <ul class="check-list">
+    <li>New chat command: <code>aqua</code></li>
+    <li>Glass fill — say all six numbers</li>
+    <li><code>HOLLOW</code> at the end</li>
+    <li>Water fill — one step inside</li>
+    <li>Fish loop — your fish, your number</li>
+    <li>Run. Screenshot. 📸</li>
+  </ul>
+</div>
+
+<!-- 25 · SLOT 18: Stretch -->
+<div class="slide">
+  <span class="slot-badge">SLOT 18</span>
+  <div class="pill">🚀 Stretch</div>
+  <h2>Pick a bonus</h2>
+  <div class="stretch-list">
+    <div class="item"><span class="lvl">★</span>20 fish — mix two kinds.</div>
+    <div class="item"><span class="lvl">★★</span>Sand floor: fill SAND, one layer, inside the bottom.</div>
+    <div class="item"><span class="lvl">★★★</span>A second tank beside the first — new x numbers.</div>
+  </div>
+</div>
+
+<!-- 26 · Extra: Debug 4 (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🐛 Debug 4</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Fish on the roof</h2>
+  <p style="margin-bottom:.3em">Goal: fish in the water. They flop on the lid.</p>
+<pre><span class="dim">mobs.spawn(TROPICAL_FISH,</span><span class="bad">    pos(6, 9, 6))</span></pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">y = 9 is above the lid (y = 6). Water is y 1 to 5.</div>
+    <pre>    pos(<span class="num">6</span>, <span class="num">3</span>, <span class="num">6</span>))</pre>
+  </details></div>
+</div>
+
+<!-- 27 · SLOT 19: Exit Ticket -->
+<div class="slide">
+  <span class="slot-badge">SLOT 19</span>
+  <div class="pill">🎟️ Exit ticket</div>
+  <h2>Before you go…</h2>
+  <div class="exit">
+    <div class="label">Say your answer</div>
+    <p style="margin-top:.4em">Say your tank's six numbers — in order, from memory.</p>
+    <p class="bilingual" style="margin-top:.4em">여섯 숫자, 순서대로!</p>
+  </div>
+</div>
+
+<!-- 28 · SLOT 20: Close & Bridge -->
+<div class="slide center-all">
+  <span class="slot-badge">SLOT 20</span>
+  <div class="emoji">🐠</div>
+  <h1 style="font-size:clamp(36px,6vmin,56px)">Two corners<br>build anything.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a coral reef around your tank.</p>
+  <p class="bilingual">다음: 산호초 꾸미기</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>

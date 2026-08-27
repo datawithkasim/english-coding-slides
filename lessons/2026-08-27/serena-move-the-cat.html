@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Super Catio — Move the Cat (Serena · 2026-08-27)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Super Catio · Pygame · Serena · 27 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Super Catio</div>
+    <div class="emoji">🐈</div>
+    <h1>Move<br>the Cat</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">name</span> the cat's numbers + <span class="sub">drive</span> it with arrow keys.</p>
+    <p class="bilingual">화살표 키로 고양이를 움직여요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Serena's own 2026-08-20 lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your first pygame lesson</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your code</div>
+      <div class="q">1. <code>PASTEL_PEACH = (255, 218, 185)</code> — why capital letters?</div>
+      <details><summary>Show answer</summary><div class="ans">A constant — it never changes.</div></details>
+      <div class="q" style="margin-top:.5em">2. What are the three numbers?</div>
+      <details><summary>Show answer</summary><div class="ans">Red, green, blue — each 0 to 255.</div></details>
+      <div class="q" style="margin-top:.5em">3. <code>clock.tick(60)</code> does what?</div>
+      <details><summary>Show answer</summary><div class="ans">60 frames every second.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) — targets the y-direction wobble -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Two squares</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Same x. Which square sits nearer the <b>bottom</b>?</div>
+<pre>pygame.draw.<span class="fn">rect</span>(screen, RED,  (<span class="num">300</span>, <span class="num">100</span>, <span class="num">60</span>, <span class="num">60</span>))
+pygame.draw.<span class="fn">rect</span>(screen, BLUE, (<span class="num">300</span>, <span class="num">400</span>, <span class="num">60</span>, <span class="num">60</span>))</pre>
+      <details><summary>Reveal output</summary><div class="ans">BLUE — bigger y sits lower on screen.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">frame</span>
+      <span class="gloss">one drawing of the window — about 60 each second</span>
+      <span class="ko">한 장면</span>
+
+      <span class="term">pygame.key.get_pressed()</span>
+      <span class="gloss">asks: which keys are held right now?</span>
+      <span class="ko">지금 눌린 키 목록</span>
+
+      <span class="term">speed</span>
+      <span class="gloss">pixels moved each frame</span>
+      <span class="ko">한 프레임에 가는 거리</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Roadmap — the version ramp -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Today's plan 🗺️</div>
+    <h2>Four tiny versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🐈</div><div class="name">v1 · sitting cat</div><div class="ex">(120, 420, 60, 70)</div></div>
+      <div class="opt-card"><div class="ico">🏷️</div><div class="name">v2 · name the numbers</div><div class="ex">cat_x, cat_y</div></div>
+      <div class="opt-card"><div class="ico">🎮</div><div class="name">v3 · arrow keys</div><div class="ex">get_pressed()</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">v4 · one speed</div><div class="ex">SPEED = 5</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Every version runs. Each adds one idea.</p>
+  </div>
+
+  <!-- Slot 6: Concept (Notional Machine) — NO CODE, y grows down -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept 💡</div>
+    <h2>The screen counts DOWN</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📐</div><div class="name">Maths graph</div><div class="ex">y grows UP ⬆</div></div>
+      <div class="opt-card"><div class="ico">🖥️</div><div class="name">Pygame screen</div><div class="ex">y grows DOWN ⬇</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em"><b>(0, 0)</b> is the top-left corner. x grows right. y grows down, like reading a page.</p>
+    <p class="bilingual center">y는 아래로 커져요</p>
+  </div>
+
+  <!-- Slot 7: Run (Worked Example) — v1, the homework -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Run ▶</div>
+    <h2>v1 — your homework</h2>
+<pre>screen.<span class="fn">fill</span>(PASTEL_PEACH)
+pygame.draw.<span class="fn">rect</span>(screen, BROWN, (<span class="num">0</span>, <span class="num">500</span>, <span class="num">600</span>, <span class="num">100</span>))  <span class="com"># ground</span>
+pygame.draw.<span class="fn">rect</span>(screen, GREEN, (<span class="num">0</span>, <span class="num">480</span>, <span class="num">600</span>, <span class="num">20</span>))   <span class="com"># grass</span>
+pygame.draw.<span class="fn">rect</span>(screen, RED,   (<span class="num">120</span>, <span class="num">420</span>, <span class="num">60</span>, <span class="num">70</span>))  <span class="com"># cat</span>
+pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">peach sky · brown ground · green grass · cat at (120, 420)</div>
+    </div>
+    <p style="margin-top:.4em">Starter numbers — yours may differ.</p>
+  </div>
+
+  <!-- Slot 8: Rect anatomy — Serena's △: the 4 numbers -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Four numbers, one cat</h2>
+<pre>pygame.draw.<span class="fn">rect</span>(screen, RED, (<span class="num">120</span>, <span class="num">420</span>, <span class="num">60</span>, <span class="num">70</span>))</pre>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">x</span><span class="val">120 · from left</span></div>
+      <div class="varbox"><span class="name">y</span><span class="val">420 · from top</span></div>
+      <div class="varbox"><span class="name">width</span><span class="val">60 wide</span></div>
+      <div class="varbox"><span class="name">height</span><span class="val">70 tall</span></div>
+    </div>
+    <p class="center">First two <b>place</b> the box. Last two <b>size</b> it.</p>
+    <p class="bilingual center">앞 둘은 위치, 뒤 둘은 크기</p>
+  </div>
+
+  <!-- Slot 9: Investigate (Animated) — changing x moves the cat -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Change the number, move the cat</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">x →</div>
+        <div class="cg-track"><div class="cg-sprite">🐈</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">cat_x</span> = <span class="cg-val"><span>120</span><span>220</span><span>320</span><span>420</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Bigger <code>cat_x</code>, further right. Movement is a number changing every frame.</p>
+  </div>
+
+  <!-- Slot 10: Trace Activity — edges of the homework rects -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Where is each edge?</h2>
+<pre>ground (<span class="num">0</span>, <span class="num">500</span>, <span class="num">600</span>, <span class="num">100</span>)   grass (<span class="num">0</span>, <span class="num">480</span>, <span class="num">600</span>, <span class="num">20</span>)   cat (<span class="num">120</span>, <span class="num">420</span>, <span class="num">60</span>, <span class="num">70</span>)</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">edge</div>
+      <div class="cell head">ground</div>
+      <div class="cell head">grass</div>
+      <div class="cell head">cat</div>
+
+      <div class="cell"><code>top = y</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">500</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">480</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">420</span></details></div>
+
+      <div class="cell"><code>bottom = y + h</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">600</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">500</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">490</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Highest on screen? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700;display:inline">?</summary> <span style="color:#6fe0a0;font-weight:700">The cat — smallest top y.</span></details></p>
+  </div>
+
+  <!-- Slot 11: Common Mistake — Serena's △: "up" means bigger y -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Up is minus, not plus</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="com"># goal: cat higher</span>
+(<span class="num">120</span>, <span class="num">500</span>, <span class="num">60</span>, <span class="num">70</span>)</pre>
+        <p>Bigger y — the cat sank into the ground.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="com"># goal: cat higher</span>
+(<span class="num">120</span>, <span class="num">300</span>, <span class="num">60</span>, <span class="num">70</span>)</pre>
+        <p>Smaller y — the cat rises.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.5em">위로 = y 줄이기</p>
+  </div>
+
+  <!-- Slot 12: Build v2 — variables replace the numbers -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Build v2 🏷️</div>
+    <h2>v2 — names for the numbers</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">cat_x = <span class="num">120</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">cat_y = <span class="num">420</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45"><span class="kw">while</span> <span class="kw">True</span>:</span><span style="display:block;opacity:.45">    screen.<span class="fn">fill</span>(PASTEL_PEACH)</span><span style="display:block;background:rgba(220,53,69,.12)">    pygame.draw.<span class="fn">rect</span>(screen, RED, (<span class="num">120</span>, <span class="num">420</span>, <span class="num">60</span>, <span class="num">70</span>))<span class="activity-tag" style="background:#dc3545">OLD</span></span><span style="display:block;background:rgba(56,208,224,.13)">    pygame.draw.<span class="fn">rect</span>(screen, RED, (cat_x, cat_y, <span class="num">60</span>, <span class="num">70</span>))<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    pygame.display.<span class="fn">flip</span>()</span></pre>
+    <p style="margin-top:.5em">📍 Above <code>while True:</code>. Run it — same picture. But names can change; plain numbers cannot.</p>
+    <p class="bilingual">변수는 바꿀 수 있어요</p>
+  </div>
+
+  <!-- Slot 13: Build v3 — arrow keys -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Build v3 🎮</div>
+    <h2>v3 — arrow keys</h2>
+<pre><span style="display:block;opacity:.45"><span class="kw">while</span> <span class="kw">True</span>:</span><span style="display:block;opacity:.45">    <span class="com"># your event loop stays here</span></span><span style="display:block;background:rgba(56,208,224,.13)">    keys = pygame.key.<span class="fn">get_pressed</span>()<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_RIGHT]: cat_x += <span class="num">5</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_LEFT]:  cat_x -= <span class="num">5</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_UP]:    cat_y -= <span class="num">5</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_DOWN]:  cat_y += <span class="num">5</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    <span class="com"># fill, draw, flip — unchanged</span></span></pre>
+    <p style="margin-top:.5em">📍 After the event loop, before <code>screen.fill</code>. Held key → number changes → next frame draws the cat there.</p>
+  </div>
+
+  <!-- Slot 14: DEBUG 1 — Serena's △: y-direction, swapped arrows -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — upside-down arrows</h2>
+<pre><span class="kw">if</span> keys[pygame.K_UP]:   cat_y += <span class="num">5</span>
+<span class="kw">if</span> keys[pygame.K_DOWN]: cat_y -= <span class="num">5</span></pre>
+    <div class="debug-card"><div class="err">No crash. Press UP — the cat dives.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Swap the signs. UP must <b>shrink</b> y — the screen counts down.</p>
+      <p class="bilingual">위 화살표 = y 감소</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: DEBUG 2 — Serena's △: the 4 numbers out of order -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — the giant cat</h2>
+<pre>pygame.draw.<span class="fn">rect</span>(screen, RED, (<span class="num">60</span>, <span class="num">70</span>, cat_x, cat_y))</pre>
+    <div class="debug-card"><div class="err">A huge red block hugs the top-left corner. Arrows stretch it.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Order is <b>(x, y, width, height)</b>. Position first, size last: <code>(cat_x, cat_y, 60, 70)</code>.</p>
+      <p class="bilingual">순서: 위치 먼저, 크기 나중</p>
+    </details>
+  </div>
+
+  <!-- Slot 16: DEBUG 3 — variable reset inside the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — the cat is stuck</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    cat_x = <span class="num">120</span>
+    keys = pygame.key.<span class="fn">get_pressed</span>()
+    <span class="kw">if</span> keys[pygame.K_RIGHT]: cat_x += <span class="num">5</span></pre>
+    <div class="debug-card"><div class="err">Hold RIGHT — the cat sticks near its start, forever.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Every frame resets <code>cat_x</code> to 120 before adding 5. Set it <b>once, above the loop</b>.</p>
+      <p class="bilingual">시작 값은 반복문 밖에</p>
+    </details>
+  </div>
+
+  <!-- Slot 17: Build v4 — SPEED constant -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Build v4 ⚡</div>
+    <h2>v4 — one speed, one place</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">SPEED = <span class="num">5</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    ...</span><span style="display:block;background:rgba(220,53,69,.12)">    <span class="kw">if</span> keys[pygame.K_RIGHT]: cat_x += <span class="num">5</span><span class="activity-tag" style="background:#dc3545">OLD</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_RIGHT]: cat_x += SPEED<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    <span class="com"># same swap on all four lines</span></span></pre>
+    <p style="margin-top:.5em">📍 Top of file, with your colors. Capital name, like <code>PASTEL_PEACH</code> — change one line, all four keys feel it.</p>
+    <p class="bilingual">상수는 한 곳에서만</p>
+  </div>
+
+  <!-- Slot 18: Modify 1 (easy fill-blank) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>keys = pygame.key.___()
+
+<span class="kw">if</span> keys[pygame.K_RIGHT]: cat_x ___ SPEED
+<span class="kw">if</span> keys[pygame.K_LEFT]:  cat_x ___ SPEED
+<span class="kw">if</span> keys[pygame.K_UP]:    cat_y ___ SPEED
+<span class="kw">if</span> keys[pygame.K_DOWN]:  cat_y ___ SPEED</pre>
+    <p style="margin-top:.6em"><b>Hint:</b> up and left both mean minus.</p>
+  </div>
+
+  <!-- Slot 19: Modify 2 (harder) — the enemy moves too -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — wake the enemy</h2>
+<pre>enemy_x = <span class="num">420</span>
+enemy_y = <span class="num">410</span>
+
+<span class="kw">if</span> keys[pygame.K_w]: ___ -= SPEED
+<span class="kw">if</span> keys[pygame.K_s]: ___ += SPEED
+
+pygame.draw.<span class="fn">rect</span>(screen, BLUE, (___, ___, <span class="num">60</span>, <span class="num">70</span>))</pre>
+    <p style="margin-top:.5em">Same pattern, new names. Which variable do <code>w</code> and <code>s</code> change?</p>
+  </div>
+
+  <!-- Slot 20: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>cat_y -= 5</code> — the cat moves…</div>
+      <div class="opts">
+        <details><summary>A. down</summary><div class="ans">No — smaller y is higher.</div></details>
+        <details><summary>B. up</summary><div class="ans">✓ y shrinks, the cat rises.</div></details>
+        <details><summary>C. right</summary><div class="ans">No — that is x's job.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. In <code>(120, 420, 60, 70)</code>, the 70 is…</div>
+      <div class="opts">
+        <details><summary>A. width</summary><div class="ans">No — 60 is width.</div></details>
+        <details><summary>B. y</summary><div class="ans">No — 420 is y.</div></details>
+        <details><summary>C. height</summary><div class="ans">✓ Last number = height.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 21: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Every frame <code>get_pressed</code> checks <span class="blank"></span>. While <code>K_RIGHT</code> is held, <code>cat_x</code> gets <span class="blank"></span>, so the cat slides <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in your file</h2>
+    <ul class="check-list">
+      <li><code>cat_x</code>, <code>cat_y</code> above <code>while True:</code></li>
+      <li>Cat's draw line reads <code>cat_x, cat_y</code></li>
+      <li><code>keys = pygame.key.get_pressed()</code></li>
+      <li>Four <code>if</code>s — UP means minus</li>
+      <li><code>SPEED = 5</code> at the top of the file</li>
+      <li>Run after every edit</li>
+    </ul>
+  </div>
+
+  <!-- Slot 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span><code>SPEED = 9</code>. Feel it. Back to 5.</div>
+      <div class="item"><span class="lvl">★★</span>Hold → and ↑ together. Explain the diagonal.</div>
+      <div class="item"><span class="lvl">★★★</span>The cat may not leave the window.</div>
+    </div>
+  </div>
+
+  <!-- Slot 24: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">Type the line that moves the cat <b>up</b> — and say why it uses minus.</p>
+      <p class="bilingual" style="margin-top:.4em">왜 마이너스인지 말해요</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- Slot 25: OPTIONAL — DEBUG 4, tap vs hold -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 4 — one tap, one hop</h2>
+<pre><span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():
+    <span class="kw">if</span> event.type == pygame.KEYDOWN:
+        <span class="kw">if</span> event.key == pygame.K_RIGHT:
+            cat_x += SPEED</pre>
+    <div class="debug-card"><div class="err">Each press hops once. Holding the key adds nothing.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>KEYDOWN</code> fires once per press. <code>get_pressed()</code> answers every frame — move the <code>if</code>s back outside the event loop.</p>
+      <p class="bilingual">누르고 있으면 매 프레임</p>
+    </details>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — harder trace, frames of movement -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four frames, one finger</h2>
+<pre>cat_x = <span class="num">120</span>   cat_y = <span class="num">420</span>   SPEED = <span class="num">5</span></pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">held key</div>
+      <div class="cell head">→</div>
+      <div class="cell head">→</div>
+      <div class="cell head">→</div>
+      <div class="cell head">↑</div>
+
+      <div class="cell"><code>cat_x</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">125</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">130</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">135</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">135</span></details></div>
+
+      <div class="cell"><code>cat_y</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">420</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">420</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">420</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">415</span></details></div>
+    </div>
+    <p style="margin-top:.5em">One column per frame. The axis you don't press holds still.</p>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — Modify 3, walls -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Walls — no escape</h2>
+<pre><span class="kw">if</span> cat_x &lt; <span class="num">0</span>:
+    cat_x = ___
+<span class="kw">if</span> cat_x &gt; ___:
+    cat_x = <span class="num">540</span></pre>
+    <p style="margin-top:.5em">Why 540? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700;display:inline">?</summary> <span style="color:#6fe0a0;font-weight:700">600 − 60. Window width minus cat width.</span></details></p>
+    <p class="bilingual">화면 너비 − 고양이 너비</p>
+  </div>
+
+  <!-- Slot 28: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="emoji">🐈</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Change a number,<br>move a cat.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: the enemy wakes up — don't get caught.</p>
+    <p class="bilingual">다음 시간: 적이 움직여요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

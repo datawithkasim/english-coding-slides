@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pass the Animal &middot; One Word, Sixty-Four Animals</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* .slide is already position:absolute; inset:0 in the shared stylesheet, so it
+     anchors .tag and .cap. Do not give it position:relative — that collapses it
+     to content height and the caption stops sitting at the bottom. */
+
+  /* mode tag, top left, so the teacher knows how to run the slide */
+  .tag { position: absolute; top: 4%; left: 4%;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+         letter-spacing: .14em; text-transform: uppercase;
+         border: 2px solid var(--accent); color: var(--accent);
+         border-radius: 2em; padding: .2em .9em; }
+  .tag.ex { border-color: #ffb86c; color: #ffb86c; }
+
+  /* optional-slide marker, top right */
+  .opt { position: absolute; top: 4%; right: 4%;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+         letter-spacing: .14em; text-transform: uppercase;
+         border: 2px dashed var(--com); color: var(--com);
+         border-radius: 2em; padding: .2em .9em; }
+
+  /* the short line the teacher talks around, pinned to the bottom */
+  .cap { position: absolute; bottom: 5%; left: 6%; right: 6%; text-align: center;
+         font-size: clamp(15px, 2.4vmin, 26px); line-height: 1.35; color: var(--code-ink); margin: 0; }
+  .cap b { color: var(--accent); }
+  .cap .ko { display: block; color: var(--com); font-size: .78em; margin-top: .25em; }
+
+  /* code is the hero of most slides, so it is sized for a shared screen */
+  pre { background: var(--code-bg); border-radius: .5em; padding: .8em 1.1em; margin: .3em auto;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(15px, 2.7vmin, 31px);
+        line-height: 1.5; overflow-x: auto; color: var(--code-ink);
+        text-align: left; width: fit-content; max-width: 94%; }
+  pre.sm { font-size: clamp(13px, 2.1vmin, 24px); }
+  pre .ln { color: #3d4759; user-select: none; display: inline-block; width: 1.9em;
+            text-align: right; padding-right: .6em; margin-right: .5em; }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .bad { display: block; background: rgba(255,85,85,.16); }
+  pre .dim { color: #4a5670; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: center;
+         width: 100%; max-width: 1500px; }
+  .two > * { min-width: 0; }
+  @media (max-width: 1000px) { .two { grid-template-columns: 1fr; } }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .22em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 18px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+  .ans { font-size: clamp(15px, 2.4vmin, 26px); margin: .3em 0 0; }
+  .ans b { color: var(--fn); }
+
+  .stat { display: flex; gap: 2.2em; justify-content: center; flex-wrap: wrap; }
+  .stat div { text-align: center; }
+  .stat .n { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             font-size: clamp(38px, 11vmin, 120px); line-height: 1; }
+  .stat .t { color: var(--com); font-size: clamp(12px, 1.8vmin, 18px);
+             text-transform: uppercase; letter-spacing: .08em; margin-top: .3em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 620px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .4em auto 0; max-width: 620px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2vmin, 19px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  table.vt { border-collapse: collapse; margin: .2em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(16px, 3vmin, 32px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .25em 1em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .7em; }
+  table.vt td { color: var(--accent); }
+  table.vt td.fill { color: #ffb86c; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(16px, 2.7vmin, 30px); margin: .2em 0; }
+  ul.tick li { font-size: inherit; margin: .3em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  ol.steps { counter-reset: s; list-style: none; padding-left: 0;
+             font-size: clamp(15px, 2.5vmin, 28px); max-width: 1100px; margin: .2em auto; }
+  ol.steps li { counter-increment: s; margin: .35em 0; padding-left: 2em; position: relative; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 0; top: .1em;
+             width: 1.4em; height: 1.4em; border-radius: 50%; border: 2px solid var(--accent-2);
+             color: var(--accent-2); font-family: "JetBrains Mono", monospace;
+             font-size: .75em; display: flex; align-items: center; justify-content: center; }
+  ol.steps code { font-size: .92em; }
+
+  code { font-family: "JetBrains Mono", monospace; background: rgba(56,208,224,.12);
+         border-radius: .25em; padding: 0 .3em; color: var(--accent); }
+
+  .stamp { display: flex; gap: .6em; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .stamp .box { width: clamp(56px, 11vmin, 130px); height: clamp(56px, 11vmin, 130px);
+                border: 3px solid var(--fn); border-radius: .3em; background: rgba(80,250,123,.08);
+                display: flex; align-items: center; justify-content: center; text-align: center;
+                font-family: "JetBrains Mono", monospace; color: var(--fn);
+                font-size: clamp(13px, 2.3vmin, 24px); }
+  .stamp .box.q { border-color: var(--accent-2); color: var(--accent-2);
+                  background: rgba(139,92,246,.08); }
+  .stamp .box.w { border-color: #ffb86c; color: #ffb86c; background: rgba(255,184,108,.08); }
+  .stamp .arrow { color: var(--com); font-size: clamp(24px, 5vmin, 54px); }
+
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+           width: 100%; max-width: 1500px; margin: 0 auto; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: 1fr; } }
+  .card { border: 2px solid var(--soft); border-radius: .6em; padding: .5em .7em; }
+  .card .h { font-family: "JetBrains Mono", monospace; color: var(--com);
+             font-size: clamp(11px, 1.7vmin, 16px); text-transform: uppercase; letter-spacing: .08em; }
+  .card.red { border-color: #ff5555; }
+  .card.green { border-color: var(--fn); }
+  .card p { font-size: clamp(15px, 2.3vmin, 25px); margin: .2em 0; }
+
+  .vocab-big { display: grid; grid-template-columns: auto 1fr auto; gap: .3em 1.4em;
+               align-items: baseline; margin: 0 auto; font-size: clamp(15px, 2.6vmin, 30px); }
+  .vocab-big .term { font-family: "JetBrains Mono", monospace; color: var(--fn); }
+  .vocab-big .gloss { color: var(--code-ink); }
+  .vocab-big .ko { color: var(--com); font-size: .85em; }
+
+  .frames { font-size: clamp(16px, 2.8vmin, 32px); line-height: 1.9; text-align: left;
+            max-width: 1100px; margin: 0 auto; }
+  .frames .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  /* cage cross-section, one vertical slice, 6 x 6 cells */
+  .xs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px;
+        width: clamp(140px, 26vmin, 260px); margin: 0 auto; }
+  .xs i { aspect-ratio: 1; border-radius: 2px; background: #1c2333; }
+  .xs i.g { background: #2f7d3a; }
+  .xs i.f { background: #8a5a2b; }
+  .xs i.m { background: #1c2333; position: relative; }
+  .xs i.m::after { content: "🐷"; position: absolute; inset: 0;
+                   display: flex; align-items: center; justify-content: center;
+                   font-size: clamp(12px, 2.4vmin, 24px); }
+  .xs.solid i { background: #2f7d3a; }
+  .xs.solid i.m::after { filter: grayscale(1); opacity: .55; }
+  .xslab { text-align: center; font-family: "JetBrains Mono", monospace; color: var(--com);
+           font-size: clamp(12px, 1.8vmin, 18px); margin-top: .4em; text-transform: uppercase;
+           letter-spacing: .08em; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Fill Loops · 6 · Pass the Animal 🐷</div>
+
+  <!-- 1 · title -->
+  <div class="slide active center-all">
+    <div class="emoji">🐷</div>
+    <h1>One word.<br>Any animal.</h1>
+    <p class="cap">🎯 Today you pass a value <b>down the chain</b> of functions.
+      <span class="ko">값을 함수 사슬로 전달하기</span></p>
+  </div>
+
+  <!-- 2 · recap: the chain -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+    <div class="stamp">
+      <div class="box q">make_cube</div>
+      <div class="arrow">→</div>
+      <div class="box q">make_row</div>
+      <div class="arrow">→</div>
+      <div class="box">make_cage</div>
+    </div>
+    <p class="cap">Last week: one call, 64 cages. Say what each box does.
+      <span class="ko">지난주 복습</span></p>
+  </div>
+
+  <!-- 3 · recap check -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <p class="frames" style="text-align:center"><code>make_row</code> has two loops inside. How many cages from <b>one</b> call?</p>
+    <span class="rev" data-t="r1">Check</span>
+    <p class="ans hid" id="r1"><b>16</b> — four across, four up. It builds a wall, not a row. Remember that.</p>
+    <p class="cap">Answer from memory, then open your code.</p>
+  </div>
+
+  <!-- 4 · predict trap -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+<pre><span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>)</pre>
+    <p class="frames" style="text-align:center">You want a <b>pig</b> zoo. What do you edit on this line?</p>
+    <span class="rev" data-t="r2">Reveal</span>
+    <p class="ans hid" id="r2">Trick question. <b>Nothing works</b> — the call has no animal slot.</p>
+    <p class="cap">Predict before you touch anything.</p>
+  </div>
+
+  <!-- 5 · where chicken hides -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="ln">1</span><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_row</span>(x, y, z):
+<span class="ln">2</span>    <span style="color:var(--kw)">for</span> y_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="ln">3</span>        cage_y = y + y_val * <span style="color:var(--num)">7</span>
+<span class="ln">4</span>        <span style="color:var(--kw)">for</span> x_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="bad"><span class="ln">5</span>            make_cage(x + x_val*<span style="color:var(--num)">7</span>, cage_y, z, CHICKEN)</span></pre>
+    <p class="cap"><code>CHICKEN</code> is welded inside. The call can never change it.
+      <span class="ko">동물이 함수 안에 갇혀 있어요</span></p>
+  </div>
+
+  <!-- 6 · vocab -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+    <div class="vocab-big">
+      <span class="term">parameter</span><span class="gloss">a slot in the function header</span><span class="ko">매개변수</span>
+      <span class="term">argument</span><span class="gloss">the value you put in the slot</span><span class="ko">넣는 값</span>
+      <span class="term">pass down</span><span class="gloss">hand a value to the next function</span><span class="ko">아래로 전달</span>
+      <span class="term">hollow</span><span class="gloss">walls only, empty inside</span><span class="ko">속이 빈</span>
+    </div>
+    <p class="cap">Four words for today.</p>
+  </div>
+
+  <!-- 7 · concept: relay -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+    <div class="stamp">
+      <div class="box w">PIG</div>
+      <div class="arrow">→</div>
+      <div class="box q">make_cube</div>
+      <div class="arrow">→</div>
+      <div class="box q">make_row</div>
+      <div class="arrow">→</div>
+      <div class="box">make_cage</div>
+      <div class="arrow">→</div>
+      <div class="box w">🐷</div>
+    </div>
+    <p class="cap">A relay race. The word travels the whole chain, hand to hand.
+      <span class="ko">값이 사슬을 타고 내려가요</span></p>
+  </div>
+
+  <!-- 8 · v1 where we are -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">v1 — your code today</span>
+<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_row</span>(x, y, z):
+<span class="dim">    ...</span>
+<span class="bad">            make_cage(..., CHICKEN)<span class="mk old">STUCK</span></span>
+<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cube</span>(x, y, z):
+<span class="dim">    ...</span>
+<span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>)</pre>
+    <p class="cap">Works, but the animal is frozen. Three edits fix it.</p>
+  </div>
+
+  <!-- 9 · v2 make_row asks -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">v2 — make_row asks for the animal</span>
+<span class="hot"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_row</span>(x, y, z, animal):<span class="mk">NEW</span></span>
+    <span style="color:var(--kw)">for</span> y_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="dim">        cage_y = y + y_val * 7</span>
+        <span style="color:var(--kw)">for</span> x_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="hot">            make_cage(x + x_val*<span style="color:var(--num)">7</span>, cage_y, z, animal)<span class="mk">NEW</span></span></pre>
+    <p class="cap">Add the slot. <b>Use</b> the slot. Two lines change.
+      <span class="ko">칸을 만들고, 그 칸을 쓰기</span></p>
+  </div>
+
+  <!-- 10 · predict: what breaks now -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+<pre class="sm"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cube</span>(x, y, z):
+    <span style="color:var(--kw)">for</span> z_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="bad">        make_row(x, y, z + z_val*<span style="color:var(--num)">7</span>)</span></pre>
+    <p class="frames" style="text-align:center">Only <code>make_row</code> changed. Run it. What goes wrong?</p>
+    <span class="rev" data-t="r3">Reveal</span>
+    <p class="ans hid" id="r3"><code>make_row</code> now needs <b>four</b> values. make_cube only hands over three.</p>
+    <p class="cap">A chain breaks at the link you forgot.</p>
+  </div>
+
+  <!-- 11 · v3 full chain -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">v3 — the whole chain passes it down</span>
+<span class="hot"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cube</span>(x, y, z, animal):<span class="mk">NEW</span></span>
+    <span style="color:var(--kw)">for</span> z_val <span style="color:var(--kw)">in</span> range(<span style="color:var(--num)">4</span>):
+<span class="hot">        make_row(x, y, z + z_val*<span style="color:var(--num)">7</span>, animal)<span class="mk">NEW</span></span>
+
+<span class="hot"><span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, PIG)<span class="mk">NEW</span></span></pre>
+    <p class="cap">Now the animal starts at the top and rides all the way down.</p>
+  </div>
+
+  <!-- 12 · trace the word -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+<pre class="sm"><span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, LLAMA)</pre>
+    <table class="vt">
+      <tr><th>inside</th><th>animal is…</th></tr>
+      <tr><td>make_cube</td><td class="fill">?</td></tr>
+      <tr><td>make_row</td><td class="fill">?</td></tr>
+      <tr><td>make_cage</td><td class="fill">?</td></tr>
+    </table>
+    <span class="rev" data-t="r4">Check</span>
+    <p class="ans hid" id="r4"><b>LLAMA</b> in all three. Same word, handed down the chain.</p>
+    <p class="cap">Follow the word with your finger before you run.</p>
+  </div>
+
+  <!-- 13 · do it in your code -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <ol class="steps">
+      <li><code>make_row</code> header: add <code>animal</code></li>
+      <li>its <code>make_cage</code> call: <code>CHICKEN</code> → <code>animal</code></li>
+      <li><code>make_cube</code> header: add <code>animal</code></li>
+      <li>its <code>make_row</code> call: pass <code>animal</code></li>
+      <li>bottom line: <code>make_cube(1, 1, 1, PIG)</code></li>
+    </ol>
+    <p class="cap">Five edits, top to bottom. Run after each one.
+      <span class="ko">한 줄 고치고 바로 실행</span></p>
+  </div>
+
+  <!-- 14 · mistake: slot ignored -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <div class="cards">
+      <div class="card red">
+        <div class="h">broken</div>
+<pre class="sm"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_row</span>(x, y, z, animal):
+<span class="bad">    make_cage(..., CHICKEN)</span></pre>
+      </div>
+      <div class="card green">
+        <div class="h">fixed</div>
+<pre class="sm"><span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_row</span>(x, y, z, animal):
+    make_cage(..., <span style="color:var(--accent)">animal</span>)</pre>
+      </div>
+    </div>
+    <p class="cap">The slot exists but nobody uses it. You still get chickens. Why?</p>
+  </div>
+
+  <!-- 15 · mistake: call not updated -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <div class="cards">
+      <div class="card red">
+        <div class="h">broken</div>
+<pre class="sm"><span class="bad"><span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>)</span></pre>
+      </div>
+      <div class="card green">
+        <div class="h">fixed</div>
+<pre class="sm"><span style="color:var(--fn)">make_cube</span>(<span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, <span style="color:var(--num)">1</span>, PIG)</pre>
+      </div>
+    </div>
+    <p class="cap">New slot in the header means every call must fill it.
+      <span class="ko">부르는 쪽도 같이 고치기</span></p>
+  </div>
+
+  <!-- 16 · milestone -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <div class="stat">
+      <div><div class="n" style="color:#ff5555">64</div><div class="t">edits last week</div></div>
+      <div><div class="n" style="color:var(--fn)">1</div><div class="t">word today</div></div>
+    </div>
+    <p class="cap">Run with <code>PIG</code>. Then change one word to <code>LLAMA</code> and run again.</p>
+  </div>
+
+  <!-- 17 · solid problem -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm">blocks.fill(GRASS,
+    pos(x, y, z),
+    pos(x+<span style="color:var(--num)">5</span>, y+<span style="color:var(--num)">5</span>, z+<span style="color:var(--num)">5</span>),
+<span class="bad">    FillOperation.REPLACE)</span></pre>
+    <p class="cap">Problem two. This fills a <b>solid</b> grass cube — animals spawn inside blocks.
+      <span class="ko">동물이 블록 속에 갇혀요</span></p>
+  </div>
+
+  <!-- 18 · solid vs hollow -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+    <div class="two">
+      <div>
+        <div class="xs solid">
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i class="m"></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="xslab">REPLACE · solid</div>
+      </div>
+      <div>
+        <div class="xs">
+          <i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i>
+          <i class="f"></i><i></i><i></i><i></i><i></i><i class="f"></i>
+          <i class="f"></i><i></i><i></i><i></i><i></i><i class="f"></i>
+          <i class="f"></i><i></i><i class="m"></i><i></i><i></i><i class="f"></i>
+          <i class="f"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="f"></i>
+          <i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i>
+        </div>
+        <div class="xslab">HOLLOW · walls + floor</div>
+      </div>
+    </div>
+    <p class="cap">Side view of one cage. <code>HOLLOW</code> builds walls, keeps the inside empty.</p>
+  </div>
+
+  <!-- 19 · v4 real cage -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">v4 — the real cage returns</span>
+<span style="color:var(--kw)">def</span> <span style="color:var(--fn)">make_cage</span>(x, y, z, animal):
+<span class="hot">    blocks.fill(OAK_FENCE, pos(x, y, z),
+        pos(x+<span style="color:var(--num)">5</span>, y+<span style="color:var(--num)">5</span>, z+<span style="color:var(--num)">5</span>), FillOperation.HOLLOW)<span class="mk">NEW</span></span>
+<span class="hot">    blocks.fill(GRASS, pos(x, y, z),
+        pos(x+<span style="color:var(--num)">5</span>, y, z+<span style="color:var(--num)">5</span>), FillOperation.REPLACE)<span class="mk">NEW</span></span>
+<span class="hot">    mobs.spawn(animal, pos(x+<span style="color:var(--num)">2</span>, y+<span style="color:var(--num)">1</span>, z+<span style="color:var(--num)">2</span>))<span class="mk">NEW</span></span></pre>
+    <p class="cap">Fence walls, hollow. Grass floor, flat. Animal last, on the floor.</p>
+  </div>
+
+  <!-- 20 · rebuild it -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <ul class="tick">
+      <li>Fence box, <code>HOLLOW</code>, 6 tall</li>
+      <li>Grass floor — same y top and bottom</li>
+      <li>Spawn last, at <code>y+1</code>, inside the walls</li>
+    </ul>
+    <p class="cap">Rewrite your <code>make_cage</code>. Order matters — why spawn last?
+      <span class="ko">순서가 중요해요</span></p>
+  </div>
+
+  <!-- 21 · spacing maths -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <p class="frames" style="text-align:center">A cage runs <code>x</code> to <code>x+5</code> — six blocks wide.<br>Spacing is 7. How big is the gap between cages?</p>
+    <span class="rev" data-t="r5">Check</span>
+    <p class="ans hid" id="r5">Gap = <b>1</b>. And at spacing 5 the cages <b>overlap</b> and share walls.</p>
+    <p class="cap">Do the maths before the slider does it for you.</p>
+  </div>
+
+  <!-- 22 · spacing sim -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+    <canvas class="sim" id="spC" width="620" height="240"></canvas>
+    <div class="slid"><span>spacing</span><input type="range" id="spR" min="4" max="10" value="7"><span class="out" id="spRo">7</span></div>
+    <p class="cap">Drag it. Watch the gap — and watch what happens under 6.</p>
+  </div>
+
+  <!-- 23 · three copies -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">inside make_row</span>
+<span class="bad">spacing_x = <span style="color:var(--num)">7</span></span>
+<span class="bad">spacing_y = <span style="color:var(--num)">7</span></span>
+<span class="dim">inside make_cube</span>
+<span class="bad">spacing_z = <span style="color:var(--num)">7</span></span></pre>
+    <p class="cap">Problem three. One fact, three copies. Change one, forget two.
+      <span class="ko">같은 값을 세 번 쓰면 위험해요</span></p>
+  </div>
+
+  <!-- 24 · v5 one spacing -->
+  <div class="slide center-all">
+    <span class="tag">Explain</span>
+<pre class="sm"><span class="dim">v5 — one number, one place</span>
+<span class="hot">SPACING = <span style="color:var(--num)">7</span><span class="mk">NEW</span></span>
+<span class="dim">def make_row(x, y, z, animal):</span>
+    cage_y = y + y_val * <span style="color:var(--accent)">SPACING</span>
+    make_cage(x + x_val*<span style="color:var(--accent)">SPACING</span>, ...)
+<span class="dim">def make_cube(x, y, z, animal):</span>
+    make_row(x, y, z + z_val*<span style="color:var(--accent)">SPACING</span>, animal)</pre>
+    <p class="cap">Top of the file, capital letters. Everyone reads the same number.
+      <span class="ko">맨 위에 한 번만 쓰기</span></p>
+  </div>
+
+  <!-- 25 · one edit -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <p class="frames" style="text-align:center">The zoo needs more room. Make the spacing 9.<br>How many lines do you edit?</p>
+    <span class="rev" data-t="r6">Check</span>
+    <p class="ans hid" id="r6"><b>One.</b> Last week: three. Do it in your code now.</p>
+    <p class="cap">Change it, run it, then put it back to 7.</p>
+  </div>
+
+  <!-- 26 · OPTIONAL rename -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <span class="opt">Optional</span>
+    <p class="frames" style="text-align:center"><code>make_row</code> loops x <b>and</b> y. It builds 16 cages — a wall.<br>The name lies. Rename it <code>make_wall</code>.</p>
+    <span class="rev" data-t="r7">Where?</span>
+    <p class="ans hid" id="r7">Two places: the <b>def</b> line, and the call inside <b>make_cube</b>.</p>
+    <p class="cap">Names must tell the truth.
+      <span class="ko">이름은 하는 일을 말해야 해요</span></p>
+  </div>
+
+  <!-- 27 · code talk -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <div class="frames">
+      <p>I passed <span class="blank">______</span> from <span class="blank">______</span> down to <span class="blank">______</span>.</p>
+      <p>My cage is hollow because I used <span class="blank">______</span>.</p>
+      <p>To change the spacing I edit <span class="blank">______</span> line.</p>
+    </div>
+    <p class="cap">Read your own code out loud.
+      <span class="ko">한국어 먼저, 그다음 영어로</span></p>
+  </div>
+
+  <!-- 28 · your turn -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <ul class="tick">
+      <li>64 cages — 4 across, 4 up, 4 deep</li>
+      <li>Animal alive in every cage, not in a block</li>
+      <li>Animal chosen <b>in the call</b></li>
+      <li>One <code>SPACING</code>, one bottom call</li>
+    </ul>
+    <p class="cap">Your turn. Finish the zoo, walk through it in your world.</p>
+  </div>
+
+  <!-- 29 · OPTIONAL stretch -->
+  <div class="slide center-all">
+    <span class="tag ex">Exercise</span>
+    <span class="opt">Optional</span>
+    <ul class="tick">
+      <li>★ A different animal on every level — needs a list</li>
+      <li>★★ <code>make_gate</code>: one fence gap, called inside make_cage</li>
+      <li>★★★ <code>make_zoo(animal)</code> builds two towers, spacing apart</li>
+    </ul>
+    <p class="cap">If you finish early.</p>
+  </div>
+
+  <!-- 30 · exit + bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🦙</div>
+    <h1>One word.<br>Sixty-four animals.</h1>
+    <span class="rev" data-t="r8">Exit question</span>
+    <p class="ans hid" id="r8">Turn the whole zoo to llamas. How many words do you edit? <b>One.</b></p>
+    <p class="cap">Next time: a different animal on every level — lists.
+      <span class="ko">다음 시간: 리스트</span></p>
+  </div>
+
+</div>
+
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  document.querySelectorAll('.rev').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = $(b.getAttribute('data-t'));
+      if (t) t.classList.toggle('hid');
+    });
+  });
+
+  /* four cages seen from above, one row: spacing slider shows gap vs overlap */
+  (function () {
+    var c = $('spC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var s = 14;                 /* px per block */
+    var left = 30, top = 60;
+    function upd() {
+      var sp = +$('spR').value;
+      $('spRo').textContent = sp;
+      ctx.fillStyle = '#0d1117';
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      /* overlap tint first, so cage outlines draw on top */
+      if (sp < 6) {
+        ctx.fillStyle = 'rgba(255,85,85,.25)';
+        for (var o = 0; o < 3; o++) {
+          var ox = left + (o + 1) * sp * s;          /* next cage's start */
+          var ow = (6 - sp) * s;                      /* shared blocks */
+          ctx.fillRect(ox, top, ow, 6 * s);
+        }
+      }
+      ctx.lineWidth = 2;
+      for (var i = 0; i < 4; i++) {
+        var px = left + i * sp * s;
+        ctx.strokeStyle = sp < 6 ? '#ff5555' : '#50fa7b';
+        ctx.strokeRect(px, top, 6 * s, 6 * s);
+        ctx.fillStyle = '#38d0e0';
+        ctx.beginPath();
+        ctx.arc(px + 3 * s, top + 3 * s, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.font = '14px monospace';
+      ctx.fillStyle = '#8a97b8';
+      var msg = sp > 6 ? 'gap = ' + (sp - 6)
+              : sp === 6 ? 'touching — no gap'
+              : 'overlap! cages share ' + (6 - sp) + ' block(s)';
+      ctx.fillText('cage = 6 wide · spacing = ' + sp + ' · ' + msg, left, 34);
+    }
+    $('spR').addEventListener('input', upd);
+    upd();
+  })();
+})();
+</script>
+</body>
+</html>

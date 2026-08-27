@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JJ — Count Moves, Not Blocks (agent bridge)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* v1→v4 ramp helpers only — everything else comes from style.css */
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft Education · JJ · 2026-08-27</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Today</div>
+    <div class="emoji">🌉</div>
+    <h1>Count Moves,<br>Not Blocks</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">count</span> + <span class="sub">bridge</span> + <span class="sub">fix</span></p>
+    <p class="bilingual">블록 말고 이동을 세요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — JJ's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — the bridge</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Where does the agent drop its block?</div>
+      <details><summary>Show answer</summary><div class="ans">In the square it LEAVES — never "in its stomach". Your words! 🤢</div></details>
+    </div>
+    <p style="margin-top:.5em">Pattern: up → forward → down. You even caught my missing forward. 🎯</p>
+    <p class="bilingual">지난 시간: 위 → 앞 → 아래 다리</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Three moves — then what?</h2>
+    <div class="predict-card">
+      <div class="label">Place on move is ON</div>
+<pre><span class="dim">agent.set_block_or_item(GRASS, 1)</span><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot"><span class="fn">agent.move</span>(FORWARD, <span class="num">3</span>)</span></pre>
+      <details><summary>How many blocks? Which square is the agent in?</summary><div class="ans">3 blocks — squares 1, 2, 3. The agent stands in square 4.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 words today</h2>
+    <div class="vocab-table">
+      <span class="term">move</span>
+      <span class="gloss">one step of the agent</span>
+      <span class="ko">이동</span>
+
+      <span class="term">gap</span>
+      <span class="gloss">empty squares between two sides</span>
+      <span class="ko">간격</span>
+
+      <span class="term">leave</span>
+      <span class="gloss">walk out of a square</span>
+      <span class="ko">떠나다</span>
+
+      <span class="term">step off</span>
+      <span class="gloss">the last move, onto the far side</span>
+      <span class="ko">마지막 한 걸음</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — the stomach rule, no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>The stomach rule</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">🤖 holds the block in its stomach</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">🚶 agent walks OUT of the square</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">🧱 block pops into the empty square</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">🔄 same again, next square</div>
+    </div>
+    <p class="bilingual">떠난 칸에 블록이 생겨요</p>
+  </div>
+
+  <!-- Slot 6: Run v1 (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>v1 — walk and drop</h2>
+<pre><span class="dim">agent.set_block_or_item(GRASS, 1)</span><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot"><span class="fn">agent.move</span>(FORWARD, <span class="num">3</span>)<span class="mk">NEW</span></span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">🧱🧱🧱 behind · 🤖 one square past them</div>
+    </div>
+    <p style="margin-top:.5em">3 moves → 3 blocks. The agent never stands on its new block.</p>
+  </div>
+
+  <!-- Slot 7: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Count the moves</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">squares →</div>
+        <div class="cg-track"><div class="cg-sprite">🤖</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">moves</span> = <span class="cg-val"><span>0</span><span>1</span><span>2</span><span>3</span></span></div>
+    </div>
+    <p style="margin-top:.5em">Each hop = one move. The block lands behind, in the square it left.</p>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the table</h2>
+<pre><span class="com"># agent starts in square 1</span>
+<span class="fn">agent.move</span>(FORWARD, <span class="num">4</span>)</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">move</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4</div>
+
+      <div class="cell">block appears in</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">agent now in</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Concept — the gap and the step off (extra) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept</div>
+    <h2>Cross the gap</h2>
+    <div class="iter-row" style="margin-top:.4em">
+      <div class="iter-item">🟩</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">🟩</div>
+    </div>
+    <p class="big center" style="margin-top:.6em">Gap = 4. Forward moves = 5.</p>
+    <p class="center">Square 4 fills only when the agent steps OFF it, onto the grass. That step is the +1.</p>
+    <p class="bilingual center">마지막 칸은 나가야 채워져요</p>
+  </div>
+
+  <!-- Slot 10: Run v2 — the bridge (extra) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — the bridge</h2>
+<pre><span class="dim">agent.set_block_or_item(GRASS, 1)</span><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot"><span class="fn">agent.move</span>(UP, <span class="num">1</span>)<span class="mk">NEW</span></span><span class="hot"><span class="fn">agent.move</span>(FORWARD, <span class="num">5</span>)<span class="mk">OLD 3 → NEW 4+1</span></span><span class="hot"><span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)<span class="mk">NEW</span></span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">bridge over the gap · 🤖 lands on the far side</div>
+    </div>
+    <p style="margin-top:.5em">Take off, cross, land.</p>
+  </div>
+
+  <!-- Slot 11: Common Mistake — forward/up order -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Up first, then forward</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">5</span>)
+<span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em">Crosses first — up at the end does nothing.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">5</span>)
+<span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em">Take off before the gap, land after.</p>
+      </div>
+    </div>
+    <p class="bilingual">순서: 위 → 앞 → 아래</p>
+  </div>
+
+  <!-- Slot 12: Debug 1 — forward one short -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — the hole</h2>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">4</span>)
+<span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)</pre>
+    <div class="debug-card"><div class="err">Gap is 4. One hole at the end — the player falls. 🕳️</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Square 4 only fills on the step off. forward = 4 + 1 = <b>5</b>. Same bug you caught in my code!</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Debug 2 — up/down mismatch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — floating end</h2>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">2</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">5</span>)
+<span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)</pre>
+    <div class="debug-card"><div class="err">The far end hangs one square too high.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Up 2 but down 1. Come down as much as you went up.</p>
+      <p class="bilingual">올라간 만큼 내려와요</p>
+    </details>
+  </div>
+
+  <!-- Slot 14: Debug 3 — homework bridge -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🏠 Homework<span class="activity-tag">activity</span></div>
+    <h2>Bridge 2 — one square short</h2>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">6</span>)
+<span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)</pre>
+    <div class="debug-card"><div class="err">Bridge 2's gap is 6 squares. The bridge stops short.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Count moves, not blocks: 6 squares to leave + 1 step off = forward <b>7</b>.</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.move</span>(DOWN, ___)</pre>
+    <p style="margin-top:.6em">Goal: cross a gap of 3 squares.</p>
+  </div>
+
+  <!-- Slot 16: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — the high bridge</h2>
+<pre><span class="fn">agent.move</span>(UP, ___)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.move</span>(DOWN, ___)</pre>
+    <p style="margin-top:.6em">Goal: gap of 7, two squares high — boats pass under. Count each blank.</p>
+  </div>
+
+  <!-- Slot 17: Quick Quiz — Q1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">Gap = 5 squares. <code>forward</code> = ?</div>
+      <div class="opts">
+        <details><summary>A. 5</summary><div class="ans">No — square 5 still waits for the step off.</div></details>
+        <details><summary>B. 6</summary><div class="ans">✓ 5 to leave + 1 step off.</div></details>
+        <details><summary>C. 4</summary><div class="ans">No — too short by two.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 18: Quick Quiz — Q2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">Where does the block appear?</div>
+      <div class="opts">
+        <details><summary>A. The square the agent stands in</summary><div class="ans">No — stomach rule! 🤢</div></details>
+        <details><summary>B. The square it walked out of</summary><div class="ans">✓ always the square it LEAVES.</div></details>
+        <details><summary>C. The square in front</summary><div class="ans">No — never in front.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The block appears in the square the agent <span class="blank"></span>, so a gap of 4 needs <span class="blank"></span> forward moves."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the bridges 🌉</h2>
+    <ul class="check-list">
+      <li>Bridge the 4-gap: up 1, forward 5, down 1</li>
+      <li>Bridge the 6-gap river — count first, then run</li>
+      <li>Fix Bridge 2 from homework</li>
+      <li>Say your numbers out loud before every run</li>
+    </ul>
+  </div>
+
+  <!-- Slot 21: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Stone bridge: <code>agent.set_block_or_item(STONE, 1)</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Turn around, bridge back home. Do the numbers change?</div>
+      <div class="item"><span class="lvl">★★★</span>Mega canyon: gap 12, two high — say all three numbers first.</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: OPTIONAL — v3 chat command -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v3 — one word builds it</h2>
+<pre><span class="hot"><span class="kw">def</span> <span class="fn">on_chat</span>():<span class="mk">NEW</span></span><span class="dim">    agent.move(UP, 1)</span><span class="dim">    agent.move(FORWARD, 5)</span><span class="dim">    agent.move(DOWN, 1)</span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"bridge"</span>, on_chat)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.6em">Type <code>bridge</code> in chat. The three moves didn't change — they moved inside.</p>
+  </div>
+
+  <!-- Slot 23: OPTIONAL — v4 bridge any gap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 — bridge any gap</h2>
+<pre><span class="hot"><span class="kw">def</span> <span class="fn">on_chat</span>(n):<span class="mk">NEW n</span></span><span class="dim">    agent.move(UP, 1)</span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, n + <span class="num">1</span>)<span class="mk">OLD 5 → NEW n+1</span></span><span class="dim">    agent.move(DOWN, 1)</span><span class="dim">player.on_chat("bridge", on_chat)</span></pre>
+    <p style="margin-top:.6em">Type <code>bridge 4</code> or <code>bridge 9</code>. The step-off +1 lives in the code now.</p>
+  </div>
+
+  <!-- Slot 24: OPTIONAL — Debug 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every bridge has a hole</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>(n):
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+    <span class="fn">agent.move</span>(FORWARD, n)
+    <span class="fn">agent.move</span>(DOWN, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"bridge"</span>, on_chat)</pre>
+    <div class="debug-card"><div class="err">bridge 4, bridge 6, bridge 9 — always one hole at the end.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">n squares to leave + 1 step off → <code>n + 1</code>.</p>
+    </details>
+  </div>
+
+  <!-- Slot 25: OPTIONAL — staircase order drill -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🚀 Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Staircase to the sky</h2>
+<pre><span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+<span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <p style="margin-top:.5em">Keep the pattern: 4 stairs high. Up before forward, every time.</p>
+    <div class="quiz-card">
+      <div class="q">How many moves for 4 stairs?</div>
+      <div class="opts">
+        <details><summary>Reveal</summary><div class="ans">8 — one block per move.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — mega canyon -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">🚀 Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mega canyon</h2>
+<pre><span class="fn">agent.move</span>(UP, ___)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.move</span>(DOWN, ___)</pre>
+    <p style="margin-top:.6em">Gap 10, two squares high.</p>
+    <details class="debug-card">
+      <summary>Reveal answer</summary>
+      <p style="margin-top:.4em">2 · 11 · 2 — ten to leave, one step off.</p>
+    </details>
+  </div>
+
+  <!-- Slot 27: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Say your answer</div>
+      <p style="margin-top:.4em">Why does a gap of 4 need 5 forward moves? One sentence.</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 왜 4칸에 5번?</p>
+    </div>
+  </div>
+
+  <!-- Slot 28: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Blocks land where you leave.<br>Count the moves.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: agent.turn — bridges with corners.</p>
+    <p class="bilingual">다음 시간: 모퉁이 있는 다리</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
