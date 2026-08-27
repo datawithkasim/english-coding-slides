@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — The Boss Shoots Back (Neo · 2026-08-24)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS003 · Pygame Turret Shooter · Neo · 24 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Boss Fight</div>
+    <div class="emoji">☄️</div>
+    <h1>The Boss<br>Shoots Back</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">spawn</span> boss bullets + <span class="sub">lose</span> HP.</p>
+    <p class="bilingual">보스가 총알을 쏘고, 내 체력이 줄어요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Neo's own 2026-08-10 build -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your last boss build</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your code</div>
+      <div class="q">1. Why largest → smallest in your spawn <code>elif</code> chain?</div>
+      <details><summary>Show answer</summary><div class="ans">First true branch wins.</div></details>
+      <div class="q" style="margin-top:.5em">2. Where did <code>colliderect()</code> sit?</div>
+      <details><summary>Show answer</summary><div class="ans">Inside the bullet loop.</div></details>
+      <div class="q" style="margin-top:.5em">3. <code>boss["hp"] -= 1</code> — what for?</div>
+      <details><summary>Show answer</summary><div class="ans">One hit, one HP down.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>boss = {<span class="str">"cooldown"</span>: <span class="num">3</span>, <span class="str">"shoot_cd"</span>: <span class="num">3</span>}
+boss_bullets = []
+
+<span class="kw">for</span> frame <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"y"</span>: <span class="num">80</span>})
+        boss[<span class="str">"shoot_cd"</span>] = boss[<span class="str">"cooldown"</span>]
+
+<span class="fn">print</span>(<span class="fn">len</span>(boss_bullets), boss[<span class="str">"shoot_cd"</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">1 2 — it fired on frame 3, then reset.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">boss_bullets</span>
+      <span class="gloss">a list — one dict per bullet</span>
+      <span class="ko">보스 총알 목록</span>
+
+      <span class="term">shoot cooldown</span>
+      <span class="gloss">frames to wait before the next shot</span>
+      <span class="ko">발사 대기 시간</span>
+
+      <span class="term">player_hp</span>
+      <span class="gloss">how many hits you survive</span>
+      <span class="ko">플레이어 체력</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — NO CODE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>A cooldown is a countdown</h2>
+    <div class="iter-row" style="margin-top:.6em">
+      <div class="iter-item">3</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">0</div>
+      <div class="iter-item">💥</div>
+    </div>
+    <p class="big center" style="margin-top:.7em">One frame, one tick down. At zero the boss fires — then the timer goes back up.</p>
+    <p class="bilingual center">0이 되면 발사, 다시 리셋</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run ▶</div>
+    <h2>The boss fires</h2>
+<pre>boss = {<span class="str">"x"</span>: <span class="num">300</span>, <span class="str">"y"</span>: <span class="num">80</span>, <span class="str">"hp"</span>: <span class="num">5</span>,
+        <span class="str">"cooldown"</span>: <span class="num">70</span>, <span class="str">"shoot_cd"</span>: <span class="num">70</span>}
+boss_bullets = []
+
+<span class="kw">while</span> running:
+    boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"x"</span>: boss[<span class="str">"x"</span>],
+                             <span class="str">"y"</span>: boss[<span class="str">"y"</span>],
+                             <span class="str">"speed"</span>: <span class="num">6</span>})
+        boss[<span class="str">"shoot_cd"</span>] = boss[<span class="str">"cooldown"</span>]</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">one new bullet every 70 frames</div>
+    </div>
+  </div>
+
+  <!-- Slot 7: Investigate (Animated Trace) — cooldown falls to 0 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2><code>shoot_cd</code> falls to zero</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">f1</div><div class="iter-item">f2</div>
+        <div class="iter-item">f3</div><div class="iter-item">f4</div>
+        <div class="iter-item">f5</div>
+      </div>
+      <div class="var-row"><span class="label">shoot_cd = </span><span class="var-vals">
+        <span class="var-val">3</span><span class="var-val">2</span><span class="var-val">1</span><span class="var-val">0 → fire!</span><span class="var-val">3</span>
+      </span></div>
+      <div class="output-box">
+        <div class="out-label">▸ boss_bullets</div>
+        <div class="out-line">[]</div>
+        <div class="out-line">[]</div>
+        <div class="out-line">[]</div>
+        <div class="out-line">[{"x": 300, "y": 80}]</div>
+        <div class="out-line">[{"x": 300, "y": 80}]</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.4em">Starts at 4. Frame 4 hits 0 → append, then reset to 4.</p>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill in every frame</h2>
+<pre>boss = {<span class="str">"cooldown"</span>: <span class="num">2</span>, <span class="str">"shoot_cd"</span>: <span class="num">2</span>}</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">end of frame</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4</div>
+
+      <div class="cell"><code>shoot_cd</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell"><code>len(bullets)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Frames 2 and 4 hit 0, fire, then jump back to 2.</p>
+  </div>
+
+  <!-- Slot 9: Common Mistake — Neo's real △: pygame.rect vs pygame.Rect -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Capital R or no box</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>hit_box = pygame.<span class="fn">rect</span>(
+    b[<span class="str">"x"</span>], b[<span class="str">"y"</span>], <span class="num">8</span>, <span class="num">16</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>AttributeError: module 'pygame' has no attribute 'rect'</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>hit_box = pygame.<span class="fn">Rect</span>(
+    b[<span class="str">"x"</span>], b[<span class="str">"y"</span>], <span class="num">8</span>, <span class="num">16</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ a real box you can test</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>pygame.Rect</code> makes a box. <code>pygame.draw.rect</code> paints one. Different word, different job.</p>
+    <p class="bilingual">Rect는 상자, draw.rect는 그리기</p>
+  </div>
+
+  <!-- Slot 10: DEBUG 1 — decrement outside the while loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — the boss never fires</h2>
+<pre>boss[<span class="str">"shoot_cd"</span>] = <span class="num">70</span>
+boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+
+<span class="kw">while</span> running:
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"x"</span>: boss[<span class="str">"x"</span>]})</pre>
+    <div class="debug-card"><div class="err">No error. shoot_cd stays 69 forever — zero bullets.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Indent <code>-= 1</code> <b>inside</b> <code>while</code>. Outside the loop it runs once, not every frame.</p>
+      <p class="bilingual">while 안에 넣어야 매 프레임 줄어요</p>
+    </details>
+  </div>
+
+  <!-- Slot 11: DEBUG 2 — collision check outside the bullet loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — only one bullet can hit</h2>
+<pre><span class="kw">for</span> b <span class="kw">in</span> boss_bullets[:]:
+    b[<span class="str">"y"</span>] += b[<span class="str">"speed"</span>]
+
+hit_box = pygame.<span class="fn">Rect</span>(b[<span class="str">"x"</span>], b[<span class="str">"y"</span>], <span class="num">8</span>, <span class="num">16</span>)
+<span class="kw">if</span> hit_box.<span class="fn">colliderect</span>(player):
+    player_hp -= <span class="num">1</span></pre>
+    <div class="debug-card"><div class="err">NameError: name 'b' is not defined — and with bullets, only the last one is tested.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Indent both lines <b>inside</b> the <code>for</code> — same place your <code>colliderect</code> went last time.</p>
+      <p class="bilingual">총알마다 검사 — for 안으로</p>
+    </details>
+  </div>
+
+  <!-- Slot 12: DEBUG 3 — mutating the list while looping it -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — bullets get skipped</h2>
+<pre><span class="kw">for</span> b <span class="kw">in</span> boss_bullets:
+    b[<span class="str">"y"</span>] += b[<span class="str">"speed"</span>]
+    <span class="kw">if</span> b[<span class="str">"y"</span>] &gt; <span class="num">600</span>:
+        boss_bullets.<span class="fn">remove</span>(b)</pre>
+    <div class="debug-card"><div class="err">Some bullets never move. Others stay on screen forever.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Loop a copy: <code>for b in boss_bullets[:]:</code>. Removing shifts the real list under the loop.</p>
+      <p class="bilingual">리스트를 지우면서 돌면 건너뛰어요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Modify 1 (easy fill-blank) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">while</span> running:
+    boss[<span class="str">"shoot_cd"</span>] ___ <span class="num">1</span>
+
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.___({<span class="str">"x"</span>: boss[<span class="str">"x"</span>],
+                          <span class="str">"y"</span>: boss[<span class="str">"y"</span>],
+                          <span class="str">"speed"</span>: ___})
+        boss[<span class="str">"shoot_cd"</span>] = boss[___]</pre>
+    <p style="margin-top:.6em">You pick the speed. Fast bullets need a longer cooldown.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 (harder) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — take the damage</h2>
+<pre>player_hp = <span class="num">3</span>
+
+<span class="kw">for</span> b <span class="kw">in</span> boss_bullets[:]:
+    b[<span class="str">"y"</span>] += b[<span class="str">"speed"</span>]
+    hit_box = pygame.___(b[<span class="str">"x"</span>], b[<span class="str">"y"</span>], <span class="num">8</span>, <span class="num">16</span>)
+    <span class="kw">if</span> hit_box.___(player):
+        player_hp ___ <span class="num">1</span>
+        boss_bullets.___(b)
+
+<span class="kw">if</span> player_hp ___ <span class="num">0</span>:
+    running = <span class="kw">False</span></pre>
+    <p style="margin-top:.5em">Watch the indent on <code>player_hp</code> — it belongs under the <code>if</code>.</p>
+  </div>
+
+  <!-- Slot 15: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>boss["shoot_cd"] -= 1</code> belongs…</div>
+      <div class="opts">
+        <details><summary>A. above the <code>while</code></summary><div class="ans">No — it would run once.</div></details>
+        <details><summary>B. inside <code>while</code>, every frame</summary><div class="ans">✓ One frame, one tick.</div></details>
+        <details><summary>C. inside the bullet <code>for</code></summary><div class="ans">No — then bullets control the timer.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which makes a box?</div>
+      <div class="opts">
+        <details><summary>A. <code>pygame.rect(...)</code></summary><div class="ans">No — AttributeError.</div></details>
+        <details><summary>B. <code>pygame.Rect(...)</code></summary><div class="ans">✓ Capital R.</div></details>
+        <details><summary>C. <code>pygame.draw.Rect(...)</code></summary><div class="ans">No — draw uses lowercase.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Every frame <code>shoot_cd</code> goes <span class="blank"></span>. At <span class="blank"></span> the boss appends a bullet, then <code>shoot_cd</code> resets to <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in your game</h2>
+    <ul class="check-list">
+      <li>Add <code>"shoot_cd"</code> to your boss dict</li>
+      <li>Tick it down inside <code>while running:</code></li>
+      <li>At <code>&lt;= 0</code>: append a bullet dict, reset the timer</li>
+      <li>Move + draw boss bullets in their own loop</li>
+      <li><code>player_hp = 3</code> → drop it on a hit</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Draw <code>player_hp</code> as three small squares.</div>
+      <div class="item"><span class="lvl">★★</span>Boss bullets get bigger when <code>boss["hp"]</code> drops below 3.</div>
+      <div class="item"><span class="lvl">★★★</span>Spend <code>boss["spread"]</code>: fire that many bullets, each with a different <code>"vx"</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">Name one line that must sit <b>inside</b> the bullet <code>for</code> loop — and say why.</p>
+      <p class="bilingual" style="margin-top:.4em">for 안에 있어야 하는 줄 하나, 이유도</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW — Neo works fast ================= -->
+
+  <!-- Slot 20: OPTIONAL — many bosses, one list -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three bosses, three timers</h2>
+<pre>bosses = [
+    {<span class="str">"x"</span>: <span class="num">150</span>, <span class="str">"hp"</span>: <span class="num">5</span>, <span class="str">"cooldown"</span>: <span class="num">70</span>, <span class="str">"shoot_cd"</span>: <span class="num">70</span>},
+    {<span class="str">"x"</span>: <span class="num">300</span>, <span class="str">"hp"</span>: <span class="num">8</span>, <span class="str">"cooldown"</span>: <span class="num">45</span>, <span class="str">"shoot_cd"</span>: <span class="num">45</span>},
+    {<span class="str">"x"</span>: <span class="num">450</span>, <span class="str">"hp"</span>: <span class="num">3</span>, <span class="str">"cooldown"</span>: <span class="num">20</span>, <span class="str">"shoot_cd"</span>: <span class="num">20</span>},
+]
+
+<span class="kw">for</span> boss <span class="kw">in</span> bosses[:]:
+    boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"x"</span>: boss[<span class="str">"x"</span>], <span class="str">"y"</span>: <span class="num">80</span>, <span class="str">"speed"</span>: <span class="num">6</span>})
+        boss[<span class="str">"shoot_cd"</span>] = boss[<span class="str">"cooldown"</span>]</pre>
+    <p style="margin-top:.5em">Each dict carries its own counter, so they fire out of step.</p>
+  </div>
+
+  <!-- Slot 21: OPTIONAL — DEBUG 4, reset outside the if -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 4 — nobody ever fires</h2>
+<pre><span class="kw">for</span> boss <span class="kw">in</span> bosses:
+    boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"x"</span>: boss[<span class="str">"x"</span>]})
+    boss[<span class="str">"shoot_cd"</span>] = boss[<span class="str">"cooldown"</span>]</pre>
+    <div class="debug-card"><div class="err">Every counter goes 70 → 69 → 70 → 69. Nothing reaches 0.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The reset must be indented <b>under the <code>if</code></b>, not under the <code>for</code>. One space level changes everything.</p>
+      <p class="bilingual">리셋은 if 안쪽</p>
+    </details>
+  </div>
+
+  <!-- Slot 22: OPTIONAL — enemy fleet in formation -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A fleet in formation</h2>
+<pre>fleet = []
+
+<span class="kw">for</span> row <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> col <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+        fleet.<span class="fn">append</span>({<span class="str">"x"</span>: <span class="num">80</span> + col * ___,
+                      <span class="str">"y"</span>: <span class="num">60</span> + row * ___,
+                      <span class="str">"hp"</span>: <span class="num">1</span>})</pre>
+    <p style="margin-top:.5em">Inner loop builds a row. Outer loop stacks the rows. You choose the gaps.</p>
+    <p class="bilingual">중첩 반복 = 격자 대형</p>
+  </div>
+
+  <!-- Slot 23: OPTIONAL — trace the formation maths -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Where does each ship land?</h2>
+<pre>x = <span class="num">80</span> + col * <span class="num">90</span>       y = <span class="num">60</span> + row * <span class="num">70</span></pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">(row, col)</div>
+      <div class="cell head">(0, 0)</div>
+      <div class="cell head">(0, 5)</div>
+      <div class="cell head">(2, 3)</div>
+
+      <div class="cell"><code>x</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">80</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">530</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">350</span></details></div>
+
+      <div class="cell"><code>y</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+    </div>
+    <p style="margin-top:.5em"><code>len(fleet)</code>? <details style="display:inline"><summary style="cursor:pointer;color:var(--accent);font-weight:700">?</summary> <span style="color:#6fe0a0;font-weight:700">18 — 3 × 6</span></details></p>
+  </div>
+
+  <!-- Slot 24: OPTIONAL — aim at the player's current x -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Aim at where you are now</h2>
+<pre><span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+    dx = player.x - boss[<span class="str">"x"</span>]
+    dy = player.y - boss[<span class="str">"y"</span>]
+    dist = (dx * dx + dy * dy) ** <span class="num">0.5</span>
+    boss_bullets.<span class="fn">append</span>({<span class="str">"x"</span>: boss[<span class="str">"x"</span>], <span class="str">"y"</span>: boss[<span class="str">"y"</span>],
+                         <span class="str">"vx"</span>: dx / dist * <span class="num">6</span>,
+                         <span class="str">"vy"</span>: dy / dist * <span class="num">6</span>})</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ then, in the bullet loop</div>
+      <div style="opacity:1">b["x"] += b["vx"] &nbsp;·&nbsp; b["y"] += b["vy"]</div>
+    </div>
+    <p class="bilingual">거리로 나눠서 속도를 6으로 맞춰요</p>
+  </div>
+
+  <!-- Slot 25: OPTIONAL — DEBUG 5, dead aim -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 5 — the aim is frozen</h2>
+<pre>dx = player.x - boss[<span class="str">"x"</span>]
+dist = (dx * dx + <span class="num">500</span> * <span class="num">500</span>) ** <span class="num">0.5</span>
+
+<span class="kw">while</span> running:
+    boss[<span class="str">"shoot_cd"</span>] -= <span class="num">1</span>
+    <span class="kw">if</span> boss[<span class="str">"shoot_cd"</span>] &lt;= <span class="num">0</span>:
+        boss_bullets.<span class="fn">append</span>({<span class="str">"vx"</span>: dx / dist * <span class="num">6</span>})</pre>
+    <div class="debug-card"><div class="err">Every shot aims at your starting spot. Step aside once and you are safe forever.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Compute <code>dx</code> and <code>dist</code> <b>inside the <code>if</code></b>, at the moment of firing. Then the aim is fresh.</p>
+      <p class="bilingual">쏘는 순간에 다시 계산</p>
+    </details>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — pattern picker, elif order again -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three attack patterns</h2>
+<pre><span class="kw">if</span> boss[<span class="str">"pattern"</span>] == <span class="str">"aim"</span>:
+    <span class="com"># one bullet, straight at the player</span>
+<span class="kw">elif</span> boss[<span class="str">"pattern"</span>] == <span class="str">"spread"</span>:
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(boss[<span class="str">"spread"</span>]):
+        ___
+<span class="kw">elif</span> boss[<span class="str">"pattern"</span>] == <span class="str">"wall"</span>:
+    <span class="kw">for</span> col <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+        ___</pre>
+    <p style="margin-top:.5em">Same <code>elif</code> chain rule as your spawn code: order decides who wins.</p>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — hardest stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Boss rush</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★★★</span>Phase 2: below half HP a boss halves its own <code>"cooldown"</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Fleet dives — every ship in row 0 gets <code>"speed"</code> once that row is empty.</div>
+      <div class="item"><span class="lvl">★★★★</span>Aimed spread: 3 bullets, all aimed at the player, each nudged by <code>i - 1</code>.</div>
+    </div>
+  </div>
+
+  <!-- Slot 28: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">A counter<br>is a weapon.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: fleets that move together.</p>
+    <p class="bilingual">다음 시간: 대형으로 움직이는 함대</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

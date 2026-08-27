@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS002 — Maze Conditionals (if / and / or)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS002 · Minecraft Education · Siyun · 2026-08-24</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Maze Madness</div>
+    <div class="emoji">🧭</div>
+    <h1>Maze Rules:<br>if · and · or</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you will <span class="sub">detect</span> + <span class="sub">decide</span> + <span class="sub">combine</span>.</p>
+    <p class="bilingual">에이전트가 벽을 느끼고 스스로 길을 골라요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — her own last real lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your coordinates lesson</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">You filled <code>1</code> to <code>15</code> across, then <code>7</code> to <code>9</code> up. Which axis goes first?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>x</code> first, then <code>y</code>. You counted 1–15 yourself — 15 blocks.</div></details>
+    </div>
+    <p class="bilingual">그때는 <b>어디</b> (WHERE) — 오늘은 <b>언제</b> (WHEN)</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Does the agent turn?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span class="kw">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+<span class="com"># the path ahead is open</span></pre>
+      <details><summary>Reveal output</summary><div class="ans">It moves forward 1. No wall ahead, so the test is False and <code>else</code> runs.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">detect</span>
+      <span class="gloss">feel for a block in one direction</span>
+      <span class="ko">감지</span>
+
+      <span class="term">condition</span>
+      <span class="gloss">a True / False test</span>
+      <span class="ko">조건</span>
+
+      <span class="term">and</span>
+      <span class="gloss">true only when both sides are true</span>
+      <span class="ko">그리고</span>
+
+      <span class="term">or</span>
+      <span class="gloss">true when one side is enough</span>
+      <span class="ko">또는</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>The agent has four feelers 🤖</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">FORWARD</span><span class="val">🧱 or ⬜</span></div>
+      <div class="varbox"><span class="name">LEFT</span><span class="val">🧱 or ⬜</span></div>
+      <div class="varbox"><span class="name">RIGHT</span><span class="val">🧱 or ⬜</span></div>
+      <div class="varbox"><span class="name">DOWN</span><span class="val">🧱 or ⬜</span></div>
+    </div>
+    <p class="big center" style="margin-top:.4em">Every feeler answers one word: True or False.</p>
+    <p class="bilingual">감지 결과는 참 아니면 거짓, 둘 중 하나</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) — one condition -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>One condition</h2>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span class="kw">else</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Wall ahead 🧱</div>
+      <div style="opacity:1">agent turns right</div>
+    </div>
+  </div>
+
+  <!-- Slot 6b: Run — if / elif / else ladder -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6b</span>
+    <div class="pill">Run it</div>
+    <h2>Three choices: if · elif · else</h2>
+<pre><span class="kw">while not</span> <span class="fn">agent.detect</span>(BLOCK, DOWN):
+    <span class="kw">if not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    <span class="kw">elif not</span> <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+        <span class="fn">agent.turn</span>(RIGHT_TURN)
+    <span class="kw">else</span>:
+        <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <p style="margin-top:.5em">The first True branch runs. Python skips the rest.</p>
+    <p class="bilingual">처음 참인 줄만 실행돼요</p>
+  </div>
+
+  <!-- Slot 7: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>One test, two paths</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">front ⬜ open</span>
+        <span class="case case-b">front 🧱 wall</span>
+      </div>
+      <div class="if-cond">not agent.detect(BLOCK, FORWARD)</div>
+      <div class="if-branches">
+        <div class="if-branch true">agent.move(FORWARD, 1)</div>
+        <div class="if-branch false">agent.turn(RIGHT_TURN)</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Agent does</div>
+        <div class="out-line out-a">steps forward</div>
+        <div class="out-line out-b">turns right</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 7b: Concept + Code — and -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7b</span>
+    <div class="pill">Concept</div>
+    <h2><code>and</code> — both must be True</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">True and True</span><span class="val">✅ True</span></div>
+      <div class="varbox"><span class="name">True and False</span><span class="val">❌ False</span></div>
+      <div class="varbox"><span class="name">False and False</span><span class="val">❌ False</span></div>
+    </div>
+<pre style="margin-top:.6em"><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span class="kw">and</span> \
+   <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <p class="bilingual">둘 다 벽이면 진짜 코너</p>
+  </div>
+
+  <!-- Slot 7c: Concept + Code — or -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7c</span>
+    <div class="pill">Concept</div>
+    <h2><code>or</code> — one side is enough</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🤝</div><div class="name">and</div><div class="ex">both True<br>→ True</div></div>
+      <div class="opt-card"><div class="ico">🔱</div><div class="name">or</div><div class="ex">one True<br>→ True</div></div>
+    </div>
+<pre style="margin-top:.6em"><span class="kw">if not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span class="kw">or</span> \
+   <span class="kw">not</span> <span class="fn">agent.detect</span>(BLOCK, LEFT):
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <p class="bilingual">앞 또는 왼쪽이 열려 있으면 전진</p>
+  </div>
+
+  <!-- Slot 7d: Investigate — or animated (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7d</span>
+    <div class="pill">Watch it!<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Either side is enough</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">front ⬜, left 🧱</span>
+        <span class="case case-b">front 🧱, left 🧱</span>
+      </div>
+      <div class="if-cond">front open OR left open?</div>
+      <div class="if-branches">
+        <div class="if-branch true">agent.move(FORWARD, 1)</div>
+        <div class="if-branch false">agent.turn(LEFT_TURN)</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Agent does</div>
+        <div class="out-line out-a">moves — front is open</div>
+        <div class="out-line out-b">turns — both blocked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which branch runs?</h2>
+<pre><span class="kw">if not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+<span class="kw">elif not</span> <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+    <span class="fn">agent.turn</span>(RIGHT_TURN)
+<span class="kw">else</span>:
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">maze</div>
+      <div class="cell head">front</div>
+      <div class="cell head">right</div>
+      <div class="cell head">agent does</div>
+
+      <div class="cell">A</div>
+      <div class="cell">⬜</div>
+      <div class="cell">🧱</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">move</span></details></div>
+
+      <div class="cell">B</div>
+      <div class="cell">🧱</div>
+      <div class="cell">⬜</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">turn right</span></details></div>
+
+      <div class="cell">C</div>
+      <div class="cell">🧱</div>
+      <div class="cell">🧱</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">turn left</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 8b: Trace Activity 2 — and / or (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8b</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Fill in <code>and</code> / <code>or</code></h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">front 🧱?</div>
+      <div class="cell head">right 🧱?</div>
+      <div class="cell head">front and right</div>
+      <div class="cell head">front or right</div>
+
+      <div class="cell">True</div>
+      <div class="cell">True</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell">True</div>
+      <div class="cell">False</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell">False</div>
+      <div class="cell">False</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Common Mistake — argument order (her X/Y swap) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>What first, direction second</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">agent.detect</span>(FORWARD, BLOCK)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ order swapped, detect fails</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">agent.detect</span>(BLOCK, FORWARD)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ what to find, then which way</p>
+      </div>
+    </div>
+    <p class="bilingual">x 먼저 y 나중처럼 — 무엇 먼저, 방향 나중</p>
+  </div>
+
+  <!-- Slot 10: Debug 1 — off-by-one range miscount (her △) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — one square short</h2>
+<pre><span class="com"># corridor squares 1 to 9</span>
+<span class="fn">agent.move</span>(FORWARD, <span class="num">8</span>)</pre>
+    <div class="debug-card">
+      <div class="err">Agent stops one square before the corner.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">1 to 9 is <b>9</b> squares. Count both ends: 9 − 1 + 1 = 9.</p>
+<pre style="margin-top:.4em"><span class="fn">agent.move</span>(FORWARD, <span class="num">9</span>)</pre>
+        <p class="bilingual">끝 칸도 세야 해요 — 1부터 9는 9칸</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 11: Debug 2 — missing not -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — flipped test</h2>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <div class="debug-card">
+      <div class="err">Agent walks straight into the wall.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Move when the way is <b>not</b> blocked.</p>
+<pre style="margin-top:.4em"><span class="kw">if not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 12: Debug 3 — same direction twice -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — copied direction</h2>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span class="kw">and</span> \
+   <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <div class="debug-card">
+      <div class="err">Agent turns at every wall, not only corners.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">A corner needs <b>two different</b> directions.</p>
+<pre style="margin-top:.4em"><span class="fn">agent.detect</span>(BLOCK, FORWARD) <span class="kw">and</span> \
+<span class="fn">agent.detect</span>(BLOCK, RIGHT)</pre>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 12b: Debug 4 — or where and belongs (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12b</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — wrong operator</h2>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) <span class="kw">or</span> \
+   <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <div class="debug-card">
+      <div class="err">It turns left when only the right side is a wall.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.4em">A corner needs both walls, so use <code>and</code>.</p>
+        <p class="bilingual">코너는 둘 다 벽 — and 를 쓰세요</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Slot 13: Modify 1 — easy fill-blank -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">while not</span> <span class="fn">agent.detect</span>(BLOCK, DOWN):
+    ___ <span class="kw">not</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD):
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    ___ <span class="kw">not</span> <span class="fn">agent.detect</span>(BLOCK, RIGHT):
+        <span class="fn">agent.turn</span>(RIGHT_TURN)
+    ___:
+        <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <p style="margin-top:.5em">Blanks are <code>if</code>, <code>elif</code>, <code>else</code>.</p>
+  </div>
+
+  <!-- Slot 14: Modify 2 — harder, add and -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — add <code>and</code></h2>
+<pre><span class="kw">if</span> <span class="fn">agent.detect</span>(BLOCK, FORWARD) ___ \
+   <span class="fn">agent.detect</span>(BLOCK, ___):
+    <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <p style="margin-top:.6em">Goal: turn left only at a front + right corner.</p>
+    <p style="margin-top:.3em">Say both arguments out loud before you type.</p>
+  </div>
+
+  <!-- Slot 14b: Modify 3 — add or (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14b</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Harder — add <code>or</code></h2>
+<pre><span class="kw">if</span> ___ <span class="fn">agent.detect</span>(BLOCK, FORWARD) ___ \
+   ___ <span class="fn">agent.detect</span>(BLOCK, LEFT):
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <p style="margin-top:.6em">Goal: move when front <b>or</b> left is open.</p>
+    <p style="margin-top:.3em">Blanks: <code>not</code>, <code>or</code>, <code>not</code>.</p>
+  </div>
+
+  <!-- Slot 15: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Front is a wall, right is open. <code>front and right</code> →</div>
+      <div class="opts">
+        <details><summary>A. True</summary><div class="ans">No — <code>and</code> needs both sides.</div></details>
+        <details><summary>B. False</summary><div class="ans">✓ One side is open, so the whole test is False.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which argument goes first in <code>agent.detect</code>?</div>
+      <div class="opts">
+        <details><summary>A. the direction</summary><div class="ans">No — direction comes second.</div></details>
+        <details><summary>B. what to look for</summary><div class="ans">✓ <code>BLOCK</code> first, then <code>FORWARD</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 15b: Quiz 2 (OPTIONAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15b</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>2 more questions</h2>
+    <div class="quiz-card">
+      <div class="q">3. When is <code>A or B</code> True?</div>
+      <div class="opts">
+        <details><summary>A. only when both are True</summary><div class="ans">That is <code>and</code>.</div></details>
+        <details><summary>B. when at least one is True</summary><div class="ans">✓ One True side is enough.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">4. Squares 3 to 7 — how many squares?</div>
+      <div class="opts">
+        <details><summary>A. 4</summary><div class="ans">Close — you missed one end.</div></details>
+        <details><summary>B. 5</summary><div class="ans">✓ 7 − 3 + 1 = 5.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 16: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud 🗣️</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The agent detects <span class="blank"></span>. It is <span class="blank"></span>, so the agent <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Solve the maze 🤖</h2>
+    <ul class="check-list">
+      <li>Open the maze world, press <code>C</code> for Code Builder</li>
+      <li>Write <code>if</code> / <code>elif</code> / <code>else</code> for three directions</li>
+      <li>Add one <code>and</code> for real corners</li>
+      <li>Check argument order before you run</li>
+      <li>Reach the end, then send the video</li>
+    </ul>
+  </div>
+
+  <!-- Slot 18: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add an <code>or</code> so the agent also tries LEFT.</div>
+      <div class="item"><span class="lvl">★★</span>Place a torch every time the agent turns.</div>
+      <div class="item"><span class="lvl">★★★</span>Build a 5-turn maze, then let the agent solve it.</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: when does <code>and</code> give False?</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — and 가 거짓이 되는 때는?</p>
+    </div>
+  </div>
+
+  <!-- Slot 20: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Coordinates said WHERE.<br>Conditions say WHEN.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: ask the agent <i>which</i> block it found.</p>
+    <p class="bilingual">다음: 어떤 블록인지 물어보기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

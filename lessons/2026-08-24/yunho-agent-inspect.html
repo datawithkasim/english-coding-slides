@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS001 — Which Block Is It? (agent.inspect)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS001 · Minecraft Education · YUNHO · 2026-08-24</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Today</div>
+    <div class="emoji">&#128269;</div>
+    <h1>Which Block<br>Is It?</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">inspect</span> + <span class="sub">loop</span> + <span class="sub">compare</span></p>
+    <p class="bilingual">블록 이름을 묻고 다르게 움직이기</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — levers and pistons</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which line flipped the lever?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>agent.interact(FORWARD)</code> — it flips whatever the agent faces.</div></details>
+    </div>
+    <p style="margin-top:.5em">You started the piston maze from an empty file. No starter code. &#128170;</p>
+    <p class="bilingual">지난 시간: 레버와 피스톤 미로</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>What comes back?</h2>
+    <div class="predict-card">
+      <div class="label">Gold is in front of the agent</div>
+<pre>found = <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD)
+block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+<span class="fn">player.say</span>(found)
+<span class="fn">player.say</span>(block)</pre>
+      <details><summary>Reveal output</summary><div class="ans">True<br>GOLD_BLOCK</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">inspect</span>
+      <span class="gloss">ask which block is there</span>
+      <span class="ko">조사하다</span>
+
+      <span class="term">block name</span>
+      <span class="gloss">the game name for a block, like GOLD_BLOCK</span>
+      <span class="ko">블록 이름</span>
+
+      <span class="term">while True</span>
+      <span class="gloss">keep repeating, no end</span>
+      <span class="ko">계속 반복</span>
+
+      <span class="term">==</span>
+      <span class="gloss">is this the same as that?</span>
+      <span class="ko">같은지 비교</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — detect vs inspect, no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Two different questions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card">
+        <div class="ico">&#9989;</div>
+        <div class="name">detect</div>
+        <div class="ex">"Is anything there?"<br>answer: True / False</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">&#128269;</div>
+        <div class="name">inspect</div>
+        <div class="ex">"Which block is there?"<br>answer: GOLD_BLOCK</div>
+      </div>
+    </div>
+    <p class="big center" style="margin-top:.5em">detect says yes or no. inspect says the name.</p>
+    <p class="bilingual">detect는 있는지, inspect는 무엇인지</p>
+  </div>
+
+  <!-- Slot 6: Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>Ask once, say the answer</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+    <span class="fn">player.say</span>(block)
+<span class="fn">player.on_chat</span>(<span class="str">"look"</span>, on_chat)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">&#9656; Output</div>
+      <div style="opacity:1">GOLD_BLOCK</div>
+    </div>
+    <p style="margin-top:.5em">The name lands in <code>block</code>. Now you can compare it.</p>
+  </div>
+
+  <!-- Slot 7: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Inspect &rarr; compare &rarr; move</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">block = GOLD_BLOCK</span>
+        <span class="case case-b">block = STONE</span>
+      </div>
+      <div class="if-cond">block == GOLD_BLOCK</div>
+      <div class="if-branches">
+        <div class="if-branch true">agent.move(UP, 1)</div>
+        <div class="if-branch false">walk on</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">&#9656; Result</div>
+        <div class="out-line out-a">agent climbs 1 up</div>
+        <div class="out-line out-b">agent stays level</div>
+      </div>
+    </div>
+    <p class="bilingual">이름에 따라 행동이 달라져요</p>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Does the agent climb?</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+    <span class="kw">if</span> block == GOLD_BLOCK:
+        <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">step</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4</div>
+
+      <div class="cell">block</div>
+      <div class="cell"><code>STONE</code></div>
+      <div class="cell"><code>GOLD_BLOCK</code></div>
+      <div class="cell"><code>STONE</code></div>
+      <div class="cell"><code>GOLD_BLOCK</code></div>
+
+      <div class="cell">climbs?</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Concept — while True -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept</div>
+    <h2>The loop asks every step</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">agent.move(FORWARD, 1)</div>
+      <div class="viz-arrow">&darr;</div>
+      <div class="ev-step ev-listen">block = agent.inspect(...)</div>
+      <div class="viz-arrow">&darr;</div>
+      <div class="ev-step ev-run">block == GOLD_BLOCK ?</div>
+      <div class="viz-arrow">&darr;</div>
+      <div class="ev-step ev-dom">&#128260; back to the top</div>
+    </div>
+    <p class="bilingual">한 걸음마다 다시 묻고 다시 비교해요</p>
+  </div>
+
+  <!-- Slot 10: Run — the walking loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Run it</div>
+    <h2>Walk and climb</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+        <span class="kw">if</span> block == GOLD_BLOCK:
+            <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"run"</span>, on_chat)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">&#9656; In the world</div>
+      <div style="opacity:1">walks forward, steps up every gold wall</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Common Mistake — indent level (his lines 34-41 bug) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>One indent level short</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    block = <span class="fn">agent.inspect</span>(...)
+<span class="kw">if</span> block == GOLD_BLOCK:
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">The <code>if</code> sits outside the loop, so it never runs.</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    block = <span class="fn">agent.inspect</span>(...)
+    <span class="kw">if</span> block == GOLD_BLOCK:
+        <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Inside the loop, and the move is inside the <code>if</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 12: Debug 1 — wrong direction argument -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">&#128027; Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — never climbs</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, DOWN)
+    <span class="kw">if</span> block == GOLD_BLOCK:
+        <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre>
+    <div class="debug-card"><div class="err">block is always GRASS. The agent walks straight into the gold wall.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>DOWN</code> looks at the floor. The wall is ahead, so inspect <code>FORWARD</code>.</p>
+      <p class="bilingual">방향 하나만 틀려도 답이 달라져요</p>
+    </details>
+  </div>
+
+  <!-- Slot 13: Debug 2 — while True with no way to stop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">&#128027; Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — never stops</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"run"</span>, on_chat)</pre>
+    <div class="debug-card"><div class="err">The agent pushes at the wall forever. Code Builder freezes.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Give the loop a door out:</p>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    <span class="kw">if</span> <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD):
+        <span class="kw">break</span>
+    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+      <p class="bilingual">while True는 나갈 길이 필요해요</p>
+    </details>
+  </div>
+
+  <!-- Slot 14: Debug 3 — detect compared to a block name -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">&#128027; Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — always False</h2>
+<pre>block = <span class="fn">agent.detect</span>(AgentDetection.BLOCK, FORWARD)
+<span class="kw">if</span> block == GOLD_BLOCK:
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)</pre>
+    <div class="debug-card"><div class="err">Gold is right there, but the agent never moves up.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>detect</code> hands back <code>True</code>, and <code>True</code> is never a block name. Use <code>inspect</code> when you need the name.</p>
+      <p class="bilingual">이름을 비교할 땐 inspect</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    block = agent.<span class="fn">______</span>(AgentInspection.BLOCK, ______)
+    <span class="kw">if</span> block ___ GOLD_BLOCK:
+        <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"look"</span>, on_chat)</pre>
+    <p style="margin-top:.6em">Goal: climb when gold stands in front.</p>
+  </div>
+
+  <!-- Slot 16: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — build the walker</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">while</span> ____:
+        <span class="fn">agent.move</span>(____, <span class="num">1</span>)
+        block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, ____)
+        <span class="kw">if</span> block == ____:
+            <span class="fn">agent.move</span>(____, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"run"</span>, on_chat)</pre>
+    <p style="margin-top:.6em">Six blanks. Watch your indent levels.</p>
+  </div>
+
+  <!-- Slot 17: Code — helper chat commands -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Code</div>
+    <h2>Two helper commands</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat2</span>():
+    <span class="fn">agent.teleport_to_player</span>()
+<span class="fn">player.on_chat</span>(<span class="str">"rl"</span>, on_chat2)
+
+<span class="kw">def</span> <span class="fn">on_chat3</span>():
+    <span class="fn">agent.turn</span>(TurnDirection.LEFT)
+<span class="fn">player.on_chat</span>(<span class="str">"l"</span>, on_chat3)</pre>
+    <p style="margin-top:.5em">Type <code>rl</code> to recall the agent. Type <code>l</code> to turn it left. Now you can test by hand.</p>
+    <p class="bilingual">에이전트를 손으로 조종하는 명령어</p>
+  </div>
+
+  <!-- Slot 18: Run — the whole program -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Run it</div>
+    <h2>All three together</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+        <span class="kw">if</span> block == GOLD_BLOCK:
+            <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"run"</span>, on_chat)
+
+<span class="kw">def</span> <span class="fn">on_chat2</span>():
+    <span class="fn">agent.teleport_to_player</span>()
+<span class="fn">player.on_chat</span>(<span class="str">"rl"</span>, on_chat2)
+
+<span class="kw">def</span> <span class="fn">on_chat3</span>():
+    <span class="fn">agent.turn</span>(TurnDirection.LEFT)
+<span class="fn">player.on_chat</span>(<span class="str">"l"</span>, on_chat3)</pre>
+  </div>
+
+  <!-- Slot 19: Quick Quiz — Q1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">Gold is ahead. <code>agent.detect(...)</code> gives back</div>
+      <div class="opts">
+        <details><summary>A. GOLD_BLOCK</summary><div class="ans">No — that is inspect.</div></details>
+        <details><summary>B. True</summary><div class="ans">&#10003; detect says yes or no.</div></details>
+        <details><summary>C. 1</summary><div class="ans">No — not a number.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Quick Quiz — Q2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">What stops <code>while True:</code>?</div>
+      <div class="opts">
+        <details><summary>A. Nothing — you build the exit</summary><div class="ans">&#10003; use break or a counter.</div></details>
+        <details><summary>B. A wall stops it</summary><div class="ans">No — the agent pushes forever.</div></details>
+      </div>
+    </div>
+    <p class="bilingual">멈추는 조건은 직접 만들어야 해요</p>
+  </div>
+
+  <!-- Slot 21: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>agent.detect</code> gives me <span class="blank"></span>, but <code>agent.inspect</code> gives me <span class="blank"></span>, so I can compare it with <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Your turn!</div>
+    <h2>Drive the agent &#129302;</h2>
+    <ul class="check-list">
+      <li>Write <code>run</code> — walk forward in a <code>while True</code></li>
+      <li>Add the inspect line, store it in <code>block</code></li>
+      <li>Climb when <code>block == GOLD_BLOCK</code></li>
+      <li>Add <code>rl</code> and <code>l</code> to reset and turn</li>
+      <li>Finish: up, turn, forward &rarr; diamond</li>
+    </ul>
+  </div>
+
+  <!-- Slot 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">&#128640; Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">&#9733;</span>Say the name every step: <code>player.say(block)</code>.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;</span>Climb for <code>GOLD_BLOCK</code> <b>or</b> <code>EMERALD_BLOCK</code>.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;&#9733;</span>Add an <code>r</code> command that turns right, then drive the whole maze by chat only.</div>
+    </div>
+  </div>
+
+  <!-- Slot 24: OPTIONAL — coloured path, inspect DOWN -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">&#128640; Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Follow the coloured path</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    below = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, DOWN)
+    <span class="kw">if</span> below == BLUE_WOOL:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    <span class="kw">elif</span> below == RED_WOOL:
+        <span class="fn">agent.turn</span>(TurnDirection.RIGHT)
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+    <span class="kw">else</span>:
+        <span class="kw">break</span></pre>
+    <p style="margin-top:.5em">Lay a wool path with corners. The agent reads the floor, not the wall.</p>
+  </div>
+
+  <!-- Slot 25: OPTIONAL — counter stops the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">&#128640; Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stop after N steps</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>(n):
+    steps = <span class="num">0</span>
+    <span class="kw">while</span> steps &lt; n:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+        <span class="kw">if</span> block == GOLD_BLOCK:
+            <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+        steps += <span class="num">1</span>
+    <span class="fn">player.say</span>(<span class="str">"done"</span>)
+<span class="fn">player.on_chat</span>(<span class="str">"walk"</span>, on_chat)</pre>
+    <p style="margin-top:.5em">Type <code>walk 12</code>. Which indent level must <code>steps += 1</code> sit on?</p>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — two blocks, two moves -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">&#128640; Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two blocks, two moves</h2>
+<pre><span class="kw">while</span> <span class="kw">True</span>:
+    block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+    <span class="kw">if</span> block == GOLD_BLOCK:
+        <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+    <span class="kw">elif</span> block == REDSTONE_BLOCK:
+        <span class="fn">agent.turn</span>(TurnDirection.LEFT)
+    <span class="kw">else</span>:
+        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</pre>
+    <p style="margin-top:.5em">Build a maze where gold means climb and redstone means turn. Then solve it.</p>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — Debug 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">&#128027; Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the waste</h2>
+<pre><span class="kw">if</span> <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD) == GOLD_BLOCK:
+    <span class="fn">agent.move</span>(UP, <span class="num">1</span>)
+<span class="kw">elif</span> <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD) == REDSTONE_BLOCK:
+    <span class="fn">agent.turn</span>(TurnDirection.LEFT)</pre>
+    <div class="debug-card"><div class="err">Two trips to Minecraft for one block. The loop crawls.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Ask once, store it, compare the variable twice:</p>
+<pre>block = <span class="fn">agent.inspect</span>(AgentInspection.BLOCK, FORWARD)
+<span class="kw">if</span> block == GOLD_BLOCK:
+    ...
+<span class="kw">elif</span> block == REDSTONE_BLOCK:
+    ...</pre>
+    </details>
+  </div>
+
+  <!-- Slot 28: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">&#127903;&#65039; Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Write your answer</div>
+      <p style="margin-top:.4em">In one sentence: what does <code>inspect</code> give you that <code>detect</code> cannot?</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — inspect와 detect의 차이</p>
+    </div>
+  </div>
+
+  <!-- Slot 29: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="emoji">&#127752;</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">detect asks if.<br>inspect asks which.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: one elif chain, many blocks, many moves.</p>
+    <p class="bilingual">다음 시간: 블록마다 다른 행동</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 29</span><button id="next">&rsaquo;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
