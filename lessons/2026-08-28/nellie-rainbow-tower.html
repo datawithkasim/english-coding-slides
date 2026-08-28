@@ -393,6 +393,89 @@
   <p style="margin-top:.5em">Like your tree torches last week.</p>
 </div>
 
+<!-- 27b · Bonus: stairs — concept + step 1 (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🪜 Bonus build</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Stairs up the tower</h2>
+  <p style="margin-bottom:.3em">Each step: <b>up 1, forward 1</b>. y and z climb together.</p>
+<pre><span class="hot"><span class="fn">blocks.fill</span>(STONE,</span><span class="hot">    <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">2</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">2</span>),</span><span class="hot">    FillOperation.REPLACE)</span></pre>
+  <p class="where">📍 New chat command <code>stairs</code>. Step 1: on the ground, next to the wall.</p>
+  <p class="bilingual">계단: 한 칸 앞, 한 칸 위</p>
+</div>
+
+<!-- 27c · Bonus: stair pattern (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🪜 Step 2, 3…</div><span class="activity-tag">OPTIONAL</span>
+  <h2>The stair pattern</h2>
+<pre><span class="dim">blocks.fill(STONE,   # step 1</span><span class="dim">    pos(0, 0, 2), pos(1, 0, 2), ...)</span><span class="hot"><span class="fn">blocks.fill</span>(STONE,   # step 2</span><span class="hot">    <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">3</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="num">3</span>),</span><span class="hot">    FillOperation.REPLACE)<span class="mk">NEW</span></span></pre>
+  <p class="where">📍 y and z both +1 each step. x stays 0 and 1.</p>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Run: stairs</div>
+    <div>Two steps. A staircase begins.</div>
+  </div>
+</div>
+
+<!-- 27d · Bonus: finish the staircase trace (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">Trace it</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Finish the staircase</h2>
+  <div class="trace-grid">
+    <div class="cell head">step</div><div class="cell head">y</div><div class="cell head">z</div>
+    <div class="cell">1</div><div class="cell">0</div><div class="cell">2</div>
+    <div class="cell">2</div><div class="cell">1</div><div class="cell">3</div>
+    <div class="cell">3</div><div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+    <div class="cell">4</div><div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+    <div class="cell">5</div><div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+    <div class="cell">6</div><div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
+    <div class="cell">7</div><div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+  </div>
+  <p class="quiet" style="margin-top:.4em">Type each step. Run. Climb it!</p>
+</div>
+
+<!-- 27e · Bonus: ladder bug (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🐛 Debug 5</div><span class="activity-tag">OPTIONAL</span>
+  <h2>The ladder bug</h2>
+  <p style="margin-bottom:.3em">Goal: stairs go forward. These stacked straight up!</p>
+<pre><span class="dim">blocks.fill(STONE,   # step 4</span><span class="bad">    pos(0, 3, 2), pos(1, 3, 2),</span><span class="dim">    FillOperation.REPLACE)</span></pre>
+  <div class="debug-card"><details><summary>▸ Show the bug</summary>
+    <div class="err">z is stuck at 2 — only y climbed. Step 4 needs z 5.</div>
+    <pre>    pos(<span class="num">0</span>, <span class="num">3</span>, <span class="num">5</span>), pos(<span class="num">1</span>, <span class="num">3</span>, <span class="num">5</span>),</pre>
+  </details></div>
+</div>
+
+<!-- 27f · Bonus: glass window (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">💎 Decorate</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Glass window up top</h2>
+<pre><span class="hot"><span class="fn">blocks.fill</span>(GLASS,</span><span class="hot">    <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">15</span>, <span class="num">4</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">16</span>, <span class="num">6</span>),</span><span class="hot">    FillOperation.REPLACE)</span></pre>
+  <p class="where">📍 x stays 2 — one wall only. Glass replaces the purple wool.</p>
+  <p class="bilingual">유리창 — 벽 한 면만</p>
+</div>
+
+<!-- 27g · Bonus: pet in the top room (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🐔 Pet time</div><span class="activity-tag">OPTIONAL</span>
+  <h2>A pet in the top room</h2>
+<pre><span class="hot"><span class="fn">mobs.spawn</span>(CHICKEN, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">16</span>, <span class="num">5</span>))</span></pre>
+  <p class="where">📍 y 16 = inside the hollow room. Like your tree animals last week.</p>
+  <p style="margin-top:.5em">Try RABBIT too. Climb your stairs and say hi.</p>
+</div>
+
+<!-- 27h · Bonus: mega challenge (OPTIONAL) -->
+<div class="slide">
+  <div class="pill">🏗️ Mega challenge</div><span class="activity-tag">OPTIONAL</span>
+  <h2>Tower two — your colors</h2>
+  <ul class="check-list">
+    <li>New command: <code>tower2</code></li>
+    <li>Base: <code>pos(12, 0, 2)</code> → <code>pos(18, 2, 8)</code></li>
+    <li>Six layers — YOUR colors</li>
+    <li><code>HOLLOW</code> the top two</li>
+    <li>Stairs on it too?</li>
+  </ul>
+  <p class="bilingual">두 번째 타워 — 내가 고른 색으로</p>
+</div>
+
 <!-- 28 · SLOT 19: Exit Ticket -->
 <div class="slide">
   <span class="slot-badge">SLOT 19</span>
@@ -410,11 +493,11 @@
   <span class="slot-badge">SLOT 20</span>
   <div class="emoji">🌈</div>
   <h1 style="font-size:clamp(36px,6vmin,56px)">Check first.<br>Then build high.</h1>
-  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: stairs to the top of your tower.</p>
-  <p class="bilingual">다음: 꼭대기까지 계단</p>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a rainbow bridge between your towers.</p>
+  <p class="bilingual">다음: 타워 사이 무지개 다리</p>
 </div>
 
 <div class="nav">
-  <button id="prev">‹</button><span class="counter" id="counter">1 / 29</span><button id="next">›</button>
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 36</span><button id="next">›</button>
 </div>
 </div><script src="../../assets/deck.js"></script></body></html>
