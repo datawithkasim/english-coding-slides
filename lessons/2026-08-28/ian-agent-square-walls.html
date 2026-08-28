@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IAN — Close the Square (agent square walls)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* v1→v4 ramp helpers only — everything else comes from style.css */
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft Education · Agent · IAN · 2026-08-28</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Today</div>
+    <div class="emoji">🔲</div>
+    <h1>Close<br>the Square</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">count</span> + <span class="sub">turn</span> + <span class="sub">close</span></p>
+    <p class="bilingual">네 벽으로 정사각형 닫기</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Ian's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — your walls</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which chat command brings the agent to you?</div>
+      <details><summary>Show answer</summary><div class="ans">RL — teleports it to the player. Your remote.</div></details>
+    </div>
+    <p style="margin-top:.5em">The 7-wall and the 8-wall — you built them solo: counted, coded, ran. 💪</p>
+    <p class="bilingual">지난 시간: 혼자 두 벽 완성</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Two walls — then what?</h2>
+    <div class="predict-card">
+      <div class="label">Place on move is ON</div>
+<pre><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot"><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</span><span class="hot"><span class="fn">agent.turn</span>(RIGHT)</span><span class="hot"><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</span></pre>
+      <details><summary>What shape do the blocks make?</summary><div class="ans">An L — two walls, one corner. The turn makes the corner.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>4 words today</h2>
+    <div class="vocab-table">
+      <span class="term">corner</span>
+      <span class="gloss">where two walls meet</span>
+      <span class="ko">모퉁이</span>
+
+      <span class="term">side</span>
+      <span class="gloss">one wall of the square</span>
+      <span class="ko">한 변</span>
+
+      <span class="term">turn</span>
+      <span class="gloss">spin on the spot — no block drops</span>
+      <span class="ko">제자리 돌기</span>
+
+      <span class="term">close</span>
+      <span class="gloss">join back to the start</span>
+      <span class="ko">닫다</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — no code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Four walls, four turns</h2>
+    <div class="opt-grid two">
+      <div class="opt-card">
+        <div class="ico">➡</div>
+        <div class="name">wall 1</div>
+        <div class="ex">7 blocks, then turn ↪</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">⬇</div>
+        <div class="name">wall 2</div>
+        <div class="ex">7 blocks, then turn ↪</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">⬆</div>
+        <div class="name">wall 4</div>
+        <div class="ex">7 blocks, then turn ↪</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">⬅</div>
+        <div class="name">wall 3</div>
+        <div class="ex">7 blocks, then turn ↪</div>
+      </div>
+    </div>
+    <p class="big center" style="margin-top:.5em">Wall, then turn. Four times. Closed.</p>
+    <p class="bilingual center">벽 하나 끝나면 한 번 돌아요</p>
+  </div>
+
+  <!-- Slot 6: Run v1 — his solo wall -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>v1 — your wall</h2>
+<pre><span class="dim">def on_chat():</span><span class="dim">    agent.set_block_or_item(GRASS, 1)</span><span class="dim">    agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)<span class="mk">WALL 1</span></span><span class="dim">player.on_chat("run", on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">🧱🧱🧱🧱🧱🧱🧱 · 🤖 one square past</div>
+    </div>
+    <p style="margin-top:.5em">7 moves → 7 blocks. The wall you built solo.</p>
+  </div>
+
+  <!-- Slot 7: Investigate — the corner, animated -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Watch one corner</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">🧱 wall 1 done — 7 moves</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">↪ agent.turn(RIGHT) — spins on the spot</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">🚫 a turn drops no block</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">🧱 wall 2 — blocks drop again</div>
+    </div>
+    <p class="bilingual">돌 때는 블록이 안 나와요</p>
+  </div>
+
+  <!-- Slot 8: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the table</h2>
+<pre><span class="com"># agent starts facing ➡</span>
+<span class="fn">agent.move</span>(FORWARD, <span class="num">3</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">3</span>)
+<span class="fn">agent.turn</span>(RIGHT)</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">after…</div>
+      <div class="cell head"><code>move 3</code></div>
+      <div class="cell head"><code>turn R</code></div>
+      <div class="cell head"><code>move 3</code></div>
+      <div class="cell head"><code>turn R</code></div>
+
+      <div class="cell">blocks</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+
+      <div class="cell">facing</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">➡</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬇</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬇</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬅</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Ritual — count, say, type -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Ritual</div>
+    <h2>Count, say, type</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">👉 point at each block</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">🗣️ count out loud — 1, 2 … 7</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">⌨️ type the number you said</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">▶ run</div>
+    </div>
+    <p style="margin-top:.5em">Your promise from last time. 🤝</p>
+    <p class="bilingual">세고 → 말하고 → 입력해요</p>
+  </div>
+
+  <!-- Slot 10: Run v2 — first corner -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — first corner</h2>
+<pre><span class="dim">def on_chat():</span><span class="dim">    agent.set_block_or_item(GRASS, 1)</span><span class="dim">    agent.set_assist(PLACE_ON_MOVE, True)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="hot">    <span class="fn">agent.turn</span>(RIGHT)<span class="mk">NEW</span></span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)<span class="mk">WALL 2</span></span><span class="dim">player.on_chat("run", on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">wall 1 ➡ · corner ↪ · wall 2 ⬇ — an L</div>
+    </div>
+    <p style="margin-top:.5em">One turn makes the corner.</p>
+  </div>
+
+  <!-- Slot 11: Run v3 — three walls -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Run it</div>
+    <h2>v3 — three walls</h2>
+<pre><span class="dim">def on_chat():</span><span class="dim">    agent.set_block_or_item(GRASS, 1)</span><span class="dim">    agent.set_assist(PLACE_ON_MOVE, True)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="dim">    agent.turn(RIGHT)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="hot">    <span class="fn">agent.turn</span>(RIGHT)<span class="mk">NEW</span></span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)<span class="mk">WALL 3</span></span><span class="dim">player.on_chat("run", on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">three walls — a U shape · one side open</div>
+    </div>
+    <p style="margin-top:.5em">Turn again, wall 3. One side left.</p>
+  </div>
+
+  <!-- Slot 12: Run v4 — close the square -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Run it</div>
+    <h2>v4 — close the square</h2>
+<pre><span class="dim">def on_chat():</span><span class="dim">    agent.set_block_or_item(GRASS, 1)</span><span class="dim">    agent.set_assist(PLACE_ON_MOVE, True)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="dim">    agent.turn(RIGHT)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="dim">    agent.turn(RIGHT)</span><span class="dim">    agent.move(FORWARD, 7)</span><span class="hot">    <span class="fn">agent.turn</span>(RIGHT)<span class="mk">NEW</span></span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)<span class="mk">WALL 4</span></span><span class="hot">    <span class="fn">agent.turn</span>(RIGHT)<span class="mk">NEW</span></span><span class="dim">player.on_chat("run", on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div style="opacity:1">square closed ✓ · 🤖 back at the start</div>
+    </div>
+    <p style="margin-top:.5em">The last turn faces the start — ready to run again.</p>
+  </div>
+
+  <!-- Slot 13: Common Mistake — guessing the count -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Guessing the number</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">8</span>)</pre>
+        <p style="margin-top:.4em">A guess. The wall was 7.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</pre>
+        <p style="margin-top:.4em">Point 👉 count 🗣️ type ⌨️</p>
+      </div>
+    </div>
+    <p class="bilingual">감으로 말고 세어 보세요</p>
+  </div>
+
+  <!-- Slot 14: Debug 1 — overshoot past the corner -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — past the corner</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">8</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</pre>
+    <div class="debug-card"><div class="err">Wall 1 pokes one block past the corner. Wall 2 starts in the wrong place.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The wall is <b>7</b>, not 8. Point, count out loud, retype.</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: Debug 2 — letter L vs number 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — dead command</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat3</span>():
+    <span class="fn">agent.turn</span>(LEFT)
+<span class="fn">player.on_chat</span>(<span class="str">"1"</span>, on_chat3)</pre>
+    <div class="debug-card"><div class="err">You type l in chat. The agent never turns.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">That <code>"1"</code> is the number one. The command needs the letter <code>"l"</code>.</p>
+      <p class="bilingual">숫자 1, 글자 l — 달라요</p>
+    </details>
+  </div>
+
+  <!-- Slot 16: Debug 3 — missing turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — never closes</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</pre>
+    <div class="debug-card"><div class="err">The last 7 blocks keep going straight. The square stays open.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">No turn after wall 3. Every wall ends with one turn — four walls, four turns.</p>
+      <p class="bilingual">벽 하나에 턴 하나</p>
+    </details>
+  </div>
+
+  <!-- Slot 17: Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)</pre>
+    <p style="margin-top:.6em">Goal: a square with sides of 5. Same number, four times.</p>
+  </div>
+
+  <!-- Slot 18: Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — the animal pen</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, ___)
+<span class="fn">agent.turn</span>(RIGHT)</pre>
+    <p style="margin-top:.6em">Goal: a pen 8 long, 5 wide. Two numbers, each used twice.</p>
+  </div>
+
+  <!-- Slot 19: Quick Quiz — Q1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">A square fence, sides of 6. How many turns?</div>
+      <div class="opts">
+        <details><summary>A. 3</summary><div class="ans">No — one more corner waits.</div></details>
+        <details><summary>B. 4</summary><div class="ans">✓ one turn after every wall.</div></details>
+        <details><summary>C. 6</summary><div class="ans">No — 6 is the side length.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Quick Quiz — Q2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q"><code>agent.turn(RIGHT)</code> drops how many blocks?</div>
+      <div class="opts">
+        <details><summary>A. 0</summary><div class="ans">✓ turns spin on the spot.</div></details>
+        <details><summary>B. 1</summary><div class="ans">No — only moves drop blocks.</div></details>
+        <details><summary>C. 7</summary><div class="ans">No — that's a whole wall.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 21: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"A square needs <span class="blank"></span> walls and <span class="blank"></span> turns, so after every wall I <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Your turn!</div>
+    <h2>Close your square 🔲</h2>
+    <ul class="check-list">
+      <li>RL — call the agent</li>
+      <li>Point 👉 count 🗣️ type ⌨️ — every number</li>
+      <li>Wall 1 + one turn — run it</li>
+      <li>Add walls 2, 3, 4</li>
+      <li>Stand inside your square 🎉</li>
+    </ul>
+  </div>
+
+  <!-- Slot 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Stone walls: <code>agent.set_block_or_item(STONE, 1)</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Giant square — sides of 12.</div>
+      <div class="item"><span class="lvl">★★★</span>Close the square, <code>agent.move(UP, 1)</code>, close it again — two floors.</div>
+    </div>
+  </div>
+
+  <!-- Slot 24: OPTIONAL — count drill -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Ritual<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count drill — no guessing</h2>
+    <p>Point at the screen. Count out loud. Then reveal.</p>
+    <div class="quiz-card">
+      <div class="q">How long is each wall?</div>
+      <div class="opts">
+        <details><summary>🧱🧱🧱🧱🧱🧱</summary><div class="ans">6</div></details>
+        <details><summary>🧱🧱🧱🧱🧱🧱🧱🧱</summary><div class="ans">8</div></details>
+        <details><summary>🧱🧱🧱🧱🧱🧱🧱</summary><div class="ans">7 — your wall!</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 25: OPTIONAL — Debug 4: undershoot -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the gap</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">5</span>)
+<span class="fn">agent.turn</span>(RIGHT)</pre>
+    <div class="debug-card"><div class="err">Wall 2 stops short. Two squares open — the sheep walk out. 🐑</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">5 was a guess. The wall is <b>7</b> — count first.</p>
+    </details>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — Debug 5: wrong turn direction -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — runaway wall</h2>
+<pre><span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)
+<span class="fn">agent.turn</span>(LEFT)
+<span class="fn">agent.move</span>(FORWARD, <span class="num">7</span>)</pre>
+    <div class="debug-card"><div class="err">Wall 3 runs away from the square.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">One LEFT in a RIGHT square. Same turn at every corner.</p>
+    </details>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — the three remotes -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Code<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your three remotes</h2>
+<pre><span class="kw">def</span> <span class="fn">on_chat2</span>():
+    <span class="fn">agent.teleport_to_player</span>()
+<span class="fn">player.on_chat</span>(<span class="str">"rl"</span>, on_chat2)
+
+<span class="kw">def</span> <span class="fn">on_chat3</span>():
+    <span class="fn">agent.turn</span>(RIGHT)
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat3)
+
+<span class="kw">def</span> <span class="fn">on_chat4</span>():
+    <span class="fn">agent.turn</span>(LEFT)
+<span class="fn">player.on_chat</span>(<span class="str">"l"</span>, on_chat4)</pre>
+    <p style="margin-top:.5em"><code>rl</code> calls the agent. <code>r</code> and <code>l</code> spin it. Letter l — never 1.</p>
+  </div>
+
+  <!-- Slot 28: OPTIONAL — sneak peek: repeat ×4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Sneak peek — repeat ×4</h2>
+<pre><span class="dim">def on_chat():</span><span class="dim">    agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):<span class="mk">NEW</span></span><span class="dim">        agent.move(FORWARD, 7)</span><span class="dim">        agent.turn(RIGHT)</span><span class="dim">player.on_chat("run", on_chat)</span></pre>
+    <p style="margin-top:.6em">One repeat block, four walls. Next lesson.</p>
+  </div>
+
+  <!-- Slot 29: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Say your answer</div>
+      <p style="margin-top:.4em">When do you turn, and how many turns close the square? One sentence.</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 — 언제, 몇 번 돌아요?</p>
+    </div>
+  </div>
+
+  <!-- Slot 30: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="emoji">🔲</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Wall. Turn.<br>Four times.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: one repeat block builds all four walls.</p>
+    <p class="bilingual">다음 시간: repeat 블록</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
