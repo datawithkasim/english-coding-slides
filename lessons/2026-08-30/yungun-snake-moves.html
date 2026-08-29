@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snake — Make It Move (Yungun · 2026-08-30)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Pygame Snake · Yungun · 30 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pygame Snake</div>
+    <div class="emoji">🐍</div>
+    <h1>Make the<br>Snake Move</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">change</span> one slot + <span class="sub">steer</span> with arrow keys.</p>
+    <p class="bilingual">오늘은 뱀을 움직여요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Yungun's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your last lesson</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your own code</div>
+      <div class="q">1. <code>say_hello()</code> crashed. You fixed it yourself — how?</div>
+      <details><summary>Show answer</summary><div class="ans">You gave it the name: <code>say_hello("James")</code>. 👏</div></details>
+      <div class="q" style="margin-top:.5em">2. What do the brackets in <code>snake_pos[0]</code> pick?</div>
+      <details><summary>Show answer</summary><div class="ans">One slot inside the list.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">The box starts with two numbers.</div>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span>
+<span class="fn">print</span>(snake_pos)</pre>
+      <details><summary>Reveal output</summary><div class="ans">[110, 50] — only the first slot grew.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">list</span>
+      <span class="gloss">one box holding several values in order</span>
+      <span class="ko">리스트</span>
+
+      <span class="term">index</span>
+      <span class="gloss">the slot number, counted from zero</span>
+      <span class="ko">인덱스 · 슬롯 번호</span>
+
+      <span class="term">game loop</span>
+      <span class="gloss">code that runs again every frame</span>
+      <span class="ko">게임 루프</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — physical model, NO code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One box. Two numbered slots.</h2>
+    <p class="big center">The snake's box is called <span class="sub">snake_pos</span></p>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">slot 0</span><span class="val">100 · across ➡️</span></div>
+      <div class="varbox"><span class="name">slot 1</span><span class="val">50 · down ⬇️</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Slot <b>0</b> = across. Slot <b>1</b> = down. Counting starts at zero.</p>
+    <p class="bilingual center">0번은 가로, 1번은 세로</p>
+  </div>
+
+  <!-- Slot 6: Today's plan — the version ramp -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Today's plan 🗺️</div>
+    <h2>Four tiny versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🐍</div><div class="name">v1 · still snake</div><div class="ex">drawn once</div></div>
+      <div class="opt-card"><div class="ico">➡️</div><div class="name">v2 · slot 0</div><div class="ex">slides right</div></div>
+      <div class="opt-card"><div class="ico">⬇️</div><div class="name">v3 · slot 1</div><div class="ex">slides down</div></div>
+      <div class="opt-card"><div class="ico">⌨️</div><div class="name">v4 · arrow keys</div><div class="ex">keys pick the slot</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Every version runs. Each one adds a line.</p>
+  </div>
+
+  <!-- Slot 7: Run (Worked Example) — v1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Run ▶</div>
+    <h2>v1 — your snake right now</h2>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+
+<span class="kw">while</span> running:
+    screen.<span class="fn">fill</span>(BLACK)
+    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (snake_pos[<span class="num">0</span>], snake_pos[<span class="num">1</span>], <span class="num">20</span>, <span class="num">20</span>))
+    pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">A green square at 100 across, 50 down. It never moves.</div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Zoom in — reading the index -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Read it out loud</h2>
+<pre>snake_pos[<span class="num">0</span>]</pre>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">snake_pos</span><span class="val">the box</span></div>
+      <div class="varbox"><span class="name">[ ]</span><span class="val">open a slot</span></div>
+      <div class="varbox"><span class="name">0</span><span class="val">which slot</span></div>
+    </div>
+    <p class="center">Name → brackets → slot number. It gives you the <b>value</b>, 100.</p>
+    <p class="bilingual center">이름 · 괄호 · 번호</p>
+  </div>
+
+  <!-- Slot 9: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Add 10, every frame</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">slot 0 · across →</div>
+        <div class="cg-track"><div class="cg-sprite">🐍</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">snake_pos[0]</span> = <span class="cg-val"><span>100</span><span>110</span><span>120</span><span>130</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Movement is one number changing again and again.</p>
+  </div>
+
+  <!-- Slot 10: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>What is in each slot?</h2>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span>
+snake_pos[<span class="num">1</span>] = snake_pos[<span class="num">1</span>] + <span class="num">10</span>
+snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span></pre>
+    <div class="trace-grid">
+      <div class="cell head">After line</div>
+      <div class="cell head"><code>snake_pos[0]</code></div>
+      <div class="cell head"><code>snake_pos[1]</code></div>
+
+      <div class="cell">1</div>
+      <div class="cell">100</div>
+      <div class="cell">50</div>
+
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">110</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">50</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">110</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 11: Common Mistake — Yungun's own quotes bug -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Quotes print the name</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">print</span>(<span class="str">"snake_pos[0]"</span>)</pre>
+        <p>→ <code>snake_pos[0]</code><br>Just letters. The box was never opened.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">print</span>(snake_pos[<span class="num">0</span>])</pre>
+        <p>→ <code>100</code><br>The value inside slot 0.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">따옴표 안은 글자 그대로</p>
+  </div>
+
+  <!-- Slot 12: Build v2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Build v2 ➡️</div>
+    <h2>v2 — move slot 0</h2>
+<pre><span style="display:block;opacity:.45">snake_pos = [<span class="num">100</span>, <span class="num">50</span>]</span><span style="display:block;opacity:.45"><span class="kw">while</span> running:</span><span style="display:block;opacity:.45">    screen.<span class="fn">fill</span>(BLACK)</span><span style="display:block;background:rgba(56,208,224,.13)">    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (snake_pos[<span class="num">0</span>], snake_pos[<span class="num">1</span>], <span class="num">20</span>, <span class="num">20</span>))</span><span style="display:block;opacity:.45">    pygame.display.<span class="fn">flip</span>()</span></pre>
+    <p style="margin-top:.5em">📍 Inside <code>while running:</code>, straight above the draw line. Run it — the snake slides right, off the screen.</p>
+    <p class="bilingual">0번이 커지면 오른쪽으로</p>
+  </div>
+
+  <!-- Slot 13: Build v3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Build v3 ⬇️</div>
+    <h2>v3 — move slot 1 too</h2>
+<pre><span style="display:block;opacity:.45"><span class="kw">while</span> running:</span><span style="display:block;opacity:.45">    screen.<span class="fn">fill</span>(BLACK)</span><span style="display:block;opacity:.45">    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span></span><span style="display:block;background:rgba(56,208,224,.13)">    snake_pos[<span class="num">1</span>] = snake_pos[<span class="num">1</span>] + <span class="num">10</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    <span class="com"># draw and flip stay the same</span></span></pre>
+    <p style="margin-top:.5em">📍 One line under the slot-0 line. Same shape, one digit changed. Both slots grow → the snake slides diagonally.</p>
+  </div>
+
+  <!-- Slot 14: DEBUG 1 — reset inside the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — the stuck snake</h2>
+<pre><span class="kw">while</span> running:
+    snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span></pre>
+    <div class="debug-card"><div class="err">No crash. The snake sits frozen at 110.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Every frame builds a fresh box. Set the starting list <b>once, above</b> the loop.</p>
+      <p class="bilingual">시작 값은 반복문 밖에</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: DEBUG 2 — IndexError -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — slot 2</h2>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+snake_pos[<span class="num">2</span>] = snake_pos[<span class="num">2</span>] + <span class="num">10</span></pre>
+    <div class="debug-card"><div class="err">IndexError: list index out of range</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Two values means two slots: <b>0</b> and <b>1</b>. There is no slot 2.</p>
+      <p class="bilingual">슬롯은 0과 1뿐</p>
+    </details>
+  </div>
+
+  <!-- Slot 16: DEBUG 3 — no assignment -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — nothing happens</h2>
+<pre><span class="kw">while</span> running:
+    snake_pos[<span class="num">0</span>] + <span class="num">10</span></pre>
+    <div class="debug-card"><div class="err">No crash. No error. The snake never moves.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Python worked out 110 and threw it away. Put <code>snake_pos[0] =</code> on the left to store it.</p>
+      <p class="bilingual">저장하지 않으면 사라져요</p>
+    </details>
+  </div>
+
+  <!-- Slot 17: Build v4 — keys pick the slot -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Build v4 ⌨️</div>
+    <h2>v4 — the key picks the slot</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span><span class="activity-tag" style="background:#dc3545">OLD</span></span><span style="display:block;background:rgba(220,53,69,.12)">    snake_pos[<span class="num">1</span>] = snake_pos[<span class="num">1</span>] + <span class="num">10</span><span class="activity-tag" style="background:#dc3545">OLD</span></span><span style="display:block;background:rgba(56,208,224,.13)">    keys = pygame.key.<span class="fn">get_pressed</span>()<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_RIGHT]: snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_LEFT]:  snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] - <span class="num">10</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_DOWN]:  snake_pos[<span class="num">1</span>] = snake_pos[<span class="num">1</span>] + <span class="num">10</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> keys[pygame.K_UP]:    snake_pos[<span class="num">1</span>] = snake_pos[<span class="num">1</span>] - <span class="num">10</span><span class="activity-tag">NEW</span></span></pre>
+    <p style="margin-top:.5em">📍 Delete the two OLD lines. Type the five NEW lines in their place. Left and right pick slot 0. Up and down pick slot 1.</p>
+  </div>
+
+  <!-- Slot 18: Modify 1 (easy fill-blank) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the slot numbers</h2>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]
+
+snake_pos[___] = snake_pos[___] + <span class="num">10</span>   <span class="com"># move right</span>
+snake_pos[___] = snake_pos[___] + <span class="num">10</span>   <span class="com"># move down</span></pre>
+    <p style="margin-top:.6em"><b>Hint:</b> across is slot 0.</p>
+  </div>
+
+  <!-- Slot 19: Modify 2 (harder) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — go back the other way</h2>
+<pre><span class="kw">if</span> keys[pygame.K_LEFT]:
+    snake_pos[___] = snake_pos[___] ___ <span class="num">10</span>
+
+<span class="kw">if</span> keys[pygame.K_UP]:
+    snake_pos[___] = snake_pos[___] ___ <span class="num">10</span></pre>
+    <p style="margin-top:.5em">Left and up both make the number <b>smaller</b>.</p>
+  </div>
+
+  <!-- Slot 20: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>snake_pos[1] = snake_pos[1] + 10</code> moves the snake…</div>
+      <div class="opts">
+        <details><summary>A. right</summary><div class="ans">No — slot 0.</div></details>
+        <details><summary>B. down</summary><div class="ans">✓ Slot 1 = down.</div></details>
+        <details><summary>C. nowhere</summary><div class="ans">No — it changed.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>print("snake_pos[0]")</code> shows…</div>
+      <div class="opts">
+        <details><summary>A. 100</summary><div class="ans">No — quotes hide it.</div></details>
+        <details><summary>B. the name</summary><div class="ans">✓ Quotes = plain text.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 21: Code Talk Frame — the sentence he could not say -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the whole sentence</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>snake_pos[0]</code> holds <span class="blank"></span>, so adding 10 moves the snake <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"<code>snake_pos[1]</code> holds <span class="blank"></span>, so adding 10 moves the snake <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in your file</h2>
+    <ul class="check-list">
+      <li><code>snake_pos = [100, 50]</code> above <code>while running:</code></li>
+      <li>Draw line reads <code>snake_pos[0], snake_pos[1]</code></li>
+      <li>Add <code>snake_pos[0] = snake_pos[0] + 10</code> inside the loop</li>
+      <li>Run. It slides right</li>
+      <li>Add the slot-1 line. Run</li>
+      <li>Swap both for four key lines</li>
+    </ul>
+  </div>
+
+  <!-- Slot 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change the 10 to 40. Run. Change it back.</div>
+      <div class="item"><span class="lvl">★★</span>Hold → and ↓ together. Say why it goes diagonally.</div>
+      <div class="item"><span class="lvl">★★★</span>Stop the snake at the window edge.</div>
+    </div>
+  </div>
+
+  <!-- Slot 24: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one full sentence</div>
+      <p style="margin-top:.4em">Type the line that moves the snake <b>down</b> — then say which slot it changes, and why.</p>
+      <p class="bilingual" style="margin-top:.4em">어느 슬롯인지 문장으로 말해요</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- Slot 25: OPTIONAL — DEBUG 4, no screen.fill -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 4 — the green stripe</h2>
+<pre><span class="kw">while</span> running:
+    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + <span class="num">10</span>
+    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (snake_pos[<span class="num">0</span>], snake_pos[<span class="num">1</span>], <span class="num">20</span>, <span class="num">20</span>))
+    pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="debug-card"><div class="err">No crash. A long green stripe grows across the window.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Old squares are still on screen. Put <code>screen.fill(BLACK)</code> first, inside the loop.</p>
+      <p class="bilingual">매 프레임 화면을 지워요</p>
+    </details>
+  </div>
+
+  <!-- Slot 26: OPTIONAL — harder trace, both slots -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four frames, one finger</h2>
+<pre>snake_pos = [<span class="num">100</span>, <span class="num">50</span>]   step = <span class="num">10</span></pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">held key</div>
+      <div class="cell head">→</div>
+      <div class="cell head">→</div>
+      <div class="cell head">↓</div>
+      <div class="cell head">↓</div>
+
+      <div class="cell"><code>snake_pos[0]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">110</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+
+      <div class="cell"><code>snake_pos[1]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">50</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">50</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">70</span></details></div>
+    </div>
+    <p style="margin-top:.5em">The slot you don't press holds still.</p>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — Modify 3, one step name -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One name, four lines</h2>
+<pre>STEP = ___          <span class="com"># top of the file</span>
+
+<span class="kw">if</span> keys[pygame.K_RIGHT]:
+    snake_pos[<span class="num">0</span>] = snake_pos[<span class="num">0</span>] + ___</pre>
+    <p style="margin-top:.5em">📍 <code>STEP</code> goes with your colours, above the loop. Change it once — all four keys feel it.</p>
+    <p class="bilingual">상수는 한 곳에서만</p>
+  </div>
+
+  <!-- Slot 28: OPTIONAL — Quiz round 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two more</h2>
+    <div class="quiz-card">
+      <div class="q">3. <code>snake_pos = [100, 50]</code> — how many slots?</div>
+      <div class="opts">
+        <details><summary>A. one</summary><div class="ans">No.</div></details>
+        <details><summary>B. two</summary><div class="ans">✓ Slot 0 and 1.</div></details>
+        <details><summary>C. three</summary><div class="ans">No — 2 crashes.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">4. Left and up both use…</div>
+      <div class="opts">
+        <details><summary>A. plus</summary><div class="ans">No — that grows.</div></details>
+        <details><summary>B. minus</summary><div class="ans">✓ Both shrink the number.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 29: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="emoji">🐍</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Slot 0 across.<br>Slot 1 down.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: the snake grows a tail.</p>
+    <p class="bilingual">다음 시간: 뱀이 길어져요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 29</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

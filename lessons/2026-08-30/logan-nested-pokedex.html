@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LOGAN — What Is Inside This Variable? (nested Pokédex)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Step-walkthrough helpers lifted from lessons/2026-08-29/dewy-agent-loops.html */
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS002 · Pokédex · Logan · 30 Aug 2026</div>
+
+  <!-- ================= SLOT 1 · Title + Objective ================= -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Today</div>
+    <div class="emoji">📦</div>
+    <h1>What Is Inside<br>This Variable?</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">look</span> + <span class="sub">name</span> + <span class="sub">reach</span></p>
+    <div class="iter-row" style="margin-top:.7em">
+      <span class="chip on">v1 moves list</span><span class="chip">v2 move dicts</span>
+      <span class="chip">v3 name + power</span><span class="chip">v4 strongest</span>
+    </div>
+    <p class="bilingual">변수 안에 뭐가 들어 있나?</p>
+  </div>
+
+  <!-- ================= SLOT 2 · Recap (Logan's own last lesson) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — your Pokédex</h2>
+    <div class="recap-q">
+      <div class="label">Your wins</div>
+      <div class="q">You googled it and ran Python in the Mac terminal at home. You explained <code>\n</code> yourself: "it made the word into another line."</div>
+      <div class="q" style="margin-top:.6em">Quick check: <code>search["moves"][1]</code> gives which move?</div>
+      <details><summary>Show answer</summary><div class="ans">The second one. Counting starts at <code>0</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 3 · Predict ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Each move grows</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+<pre><span class="str">"moves"</span>: [
+    {<span class="str">"name"</span>: <span class="str">"thunderbolt"</span>, <span class="str">"power"</span>: <span class="num">90</span>},
+    {<span class="str">"name"</span>: <span class="str">"quick attack"</span>, <span class="str">"power"</span>: <span class="num">40</span>}
+]
+
+<span class="fn">print</span>(search[<span class="str">"moves"</span>][<span class="num">0</span>])</pre>
+      <details><summary>Reveal output</summary><div class="ans">{'name': 'thunderbolt', 'power': 90}</div></details>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 4 · Vocab ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>New words today</h2>
+    <div class="vocab-table">
+      <span class="term">nested</span><span class="gloss">a box inside another box</span><span class="ko">중첩</span>
+      <span class="term">list of dicts</span><span class="gloss">a list where every item is a dictionary</span><span class="ko">딕셔너리 리스트</span>
+      <span class="term">level</span><span class="gloss">one more <code>[ ]</code> goes one layer deeper</span><span class="ko">단계</span>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 5 · Concept (NO CODE) ================= -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>A box inside a box</h2>
+    <div class="varbox-row">
+      <div class="varbox">
+        <span class="name">search</span>
+        <span class="val">📦 one Pokémon</span>
+        <div class="varbox">
+          <span class="name">search["moves"]</span>
+          <span class="val">📋 a shelf of boxes</span>
+          <div class="varbox">
+            <span class="name">search["moves"][0]</span>
+            <span class="val">📦 one move</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="big">Every lid has a name on it. Open one lid at a time.</p>
+    <p class="bilingual">상자 안의 상자 — 뚜껑마다 이름이 있어요</p>
+  </div>
+
+  <!-- ================= SLOT 6 · Run (v1 → v2) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — moves get their own boxes</h2>
+    <div class="viz">
+      <div class="tag-old">OLD · pokedex.py</div>
+      <div class="was"><pre>"moves": ["thunderbolt", "quick attack", "agility"]</pre></div>
+      <div class="tag-new">NEW · same file, same key</div>
+      <div class="now"><pre><span class="dim">pokedex = {</span>
+<span class="dim">  "pikachu": {"type": "electric",</span>
+<span class="hot">    "moves": [</span>
+<span class="hot">      {"name": "thunderbolt", "type": "electric", "power": 90},</span>
+<span class="hot">      {"name": "quick attack", "type": "normal", "power": 40},</span>
+<span class="hot">      {"name": "agility", "type": "psychic", "power": 0}</span>
+<span class="hot">    ]},</span>
+<span class="dim">  # ... your other pokemon</span>
+<span class="dim">}</span>
+<span class="dim"># input + search lines unchanged</span>
+<span class="dim">for i in range(3):</span>
+<span class="dim">    print(search["moves"][i])</span></pre></div>
+      <div class="output-box">
+        <div class="out-label">▸ The old loop now prints</div>
+        <div>{'name': 'thunderbolt', 'type': 'electric', 'power': 90}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 7 · Investigate (terminal peel) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Watch it!</div>
+    <h2>Peel one layer at a time</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="typed">print(search)</span></div>
+      <div class="line"><span class="echo">{'type': 'electric', 'moves': [{...}, {...}, {...}]}</span></div>
+      <div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="typed">print(search["moves"])</span></div>
+      <div class="line"><span class="echo">[{...}, {...}, {...}]</span></div>
+      <div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="typed">print(search["moves"][0])</span></div>
+      <div class="line"><span class="ok">{'name': 'thunderbolt', 'type': 'electric', 'power': 90}</span></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">One more <code>[ ]</code> = one layer deeper.</p>
+  </div>
+
+  <!-- ================= EXTRA · check don't guess ================= -->
+  <div class="slide">
+    <div class="pill">Tool <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Check, don't guess</h2>
+<pre><span class="fn">print</span>(<span class="fn">type</span>(search))
+<span class="fn">print</span>(<span class="fn">type</span>(search[<span class="str">"moves"</span>]))
+<span class="fn">print</span>(<span class="fn">type</span>(search[<span class="str">"moves"</span>][<span class="num">0</span>]))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div>&lt;class 'dict'&gt;</div>
+      <div>&lt;class 'list'&gt;</div>
+      <div>&lt;class 'dict'&gt;</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Put this above any line you are unsure about.</p>
+  </div>
+
+  <!-- ================= SLOT 8 · Trace activity ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Your trace</div>
+    <h2>Fill the table — <code>i</code> is <code>0</code></h2>
+    <div class="trace-grid">
+      <div class="cell head">Name</div><div class="cell head">What kind?</div><div class="cell head">What's inside?</div>
+
+      <div class="cell"><code>search</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">dict</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">type + moves</span></details></div>
+
+      <div class="cell"><code>search["moves"]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">list</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3 move dicts</span></details></div>
+
+      <div class="cell"><code>search["moves"][0]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">dict</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">name, type, power</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Say it out loud before you click.</p>
+  </div>
+
+  <!-- ================= SLOT 9 · Common mistake ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Stopping one layer too early</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ whole box</span>
+<pre>print(search["moves"][0])
+
+{'name': 'thunderbolt',
+ 'type': 'electric',
+ 'power': 90}</pre></div>
+      <div class="col good"><span class="tag">✓ one label</span>
+<pre>print(search["moves"][0]["name"])
+
+thunderbolt</pre></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Curly braces in the output mean you are still holding a dictionary.</p>
+  </div>
+
+  <!-- ================= SLOT 10 · Debug 1 (Logan's own bug) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Debug 1</div>
+    <h2>The double lookup</h2>
+    <div class="debug-card">
+<pre><span class="dim">search = pokedex[name]</span>
+<span class="hot">print(pokedex[search]["moves"])</span></pre>
+      <div class="err">TypeError: unhashable type: 'dict'</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="debug-reveal"><code>search</code> already holds the inner dictionary. Look up once: <code>print(search["moves"])</code></div>
+      </details>
+    </div>
+    <p class="quiet" style="margin-top:.4em">You hit this last time. Read the variable before you use it.</p>
+  </div>
+
+  <!-- ================= SLOT 11 · Debug 2 ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Debug 2</div>
+    <h2>The empty loop body</h2>
+    <div class="debug-card">
+<pre><span class="hot">for i in range(3):</span>
+<span class="dim">print("done")</span></pre>
+      <div class="err">IndentationError: expected an indented block</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="debug-reveal">A <code>for</code> needs at least one indented line under it. Add <code>print(search["moves"][i])</code>, four spaces in.</div>
+      </details>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Nothing is indented under the <code>for</code>. Write the inside line before you run it.</p>
+  </div>
+
+  <!-- ================= SLOT 12 · Debug 3 ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Debug 3</div>
+    <h2>Counting past the end</h2>
+    <div class="debug-card">
+<pre><span class="com"># pikachu has 3 moves</span>
+<span class="hot">for i in range(4):</span>
+<span class="dim">    print(search["moves"][i])</span></pre>
+      <div class="err">IndexError: list index out of range</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="debug-reveal">Indexes are <code>0 1 2</code>. Use <code>range(3)</code>, or safer: <code>range(len(search["moves"]))</code></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= EXTRA · Debug 4 ================= -->
+  <div class="slide">
+    <div class="pill">Debug 4 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>The wrong lid name</h2>
+    <div class="debug-card">
+<pre><span class="dim">move = search["moves"][0]</span>
+<span class="hot">print(move["Power"])</span></pre>
+      <div class="err">KeyError: 'Power'</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="debug-reveal">Keys are exact. The lid says <code>"power"</code>, small p.</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 13 · Modify 1 (v3) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Try it</div>
+    <h2>v3 — name and power</h2>
+    <div class="tag-old">OLD · the line inside your loop</div>
+    <div class="was"><pre>    print(search["moves"][i])</pre></div>
+    <div class="tag-new">NEW · replace it with these two lines</div>
+    <div class="now"><pre>    move = search["moves"][___]
+    print(move["___"], move["___"])</pre></div>
+    <p style="margin-top:.5em">Both lines sit <span class="sub">inside</span> <code>for i in range(3):</code> — four spaces in.</p>
+    <p class="quiet">Blanks: the counter, then two lid names.</p>
+  </div>
+
+  <!-- ================= EXTRA · v3 running ================= -->
+  <div class="slide">
+    <div class="pill">Run it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v3 running</h2>
+<pre><span class="dim">for i in range(3):</span>
+<span class="hot">    move = search["moves"][i]</span>
+<span class="hot">    print(move["name"], move["power"])</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div>thunderbolt 90</div>
+      <div>quick attack 40</div>
+      <div>agility 0</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em"><code>move</code> holds one dictionary each time round.</p>
+  </div>
+
+  <!-- ================= SLOT 14 · Modify 2 (v4) ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Harder</div>
+    <h2>v4 — find the strongest</h2>
+    <div class="tag-new">NEW · <code>best</code> starts above the loop</div>
+    <div class="now"><pre>best = search["moves"][0]
+for i in range(3):
+    move = search["moves"][i]
+    if move["___"] &gt; best["___"]:
+        best = ___
+print("Strongest:", best["___"])</pre></div>
+    <p style="margin-top:.5em"><code>best</code> holds a <span class="sub">move dictionary</span>, never a number.</p>
+    <p class="quiet">Blanks: the same lid twice, then the whole box, then its name.</p>
+  </div>
+
+  <!-- ================= EXTRA · v4 running ================= -->
+  <div class="slide">
+    <div class="pill">Run it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 running</h2>
+<pre><span class="dim">best = search["moves"][0]</span>
+<span class="dim">for i in range(3):</span>
+<span class="dim">    move = search["moves"][i]</span>
+<span class="hot">    if move["power"] &gt; best["power"]:</span>
+<span class="hot">        best = move</span>
+<span class="hot">print("Strongest:", best["name"])</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div>Strongest: thunderbolt</div>
+    </div>
+  </div>
+
+  <!-- ================= EXTRA · Trace 2 ================= -->
+  <div class="slide">
+    <div class="pill">Trace 2 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Round 2 of the v4 loop</h2>
+    <div class="trace-grid">
+      <div class="cell head">Name</div><div class="cell head">What kind?</div><div class="cell head">What's inside?</div>
+
+      <div class="cell"><code>move</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">dict</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">quick attack, 40</span></details></div>
+
+      <div class="cell"><code>best</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">dict</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">thunderbolt, 90</span></details></div>
+
+      <div class="cell"><code>move["power"]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">int</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">40</span></details></div>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 15 · Quiz ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill purple">Quick quiz</div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>search["moves"]</code> is a…</div>
+      <div class="opts">
+        <details><summary>a) a list of dictionaries</summary><div class="ans">✓ Correct. Three boxes on a shelf.</div></details>
+        <details><summary>b) one dictionary</summary><div class="ans">✗ That is <code>search["moves"][0]</code>.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>search["moves"][0]["power"]</code> gives…</div>
+      <div class="opts">
+        <details><summary>a) 90</summary><div class="ans">✓ Correct. A number, not a box.</div></details>
+        <details><summary>b) {'power': 90}</summary><div class="ans">✗ The last <code>[ ]</code> opens the box.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EXTRA · Quiz 3 ================= -->
+  <div class="slide">
+    <div class="pill purple">Quiz 3 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>One more</h2>
+    <div class="quiz-card">
+      <div class="q"><code>search = pokedex[name]</code> already ran. Which line prints the moves?</div>
+      <div class="opts">
+        <details><summary>a) print(search["moves"])</summary><div class="ans">✓ Correct. One lookup is enough.</div></details>
+        <details><summary>b) print(pokedex[search]["moves"])</summary><div class="ans">✗ TypeError: unhashable type: 'dict'</div></details>
+        <details><summary>c) print(pokedex["moves"])</summary><div class="ans">✗ KeyError: 'moves'</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 16 · Code Talk Frame ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it before you type it</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>search</code> holds a <span class="blank"></span>, so <code>search["moves"]</code> gives me a <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.5em">"To reach one move's power I need <span class="blank"></span> more brackets."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 17 · Make ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build v2 🚀</h2>
+    <ul class="check-list">
+      <li>Open your Pokédex file</li>
+      <li>Find pikachu's <code>"moves": [</code> line</li>
+      <li>Swap <code>"thunderbolt"</code> for <code>{"name": "thunderbolt", "type": "electric", "power": 90}</code></li>
+      <li>Run it. Read what prints</li>
+      <li>Now do the other two moves</li>
+    </ul>
+  </div>
+
+  <!-- ================= EXTRA · Mac terminal at home ================= -->
+  <div class="slide">
+    <div class="pill">At home <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Run it in your Mac terminal</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">$ </span><span class="typed">cd Desktop</span></div>
+      <div class="line"><span class="prompt">$ </span><span class="typed">python3 pokedex.py</span></div>
+      <div class="line"><span class="echo">Which Pokemon? pikachu</span></div>
+      <div class="line"><span class="ok">thunderbolt 90</span></div>
+      <div class="line"><span class="echo">quick attack 40</span></div>
+      <div class="line"><span class="echo">agility 0</span></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">You found this yourself already. Same file, same output.</p>
+  </div>
+
+  <!-- ================= SLOT 18 · Stretch ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Stretch</div>
+    <h2>Bonus challenges</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a fourth move dictionary to pikachu. Change <code>range(3)</code> to match.</div>
+      <div class="item"><span class="lvl">★★</span>Print only moves where <code>move["power"] &gt; 50</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Print each move's <code>"type"</code> next to the Pokémon's own <code>"type"</code>.</div>
+    </div>
+  </div>
+
+  <!-- ================= EXTRA · Stretch 2 ================= -->
+  <div class="slide">
+    <div class="pill">Stretch 2 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every Pokémon at once</h2>
+<pre><span class="kw">for</span> name <span class="kw">in</span> pokedex:
+    p = pokedex[name]
+    <span class="fn">print</span>(name, p[<span class="str">"moves"</span>][<span class="num">0</span>][<span class="str">"name"</span>])</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div>pikachu thunderbolt</div>
+      <div>charmander ember</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Three layers deep. Name the box at every step.</p>
+  </div>
+
+  <!-- ================= SLOT 19 · Exit ticket ================= -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Exit ticket</div>
+    <h2>Before you close the laptop</h2>
+    <div class="exit">
+      <div class="label">Write one line</div>
+      <p><code>search["moves"][2]["name"]</code> gives <span class="sub">___</span></p>
+      <p style="margin-top:.5em">Then finish: "Before I write code against a variable, I <span class="sub">___</span>."</p>
+    </div>
+  </div>
+
+  <!-- ================= SLOT 20 · Close & Bridge ================= -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🔍</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Look inside first</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: a function that finds any move for you</p>
+    <p class="bilingual">다음 시간: 함수로 기술 찾기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

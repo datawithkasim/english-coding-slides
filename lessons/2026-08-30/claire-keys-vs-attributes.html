@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — Square Brackets or a Dot? (Claire · 2026-08-30)</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame · Claire · 30 Aug 2026</div>
+
+<!-- 1 · SLOT 1 -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">Power-ups</div>
+  <div class="emoji">🛡️</div>
+  <h1>Square brackets<br>or a dot?</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">You pick the <span class="sub">right access</span> on <span class="sub">every</span> line</p>
+  <div class="iter-row" style="margin-top:.8em">
+    <div class="iter-item">v1 make</div><div class="iter-item">v2 fall</div>
+    <div class="iter-item">v3 catch</div><div class="iter-item">v4 shield</div>
+  </div>
+  <p class="bilingual">대괄호냐 점이냐 — 오늘의 규칙</p>
+</div>
+
+<!-- 2 · SLOT 2 · Recap = Claire's own last lesson -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap</div>
+  <h2>Your three wins</h2>
+  <div class="recap-q">
+    <div class="q">1. Collision code — which line?</div>
+    <details><summary>Answer</summary><div class="ans">149. Before Kasim.</div></details>
+    <div class="q" style="margin-top:.5em">2. Spark life: you tested 8, 16. Chose?</div>
+    <details><summary>Answer</summary><div class="ans">12 — fast, still visible.</div></details>
+    <div class="q" style="margin-top:.5em">3. Which typo did you catch?</div>
+    <details><summary>Answer</summary><div class="ans"><code>saprock</code> → <code>spark</code></div></details>
+  </div>
+</div>
+
+<!-- 3 · SLOT 3 · Predict -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>Which line crashes?</h2>
+  <div class="predict-card">
+    <div class="label">Predict</div>
+<pre>enemy = {<span class="str">"color"</span>: <span class="str">"red"</span>}
+
+<span class="fn">print</span>(enemy[<span class="str">"color"</span>])
+<span class="fn">print</span>(enemy.color)</pre>
+    <details><summary>Reveal</summary><div class="ans">Line 3 → red<br>Line 4 → AttributeError: 'dict' object has no attribute 'color'</div></details>
+  </div>
+</div>
+
+<!-- 4 · SLOT 4 · Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>Three words today</h2>
+  <div class="vocab-table">
+    <span class="term">key</span>
+    <span class="gloss">a name you wrote inside { }</span>
+    <span class="ko">키</span>
+
+    <span class="term">attribute</span>
+    <span class="gloss">a part that belongs to an object</span>
+    <span class="ko">속성</span>
+
+    <span class="term">Rect</span>
+    <span class="gloss">pygame box: x, y, width, height</span>
+    <span class="ko">사각형 상자</span>
+  </div>
+</div>
+
+<!-- 5 · SLOT 5 · Concept — NO CODE -->
+<div class="slide">
+  <span class="slot-badge">SLOT 5</span>
+  <div class="pill">Concept 💡</div>
+  <h2>Drawer, or machine part</h2>
+  <div class="opt-grid two">
+    <div class="opt-card">
+      <div class="ico">🗄️</div>
+      <div class="name">You wrote the label</div>
+      <div class="ex">open the drawer<br>["color"]</div>
+    </div>
+    <div class="opt-card">
+      <div class="ico">⚙️</div>
+      <div class="name">Pygame built the part</div>
+      <div class="ex">name the part<br>.centerx</div>
+    </div>
+  </div>
+  <p class="bilingual center">내가 붙인 이름은 대괄호, 기계 부품은 점</p>
+</div>
+
+<!-- 6 · EXTRA · read one line left to right -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>One line, both</h2>
+<pre>power[<span class="str">"rect"</span>].centerx</pre>
+  <div class="edge-grid" style="margin-top:.6em">
+    <div class="edge-card"><div class="ehead">power</div><div class="edesc">Your dictionary → brackets.</div></div>
+    <div class="edge-card"><div class="ehead">power["rect"]</div><div class="edesc">A pygame Rect → dot.</div></div>
+  </div>
+  <p class="bilingual">왼쪽부터 한 칸씩 읽어요</p>
+</div>
+
+<!-- 7 · SLOT 6 · Run v1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 6</span>
+  <div class="pill">v1 · make it</div>
+  <h2>Build the power-up</h2>
+<pre><span class="com"># top of file, next to score = 0</span>
+<span style="background:rgba(56,208,224,.16);display:block">BLUE = (<span class="num">0</span>, <span class="num">200</span>, <span class="num">255</span>)</span><span style="background:rgba(56,208,224,.16);display:block">power = {<span class="str">"kind"</span>: <span class="str">"shield"</span>, <span class="str">"frames"</span>: <span class="num">180</span>}</span><span style="background:rgba(56,208,224,.16);display:block">power[<span class="str">"rect"</span>] = pygame.<span class="fn">Rect</span>(<span class="num">300</span>, <span class="num">0</span>, <span class="num">30</span>, <span class="num">30</span>)</span>
+<span class="com"># inside while running:, under the enemy drawing</span>
+<span style="background:rgba(56,208,224,.16);display:block">pygame.draw.<span class="fn">rect</span>(screen, BLUE, power[<span class="str">"rect"</span>])</span></pre>
+  <div class="output-box" style="margin-top:.5em">
+    <div class="out-label">▸ On screen</div>
+    <div>A blue square, top of the window.</div>
+  </div>
+</div>
+
+<!-- 8 · EXTRA · Make v1 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v1</h2>
+  <ul class="check-list">
+    <li>Colour first: <code>BLUE = (0, 200, 255)</code></li>
+    <li>The dict: <code>"kind"</code> and <code>"frames"</code></li>
+    <li>Then <code>power["rect"] = pygame.Rect(...)</code></li>
+    <li>The draw line, inside <code>while running:</code></li>
+    <li>Run it 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 60 seconds, no hints</div></div>
+</div>
+
+<!-- 9 · SLOT 7 · Investigate (animated) -->
+<div class="slide">
+  <span class="slot-badge">SLOT 7</span>
+  <div class="pill">Watch it 👀</div>
+  <h2>Brackets pick a drawer</h2>
+  <div class="viz viz-dict">
+    <div class="d-table">
+      <div class="d-row"><span class="d-key">"kind"</span><span class="d-sep">:</span><span class="d-val">"shield"</span></div>
+      <div class="d-row"><span class="d-key">"rect"</span><span class="d-sep">:</span><span class="d-val">Rect(300, 0, 30, 30)</span></div>
+      <div class="d-row"><span class="d-key">"frames"</span><span class="d-sep">:</span><span class="d-val">180</span></div>
+    </div>
+    <div class="d-lookup">power[<span class="d-qs"><span class="d-q d-q1">"kind"</span><span class="d-q d-q2">"frames"</span></span>]</div>
+    <div class="output-box">
+      <div class="out-label">▸ value</div>
+      <div class="out-line d-out d-out1">"shield"</div>
+      <div class="out-line d-out d-out2">180</div>
+    </div>
+  </div>
+</div>
+
+<!-- 10 · SLOT 8 · Trace activity -->
+<div class="slide">
+  <span class="slot-badge">SLOT 8</span>
+  <div class="pill">Your trace ✏️</div>
+  <h2>What does each one hold?</h2>
+  <div class="trace-grid">
+    <div class="cell head">code</div><div class="cell head">what is it?</div><div class="cell head">value</div>
+
+    <div class="cell"><code>power</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">dictionary</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">3 keys</span></details></div>
+
+    <div class="cell"><code>power["rect"]</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">Rect</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">Rect(300,0,30,30)</span></details></div>
+
+    <div class="cell"><code>power["rect"].centerx</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">number</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">315</span></details></div>
+  </div>
+</div>
+
+<!-- 11 · SLOT 9 · Common Mistake — her own -->
+<div class="slide">
+  <span class="slot-badge">SLOT 9</span>
+  <div class="pill">⚠️ Watch out</div>
+  <h2>The mix-up</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ last time</span>
+<pre>enemyRect.color
+power.kind</pre>
+      <p>Dots on names you wrote.</p></div>
+    <div class="col good"><span class="tag">✓ fixed</span>
+<pre>enemy["color"]
+power["kind"]</pre>
+      <p>Brackets on your own keys.</p></div>
+  </div>
+</div>
+
+<!-- 12 · EXTRA · Run v2 -->
+<div class="slide">
+  <div class="pill">v2 · make it fall</div>
+  <h2>One new line</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>pygame.draw.rect(screen, BLUE, power["rect"])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span style="background:rgba(56,208,224,.16);display:block">power["rect"].y = power["rect"].y + 3</span><span style="opacity:.38;display:block">pygame.draw.rect(screen, BLUE, power["rect"])</span></pre></div>
+  </div>
+  <p style="margin-top:.5em">Brackets fetch the Rect. The dot moves it.</p>
+</div>
+
+<!-- 13 · EXTRA · Make v2 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v2</h2>
+  <ul class="check-list">
+    <li>Add the falling line <b>above</b> the draw line</li>
+    <li>Both inside <code>while running:</code></li>
+    <li>Run it — the square drops 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 60 seconds, no hints</div></div>
+</div>
+
+<!-- 14 · SLOT 10 · Debug 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 10</span>
+  <div class="pill">🐛 Debug 1</div>
+  <h2>Why the crash?</h2>
+<pre><span class="kw">if</span> power.kind == <span class="str">"shield"</span>:</pre>
+  <div class="debug-card"><details><summary>Show error + fix</summary>
+    <div class="err">AttributeError: 'dict' object has no attribute 'kind'</div>
+    <div>Fix → <code>power["kind"]</code>. You wrote that name.</div>
+  </details></div>
+</div>
+
+<!-- 15 · SLOT 11 · Debug 2 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 11</span>
+  <div class="pill">🐛 Debug 2</div>
+  <h2>Backwards this time</h2>
+<pre>power[<span class="str">"rect"</span>][<span class="str">"y"</span>] = <span class="num">0</span></pre>
+  <div class="debug-card"><details><summary>Show fix</summary>
+    <div class="err">A Rect is not a dictionary. It has no key "y".</div>
+    <div>Fix → <code>power["rect"].y = 0</code></div>
+  </details></div>
+</div>
+
+<!-- 16 · SLOT 12 · Debug 3 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 12</span>
+  <div class="pill">🐛 Debug 3</div>
+  <h2>Wrong thing handed over</h2>
+<pre><span class="kw">if</span> playerRect.<span class="fn">colliderect</span>(power):</pre>
+  <div class="debug-card"><details><summary>Show fix</summary>
+    <div class="err">colliderect wants a Rect. You gave the whole dictionary.</div>
+    <div>Fix → <code>colliderect(power["rect"])</code></div>
+  </details></div>
+</div>
+
+<!-- 17 · EXTRA · Run v3 -->
+<div class="slide">
+  <div class="pill">v3 · catch it</div>
+  <h2>Declare first, then catch</h2>
+<pre><span class="com"># top of file, next to score = 0</span>
+<span style="opacity:.38;display:block">power = {<span class="str">"kind"</span>: <span class="str">"shield"</span>, <span class="str">"frames"</span>: <span class="num">180</span>}</span><span style="background:rgba(56,208,224,.16);display:block">shield = <span class="num">0</span></span>
+<span class="com"># in while running: — your collision area, line 149</span>
+<span style="background:rgba(56,208,224,.16);display:block"><span class="kw">if</span> playerRect.<span class="fn">colliderect</span>(power[<span class="str">"rect"</span>]):</span><span style="background:rgba(56,208,224,.16);display:block">    shield = power[<span class="str">"frames"</span>]</span><span style="background:rgba(56,208,224,.16);display:block">    power[<span class="str">"rect"</span>].y = <span class="num">-50</span></span></pre>
+  <p style="margin-top:.4em">Dot on <code>playerRect</code>. Brackets on <code>power</code>. Same line.</p>
+</div>
+
+<!-- 18 · EXTRA · Make v3 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v3</h2>
+  <ul class="check-list">
+    <li>First <code>shield = 0</code> at the top</li>
+    <li>Then the <code>if</code> line at your collisions</li>
+    <li>Two lines indented under it</li>
+    <li>Run it — the square vanishes 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 60 seconds, no hints</div></div>
+</div>
+
+<!-- 19 · SLOT 13 · Modify 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 13</span>
+  <div class="pill">Try it</div>
+  <h2>Fill two blanks</h2>
+<pre><span class="fn">print</span>(power[___])          <span class="com"># shield</span>
+<span class="fn">print</span>(power[<span class="str">"rect"</span>].___)    <span class="com"># 0</span></pre>
+  <div class="debug-card"><details><summary>Show answers</summary>
+    <div><code>"kind"</code> · <code>y</code></div>
+  </details></div>
+</div>
+
+<!-- 20 · SLOT 14 · Modify 2 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 14</span>
+  <div class="pill">Try it</div>
+  <h2>Three blanks, one variable</h2>
+<pre><span class="kw">if</span> power___ == <span class="str">"shield"</span> <span class="kw">and</span> power___.top &gt; <span class="num">600</span>:
+    power___.y = <span class="num">0</span></pre>
+  <div class="debug-card"><details><summary>Show answers</summary>
+    <div><code>["kind"]</code> · <code>["rect"]</code> · <code>["rect"]</code></div>
+  </details></div>
+</div>
+
+<!-- 21 · SLOT 15 · Quiz 1 -->
+<div class="slide mcq" data-correct="0" data-explain="Brackets open your own key. centerx is pygame's part.">
+  <span class="slot-badge">SLOT 15</span>
+  <div class="pill purple">Quiz</div>
+  <h2>Which part uses a key?</h2>
+  <div class="q"><code>power["rect"].centerx</code></div>
+  <div class="opts">
+    <button class="opt"><code>["rect"]</code></button>
+    <button class="opt"><code>.centerx</code></button>
+    <button class="opt"><code>power</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 22 · EXTRA · Quiz 2 -->
+<div class="slide mcq" data-correct="0" data-explain="A dictionary opens with brackets and a string key.">
+  <div class="pill purple">Quiz</div>
+  <h2>enemy is a dictionary. Which line runs? <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="opts">
+    <button class="opt"><code>enemy["color"]</code></button>
+    <button class="opt"><code>enemy.color</code></button>
+    <button class="opt"><code>enemy("color")</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 23 · SLOT 16 · Code Talk Frame -->
+<div class="slide">
+  <span class="slot-badge">SLOT 16</span>
+  <div class="pill purple">Code Talk</div>
+  <h2>Say the rule</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame"><code>enemy</code> is a <span class="blank"></span>, so I use <span class="blank"></span>.<br>
+    <code>enemyRect</code> is a <span class="blank"></span>, so I use <span class="blank"></span>.</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+  </div>
+</div>
+
+<!-- 24 · SLOT 17 · Make / Your Turn -->
+<div class="slide">
+  <span class="slot-badge">SLOT 17</span>
+  <div class="pill">Your turn 🚀</div>
+  <h2>Run the whole thing</h2>
+  <ul class="check-list">
+    <li>v1 the square appears</li>
+    <li>v2 the square falls</li>
+    <li>v3 touching it sets <code>shield</code></li>
+    <li>Print <code>shield</code> to check</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 60 seconds, no hints</div></div>
+</div>
+
+<!-- 25 · OPTIONAL · Run v4 -->
+<div class="slide">
+  <div class="pill">v4 · use it</div>
+  <h2>Shield ring, counting down <span class="activity-tag">OPTIONAL</span></h2>
+<pre><span class="com"># inside while running:, before display.flip()</span>
+<span style="background:rgba(56,208,224,.16);display:block"><span class="kw">if</span> shield &gt; <span class="num">0</span>:</span><span style="background:rgba(56,208,224,.16);display:block">    shield = shield - <span class="num">1</span></span><span style="background:rgba(56,208,224,.16);display:block">    pygame.draw.<span class="fn">circle</span>(screen, BLUE, playerRect.center, <span class="num">40</span>, <span class="num">3</span>)</span></pre>
+  <p style="margin-top:.4em"><code>playerRect.center</code> — pygame made it, so a dot.</p>
+</div>
+
+<!-- 26 · SLOT 18 · Stretch -->
+<div class="slide">
+  <span class="slot-badge">SLOT 18</span>
+  <div class="pill">Stretch ⭐</div>
+  <h2>Pick one</h2>
+  <div class="stretch-list">
+    <div class="item"><span class="lvl">★</span>Change <code>"frames"</code> to 300. Longer shield.</div>
+    <div class="item"><span class="lvl">★★</span>Add a second kind: <code>"slow"</code>.</div>
+    <div class="item"><span class="lvl">★★★</span>Keep power-ups in a list. Loop over it.</div>
+  </div>
+</div>
+
+<!-- 27 · SLOT 19 · Exit ticket -->
+<div class="slide">
+  <span class="slot-badge">SLOT 19</span>
+  <div class="pill">Exit ticket 🎟️</div>
+  <h2>One line, both</h2>
+  <div class="exit"><div class="label">Write a line using a key AND a dot</div></div>
+  <div class="recap-q" style="margin-top:.6em">
+    <details><summary>Answer</summary><div class="ans"><code>power["rect"].y = 0</code></div></details>
+  </div>
+</div>
+
+<!-- 28 · SLOT 20 · Close & Bridge -->
+<div class="slide center-all">
+  <span class="slot-badge">SLOT 20</span>
+  <div class="emoji">🛡️</div>
+  <h1 style="font-size:clamp(30px,5.2vmin,50px)">You named it → brackets.<br>Pygame named it → dot.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: many power-ups in a list</p>
+  <p class="bilingual">다음 시간엔 리스트로 여러 개</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>

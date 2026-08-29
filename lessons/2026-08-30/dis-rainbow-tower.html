@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DIS — The Rainbow Tower (group build, Minecraft Python)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Step-walkthrough helpers — same block as lessons/2026-08-29/dewy-agent-loops.html
+     and lessons/2026-08-25/jiyu-3d-pixel-art.html. Nothing new added. */
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2.1vmin, 21px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.6vmin, 15px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft Education · Python · DIS group · 30 Aug 2026</div>
+
+  <!-- 1 · Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Group build · 50 min</div>
+    <div class="emoji">🌈</div>
+    <h1>The Rainbow<br>Tower</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">fill</span> + <span class="sub">loop</span> + <span class="sub">pick</span></p>
+    <div class="iter-row" style="margin-top:.7em">
+      <span class="chip on">v1 one slab</span><span class="chip">v2 six layers</span>
+      <span class="chip">v3 rainbow</span><span class="chip">v4 stretch</span>
+    </div>
+    <p class="bilingual">파이썬으로 무지개 탑 쌓기</p>
+  </div>
+
+  <!-- 2 · Recap & Retrieve — this group's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — the panda 🐼</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">In <code>pos(x, y, z)</code> — which number goes up?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>y</code> — the middle one.</div></details>
+      <div class="q" style="margin-top:.5em">Where does counting start?</div>
+      <details><summary>Show answer</summary><div class="ans">At you. <code>pos(0, 0, 0)</code>.</div></details>
+    </div>
+    <p style="margin-top:.5em">Head, ears, paws — all finished. 💪</p>
+    <p class="bilingual">지난 시간: 판다 좌표</p>
+  </div>
+
+  <!-- 3 · House rules — shared world -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">🏠 House rules</div>
+    <h2>One world. Three markers.</h2>
+    <ul class="check-list">
+      <li>Stand on <b>your own</b> gold marker.</li>
+      <li>Build from your marker only.</li>
+      <li>Never break another builder's blocks.</li>
+      <li>Ask before you fill near someone.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.5em">A broken tower cannot be undone. 🚫</p>
+    <p class="bilingual">친구 블록은 절대 부수지 않아요</p>
+  </div>
+
+  <!-- 4 · Today's plan — three teach/build cycles -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Today's plan</div>
+    <h2>I teach. You build. Three times.</h2>
+    <div class="topic-grid three">
+      <div class="topic-chip"><div class="head">Stage 1</div><div class="desc">one red slab</div></div>
+      <div class="topic-chip purple"><div class="head">Stage 2</div><div class="desc">six layers, a loop</div></div>
+      <div class="topic-chip"><div class="head">Stage 3</div><div class="desc">the rainbow</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.6em">Each stage adds one line to the same program.</p>
+    <p class="bilingual">한 단계 = 한 줄 추가</p>
+  </div>
+
+  <!-- 5 · Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Vocab</div>
+    <h2>Four words today</h2>
+    <div class="vocab-table">
+      <span class="term">fill</span>
+      <span class="gloss">paint every block between two corners</span>
+      <span class="ko">채우기</span>
+
+      <span class="term">layer</span>
+      <span class="gloss">one flat slab of the tower</span>
+      <span class="ko">층</span>
+
+      <span class="term">list</span>
+      <span class="gloss">a shelf of things, in order</span>
+      <span class="ko">목록</span>
+
+      <span class="term">colours[i]</span>
+      <span class="gloss">the one thing at slot i</span>
+      <span class="ko">i번째</span>
+    </div>
+  </div>
+
+  <!-- 6 · Concept (Notional Machine) — the origin. No code. -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept</div>
+    <h2>Start where the axes meet</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">X</span><span class="val">➡ across</span></div>
+      <div class="varbox"><span class="name">Y</span><span class="val">⬆ up</span></div>
+      <div class="varbox"><span class="name">Z</span><span class="val">↗ away</span></div>
+    </div>
+    <p class="line" style="margin-top:.5em"><code>pos(0, 0, 0)</code> is the block <b>you stand on</b>.</p>
+    <p class="quiet">Count from there. Every single time.</p>
+    <p class="bilingual">축이 만나는 곳에서 세요</p>
+  </div>
+
+  <!-- ================= STAGE 1 ================= -->
+
+  <!-- 7 · STAGE 1 DIVIDER -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="stage-bar"><span class="step current"></span><span class="step"></span><span class="step"></span></div>
+    <div class="num">1</div>
+    <div class="stage-label">Kasim teaches · then you build</div>
+    <h1>One Red Slab</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Two corners make a rectangle.</p>
+    <p class="bilingual">1단계: 빨간 판 한 장</p>
+  </div>
+
+  <!-- 8 · Predict (Stage 1) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What appears at your feet?</h2>
+    <div class="predict-card">
+      <div class="label">You stand on your marker</div>
+<pre><span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">4</span>), <span class="kw">REPLACE</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">A red square, 5 × 5, one block thick.</div></details>
+    </div>
+  </div>
+
+  <!-- 9 · Concept (Stage 1) — two corners -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept</div>
+    <h2>Two corners, one rectangle</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Looking down from above</div>
+      <div>🅰️🟥🟥🟥🟥 &nbsp; z = 0</div>
+      <div>🟥🟥🟥🟥🟥</div>
+      <div>🟥🟥🟥🟥🟥</div>
+      <div>🟥🟥🟥🟥🟥</div>
+      <div>🟥🟥🟥🟥🅱️ &nbsp; z = 4</div>
+    </div>
+    <p class="line" style="margin-top:.5em">🅰️ <code>pos(0, 0, 0)</code> &nbsp;&nbsp; 🅱️ <code>pos(4, 0, 4)</code></p>
+    <p class="quiet">0 to 4 is <b>five</b> blocks, not four.</p>
+    <p class="bilingual">모서리 두 개 = 사각형</p>
+  </div>
+
+  <!-- 10 · Run v1 (worked example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Run it</div>
+    <h2>v1 — one red slab</h2>
+<pre><span class="hot"><span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">4</span>), <span class="kw">REPLACE</span>)</span></pre>
+    <p class="where">▸ Code Builder → Python → new project → <code>line 1</code>. Nothing above it.</p>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div>a 5 × 5 red floor at your feet</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">One line, one layer. The height <code>y</code> stays 0.</p>
+  </div>
+
+  <!-- 11 · NOW YOU BUILD IT #1 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">✋ Kasim stops talking</div>
+    <div class="emoji">🔨</div>
+    <h1>Now you build it</h1>
+    <ul class="check-list" style="text-align:left">
+      <li>Stand on your own marker.</li>
+      <li>Type the fill line.</li>
+      <li>Run it. Look for red.</li>
+      <li>Hand up when your square is there.</li>
+    </ul>
+    <p class="bilingual">지금 직접 만들어요</p>
+  </div>
+
+  <!-- ================= STAGE 2 ================= -->
+
+  <!-- 12 · STAGE 2 DIVIDER -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="stage-bar"><span class="step done"></span><span class="step current"></span><span class="step"></span></div>
+    <div class="num">2</div>
+    <div class="stage-label">Kasim teaches · then you build</div>
+    <h1>Six Layers</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">One loop. <code>y</code> climbs.</p>
+    <p class="bilingual">2단계: 여섯 층</p>
+  </div>
+
+  <!-- 13 · Predict (Stage 2) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>How tall is the tower?</h2>
+    <div class="predict-card">
+      <div class="label">The same slab, wrapped in a loop</div>
+<pre>y = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, y, <span class="num">4</span>), <span class="kw">REPLACE</span>)
+    y = y + <span class="num">1</span></pre>
+      <details><summary>Reveal</summary><div class="ans">A red tower, six layers tall.</div></details>
+    </div>
+  </div>
+
+  <!-- 14 · Concept (Stage 2) — type once, run six times. No code. -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Concept</div>
+    <h2>Type once. Run six times.</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 1</div><div class="ex">y = 0</div></div>
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 2</div><div class="ex">y = 1</div></div>
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 3</div><div class="ex">y = 2</div></div>
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 4</div><div class="ex">y = 3</div></div>
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 5</div><div class="ex">y = 4</div></div>
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">pass 6</div><div class="ex">y = 5</div></div>
+    </div>
+    <p class="line" style="margin-top:.5em">Every pass fills a slab, then adds 1 to <b>y</b>.</p>
+    <p class="bilingual">한 번 쓰고 여섯 번 실행</p>
+  </div>
+
+  <!-- 15 · Run v2 — OLD / NEW -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — the loop</h2>
+    <div class="tag-old">OLD · v1</div>
+    <div class="was"><pre>blocks.fill(RED_WOOL, pos(0, 0, 0), pos(4, 0, 4), REPLACE)</pre></div>
+    <div class="tag-new">NEW · v2</div>
+    <div class="now"><pre class="tiny"><span class="hot">y = <span class="num">0</span></span><span class="hot"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, y, <span class="num">4</span>), <span class="kw">REPLACE</span>)</span><span class="hot">    y = y + <span class="num">1</span></span></pre></div>
+    <p class="where">▸ <code>y = 0</code> above the fill · indent the fill 4 spaces · <code>y = y + 1</code> below it, indented</p>
+    <p class="quiet">Both middle zeros became <code>y</code>.</p>
+  </div>
+
+  <!-- 16 · Investigate (animated trace) — first three passes -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Watch it!</div>
+    <h2>The first three passes</h2>
+    <div class="viz viz-3">
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, y, <span class="num">4</span>), <span class="kw">REPLACE</span>)
+    y = y + <span class="num">1</span></pre>
+      <div class="iter-row">
+        <div class="iter-item">i = 0</div><div class="iter-item">i = 1</div><div class="iter-item">i = 2</div>
+      </div>
+      <div class="var-row"><span class="label">y = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ In the world</div>
+        <div class="out-line">🟥 layer 1 on the ground</div>
+        <div class="out-line">🟥 layer 2, one up</div>
+        <div class="out-line">🟥 layer 3, two up</div>
+      </div>
+    </div>
+    <p class="bilingual">y가 한 칸씩 올라가요</p>
+  </div>
+
+  <!-- 17 · NOW YOU BUILD IT #2 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">✋ Kasim stops talking</div>
+    <div class="emoji">🔨</div>
+    <h1>Now you build it</h1>
+    <ul class="check-list" style="text-align:left">
+      <li>Add <code>y = 0</code> above your fill line.</li>
+      <li>Add <code>for i in range(6):</code> under it.</li>
+      <li>Indent the fill line four spaces.</li>
+      <li>Add <code>y = y + 1</code> under the fill — indent it too.</li>
+    </ul>
+    <p class="bilingual">한 줄씩 추가해요</p>
+  </div>
+
+  <!-- ================= STAGE 3 ================= -->
+
+  <!-- 18 · STAGE 3 DIVIDER -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="stage-bar"><span class="step done"></span><span class="step done"></span><span class="step current"></span></div>
+    <div class="num">3</div>
+    <div class="stage-label">Kasim teaches · then you build</div>
+    <h1>The Rainbow</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">One counter. Two jobs.</p>
+    <p class="bilingual">3단계: 무지개 색</p>
+  </div>
+
+  <!-- 19 · Predict (Stage 3) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What colour is the top layer?</h2>
+    <div class="predict-card">
+      <div class="label">A list of six colours</div>
+<pre class="tiny">colours = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>, <span class="str">YELLOW_WOOL</span>,
+           <span class="str">LIME_WOOL</span>, <span class="str">LIGHT_BLUE_WOOL</span>, <span class="str">PURPLE_WOOL</span>]
+y = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">blocks.fill</span>(colours[i], <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, y, <span class="num">4</span>), <span class="kw">REPLACE</span>)
+    y = y + <span class="num">1</span></pre>
+      <details><summary>Reveal</summary><div class="ans">Purple — that is <code>colours[5]</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- 20 · Concept (Stage 3) — the shelf. No code. -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Concept</div>
+    <h2>The list is a shelf</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🟥</div><div class="name">colours[0]</div><div class="ex">red</div></div>
+      <div class="opt-card"><div class="ico">🟧</div><div class="name">colours[1]</div><div class="ex">orange</div></div>
+      <div class="opt-card"><div class="ico">🟨</div><div class="name">colours[2]</div><div class="ex">yellow</div></div>
+      <div class="opt-card"><div class="ico">🟩</div><div class="name">colours[3]</div><div class="ex">lime</div></div>
+      <div class="opt-card"><div class="ico">🟦</div><div class="name">colours[4]</div><div class="ex">blue</div></div>
+      <div class="opt-card"><div class="ico">🟪</div><div class="name">colours[5]</div><div class="ex">purple</div></div>
+    </div>
+    <p class="line" style="margin-top:.5em"><b>i</b> points at one box — the same <b>i</b> that counts layers.</p>
+    <p class="bilingual">목록은 0번부터 시작해요</p>
+  </div>
+
+  <!-- 21 · Run v3 — OLD / NEW -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Run it</div>
+    <h2>v3 — the rainbow</h2>
+    <div class="tag-old">OLD · v2</div>
+    <div class="was"><pre>    blocks.fill(RED_WOOL, pos(0, y, 0), pos(4, y, 4), REPLACE)</pre></div>
+    <div class="tag-new">NEW · v3</div>
+    <div class="now"><pre class="tiny"><span class="hot">colours = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>, <span class="str">YELLOW_WOOL</span>,</span><span class="hot">           <span class="str">LIME_WOOL</span>, <span class="str">LIGHT_BLUE_WOOL</span>, <span class="str">PURPLE_WOOL</span>]</span><span class="dim">y = 0</span><span class="dim">for i in range(6):</span><span class="hot">    <span class="fn">blocks.fill</span>(colours[i], <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, y, <span class="num">4</span>), <span class="kw">REPLACE</span>)</span><span class="dim">    y = y + 1</span></pre></div>
+    <p class="where">▸ list on <code>line 1</code>, above <code>y = 0</code> · swap <code>RED_WOOL</code> for <code>colours[i]</code></p>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ In the world</div>
+      <div>six layers, six colours 🌈</div>
+    </div>
+  </div>
+
+  <!-- 22 · Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the table</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div>
+      <div class="cell head">1st</div>
+      <div class="cell head">2nd</div>
+      <div class="cell head">6th</div>
+
+      <div class="cell"><code>i</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell"><code>y</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell"><code>colours[i]</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">red</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">orange</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">purple</span></details></div>
+    </div>
+  </div>
+
+  <!-- 23 · Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it to the group</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Each pass, <code>i</code> chooses the <span class="blank"></span> and <code>y</code> chooses the <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Answers: the colour · the height. Leia, Danny, Shian — one each.</p>
+  </div>
+
+  <!-- 24 · NOW YOU BUILD IT #3 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">✋ Kasim stops talking</div>
+    <div class="emoji">🔨</div>
+    <h1>Now you build it</h1>
+    <ul class="check-list" style="text-align:left">
+      <li>Add the <code>colours</code> list on line 1.</li>
+      <li>Change <code>RED_WOOL</code> to <code>colours[i]</code>.</li>
+      <li>Run it. Count six colours.</li>
+      <li>Stand back and look up. 🌈</li>
+    </ul>
+    <p class="bilingual">무지개 완성해요</p>
+  </div>
+
+  <!-- ===== everything below is overflow · OPTIONAL ===== -->
+
+  <!-- 25 · Common Mistake — the indent -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The flat tower</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">blocks.fill</span>(colours[i], <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), …)
+y = y + <span class="num">1</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Six fills, all at <code>y = 0</code>. One layer.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    <span class="fn">blocks.fill</span>(colours[i], <span class="fn">pos</span>(<span class="num">0</span>, y, <span class="num">0</span>), …)
+    y = y + <span class="num">1</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Indented, so <code>y</code> climbs each pass.</p>
+      </div>
+    </div>
+    <p class="bilingual">들여쓰기 = 반복문 안</p>
+  </div>
+
+  <!-- 26 · Debug 1 — Z counted from the wrong place -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the missing slab</h2>
+<pre><span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">10</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">11</span>), <span class="kw">REPLACE</span>)</pre>
+    <div class="debug-card"><div class="err">It runs. Nothing appears. The slab landed far behind you.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Z was counted from a wall, not from you. Start at zero — <code>pos(0, 0, 0)</code> to <code>pos(4, 0, 4)</code>.</p>
+      <p class="bilingual">0은 내가 선 자리</p>
+    </details>
+  </div>
+
+  <!-- 27 · Debug 2 — Z range too wide -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the giant slab</h2>
+<pre><span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">0</span>, <span class="num">20</span>), <span class="kw">REPLACE</span>)</pre>
+    <div class="debug-card"><div class="err">One layer, 21 blocks deep. It swallows the room.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Z runs 0 to 20 — that is 21 blocks. Match Z to X: <code>0</code> to <code>4</code>.</p>
+      <p class="bilingual">숫자 두 개를 같게</p>
+    </details>
+  </div>
+
+  <!-- 28 · Debug 3 — the fill lands on someone else's build -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the vanished tower</h2>
+<pre><span class="fn">blocks.fill</span>(<span class="str">RED_WOOL</span>, <span class="fn">pos</span>(-<span class="num">8</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(-<span class="num">4</span>, <span class="num">0</span>, <span class="num">4</span>), <span class="kw">REPLACE</span>)</pre>
+    <div class="debug-card"><div class="err">Your slab is fine. Your neighbour's tower is gone.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Minus 8 walks onto their marker, and <code>REPLACE</code> deletes whatever stood there. Build from <code>pos(0, 0, 0)</code>.</p>
+      <p class="bilingual">친구 자리로 넘어가지 않아요</p>
+    </details>
+  </div>
+
+  <!-- 29 · Stretch v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 — go further</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span> Hollow it — add <code>blocks.fill(AIR, pos(1, y, 1), pos(3, y, 3), REPLACE)</code> inside the loop.</div>
+      <div class="item"><span class="lvl">★★</span> Twin tower — copy the fill, use x <code>6</code> to <code>10</code>.</div>
+      <div class="item"><span class="lvl">★★★</span> Repeat colours — use <code>colours[i % 3]</code> with <code>range(12)</code>.</div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Same loop. One line changes.</p>
+  </div>
+
+  <!-- 30 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="emoji">🌈</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One counter.<br>Two jobs.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: your own colour order.</p>
+    <div class="iter-row" style="margin-top:.7em">
+      <span class="chip on">v1</span><span class="chip on">v2</span><span class="chip on">v3</span><span class="chip">v4</span>
+    </div>
+    <p class="bilingual">다음 시간: 나만의 무지개 순서</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

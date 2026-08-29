@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Loop, Many Structures · Leo</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Helper kit copied from lessons/2026-08-25/leo-algorithms-nested-loops.html
+     and lessons/2026-08-28/nellie-rainbow-tower.html — same classes, no new ones. */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .bad { display: block; background: rgba(255,85,85,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .ln { color: #3d4759; user-select: none; display: inline-block; width: 2em;
+            text-align: right; padding-right: .6em; margin-right: .6em; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2.1vmin, 20px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .5em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Leo · MS002 · Pillars 🏛️</div>
+
+  <!-- 1 · SLOT 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft · Python</div>
+    <div class="emoji">🏛️</div>
+    <h1>One loop.<br>Many pillars.</h1>
+    <p class="line" style="margin-top:.3em">One number sets every gap.<br><b>You type first</b>, every time.</p>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip on">v1 one pillar</span><span class="chip">v2 loop it</span>
+      <span class="chip">v3 spacing</span><span class="chip">v4 growing gaps</span>
+    </div>
+    <p class="bilingual">숫자 하나가 모양을 바꿔요</p>
+  </div>
+
+  <!-- 2 · SLOT 2: Recap — Leo's own 08-23 lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>You saw it first</h2>
+    <p class="line">You spotted this jump yourself:<br><b>2 → 4</b>, <b>4 → 7</b>, <b>7 → 11</b>.</p>
+    <p class="quiet" style="margin-top:.4em">Yours already: <code>x_change</code>, <code>blocks.fill()</code>, a multiplier.</p>
+    <div class="recap-q" style="margin-top:.4em">
+      <div class="label">Quick check — you say it</div>
+      <div class="q">How much bigger is each jump?</div>
+      <details><summary>Show answer</summary><div class="ans">+2, +3, +4. Each jump grows by one.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 · EXTRA: stuck frames, early -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Before we start</div>
+    <h2>Three things to say when stuck</h2>
+    <div class="frame-card">
+      <div class="label">Read one out loud — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 4 · SLOT 4: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Pillars, or one wall?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first — do not run it</div>
+<pre>x = <span class="num">2</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,
+        <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+        <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)
+    x = x + <span class="num">1</span></pre>
+      <details><summary>Reveal</summary><div class="ans">One solid wall. x 2,3,4,5,6 — +1 leaves no gap.</div></details>
+    </div>
+  </div>
+
+  <!-- 5 · SLOT 5: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">pillar</span>
+      <span class="gloss">a tall thin column of blocks</span>
+      <span class="ko">기둥</span>
+      <span class="term">spacing</span>
+      <span class="gloss">how far apart two pillars stand</span>
+      <span class="ko">간격</span>
+      <span class="term">gap</span>
+      <span class="gloss">the empty space left between them</span>
+      <span class="ko">틈</span>
+    </div>
+  </div>
+
+  <!-- 6 · SLOT 6: Concept — no code -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept</div>
+    <h2>Spacing is the size of the step</h2>
+    <p class="line" style="margin:.15em 0">spacing <b>1</b> → 🟦🟦🟦🟦🟦 &nbsp;<span class="quiet">a wall</span></p>
+    <p class="line" style="margin:.15em 0">spacing <b>2</b> → 🟦⬛🟦⬛🟦 &nbsp;<span class="quiet">pillars</span></p>
+    <p class="line" style="margin:.15em 0">spacing <b>3</b> → 🟦⬛⬛🟦⬛⬛🟦 &nbsp;<span class="quiet">wide pillars</span></p>
+    <p class="line" style="margin-top:.6em">Same loop. Same fill. One number decides the shape.</p>
+    <p class="bilingual">반복은 그대로, 간격만 달라져요</p>
+  </div>
+
+  <!-- 7 · SLOT 7: Run — v1 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">✋ You type first — teacher waits</div>
+<pre><span class="kw">def</span> <span class="fn">on_pillars</span>():
+    x = <span class="num">2</span>
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,
+        <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+        <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)
+
+<span class="fn">player.on_chat</span>(<span class="str">"pillars"</span>, on_pillars)</pre>
+    <p class="where">📍 New Python file in Code Builder. You type all 6 lines. No copy.</p>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Chat: pillars</div>
+      <div>One white pillar. 1 wide, 5 tall.</div>
+    </div>
+  </div>
+
+  <!-- 8 · EXTRA: v2 — wrap it in a loop -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <p class="line">Type these two lines:</p>
+    <div class="skel" style="max-width:26em">
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        x = x + <span class="num">1</span></pre></div>
+    <p class="where">📍 <code>for</code> under <code>x = 2</code>. <code>x = x + 1</code> last, inside the loop.</p>
+    <span class="rev" data-t="a8">show the demo</span>
+    <div id="a8" class="hid">
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_pillars</span>():</span><span class="dim">    x = <span class="num">2</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):<span class="mk">NEW</span></span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="hot">        x = x + <span class="num">1</span><span class="mk">NEW</span></span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"pillars"</span>, on_pillars)</span></pre>
+      <p class="where">📍 The 3 fill lines move right 4 spaces.</p>
+      <div class="output-box" style="margin-top:.3em">
+        <div class="out-label">▸ Chat: pillars</div>
+        <div>A solid wall. 5 wide. No gaps.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 · SLOT 9: Investigate — step the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Watch it! 🔬</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="stepC" width="380" height="200"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="stFwd">one pass ▶</button>
+          <button class="btn alt" id="stReset">reset</button>
+        </div>
+      </div>
+      <div>
+        <p class="line">Say the next <b>x</b> out loud before you press.</p>
+        <table class="vt">
+          <tr><th>i</th><th>x now</th><th>x next</th></tr>
+          <tr><td id="stI">—</td><td id="stX">—</td><td id="stN">2</td></tr>
+        </table>
+        <p class="quiet" style="margin-top:.4em;text-align:center">+1 every pass. No room is left for a gap.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 · SLOT 10: Trace activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Trace it ✏️</div>
+    <h2>Now spacing is 2</h2>
+<pre>x = <span class="num">2</span> &nbsp;&nbsp;spacing = <span class="num">2</span> &nbsp;&nbsp;x = x + spacing</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">pass</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4</div>
+
+      <div class="cell"><code>i</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell"><code>x</code> at fill</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Write your answer, then tap to check.</p>
+  </div>
+
+  <!-- 11 · SLOT 11: Common Mistake — his 30-lines habit -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Your old habit: 30 lines</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ 30 lines</span>
+<pre class="tiny">blocks.fill(QUARTZ_BLOCK, pos(2,0,0), pos(2,4,0), REPLACE)
+blocks.fill(QUARTZ_BLOCK, pos(4,0,0), pos(4,4,0), REPLACE)
+blocks.fill(QUARTZ_BLOCK, pos(6,0,0), pos(6,4,0), REPLACE)
+blocks.fill(QUARTZ_BLOCK, pos(8,0,0), pos(8,4,0), REPLACE)
+blocks.fill(QUARTZ_BLOCK, pos(10,0,0), pos(10,4,0), REPLACE)
+blocks.fill(QUARTZ_BLOCK, pos(12,0,0), pos(12,4,0), REPLACE)
+<span class="dim">⋮ 24 more lines</span></pre>
+      </div>
+      <div class="col good"><span class="tag">✓ 4 lines</span>
+<pre class="tiny"><span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">30</span>):
+    blocks.fill(<span class="str">QUARTZ_BLOCK</span>,
+        pos(x,<span class="num">0</span>,<span class="num">0</span>), pos(x,<span class="num">4</span>,<span class="num">0</span>), REPLACE)
+    x = x + spacing</pre>
+      </div>
+    </div>
+    <p class="quiet">Change the gap: 30 lines means 30 edits. The loop means 1 edit.</p>
+    <p class="bilingual">30줄 대신 4줄</p>
+  </div>
+
+  <!-- 12 · EXTRA: v3 — the spacing multiplier -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <p class="line">Type the multiplier yourself:</p>
+    <div class="skel" style="max-width:26em">
+<pre>    spacing = <span class="num">2</span>
+        x = x + spacing</pre></div>
+    <p class="where">📍 <code>spacing = 2</code> under <code>x = 2</code>. Then change the last line.</p>
+    <span class="rev" data-t="a12">show the demo</span>
+    <div id="a12" class="hid">
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_pillars</span>():</span><span class="dim">    x = <span class="num">2</span></span><span class="hot">    spacing = <span class="num">2</span><span class="mk">NEW</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="bad">        x = x + <span class="num">1</span><span class="mk old">OLD</span></span><span class="hot">        x = x + spacing<span class="mk">NEW</span></span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"pillars"</span>, on_pillars)</span></pre>
+      <div class="output-box" style="margin-top:.3em">
+        <div class="out-label">▸ Chat: pillars</div>
+        <div>5 pillars at x 2, 4, 6, 8, 10.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 · EXTRA: one loop, many structures -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">One loop, many buildings</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="spC" width="380" height="190"></canvas>
+        <div class="slid"><span>spacing</span><input type="range" id="spR" min="1" max="5" value="2"><span class="out" id="spO">2</span></div>
+        <div class="readout">x = <b id="spList">2, 4, 6, 8, 10</b></div>
+      </div>
+      <div>
+        <p class="line big">Drag it.</p>
+        <p class="line" style="margin-top:.4em">The loop never changes.<br>Only <code>spacing</code> changes.</p>
+        <p class="quiet" style="margin-top:.4em">1 = a wall. 5 = a fence you can walk through.</p>
+        <p class="bilingual">같은 반복문, 다른 건물</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 · SLOT 14: Debug 1 — only one pillar -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug 1</div>
+    <h2>5 fills ran. 1 pillar appeared.</h2>
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_pillars</span>():</span><span class="dim">    spacing = <span class="num">2</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="bad">        x = <span class="num">2</span></span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">x goes back to 2 at the start of every pass.</div>
+      <p class="quiet">Move <code>x = 2</code> above the <code>for</code> line. Set it once, then let the loop change it.</p>
+    </details>
+  </div>
+
+  <!-- 15 · SLOT 15: Debug 2 — spacing ignored -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug 2</div>
+    <h2>spacing is 3, pillars still touch</h2>
+<pre class="tiny"><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">3</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="bad">        x = x + <span class="num">1</span></span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">x = 2, 3, 4, 5, 6 — a wall. spacing was never used.</div>
+      <p class="quiet">Last line becomes <code>x = x + spacing</code>. Making a variable is not the same as using it.</p>
+    </details>
+  </div>
+
+  <!-- 16 · SLOT 16: Debug 3 — real error, real line number -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug 3</div>
+    <h2>Red error. Say the line number.</h2>
+<pre class="tiny"><span class="dim"><span class="ln">1</span><span class="kw">def</span> <span class="fn">on_pillars</span>():</span><span class="dim"><span class="ln">2</span>    x = <span class="num">2</span></span><span class="dim"><span class="ln">3</span>    spacing = <span class="num">2</span></span><span class="dim"><span class="ln">4</span>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="bad"><span class="ln">5</span>    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="bad"><span class="ln">6</span>        <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="bad"><span class="ln">7</span>        <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="bad"><span class="ln">8</span>    x = x + spacing</span></pre>
+    <div class="debug-card"><div class="err">IndentationError: expected an indented block — line 5</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p class="quiet">Push lines 5–8 right by 4 spaces. A <code>for</code> line must be followed by indented lines.</p>
+      <p class="line" style="margin-top:.3em">Now say it: "It breaks on line <b>5</b>."</p>
+    </details>
+  </div>
+
+  <!-- 17 · SLOT 17: Modify 1 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Try it · one number</div>
+    <h2>Turn the pillars back into a wall</h2>
+    <div class="skel" style="max-width:24em">
+<pre>    x = <span class="num">2</span>
+    spacing = <span class="blank">?</span>
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">5</span>):</pre></div>
+    <span class="rev" data-t="a17">show answer</span>
+    <div id="a17" class="hid"><p class="line"><b>1</b> — every pillar lands next to the last one.</p></div>
+  </div>
+
+  <!-- 18 · SLOT 18: Modify 2 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Try it · harder</div>
+    <h2>8 pillars. 3 empty blocks between each.</h2>
+    <div class="skel" style="max-width:26em">
+<pre>    x = <span class="num">0</span>
+    spacing = <span class="blank">?</span>
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="blank">?</span>):</pre></div>
+    <span class="rev" data-t="a18">show answer</span>
+    <div id="a18" class="hid"><p class="line"><b>4</b> and <b>8</b> — pillar 1 block + gap 3 blocks = step of 4.</p></div>
+    <p class="quiet" style="margin-top:.4em">x lands on 0, 4, 8, 12, 16, 20, 24, 28.</p>
+  </div>
+
+  <!-- 19 · SLOT 19: Quick quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">x starts at 2, spacing is 5. What is x on pass 3?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">12 — 2, then 7, then 12.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">Where must <code>x = x + spacing</code> sit?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">Inside the loop, under blocks.fill. Outside = one pillar.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 · EXTRA: v4 — the gaps grow (his own pattern) -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <p class="line">One more line. Just one.</p>
+    <div class="skel" style="max-width:26em">
+<pre>        spacing = spacing + <span class="num">1</span></pre></div>
+    <p class="where">📍 Under <code>x = x + spacing</code>, same indent.</p>
+    <span class="rev" data-t="a20">show the demo</span>
+    <div id="a20" class="hid">
+<pre class="tiny"><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">2</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span><span class="hot">        spacing = spacing + <span class="num">1</span><span class="mk">NEW</span></span></pre>
+      <div class="output-box" style="margin-top:.3em">
+        <div class="out-label">▸ Chat: pillars</div>
+        <div>x = 2, 4, 7, 11, 16 — your own pattern.</div>
+      </div>
+      <p class="line" style="margin-top:.3em"><b>2 → 4 → 7 → 11</b>. You found it. Now you wrote it.</p>
+    </div>
+  </div>
+
+  <!-- 21 · SLOT 21: Code Talk + stuck frames again -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Code Talk</div>
+    <div class="frame-card" style="margin:.5em 0">
+      <div class="label">Say it out loud</div>
+      <div class="frame">"<code>spacing</code> decides <span class="blank"></span>, so a bigger number makes <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin:.5em 0">
+      <div class="label">Stuck? Pick one — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 22 · SLOT 22: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <h2>Your colonnade 🏛️</h2>
+    <ul class="check-list">
+      <li>Set <code>spacing = 4</code>. Run. Count the gaps.</li>
+      <li>Change <code>range(5)</code> to <code>range(8)</code>. Run.</li>
+      <li>Swap <code>QUARTZ_BLOCK</code> for a block you like. Run.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.4em">Run after every single change. One change, one run.</p>
+  </div>
+
+  <!-- 23 · SLOT 23: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Stretch 🚀</div>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>pos(x, 4, 0)</code> to <code>pos(x, 9, 0)</code> — pillars twice as tall.</div>
+      <div class="item"><span class="lvl">★★</span>Add <code>z = z + 1</code> in the loop and use <code>z</code> in both <code>pos()</code> — pillars walk diagonally.</div>
+      <div class="item"><span class="lvl">★★★</span>Add <code>spacing = spacing - 1</code> instead — gaps that shrink.</div>
+    </div>
+  </div>
+
+  <!-- 24 · EXTRA OPTIONAL: a second row -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Two rows<span class="activity-tag">OPTIONAL</span></div>
+    <p class="line big" style="margin-bottom:.3em">One loop. Two rows.</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,<span class="mk">NEW</span></span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">6</span>),<span class="mk">NEW</span></span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">6</span>), REPLACE)<span class="mk">NEW</span></span><span class="dim">        x = x + spacing</span></pre>
+    <p class="where">📍 The 3 new lines go under the first fill, same indent.</p>
+    <p class="quiet" style="margin-top:.3em">Only z changed: 0 → 6. A hallway.</p>
+  </div>
+
+  <!-- 25 · EXTRA OPTIONAL: bonus modify — the roof -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">Bonus<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Put a roof on top</h2>
+    <p class="quiet">Using v3: x is 2, 4, 6, 8, 10. Roof sits at y 5.</p>
+    <div class="skel" style="max-width:26em">
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,
+        <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">5</span>, <span class="num">0</span>),
+        <span class="fn">pos</span>(<span class="blank">?</span>, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</pre></div>
+    <p class="where">📍 After the loop, outside it — no indent under <code>for</code>.</p>
+    <span class="rev" data-t="a25">show answer</span>
+    <div id="a25" class="hid"><p class="line"><b>10</b> — the last pillar's x.</p></div>
+  </div>
+
+  <!-- 26 · EXTRA OPTIONAL: the whole program -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Full program<span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">on_pillars</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,
+            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)
+        x = x + spacing
+        spacing = spacing + <span class="num">1</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"pillars"</span>, on_pillars)</pre>
+    <p class="quiet" style="margin-top:.3em">Read it out loud, line by line. 10 lines. 5 pillars.</p>
+  </div>
+
+  <!-- 27 · SLOT 27: Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Exit ticket</div>
+    <div class="exit">
+      <div class="label">Write it, then say it</div>
+      <p class="line" style="margin-top:.3em">Which one line makes the gaps grow bigger every pass?</p>
+      <details><summary class="rev" style="display:inline-block">show answer</summary>
+        <p class="line" style="margin-top:.3em"><code>spacing = spacing + 1</code></p></details>
+    </div>
+  </div>
+
+  <!-- 28 · SLOT 28: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="emoji">🏛️</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One loop.<br>Many buildings.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: two spacings at once — a grid of pillars.</p>
+    <p class="bilingual">다음 시간: 격자로 세우는 기둥</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 28</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  document.querySelectorAll('.rev[data-t]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var t = $(btn.getAttribute('data-t'));
+      if (!t) return;
+      t.classList.toggle('hid');
+      btn.blur();
+    });
+  });
+
+  // Side view of a row of pillars. xs = block x of each pillar.
+  function drawPillars(ctx, W, H, cols, xs, height, hi) {
+    var cell = Math.min(W / cols, (H - 26) / (height + 1));
+    var ox = (W - cols * cell) / 2;
+    var base = H - 16;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    for (var c = 0; c <= cols; c++) {
+      ctx.beginPath();
+      ctx.moveTo(ox + c * cell, base - height * cell);
+      ctx.lineTo(ox + c * cell, base);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#2b3547';
+    ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+    xs.forEach(function (x, idx) {
+      ctx.fillStyle = (idx === hi) ? '#ffb86c' : '#38d0e0';
+      for (var r = 0; r < height; r++) {
+        ctx.fillRect(ox + x * cell + 1, base - (r + 1) * cell + 1, cell - 2, cell - 2);
+      }
+    });
+    ctx.fillStyle = '#8a97b8';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'center';
+    xs.forEach(function (x) { ctx.fillText(String(x), ox + x * cell + cell / 2, base + 12); });
+    ctx.textAlign = 'left';
+  }
+
+  /* Slot 9 — step the v2 loop, spacing of 1 */
+  (function () {
+    var c = $('stepC'); if (!c) return;
+    var ctx = c.getContext('2d'), step = 0, COLS = 14;
+    function draw() {
+      var xs = [];
+      for (var k = 0; k < step; k++) { xs.push(2 + k); }
+      drawPillars(ctx, c.width, c.height, COLS, xs, 5, step - 1);
+      $('stI').textContent = step ? (step - 1) : '—';
+      $('stX').textContent = step ? (2 + step - 1) : '—';
+      $('stN').textContent = step < 5 ? (2 + step) : 'done';
+    }
+    $('stFwd').addEventListener('click', function () { if (step < 5) step++; draw(); this.blur(); });
+    $('stReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* Slot 13 — one loop, many structures */
+  (function () {
+    var c = $('spC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function upd() {
+      var s = +$('spR').value;
+      $('spO').textContent = s;
+      var xs = [];
+      for (var k = 0; k < 5; k++) { xs.push(2 + k * s); }
+      drawPillars(ctx, c.width, c.height, 24, xs, 5, -1);
+      $('spList').textContent = xs.join(', ');
+    }
+    $('spR').addEventListener('input', upd);
+    upd();
+  })();
+})();
+</script>
+</body>
+</html>
