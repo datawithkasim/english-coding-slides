@@ -98,6 +98,11 @@ Today's content — one file, growing:
   (you animate an *animation*, not an object); nothing appears because
   `self.play` was never called.
 
+**No LaTeX on the render box.** `code-executor/manim_setup.sh` installs cairo,
+pango and fonts only — no texlive — so `MathTex` / `Tex` will fail. Write maths
+as `Text("x² + y² = r²")` instead. Bare `Axes()` and `NumberPlane()` are fine;
+anything that draws tick numbers is not.
+
 Topic slug: `andy-manim-first-animation`. Tone reference:
 `lessons/2026-09-01/ryan-enemy-name-tags.html` (structure + the step CSS).
 

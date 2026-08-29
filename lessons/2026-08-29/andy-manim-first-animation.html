@@ -473,8 +473,274 @@
     <p class="bilingual">다음 시간: 좌표로 위치 정하기</p>
   </div>
 
+  <!-- 31 · BONUS 1 — the pause -->
+  <div class="slide">
+    <div class="steptag">BONUS 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Let it breathe</h2>
+    <div class="where">📍 The last line of the file. Indent 8.</div>
+<pre><span class="dim">        self.play(circle.animate.scale(2))</span>
+<span class="hot">        self.wait(1)</span></pre>
+    <div class="why">🟣 Holds the last frame for 1 second. Without it the video cuts the moment it ends.</div>
+    <div class="chk">✅ Run — the ending no longer feels rushed.</div>
+  </div>
+
+  <!-- 32 · Which animation for which object -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Which animation?</h2>
+    <div class="vocab-table">
+      <span class="term">Create</span>
+      <span class="gloss">draws a shape, line by line</span>
+      <span class="ko">그리기</span>
+
+      <span class="term">Write</span>
+      <span class="gloss">draws Text on, like a pen</span>
+      <span class="ko">쓰기</span>
+
+      <span class="term">FadeIn</span>
+      <span class="gloss">anything appears softly</span>
+      <span class="ko">나타나기</span>
+
+      <span class="term">FadeOut</span>
+      <span class="gloss">anything leaves softly</span>
+      <span class="ko">사라지기</span>
+    </div>
+    <p class="quiet" style="margin-top:.4em">All four go inside <code>self.play( )</code>.</p>
+  </div>
+
+  <!-- 33 · Directions -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four directions, three ways to move</h2>
+<pre>                 <span class="fn">UP</span>
+                  ↑
+    <span class="fn">LEFT</span>  ←    •    →  <span class="fn">RIGHT</span>
+                  ↓
+                <span class="fn">DOWN</span>
+
+circle.animate.<span class="fn">shift</span>(LEFT * <span class="num">2</span>)        <span class="com"># 2 steps left</span>
+title.animate.<span class="fn">to_edge</span>(UP)             <span class="com"># stick to the top wall</span>
+title.animate.<span class="fn">next_to</span>(circle, RIGHT)   <span class="com"># park beside the shape</span></pre>
+    <p class="line" style="margin-top:.4em">UP, DOWN, LEFT, RIGHT come free with <code>import *</code>.</p>
+    <p class="bilingual">위·아래·왼쪽·오른쪽 방향 상수</p>
+  </div>
+
+  <!-- 34 · BONUS 2 — next_to -->
+  <div class="slide">
+    <div class="steptag">BONUS 2<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Park the text beside the shape</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.wait(1)</code> — the new line goes above it.</div>
+<pre><span class="dim">        self.play(circle.animate.scale(2))</span>
+<span class="hot">        self.play(title.animate.next_to(circle, RIGHT))</span>
+<span class="dim">        self.wait(1)</span></pre>
+    <div class="why">🟣 Two things in the brackets: which object, which side.</div>
+    <div class="chk">✅ Run — the text drops down and sits on the right.</div>
+  </div>
+
+  <!-- 35 · BONUS 3 — to_edge -->
+  <div class="slide">
+    <div class="steptag">BONUS 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Send it to the top edge</h2>
+    <div class="where">📍 The next line down. Indent 8.</div>
+<pre><span class="dim">        self.play(title.animate.next_to(circle, RIGHT))</span>
+<span class="hot">        self.play(title.animate.to_edge(UP))</span></pre>
+    <div class="why">🟣 <code>to_edge</code> pins it to a wall of the stage. No numbers needed.</div>
+    <div class="chk">✅ Run — the text flies up to the top.</div>
+  </div>
+
+  <!-- 36 · Colour list -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The colour names</h2>
+    <div class="chips" style="margin-top:.5em">
+      <span class="chip" style="color:#58C4DD;border-color:#58C4DD">BLUE</span>
+      <span class="chip" style="color:#FC6255;border-color:#FC6255">RED</span>
+      <span class="chip" style="color:#83C167;border-color:#83C167">GREEN</span>
+      <span class="chip" style="color:#E8E800;border-color:#E8E800">YELLOW</span>
+      <span class="chip" style="color:#9A72AC;border-color:#9A72AC">PURPLE</span>
+      <span class="chip" style="color:#FF862F;border-color:#FF862F">ORANGE</span>
+      <span class="chip" style="color:#FFFFFF;border-color:#FFFFFF">WHITE</span>
+    </div>
+<pre>        circle = <span class="fn">Circle</span>(color=RED)
+        circle.<span class="fn">set_fill</span>(YELLOW, opacity=<span class="num">0.7</span>)</pre>
+    <div class="why">🟣 Capitals, no quotes. Outline colour and fill colour can differ.</div>
+  </div>
+
+  <!-- 37 · Mistake 5 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake 5 — the lowercase colour</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>Circle(color=blue)
+Circle(color="blue")</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>NameError: name 'blue' is not defined</code><br>→ quotes make it text, not a colour</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>Circle(color=BLUE)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ the blue Manim knows</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Colours are <b>names Manim made for you</b>. CAPITALS, no quotes.</p>
+    <p class="bilingual">색 이름은 대문자, 따옴표 없이</p>
+  </div>
+
+  <!-- 38 · BONUS 4 — rotate + PI -->
+  <div class="slide">
+    <div class="steptag">BONUS 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spin it</h2>
+    <div class="where">📍 The next line down. Indent 8.</div>
+<pre><span class="dim">        self.play(title.animate.to_edge(UP))</span>
+<span class="hot">        self.play(circle.animate.rotate(PI / 2))</span></pre>
+    <div class="why">🟣 <code>PI</code> comes with <code>import *</code>. A half turn is <code>PI</code> — so <code>PI / 2</code> is a quarter.</div>
+    <div class="chk">✅ Run — watch it spin. A square ends looking the same.</div>
+  </div>
+
+  <!-- 39 · BONUS 5 — VGroup -->
+  <div class="slide">
+    <div class="steptag">BONUS 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Move two things as one</h2>
+    <div class="where">📍 Two new lines. Indent 8.</div>
+<pre><span class="dim">        self.play(circle.animate.rotate(PI / 2))</span>
+<span class="hot">        group = VGroup(circle, title)</span>
+<span class="hot">        self.play(group.animate.shift(DOWN * 2))</span></pre>
+    <div class="why">🟣 <code>VGroup</code> ties objects together. Any two: <code>VGroup(circle, square)</code> works the same.</div>
+    <div class="chk">✅ Run — shape and text slide down together.</div>
+    <p class="bilingual">여러 도형을 한 덩어리로</p>
+  </div>
+
+  <!-- 40 · BONUS 6 — maths text -->
+  <div class="slide">
+    <div class="steptag">BONUS 6<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Write real maths</h2>
+    <div class="where">📍 Two new lines at the bottom. Indent 8.</div>
+<pre><span class="dim">        self.play(group.animate.shift(DOWN * 2))</span>
+<span class="hot">        eq = Text("x² + y² = r²").to_edge(DOWN)</span>
+<span class="hot">        self.play(Write(eq))</span></pre>
+    <div class="why">🟣 Copy the ² sign straight into the quotes. <code>Text</code> draws any symbol.</div>
+    <div class="chk">✅ Run — the circle equation writes itself along the bottom.</div>
+    <p class="bilingual">수식도 Text 안에 그대로 써요</p>
+  </div>
+
+  <!-- 41 · BONUS 7 — Axes -->
+  <div class="slide">
+    <div class="steptag">BONUS 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Put maths paper behind it</h2>
+    <div class="where">📍 Two new lines at the bottom. Indent 8.</div>
+<pre><span class="dim">        self.play(Write(eq))</span>
+<span class="hot">        axes = Axes()</span>
+<span class="hot">        self.play(Create(axes))</span></pre>
+    <div class="why">🟣 <code>Axes()</code> draws x and y lines. <code>NumberPlane()</code> draws the full grid — one word swap.</div>
+    <div class="chk">✅ Run — the axes draw themselves across the stage.</div>
+    <p class="bilingual">좌표축이 배경이 돼요</p>
+  </div>
+
+  <!-- 42 · BONUS 8 — Dot -->
+  <div class="slide">
+    <div class="steptag">BONUS 8<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mark a point</h2>
+    <div class="where">📍 Two new lines at the bottom. Indent 8.</div>
+<pre><span class="dim">        self.play(Create(axes))</span>
+<span class="hot">        dot = Dot(axes.coords_to_point(1, 2))</span>
+<span class="hot">        self.play(FadeIn(dot))</span></pre>
+    <div class="why">🟣 <code>coords_to_point(1, 2)</code> means x = 1, y = 2 on those axes.</div>
+    <div class="chk">✅ Run — a dot fades in right on (1, 2). 🎉</div>
+  </div>
+
+  <!-- 43 · Last scene wins -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The app plays the <b>last</b> scene</h2>
+<pre class="tiny"><span class="dim">class FirstScene(Scene):      # skipped</span>
+<span class="dim">    def construct(self):</span>
+<span class="dim">        ...</span>
+<span class="dim"> </span>
+<span class="hot">class SecondScene(Scene):     # this one plays</span>
+<span class="hot">    def construct(self):</span>
+<span class="hot">        ...</span></pre>
+    <p class="line" style="margin-top:.4em">You never type a scene name. The server reads top to bottom and films the <b>last</b> class it finds.</p>
+    <p class="bilingual">맨 아래 장면만 재생돼요</p>
+  </div>
+
+  <!-- 44 · BONUS 9 — second scene -->
+  <div class="slide">
+    <div class="steptag">BONUS 9<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A second scene</h2>
+    <div class="where">📍 Very bottom. Blank line first, then <b>column 0</b> — no spaces before <code>class</code>.</div>
+<pre><span class="dim">        self.play(FadeIn(dot))</span>
+<span class="dim"> </span>
+<span class="hot">class SecondScene(Scene):</span>
+<span class="hot">    def construct(self):</span>
+<span class="hot">        star = Star(color=YELLOW)</span>
+<span class="hot">        self.play(Create(star))</span></pre>
+    <div class="why">🟣 The same four lines. Only the name changed.</div>
+    <div class="chk">✅ Run — you get <b>only</b> the star. Scene one is skipped, not broken.</div>
+  </div>
+
+  <!-- 45 · Mistake 6 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake 6 — the missing colon</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    def construct(self)
+        circle = Circle()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>SyntaxError: expected ':'</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>    def construct(self):
+        circle = Circle()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ Python knows a block is coming</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">The colon opens the block. <code>class</code>, <code>def</code>, <code>if</code>, <code>for</code> — all of them end in one.</p>
+    <p class="bilingual">콜론이 블록을 열어요</p>
+  </div>
+
+  <!-- 46 · Mistake 7 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake 7 — the open quote</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        title = Text("Math Motion)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>SyntaxError: unterminated string literal (detected at line 10)</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        title = Text("Math Motion")</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ two quotes, one each side</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">The app's log names the <b>line number</b>. Go there and count the quotes — two, always.</p>
+    <p class="bilingual">따옴표는 항상 두 개</p>
+  </div>
+
+  <!-- 47 · Stretch 2 -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three harder bonuses</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Put <code>self.wait(1)</code> after every <code>self.play</code>. Watch the video breathe.</div>
+      <div class="item"><span class="lvl">★★</span>Open with <code>plane = NumberPlane()</code>, close with <code>self.play(FadeOut(plane))</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Make a <code>VGroup</code> of three shapes, then rotate the whole group by <code>PI</code>.</div>
+    </div>
+  </div>
+
+  <!-- 48 · Lesson 2 preview -->
+  <div class="slide center-all">
+    <div class="pill">Next up<span class="activity-tag">OPTIONAL</span></div>
+    <p class="line big">What lesson 2 adds</p>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📐</div><div class="name">Exact coordinates</div><div class="ex">move_to([2, 1, 0])</div></div>
+      <div class="opt-card"><div class="ico">🔢</div><div class="name">Numbered axes</div><div class="ex">Axes(x_range=[0, 5])</div></div>
+      <div class="opt-card"><div class="ico">📊</div><div class="name">Plot a curve</div><div class="ex">axes.plot(...)</div></div>
+      <div class="opt-card"><div class="ico">🏷️</div><div class="name">Label a point</div><div class="ex">Text next_to a Dot</div></div>
+    </div>
+    <p class="bilingual">다음 시간: 좌표로 정확히 놓기</p>
+  </div>
+
   <div class="nav">
-    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 48</span><button id="next">›</button>
   </div>
 </div>
 <script src="../../assets/deck.js"></script>
