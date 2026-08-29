@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEB DEV — Finish the Styling (Andy · 2026-08-29)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Web Dev · Daily Planner · Andy · 29 Aug 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Web Dev · Daily Planner</div>
+    <div class="emoji">🎨</div>
+    <h1>Finish the<br>Styling</h1>
+    <p class="line" style="margin-top:.4em">17 steps. You type every line. <b>Watch the preview</b> after each one.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 foundations</span><span class="chip">v2 text</span>
+      <span class="chip">v3 buttons</span><span class="chip">v4 timetable</span><span class="chip">v5 to-do</span>
+    </div>
+    <p class="bilingual">오늘은 CSS로 페이지를 완성해요</p>
+  </div>
+
+  <!-- 2 · Recap -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Last time — the tracker</h2>
+    <div class="recap-q">
+      <div class="label">Check 1</div>
+      <div class="q">In <code>updateCount(event)</code>, what does <code>event.target.checked</code> give you?</div>
+      <details><summary>Show answer</summary><div class="ans">true when ticked, false when not.</div></details>
+    </div>
+    <div class="recap-q">
+      <div class="label">Check 2</div>
+      <div class="q">What does your <code>days.forEach</code> block do?</div>
+      <details><summary>Show answer</summary><div class="ans">Adds <code>day-complete</code> to a day header when all its boxes are ticked.</div></details>
+    </div>
+    <p class="bilingual">지난 시간에 만든 기능이에요</p>
+  </div>
+
+  <!-- 3 · How the preview works -->
+  <div class="slide">
+    <div class="pill">Setup</div>
+    <h2>How the preview works</h2>
+    <ul class="check-list">
+      <li>Open the <code>index.html</code> tab. Press <b>Run</b> once.</li>
+      <li>The page appears in the preview panel.</li>
+      <li>Now edit <code>main.css</code>. Stop typing — it redraws itself.</li>
+      <li>About half a second later. No second Run.</li>
+      <li>No terminal, no install.</li>
+    </ul>
+    <p class="bilingual">한 번만 Run, 그 다음은 자동이에요</p>
+  </div>
+
+  <!-- 4 · Bug hunt 1 -->
+  <div class="slide">
+    <div class="pill">🔎 Hunt</div>
+    <h2>Three lines the browser threw away</h2>
+<pre>* { font-family: 'cursive' }     <span class="com">/* a font NAMED cursive */</span>
+button { border: 15px }          <span class="com">/* a width, no style */</span>
+tr { min-width: none }           <span class="com">/* not a legal value */</span></pre>
+    <p class="line" style="margin-top:.5em">Open <code>main.css</code>. Find all three. Each one looks fine and does nothing.</p>
+    <p class="bilingual">브라우저가 조용히 버린 줄들이에요</p>
+  </div>
+
+  <!-- 5 · Bug hunt 2 -->
+  <div class="slide">
+    <div class="pill">🔎 Hunt</div>
+    <h2>Three more — legal, but useless</h2>
+<pre>.todo-container { display: grid; flex-direction: column; }  <span class="com">/* flex only */</span>
+th.day-complete { background-color: #8fcc77; }              <span class="com">/* same as th */</span>
+.done { ... }                                               <span class="com">/* nothing wears it */</span></pre>
+    <p class="line" style="margin-top:.5em">Six bugs. Today you fix all six.</p>
+    <p class="bilingual">문법은 맞지만 효과가 없어요</p>
+  </div>
+
+  <!-- 6 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>4 words for today</h2>
+    <div class="vocab-table">
+      <span class="term">selector</span>
+      <span class="gloss">the part before { } — which elements it hits</span>
+      <span class="ko">선택자</span>
+
+      <span class="term">property</span>
+      <span class="gloss">a setting inside { } — colour, padding, border</span>
+      <span class="ko">속성</span>
+
+      <span class="term">pseudo-class</span>
+      <span class="gloss">a state, not an element: <code>:hover</code>, <code>:nth-child</code></span>
+      <span class="ko">가상 클래스</span>
+
+      <span class="term">transition</span>
+      <span class="gloss">slide from old value to new, over time</span>
+      <span class="ko">전환 효과</span>
+    </div>
+  </div>
+
+  <!-- 7 · Roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan — 17 steps</p>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🧱</div><div class="name">v1 · foundations</div><div class="ex">steps 1–3 · font, width, title</div></div>
+      <div class="opt-card"><div class="ico">✍️</div><div class="name">v2 · text</div><div class="ex">steps 4–5 · paragraphs, headings</div></div>
+      <div class="opt-card"><div class="ico">🔘</div><div class="name">v3 · buttons</div><div class="ex">steps 6–8 · shape, fade, gaps</div></div>
+      <div class="opt-card"><div class="ico">📅</div><div class="name">v4 · timetable</div><div class="ex">steps 9–12 · boxes, stripes</div></div>
+      <div class="opt-card"><div class="ico">✅</div><div class="name">v5 · to-do</div><div class="ex">steps 13–17 · cards, done</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">One file grows. Look at the preview after every step.</p>
+  </div>
+
+  <!-- 8 · v1 intro -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span><span>v5</span></div>
+    <h2>v1 — foundations</h2>
+    <p class="line" style="margin-top:.5em">Three steps: the font, the width of the page, the title.</p>
+    <p class="line">Every step is the same job — find the line, retype it, look.</p>
+    <p class="bilingual">기초 세 가지부터 고쳐요</p>
+  </div>
+
+  <!-- 9 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 17</div>
+    <h2>Fix the font</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>font-family: 'cursive'</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>* {
+    font-family: 'cursive'
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>* {
+    box-sizing: border-box;
+    font-family: "Comic Sans MS", "Segoe UI", cursive;
+}</pre></div>
+    <div class="why">🟣 Quotes turned <code>cursive</code> into a font <b>name</b>. Without quotes it is a keyword the browser understands.</div>
+    <div class="chk">✅ The whole page changes font.</div>
+  </div>
+
+  <!-- 10 · STEP 1b -->
+  <div class="slide">
+    <div class="pill">Why it broke</div>
+    <h2>Quotes make a name</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>font-family: 'cursive';</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ hunts for a font called "cursive" → never finds it</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>font-family: cursive;</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ a keyword the browser knows</p>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.5em"><code>box-sizing: border-box</code> stops padding making boxes wider than you asked.</p>
+    <p class="bilingual">따옴표를 쓰면 폰트 이름이 돼요</p>
+  </div>
+
+  <!-- 11 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 17</div>
+    <h2>Centre the page</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>background-color: rgb(218, 222, 192)</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>body {
+    background-color: rgb(218, 222, 192);
+    font-family: 'cursive';
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>body {
+    background-color: rgb(218, 222, 192);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+}</pre></div>
+    <div class="why">🟣 <code>margin: 0 auto</code> puts equal space left and right. The font line goes — the <code>*</code> rule above already covers it.</div>
+    <div class="chk">✅ Content pulls into a centred column.</div>
+  </div>
+
+  <!-- 12 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 17</div>
+    <h2>Make the title readable</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>color: #8fcc77;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">h1 {
+    color: #8fcc77;
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 600;
+    text-align: center;
+    padding: 60px;
+    margin: 20px;
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">h1 {
+    color: #3c6b2c;
+    font-size: 40px;
+    font-style: italic;
+    font-weight: 700;
+    text-align: center;
+    padding: 24px;
+    margin: 0 0 16px;
+}</pre></div>
+    <div class="why">🟣 Same green, darker, so it stands off the pale page. 60px of padding pushed everything down a whole screen.</div>
+    <div class="chk">✅ Title is dark green and the page starts higher up.</div>
+  </div>
+
+  <!-- 13 · STEP 4 (v2) -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span><span>v5</span></div>
+    <div class="steptag">STEP 4 / 17</div>
+    <h2>Calm the paragraph colour</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>color:rgb(59, 9, 243);</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>p {
+    line-height: 1.6;
+    max-width: 600px;
+
+    color:rgb(59, 9, 243);
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>p {
+    line-height: 1.6;
+    max-width: 600px;
+    color: #2b2233;
+}</pre></div>
+    <div class="why">🟣 Bright blue on pale green fights the eye. Near-black reads easily.</div>
+    <div class="chk">✅ Paragraphs turn dark grey.</div>
+  </div>
+
+  <!-- 14 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 17</div>
+    <h2>Style the h2 headings</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>h1</code> rule's closing <code>}</code></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>h2 {
+    color: #3c6b2c;
+    border-bottom: 3px solid #8fcc77;
+    padding-bottom: 6px;
+    margin-top: 32px;
+}</pre></div>
+    <div class="why">🟣 <code>border-bottom</code> draws one line under the heading — it splits the page into sections.</div>
+    <div class="chk">✅ "mathematical buttons" and "My To-Do List:" each get a green underline.</div>
+  </div>
+
+  <!-- 15 · v3 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span><span>v5</span></div>
+    <h2>v3 — the five buttons</h2>
+    <div class="icon-row"><span>🔘</span><span>🔘</span><span>🔘</span><span>🔘</span><span>🔘</span></div>
+    <p class="line center" style="margin-top:.6em">Shape, then a fade on hover, then space between them.</p>
+    <p class="quiet center">Three steps. All in the <code>button</code> rules.</p>
+    <p class="bilingual center">버튼 모양부터 손봐요</p>
+  </div>
+
+  <!-- 16 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 17</div>
+    <h2>Give the buttons a shape</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>background-color: #722F37;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">button {
+    padding: 5px;
+    background-color: #722F37;
+    color: #FFFFFF;
+    border:15px
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">button {
+    padding: 10px 18px;
+    background-color: #722F37;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}</pre></div>
+    <div class="why">🟣 <code>border-radius</code> rounds the corners. <code>cursor</code> makes the mouse turn into a hand.</div>
+    <div class="chk">✅ Buttons get bigger, rounded, and the mouse becomes a hand over them.</div>
+  </div>
+
+  <!-- 17 · STEP 6b -->
+  <div class="slide">
+    <div class="pill">Why it broke</div>
+    <h2>A width with no style</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>border: 15px</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ how thick? but never says <b>what kind</b> → line dropped</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>border: 2px solid #8fcc77</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ thickness, style, colour</p>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.5em">The same bug sits in <code>.plan-for-day</code>. You fix that one at step 10.</p>
+    <p class="bilingual">두께만 쓰면 선이 안 나와요</p>
+  </div>
+
+  <!-- 18 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 17</div>
+    <h2>Make the hover fade</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>border-radius: 8px;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>    border-radius: 8px;
+    cursor: pointer;</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;</pre></div>
+    <div class="why">🟣 <code>transition</code> slides between the two colours over 0.2 seconds instead of snapping.</div>
+    <div class="chk">✅ Hover a button — the colour fades in, not jumps.</div>
+  </div>
+
+  <!-- 19 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 17</div>
+    <h2>Space them out</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>button:hover</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>button + button {
+    margin-left: 8px;
+}</pre></div>
+    <div class="why">🟣 <code>button + button</code> means "a button that comes right after another button". The first gets no gap; every one after it does.</div>
+    <div class="chk">✅ The five buttons stop touching.</div>
+  </div>
+
+  <!-- 20 · STEP 8b -->
+  <div class="slide">
+    <div class="pill">Selector 🔬</div>
+    <h2>Read <code>button + button</code></h2>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip">btn 1</span><span class="chip on">btn 2</span><span class="chip on">btn 3</span>
+      <span class="chip on">btn 4</span><span class="chip on">btn 5</span>
+    </div>
+    <p class="quiet center" style="margin-top:.4em">green = gets the 8px gap</p>
+<pre>button            <span class="com">/* all five */</span>
+button + button   <span class="com">/* only one that FOLLOWS a button */</span></pre>
+    <p class="line" style="margin-top:.5em">The first button has nothing before it, so it is never picked.</p>
+    <p class="bilingual">+ 는 "바로 뒤에 오는" 이라는 뜻</p>
+  </div>
+
+  <!-- 21 · v4 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span><span>v5</span></div>
+    <h2>v4 — the 7-day timetable</h2>
+    <p class="line" style="margin-top:.5em">Four steps: delete a dead rule, fix the boxes, stripe the rows, light up a finished day.</p>
+    <p class="quiet">Two of them change nothing on screen. That is the point.</p>
+    <p class="bilingual">시간표를 읽기 쉽게 만들어요</p>
+  </div>
+
+  <!-- 22 · STEP 9 -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 17</div>
+    <h2>Delete a line that does nothing</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>min-width: none</code></div>
+    <div class="tag-old">DELETE these lines</div>
+    <div class="was"><pre>tr {
+    min-width: none;
+}</pre></div>
+    <div class="why">🟣 <code>none</code> is not a legal value for <code>min-width</code>, so the browser ignores the whole rule. Dead code — take it out.</div>
+    <div class="chk">✅ Nothing changes on screen. That is the point.</div>
+  </div>
+
+  <!-- 23 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 17</div>
+    <h2>Timetable boxes</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>padding-top: 30px;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">.plan-for-day {
+    margin: 8px 8px 8px 25px;
+    padding-top: 30px;
+    border: 10px
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">.plan-for-day {
+    width: 110px;
+    margin: 4px;
+    padding: 6px;
+    border: 2px solid #8fcc77;
+    border-radius: 6px;
+}</pre></div>
+    <div class="why">🟣 <code>border: 10px</code> was the same broken bug as the button. <code>padding-top: 30px</code> made every box tall and empty at the top.</div>
+    <div class="chk">✅ Timetable boxes become neat, even, and the same width.</div>
+  </div>
+
+  <!-- 24 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 17</div>
+    <h2>Stripe the rows</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>th</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>tbody tr:nth-child(even) {
+    background-color: #eef0e0;
+}</pre></div>
+    <div class="why">🟣 <code>:nth-child(even)</code> picks rows 2, 4, 6… Stripes make a wide table easy to follow across.</div>
+    <div class="chk">✅ Every other row of the timetable goes slightly lighter.</div>
+  </div>
+
+  <!-- 25 · STEP 11b -->
+  <div class="slide">
+    <div class="pill">Selector 🔬</div>
+    <h2>Read <code>:nth-child(even)</code></h2>
+<pre>row 1   <span class="com">odd   — untouched</span>
+<span class="hot">row 2   even  — #eef0e0</span>
+row 3   <span class="com">odd   — untouched</span>
+<span class="hot">row 4   even  — #eef0e0</span>
+row 5   <span class="com">odd   — untouched</span></pre>
+    <p class="line" style="margin-top:.5em">A pseudo-class picks by <b>position</b>, not by class. <code>odd</code> works too.</p>
+    <p class="bilingual">가상 클래스는 순서로 골라요</p>
+  </div>
+
+  <!-- 26 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 17</div>
+    <h2>Day complete</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>th.day-complete</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>th.day-complete {
+    background-color: #8fcc77;
+    color: #A7002A
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>th.day-complete {
+    background-color: #2f5d22;
+    color: #ffffff;
+}</pre></div>
+    <div class="why">🟣 The old background was the <b>same colour</b> a <code>th</code> already has, so finishing a day did almost nothing. Dark green plus white text is unmissable.</div>
+    <div class="chk">✅ Tick every checkbox in one day column — that day's header goes dark green.</div>
+  </div>
+
+  <!-- 27 · Read your own CSS (after v4) -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>v4 done — say it back</h2>
+    <div class="frame-card">
+      <div class="label">Finish the sentence</div>
+      <div class="frame">"<code>tbody tr:nth-child(even)</code> picks <span class="blank"></span> so the table <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.5em">"I deleted <code>tr { min-width: none }</code> because <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 28 · v5 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <h2>v5 — the to-do list</h2>
+    <p class="line" style="margin-top:.5em">Cards, bigger checkboxes, and at last the <code>.done</code> class gets used.</p>
+    <p class="quiet">Steps 16 and 17 are the payoff. One of them is in <code>scripts.js</code>.</p>
+    <p class="bilingual">마지막은 할 일 목록이에요</p>
+  </div>
+
+  <!-- 29 · STEP 13 -->
+  <div class="slide">
+    <div class="steptag">STEP 13 / 17</div>
+    <h2>Delete another dead line</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>flex-direction: column;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">.todo-container {
+    display: grid;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">.todo-container {
+    display: grid;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}</pre></div>
+    <div class="why">🟣 <code>flex-direction</code> only works in a <code>display: flex</code> box. This box is <code>grid</code>, so the line was ignored.</div>
+    <div class="chk">✅ Nothing changes on screen — the file just got honest.</div>
+  </div>
+
+  <!-- 30 · STEP 14 -->
+  <div class="slide">
+    <div class="steptag">STEP 14 / 17</div>
+    <h2>Turn each task into a card</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>.todo-item {</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>.todo-item {
+    display: flex;
+    align-items: center;
+}</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 8px;
+}</pre></div>
+    <div class="why">🟣 <code>gap</code> puts space between the text box and the checkbox without touching either one.</div>
+    <div class="chk">✅ Each task sits on its own white rounded card.</div>
+  </div>
+
+  <!-- 31 · STEP 15 -->
+  <div class="slide">
+    <div class="steptag">STEP 15 / 17</div>
+    <h2>Bigger checkboxes</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>input</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #722F37;
+    cursor: pointer;
+}</pre></div>
+    <div class="why">🟣 <code>input[type="checkbox"]</code> picks only the checkboxes, not the text boxes. <code>accent-color</code> recolours the tick itself.</div>
+    <div class="chk">✅ Checkboxes get bigger and tick in dark red.</div>
+  </div>
+
+  <!-- 32 · STEP 15b -->
+  <div class="slide">
+    <div class="pill">Selector 🔬</div>
+    <h2>Square brackets pick an attribute</h2>
+<pre>input                      <span class="com">/* every box — text AND checkbox */</span>
+input[type="checkbox"]     <span class="com">/* only the ticky ones */</span>
+input[type="text"]         <span class="com">/* only the typing ones */</span></pre>
+    <p class="line" style="margin-top:.5em">Your <code>.content-gen</code> and <code>.plan-for-day</code> boxes are both <code>type="text"</code>. They stay small.</p>
+    <p class="bilingual">대괄호는 속성으로 골라요</p>
+  </div>
+
+  <!-- 33 · STEP 16 -->
+  <div class="slide">
+    <div class="steptag">STEP 16 / 17</div>
+    <h2>Finally use <code>.done</code></h2>
+    <div class="find"><span class="fl">🔍 Find in scripts.js</span><code>statusText.textContent = "TASKS DONE: " + tasksDone;</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">function updateCount(event) {
+    if (event.target.checked) {
+        tasksDone = tasksDone + 1;
+    } else {
+        tasksDone = tasksDone - 1;
+    }
+    statusText.textContent = "TASKS DONE: " + tasksDone;
+};</pre></div>
+    <div class="tag-new">NEW — one new line at the bottom</div>
+    <div class="now"><pre class="tiny">function updateCount(event) {
+    if (event.target.checked) {
+        tasksDone = tasksDone + 1;
+    } else {
+        tasksDone = tasksDone - 1;
+    }
+    statusText.textContent = "TASKS DONE: " + tasksDone;
+    event.target.parentElement.classList.toggle("done", event.target.checked);
+};</pre></div>
+    <div class="why">🟣 <code>.done</code> has been sitting in your CSS since day one with nothing ever wearing it.</div>
+    <div class="chk">✅ Tick a task — the whole card fades to 40%.</div>
+  </div>
+
+  <!-- 34 · STEP 16b -->
+  <div class="slide">
+    <div class="pill">Read the line 🔬</div>
+    <h2>What that line says</h2>
+<pre>event.target        <span class="com">/* the checkbox you clicked */</span>
+.parentElement      <span class="com">/* the .todo-item card it sits in */</span>
+.classList.toggle(<span class="str">"done"</span>, event.target.checked)</pre>
+    <p class="line" style="margin-top:.5em"><code>toggle</code> with a true/false second word means: add the class when ticked, remove it when unticked.</p>
+    <p class="quiet"><code>.done</code> sat in your CSS since day one with nothing wearing it.</p>
+    <p class="bilingual">체크하면 추가, 풀면 제거</p>
+  </div>
+
+  <!-- 35 · STEP 17 -->
+  <div class="slide">
+    <div class="steptag">STEP 17 / 17</div>
+    <h2>Strike it out</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, after the <code>.done</code> rule at the bottom</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>.todo-item.done .content-gen {
+    text-decoration: line-through;
+    color: #7a7a7a;
+}</pre></div>
+    <div class="why">🟣 <code>text-decoration</code> on the card does not reach <b>inside</b> a text box, so the line has to be aimed at <code>.content-gen</code> directly.</div>
+    <div class="chk">✅ Tick a task — the typed text now has a line through it as well.</div>
+  </div>
+
+  <!-- 36 · STEP 17b -->
+  <div class="slide">
+    <div class="pill">Selector 🔬</div>
+    <h2>Space or no space</h2>
+<pre>.todo-item.done      <span class="com">/* ONE element with BOTH classes */</span>
+.todo-item .done     <span class="com">/* a .done INSIDE a .todo-item */</span></pre>
+    <p class="line" style="margin-top:.5em">One space changes the whole meaning. Step 17 needs the first one, then a space, then <code>.content-gen</code>.</p>
+    <p class="bilingual">붙이면 "둘 다", 띄우면 "안에 있는"</p>
+  </div>
+
+  <!-- 37 · Read your own CSS (after v5) -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>v5 done — say it back</h2>
+    <div class="frame-card">
+      <div class="label">Finish the sentence</div>
+      <div class="frame">"<code>classList.toggle</code> adds <span class="blank"></span> when the box is <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.5em">"<code>.todo-item.done</code> with no space means <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 38 · BONUS 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Show the selected box</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>input[type="checkbox"]</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>input:focus {
+    outline: 3px solid #722F37;
+}</pre></div>
+    <div class="why">🟣 <code>:focus</code> is a pseudo-class — the box you are typing in right now.</div>
+    <div class="chk">✅ Click a box — a dark red ring appears round it.</div>
+  </div>
+
+  <!-- 39 · BONUS 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS 2<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Light the row under the mouse</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>tbody tr:nth-child(even)</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>tbody tr:hover {
+    background-color: #dfe4c8;
+}</pre></div>
+    <div class="why">🟣 <code>:hover</code> is a state, so it beats the stripe underneath it.</div>
+    <div class="chk">✅ Move the mouse down the table — each row lights up in turn.</div>
+  </div>
+
+  <!-- 40 · BONUS 3 -->
+  <div class="slide">
+    <div class="steptag">BONUS 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Let the table scroll sideways</h2>
+    <div class="where">📍 <code>main.css</code> — new rule at the bottom of the file</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>.container-hori {
+    display: flex;
+    max-width: max-content;
+    overflow-x: auto;
+}</pre></div>
+    <div class="why">🟣 <code>overflow-x: auto</code> gives the wide table its own sideways scrollbar.</div>
+    <div class="chk">✅ On a narrow window the timetable slides instead of squashing.</div>
+  </div>
+
+  <!-- 41 · BONUS 4 -->
+  <div class="slide">
+    <div class="steptag">BONUS 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pin the day names</h2>
+    <div class="where">📍 <code>main.css</code> — two new lines <b>inside</b> the <code>th</code> rule, under its opening <code>{</code></div>
+<pre><span class="dim">th {</span>
+<span class="hot">    position: sticky;</span>
+<span class="hot">    top: 0;</span>
+<span class="dim">    ...</span></pre>
+    <div class="why">🟣 <code>sticky</code> means "scroll with the page until you hit the top, then stop".</div>
+    <div class="chk">✅ Scroll down — Mon…Sun stay on screen.</div>
+  </div>
+
+  <!-- 42 · BONUS 5 -->
+  <div class="slide">
+    <div class="steptag">BONUS 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Turn the counters into pills</h2>
+    <div class="where">📍 <code>main.css</code> — new rule at the bottom of the file</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">#statusText, #count {
+    background-color: #722F37;
+    color: #fff;
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+}</pre></div>
+    <div class="why">🟣 <code>border-radius: 999px</code> is bigger than the box, so the ends go fully round.</div>
+    <div class="chk">✅ Both counters become dark red pills with white text.</div>
+  </div>
+
+  <!-- 43 · BONUS 6 -->
+  <div class="slide">
+    <div class="steptag">BONUS 6<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Lift the cards</h2>
+    <div class="find"><span class="fl">🔍 Find in main.css</span><code>.todo-item {</code></div>
+    <div class="tag-new">NEW — one line at the bottom of that rule</div>
+<pre><span class="dim">    border-radius: 8px;</span>
+<span class="dim">    padding: 8px;</span>
+<span class="hot">    box-shadow: 0 2px 6px rgba(0,0,0,.15);</span></pre>
+    <div class="why">🟣 Four numbers: across, down, blur, then the shadow colour.</div>
+    <div class="chk">✅ Each card gets a soft shadow. Same line inside a <code>table</code> rule shadows the timetable.</div>
+  </div>
+
+  <!-- 44 · BONUS 7 -->
+  <div class="slide">
+    <div class="steptag">BONUS 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Name your colours once</h2>
+    <div class="where">📍 <code>main.css</code> — a new rule at the very <b>top</b>, above the <code>*</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">:root {
+    --leaf: #8fcc77;
+    --leaf-dark: #3c6b2c;
+    --wine: #722F37;
+}</pre></div>
+    <p class="quiet" style="margin-top:.3em">Then in <code>h1</code> swap <code>color: #3c6b2c;</code> for:</p>
+<pre>    color: var(--leaf-dark);</pre>
+    <div class="chk">✅ Nothing changes yet — but now one line changes the whole site.</div>
+  </div>
+
+  <!-- 45 · BONUS 8 -->
+  <div class="slide">
+    <div class="steptag">BONUS 8<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Make it fit a phone</h2>
+    <div class="where">📍 <code>main.css</code> — new rule at the bottom of the file</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>@media (max-width: 700px) {
+    body { padding: 12px; }
+    h1 { font-size: 28px; }
+}</pre></div>
+    <div class="why">🟣 The rules inside only switch on when the window is 700px wide or less.</div>
+    <div class="chk">✅ Drag the preview panel narrow — the title shrinks.</div>
+  </div>
+
+  <!-- 46 · BONUS 9 -->
+  <div class="slide">
+    <div class="steptag">BONUS 9<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Space out the two lists</h2>
+    <div class="where">📍 <code>main.css</code> — new rule, straight after the <code>p</code> rule</div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>ol, ul {
+    line-height: 1.8;
+}</pre></div>
+    <div class="why">🟣 A comma between two selectors means "both of these get the same rule".</div>
+    <div class="chk">✅ Your two intro lists breathe instead of stacking tight.</div>
+  </div>
+
+  <!-- 47 · BONUS 10 -->
+  <div class="slide">
+    <div class="steptag">BONUS 10<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Swap the whole palette</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Do BONUS 7 first. Every colour must go through <code>var()</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Pick three new colours. Change only the <code>:root</code> block.</div>
+      <div class="item"><span class="lvl">★★★</span>Three lines. Whole new site. Show me before and after.</div>
+    </div>
+    <p class="bilingual">색은 한 곳에서만 바꿔요</p>
+  </div>
+
+  <!-- 48 · Close & Bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Find it.<br>Retype it.<br>Watch it change.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: your first Manim animation — maths that moves.</p>
+    <p class="bilingual">다음 시간: 매스 애니메이션</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 48</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
