@@ -1,7 +1,7 @@
 # Today's decks — 2026-08-30 (Sun)
 
 One deck per student, built from what the tracker says they last did and what was
-promised for next time. Five Sunday slots, 08:10 → 21:00 Korea time.
+promised for next time. Five Sunday slots, 08:10 → 21:00 Korea time (06:10 → 19:00 Ho Chi Minh, KST−2).
 
 ## Hard rules for every deck
 
@@ -36,7 +36,7 @@ Then:
 
 ---
 
-## 08:10 · YUNGUN — `yungun-snake-moves.html`
+## 08:10 KST · 06:10 HCMC · YUNGUN — `yungun-snake-moves.html`
 
 **Track:** RS001 · **Source:** draft, 2026-08-29 (fresher than the 08-16 log)
 
@@ -63,7 +63,7 @@ snake ___." Common Mistake = the quotes bug: `print("snake_pos[0]")` vs
 
 ---
 
-## 10:00 · DIS — `dis-rainbow-tower.html` · **GROUP PREP CLASS, 50 MINUTES**
+## 10:00 KST · 08:00 HCMC · DIS — `dis-rainbow-tower.html` · **GROUP PREP CLASS, 50 MINUTES**
 
 **Track:** MS002 · Group of three — **Leia, Danny, Shian** · **Source:** log, 2026-08-16
 
@@ -123,7 +123,7 @@ rules slide.
 
 ---
 
-## 18:00 · LEO KIM — `leo-loop-that-changes.html`
+## 18:00 KST · 16:00 HCMC · LEO KIM — `leo-loop-that-changes.html`
 
 **Track:** MS002 · **Source:** log, 2026-08-23
 
@@ -158,7 +158,7 @@ Common Mistake = the 30-lines-instead-of-a-loop habit: show the wall of repeated
 
 ---
 
-## 19:00 · LOGAN — `logan-nested-pokedex.html`
+## 19:00 KST · 17:00 HCMC · LOGAN — `logan-nested-pokedex.html`
 
 **Track:** RS002 · **Source:** log, 2026-08-16
 
@@ -194,7 +194,7 @@ his own double-lookup bug. Debug 2 is the empty loop body (`IndentationError`).
 
 ---
 
-## 21:00 · CLAIRE — `claire-keys-vs-attributes.html`
+## 21:00 KST · 19:00 HCMC · CLAIRE — `claire-keys-vs-attributes.html`
 
 **Track:** RS003 · **Source:** log, 2026-08-16
 
