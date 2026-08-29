@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MANIM — First Animation (Andy · 2026-08-29)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Manim · 매스 모션 16 · Andy · 29 Aug 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Lesson 1 of 16</div>
+    <div class="emoji">🎬</div>
+    <h1>Your First<br>Manim Animation</h1>
+    <p class="line" style="margin-top:.4em">By the end you will <b>type</b>, <b>run</b> and <b>watch</b> your own maths video.<br>12 small steps. Run after every version.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 circle</span><span class="chip">v2 colour</span>
+      <span class="chip">v3 morph</span><span class="chip">v4 motion</span>
+    </div>
+    <p class="bilingual">파이썬으로 수학 애니메이션을 만들어요</p>
+  </div>
+
+  <!-- 2 · Recap — Andy's own JavaScript -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Your JavaScript, 2 questions</h2>
+    <div class="recap-q">
+      <div class="q">1. You wrote <code>function updateCount(event)</code>. What does a function do?</div>
+      <details><summary>Show answer</summary><div class="ans">Holds steps. Runs only when something calls it.</div></details>
+      <div class="q" style="margin-top:.5em">2. Your reset button showed <code>NaN</code>. Why?</div>
+      <details><summary>Show answer</summary><div class="ans">Text minus a number. Not a Number.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 · Bridge JS → Python -->
+  <div class="slide">
+    <div class="pill purple">Bridge</div>
+    <h2>Same idea, new language</h2>
+<pre>function updateCount(event) {   <span class="com">// JavaScript</span>
+  ...
+}
+
+<span class="kw">def</span> <span class="fn">construct</span>(self):             <span class="com"># Python</span>
+    ...</pre>
+    <p class="line" style="margin-top:.5em">Same job: <b>hold steps until something calls it</b>.</p>
+    <p class="line">You called <code>updateCount</code> yourself. Manim calls <code>construct</code> for you.</p>
+    <p class="bilingual">함수는 그대로, 언어만 바뀌어요</p>
+  </div>
+
+  <!-- 4 · Concept — what Manim is (no code) -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>What is Manim?</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">you type Python</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s2">press Run</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s3">server draws frames</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s4">video plays 🎥</div>
+    </div>
+    <p class="line center" style="margin-top:.5em">A Python library that draws maths, then films it.</p>
+    <p class="bilingual center">수학 애니메이션 라이브러리</p>
+  </div>
+
+  <!-- 5 · Where it runs -->
+  <div class="slide">
+    <div class="pill">Setup</div>
+    <h2>Inside app.english-coding.co.uk</h2>
+    <ul class="check-list">
+      <li>Type Python in the editor. Press <b>Run</b>.</li>
+      <li>No terminal. No install. No commands.</li>
+      <li>Video comes back in the app: 10–60 seconds.</li>
+      <li>"queued" for a moment is normal, not a bug.</li>
+      <li>480p15 — small on purpose, so it renders fast.</li>
+    </ul>
+    <p class="bilingual">아이패드에서 그대로 돌아가요</p>
+  </div>
+
+  <!-- 6 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">Scene</span>
+      <span class="gloss">the stage your animation stands on</span>
+      <span class="ko">장면</span>
+
+      <span class="term">construct</span>
+      <span class="gloss">the function Manim calls for you</span>
+      <span class="ko">만들기</span>
+
+      <span class="term">self.play</span>
+      <span class="gloss">"run this animation now"</span>
+      <span class="ko">재생</span>
+
+      <span class="term">Create</span>
+      <span class="gloss">the animation that draws a shape</span>
+      <span class="ko">그리기</span>
+    </div>
+  </div>
+
+  <!-- 7 · Roadmap -->
+  <div class="slide center-all">
+    <p class="line big">The plan — 12 steps</p>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">⚪</div><div class="name">v1 · a circle draws</div><div class="ex">steps 1–5</div></div>
+      <div class="opt-card"><div class="ico">🔵</div><div class="name">v2 · colour and size</div><div class="ex">steps 6–7</div></div>
+      <div class="opt-card"><div class="ico">🟦</div><div class="name">v3 · circle → square</div><div class="ex">steps 8–9</div></div>
+      <div class="opt-card"><div class="ico">✨</div><div class="name">v4 · text and motion</div><div class="ex">steps 10–12</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">One file. It grows. You press Run after every version.</p>
+  </div>
+
+  <!-- 8 · v1 intro -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <h2>v1 — the shape of every Manim file</h2>
+<pre><span class="kw">from</span> manim <span class="kw">import</span> *          <span class="com"># 1 · bring Manim in</span>
+
+<span class="kw">class</span> <span class="fn">FirstScene</span>(Scene):     <span class="com"># 2 · the stage</span>
+    <span class="kw">def</span> <span class="fn">construct</span>(self):     <span class="com"># 3 · the steps</span>
+        circle = <span class="fn">Circle</span>()    <span class="com"># 4 · make a shape</span>
+        self.<span class="fn">play</span>(...)        <span class="com"># 5 · animate it</span></pre>
+    <p class="line" style="margin-top:.5em">Five lines. You type them one at a time.</p>
+    <p class="bilingual">틀은 언제나 똑같아요</p>
+  </div>
+
+  <!-- 9 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 12</div>
+    <h2>Bring Manim in</h2>
+    <div class="where">📍 Line 1 of an empty file. No spaces in front.</div>
+<pre><span class="hot">from manim import *</span></pre>
+    <div class="why">🟣 The <code>*</code> means "everything" — Circle, Create, BLUE, all of it.</div>
+    <div class="chk">✅ Check: star at the end, no full stop.</div>
+  </div>
+
+  <!-- 10 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 12</div>
+    <h2>Build the stage</h2>
+    <div class="where">📍 Line 3, after one blank line. No spaces in front.</div>
+<pre><span class="dim">from manim import *</span>
+<span class="dim"> </span>
+<span class="hot">class FirstScene(Scene):</span></pre>
+    <div class="why">🟣 <code>Scene</code> is Manim's stage. Your scene stands on it.</div>
+    <div class="chk">✅ Check: capital <code>S</code> in Scene, colon at the end.</div>
+  </div>
+
+  <!-- 11 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 12</div>
+    <h2>The function Manim calls</h2>
+    <div class="where">📍 Line 4, indented <b>4 spaces</b>.</div>
+<pre><span class="dim">class FirstScene(Scene):</span>
+<span class="hot">    def construct(self):</span></pre>
+    <div class="why">🟣 Like your <code>updateCount</code> — but you never type the call. Manim calls it.</div>
+    <div class="chk">✅ Check: 4 spaces, and a colon at the end.</div>
+  </div>
+
+  <!-- 12 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 12</div>
+    <h2>Make a circle</h2>
+    <div class="where">📍 Line 5, indented <b>8 spaces</b>.</div>
+<pre><span class="dim">    def construct(self):</span>
+<span class="hot">        circle = Circle()</span></pre>
+    <div class="why">🟣 Makes it. Does not show it. It waits off-stage.</div>
+    <div class="chk">✅ Check: capital <code>C</code>, and <code>()</code> after Circle.</div>
+  </div>
+
+  <!-- 13 · STEP 5 — first video -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 12</div>
+    <h2>Play it 🎥</h2>
+    <div class="where">📍 Line 6, same indent as <code>circle</code> — 8 spaces.</div>
+<pre><span class="dim">        circle = Circle()</span>
+<span class="hot">        self.play(Create(circle))</span></pre>
+    <div class="why">🟣 <code>Create</code> draws it. <code>self.play</code> plays it.</div>
+    <div class="chk">✅ v1 done. Press Run. 10–60 seconds — "queued" is normal.</div>
+    <p class="quiet" style="margin-top:.4em">Your video: a circle draws itself on a black stage. Small picture, real animation.</p>
+  </div>
+
+  <!-- 14 · Mistake 1 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake 1 — the missing <code>self.</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        play(Create(circle))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>NameError: name 'play' is not defined</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        self.play(Create(circle))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ the scene plays it</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>self</code> means <b>this scene</b>. Drop it and Python hunts for a loose <code>play</code> that does not exist.</p>
+    <p class="bilingual">self 빼먹으면 못 찾아요</p>
+  </div>
+
+  <!-- 15 · Mistake 2 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake 2 — flat body</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    def construct(self):
+    circle = Circle()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>IndentationError: expected an indented block after function definition on line 4</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>    def construct(self):
+        circle = Circle()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ 8 spaces, inside the function</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">JavaScript used <code>{ }</code>. Python uses <b>spaces</b>. The spaces are the brackets.</p>
+    <p class="bilingual">들여쓰기가 곧 문법이에요</p>
+  </div>
+
+  <!-- 16 · STEP 6 — v2 -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="steptag">STEP 6 / 12</div>
+    <h2>Colour and size</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>circle = Circle()</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        circle = Circle()</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        circle = Circle(color=BLUE, radius=2)</pre></div>
+    <div class="why">🟣 Words inside the brackets set the shape. <code>radius=2</code> = twice as big.</div>
+    <div class="chk">✅ Run — a big blue outline.</div>
+  </div>
+
+  <!-- 17 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 12</div>
+    <h2>Fill it in</h2>
+    <div class="where">📍 A new line <b>between</b> the two you have. Indent 8.</div>
+<pre><span class="dim">        circle = Circle(color=BLUE, radius=2)</span>
+<span class="hot">        circle.set_fill(BLUE, opacity=0.5)</span>
+<span class="dim">        self.play(Create(circle))</span></pre>
+    <div class="why">🟣 Fill it <b>before</b> you play it. <code>opacity=0.5</code> = half see-through.</div>
+    <div class="chk">✅ v2 done. Run — a fat blue circle with a soft fill.</div>
+  </div>
+
+  <!-- 18 · Mistake 3 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake 3 — shape is not animation</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        self.play(circle)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        self.play(Create(circle))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ Create wraps the shape in an animation</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>Circle()</code> is a <b>thing</b>. <code>Create(circle)</code> is a <b>doing</b>. <code>self.play</code> only takes doings.</p>
+    <p class="bilingual">도형 말고 애니메이션을 넣어요</p>
+  </div>
+
+  <!-- 19 · v3 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <h2>v3 — one shape becomes another</h2>
+    <div class="icon-row"><span>⚪</span><span>➡️</span><span>🟦</span></div>
+    <p class="line center" style="margin-top:.6em"><code>Transform(circle, square)</code><br>reads as: bend <b>this</b> into <b>that</b>.</p>
+    <p class="quiet center" style="margin-top:.4em">The circle does the bending. The square is only the target shape.</p>
+    <p class="bilingual center">원이 사각형으로 변해요</p>
+  </div>
+
+  <!-- 20 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 12</div>
+    <h2>Make the target</h2>
+    <div class="where">📍 A new line at the <b>bottom</b> of the file. Indent 8.</div>
+<pre><span class="dim">        self.play(Create(circle))</span>
+<span class="hot">        square = Square()</span></pre>
+    <div class="why">🟣 Same pattern as Circle. Made, not shown.</div>
+    <div class="chk">✅ Run — the video is unchanged. That is correct.</div>
+  </div>
+
+  <!-- 21 · STEP 9 — the wow -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 12</div>
+    <h2>The morph ✨</h2>
+    <div class="where">📍 The last line of the file. Indent 8.</div>
+<pre><span class="dim">        square = Square()</span>
+<span class="hot">        self.play(Transform(circle, square))</span></pre>
+    <div class="why">🟣 Two names in the brackets: <b>from</b>, then <b>to</b>.</div>
+    <div class="chk">✅ v3 done. Run — the circle bends into a square. That is the wow.</div>
+  </div>
+
+  <!-- 22 · Mistake 4 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake 4 — the blank video</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    def construct(self):
+        circle = Circle()
+        square = Square()</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ no error at all. The video is empty.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        circle = Circle()
+        self.play(Create(circle))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ now it reaches the stage</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Making a shape is not showing a shape. Nothing appears until <code>self.play</code> runs.</p>
+    <p class="bilingual">self.play 없으면 화면이 비어요</p>
+  </div>
+
+  <!-- 23 · STEP 10 — v4 -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="steptag">STEP 10 / 12</div>
+    <h2>Add words</h2>
+    <div class="where">📍 Bottom of the file. Two new lines, indent 8.</div>
+<pre><span class="dim">        self.play(Transform(circle, square))</span>
+<span class="hot">        title = Text("Math Motion")</span>
+<span class="hot">        self.play(Write(title))</span></pre>
+    <div class="why">🟣 <code>Write</code> draws text like a pen. Quotes around your words!</div>
+    <div class="chk">✅ Run — the words write themselves over the square.</div>
+  </div>
+
+  <!-- 24 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 12</div>
+    <h2>Slide it up</h2>
+    <div class="where">📍 The next line down. Indent 8.</div>
+<pre><span class="dim">        self.play(Write(title))</span>
+<span class="hot">        self.play(title.animate.shift(UP * 3))</span></pre>
+    <div class="why">🟣 <code>.animate</code> turns a change into an animation. <code>UP * 3</code> = three units up.</div>
+    <div class="chk">✅ Run — the text slides up, clear of the shape.</div>
+  </div>
+
+  <!-- 25 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 12</div>
+    <h2>Grow it</h2>
+    <div class="where">📍 The last line of the file. Indent 8.</div>
+<pre><span class="dim">        self.play(title.animate.shift(UP * 3))</span>
+<span class="hot">        self.play(circle.animate.scale(2))</span></pre>
+    <div class="why">🟣 Still called <code>circle</code>. Transform changed its <b>look</b>, not its <b>name</b>.</div>
+    <div class="chk">✅ v4 done. Run — the square doubles in size. 🎉</div>
+  </div>
+
+  <!-- 26 · Full file -->
+  <div class="slide">
+    <div class="pill">Read back<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your whole file</h2>
+<pre class="tiny"><span class="kw">from</span> manim <span class="kw">import</span> *
+
+<span class="kw">class</span> <span class="fn">FirstScene</span>(Scene):
+    <span class="kw">def</span> <span class="fn">construct</span>(self):
+        circle = <span class="fn">Circle</span>(color=BLUE, radius=<span class="num">2</span>)
+        circle.<span class="fn">set_fill</span>(BLUE, opacity=<span class="num">0.5</span>)
+        self.<span class="fn">play</span>(<span class="fn">Create</span>(circle))
+        square = <span class="fn">Square</span>()
+        self.<span class="fn">play</span>(<span class="fn">Transform</span>(circle, square))
+        title = <span class="fn">Text</span>(<span class="str">"Math Motion"</span>)
+        self.<span class="fn">play</span>(<span class="fn">Write</span>(title))
+        self.<span class="fn">play</span>(title.animate.<span class="fn">shift</span>(UP * <span class="num">3</span>))
+        self.<span class="fn">play</span>(circle.animate.<span class="fn">scale</span>(<span class="num">2</span>))</pre>
+    <p class="quiet" style="margin-top:.4em">Five <code>self.play</code> lines = five animations, in order, top to bottom.</p>
+  </div>
+
+  <!-- 27 · Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Type it yourself</h2>
+    <ul class="check-list">
+      <li>v1 — import, class, construct, Circle, Create</li>
+      <li>v2 — <code>color=BLUE, radius=2</code> then <code>set_fill</code></li>
+      <li>v3 — <code>Square()</code> then <code>Transform(circle, square)</code></li>
+      <li>v4 — <code>Text</code>, <code>Write</code>, <code>shift</code>, <code>scale</code></li>
+      <li>Press Run after every version. Never two at once.</li>
+    </ul>
+  </div>
+
+  <!-- 28 · Stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Swap <code>BLUE</code> for <code>RED</code>, <code>YELLOW</code> or <code>PURPLE</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Swap <code>Square()</code> for <code>Triangle()</code> or <code>Star()</code>. One word, whole new morph.</div>
+      <div class="item"><span class="lvl">★★★</span>At the bottom type <code>class SecondScene(Scene):</code>, then its own <code>construct</code> with one shape. The server plays the <b>last</b> scene.</div>
+    </div>
+  </div>
+
+  <!-- 29 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">Which line puts a shape on the screen — <code>circle = Circle()</code> or <code>self.play(Create(circle))</code>?</p>
+      <p class="bilingual" style="margin-top:.4em">화면에 나오게 하는 줄은?</p>
+    </div>
+  </div>
+
+  <!-- 30 · Close & Bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Type it.<br>Run it.<br>Watch it move.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Lesson 2 of 16: coordinates — put every shape exactly where you want it.</p>
+    <p class="bilingual">다음 시간: 좌표로 위치 정하기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
