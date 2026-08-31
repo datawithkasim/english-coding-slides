@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intro to Pygame — Your First Window (Logan · 2026-08-30)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Pygame · Intro · Logan · 30 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pygame · Week 1</div>
+    <div class="emoji">🚀</div>
+    <h1>Your First<br>Game Window</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today Python stops <span class="sub">printing</span> and starts <span class="sub">drawing</span>.</p>
+    <p class="bilingual">오늘부터 화면에 그려요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Logan's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your last lesson</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your Pokedex</div>
+      <div class="q">1. You stored the inner dictionary in <code>search</code>. So what gets the moves?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>search["moves"]</code> — you were already inside. 👏</div></details>
+      <div class="q" style="margin-top:.5em">2. Why does a key need quotes?</div>
+      <details><summary>Show answer</summary><div class="ans">Quotes = plain text. No quotes = a variable name.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Three lines. Then the file ends.</div>
+<pre><span class="kw">import</span> pygame
+pygame.<span class="fn">init</span>()
+screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))</pre>
+      <details><summary>Reveal</summary><div class="ans">A window flashes — then vanishes. Python ran out of lines.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">pygame</span>
+      <span class="gloss">a toolbox for making games</span>
+      <span class="ko">파이게임 · 게임 도구상자</span>
+
+      <span class="term">screen</span>
+      <span class="gloss">the window you draw on</span>
+      <span class="ko">화면 · 그리는 곳</span>
+
+      <span class="term">game loop</span>
+      <span class="gloss">code that runs again every frame</span>
+      <span class="ko">게임 루프</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — coordinates, NO code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>The window is a grid</h2>
+    <svg viewBox="0 0 420 200" style="width:100%;max-height:34vh;display:block;margin:.3em auto">
+      <rect x="30" y="16" width="290" height="168" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+      <line x1="30" y1="16" x2="320" y2="16" stroke="#ff7849" stroke-width="3"/>
+      <line x1="30" y1="16" x2="30" y2="184" stroke="#ff7849" stroke-width="3"/>
+      <circle cx="30" cy="16" r="6" fill="#ff7849"/>
+      <text x="40" y="36" fill="#ff7849" font-size="15" font-weight="700">(0, 0)</text>
+      <text x="150" y="11" fill="#ff7849" font-size="14" font-weight="700">x → 800</text>
+      <text x="330" y="105" fill="#ff7849" font-size="14" font-weight="700">y ↓ 600</text>
+      <rect x="180" y="100" width="34" height="24" rx="4" fill="#4ade80"/>
+      <text x="176" y="146" fill="#f5f5f5" font-size="14" font-weight="700">(180, 100)</text>
+    </svg>
+    <p class="center">Zero is the <b>top-left</b>. x goes across. y goes <b>down</b>, not up.</p>
+    <p class="bilingual center">0은 왼쪽 위, y는 아래로</p>
+  </div>
+
+  <!-- Slot 6: Concept 2 — the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept 💡</div>
+    <h2>A game repeats forever</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🧹</div><div class="name">1 · wipe</div><div class="ex">paint the screen blank</div></div>
+      <div class="opt-card"><div class="ico">🎨</div><div class="name">2 · draw</div><div class="ex">put the shapes down</div></div>
+      <div class="opt-card"><div class="ico">👀</div><div class="name">3 · show</div><div class="ex">flip it to the window</div></div>
+      <div class="opt-card"><div class="ico">🔁</div><div class="name">4 · repeat</div><div class="ex">60 times a second</div></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Your Pokedex ran once. A game never stops.</p>
+    <p class="bilingual center">게임은 계속 반복해요</p>
+  </div>
+
+  <!-- Slot 7: Today's plan -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Today's plan 🗺️</div>
+    <h2>Four tiny versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">v1 · a flash</div><div class="ex">window opens, closes</div></div>
+      <div class="opt-card"><div class="ico">🪟</div><div class="name">v2 · it stays</div><div class="ex">the game loop</div></div>
+      <div class="opt-card"><div class="ico">🟩</div><div class="name">v3 · a ship</div><div class="ex">fill + draw</div></div>
+      <div class="opt-card"><div class="ico">⏱️</div><div class="name">v4 · smooth</div><div class="ex">60 frames a second</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Every version runs. Each one adds lines.</p>
+  </div>
+
+  <!-- Slot 8: Run (Worked Example) — v1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Run ▶</div>
+    <h2>v1 — open a window</h2>
+<pre><span class="kw">import</span> pygame
+pygame.<span class="fn">init</span>()
+
+screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))
+pygame.display.<span class="fn">set_caption</span>(<span class="str">"Logan Game"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">A window blinks open and shuts. Too fast to see.</div>
+    </div>
+  </div>
+
+  <!-- Slot 9: Zoom in -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Read it out loud</h2>
+<pre>screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))</pre>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">800</span><span class="val">wide · across</span></div>
+      <div class="varbox"><span class="name">600</span><span class="val">tall · down</span></div>
+      <div class="varbox"><span class="name">screen</span><span class="val">holds the window</span></div>
+    </div>
+    <p class="center">Same order as the grid: across first, then down.</p>
+    <p class="bilingual center">가로 먼저, 세로 다음</p>
+  </div>
+
+  <!-- Slot 10: Common Mistake — the vanishing window -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The window that vanishes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ flashes</span>
+<pre>screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>,<span class="num">600</span>))</pre>
+        <p>File ends → Python quits → window closes.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ stays</span>
+<pre><span class="kw">while</span> running:
+    pygame.display.<span class="fn">flip</span>()</pre>
+        <p>The loop never ends, so the window stays.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">반복문이 창을 살려둬요</p>
+  </div>
+
+  <!-- Slot 11: Build v2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Build v2 🪟</div>
+    <h2>v2 — keep it open</h2>
+<pre><span style="display:block;opacity:.45">screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))</span><span style="display:block;background:rgba(56,208,224,.13)">running = <span class="kw">True</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)"><span class="kw">while</span> running:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.<span class="fn">get</span>():<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        <span class="kw">if</span> event.type == pygame.QUIT:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">            running = <span class="kw">False</span><span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    pygame.display.<span class="fn">flip</span>()<span class="activity-tag">NEW</span></span></pre>
+    <p style="margin-top:.5em">📍 Under the <code>set_caption</code> line. Run it — the window stays. The X button now closes it.</p>
+  </div>
+
+  <!-- Slot 12: Investigate (Animated Trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>x is just a number</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">x · across →</div>
+        <div class="cg-track"><div class="cg-sprite">🚀</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">x</span> = <span class="cg-val"><span>50</span><span>250</span><span>450</span><span>650</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Bigger x → further right. Bigger y → further down.</p>
+  </div>
+
+  <!-- Slot 13: Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Where does it land?</h2>
+<pre><span class="com"># window is 800 wide, 600 tall</span>
+pygame.draw.<span class="fn">rect</span>(screen, GREEN, (x, y, <span class="num">40</span>, <span class="num">40</span>))</pre>
+    <div class="trace-grid">
+      <div class="cell head">x</div>
+      <div class="cell head">y</div>
+      <div class="cell head">Corner of the window</div>
+
+      <div class="cell">0</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">top-left</span></details></div>
+
+      <div class="cell">760</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">top-right</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell">560</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">bottom-left</span></details></div>
+
+      <div class="cell">400</div>
+      <div class="cell">300</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">the middle</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 14: Build v3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Build v3 🟩</div>
+    <h2>v3 — draw a ship</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">BLACK = (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">GREEN = (<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>)<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45"><span class="kw">while</span> running:</span><span style="display:block;opacity:.45">    <span class="com"># the event lines stay the same</span></span><span style="display:block;background:rgba(56,208,224,.13)">    screen.<span class="fn">fill</span>(BLACK)<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (<span class="num">380</span>, <span class="num">500</span>, <span class="num">40</span>, <span class="num">40</span>))<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45">    pygame.display.<span class="fn">flip</span>()</span></pre>
+    <p style="margin-top:.5em">📍 Colours go at the top, above the loop. The two draw lines go inside the loop, above <code>flip()</code>.</p>
+  </div>
+
+  <!-- Slot 15: DEBUG 1 — Logan's own empty-body bug -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — the empty loop</h2>
+<pre><span class="kw">while</span> running:
+
+pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="debug-card"><div class="err">IndentationError: expected an indented block</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A loop needs at least one line <b>indented</b> under it. Push <code>flip()</code> in by four spaces.</p>
+      <p class="bilingual">반복문 안은 비워둘 수 없어요</p>
+    </details>
+  </div>
+
+  <!-- Slot 16: DEBUG 2 — Logan's own quotes-vs-variable bug -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — the quoted colour</h2>
+<pre>BLACK = (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>)
+
+screen.<span class="fn">fill</span>(<span class="str">"BLACK"</span>)</pre>
+    <div class="debug-card"><div class="err">ValueError: invalid color argument</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Quotes mean the five letters B-L-A-C-K. Drop them to reach the variable: <code>screen.fill(BLACK)</code>.</p>
+      <p class="bilingual">따옴표 빼야 변수예요</p>
+    </details>
+  </div>
+
+  <!-- Slot 17: DEBUG 3 — no flip -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — the black window</h2>
+<pre><span class="kw">while</span> running:
+    screen.<span class="fn">fill</span>(BLACK)
+    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (<span class="num">380</span>, <span class="num">500</span>, <span class="num">40</span>, <span class="num">40</span>))</pre>
+    <div class="debug-card"><div class="err">No crash. No error. The window is empty.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">You painted, but never showed it. Add <code>pygame.display.flip()</code> last, inside the loop.</p>
+      <p class="bilingual">flip() 해야 보여요</p>
+    </details>
+  </div>
+
+  <!-- Slot 18: Build v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Build v4 ⏱️</div>
+    <h2>v4 — steady speed</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">clock = pygame.time.<span class="fn">Clock</span>()<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.45"><span class="kw">while</span> running:</span><span style="display:block;opacity:.45">    screen.<span class="fn">fill</span>(BLACK)</span><span style="display:block;opacity:.45">    pygame.draw.<span class="fn">rect</span>(screen, GREEN, (<span class="num">380</span>, <span class="num">500</span>, <span class="num">40</span>, <span class="num">40</span>))</span><span style="display:block;opacity:.45">    pygame.display.<span class="fn">flip</span>()</span><span style="display:block;background:rgba(56,208,224,.13)">    clock.<span class="fn">tick</span>(<span class="num">60</span>)<span class="activity-tag">NEW</span></span></pre>
+    <p style="margin-top:.5em">📍 <code>clock =</code> goes above the loop. <code>clock.tick(60)</code> is the last line inside it. Now the loop runs 60 times a second.</p>
+  </div>
+
+  <!-- Slot 19: Modify 1 (easy fill-blank) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>screen = pygame.display.<span class="fn">set_mode</span>((____, ____))  <span class="com"># 640 wide, 480 tall</span>
+
+screen.<span class="fn">fill</span>(____)          <span class="com"># the colour variable, no quotes</span>
+pygame.display.____()      <span class="com"># show it</span></pre>
+    <p style="margin-top:.6em"><b>Hint:</b> across comes first.</p>
+  </div>
+
+  <!-- Slot 20: Modify 2 (harder) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — move the ship</h2>
+<pre><span class="com"># window 800 x 600, ship 40 x 40</span>
+<span class="com"># put the ship in the exact middle</span>
+
+pygame.draw.<span class="fn">rect</span>(screen, GREEN, (____, ____, <span class="num">40</span>, <span class="num">40</span>))</pre>
+    <p style="margin-top:.5em">Half of 800 is 400 — then step back half a ship.</p>
+    <p class="bilingual">배 크기의 절반만큼 빼요</p>
+  </div>
+
+  <!-- Slot 21: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. In pygame, <code>y = 500</code> is…</div>
+      <div class="opts">
+        <details><summary>A. near the top</summary><div class="ans">No — y grows downward.</div></details>
+        <details><summary>B. near the bottom</summary><div class="ans">✓ 0 is the top.</div></details>
+        <details><summary>C. on the left</summary><div class="ans">No — that is x.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Remove <code>pygame.display.flip()</code>. You get…</div>
+      <div class="opts">
+        <details><summary>A. a crash</summary><div class="ans">No error appears.</div></details>
+        <details><summary>B. an empty window</summary><div class="ans">✓ Painted, never shown.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 22: Code Talk Frame — his promise: check what a variable holds -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>What is inside it?</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>screen</code> holds <span class="blank"></span>, so <code>screen.fill(BLACK)</code> <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"<code>BLACK</code> holds <span class="blank"></span>, so quotes would break it."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 23: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in your file</h2>
+    <ul class="check-list">
+      <li>New file: <code>game.py</code></li>
+      <li><code>import pygame</code> then <code>pygame.init()</code></li>
+      <li><code>set_mode((800, 600))</code> — run. It flashes</li>
+      <li>Add the loop and the QUIT event. Run. It stays</li>
+      <li>Add <code>fill</code> and <code>draw.rect</code>. Run. A ship</li>
+      <li>Add <code>clock.tick(60)</code> last</li>
+    </ul>
+  </div>
+
+  <!-- Slot 24: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change the window to 400 x 400. Run it.</div>
+      <div class="item"><span class="lvl">★★</span>Add a second rectangle in a new colour.</div>
+      <div class="item"><span class="lvl">★★★</span>Put the ship in the bottom-right corner. Work out the numbers.</div>
+    </div>
+  </div>
+
+  <!-- Slot 25: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one full sentence</div>
+      <p style="margin-top:.4em">Why does the window close on its own without a <code>while</code> loop?</p>
+      <p class="bilingual" style="margin-top:.4em">문장으로 설명해요</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- Slot 26: OPTIONAL — DEBUG 4, no event loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 4 — the frozen window</h2>
+<pre>running = <span class="kw">True</span>
+<span class="kw">while</span> running:
+    screen.<span class="fn">fill</span>(BLACK)
+    pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="debug-card"><div class="err">No crash. The X button does nothing. "Not Responding".</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Nobody is listening. Add the <code>for event in pygame.event.get():</code> block so QUIT can set <code>running = False</code>.</p>
+      <p class="bilingual">이벤트를 들어야 닫혀요</p>
+    </details>
+  </div>
+
+  <!-- Slot 27: OPTIONAL — DEBUG 5, no init -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 5 — nothing starts</h2>
+<pre><span class="kw">import</span> pygame
+
+screen = pygame.display.<span class="fn">set_mode</span>((<span class="num">800</span>, <span class="num">600</span>))</pre>
+    <div class="debug-card"><div class="err">pygame.error: video system not initialized</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Switch the toolbox on first. Add <code>pygame.init()</code> under the import.</p>
+      <p class="bilingual">먼저 init() 해야 해요</p>
+    </details>
+  </div>
+
+  <!-- Slot 28: OPTIONAL — harder trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Read the rectangle</h2>
+<pre>pygame.draw.<span class="fn">rect</span>(screen, GREEN, (<span class="num">380</span>, <span class="num">500</span>, <span class="num">40</span>, <span class="num">40</span>))</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">slot</div>
+      <div class="cell head">1st</div>
+      <div class="cell head">2nd</div>
+      <div class="cell head">3rd</div>
+      <div class="cell head">4th</div>
+
+      <div class="cell">value</div>
+      <div class="cell">380</div>
+      <div class="cell">500</div>
+      <div class="cell">40</div>
+      <div class="cell">40</div>
+
+      <div class="cell">means</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">x · across</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">y · down</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">width</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">height</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Position first, then size. Always that order.</p>
+  </div>
+
+  <!-- Slot 29: OPTIONAL — Modify 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Give it a name variable</h2>
+<pre>ship_x = <span class="num">380</span>
+ship_y = <span class="num">500</span>
+
+pygame.draw.<span class="fn">rect</span>(screen, GREEN, (____, ____, <span class="num">40</span>, <span class="num">40</span>))</pre>
+    <p style="margin-top:.5em">Now change only <code>ship_x</code> to 100 and run. One number, one place.</p>
+    <p class="bilingual">변수 하나만 바꿔요</p>
+  </div>
+
+  <!-- Slot 30: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="emoji">🚀</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Wipe. Draw.<br>Show. Repeat.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: the ship moves with the arrow keys.</p>
+    <p class="bilingual">다음 시간: 방향키로 움직여요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

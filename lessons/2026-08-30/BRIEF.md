@@ -158,7 +158,12 @@ Common Mistake = the 30-lines-instead-of-a-loop habit: show the wall of repeated
 
 ---
 
-## 19:00 KST · 17:00 HCMC · LOGAN — `logan-nested-pokedex.html`
+## 19:00 KST · 17:00 HCMC · LOGAN — `logan-pygame-window.html`
+
+> **OVERRIDE (30 Aug):** Kasim switched Logan to **Intro to Pygame** for this
+> lesson. The deck to teach is `logan-pygame-window.html`.
+> `logan-nested-pokedex.html` stays in the folder unused — the section below is
+> the original plan, kept because its recap facts and △ mistakes feed the new deck.
 
 **Track:** RS002 · **Source:** log, 2026-08-16
 
