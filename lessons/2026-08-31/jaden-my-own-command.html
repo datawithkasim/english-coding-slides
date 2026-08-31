@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JADEN — My Own Command (register it, then type it)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Step-walkthrough helpers lifted from lessons/2026-08-29/dewy-agent-loops.html
+     and lessons/2026-08-25/jason-finish-the-game.html — no new components. */
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft · Agent Python · Jaden · 31 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Today</div>
+    <div class="emoji">🌸</div>
+    <h1>My Own<br>Command</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">register</span> + <span class="sub">type</span> + <span class="sub">plant</span></p>
+    <div class="iter-row" style="margin-top:.7em">
+      <span class="chip on">v1 one flower</span><span class="chip">v2 four calls</span>
+      <span class="chip">v3 step between</span><span class="chip">v4 a whole row</span>
+    </div>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Jaden's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time — fence and flower</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which line turned each fence corner?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>agent.turn(LEFT_TURN)</code></div></details>
+      <div class="q" style="margin-top:.5em">What did you name your own function?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>def flower():</code></div></details>
+    </div>
+    <p class="quiet" style="margin-top:.4em">You found the missing <code>agent.move(UP, 1)</code> yourself. 👏</p>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) — the headline misconception IS the hook -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>You type <code>run</code>. What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first — then reveal</div>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.set_block_or_item</span>(RED_FLOWER, <span class="num">1</span>)
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(<span class="str">"flower"</span>, flower)</pre>
+      <details><summary>Reveal output</summary><div class="ans">Nothing. No command named <b>run</b> exists here. The agent just stands there.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>New words today</h2>
+    <div class="vocab-table">
+      <span class="term">register</span>
+      <span class="gloss">link a chat word to your function</span>
+      <span class="ko"></span>
+      <span class="term">chat word</span>
+      <span class="gloss">what you type in the chat box</span>
+      <span class="ko"></span>
+      <span class="term">function name</span>
+      <span class="gloss">the word right after <code>def</code></span>
+      <span class="ko"></span>
+      <span class="term">call</span>
+      <span class="gloss">make the function actually run</span>
+      <span class="ko"></span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — doorbells, NO code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Chat is a doorbell 🔔</h2>
+    <svg viewBox="0 0 860 300" style="width:100%;max-width:980px;margin:.2em auto 0;display:block" role="img" aria-label="Two doorbells: flower rings, run does not">
+      <rect x="15" y="15" width="400" height="270" rx="20" fill="#141b27" stroke="#50fa7b" stroke-width="4"/>
+      <text x="215" y="55" text-anchor="middle" font-size="22" fill="#8a97b8" font-family="Inter,sans-serif">you press the button</text>
+      <rect x="95" y="72" width="240" height="58" rx="29" fill="#232b3a" stroke="#50fa7b" stroke-width="3"/>
+      <text x="215" y="111" text-anchor="middle" font-size="30" fill="#50fa7b" font-family="monospace">"flower"</text>
+      <line x1="215" y1="140" x2="215" y2="188" stroke="#50fa7b" stroke-width="5"/>
+      <polygon points="215,204 203,182 227,182" fill="#50fa7b"/>
+      <rect x="55" y="212" width="320" height="58" rx="14" fill="#182028" stroke="#50fa7b" stroke-width="3"/>
+      <text x="215" y="248" text-anchor="middle" font-size="23" fill="#e8eef6" font-family="Inter,sans-serif">your flower code answers ✓</text>
+
+      <rect x="445" y="15" width="400" height="270" rx="20" fill="#141b27" stroke="#ff5555" stroke-width="4"/>
+      <text x="645" y="55" text-anchor="middle" font-size="22" fill="#8a97b8" font-family="Inter,sans-serif">you press the button</text>
+      <rect x="525" y="72" width="240" height="58" rx="29" fill="#232b3a" stroke="#ff5555" stroke-width="3"/>
+      <text x="645" y="111" text-anchor="middle" font-size="30" fill="#ff5555" font-family="monospace">"run"</text>
+      <line x1="645" y1="140" x2="645" y2="188" stroke="#ff5555" stroke-width="5"/>
+      <polygon points="645,204 633,182 657,182" fill="#ff5555"/>
+      <rect x="485" y="212" width="320" height="58" rx="14" fill="#182028" stroke="#ff5555" stroke-width="3"/>
+      <text x="645" y="248" text-anchor="middle" font-size="23" fill="#e8eef6" font-family="Inter,sans-serif">nobody is home ✗</text>
+    </svg>
+    <p class="line" style="margin-top:.4em">Only the word you <b>registered</b> rings your bell.</p>
+  </div>
+
+  <!-- Slot 6: Concept part 2 — the name tag -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept</div>
+    <h2>The name tag on your function</h2>
+    <svg viewBox="0 0 860 260" style="width:100%;max-width:960px;margin:0 auto;display:block" role="img" aria-label="A name tag reading flower hangs on the flower function">
+      <polygon points="30,30 230,30 268,72 230,114 30,114" fill="#232b3a" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="130" y="83" text-anchor="middle" font-size="30" fill="#f1fa8c" font-family="monospace">"flower"</text>
+      <text x="130" y="145" text-anchor="middle" font-size="20" fill="#8a97b8" font-family="Inter,sans-serif">the chat word</text>
+      <line x1="268" y1="72" x2="360" y2="110" stroke="#f1fa8c" stroke-width="3" stroke-dasharray="8 7"/>
+      <rect x="360" y="60" width="470" height="140" rx="18" fill="#141b27" stroke="#50fa7b" stroke-width="4"/>
+      <text x="390" y="112" font-size="27" fill="#50fa7b" font-family="monospace">def flower():</text>
+      <text x="420" y="155" font-size="21" fill="#8a97b8" font-family="monospace">agent.place(FORWARD)</text>
+      <text x="595" y="232" text-anchor="middle" font-size="20" fill="#8a97b8" font-family="Inter,sans-serif">the function that answers</text>
+    </svg>
+    <p class="line" style="margin-top:.3em">One line ties the tag on: <code>player.on_chat("flower", flower)</code></p>
+  </div>
+
+  <!-- Slot 7: Run v1 — worked example -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Run it</div>
+    <h2>v1 — one flower</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.set_block_or_item</span>(RED_FLOWER, <span class="num">1</span>)
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(<span class="str">"flower"</span>, flower)</pre>
+    <div class="where">WHERE · a new Python file. Line 1. Nothing above it.</div>
+    <div class="why">WHY · <code>RED_FLOWER</code> goes into slot 1, then <code>place</code> puts one down.</div>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ In the world</div>
+      <div>Type <b>flower</b> in chat → 🌸 one red flower in front of the agent.</div>
+    </div>
+  </div>
+
+  <!-- Slot 8: Investigate (animated trace) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Watch it!</div>
+    <h2>Chat word → your code</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">💬 you type <b>flower</b></div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">player.on_chat("flower", flower)</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">flower() runs</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">🌸 one flower placed</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Four steps, every time. Miss step 1 and nothing else fires.</p>
+  </div>
+
+  <!-- Slot 9: Trace Activity — which word fires what -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the table</h2>
+<pre><span class="fn">player.on_chat</span>(<span class="str">"flower"</span>, flower)</pre>
+    <div class="trace-grid">
+      <div class="cell head">you type in chat</div>
+      <div class="cell head">does it match?</div>
+      <div class="cell head">what happens</div>
+
+      <div class="cell"><code>flower</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🌸 placed</span></details></div>
+
+      <div class="cell"><code>run</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+
+      <div class="cell"><code>Flower</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+
+      <div class="cell"><code>flowers</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 10: Direction drill A — the picture -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Concept</div>
+    <h2>FORWARD is not UP</h2>
+    <svg viewBox="0 0 860 330" style="width:100%;max-width:960px;margin:0 auto;display:block" role="img" aria-label="forward runs along the ground, up climbs into the sky">
+      <rect x="20" y="250" width="820" height="16" rx="6" fill="#3aa76a"/>
+      <rect x="60" y="192" width="56" height="56" rx="10" fill="#38d0e0"/>
+      <text x="88" y="230" text-anchor="middle" font-size="26" fill="#0a0d13" font-family="monospace">A</text>
+      <line x1="126" y1="220" x2="700" y2="220" stroke="#50fa7b" stroke-width="7"/>
+      <polygon points="730,220 700,204 700,236" fill="#50fa7b"/>
+      <text x="400" y="198" text-anchor="middle" font-size="30" fill="#50fa7b" font-family="monospace">FORWARD</text>
+      <text x="400" y="296" text-anchor="middle" font-size="22" fill="#8a97b8" font-family="Inter,sans-serif">along the ground</text>
+      <line x1="88" y1="180" x2="88" y2="70" stroke="#ff79c6" stroke-width="7"/>
+      <polygon points="88,42 72,72 104,72" fill="#ff79c6"/>
+      <text x="180" y="72" font-size="30" fill="#ff79c6" font-family="monospace">UP</text>
+      <text x="180" y="106" font-size="22" fill="#8a97b8" font-family="Inter,sans-serif">into the sky</text>
+    </svg>
+    <p class="line" style="margin-top:.2em"><code>agent.move(FORWARD, 5)</code> walks. <code>agent.move(UP, 5)</code> climbs.</p>
+  </div>
+
+  <!-- Slot 11: Direction drill B — predict where it lands -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Where does the agent land?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">line</div>
+      <div class="cell head">ground steps</div>
+      <div class="cell head">sky steps</div>
+      <div class="cell head">ends up</div>
+
+      <div class="cell"><code>move(FORWARD, 5)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5 ahead</span></details></div>
+
+      <div class="cell"><code>move(UP, 7)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">7 in the air</span></details></div>
+
+      <div class="cell"><code>move(FORWARD, 3)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3 ahead</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Read the direction before you read the number.</p>
+  </div>
+
+  <!-- Slot 12: Common Mistake — the headline -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Common mistake</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>registered: <span class="str">"flower"</span>
+
+chat: <span class="kw">run</span></pre>
+        <p>The words do not match. Nothing happens.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>registered: <span class="str">"flower"</span>
+
+chat: <span class="fn">flower</span></pre>
+        <p>Same word both times. 🌸 appears.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 13: Debug 1 — registered "run", he types flower -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — nothing happens</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(<span class="str">"run"</span>, flower)</pre>
+    <div class="debug-card"><div class="err">chat: flower → no flower, no error, nothing.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The bell is labelled <code>"run"</code>. Either type <code>run</code>, or change the quotes to <code>"flower"</code>.</p>
+    </details>
+  </div>
+
+  <!-- Slot 14: Debug 2 — UP where FORWARD was meant -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — a tower, not a path</h2>
+<pre><span class="kw">def</span> <span class="fn">garden</span>():
+    <span class="fn">flower</span>()
+    <span class="fn">agent.move</span>(UP, <span class="num">7</span>)
+    <span class="fn">flower</span>()</pre>
+    <div class="debug-card"><div class="err">The agent climbs 7 blocks. Two flowers, straight up in the sky. 🗼</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Swap the direction: <code>agent.move(FORWARD, 1)</code>. Sky → ground.</p>
+    </details>
+  </div>
+
+  <!-- Slot 15: Debug 3 — def Flower() vs flower -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — red squiggle</h2>
+<pre><span class="kw">def</span> <span class="fn">Flower</span>():
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(<span class="str">"flower"</span>, flower)</pre>
+    <div class="debug-card"><div class="err">NameError: name 'flower' is not defined</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Big <code>F</code> and small <code>f</code> are two different names. Make line 1 read <code>def flower():</code>.</p>
+    </details>
+  </div>
+
+  <!-- Slot 16: Run v2 — four calls -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — call it four times</h2>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>def flower():
+    agent.set_block_or_item(RED_FLOWER, 1)
+    agent.place(FORWARD)
+player.on_chat("flower", flower)</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre><span class="dim">def flower():</span><span class="dim">    agent.set_block_or_item(RED_FLOWER, 1)</span><span class="dim">    agent.place(FORWARD)</span><span class="hot"><span class="kw">def</span> <span class="fn">garden</span>():</span><span class="hot">    <span class="fn">flower</span>()</span><span class="hot">    <span class="fn">flower</span>()</span><span class="hot">    <span class="fn">flower</span>()</span><span class="hot">    <span class="fn">flower</span>()</span><span class="dim">player.on_chat("flower", flower)</span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"garden"</span>, garden)</span></pre></div>
+    <div class="where">WHERE · after <code>agent.place(FORWARD)</code>, above <code>player.on_chat("flower", flower)</code>.</div>
+    <div class="why">WHY · a second bell. Two chat words now live at once.</div>
+  </div>
+
+  <!-- Slot 17: Run v2 — the output -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — what you see</h2>
+    <div class="output-box">
+      <div class="out-label">▸ In the world</div>
+      <div>chat: <b>garden</b> → four flowers land on the <b>same</b> square.</div>
+      <div>You only see one. 🌸</div>
+    </div>
+    <p class="line" style="margin-top:.5em">The agent never moved. Four flowers, one spot.</p>
+    <p class="quiet" style="margin-top:.3em">Also try chat: <b>flower</b> — the old bell still works.</p>
+  </div>
+
+  <!-- Slot 18: Run v3 — step between -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Run it</div>
+    <h2>v3 — step between each flower</h2>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>def garden():
+    flower()
+    flower()
+    flower()
+    flower()</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre><span class="dim">def garden():</span><span class="dim">    flower()</span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</span><span class="dim">    flower()</span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</span><span class="dim">    flower()</span><span class="hot">    <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</span><span class="dim">    flower()</span></pre></div>
+    <div class="where">WHERE · inside <code>def garden():</code>, one new line after each <code>flower()</code>.</div>
+    <div class="why">WHY · <code>FORWARD</code>, not <code>UP</code> — the row runs along the ground.</div>
+  </div>
+
+  <!-- Slot 19: Run v3 — the output -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Run it</div>
+    <h2>v3 — what you see</h2>
+    <div class="output-box">
+      <div class="out-label">▸ In the world</div>
+      <div>🌸🌸🌸🌸 &nbsp; four flowers in a straight line</div>
+    </div>
+    <p class="line" style="margin-top:.5em">Plant. Step. Plant. Step. The same pair, four times.</p>
+  </div>
+
+  <!-- Slot 20: Run v4 — the row along the fence -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Run it</div>
+    <h2>v4 — the whole fence side</h2>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>def garden():
+    flower()
+    agent.move(FORWARD, 1)
+    flower()
+    agent.move(FORWARD, 1)
+    ... eight more lines</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre><span class="dim">def garden():</span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):</span><span class="hot">        <span class="fn">flower</span>()</span><span class="hot">        <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)</span></pre></div>
+    <div class="where">WHERE · delete every line inside <code>def garden():</code>, type these three.</div>
+    <div class="why">WHY · <code>range(10)</code> repeats the pair ten times — one flower per fence block.</div>
+  </div>
+
+  <!-- Slot 21: Modify 1 — change the chat word -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blank</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(<span class="str">"____"</span>, flower)</pre>
+    <p style="margin-top:.5em">Goal: the bell is now called <b>rose</b>.</p>
+    <details class="debug-card">
+      <summary>Show the answer</summary>
+      <p style="margin-top:.4em">Quotes: <code>"rose"</code>. In chat you type <code>rose</code>. The function name <code>flower</code> does not change.</p>
+    </details>
+  </div>
+
+  <!-- Slot 22: Modify 2 — a second command -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — a second bell</h2>
+<pre><span class="kw">def</span> <span class="fn">tree</span>():
+    <span class="fn">agent.set_block_or_item</span>(OAK_SAPLING, <span class="num">2</span>)
+    <span class="fn">agent.place</span>(____)
+<span class="fn">player.on_chat</span>(<span class="str">"____"</span>, ____)</pre>
+    <p style="margin-top:.5em">Goal: chat <b>tree</b> plants a sapling in front.</p>
+    <details class="debug-card">
+      <summary>Show the answer</summary>
+      <p style="margin-top:.4em"><code>FORWARD</code>, then <code>"tree"</code>, then <code>tree</code>. Chat word and function name match.</p>
+    </details>
+  </div>
+
+  <!-- Slot 23: Quick Quiz Q1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">You wrote <code>player.on_chat("garden", garden)</code>. What do you type in chat?</div>
+      <div class="opts">
+        <details><summary>A. run</summary><div class="ans">No — nothing is registered under "run".</div></details>
+        <details><summary>B. garden</summary><div class="ans">✓ The word inside the quotes.</div></details>
+        <details><summary>C. flower</summary><div class="ans">No — that rings the other bell.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 24: Quick Quiz Q2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">Which line moves the agent along the ground?</div>
+      <div class="opts">
+        <details><summary>A. agent.move(UP, 5)</summary><div class="ans">No — that climbs into the sky.</div></details>
+        <details><summary>B. agent.move(FORWARD, 5)</summary><div class="ans">✓ FORWARD runs along the grass.</div></details>
+        <details><summary>C. agent.turn(LEFT_TURN)</summary><div class="ans">No — it spins on the spot.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 25: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I registered my function under the chat word <span class="blank"></span>, so in chat I must type <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at the quotes while you say it. Say it twice.</div>
+    </div>
+  </div>
+
+  <!-- Slot 26: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Your turn!</div>
+    <h2>Plant your row 🌸</h2>
+    <ul class="check-list">
+      <li>Open Code Builder, start a new Python file</li>
+      <li>Type <code>def flower():</code> and its two lines</li>
+      <li>Add <code>player.on_chat("flower", flower)</code></li>
+      <li>Read your quotes out loud before you press play</li>
+      <li>In chat, type that exact word</li>
+    </ul>
+  </div>
+
+  <!-- Slot 27: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>range(10)</code> to <code>range(20)</code> — a longer row.</div>
+      <div class="item"><span class="lvl">★★</span>Register a third bell, <code>"clear"</code>, that places air instead of flowers.</div>
+      <div class="item"><span class="lvl">★★★</span>Inside <code>garden</code>, call <code>tree()</code> every fifth block instead of a flower.</div>
+    </div>
+  </div>
+
+  <!-- Slot 28: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you leave…</h2>
+    <div class="exit">
+      <div class="label">Say your answer</div>
+      <p style="margin-top:.4em">Your code says <code>player.on_chat("build", make_wall)</code>.</p>
+      <p style="margin-top:.3em">What one word do you type in chat?</p>
+    </div>
+  </div>
+
+  <!-- Slot 29: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="emoji">🔔</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">The word in the quotes<br>is the word you type.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: one bell that asks you a question first.</p>
+  </div>
+
+  <!-- Slot 30: OPTIONAL — Debug 4: quotes missing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the missing quotes</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.place</span>(FORWARD)
+<span class="fn">player.on_chat</span>(flower, flower)</pre>
+    <div class="debug-card"><div class="err">No chat word is registered. Typing anything does nothing.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The first slot needs quotes: <code>"flower"</code>. In <code>on_chat</code>, quotes = the word you type; no quotes = your function.</p>
+    </details>
+  </div>
+
+  <!-- Slot 31: OPTIONAL — Debug 5: place direction -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — the floating flower</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.set_block_or_item</span>(RED_FLOWER, <span class="num">1</span>)
+    <span class="fn">agent.place</span>(UP)</pre>
+    <div class="debug-card"><div class="err">The flower lands above the agent's head, not on the grass.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>agent.place(FORWARD)</code>. The same direction swap as the move lines.</p>
+    </details>
+  </div>
+
+  <!-- Slot 32: OPTIONAL — two bells at once -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two bells, two words</h2>
+    <div class="opt-grid two" style="margin-top:.6em">
+      <div class="opt-card">
+        <div class="ico">🌸</div>
+        <div class="name">you type flower</div>
+        <div class="ex">on_chat("flower", flower)<br>→ one red flower</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">🌳</div>
+        <div class="name">you type tree</div>
+        <div class="ex">on_chat("tree", tree)<br>→ one oak sapling</div>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.5em">Both live in one file. The word you type picks which one runs.</p>
+  </div>
+
+  <!-- Slot 33: OPTIONAL — both commands, full listing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Both bells in one file</h2>
+<pre><span class="kw">def</span> <span class="fn">flower</span>():
+    <span class="fn">agent.set_block_or_item</span>(RED_FLOWER, <span class="num">1</span>)
+    <span class="fn">agent.place</span>(FORWARD)
+
+<span class="kw">def</span> <span class="fn">tree</span>():
+    <span class="fn">agent.set_block_or_item</span>(OAK_SAPLING, <span class="num">2</span>)
+    <span class="fn">agent.place</span>(FORWARD)
+
+<span class="fn">player.on_chat</span>(<span class="str">"flower"</span>, flower)
+<span class="fn">player.on_chat</span>(<span class="str">"tree"</span>, tree)</pre>
+    <div class="where">WHERE · the two <code>on_chat</code> lines go last, below both <code>def</code> blocks.</div>
+    <div class="why">WHY · a bell can only ring a function written above it.</div>
+  </div>
+
+  <!-- Slot 34: OPTIONAL — direction trace, four lines -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Read the direction, then the number</h2>
+    <div class="trace-grid">
+      <div class="cell head">line</div>
+      <div class="cell head">direction word</div>
+      <div class="cell head">what it does</div>
+
+      <div class="cell"><code>move(UP, 3)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">UP</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">climbs 3</span></details></div>
+
+      <div class="cell"><code>move(FORWARD, 3)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">FORWARD</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">walks 3</span></details></div>
+
+      <div class="cell"><code>place(FORWARD)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">FORWARD</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">block in front</span></details></div>
+
+      <div class="cell"><code>turn(LEFT_TURN)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">LEFT_TURN</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">spins, no step</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 35: OPTIONAL — Modify 3, swap the block -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Swap the flower</h2>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>agent.set_block_or_item(RED_FLOWER, 1)</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre><span class="fn">agent.set_block_or_item</span>(YELLOW_FLOWER, <span class="num">1</span>)</pre></div>
+    <div class="where">WHERE · line 2, inside <code>def flower():</code>. Nothing else changes.</div>
+    <div class="why">WHY · only the block name changed, so the chat word still works.</div>
+  </div>
+
+  <!-- Slot 36: OPTIONAL — challenge, all four fence sides -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">🚀 Challenge<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Flowers on all four sides</h2>
+<pre><span class="kw">def</span> <span class="fn">garden</span>():
+    <span class="kw">for</span> side <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+            <span class="fn">flower</span>()
+            <span class="fn">agent.move</span>(FORWARD, <span class="num">1</span>)
+        <span class="fn">agent.turn</span>(LEFT_TURN)</pre>
+    <div class="where">WHERE · wrap your v4 loop in a second loop, then add the turn under it.</div>
+    <div class="why">WHY · one side, then a corner — the fence pattern you already built.</div>
+  </div>
+
+  <!-- Slot 37: OPTIONAL — more stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three more</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Register <code>"hi"</code> to run <code>agent.teleport_to_player()</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Make a bell called <code>"tower"</code> that plants, climbs 1, plants again.</div>
+      <div class="item"><span class="lvl">★★★</span>Two flower rows with a gap of 2 blocks between them.</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 37</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

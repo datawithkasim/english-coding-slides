@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — See the Circle (Neo · 2026-08-31)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS003 · Pygame Turret Shooter · Neo · 31 Aug 2026</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Trig, drawn</div>
+    <div class="emoji">⭕</div>
+    <h1>See the<br>Circle</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">draw</span> the angle, then <span class="sub">type</span> the ring yourself.</p>
+    <p class="bilingual">각도를 그림으로 보고, 직접 타이핑해요</p>
+  </div>
+
+  <!-- Slot 2: Recap — Neo's own 2026-08-26 lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your Wednesday build</h2>
+    <div class="recap-q">
+      <div class="label">Quick check · your code</div>
+      <div class="q">1. What did <code>M["w"]</code> and <code>M["h"]</code> give you?</div>
+      <details><summary>Show answer</summary><div class="ans">One member's width and height — its hitbox size.</div></details>
+      <div class="q" style="margin-top:.5em">2. You found <code>mx</code> and <code>my</code> yourself. Where were they?</div>
+      <details><summary>Show answer</summary><div class="ans">In the update loop: anchor + <code>dx</code>, <code>dy</code>.</div></details>
+      <div class="q" style="margin-top:.5em">3. Hexagon corners came from which two functions?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>math.cos</code> and <code>math.sin</code>. Today we draw them.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">import</span> math
+
+<span class="fn">print</span>(<span class="fn">round</span>(math.<span class="fn">cos</span>(<span class="num">0</span>), <span class="num">2</span>), <span class="fn">round</span>(math.<span class="fn">sin</span>(<span class="num">0</span>), <span class="num">2</span>))
+<span class="fn">print</span>(<span class="fn">round</span>(math.<span class="fn">cos</span>(math.pi/<span class="num">2</span>), <span class="num">2</span>), <span class="fn">round</span>(math.<span class="fn">sin</span>(math.pi/<span class="num">2</span>), <span class="num">2</span>))</pre>
+      <details><summary>Reveal output</summary><div class="ans">1.0 0.0<br>0.0 1.0</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">math.cos(angle)</span>
+      <span class="gloss">how far ACROSS, −1 to 1</span>
+      <span class="ko">가로 비율</span>
+
+      <span class="term">math.sin(angle)</span>
+      <span class="gloss">how far DOWN, −1 to 1</span>
+      <span class="ko">세로 비율</span>
+
+      <span class="term">radian</span>
+      <span class="gloss">the angle unit Python eats — one lap is 2π</span>
+      <span class="ko">라디안, 한 바퀴 2π</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: CONCEPT — the drawing. No code. -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One arm, two shadows</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:50vh" aria-hidden="true">
+      <circle cx="190" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <line x1="80" y1="150" x2="300" y2="150" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="190" y1="40" x2="190" y2="260" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="190" y1="150" x2="267" y2="214" stroke="#f1fa8c" stroke-width="4"/>
+      <line x1="190" y1="150" x2="267" y2="150" stroke="#38d0e0" stroke-width="7"/>
+      <line x1="267" y1="150" x2="267" y2="214" stroke="#bd93f9" stroke-width="7"/>
+      <circle cx="190" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="267" cy="214" r="10" fill="#ff79c6"/>
+      <text x="108" y="182" fill="#8b5cf6" font-size="18">anchor</text>
+      <text x="284" y="230" fill="#ff79c6" font-size="18">ship</text>
+      <text x="196" y="140" fill="#38d0e0" font-size="18">cos → across</text>
+      <text x="278" y="192" fill="#bd93f9" font-size="18">sin ↓ down</text>
+      <text x="198" y="202" fill="#f1fa8c" font-size="17">angle</text>
+    </svg>
+    <p class="big center" style="margin-top:.4em">The arm is the angle. Its floor shadow is <b>cos</b>. Its wall shadow is <b>sin</b>.</p>
+    <p class="bilingual center">그림자 두 개가 x와 y예요</p>
+  </div>
+
+  <!-- Slot 6: CONCEPT at 0° -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept 💡</div>
+    <h2>angle = 0°</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:44vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <line x1="60" y1="150" x2="280" y2="150" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="170" y1="40" x2="170" y2="260" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="170" y1="150" x2="270" y2="150" stroke="#38d0e0" stroke-width="7"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="270" cy="150" r="10" fill="#ff79c6"/>
+      <text x="310" y="120" fill="#38d0e0" font-size="23">across = +70</text>
+      <text x="310" y="162" fill="#bd93f9" font-size="23">down = 0</text>
+      <text x="310" y="208" fill="#e8eef6" font-size="21">ship goes RIGHT</text>
+    </svg>
+<pre>dx = <span class="num">70</span> * <span class="fn">cos</span>(<span class="num">0</span>°)  =  <span class="num">70</span>
+dy = <span class="num">70</span> * <span class="fn">sin</span>(<span class="num">0</span>°)  =  <span class="num">0</span></pre>
+  </div>
+
+  <!-- Slot 7: CONCEPT at 90° -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Concept 💡</div>
+    <h2>angle = 90°</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:44vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <line x1="60" y1="150" x2="280" y2="150" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="170" y1="40" x2="170" y2="260" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <path d="M 210 150 A 40 40 0 0 1 170 190" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <line x1="170" y1="150" x2="170" y2="250" stroke="#bd93f9" stroke-width="7"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="170" cy="250" r="10" fill="#ff79c6"/>
+      <text x="310" y="120" fill="#38d0e0" font-size="23">across = 0</text>
+      <text x="310" y="162" fill="#bd93f9" font-size="23">down = +70</text>
+      <text x="310" y="208" fill="#e8eef6" font-size="21">ship goes DOWN</text>
+    </svg>
+<pre>dx = <span class="num">70</span> * <span class="fn">cos</span>(<span class="num">90</span>°) =  <span class="num">0</span>
+dy = <span class="num">70</span> * <span class="fn">sin</span>(<span class="num">90</span>°) =  <span class="num">70</span></pre>
+  </div>
+
+  <!-- Slot 8: CONCEPT at 180° -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Concept 💡</div>
+    <h2>angle = 180°</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:44vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <line x1="60" y1="150" x2="280" y2="150" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="170" y1="40" x2="170" y2="260" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <path d="M 210 150 A 40 40 0 0 1 130 150" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <line x1="170" y1="150" x2="70" y2="150" stroke="#38d0e0" stroke-width="7"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="70" cy="150" r="10" fill="#ff79c6"/>
+      <text x="310" y="120" fill="#38d0e0" font-size="23">across = −70</text>
+      <text x="310" y="162" fill="#bd93f9" font-size="23">down = 0</text>
+      <text x="310" y="208" fill="#e8eef6" font-size="21">ship goes LEFT</text>
+    </svg>
+<pre>dx = <span class="num">70</span> * <span class="fn">cos</span>(<span class="num">180</span>°) = -<span class="num">70</span>
+dy = <span class="num">70</span> * <span class="fn">sin</span>(<span class="num">180</span>°) =  <span class="num">0</span></pre>
+  </div>
+
+  <!-- Slot 9: CONCEPT at 270° -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept 💡</div>
+    <h2>angle = 270°</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:44vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <line x1="60" y1="150" x2="280" y2="150" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <line x1="170" y1="40" x2="170" y2="260" stroke="#2f3a4d" stroke-width="2" stroke-dasharray="5 5"/>
+      <path d="M 210 150 A 40 40 0 1 1 170 110" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <line x1="170" y1="150" x2="170" y2="50" stroke="#bd93f9" stroke-width="7"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="170" cy="50" r="10" fill="#ff79c6"/>
+      <text x="310" y="120" fill="#38d0e0" font-size="23">across = 0</text>
+      <text x="310" y="162" fill="#bd93f9" font-size="23">down = −70</text>
+      <text x="310" y="208" fill="#e8eef6" font-size="21">ship goes UP</text>
+    </svg>
+<pre>dx = <span class="num">70</span> * <span class="fn">cos</span>(<span class="num">270</span>°) =  <span class="num">0</span>
+dy = <span class="num">70</span> * <span class="fn">sin</span>(<span class="num">270</span>°) = -<span class="num">70</span></pre>
+  </div>
+
+  <!-- Slot 10: all four on one ring -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Concept 💡</div>
+    <h2>All four, one ring</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:38vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="270" cy="150" r="10" fill="#ff79c6"/>
+      <circle cx="170" cy="250" r="10" fill="#ff79c6"/>
+      <circle cx="70" cy="150" r="10" fill="#ff79c6"/>
+      <circle cx="170" cy="50" r="10" fill="#ff79c6"/>
+      <text x="286" y="146" fill="#e8eef6" font-size="20">0°</text>
+      <text x="182" y="278" fill="#e8eef6" font-size="20">90°</text>
+      <text x="18" y="146" fill="#e8eef6" font-size="20">180°</text>
+      <text x="182" y="42" fill="#e8eef6" font-size="20">270°</text>
+    </svg>
+    <div class="trace-grid cols-5">
+      <div class="cell head">angle</div>
+      <div class="cell head">0°</div>
+      <div class="cell head">90°</div>
+      <div class="cell head">180°</div>
+      <div class="cell head">270°</div>
+
+      <div class="cell"><code>cos</code></div>
+      <div class="cell">1</div>
+      <div class="cell">0</div>
+      <div class="cell">−1</div>
+      <div class="cell">0</div>
+
+      <div class="cell"><code>sin</code></div>
+      <div class="cell">0</div>
+      <div class="cell">1</div>
+      <div class="cell">0</div>
+      <div class="cell">−1</div>
+    </div>
+  </div>
+
+  <!-- Slot 11: radians + step size -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One lap, shared out</h2>
+    <svg viewBox="0 0 460 300" style="width:100%;max-height:36vh" aria-hidden="true">
+      <circle cx="170" cy="150" r="100" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <circle cx="170" cy="150" r="7" fill="#8b5cf6"/>
+      <circle cx="270" cy="150" r="10" fill="#ff79c6"/>
+      <circle cx="220" cy="237" r="10" fill="#ff79c6"/>
+      <circle cx="120" cy="237" r="10" fill="#ff79c6"/>
+      <circle cx="70" cy="150" r="10" fill="#ff79c6"/>
+      <circle cx="120" cy="63" r="10" fill="#ff79c6"/>
+      <circle cx="220" cy="63" r="10" fill="#ff79c6"/>
+      <path d="M 220 150 A 50 50 0 0 1 195 193" fill="none" stroke="#f1fa8c" stroke-width="4"/>
+      <text x="284" y="146" fill="#e8eef6" font-size="19">i = 0</text>
+      <text x="238" y="252" fill="#e8eef6" font-size="19">i = 1</text>
+      <text x="330" y="200" fill="#f1fa8c" font-size="22">step = 2π / 6</text>
+    </svg>
+<pre>angle = (i / count) * <span class="num">2</span> * math.pi</pre>
+    <p style="margin-top:.4em">6 ships share one lap. Each ship steps one slice further round.</p>
+    <p class="bilingual">한 바퀴를 인원수로 나눠요</p>
+  </div>
+
+  <!-- Slot 12: TRACE ACTIVITY — before any code runs -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>You fill in dx and dy</h2>
+<pre>count = <span class="num">4</span>      radius = <span class="num">70</span>
+angle = (i / count) * <span class="num">2</span> * math.pi</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head">0</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+
+      <div class="cell"><code>angle</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0°</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">90°</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">180°</span></details></div>
+
+      <div class="cell"><code>dx</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">70</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">−70</span></details></div>
+
+      <div class="cell"><code>dy</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">70</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+    <p style="margin-top:.4em">Read them off slides 6, 7, 8. No code runs yet.</p>
+  </div>
+
+  <!-- Slot 13: Run (worked example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Run ▶</div>
+    <h2>The ring, in code</h2>
+<pre><span class="com"># make_formation(), inside  for i in range(count):</span>
+<span class="kw">if</span> pattern == <span class="str">"circle"</span>:
+    angle = (i / count) * <span class="num">2</span> * math.pi   <span class="com"># this ship's slice</span>
+    radius = <span class="num">70</span>                        <span class="com"># ring size</span>
+    dx = math.<span class="fn">cos</span>(angle) * radius        <span class="com"># across</span>
+    dy = math.<span class="fn">sin</span>(angle) * radius        <span class="com"># down</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">every ship lands on the ring, evenly spaced</div>
+    </div>
+  </div>
+
+  <!-- Slot 14: where the formula lives in HIS file -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Your file 📂</div>
+    <h2>The formula sits in two places</h2>
+<pre><span class="com"># make_formation() — the ARM</span>
+dx = math.<span class="fn">cos</span>(angle) * radius
+dy = math.<span class="fn">sin</span>(angle) * radius
+
+<span class="com"># the update loop — the CENTRE (already yours)</span>
+mx = f[<span class="str">"anchor_x"</span>] + m[<span class="str">"dx"</span>]
+my = f[<span class="str">"anchor_y"</span>] + m[<span class="str">"dy"</span>]</pre>
+    <p style="margin-top:.4em"><b>x = centre + arm.</b> You wrote the centre half last week.</p>
+  </div>
+
+  <!-- Slot 15: NEO TYPES v1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">⌨️ NEO TYPES THIS<span class="activity-tag">hands off, Kasim</span></div>
+    <h2>v1 — set up the test lab</h2>
+    <div class="practice-task">Three edits. Neo's keyboard only. Kasim reads them out, types nothing.</div>
+<pre><span class="com"># under  pattern = random.choice([...])</span>
+pattern = <span class="str">"circle"</span>          <span class="com"># NEW — force it</span>
+
+<span class="com"># under  count = random.randint(12, 16)</span>
+count = <span class="num">3</span>                    <span class="com"># NEW — three ships</span>
+
+<span class="com"># in the spawn system</span>
+<span class="kw">if</span> formation_timer &gt;= <span class="num">60</span>:     <span class="com"># OLD: 400</span></pre>
+    <p class="practice-hint">Why: one second, three ships, one shape to look at.</p>
+  </div>
+
+  <!-- Slot 16: v1 result -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Code ▶</div>
+    <h2>v1 — three ships, a triangle</h2>
+<pre><span class="com">count = 3   →   angles 0°, 120°, 240°</span>
+angle = (i / count) * <span class="num">2</span> * math.pi
+radius = <span class="num">70</span>
+dx = math.<span class="fn">cos</span>(angle) * radius
+dy = math.<span class="fn">sin</span>(angle) * radius</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">3 ships, 120° apart — a triangle on the ring</div>
+    </div>
+  </div>
+
+  <!-- Slot 17: NEO TYPES v2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">⌨️ NEO TYPES THIS<span class="activity-tag">hands off, Kasim</span></div>
+    <h2>v2 — six ships, wider ring</h2>
+    <div class="practice-task">Two numbers change. Find both lines yourself, then type.</div>
+<pre><span class="com"># in make_formation(), your forced count line</span>
+count = <span class="num">6</span>
+
+<span class="com"># in the circle branch, your radius line</span>
+radius = <span class="num">90</span></pre>
+    <p class="practice-hint">Why: 6 ships on one lap = a hexagon ring, no hexagon code.</p>
+  </div>
+
+  <!-- Slot 18: v2 code with OLD/NEW -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Code ▶</div>
+    <h2>v2 — the hexagon ring</h2>
+<pre>count = <span class="num">6</span>                      <span class="com"># OLD: 3 · NEW: 6</span>
+<span class="com">angle = (i / count) * 2 * math.pi   # unchanged</span>
+radius = <span class="num">90</span>                   <span class="com"># OLD: 70 · NEW: 90</span>
+<span class="com">dx = math.cos(angle) * radius   # unchanged</span>
+<span class="com">dy = math.sin(angle) * radius   # unchanged</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">6 ships, 60° apart — last week's hexagon, four lines</div>
+    </div>
+  </div>
+
+  <!-- Slot 19: Common Mistake — forgot * radius -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>cos is a ratio, not a distance</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>dx = math.<span class="fn">cos</span>(angle)
+dy = math.<span class="fn">sin</span>(angle)</pre>
+        <p style="margin-top:.4em">cos never passes 1. Every ship sits within one pixel — the ring is a dot.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>dx = math.<span class="fn">cos</span>(angle) * radius
+dy = math.<span class="fn">sin</span>(angle) * radius</pre>
+        <p style="margin-top:.4em"><code>radius</code> turns the ratio into pixels.</p>
+      </div>
+    </div>
+    <p class="bilingual">cos는 비율, radius가 크기</p>
+  </div>
+
+  <!-- Slot 20: DEBUG 1 — his real "angle to" typo -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — your Wednesday typo</h2>
+<pre>angle to = math.<span class="fn">radians</span>(<span class="num">60</span> * (side + <span class="num">1</span>))
+x2 = math.<span class="fn">cos</span>(angle to) * radius</pre>
+    <div class="debug-card"><div class="err">SyntaxError: invalid syntax</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A name cannot hold a space. Python read <code>angle</code>, then choked on <code>to</code>. Write <code>angle_2</code> — underscore, never space.</p>
+      <p class="bilingual">이름에 띄어쓰기 금지</p>
+    </details>
+  </div>
+
+  <!-- Slot 21: DEBUG 2 — cos/sin swapped, count=4 framing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — the tipped ring</h2>
+<pre>count = <span class="num">4</span>
+dx = math.<span class="fn">sin</span>(angle) * radius
+dy = math.<span class="fn">cos</span>(angle) * radius</pre>
+    <div class="debug-card"><div class="err">No error. Ship i = 0 should sit RIGHT of the anchor. It sits BELOW.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Swapped. <b>cos → dx</b> (across), <b>sin → dy</b> (down). Check slide 6 again: at 0°, across is 70 and down is 0.</p>
+      <p class="bilingual">cos는 가로, sin은 세로</p>
+    </details>
+  </div>
+
+  <!-- Slot 22: DEBUG 3 — degrees instead of radians -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — the bunched ring</h2>
+<pre>angle = (<span class="num">360</span> / count) * i
+dx = math.<span class="fn">cos</span>(angle) * radius
+dy = math.<span class="fn">sin</span>(angle) * radius</pre>
+    <div class="debug-card"><div class="err">No error. Ships still sit ring-distance out — but bunched at random angles. Even spacing gone.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>cos</code> only eats radians. 360 radians is 57 laps, so each ship lands somewhere random. Use <code>(i / count) * 2 * math.pi</code>.</p>
+      <p class="bilingual">cos/sin은 라디안만 먹어요</p>
+    </details>
+  </div>
+
+  <!-- Slot 23: Modify 1 — faded blanks -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill the three blanks</h2>
+<pre>angle = (i / count) * <span class="num">2</span> * math.pi
+radius = ___
+dx = math.___(angle) * radius
+dy = math.___(angle) * radius</pre>
+    <p style="margin-top:.5em">Ring size 90. Then across, then down.</p>
+  </div>
+
+  <!-- Slot 24: Modify 2 — start the ring at the top -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Start the ring at the top</h2>
+<pre><span class="com"># replace your angle line</span>
+angle = (i / count) * <span class="num">2</span> * math.pi ___ math.pi / <span class="num">2</span></pre>
+    <p style="margin-top:.5em">Ship 0 must start ABOVE the anchor. Plus or minus? Check slide 9.</p>
+    <p class="bilingual">270°가 위쪽이었죠</p>
+  </div>
+
+  <!-- Slot 25: Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>math.cos(angle)</code> gives…</div>
+      <div class="opts">
+        <details><summary>A. how far across</summary><div class="ans">✓ The floor shadow.</div></details>
+        <details><summary>B. how far down</summary><div class="ans">No — that is <code>sin</code>.</div></details>
+        <details><summary>C. the angle in degrees</summary><div class="ans">No — that is <code>math.degrees()</code>.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>count = 8</code>. One step round the ring is…</div>
+      <div class="opts">
+        <details><summary>A. 2π / 8</summary><div class="ans">✓ One lap shared by 8 ships.</div></details>
+        <details><summary>B. 8 / 2π</summary><div class="ans">No — upside down.</div></details>
+        <details><summary>C. 360 / 8</summary><div class="ans">Right idea, wrong unit. Python needs radians.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slot 26: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>math.cos(angle)</code> gives <span class="blank"></span>, <code>math.sin(angle)</code> gives <span class="blank"></span>, and <code>* radius</code> turns it into <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- Slot 27: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it — you type 🚀</h2>
+    <ul class="check-list">
+      <li>Test lab: <code>"circle"</code>, <code>count = 3</code>, timer <code>60</code></li>
+      <li>Run → triangle</li>
+      <li><code>count = 6</code>, <code>radius = 90</code> → hexagon ring</li>
+      <li>Try <code>count = 12</code>. Still a ring?</li>
+      <li>Undo the test lab: <code>random.choice</code> back, timer <code>400</code></li>
+    </ul>
+  </div>
+
+  <!-- Slot 28: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Giant ring: <code>radius = 130</code>. Tiny: <code>25</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Ring drifts in from the right — slide 31.</div>
+      <div class="item"><span class="lvl">★★★</span>Ring spins while it flies — slide 33.</div>
+    </div>
+  </div>
+
+  <!-- Slot 29: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line, no looking</div>
+      <p style="margin-top:.4em">Which one moves a ship ACROSS — <code>cos</code> or <code>sin</code>?</p>
+      <p class="bilingual" style="margin-top:.4em">가로로 움직이는 건 무엇?</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW — Neo works fast ================= -->
+
+  <!-- Slot 30: OPTIONAL — NEO TYPES v3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">⌨️ NEO TYPES THIS<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v3 — make the ring fly in</h2>
+    <div class="practice-task">Goal only. Find the four lines in the <code>formation</code> dict yourself.</div>
+<pre><span class="com"># the ring must enter from the RIGHT and drift LEFT</span>
+<span class="com"># start x: off the right edge</span>
+<span class="com"># start y: near the top</span>
+<span class="com"># vx: negative  ·  vy: small positive</span></pre>
+    <p class="practice-hint">Answer on the next slide. Try first.</p>
+  </div>
+
+  <!-- Slot 31: OPTIONAL — v3 code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">Code ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v3 — the drifting ring</h2>
+<pre><span class="com"># in make_formation(), the formation dict</span>
+<span class="str">"anchor_x"</span>: WIDTH + <span class="num">60</span>,   <span class="com"># OLD: -20</span>
+<span class="str">"anchor_y"</span>: <span class="num">120</span>,           <span class="com"># OLD: -30</span>
+<span class="str">"vx"</span>: -<span class="num">3</span>,                 <span class="com"># OLD: 2 · NEW: negative = left</span>
+<span class="str">"vy"</span>: <span class="num">1</span>,                  <span class="com"># OLD: 2</span>
+<span class="com">"members": [],               # unchanged</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">the whole ring slides left across the screen</div>
+    </div>
+  </div>
+
+  <!-- Slot 32: OPTIONAL — NEO TYPES v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">⌨️ NEO TYPES THIS<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 — make the ring spin</h2>
+    <div class="practice-task">One idea: if <code>angle</code> grows a little every frame, the ship walks round the ring.</div>
+<pre><span class="com"># what must be stored on the formation?</span>
+<span class="com"># what must be added to angle?</span>
+<span class="com"># where must dx and dy be worked out again?</span></pre>
+    <p class="practice-hint">Say your plan out loud before the next slide.</p>
+  </div>
+
+  <!-- Slot 33: OPTIONAL — v4 code -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">Code ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 — the spinning ring</h2>
+<pre><span class="com"># 1. in the formation dict, under "pattern": pattern,</span>
+<span class="str">"spin"</span>: <span class="num">0</span>,
+
+<span class="com"># 2. in the update loop, after  f["anchor_y"] += f["vy"]</span>
+f[<span class="str">"spin"</span>] += <span class="num">0.03</span>
+<span class="kw">for</span> i, m <span class="kw">in</span> <span class="fn">enumerate</span>(f[<span class="str">"members"</span>]):
+    a = (i / <span class="fn">len</span>(f[<span class="str">"members"</span>])) * <span class="num">2</span> * math.pi + f[<span class="str">"spin"</span>]
+    m[<span class="str">"dx"</span>] = math.<span class="fn">cos</span>(a) * <span class="num">90</span>
+    m[<span class="str">"dy"</span>] = math.<span class="fn">sin</span>(a) * <span class="num">90</span></pre>
+    <p style="margin-top:.4em">Same formula, new angle every frame. The ring rotates.</p>
+  </div>
+
+  <!-- Slot 34: OPTIONAL — DEBUG 4, dict key case -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 4 — the shouting key</h2>
+<pre>rect = pygame.<span class="fn">Rect</span>(mx, my, m[<span class="str">"W"</span>], m[<span class="str">"H"</span>])</pre>
+    <div class="debug-card"><div class="err">KeyError: 'W'</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Dictionary keys are case-sensitive. You stored <code>"w"</code>, so you must ask for <code>"w"</code>. Same trap as <code>pygame.Rect</code> with a small <code>r</code>.</p>
+      <p class="bilingual">대소문자 구분해요</p>
+    </details>
+  </div>
+
+  <!-- Slot 35: OPTIONAL — DEBUG 5, missing * i -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 5 — one ship, many ships</h2>
+<pre>angle = (<span class="num">1</span> / count) * <span class="num">2</span> * math.pi
+dx = math.<span class="fn">cos</span>(angle) * radius
+dy = math.<span class="fn">sin</span>(angle) * radius</pre>
+    <div class="debug-card"><div class="err">No error. All ships stack on one point. It looks like one enemy.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The angle never changes, so every ship gets the same slice. It must use <code>i</code>: <code>(i / count)</code>.</p>
+      <p class="bilingual">i가 있어야 자리가 달라져요</p>
+    </details>
+  </div>
+
+  <!-- Slot 36: OPTIONAL — two nested rings -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two rings, one formation</h2>
+<pre><span class="com"># replace your radius line in the circle branch</span>
+<span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span>:
+    radius = <span class="num">50</span>
+<span class="kw">else</span>:
+    radius = <span class="num">100</span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Run it · count = 12</div>
+      <div style="opacity:1">even ships inner ring, odd ships outer ring</div>
+    </div>
+  </div>
+
+  <!-- Slot 37: OPTIONAL — shrinking radius -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A ring that closes in</h2>
+<pre><span class="com"># 1. formation dict, under "spin": 0,</span>
+<span class="str">"ring"</span>: <span class="num">110</span>,
+
+<span class="com"># 2. just BEFORE your  for i, m in enumerate(...)</span>
+<span class="kw">if</span> f[<span class="str">"ring"</span>] &gt; <span class="num">30</span>:
+    f[<span class="str">"ring"</span>] -= <span class="num">0.3</span>
+
+<span class="com"># 3. inside that loop, swap the two 90s</span>
+    m[<span class="str">"dx"</span>] = math.<span class="fn">cos</span>(a) * f[<span class="str">"ring"</span>]
+    m[<span class="str">"dy"</span>] = math.<span class="fn">sin</span>(a) * f[<span class="str">"ring"</span>]</pre>
+    <p style="margin-top:.4em">Radius shrinks once per frame — the ring tightens as it advances.</p>
+  </div>
+
+  <!-- Slot 38: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">cos across.<br>sin down.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: your rings shoot back.</p>
+    <p class="bilingual">다음 시간: 링이 총을 쏴요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 38</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

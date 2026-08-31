@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jun — Count It Before You Run It (bridge blocks)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* v1→v4 ramp helpers only — everything else comes from style.css */
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft Education · Agent · Jun · 2026-08-31</div>
+
+  <!-- Slot 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Bridge · Week 2</div>
+    <div class="emoji">🌉</div>
+    <h1>Count It Before<br>You Run It</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you will <span class="sub">count</span> a gap and <span class="sub">write</span> the exact number</p>
+    <p class="bilingual">추측하지 말고 칸을 세어요</p>
+  </div>
+
+  <!-- Slot 2: Recap & Retrieve — Jun's own 2026-08-24 facts -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last week — your bridge</h2>
+    <div class="recap-q">
+      <div class="label">You built this on 24 August</div>
+      <div class="q">1. Which three moves make an arch?</div>
+      <div class="q">2. You changed <code>FORWARD</code> from 7 to what?</div>
+      <details><summary>Show answer</summary><div class="ans">up → forward → down. You changed 7 to 5. You spotted that yourself.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 3: Predict (Hook) — predict-then-check #1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What number goes in the blank?</h2>
+    <div class="predict-card">
+      <div class="label">Gap A · predict first</div>
+      <div class="iter-row" style="margin:.5em 0">
+        <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">🟩</div>
+      </div>
+<pre>agent.<span class="fn">move</span>(FORWARD, ___)</pre>
+      <details><summary>Reveal output</summary><div class="ans">5 — one number for each empty block.</div></details>
+    </div>
+  </div>
+
+  <!-- Slot 4: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Four words today</h2>
+    <div class="vocab-table">
+      <span class="term">gap</span><span class="gloss">the empty space between two banks</span><span class="ko">틈</span>
+      <span class="term">count</span><span class="gloss">point at each block, one number each</span><span class="ko">세다</span>
+      <span class="term">overshoot</span><span class="gloss">the bridge runs past the far bank</span><span class="ko">지나침</span>
+      <span class="term">fence</span><span class="gloss">a thin rail, not a solid floor</span><span class="ko">울타리</span>
+    </div>
+  </div>
+
+  <!-- Slot 5: Concept (Notional Machine) — the river gap, numbered -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Count the gap. Write that number.</h2>
+    <div class="iter-row" style="margin-top:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">🟩</div>
+    </div>
+    <p class="big center" style="margin-top:.6em">Gap = <span class="sub">5</span> empty blocks.</p>
+<pre>agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)</pre>
+    <p class="bilingual">칸을 하나씩 세고 그 숫자를 씁니다</p>
+  </div>
+
+  <!-- Slot 6: Concept part 2 — the same picture with 7 (what he saw) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept</div>
+    <h2>The same gap with 7</h2>
+    <div class="iter-row" style="margin-top:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">🟩</div><div class="iter-item">6 ✗</div><div class="iter-item">7 ✗</div>
+    </div>
+    <p class="big center" style="margin-top:.5em">7 lands <span class="sub">2</span> blocks past the bank.</p>
+    <p class="center">So reduce by exactly 2. 7 − 2 = 5. That is the answer you needed last week.</p>
+    <p class="bilingual">넘어간 칸 수만큼 빼요</p>
+  </div>
+
+  <!-- Slot 7: The method — three named steps -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Method</div>
+    <h2>Three steps, every time</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">📍</div><div class="name">1 · Mark the start</div><div class="ex">stand on the near bank</div></div>
+      <div class="opt-card"><div class="ico">🔢</div><div class="name">2 · Count the gap</div><div class="ex">one number per block</div></div>
+      <div class="opt-card"><div class="ico">✅</div><div class="name">3 · Write and check</div><div class="ex">run, then check the landing</div></div>
+    </div>
+    <p style="margin-top:.6em">Counting takes five seconds. Guessing costs a rebuild.</p>
+    <p class="bilingual">서기 · 세기 · 쓰고 확인하기</p>
+  </div>
+
+  <!-- Slot 8: Run (Worked Example) — v1 flat bridge -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Run it</div>
+    <h2>v1 — a flat 5-block bridge</h2>
+<pre><span class="hot">agent.<span class="fn">teleport_to_player</span>()<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">set_block_or_item</span>(WHITE_CONCRETE, <span class="num">1</span>)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)<span class="mk">NEW</span></span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+      <div>🧱🧱🧱🧱🧱 · 🤖 on the far bank</div>
+    </div>
+    <p style="margin-top:.5em"><b>Where:</b> all four lines, top of an empty file.</p>
+    <p><b>Why:</b> place mode must be on before the agent walks.</p>
+  </div>
+
+  <!-- Slot 9: Trace Activity — count, then write -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Count, then write</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Gap</div><div class="cell head">You count</div><div class="cell head">You write</div><div class="cell head">If you wrote 7</div>
+      <div class="cell"><code>🟩123🟩</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4 too far</span></details></div>
+      <div class="cell"><code>🟩12345🟩</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2 too far</span></details></div>
+      <div class="cell"><code>🟩12345678🟩</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1 short</span></details></div>
+    </div>
+  </div>
+
+  <!-- Slot 10: Common Mistake — block vs fence, picture pair (1 of 2) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>White block ≠ white fence</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">✓ deck</span><p class="big">⬜⬜⬜⬜⬜</p><pre>WHITE_CONCRETE</pre><p>Solid. You walk on it.</p></div>
+      <div class="col bad"><span class="tag">✗ not a deck</span><p class="big">🚧🚧🚧🚧🚧</p><pre>BIRCH_FENCE</pre><p>Thin post. A rail, not a floor.</p></div>
+    </div>
+    <p class="bilingual">블록은 바닥, 울타리는 난간</p>
+  </div>
+
+  <!-- Slot 11: block vs fence in code, picture pair (2 of 2) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Code</div>
+    <h2>Which name do you type?</h2>
+<pre><span class="com"># the deck you walk on</span>
+agent.<span class="fn">set_block_or_item</span>(WHITE_CONCRETE, <span class="num">1</span>)
+
+<span class="com"># the side rail</span>
+agent.<span class="fn">set_block_or_item</span>(BIRCH_FENCE, <span class="num">1</span>)</pre>
+    <p style="margin-top:.5em"><b>Where:</b> above <code>agent.set_assist(PLACE_ON_MOVE, True)</code>.</p>
+    <p><b>Why:</b> the agent places whatever you handed it last.</p>
+  </div>
+
+  <!-- Slot 12: Debug 1 — set_assist(PLACE_ON_MOVE) at the bottom -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug 1<span class="activity-tag">activity</span></div>
+    <h2>He walks. No blocks appear.</h2>
+    <div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">agent.<span class="fn">teleport_to_player</span>()
+agent.<span class="fn">set_block_or_item</span>(WHITE_CONCRETE, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)
+agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)</pre></div>
+    <div class="debug-card"><details><summary>▸ Show the bug</summary>
+      <div class="err">set_assist ran after the walk had already finished.</div>
+      <pre>agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)</pre>
+      <p><b>Where:</b> directly above <code>agent.move(FORWARD, 5)</code>.</p>
+    </details></div>
+  </div>
+
+  <!-- Slot 13: Debug 2 — forward 7 on a 5-block gap -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">🐛 Debug 2<span class="activity-tag">activity</span></div>
+    <h2>Two blocks past the bank</h2>
+    <div class="iter-row" style="margin-bottom:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">🟩</div><div class="iter-item">6 ✗</div><div class="iter-item">7 ✗</div>
+    </div>
+    <div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">agent.<span class="fn">move</span>(FORWARD, <span class="num">7</span>)</pre></div>
+    <div class="debug-card"><details><summary>▸ Show the bug</summary>
+      <div class="err">7 was a guess. The counted gap is 5.</div>
+      <pre>agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)</pre>
+    </details></div>
+  </div>
+
+  <!-- Slot 14: Debug 3 — fence name where a block name was meant -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug 3<span class="activity-tag">activity</span></div>
+    <h2>You cannot walk on it</h2>
+    <div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">agent.<span class="fn">set_block_or_item</span>(BIRCH_FENCE, <span class="num">1</span>)
+agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)</pre></div>
+    <div class="debug-card"><details><summary>▸ Show the bug</summary>
+      <div class="err">The agent laid 5 rails, not a deck.</div>
+      <pre>agent.<span class="fn">set_block_or_item</span>(WHITE_CONCRETE, <span class="num">1</span>)</pre>
+      <p><b>Where:</b> the first line, same place.</p>
+    </details></div>
+  </div>
+
+  <!-- Slot 15: Run v2 — up, forward, down -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Run it</div>
+    <h2>v2 — up, forward, down</h2>
+<pre><span class="dim">agent.teleport_to_player()</span><span class="dim">agent.set_block_or_item(WHITE_CONCRETE, 1)</span><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="hot">agent.<span class="fn">move</span>(UP, <span class="num">1</span>)<span class="mk">NEW</span></span><span class="dim">agent.move(FORWARD, 5)<span class="mk">SAME 5</span></span><span class="hot">agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.5em"><b>Where:</b> <code>UP</code> goes above <code>agent.move(FORWARD, 5)</code>. <code>DOWN</code> goes after it.</p>
+    <p><b>Why:</b> climb one, cross, step back down.</p>
+  </div>
+
+  <!-- Slot 16: Modify 1 — fill in the blanks -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+    <div class="iter-row" style="margin-bottom:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">6</div><div class="iter-item">🟩</div>
+    </div>
+<pre>agent.<span class="fn">set_block_or_item</span>(___, <span class="num">1</span>)
+agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)
+agent.<span class="fn">move</span>(UP, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, ___)
+agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)</pre>
+    <p style="margin-top:.5em">Count the picture first. Then fill both blanks.</p>
+  </div>
+
+  <!-- Slot 17: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The gap is <span class="blank"></span> blocks, so I write <code>agent.move(FORWARD, <span class="blank"></span>)</code>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- Slot 18: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Your turn!</div>
+    <h2>Bridge a real gap 🌉</h2>
+    <ul class="check-list">
+      <li>Find a gap in your world</li>
+      <li>Stand on the near bank</li>
+      <li>Count the empty blocks out loud</li>
+      <li>Write that number in <code>agent.move(FORWARD, n)</code></li>
+      <li>Run it, then check where the agent stands</li>
+    </ul>
+  </div>
+
+  <!-- Slot 19: Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>One self-check</h2>
+    <div class="exit">
+      <div class="label">Before you log off</div>
+      <p class="big">Tell me your number before you press run.</p>
+      <p style="margin-top:.4em">If it overshoots, say by how many blocks.</p>
+    </div>
+    <p style="margin-top:.5em">Finished early? Keep going — optional slides next.</p>
+  </div>
+
+  <!-- OPTIONAL: predict-then-check #2 -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div><span class="activity-tag">OPTIONAL</span>
+    <h2>Gap B — your number?</h2>
+    <div class="predict-card">
+      <div class="label">Write it down before you reveal</div>
+      <div class="iter-row" style="margin:.5em 0">
+        <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">🟩</div>
+      </div>
+<pre>agent.<span class="fn">move</span>(FORWARD, ___)</pre>
+      <details><summary>Reveal output</summary><div class="ans">3. Small gaps get counted too.</div></details>
+    </div>
+  </div>
+
+  <!-- OPTIONAL: predict-then-check #3 -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div><span class="activity-tag">OPTIONAL</span>
+    <h2>Gap C — your number?</h2>
+    <div class="predict-card">
+      <div class="label">Point at every block. No guessing.</div>
+      <div class="iter-row" style="margin:.5em 0">
+        <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">6</div><div class="iter-item">7</div><div class="iter-item">8</div><div class="iter-item">🟩</div>
+      </div>
+<pre>agent.<span class="fn">move</span>(FORWARD, ___)</pre>
+      <details><summary>Reveal output</summary><div class="ans">8. Long gaps are where guessing fails.</div></details>
+    </div>
+  </div>
+
+  <!-- OPTIONAL: fix by the exact miss -->
+  <div class="slide">
+    <div class="pill">Method<span class="activity-tag">OPTIONAL</span></div>
+    <h2>How much do I change it by?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">You wrote</div><div class="cell head">It landed</div><div class="cell head">Change by</div><div class="cell head">New number</div>
+      <div class="cell"><code>7</code></div><div class="cell">2 past</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">−2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><code>3</code></div><div class="cell">2 short</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">+2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><code>9</code></div><div class="cell">4 past</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">−4</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+    </div>
+    <p style="margin-top:.5em">Change by the miss. Never by a guess.</p>
+  </div>
+
+  <!-- OPTIONAL: Common Mistake 2 — guess vs count -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div><span class="activity-tag">OPTIONAL</span>
+    <h2>Guessing vs counting</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ guess</span><p class="big">"About 7?"</p><p>Rebuild. Try 6. Rebuild again.</p></div>
+      <div class="col good"><span class="tag">✓ count</span><p class="big">1 2 3 4 5</p><p>Right the first time.</p></div>
+    </div>
+    <p class="bilingual">한 번에 맞히는 방법은 세는 것</p>
+  </div>
+
+  <!-- OPTIONAL: Debug 4 — I and L collide inside a constant name -->
+  <div class="slide">
+    <div class="pill">🐛 Debug 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two letters that look alike</h2>
+    <div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">agent.<span class="fn">turn</span>(IEFT_TURN)</pre></div>
+    <div class="iter-row" style="margin-top:.5em">
+      <div class="iter-item">I<br>capital i</div><div class="iter-item">L<br>capital L</div><div class="iter-item">l<br>small L</div><div class="iter-item">1<br>digit one</div>
+    </div>
+    <div class="debug-card"><details><summary>▸ Show the bug</summary>
+      <div class="err">NameError: name 'IEFT_TURN' is not defined</div>
+      <pre>agent.<span class="fn">turn</span>(LEFT_TURN)</pre>
+      <p>You typed capital <code>I</code>. <code>LEFT_TURN</code> needs capital <code>L</code>.</p>
+    </details></div>
+  </div>
+
+  <!-- OPTIONAL: Debug 5 — up and down in the wrong order -->
+  <div class="slide">
+    <div class="pill">🐛 Debug 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The bridge dives</h2>
+    <div class="debug-box"><div class="debug-tag">buggy</div><pre style="margin-top:.4em">agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)
+agent.<span class="fn">move</span>(UP, <span class="num">1</span>)</pre></div>
+    <div class="debug-card"><details><summary>▸ Show the bug</summary>
+      <div class="err">Down first drops the agent into the river.</div>
+      <pre>agent.<span class="fn">move</span>(UP, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)
+agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)</pre>
+      <p><b>Why:</b> climb before you cross. Drop only at the end.</p>
+    </details></div>
+  </div>
+
+  <!-- OPTIONAL: Run v3 — add a rail -->
+  <div class="slide">
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v3 — add a fence rail</h2>
+<pre><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="dim">agent.move(UP, 1)</span><span class="dim">agent.move(FORWARD, 5)</span><span class="dim">agent.move(DOWN, 1)</span><span class="hot">agent.<span class="fn">move</span>(UP, <span class="num">1</span>)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">turn</span>(LEFT_TURN)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">turn</span>(LEFT_TURN)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">set_block_or_item</span>(BIRCH_FENCE, <span class="num">1</span>)<span class="mk">NEW</span></span><span class="hot">agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)<span class="mk">SAME 5</span></span></pre>
+    <p style="margin-top:.5em"><b>Where:</b> all five lines go after <code>agent.move(DOWN, 1)</code>.</p>
+    <p><b>Why:</b> two left turns face him back. The rail is the same 5.</p>
+  </div>
+
+  <!-- OPTIONAL: trace 2 — the rail is the same number -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>How many fences?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">Gap</div><div class="cell head">Deck blocks</div><div class="cell head">Rail fences</div><div class="cell head">Pieces used</div>
+      <div class="cell"><code>3</code></div><div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><code>5</code></div><div class="cell">5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+      <div class="cell"><code>8</code></div><div class="cell">8</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">16</span></details></div>
+    </div>
+    <p style="margin-top:.5em">One count answers every column.</p>
+  </div>
+
+  <!-- OPTIONAL: Run v4 — a gap you have not counted -->
+  <div class="slide">
+    <div class="pill">Run it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 — a wider gap</h2>
+    <div class="iter-row" style="margin-bottom:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">6</div><div class="iter-item">7</div><div class="iter-item">8</div><div class="iter-item">9</div><div class="iter-item">🟩</div>
+    </div>
+<pre><span class="dim">agent.set_assist(PLACE_ON_MOVE, True)</span><span class="dim">agent.move(UP, 1)</span><span class="hot">agent.<span class="fn">move</span>(FORWARD, <span class="num">9</span>)<span class="mk old">OLD 5 → NEW 9</span></span><span class="dim">agent.move(DOWN, 1)</span></pre>
+    <p style="margin-top:.5em"><b>Where:</b> only the number inside <code>agent.move(FORWARD, 5)</code> changes.</p>
+    <p><b>Why:</b> the program stays the same. The count does not.</p>
+  </div>
+
+  <!-- OPTIONAL: Modify 2 — harder blanks -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Harder — deck and rail</h2>
+    <div class="iter-row" style="margin-bottom:.4em">
+      <div class="iter-item">🟩</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div><div class="iter-item">6</div><div class="iter-item">7</div><div class="iter-item">🟩</div>
+    </div>
+<pre>agent.<span class="fn">move</span>(UP, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, ___)
+agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)
+agent.<span class="fn">set_block_or_item</span>(___, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, ___)</pre>
+    <p style="margin-top:.5em">Both numbers are the same. Say why.</p>
+  </div>
+
+  <!-- OPTIONAL: Concept — check the landing -->
+  <div class="slide">
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Step 3 — check the landing</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🤖</div><div class="name">on the bank</div><div class="ex">number was right</div></div>
+      <div class="opt-card"><div class="ico">➡️</div><div class="name">past the bank</div><div class="ex">subtract the extra</div></div>
+      <div class="opt-card"><div class="ico">💧</div><div class="name">in the water</div><div class="ex">add the missing</div></div>
+    </div>
+    <p style="margin-top:.6em">Where the agent stands tells you the fix.</p>
+    <p class="bilingual">에이전트가 선 자리가 정답을 알려줘요</p>
+  </div>
+
+  <!-- OPTIONAL: MCQ 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="Count the empty blocks, then write that same number.">
+    <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+    <div class="qmeta">Question 1 of 3</div>
+    <div class="q">The gap is 6 empty blocks. Which line crosses it?</div>
+    <div class="opts">
+      <button class="opt"><code>agent.move(FORWARD, 6)</code></button>
+      <button class="opt"><code>agent.move(FORWARD, 7)</code></button>
+      <button class="opt"><code>agent.move(UP, 6)</code></button>
+      <button class="opt"><code>agent.move(FORWARD, 12)</code></button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- OPTIONAL: MCQ 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="A fence is a thin rail. You cannot walk across it.">
+    <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+    <div class="qmeta">Question 2 of 3</div>
+    <div class="q">Which name builds a deck you can walk on?</div>
+    <div class="opts">
+      <button class="opt"><code>WHITE_CONCRETE</code></button>
+      <button class="opt"><code>BIRCH_FENCE</code></button>
+      <button class="opt"><code>WHITE_FENCE</code></button>
+      <button class="opt"><code>OAK_FENCE</code></button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- OPTIONAL: MCQ 3 -->
+  <div class="slide mcq" data-correct="0" data-explain="Place mode must be on before the agent takes a single step.">
+    <div class="pill purple">📝 Quiz</div><span class="activity-tag">OPTIONAL</span>
+    <div class="qmeta">Question 3 of 3</div>
+    <div class="q">Where does <code>agent.set_assist(PLACE_ON_MOVE, True)</code> go?</div>
+    <div class="opts">
+      <button class="opt">Above every move line</button>
+      <button class="opt">At the very bottom</button>
+      <button class="opt">After the first move</button>
+      <button class="opt">It does not matter</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- OPTIONAL: quiz score -->
+  <div class="slide center-all mcq-score">
+    <div class="pill purple">Quiz</div><span class="activity-tag">OPTIONAL</span>
+    <h2>Your score</h2>
+    <div class="score-val">0 / 3</div>
+    <p class="score-msg">Answer the questions to see your score.</p>
+    <button class="quiz-reset">↺ retake</button>
+  </div>
+
+  <!-- OPTIONAL: full program reference -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The whole bridge program</h2>
+<pre>agent.<span class="fn">teleport_to_player</span>()
+agent.<span class="fn">set_block_or_item</span>(WHITE_CONCRETE, <span class="num">1</span>)
+agent.<span class="fn">set_assist</span>(PLACE_ON_MOVE, <span class="kw">True</span>)
+agent.<span class="fn">move</span>(UP, <span class="num">1</span>)
+agent.<span class="fn">move</span>(FORWARD, <span class="num">5</span>)
+agent.<span class="fn">move</span>(DOWN, <span class="num">1</span>)</pre>
+    <p style="margin-top:.5em">Only one number ever changes: the counted gap.</p>
+  </div>
+
+  <!-- OPTIONAL: Stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add the rail on the second side too.</div>
+      <div class="item"><span class="lvl">★★</span>Bridge an arch two blocks high.</div>
+      <div class="item"><span class="lvl">★★★</span>Cross two gaps without stopping. Count both first.</div>
+    </div>
+  </div>
+
+  <!-- Slot 20: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="emoji">🔢</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Count first.<br>Run second.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: one chat word builds the whole bridge.</p>
+    <p class="bilingual">다음 시간: 채팅 한 단어로 다리 만들기</p>
+  </div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 37</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>
