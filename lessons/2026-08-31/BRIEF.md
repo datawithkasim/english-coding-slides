@@ -176,6 +176,24 @@ forgets where quotation marks and parentheses go.
 **Promised** — "more typing practice to build spelling familiarity" and
 **"let Amy try the Python card project herself before showing an example."**
 
+**The six-week arc (set by Kasim, 2026-08-31):** Amy is building a **small
+text-based game** over roughly six weeks. Every deck from here teaches one idea
+the game needs, and says out loud where that idea lands in the game. Today's
+player card is the game's **character screen**, not a standalone exercise.
+
+**Deck growth rule for her, learned the hard way today:** enlarging a deck means
+**more taught ideas, each opening with an animation or diagram before the code** —
+never more debug cards. Keep debug slides to her own real errors, about four.
+Use the animated visualisation machinery already in `assets/style.css`
+(`.viz-3` / `.viz-4` with `.iter-item`, `.var-val`, `.out-line`, and the
+`hl3` / `vv3` / `out3a` keyframes) plus the reusable helpers in `assets/deck.js`.
+
+**Idea ladder toward the game** — variable as a labelled box · `input()` filling
+the box · f-string `{}` as a window · `"=" * n` as a stamp · `int()` turning text
+into a number · `if` / `else` as the player's choice · a variable that changes
+(`hp = hp - 1`, then `"♥" * hp`). `if` / `else` is the most important of these:
+it is what makes a game a game.
+
 **Today:** she builds the player card herself. This is a **do-first deck**, not a
 lecture deck.
 
