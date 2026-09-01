@@ -296,8 +296,15 @@ without being reminded.
 fix the right wall `-BOSS_SPEED` with `-abs()`, add a Boss x/5 counter UI, add
 boss rage (`cooldown - boss_level * 5`).
 
-**Today (promised):** **check the homework, celebrate the finished game, pick the
-next project.**
+**Today (Kasim's decision, 2026-09-01):** **check the homework, celebrate the
+finished game, then start the platformer.** The project is not a choice any
+more. Kasim already told the mother on 2026-08-25 that finishing the shooter was
+so Jason "could move on to the platformer game", so offering three doors would
+contradict what she was told.
+
+New idea today: **gravity and jumping** — `vy`, `vy += GRAVITY`, `y += vy`, the
+floor clamp, and `JUMP_POWER = -12` on space with an `on_ground` guard. It is a
+new file, `platformer.py`, not an edit of the shooter.
 
 This deck has an unusual shape. It is **one third review, one third celebration,
 one third a choice.** Build it that way.

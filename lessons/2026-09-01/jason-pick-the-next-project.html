@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pick the Next Project · Jason</title>
+<title>Start the Platformer · Jason</title>
 <link rel="stylesheet" href="../../assets/style.css">
 <style>
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
@@ -125,10 +125,10 @@
   <!-- 1 title -->
   <div class="slide active center-all">
     <div class="emoji">🎮</div>
-    <h1>Pick the next project</h1>
-    <p class="line" style="margin-top:.3em">Mark the homework. Look at what you built.<br>Then <b>choose</b> the next game.</p>
+    <h1>Start the platformer</h1>
+    <p class="line" style="margin-top:.3em">Mark the homework. Look at what you built.<br>Then build a thing that <b>falls and jumps</b>.</p>
     <div class="chips" style="margin-top:.7em">
-      <span class="chip on">1 · homework</span><span class="chip">2 · your game</span><span class="chip">3 · the choice</span>
+      <span class="chip on">1 · homework</span><span class="chip">2 · your game</span><span class="chip">3 · gravity + jump</span>
     </div>
   </div>
 
@@ -432,50 +432,26 @@ speed = BOSS_SPEED  + (boss_level - 1)</pre>
     </div>
   </div>
 
-  <!-- 20 part 3 opener -->
+  <!-- 20 next project, decided -->
   <div class="slide center-all">
-    <div class="emoji">🚪</div>
-    <h1>What next?</h1>
-    <p class="line" style="margin-top:.3em">Meteor Shooter is finished. Three doors. <b>You pick one.</b></p>
-    <div class="chips" style="margin-top:.6em">
-      <span class="chip">A · think</span><span class="chip">B · jump</span><span class="chip">C · build</span>
-    </div>
-    <p class="bilingual">오늘 끝에 하나 골라요</p>
+    <div class="emoji">🦘</div>
+    <h1>Next: a platformer</h1>
+    <p class="line" style="margin-top:.3em">Meteor Shooter is finished. Today you start the jumping game.</p>
+    <p class="quiet" style="margin-top:.4em">Same Pygame. Brand new physics.</p>
+    <p class="bilingual">오늘부터 점프 게임 시작해요</p>
   </div>
 
-  <!-- 21 project A -->
+  <!-- 21 what we are building -->
   <div class="slide">
-    <div class="pill">Project A</div>
-    <h2>Enemies that think 🧠</h2>
+    <div class="pill">The plan</div>
+    <h2>Fall unless you jump 🦘</h2>
     <div class="two" style="align-items:start">
       <div style="text-align:left">
-        <p class="line">They watch you. Close → chase. Hurt → run.</p>
-        <p class="quiet" style="margin-top:.5em">First thing you build — one new key:</p>
-<pre class="tiny">enemies.append({
-    "x": x,
-    "y": y,
-    "state": "patrol",
-})</pre>
-        <p class="quiet">Same dict shape as your boss.</p>
-      </div>
-      <div>
-        <canvas class="sim" id="pA" width="360" height="230"></canvas>
-        <div class="readout">patrol → <b>chase</b> → flee</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 22 project B -->
-  <div class="slide">
-    <div class="pill">Project B</div>
-    <h2>A platformer 🦘</h2>
-    <div class="two" style="align-items:start">
-      <div style="text-align:left">
-        <p class="line">No more flying. You fall — unless you jump.</p>
-        <p class="quiet" style="margin-top:.5em">First thing you build — two lines:</p>
+        <p class="line">In the shooter you flew. Here you <b>fall</b>, all the time.</p>
+        <p class="quiet" style="margin-top:.5em">Today's whole idea, two lines:</p>
 <pre class="tiny">player["vy"] += GRAVITY
 player["y"]  += player["vy"]</pre>
-        <p class="quiet">Same Pygame. Brand new physics.</p>
+        <p class="quiet">Everything else today hangs off those two.</p>
       </div>
       <div>
         <canvas class="sim" id="pB" width="360" height="230"></canvas>
@@ -484,109 +460,196 @@ player["y"]  += player["vy"]</pre>
     </div>
   </div>
 
-  <!-- 23 project C -->
+  <!-- 22 concept: up is negative -->
   <div class="slide">
-    <div class="pill">Project C</div>
-    <h2>A level editor 🗺️</h2>
-    <div class="two" style="align-items:start">
+    <div class="pill purple">Concept</div>
+    <h2>On screen, <b>up is negative</b></h2>
+    <div class="two" style="align-items:center">
       <div style="text-align:left">
-        <p class="line">Draw a level with the mouse. Save it. Load it back.</p>
-        <p class="quiet" style="margin-top:.5em">First thing you build — the empty grid:</p>
-<pre class="tiny">grid = [[0] * 20 for _ in range(15)]
-grid[row][col] = 1</pre>
-        <p class="quiet">New idea: files.</p>
+        <p class="line">y = 0 is the <b>top</b> of the window. y gets bigger going <b>down</b>.</p>
+        <p class="quiet" style="margin-top:.5em">So to move up you <b>subtract</b>. A jump is a <b>negative</b> vy.</p>
+        <p class="quiet">You already did this. Your bullets went up with a minus.</p>
       </div>
       <div>
-        <canvas class="sim" id="pC" width="360" height="230"></canvas>
-        <div class="readout">grid → <b>level1.txt</b> → grid</div>
+<pre class="tiny">y = 0    &lt;- top of window
+   |
+   |  vy = -12   🡅  jumping
+   |  vy =   0   &#8212;  hanging
+   |  vy = +12   🡇  falling
+   v
+y = 400  &lt;- ground</pre>
+      </div>
+    </div>
+    <p class="bilingual">화면은 아래로 갈수록 y가 커져요. 위로 = 마이너스</p>
+  </div>
+
+  <!-- 23 concept: gravity is one small add, every frame -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>Gravity = one small add, every frame</h2>
+    <p class="line" style="margin-top:.2em">vy does not jump to a big number. It <b>grows a little each frame</b>.</p>
+<pre class="tiny">frame   vy      y        what you see
+  0    -12.0   300.0     shoot up fast
+  1    -11.4   288.6     still going up
+  2    -10.8   277.8     slower
+ ...
+ 20     +0.0   228.0     top of the arc
+ ...
+ 39    +11.4   300.0     back on the ground</pre>
+    <p class="quiet" style="margin-top:.4em">Every frame: add GRAVITY to vy, then add vy to y. That is the whole arc.</p>
+    <p class="bilingual">한 프레임마다 vy에 조금씩 더해요. 그게 포물선이 돼요.</p>
+  </div>
+
+  <!-- 24 STEP 1 the player and the constants -->
+  <div class="slide">
+    <div class="pill">v1 &middot; new file<span class="activity-tag">STEP 1 / 4</span></div>
+    <h2>The player, and three constants</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> the top of your new file &middot; 📍 above the game loop &middot; indent <b>0</b></p>
+<pre class="tiny"><span class="com"># platformer.py</span>
+WIDTH  = <span class="num">640</span>
+HEIGHT = <span class="num">400</span>
+
+<span style="display:block;background:rgba(56,208,224,.14)">GRAVITY     = <span class="num">0.6</span>
+JUMP_POWER  = <span class="num">-12</span>
+GROUND_Y    = <span class="num">340</span>
+
+player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class="str">"y"</span>: GROUND_Y, <span class="str">"w"</span>: <span class="num">30</span>, <span class="str">"h"</span>: <span class="num">40</span>,
+          <span class="str">"vy"</span>: <span class="num">0</span>, <span class="str">"on_ground"</span>: <span class="kw">True</span>}</span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Same dict shape as your boss. <code>vy</code> is the only new key.<br>🟣 CAPS because they never change &mdash; your own rule.<br>✅ Run it. A block sits on the ground and does nothing.</p>
+  </div>
+
+  <!-- 25 STEP 2 gravity -->
+  <div class="slide">
+    <div class="pill">v2 &middot; it falls<span class="activity-tag">STEP 2 / 4</span></div>
+    <h2>Two lines and it falls</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>while running:</code> &middot; 📍 inside the loop, before you draw &middot; indent <b>4</b></p>
+    <div class="two">
+      <div><span class="quiet">OLD</span>
+<pre class="tiny"><span class="kw">while</span> running:
+    <span class="com"># events here</span>
+
+    screen.fill(BLACK)</pre></div>
+      <div><span class="quiet">NEW</span>
+<pre class="tiny"><span class="kw">while</span> running:
+    <span class="com"># events here</span>
+<span style="display:block;background:rgba(56,208,224,.14)">
+    player[<span class="str">"vy"</span>] += GRAVITY
+    player[<span class="str">"y"</span>]  += player[<span class="str">"vy"</span>]</span>
+    screen.fill(BLACK)</pre></div>
+    </div>
+    <p class="quiet" style="margin-top:.35em">🟣 vy grows, then y follows vy. Order matters.<br>✅ Run it. The block sinks through the floor and vanishes. That is correct for now.</p>
+  </div>
+
+  <!-- 26 STEP 3 the floor -->
+  <div class="slide">
+    <div class="pill">v3 &middot; it lands<span class="activity-tag">STEP 3 / 4</span></div>
+    <h2>Stop at the floor</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>player["y"]  += player["vy"]</code> &middot; 📍 the next line under it &middot; indent <b>4</b></p>
+<pre class="tiny">    player[<span class="str">"vy"</span>] += GRAVITY
+    player[<span class="str">"y"</span>]  += player[<span class="str">"vy"</span>]
+<span style="display:block;background:rgba(56,208,224,.14)">
+    <span class="kw">if</span> player[<span class="str">"y"</span>] >= GROUND_Y:
+        player[<span class="str">"y"</span>] = GROUND_Y
+        player[<span class="str">"vy"</span>] = <span class="num">0</span>
+        player[<span class="str">"on_ground"</span>] = <span class="kw">True</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Three things on landing: put it back on the floor, kill the speed, remember it is standing.<br>🟣 Colon after <code>if</code>. Check it before you run.<br>✅ Run it. The block drops once and stays on the ground.</p>
+  </div>
+
+  <!-- 27 STEP 4 the jump -->
+  <div class="slide">
+    <div class="pill">v4 &middot; it jumps<span class="activity-tag">STEP 4 / 4</span></div>
+    <h2>Space to jump</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>for event in pygame.event.get():</code> &middot; 📍 inside that for loop &middot; indent <b>8</b></p>
+<pre class="tiny">    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():
+        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+<span style="display:block;background:rgba(56,208,224,.14)">
+        <span class="kw">if</span> event.type == pygame.KEYDOWN:
+            <span class="kw">if</span> event.key == pygame.K_SPACE <span class="kw">and</span> player[<span class="str">"on_ground"</span>]:
+                player[<span class="str">"vy"</span>] = JUMP_POWER
+                player[<span class="str">"on_ground"</span>] = <span class="kw">False</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 JUMP_POWER is <b>-12</b>. Negative sends it up.<br>🟣 <code>and player["on_ground"]</code> is what stops flying. No key, no double jump.<br>✅ Run it. Press space. It jumps once, arcs, lands.</p>
+  </div>
+
+  <!-- 28 check -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Three questions</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">1 &middot; Why is JUMP_POWER negative?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">Up is negative on screen. y = 0 is the top.</p></details>
+        <p class="line" style="margin-top:.5em">2 &middot; Delete <code>and player["on_ground"]</code>. What happens?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">He flies. Space works mid-air, forever.</p></details>
+      </div>
+      <div style="text-align:left">
+        <p class="line">3 &middot; GRAVITY = 3 instead of 0.6?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">A tiny hop. vy turns positive almost at once, so it barely leaves the floor.</p></details>
+        <p class="quiet" style="margin-top:.6em">Try all three. Put the numbers back after.</p>
       </div>
     </div>
   </div>
 
-  <!-- 24 the pick -->
-  <div class="slide center-all">
-    <div class="pill">Decide 🎯</div>
-    <h2>Pick one. Out loud.</h2>
-    <div class="opt-grid" style="max-width:60em;width:100%">
-      <div class="opt-card">
-        <div class="ico">🧠</div>
-        <div class="name">A · Enemies that think</div>
-        <div class="ex">"state": "patrol"</div>
-      </div>
-      <div class="opt-card">
-        <div class="ico">🦘</div>
-        <div class="name">B · Platformer</div>
-        <div class="ex">player["vy"] += GRAVITY</div>
-      </div>
-      <div class="opt-card">
-        <div class="ico">🗺️</div>
-        <div class="name">C · Level editor</div>
-        <div class="ex">grid[row][col] = 1</div>
-      </div>
-    </div>
-    <p class="quiet" style="margin-top:.5em">A = states · B = physics · C = files. No wrong answer.</p>
-  </div>
-
-  <!-- 25 code talk 2 -->
+  <!-- 29 code talk 2 -->
   <div class="slide">
     <div class="pill purple">Code Talk</div>
-    <h2>Name your pick</h2>
+    <h2>Say the physics</h2>
     <div class="frame-card">
       <div class="label">Sentence frame</div>
-      <div class="frame">"I want to build <span class="blank"></span>, because <span class="blank"></span>."</div>
-      <div class="pair-prompt">한국어로 먼저, 그다음 영어로. Say the letter and the reason.</div>
+      <div class="frame">"Every frame vy goes <span class="blank"></span>, so y goes <span class="blank"></span>, until <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로. Say it twice, once before you code and once after.</div>
     </div>
   </div>
 
-  <!-- 26 make -->
+  <!-- 30 make -->
   <div class="slide">
     <div class="pill">Your turn!</div>
     <h2>Start it now 🚀</h2>
     <ul class="tick test" style="max-width:30em">
-      <li>New file. Name it after your pick.</li>
+      <li>New file: <code>platformer.py</code></li>
       <li>Copy your Meteor Shooter window setup in.</li>
-      <li>Type the one line from your project card.</li>
-      <li>Run it. Black window, no crash = win.</li>
+      <li>Type STEP 1, run it. A block on the ground.</li>
+      <li>Then STEP 2, 3, 4. Run after every step.</li>
     </ul>
   </div>
 
-  <!-- 27 OPTIONAL stretch -->
+  <!-- 31 OPTIONAL stretch -->
   <div class="slide">
     <span class="activity-tag">OPTIONAL</span>
     <div class="pill purple">Stretch</div>
     <h2>Before next week</h2>
     <div class="stretch-list" style="max-width:34em">
-      <div class="item"><span class="lvl">★</span>Give boss 5 its own colour.</div>
-      <div class="item"><span class="lvl">★★</span>Draw <code>RAGE</code> when <code>boss_level &gt; 3</code>.</div>
-      <div class="item"><span class="lvl">★★★</span>Save your best score to a file.</div>
+      <div class="item"><span class="lvl">★</span>Left and right arrows move the player.</div>
+      <div class="item"><span class="lvl">★★</span>Add one platform. Land on it, not just the floor.</div>
+      <div class="item"><span class="lvl">★★★</span>Make a short jump when space is tapped, a tall one when held.</div>
     </div>
-    <p class="quiet" style="margin-top:.4em">★★★ is a taste of Project C.</p>
+    <p class="quiet" style="margin-top:.4em">★★ is next lesson. Try it if you want a head start.</p>
   </div>
 
-  <!-- 28 OPTIONAL exit ticket -->
+  <!-- 32 OPTIONAL exit ticket -->
   <div class="slide">
     <span class="activity-tag">OPTIONAL</span>
     <div class="pill">Exit ticket</div>
     <h2>One question</h2>
     <div class="exit" style="max-width:36em">
       <div class="label">You say it — no peeking</div>
-      <p class="line" style="margin-top:.3em">Why does the wall use <code>abs(boss["vx"])</code> and not <code>BOSS_SPEED</code>?</p>
+      <p class="line" style="margin-top:.3em">Why is <code>JUMP_POWER</code> negative, and what breaks if you drop <code>and player["on_ground"]</code>?</p>
       <details><summary class="sub">Show answer</summary>
-        <p class="line">BOSS_SPEED is stuck at 3. <code>abs()</code> keeps this boss's own speed.</p>
+        <p class="line">Up is negative because y = 0 is the top of the window. Without the on_ground check he can press space in mid-air and fly.</p>
       </details>
     </div>
   </div>
 
-  <!-- 29 close -->
+  <!-- 33 close -->
   <div class="slide center-all">
     <div class="emoji">🚀</div>
-    <p class="line big">One game shipped. <b>The next one starts today.</b></p>
-    <p class="quiet" style="margin-top:.4em">Bosses that scale, a bullet fan, a win screen — all yours.</p>
-    <p class="bilingual">다음 주에 새 프로젝트 시작해요</p>
+    <p class="line big">One game shipped. <b>The next one is running.</b></p>
+    <p class="quiet" style="margin-top:.4em">Gravity, a floor, and a jump. Next: platforms to land on.</p>
+    <p class="bilingual">오늘 새로 배운 것: 중력과 점프. 다음: 발판 만들기</p>
   </div>
 
   <div class="nav">
-    <button id="prev">‹</button><span class="counter" id="counter">1 / 29</span><button id="next">›</button>
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 33</span><button id="next">›</button>
   </div>
 </div>
 <script src="../../assets/deck.js"></script>
