@@ -95,11 +95,14 @@ getting hints.
   before the order settled.
 - **Zero-start not internalised.** Entered `3,3` where `2,2` was needed.
 
-**Today (promised):** more `blocks.fill` practice — **lock in x-before-y order
-and counting from 0**. Nothing new. The same two ideas, drilled until automatic.
+**Today (Kasim's pick):** warm up on the two shaky ideas, then **learn `z` — the
+third number in `pos()`, the one he has always typed `0` into.** Depth/forward.
+By the end he builds a path running out of the gate and a roof over both, using
+a z *range*, and knows z counts from 0 exactly like x and y.
 
-This is a **drill deck, not a new-topic deck.** Build it as a ladder of tiny
-identical-shaped tasks, each one a single `blocks.fill` line.
+**Every lesson teaches something new.** The drill is the way in, not the whole
+lesson. Build it as a ladder of tiny identical-shaped tasks (one `blocks.fill`
+line each), and the last two rungs are the new z idea.
 
 - Slot 5 model: the grid as **two rulers**, X along the bottom, Y up the side.
   Always read the bottom one first. Say the sentence "**X first, then Y**" on
@@ -108,7 +111,10 @@ identical-shaped tasks, each one a single `blocks.fill` line.
   0 1 2 3 4 5 and mark that 6 boxes end at **5**. Repeat that strip whenever a
   range appears.
 - Ramp: v1 one flat bar · v2 a rectangle (X range + Y range) · v3 two rectangles
-  side by side · v4 a small shape made of three fills.
+  side by side · v4 a small shape made of three fills · **v5 the new idea — z**:
+  a path at `pos(0,0,1)`→`pos(5,0,4)`, then a roof at `pos(0,9,0)`→`pos(5,9,4)`.
+- **z semantics, confirmed against the other Minecraft decks:** `pos(x, y, z)` =
+  x across, y up, z forward. Never paraphrase it the other way round.
 
 **Debug slides (3+)** — (1) X and Y swapped, so the wall builds sideways;
 (2) `pos(3,3,0)` where `pos(2,2,0)` was meant — his real 08-25 mistake, show the
