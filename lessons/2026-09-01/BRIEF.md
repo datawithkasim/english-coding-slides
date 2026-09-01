@@ -164,10 +164,13 @@ her code ran clean where the teacher's did not.
 - **Does not understand how `ax`, `az`, `bx`, `bz` are calculated.** The algebra
   idea is new to her.
 
-**Today:** make the numbers visible. Nothing new gets added to the program — the
-program she already has gets **opened up and read**.
+**Today (Kasim's pick):** read the numbers first, then **use them to build the
+second strand** — `j = (i + 2) % 4`, `bx`/`bz` from the same lists, emerald
+placed opposite the gold. The tracing is the way in; strand B is the new idea,
+and it is the payoff for being able to read `i % 4` at all.
 
-This is a **trace-heavy deck**. It uses `.trace-grid` far more than usual.
+The trace half stays **trace-heavy** and uses `.trace-grid` far more than usual.
+The v3 slides are no longer OPTIONAL — they are the lesson's new idea.
 
 Step 1 — `%` on its own, with no Minecraft in sight. A row of 12 numbers and what
 `i % 4` gives for each. Slot 5 model: a **clock with 4 hours**; counting past 3
@@ -184,8 +187,9 @@ Step 3 — the coordinate table she was promised on 07-21 (*"build a coordinate
 table so Eunwoo finds the pattern rule herself"*). She fills in `i`, `i % 4`,
 `ax`, `az` for `i = 0…7`, and states the rule.
 
-Ramp: v1 four blocks from a list · v2 the loop with `%` wrapping · v3 the second
-strand `bx`, `bz` offset from the first · v4 the full spiral with height.
+Ramp: v1 four blocks from a list · v2 the loop with `%` wrapping · **v3 the
+second strand `bx`, `bz` offset from the first — today's new idea, core not
+optional** · v4 the full spiral with height (still OPTIONAL).
 
 **Debug slides** — (1) `XS[i]` without `%` → `IndexError` once `i` passes the
 list length; (2) `i % 8` where `i % 4` was meant → the pattern repeats too
@@ -197,8 +201,9 @@ up — her real 07-21 mistake.
 "`i % 4` gives ___, so `XS[i % 4]` picks ___, which puts the block at ___."
 This directly answers the *"it just got fixed"* problem. She says it twice.
 
-**Next lesson, already built:** `eunwoo-two-strands.html` in this folder —
-`bx`/`bz` as `ax`/`az` plus an offset, then the rungs between the strands.
+**Next lesson:** `eunwoo-two-strands.html` in this folder covers strand B plus
+the rungs between the strands. Strand B is taught today, so that deck needs its
+opening rebuilt around the rungs before it is used.
 
 ---
 
