@@ -302,14 +302,22 @@ is not a choice any more. Kasim already told the mother on 2026-08-25 that finis
 so Jason "could move on to the platformer game", so offering three doors would
 contradict what she was told.
 
-New idea today: **gravity and jumping**, six steps in a new file
-`platformer.py`, not an edit of the shooter:
+New idea today: **gravity and jumping**, in a new file `platformer.py`, not an
+edit of the shooter. **13 steps, deliberately more than one lesson holds** —
+whatever he does not reach rolls to next week:
 1. player dict + `GRAVITY` / `JUMP_POWER` / `GROUND_Y`
 2. `vy += GRAVITY`, `y += vy` — it falls through the floor
 3. the floor clamp — it lands
 4. space → `vy = JUMP_POWER`, behind an `on_ground` guard
 5. arrow keys with `get_pressed()` — held, not tapped
 6. one platform, landing only while `vy > 0`
+7. platforms become a list, the check becomes a `for` loop
+8. three platforms and a gap — level design
+9. KEYUP cuts the rise — tap for a hop, hold for a full jump
+10. coyote time, a counter like his `combo_timer`
+11. a patrolling platform — his own boss bounce, reused
+12. riding it: carry the player's `x` too
+13. fall out of the world → respawn at `START_X` / `START_Y`
 
 Debug slides cover the two things that actually bite him: the missing colon
 after `if`, and jumping in mid-air when the `on_ground` guard is left off.
