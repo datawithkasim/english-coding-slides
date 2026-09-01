@@ -127,7 +127,11 @@ build, not once.
 
 ---
 
-## 17:00 KST · 15:00 HCMC · EUNWOO — `eunwoo-see-the-numbers.html`
+## NOT TODAY · EUNWOO — Wed 17:00 KST · 15:00 HCMC — `eunwoo-see-the-numbers.html`
+
+⚠ **Corrected by Kasim 2026-09-01: EUNWOO teaches Wednesday 17:00 KST, not Tuesday.**
+The deck below is built and correct. It is tomorrow's (09-02) lesson, not today's.
+No parent message goes out for her today.
 
 **Track:** MS002, Coordinates, Minecraft Python · **Source:** log, 2026-08-24
 
@@ -391,6 +395,11 @@ after turn 3 they are ___ and ___."
 
 ## 23:00 KST · 21:00 HCMC · JIYU — `jiyu-pixel-art-with-loops.html`
 
+
+⚠ **Coordinate origins (Kasim, 2026-09-01):** `x` and `z` start at **1**, `y`
+starts at **0**. The student stands on the grid's `0,0,0`, so `x 0` / `z 0` are
+the lines under their feet and `y 0` is the floor. Flat pixel art sits at `z 1`,
+not `z 0`. First free square is `pos(1, 0, 1)`.
 **Track:** MS001, Minecraft Python · **Source:** log, 2026-08-25
 
 **Covered last time**
@@ -458,7 +467,7 @@ Nothing here was written to the database.
 | Student | Tracker says | Reality |
 |---|---|---|
 | JASON [PH] PYGAMER | Tue 17:00 KST | Tue **19:00** KST — calendar and every Notion note since 08-18 |
-| EUNWOO COORDINATES | Mon 19:00 KST | Teaching **Tue 17:00** KST today (calendar, confirmed by Kasim) |
+| EUNWOO COORDINATES | Mon 19:00 KST | **Wed 17:00** KST (confirmed by Kasim 2026-09-01) |
 | DAVID G8 | Tue 21:00 KST | **Sun 19:00** KST (17:00 HCMC) |
 | YURA G5 | Tue 22:00 KST | **Sat 18:00** KST (16:00 HCMC) |
 | Ryan | Tue 09:00 KST | Last two lessons were **Thursday** 09:00 KST |
