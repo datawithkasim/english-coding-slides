@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two Formulas, One Build · Leo</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Helper kit copied verbatim from lessons/2026-08-30/leo-loop-that-changes.html
+     (which copied it from lessons/2026-08-25/leo-algorithms-nested-loops.html).
+     Same classes, nothing new invented. */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .bad { display: block; background: rgba(255,85,85,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .ln { color: #3d4759; user-select: none; display: inline-block; width: 2em;
+            text-align: right; padding-right: .6em; margin-right: .6em; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2.1vmin, 20px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .5em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Leo · MS002 · Two Formulas 🏙️</div>
+
+  <!-- 1 · SLOT 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft · Python</div>
+    <div class="emoji">🏙️</div>
+    <h1>Two rules.<br>One loop.</h1>
+    <p class="line" style="margin-top:.3em"><b>x</b> steps right. <b>y</b> climbs by Fibonacci.<br><b>You type first</b>, every time.</p>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip on">v1 one rule</span><span class="chip">v2 rule two</span>
+      <span class="chip">v3 both</span><span class="chip">v4 height</span>
+    </div>
+    <p class="bilingual">한 반복문 안에 두 가지 규칙</p>
+  </div>
+
+  <!-- 2 · SLOT 2: Recap = homework check -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Homework check</div>
+    <h2>Your Fibonacci towers</h2>
+    <div class="two wide-left">
+      <div>
+<pre class="tiny">    h1 = <span class="num">1</span>
+    h2 = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+        y = h1 + h2
+        h1 = h2
+        h2 = y</pre>
+        <p class="quiet">Your own worksheet lines. No lists.</p>
+      </div>
+      <div class="recap-q">
+        <div class="label">You say it</div>
+        <div class="q">Your flat staircase never climbed. What was wrong?</div>
+        <details><summary>Show answer</summary><div class="ans">The update line sat outside the loop. Indent it.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · SLOT 3: Stuck frames — EARLY -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Before we start</div>
+    <h2>Three things to say when stuck</h2>
+    <div class="frame-card">
+      <div class="label">Read one out loud — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 4 · SLOT 4: Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Six towers. What shape?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first — do not run it</div>
+<pre>x = <span class="num">2</span>
+h1 = <span class="num">1</span>
+h2 = <span class="num">1</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+    y = h1 + h2
+    <span class="fn">player.say</span>(y)
+    h1 = h2
+    h2 = y</pre>
+      <details><summary>Reveal</summary><div class="ans">2, 3, 5, 8, 13, 21. Each one adds the two before it.</div></details>
+    </div>
+  </div>
+
+  <!-- 5 · SLOT 5: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">rule</span>
+      <span class="gloss">how one variable changes each turn</span>
+      <span class="ko">규칙</span>
+      <span class="term">hand-over</span>
+      <span class="gloss">passing a number on for the next turn</span>
+      <span class="ko">넘겨주기</span>
+      <span class="term">skyline</span>
+      <span class="gloss">a row of towers, different heights</span>
+      <span class="ko">스카이라인</span>
+    </div>
+  </div>
+
+  <!-- 6 · SLOT 6: Concept — two rules, one loop (no code) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="cnC" width="380" height="300"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="cnFwd">one turn ▶</button>
+          <button class="btn alt" id="cnReset">reset</button>
+        </div>
+        <div class="readout">x = <b id="cnX">—</b> · y = <b id="cnY">—</b></div>
+      </div>
+      <div>
+        <p class="line big">Two rules. One turn.</p>
+        <p class="line" style="margin-top:.4em">Rule 1 — <b>x</b> steps right by <code>spacing</code>.</p>
+        <p class="line" style="margin-top:.2em">Rule 2 — <b>y</b> adds the last two heights.</p>
+        <p class="quiet" style="margin-top:.4em">Same loop. Same turn. Different rules.</p>
+        <p class="bilingual">규칙 두 개가 같이 돌아가요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · SLOT 7: Concept — the hand-over (no code) -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Concept</div>
+    <h2>The hand-over</h2>
+    <p class="line" style="margin:.15em 0">🖐️ <b>h1</b> = 1 &nbsp; 🖐️ <b>h2</b> = 1 &nbsp;→&nbsp; y = <b>2</b></p>
+    <p class="line" style="margin:.15em 0">🖐️ <b>h1</b> = 1 &nbsp; 🖐️ <b>h2</b> = 2 &nbsp;→&nbsp; y = <b>3</b></p>
+    <p class="line" style="margin:.15em 0">🖐️ <b>h1</b> = 2 &nbsp; 🖐️ <b>h2</b> = 3 &nbsp;→&nbsp; y = <b>5</b></p>
+    <p class="line" style="margin-top:.5em">Left hand takes the right hand's number.<br>Right hand takes the answer.</p>
+    <p class="bilingual">오른손 숫자를 왼손이 받아요</p>
+  </div>
+
+  <!-- 8 · SLOT 8: STEP 1 / 6 — v1, one rule -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 1 / 6 · ✋ You type first — teacher waits</div>
+    <p class="quiet">NEW — type every line</p>
+<pre class="tiny"><span class="hot"><span class="kw">def</span> <span class="fn">on_towers</span>():</span><span class="hot">    x = <span class="num">2</span></span><span class="hot">    spacing = <span class="num">2</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="hot">        x = x + spacing</span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, on_towers)</span></pre>
+    <p class="where">🔍 New Python file. Nothing to find yet.</p>
+    <p class="where">📍 Line 1 of a blank file. Indents: 4, 8, 12.</p>
+    <p class="where">🟣 Rule 1 only — your pillars.</p>
+    <p class="where">✅ Chat <code>towers</code> → 6 towers, all same height.</p>
+  </div>
+
+  <!-- 9 · SLOT 9: STEP 2 / 6 — v2, rule two alone -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 2 / 6 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, on_towers)</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="hot"><span class="kw">def</span> <span class="fn">on_chain</span>():</span><span class="hot">    h1 = <span class="num">1</span></span><span class="hot">    h2 = <span class="num">1</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="hot">        y = h1 + h2</span><span class="hot">        <span class="fn">player.say</span>(y)</span><span class="hot"> </span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, on_towers)</span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"chain"</span>, on_chain)</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>player.on_chat("towers", on_towers)</code></p>
+    <p class="where">📍 New lines go ABOVE it. Indents: 4, 8.</p>
+    <p class="where">🟣 Rule 2 alone, no build yet.</p>
+    <p class="where">✅ Chat <code>chain</code> → 2, 2, 2, 2, 2, 2.</p>
+  </div>
+
+  <!-- 10 · SLOT 10: STEP 3 / 6 — the hand-over pair -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 3 / 6 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">player.say</span>(y)</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">player.say</span>(y)</span><span class="hot">        h1 = h2<span class="mk">NEW</span></span><span class="hot">        h2 = y<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>player.say(y)</code></p>
+    <p class="where">📍 Two lines under it. 8 spaces in.</p>
+    <p class="where">🟣 Hand the numbers on for the next turn.</p>
+    <p class="where">✅ Chat <code>chain</code> → 2, 3, 5, 8, 13, 21.</p>
+  </div>
+
+  <!-- 11 · SLOT 11: STEP 4 / 6 — bring rule two into the towers loop -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 4 / 6 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_towers</span>():</span><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">2</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim"><span class="kw">def</span> <span class="fn">on_towers</span>():</span><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">2</span></span><span class="hot">    h1 = <span class="num">1</span><span class="mk">NEW</span></span><span class="hot">    h2 = <span class="num">1</span><span class="mk">NEW</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="hot">        y = h1 + h2<span class="mk">NEW</span></span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>spacing = 2</code></p>
+    <p class="where">📍 <code>h1</code>, <code>h2</code> under it, 4 spaces. <code>y</code> under <code>for</code>, 8 spaces.</p>
+    <p class="where">🟣 Both rules now live in one loop.</p>
+    <p class="where">✅ Chat <code>towers</code> → same 6 towers. Nothing broke.</p>
+  </div>
+
+  <!-- 12 · SLOT 12: STEP 5 / 6 — hand-over into the towers loop -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 5 / 6 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span><span class="hot">        h1 = h2<span class="mk">NEW</span></span><span class="hot">        h2 = y<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>x = x + spacing</code></p>
+    <p class="where">📍 Two lines under it. 8 spaces in.</p>
+    <p class="where">🟣 Without these, <code>y</code> stays 2 forever.</p>
+    <p class="where">✅ Chat <code>towers</code> → still 6 same towers. <code>y</code> is unused.</p>
+  </div>
+
+  <!-- 13 · SLOT 13: Trace activity — MANDATORY two-rule trace -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Trace it ✏️</div>
+    <h2>Two rules, one row each turn</h2>
+    <p class="quiet"><code>x = x + spacing</code> (spacing 2) · <code>y = h1 + h2</code> (start 1, 1)</p>
+    <div class="trace-grid">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head"><code>x</code></div>
+      <div class="cell head"><code>y</code></div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">13</span></details></div>
+
+      <div class="cell">5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">12</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">21</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Write both columns, then tap to check.</p>
+  </div>
+
+  <!-- 14 · SLOT 14: Reuse vs re-create — his own △, own slide -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill purple">Reuse or re-create?</div>
+    <h2>Where you put <code>h1</code> and <code>h2</code></h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">✓ reuse — kept across turns</span>
+<pre class="tiny">    h1 = <span class="num">1</span>
+    h2 = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">6</span>):
+        y = h1 + h2</pre>
+        <p>y = 2, 3, 5, 8, 13, 21 → a <b>growing skyline</b>.</p>
+      </div>
+      <div class="col bad"><span class="tag">✗ re-create — fresh every turn</span>
+<pre class="tiny">    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">6</span>):
+        h1 = <span class="num">1</span>
+        h2 = <span class="num">1</span>
+        y = h1 + h2</pre>
+        <p>y = 2, 2, 2, 2, 2, 2 → a <b>flat row</b>.</p>
+      </div>
+    </div>
+    <p class="quiet">Above the loop = remembers. Inside the loop = forgets.</p>
+    <p class="bilingual">밖에 두면 기억, 안에 두면 초기화</p>
+  </div>
+
+  <!-- 15 · SLOT 15: Common Mistake — his indentation △ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Never on the <code>for</code> line</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre class="tiny">    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">6</span>): x = x + spacing
+    blocks.fill(<span class="str">QUARTZ_BLOCK</span>,
+        pos(x,<span class="num">0</span>,<span class="num">0</span>), pos(x,<span class="num">4</span>,<span class="num">0</span>), REPLACE)</pre>
+        <p>The fill is <b>outside</b>. One tower, at x 14.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre class="tiny">    <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">6</span>):
+        blocks.fill(<span class="str">QUARTZ_BLOCK</span>,
+            pos(x,<span class="num">0</span>,<span class="num">0</span>), pos(x,<span class="num">4</span>,<span class="num">0</span>), REPLACE)
+        x = x + spacing</pre>
+        <p>Everything the loop repeats sits <b>under</b> it.</p>
+      </div>
+    </div>
+    <p class="bilingual">반복할 줄은 for 아래 안쪽에</p>
+  </div>
+
+  <!-- 16 · SLOT 16: STEP 6 / 6 — v4, the height -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 6 / 6 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="bad">            <span class="fn">pos</span>(x, <span class="num">4</span>, <span class="num">0</span>), REPLACE)<span class="mk old">OLD</span></span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="hot">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>pos(x, 4, 0)</code></p>
+    <p class="where">📍 Same line, 12 spaces in. Swap <code>4</code> for <code>y</code>.</p>
+    <p class="where">🟣 Rule 2 now sets the height.</p>
+    <p class="where">✅ Chat <code>towers</code> → tops at 2, 3, 5, 8, 13, 21.</p>
+  </div>
+
+  <!-- 17 · SLOT 17: Debug 1 — the dedent (his exact △) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">🐛 Debug 1</div>
+    <h2>6 fills ran. 1 tower stands.</h2>
+<pre class="tiny"><span class="dim"><span class="ln">4</span>    h2 = <span class="num">1</span></span><span class="dim"><span class="ln">5</span>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="dim"><span class="ln">6</span>        y = h1 + h2</span><span class="dim"><span class="ln">7</span>        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim"><span class="ln">8</span>            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim"><span class="ln">9</span>            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="dim"><span class="ln">10</span>        h1 = h2</span><span class="dim"><span class="ln">11</span>        h2 = y</span><span class="bad"><span class="ln">12</span>    x = x + spacing</span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">Line 12 is at 4 spaces. It runs after the loop ends.</div>
+      <p class="quiet">Push it to 8 spaces. x never moved, so all six fills landed on x = 2.</p>
+    </details>
+  </div>
+
+  <!-- 18 · SLOT 18: Debug 2 — hand-over order -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🐛 Debug 2</div>
+    <h2>2, 4, 8, 16, 32, 64 — not Fibonacci</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span><span class="bad">        h2 = y</span><span class="bad">        h1 = h2</span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">h2 changed first, so h1 copied the NEW h2.</div>
+      <p class="quiet">Both hands hold the same number, so y doubles. Swap the two lines: <code>h1 = h2</code> first.</p>
+    </details>
+  </div>
+
+  <!-- 19 · SLOT 19: Debug 3 — re-created inside -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🐛 Debug 3</div>
+    <h2>Six towers. All 3 blocks tall.</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</span><span class="bad">        h1 = <span class="num">1</span></span><span class="bad">        h2 = <span class="num">1</span></span><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span><span class="dim">        h1 = h2</span><span class="dim">        h2 = y</span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">The chain resets to 1 and 1 at the top of every turn.</div>
+      <p class="quiet">Move both lines ABOVE the <code>for</code>, at 4 spaces. Set once, then hand over.</p>
+    </details>
+  </div>
+
+  <!-- 20 · SLOT 20: Debug 4 — OPTIONAL -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">🐛 Debug 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>You counted 6. You got 5.</h2>
+<pre class="tiny"><span class="dim">    h1 = <span class="num">1</span></span><span class="dim">    h2 = <span class="num">1</span></span><span class="bad">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span class="dim">        y = h1 + h2</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span><span class="dim">        h1 = h2</span><span class="dim">        h2 = y</span></pre>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">range(5) runs 5 turns. The 21-tall tower never gets built.</div>
+      <p class="quiet">Change it to <code>range(6)</code>. The number in range() is the tower count.</p>
+    </details>
+  </div>
+
+  <!-- 21 · SLOT 21: Modify 1 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Try it · one number</div>
+    <h2>Towers 4 apart</h2>
+    <div class="skel" style="max-width:24em">
+<pre>    x = <span class="num">2</span>
+    spacing = <span class="blank">?</span>
+    h1 = <span class="num">1</span>
+    h2 = <span class="num">1</span></pre></div>
+    <span class="rev" data-t="a21">show answer</span>
+    <div id="a21" class="hid">
+      <p class="line"><b>4</b> — x lands on 2, 6, 10, 14, 18, 22.</p>
+      <p class="quiet">Heights do not change. Only rule 1 moved.</p>
+    </div>
+  </div>
+
+  <!-- 22 · SLOT 22: Modify 2 — OPTIONAL, harder -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Try it · harder<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Start the chain at 2 and 3</h2>
+    <div class="skel" style="max-width:24em">
+<pre>    h1 = <span class="blank">?</span>
+    h2 = <span class="blank">?</span></pre></div>
+    <p class="quiet">Work out the first three heights before you run it.</p>
+    <span class="rev" data-t="a22">show answer</span>
+    <div id="a22" class="hid">
+      <p class="line"><b>2</b> and <b>3</b> → y = 5, 8, 13, 21, 34, 55.</p>
+      <p class="quiet">Same rule. Different start. Taller skyline.</p>
+    </div>
+  </div>
+
+  <!-- 23 · SLOT 23: Quick quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">Turn 3 (i = 2). What are x and y?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">x = 6, y = 5.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">Which two lines must sit inside the loop for y to grow?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans"><code>h1 = h2</code> and <code>h2 = y</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 · SLOT 24: Code Talk + stuck frames LATE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill purple">Code Talk</div>
+    <div class="frame-card" style="margin:.4em 0">
+      <div class="label">Say it out loud</div>
+      <div class="frame">"<code>x</code> changes by <span class="blank"></span> each turn and <code>y</code> changes by <span class="blank"></span>, so after turn 3 they are <span class="blank"></span> and <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin:.4em 0">
+      <div class="label">Stuck? Pick one — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 25 · SLOT 25: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <h2>Your skyline 🏙️</h2>
+    <ul class="check-list">
+      <li>Type <code>spacing = 3</code>. Run <code>towers</code>.</li>
+      <li>Type <code>h2 = 2</code>. Run again. Say the new heights.</li>
+      <li>Swap <code>QUARTZ_BLOCK</code> for a block you like. Run.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.4em">One change, one run.</p>
+  </div>
+
+  <!-- 26 · SLOT 26: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Stretch 🚀<span class="activity-tag">OPTIONAL</span></div>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>pos(x, 0, 0)</code> to <code>pos(x, 1, 0)</code> — towers float one block up.</div>
+      <div class="item"><span class="lvl">★★</span>Add a second fill at <code>pos(x, 0, 6)</code> to <code>pos(x, y, 6)</code> — two skylines facing each other.</div>
+      <div class="item"><span class="lvl">★★★</span>Use <code>GOLD_BLOCK</code> for the fill and <code>range(8)</code> — how tall does tower 8 get?</div>
+    </div>
+  </div>
+
+  <!-- 27 · SLOT 27: v5 — three rules — OPTIONAL -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">v5 · three rules<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your own 08-30 line, joining in</h2>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">        x = x + spacing</span><span class="dim">        h1 = h2</span><span class="dim">        h2 = y</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">        x = x + spacing</span><span class="dim">        h1 = h2</span><span class="dim">        h2 = y</span><span class="hot">        spacing = spacing + <span class="num">1</span><span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>h2 = y</code></p>
+    <p class="where">📍 One line under it. 8 spaces in.</p>
+    <p class="where">🟣 Now the gaps grow too — three rules.</p>
+    <p class="where">✅ x lands on 2, 4, 7, 11, 16, 22.</p>
+  </div>
+
+  <!-- 28 · SLOT 28: Full program — OPTIONAL -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Full program<span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">on_towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">2</span>
+    h1 = <span class="num">1</span>
+    h2 = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):
+        y = h1 + h2
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,
+            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)
+        x = x + spacing
+        h1 = h2
+        h2 = y
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, on_towers)</pre>
+    <p class="quiet" style="margin-top:.3em">Read it out loud. Point at rule 1, then rule 2.</p>
+  </div>
+
+  <!-- 29 · SLOT 29: Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Exit ticket</div>
+    <div class="exit">
+      <div class="label">Write it, then say it</div>
+      <p class="line" style="margin-top:.3em">Name the two rules running in your loop.</p>
+      <details><summary class="rev" style="display:inline-block">show answer</summary>
+        <p class="line" style="margin-top:.3em"><code>x = x + spacing</code> — a fixed step.<br><code>y = h1 + h2</code> — the Fibonacci rule.</p></details>
+    </div>
+  </div>
+
+  <!-- 30 · SLOT 30: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="emoji">🏙️</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Two rules.<br>One skyline.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a rule that decides IF a tower gets built.</p>
+    <p class="bilingual">다음 시간: 지을지 말지 정하는 규칙</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+
+  document.querySelectorAll('.rev[data-t]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var t = $(btn.getAttribute('data-t'));
+      if (!t) return;
+      t.classList.toggle('hid');
+      btn.blur();
+    });
+  });
+
+  /* Slot 6 — side view of the skyline. towers = [{x, h}] */
+  (function () {
+    var c = $('cnC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var XS = [2, 4, 6, 8, 10, 12];
+    var YS = [2, 3, 5, 8, 13, 21];
+    var COLS = 15, ROWS = 23, step = 0;
+
+    function draw() {
+      var W = c.width, H = c.height;
+      var cell = Math.min(W / COLS, (H - 18) / ROWS);
+      var ox = (W - COLS * cell) / 2;
+      var base = H - 14;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+      for (var g = 0; g <= COLS; g++) {
+        ctx.beginPath();
+        ctx.moveTo(ox + g * cell, base - ROWS * cell);
+        ctx.lineTo(ox + g * cell, base);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = '#2b3547';
+      ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+      for (var k = 0; k < step; k++) {
+        ctx.fillStyle = (k === step - 1) ? '#ffb86c' : '#38d0e0';
+        for (var r = 0; r <= YS[k]; r++) {
+          ctx.fillRect(ox + XS[k] * cell + 1, base - (r + 1) * cell + 1, cell - 2, cell - 2);
+        }
+      }
+      ctx.fillStyle = '#8a97b8';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      for (var m = 0; m < step; m++) {
+        ctx.fillText(String(XS[m]), ox + XS[m] * cell + cell / 2, base + 11);
+      }
+      ctx.textAlign = 'left';
+      $('cnX').textContent = step ? XS[step - 1] : '—';
+      $('cnY').textContent = step ? YS[step - 1] : '—';
+    }
+    $('cnFwd').addEventListener('click', function () { if (step < 6) step++; draw(); this.blur(); });
+    $('cnReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>

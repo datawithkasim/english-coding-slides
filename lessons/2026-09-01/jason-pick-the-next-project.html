@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pick the Next Project · Jason</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  /* find box: what to Ctrl+F for */
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px);
+               user-select: none; -webkit-user-select: none; }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.6em, 2vmin, 1.4em); justify-content: center;
+          flex-wrap: wrap; margin-top: .5em; }
+  .road .rd { text-align: center; }
+  .road canvas { width: clamp(84px, 16vmin, 130px); height: auto; background: #0d1117;
+                 border: 2px solid var(--soft); border-radius: .4em; }
+  .road .rl { font-family: "JetBrains Mono", monospace; font-weight: 700;
+              color: var(--accent); font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .road .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  /* step progress badge */
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: center; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+  ul.tick.test li::before { content: "☐"; color: var(--fn); }
+  ol.mini { font-size: clamp(13px, 2vmin, 18px); padding-left: 1.4em; margin-top: .3em; }
+  ol.mini li { margin: .2em 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+
+  .states { display: flex; gap: 1em; justify-content: center; margin: .6em 0; flex-wrap: wrap; }
+  .st { border: 3px solid var(--soft); color: var(--com); border-radius: .6em;
+        padding: .5em 1.1em; font-family: "JetBrains Mono", monospace;
+        font-size: clamp(14px, 2.3vmin, 22px); font-weight: 700; }
+  .st.on { border-color: var(--fn); color: var(--fn); background: rgba(80,250,123,.08); }
+  .st.lose.on { border-color: #ff5555; color: #ff5555; background: rgba(255,85,85,.08); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Meteor Shooter · What next? 🎮</div>
+
+  <!-- 1 title -->
+  <div class="slide active center-all">
+    <div class="emoji">🎮</div>
+    <h1>Pick the next project</h1>
+    <p class="line" style="margin-top:.3em">Mark the homework. Look at what you built.<br>Then <b>choose</b> the next game.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">1 · homework</span><span class="chip">2 · your game</span><span class="chip">3 · the choice</span>
+    </div>
+  </div>
+
+  <!-- 2 recap = homework -->
+  <div class="slide">
+    <div class="pill purple">Recap · homework</div>
+    <h2>Four bugs. You hunted them.</h2>
+    <ul class="tick" style="max-width:26em">
+      <li>the spread spawn</li>
+      <li>the right wall</li>
+      <li>the Boss counter</li>
+      <li>boss rage</li>
+    </ul>
+    <p class="quiet" style="margin-top:.4em">You say what you changed first. Then the slide shows the fix.</p>
+    <p class="bilingual">숙제 먼저 확인해요</p>
+  </div>
+
+  <!-- 3 predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Boss 4 hits the right wall</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <pre>boss["vx"] = 6
+if boss["x"] &gt; WIDTH - boss["w"]:
+    boss["vx"] = -BOSS_SPEED</pre>
+      <div class="q">Speed 6 goes in. What speed comes out?</div>
+      <details><summary>Reveal</summary><div class="ans">−3. BOSS_SPEED is always 3, so boss 4 slows down at every right wall.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words, three projects</h2>
+    <div class="vocab-table">
+      <span class="term">state</span>
+      <span class="gloss">the mode an enemy is in: patrol, chase, flee</span>
+      <span class="ko">상태</span>
+      <span class="term">gravity</span>
+      <span class="gloss">speed you add downward every frame</span>
+      <span class="ko">중력</span>
+      <span class="term">file</span>
+      <span class="gloss">data your game saves, then loads later</span>
+      <span class="ko">파일</span>
+    </div>
+  </div>
+
+  <!-- 5 the map -->
+  <div class="slide center-all">
+    <div class="pill">Your game 🏆</div>
+    <p class="line big" style="margin-bottom:.2em">One frame of your main loop.</p>
+    <canvas class="sim" id="mapC" width="760" height="330" style="max-width:760px"></canvas>
+    <p class="quiet" style="margin-top:.35em">★ = a line you wrote yourself.</p>
+  </div>
+
+  <!-- 6 the four lines -->
+  <div class="slide">
+    <div class="pill">Your game 🏆</div>
+    <h2>Four lines you wrote</h2>
+    <div class="two" style="align-items:start;text-align:left">
+      <div>
+        <p class="quiet">levels</p>
+<pre class="tiny">boss_hp = BOSS_MAX_HP + (boss_level - 1) * 10
+boss_speed = BOSS_SPEED + (boss_level - 1)</pre>
+        <p class="quiet" style="margin-top:.5em">the wall</p>
+<pre class="tiny">boss["vx"] = -abs(boss["vx"])</pre>
+      </div>
+      <div>
+        <p class="quiet">the spread</p>
+<pre class="tiny">for vx in [-4, -2, 0, 2, 4]:</pre>
+        <p class="quiet" style="margin-top:.5em">the win</p>
+<pre class="tiny">if boss_level &gt; BOSSES_TO_WIN:
+    game_won = True</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 level dial -->
+  <div class="slide">
+    <div class="pill">Watch it!</div>
+    <div class="two">
+      <div>
+        <p class="line big">Your formula, live.</p>
+<pre>hp    = BOSS_MAX_HP + (boss_level - 1) * 10
+speed = BOSS_SPEED  + (boss_level - 1)</pre>
+        <p class="quiet" style="margin-top:.4em">Drag it. One formula makes every boss.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="lvC" width="360" height="200"></canvas>
+        <div class="slid"><span>boss_level</span><input type="range" id="lvS" min="1" max="5" value="1"><span class="out" id="lvO">1</span></div>
+        <div class="readout">hp <b id="lvHp">20</b> &nbsp; speed <b id="lvSp">3</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 trace activity -->
+  <div class="slide">
+    <div class="pill">Trace it</div>
+    <h2>You fill the boxes</h2>
+    <div class="trace-grid" style="max-width:28em">
+      <div class="cell head">boss_level</div><div class="cell head">hp</div><div class="cell head">speed</div>
+      <div class="cell"><code>1</code></div><div class="cell"><code>20</code></div><div class="cell"><code>3</code></div>
+      <div class="cell"><code>2</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">30</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+      <div class="cell"><code>3</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">40</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><code>5</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Say the number before you tap.</p>
+  </div>
+
+  <!-- 9 common mistake -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The colon</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if boss_level &gt; BOSSES_TO_WIN
+    game_won = True</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if boss_level &gt; BOSSES_TO_WIN:
+    game_won = True</pre></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 <code>SyntaxError: expected ':'</code> — every <code>if</code> ends with one.</p>
+  </div>
+
+  <!-- 10 homework 1 -->
+  <div class="slide center-all">
+    <div class="steptag">HOMEWORK 1 / 4</div>
+    <p class="line" style="margin-bottom:.3em">Bullets spawned off the boss's left side.</p>
+    <div class="find" style="max-width:40em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>boss["w"] / (2 - 8)</code></div>
+    <div class="debug-card" style="max-width:40em;width:100%;text-align:left">
+      <div class="tag-old">OLD — the bug</div>
+      <div class="was"><pre class="tiny">                        "x": boss["x"] + boss["w"] / (2 - 8),</pre></div>
+      <div class="err">boss["w"] is 90 → 90 / -6 → -15</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">                        "x": boss["x"] + boss["w"] / 2 - 4,</pre></div>
+      </details>
+    </div>
+    <p class="where">📍 Inside the spread loop, first line of the dict. Indent 24 spaces.</p>
+    <p class="why">🟣 Brackets moved. <code>/ 2</code> = middle, <code>- 4</code> = half a bullet.</p>
+    <p class="chk">✅ The fan starts at the boss's middle.</p>
+  </div>
+
+  <!-- 11 homework 2 -->
+  <div class="slide center-all">
+    <div class="steptag">HOMEWORK 2 / 4</div>
+    <p class="line" style="margin-bottom:.3em">Fast bosses slowed down at the right wall.</p>
+    <div class="find" style="max-width:40em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>boss["vx"] = -BOSS_SPEED</code></div>
+    <div class="debug-card" style="max-width:40em;width:100%;text-align:left">
+      <div class="tag-old">OLD — the bug</div>
+      <div class="was"><pre class="tiny">            if boss["x"] &gt; WIDTH - boss["w"]:
+                boss["x"] = WIDTH - boss["w"]
+                boss["vx"] = -BOSS_SPEED</pre></div>
+      <div class="err">boss 4 goes in at 6, comes out at 3</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">            if boss["x"] &gt; WIDTH - boss["w"]:
+                boss["x"] = WIDTH - boss["w"]
+                boss["vx"] = -abs(boss["vx"])</pre></div>
+      </details>
+    </div>
+    <p class="where">📍 Only the last line changes. Indent 16 spaces.</p>
+    <p class="why">🟣 <code>abs()</code> drops the minus. The minus in front puts it back.</p>
+    <p class="chk">✅ Boss 4 stays fast after every bounce.</p>
+  </div>
+
+  <!-- 12 homework 3 -->
+  <div class="slide center-all">
+    <div class="steptag">HOMEWORK 3 / 4</div>
+    <p class="line" style="margin-bottom:.3em">The Boss counter never appeared.</p>
+    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>pygame.display.flip()</code></div>
+    <div class="debug-card" style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD — the bug</div>
+      <div class="was"><pre class="tiny">    pygame.display.flip()
+    boss_txt = font.render(f"Boss {boss_level} / {BOSSES_TO_WIN}", True, WHITE)
+    screen.blit(boss_txt, (10, 70))</pre></div>
+      <div class="err">flip() shows the screen. Drawing after it is wiped next frame.</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    boss_txt = font.render(f"Boss {boss_level} / {BOSSES_TO_WIN}", True, WHITE)
+    screen.blit(boss_txt, (10, 70))
+    pygame.display.flip()</pre></div>
+      </details>
+    </div>
+    <p class="where">📍 The two lines move <b>above</b> flip(). Indent 4 spaces, same as it.</p>
+    <p class="why">🟣 Draw everything first, flip last.</p>
+    <p class="chk">✅ <code>Boss 2 / 5</code> sits top-left while you play.</p>
+  </div>
+
+  <!-- 13 homework 4 -->
+  <div class="slide center-all">
+    <div class="steptag">HOMEWORK 4 / 4</div>
+    <p class="line" style="margin-bottom:.3em">Boss 10 fired a wall of bullets.</p>
+    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>BOSS_SHOOT_COOLDOWN - boss_level * 5</code></div>
+    <div class="debug-card" style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD — the bug</div>
+      <div class="was"><pre class="tiny">                boss_shoot_timer = BOSS_SHOOT_COOLDOWN - boss_level * 5</pre></div>
+      <div class="err">level 9 → 45 - 45 = 0. level 10 → -5. It shoots every frame.</div>
+      <details><summary>▸ Show the fix</summary>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">                boss_shoot_timer = max(10, BOSS_SHOOT_COOLDOWN - boss_level * 5)</pre></div>
+      </details>
+    </div>
+    <p class="where">📍 Same line, wrapped in <code>max(</code> … <code>)</code>. Indent 16 spaces.</p>
+    <p class="why">🟣 <code>max()</code> keeps the bigger number. Never under 10.</p>
+    <p class="chk">✅ Boss 10 is angry, not impossible.</p>
+  </div>
+
+  <!-- 14 OPTIONAL debug 5 -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Debug ★</div>
+    <p class="line big" style="margin-bottom:.2em">Where does a bullet start?</p>
+    <canvas class="sim" id="ctrC" width="380" height="150"></canvas>
+    <div class="trace-grid" style="max-width:30em">
+      <div class="cell head">piece</div><div class="cell head">maths</div><div class="cell head">value</div>
+      <div class="cell"><code>boss["x"]</code></div><div class="cell">—</div><div class="cell"><code>100</code></div>
+      <div class="cell"><code>boss["w"] / 2</code></div><div class="cell"><code>90 / 2</code></div><div class="cell"><code>45</code></div>
+      <div class="cell"><code>- 4</code></div><div class="cell">half a bullet</div><div class="cell"><code>-4</code></div>
+      <div class="cell"><code>"x"</code></div><div class="cell"><code>100 + 45 - 4</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">141</span></details></div>
+    </div>
+  </div>
+
+  <!-- 15 modify 1 -->
+  <div class="slide center-all">
+    <div class="steptag">MODIFY 1</div>
+    <p class="line" style="margin-bottom:.3em">Seven bullets. You fill the two blanks.</p>
+    <div class="skel" style="max-width:38em;width:100%">
+<pre>for vx in [<span class="blank">?</span>, -4, -2, 0, 2, 4, <span class="blank">?</span>]:</pre></div>
+    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>for vx in [-4, -2, 0, 2, 4]:</code></div>
+    <div style="max-width:38em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">                for vx in [-4, -2, 0, 2, 4]:</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">                for vx in [-6, -4, -2, 0, 2, 4, 6]:</pre></div>
+    </div>
+    <p class="where">📍 Same line, same spot. Indent 16 spaces.</p>
+    <p class="why">🟣 Seven numbers in the list = seven bullets.</p>
+    <p class="chk">✅ Count the purple bullets. Seven.</p>
+  </div>
+
+  <!-- 16 OPTIONAL modify 2 -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="steptag">MODIFY 2 ★★</div>
+    <p class="line" style="margin-bottom:.3em">The fan grows with the boss level.</p>
+    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>for vx in [-6, -4, -2, 0, 2, 4, 6]:</code></div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">                for vx in [-6, -4, -2, 0, 2, 4, 6]:</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">                for vx in range(-boss_level * 2, boss_level * 2 + 1, 2):</pre></div>
+    </div>
+    <p class="where">📍 Same line. Indent 16 spaces.</p>
+    <p class="why">🟣 Boss 1 → 3 bullets. Boss 3 → 7 bullets.</p>
+    <p class="chk">✅ The fan gets wider each boss.</p>
+  </div>
+
+  <!-- 17 OPTIONAL quiz 1 -->
+  <div class="slide mcq" data-correct="0" data-explain="abs(6) = 6, then the minus makes it -6. The boss keeps its own speed.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Boss 4's <code>vx</code> is 6. It hits the right wall. What does <code>-abs(boss["vx"])</code> give?</div>
+    <div class="opts">
+      <button class="opt">-6</button>
+      <button class="opt">-3</button>
+      <button class="opt">6</button>
+      <button class="opt">0</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 18 OPTIONAL quiz 2 -->
+  <div class="slide mcq" data-correct="0" data-explain="flip() shows the frame. Anything drawn after it is wiped before the next flip.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">You blit the counter <b>after</b> <code>pygame.display.flip()</code>. What do you see?</div>
+    <div class="opts">
+      <button class="opt">Nothing at all</button>
+      <button class="opt">It shows one frame late</button>
+      <button class="opt">The game crashes</button>
+      <button class="opt">It shows in the wrong colour</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 19 code talk 1 -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>abs()</code> turns <span class="blank"></span> into <span class="blank"></span>, so the boss always moves <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at the right-wall line while you say it.</div>
+    </div>
+  </div>
+
+  <!-- 20 part 3 opener -->
+  <div class="slide center-all">
+    <div class="emoji">🚪</div>
+    <h1>What next?</h1>
+    <p class="line" style="margin-top:.3em">Meteor Shooter is finished. Three doors. <b>You pick one.</b></p>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip">A · think</span><span class="chip">B · jump</span><span class="chip">C · build</span>
+    </div>
+    <p class="bilingual">오늘 끝에 하나 골라요</p>
+  </div>
+
+  <!-- 21 project A -->
+  <div class="slide">
+    <div class="pill">Project A</div>
+    <h2>Enemies that think 🧠</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">They watch you. Close → chase. Hurt → run.</p>
+        <p class="quiet" style="margin-top:.5em">First thing you build — one new key:</p>
+<pre class="tiny">enemies.append({
+    "x": x,
+    "y": y,
+    "state": "patrol",
+})</pre>
+        <p class="quiet">Same dict shape as your boss.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="pA" width="360" height="230"></canvas>
+        <div class="readout">patrol → <b>chase</b> → flee</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22 project B -->
+  <div class="slide">
+    <div class="pill">Project B</div>
+    <h2>A platformer 🦘</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">No more flying. You fall — unless you jump.</p>
+        <p class="quiet" style="margin-top:.5em">First thing you build — two lines:</p>
+<pre class="tiny">player["vy"] += GRAVITY
+player["y"]  += player["vy"]</pre>
+        <p class="quiet">Same Pygame. Brand new physics.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="pB" width="360" height="230"></canvas>
+        <div class="readout">GRAVITY = <b>0.6</b> every frame</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 project C -->
+  <div class="slide">
+    <div class="pill">Project C</div>
+    <h2>A level editor 🗺️</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">Draw a level with the mouse. Save it. Load it back.</p>
+        <p class="quiet" style="margin-top:.5em">First thing you build — the empty grid:</p>
+<pre class="tiny">grid = [[0] * 20 for _ in range(15)]
+grid[row][col] = 1</pre>
+        <p class="quiet">New idea: files.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="pC" width="360" height="230"></canvas>
+        <div class="readout">grid → <b>level1.txt</b> → grid</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 the pick -->
+  <div class="slide center-all">
+    <div class="pill">Decide 🎯</div>
+    <h2>Pick one. Out loud.</h2>
+    <div class="opt-grid" style="max-width:60em;width:100%">
+      <div class="opt-card">
+        <div class="ico">🧠</div>
+        <div class="name">A · Enemies that think</div>
+        <div class="ex">"state": "patrol"</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">🦘</div>
+        <div class="name">B · Platformer</div>
+        <div class="ex">player["vy"] += GRAVITY</div>
+      </div>
+      <div class="opt-card">
+        <div class="ico">🗺️</div>
+        <div class="name">C · Level editor</div>
+        <div class="ex">grid[row][col] = 1</div>
+      </div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">A = states · B = physics · C = files. No wrong answer.</p>
+  </div>
+
+  <!-- 25 code talk 2 -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Name your pick</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"I want to build <span class="blank"></span>, because <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로. Say the letter and the reason.</div>
+    </div>
+  </div>
+
+  <!-- 26 make -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Start it now 🚀</h2>
+    <ul class="tick test" style="max-width:30em">
+      <li>New file. Name it after your pick.</li>
+      <li>Copy your Meteor Shooter window setup in.</li>
+      <li>Type the one line from your project card.</li>
+      <li>Run it. Black window, no crash = win.</li>
+    </ul>
+  </div>
+
+  <!-- 27 OPTIONAL stretch -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch</div>
+    <h2>Before next week</h2>
+    <div class="stretch-list" style="max-width:34em">
+      <div class="item"><span class="lvl">★</span>Give boss 5 its own colour.</div>
+      <div class="item"><span class="lvl">★★</span>Draw <code>RAGE</code> when <code>boss_level &gt; 3</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Save your best score to a file.</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">★★★ is a taste of Project C.</p>
+  </div>
+
+  <!-- 28 OPTIONAL exit ticket -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One question</h2>
+    <div class="exit" style="max-width:36em">
+      <div class="label">You say it — no peeking</div>
+      <p class="line" style="margin-top:.3em">Why does the wall use <code>abs(boss["vx"])</code> and not <code>BOSS_SPEED</code>?</p>
+      <details><summary class="sub">Show answer</summary>
+        <p class="line">BOSS_SPEED is stuck at 3. <code>abs()</code> keeps this boss's own speed.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- 29 close -->
+  <div class="slide center-all">
+    <div class="emoji">🚀</div>
+    <p class="line big">One game shipped. <b>The next one starts today.</b></p>
+    <p class="quiet" style="margin-top:.4em">Bosses that scale, a bullet fan, a win screen — all yours.</p>
+    <p class="bilingual">다음 주에 새 프로젝트 시작해요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 29</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CY = '#38d0e0', PUR = '#a44fd0', GRN = '#50fa7b', OR = '#ffb86c', DIM = '#8a97b8', INK = '#e6edf3';
+
+  function sky(ctx, W, H) { ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H); }
+
+  function rrect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function arrow(ctx, x1, y1, x2, y2, col) {
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 9 * Math.cos(a - 0.4), y2 - 9 * Math.sin(a - 0.4));
+    ctx.lineTo(x2 - 9 * Math.cos(a + 0.4), y2 - 9 * Math.sin(a + 0.4));
+    ctx.closePath(); ctx.fill();
+  }
+
+  /* ---- slide 5: architecture map ---- */
+  (function () {
+    var c = $('mapC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    sky(ctx, c.width, c.height);
+
+    var boxes = [
+      { x: 18,  y: 40,  t: 'spawn boss',   s: 'hp = 20 + (lv-1)*10' },
+      { x: 268, y: 40,  t: 'move + bounce', s: '-abs(boss["vx"])' },
+      { x: 518, y: 40,  t: 'shoot spread',  s: 'for vx in [-4..4]' },
+      { x: 518, y: 200, t: 'boss dies',     s: 'boss_level += 1' },
+      { x: 268, y: 200, t: 'win check',     s: 'lv > BOSSES_TO_WIN' },
+      { x: 18,  y: 200, t: 'YOU WIN',       s: 'game_won = True' }
+    ];
+    var BW = 224, BH = 78;
+
+    boxes.forEach(function (b) {
+      ctx.strokeStyle = CY; ctx.lineWidth = 2;
+      ctx.fillStyle = 'rgba(56,208,224,.07)';
+      rrect(ctx, b.x, b.y, BW, BH, 10); ctx.fill(); ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.fillStyle = INK; ctx.font = 'bold 16px monospace';
+      ctx.fillText(b.t, b.x + BW / 2, b.y + 32);
+      ctx.fillStyle = DIM; ctx.font = '12px monospace';
+      ctx.fillText(b.s, b.x + BW / 2, b.y + 56);
+      ctx.textAlign = 'left';
+      ctx.fillStyle = OR; ctx.font = 'bold 15px monospace';
+      ctx.fillText('★', b.x + 8, b.y + 20);
+    });
+
+    arrow(ctx, 246, 79, 264, 79, DIM);
+    arrow(ctx, 496, 79, 514, 79, DIM);
+    arrow(ctx, 630, 122, 630, 196, DIM);
+    arrow(ctx, 514, 239, 496, 239, DIM);
+    arrow(ctx, 264, 239, 246, 239, DIM);
+
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = DIM; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(330, 196); ctx.lineTo(330, 160); ctx.lineTo(130, 160); ctx.stroke();
+    ctx.setLineDash([]);
+    arrow(ctx, 130, 160, 130, 124, DIM);
+    ctx.fillStyle = DIM; ctx.font = '12px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('not won yet → next boss', 232, 154);
+    ctx.textAlign = 'left';
+  })();
+
+  /* ---- slide 7: level dial ---- */
+  (function () {
+    var c = $('lvC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function draw() {
+      var lv = +$('lvS').value;
+      var hp = 20 + (lv - 1) * 10, sp = 3 + (lv - 1);
+      $('lvO').textContent = lv; $('lvHp').textContent = hp; $('lvSp').textContent = sp;
+      sky(ctx, c.width, c.height);
+      var bw = 60 + (lv - 1) * 8;
+      var bx = (c.width - bw) / 2;
+      ctx.fillStyle = '#300'; ctx.fillRect(bx, 40, bw, 9);
+      ctx.fillStyle = GRN; ctx.fillRect(bx, 40, bw, 9);
+      ctx.fillStyle = PUR; ctx.fillRect(bx, 58, bw, 22);
+      ctx.strokeStyle = DIM; ctx.lineWidth = 2;
+      for (var i = 0; i < sp; i++) {
+        var y = 66 + (i % 3) * 5;
+        ctx.beginPath(); ctx.moveTo(bx - 10 - i * 7, y); ctx.lineTo(bx - 4 - i * 7, y); ctx.stroke();
+      }
+      ctx.font = '12px monospace'; ctx.fillStyle = DIM;
+      ctx.fillText('hp ' + hp + '   speed ' + sp, bx, 110);
+    }
+    $('lvS').addEventListener('input', draw); draw();
+  })();
+
+  /* ---- slide 14: centering ---- */
+  (function () {
+    var c = $('ctrC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    sky(ctx, c.width, c.height);
+    var bx = 60, bw = 180, by = 50, bh = 40;
+    ctx.fillStyle = PUR; ctx.fillRect(bx, by, bw, bh);
+    ctx.strokeStyle = OR; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(bx + bw / 2, 30); ctx.lineTo(bx + bw / 2, 130); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = PUR; ctx.fillRect(bx + bw / 2 - 8, 100, 16, 16);
+    ctx.font = '12px monospace'; ctx.fillStyle = DIM; ctx.textAlign = 'center';
+    ctx.fillText('boss["x"] = 100', bx, 30);
+    ctx.fillText('boss["w"] = 90', bx + bw / 2, 24);
+    ctx.fillStyle = OR;
+    ctx.fillText('middle = 145', bx + bw / 2, 142);
+    ctx.fillStyle = GRN;
+    ctx.fillText('bullet "x" = 141', bx + bw / 2 + 92, 112);
+    ctx.textAlign = 'left';
+    ctx.strokeStyle = DIM; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(bx, 36); ctx.lineTo(bx, by); ctx.stroke();
+  })();
+
+  /* ---- slide 21: enemies that think ---- */
+  (function () {
+    var c = $('pA'); if (!c) return;
+    var ctx = c.getContext('2d');
+    sky(ctx, c.width, c.height);
+    ctx.fillStyle = GRN;
+    ctx.beginPath(); ctx.moveTo(180, 185); ctx.lineTo(168, 208); ctx.lineTo(192, 208); ctx.closePath(); ctx.fill();
+    ctx.font = '11px monospace'; ctx.textAlign = 'center';
+    ctx.fillStyle = DIM; ctx.fillText('you', 180, 222);
+
+    ctx.fillStyle = DIM; ctx.fillRect(38, 60, 24, 24);
+    ctx.fillText('PATROL', 50, 100);
+    arrow(ctx, 30, 46, 74, 46, DIM);
+
+    ctx.fillStyle = '#ff5555'; ctx.fillRect(168, 60, 24, 24);
+    ctx.fillStyle = '#ff5555'; ctx.fillText('CHASE', 180, 100);
+    ctx.strokeStyle = 'rgba(255,85,85,.6)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(180, 90); ctx.lineTo(180, 178); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = CY; ctx.fillRect(296, 60, 24, 24);
+    ctx.fillStyle = CY; ctx.fillText('FLEE', 308, 100);
+    arrow(ctx, 300, 50, 336, 26, CY);
+    ctx.textAlign = 'left';
+  })();
+
+  /* ---- slide 22: platformer ---- */
+  (function () {
+    var c = $('pB'); if (!c) return;
+    var ctx = c.getContext('2d');
+    sky(ctx, c.width, c.height);
+    ctx.fillStyle = '#2f7d4f'; ctx.fillRect(0, 200, 360, 30);
+    ctx.fillStyle = '#2f7d4f'; ctx.fillRect(210, 130, 110, 14);
+    ctx.fillStyle = '#2f7d4f'; ctx.fillRect(40, 155, 90, 14);
+
+    ctx.strokeStyle = 'rgba(255,184,108,.7)'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(70, 155);
+    ctx.quadraticCurveTo(165, 40, 250, 130);
+    ctx.stroke(); ctx.setLineDash([]);
+
+    ctx.fillStyle = CY; ctx.fillRect(150, 66, 22, 22);
+    arrow(ctx, 161, 96, 161, 124, OR);
+    ctx.font = '11px monospace'; ctx.fillStyle = OR; ctx.textAlign = 'center';
+    ctx.fillText('vy grows every frame', 161, 140);
+    ctx.fillStyle = DIM; ctx.fillText('ground', 40, 220);
+    ctx.textAlign = 'left';
+  })();
+
+  /* ---- slide 23: level editor ---- */
+  (function () {
+    var c = $('pC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    sky(ctx, c.width, c.height);
+    var cell = 20, cols = 8, rows = 6, gx = 12, gy = 40;
+    var filled = [[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[3,3],[4,3],[6,2]];
+    for (var r = 0; r < rows; r++) {
+      for (var q = 0; q < cols; q++) {
+        ctx.strokeStyle = '#26303f'; ctx.lineWidth = 1;
+        ctx.strokeRect(gx + q * cell, gy + r * cell, cell, cell);
+      }
+    }
+    filled.forEach(function (f) {
+      ctx.fillStyle = OR;
+      ctx.fillRect(gx + f[0] * cell + 2, gy + f[1] * cell + 2, cell - 4, cell - 4);
+    });
+    ctx.font = '11px monospace'; ctx.fillStyle = DIM; ctx.textAlign = 'left';
+    ctx.fillText('grid[row][col]', gx, 30);
+
+    arrow(ctx, 182, 100, 216, 100, CY);
+    ctx.fillStyle = CY; ctx.textAlign = 'center';
+    ctx.fillText('save', 199, 92);
+
+    ctx.strokeStyle = GRN; ctx.lineWidth = 2;
+    rrect(ctx, 226, 46, 118, 110, 8); ctx.stroke();
+    ctx.fillStyle = GRN; ctx.font = 'bold 12px monospace';
+    ctx.fillText('level1.txt', 285, 68);
+    ctx.fillStyle = DIM; ctx.font = '12px monospace';
+    ['........', '......#.', '...##...', '########'].forEach(function (ln, i) {
+      ctx.fillText(ln, 285, 90 + i * 16);
+    });
+    ctx.textAlign = 'left';
+  })();
+})();
+</script>
+</body>
+</html>

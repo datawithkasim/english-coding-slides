@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS002 — X First, Then Y (RIO · 2026-09-01)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS002 &middot; Minecraft Python &middot; RIO &middot; 2026-09-01</div>
+
+  <!-- 1 · Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft Python &middot; drill</div>
+    <div class="emoji">📏</div>
+    <h1>X First,<br>Then Y</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">By the end you'll <span class="sub">count from 0</span> + <span class="sub">read X before Y</span></p>
+    <p class="bilingual">X 먼저, 그다음 Y. 0부터 세요.</p>
+  </div>
+
+  <!-- 2 · Recap & Retrieve — RIO's own last lesson -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time &mdash; your own ranges</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">You typed X 7&rarr;11, Y 3&rarr;3. How wide? How tall?</div>
+      <details><summary>Show answer</summary><div class="ans">5 wide, 1 tall. 11 &minus; 7 = 4, then add 1.</div></details>
+    </div>
+    <p style="margin-top:.4em">You found 6&rarr;12 alone. You fixed <code>MOSS_BLOCK</code> the second you saw the underscore. 💪</p>
+  </div>
+
+  <!-- 3 · Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>How many blocks?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>X starts at <span class="num">0</span>
+X ends   at <span class="num">5</span>
+
+how many blocks wide?  <span class="kw">??</span></pre>
+      <details><summary>Reveal</summary><div class="ans">6 blocks. Not 5. Zero is a block too.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 · Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Words for today</h2>
+    <div class="vocab-table">
+      <span class="term">X axis</span>
+      <span class="gloss">sideways &mdash; the ruler on the bottom</span>
+      <span class="ko">가로축</span>
+
+      <span class="term">Y axis</span>
+      <span class="gloss">up &mdash; the ruler on the side</span>
+      <span class="ko">세로축</span>
+
+      <span class="term">range</span>
+      <span class="gloss">a start number and an end number</span>
+      <span class="ko">범위</span>
+
+      <span class="term">off-by-one</span>
+      <span class="gloss">your range is one block wrong</span>
+      <span class="ko">한 칸 오류</span>
+    </div>
+  </div>
+
+  <!-- 5 · Concept (Notional Machine) — TWO RULERS. No code. -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Two rulers 📏</h2>
+<pre style="font-size:clamp(13px,2.4vmin,26px)"><span class="num">Y</span>
+<span class="num">5</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">4</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">3</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">2</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">1</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">0</span> ⬛⬛⬛⬛⬛⬛
+  <span class="num">0 1 2 3 4 5 </span> <span class="num">X</span></pre>
+    <p style="margin-top:.4em">Bottom ruler is <b>X</b>. Side ruler is <b>Y</b>. Read the bottom one first.</p>
+    <p class="bilingual">아래 자가 X, 옆 자가 Y. 아래부터 읽어요.</p>
+  </div>
+
+  <!-- 6 · Concept — the off-by-one box strip (MANDATORY VISUAL) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Count</div>
+    <h2>Six boxes end at 5</h2>
+    <div class="iter-row">
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <p style="margin-top:.6em">Count the boxes: <b>6</b>. The last number is <b>5</b>.</p>
+    <p>5 &minus; 0 = 5. Then add 1.</p>
+    <p class="bilingual">칸 수 = 끝 − 시작 + 1</p>
+  </div>
+
+  <!-- 7 · Run (Worked Example) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Code</div>
+    <h2>One line, one bar</h2>
+<pre style="font-size:clamp(12px,2.2vmin,24px)"><span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(12px,2.2vmin,24px)"><span class="num">1</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">0</span> 🟩🟩🟩🟩🟩🟩
+  <span class="num">0 1 2 3 4 5 </span> <span class="num">X</span></pre>
+    </div>
+    <p style="margin-top:.4em">X first, then Y. X goes 0&rarr;5, Y stays 0.</p>
+  </div>
+
+  <!-- 8 · Today's ladder — v1 → v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">The ladder</div>
+    <h2>Seven lines, one gate</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🟩</div><div class="name">v1 &middot; one bar</div><div class="ex">step 1</div></div>
+      <div class="opt-card"><div class="ico">⬜</div><div class="name">v2 &middot; one rectangle</div><div class="ex">step 2</div></div>
+      <div class="opt-card"><div class="ico">🟨</div><div class="name">v3 &middot; two rectangles</div><div class="ex">steps 3&ndash;4</div></div>
+      <div class="opt-card"><div class="ico">🚩</div><div class="name">v4 &middot; three fills</div><div class="ex">steps 5&ndash;7</div></div>
+    </div>
+    <p style="margin-top:.5em">Every step is one <code>blocks.fill</code> line. X first, then Y.</p>
+  </div>
+
+  <!-- 9 · STEP 1 / 7 — v1 flat bar -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">v1 &middot; the ground<span class="activity-tag">STEP 1 / 7</span></div>
+    <h2>Green bar: X 0&rarr;5, Y 0&rarr;0</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code># RIO gate</code><br>📍 New line goes <b>UNDER</b> <code># RIO gate</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span class="com"># RIO gate</span></pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span style="opacity:.38"><span class="com"># RIO gate</span></span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">0</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. Six boxes, so 5 is the end.</span><br><span class="fn">✅ A green bar, 6 wide, on the floor.</span></p>
+  </div>
+
+  <!-- 10 · Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it before you type</h2>
+    <div class="frame-card">
+      <div class="label">Every single build</div>
+      <div class="frame">"X goes from <span class="blank"></span> to <span class="blank"></span>, Y goes from <span class="blank"></span> to <span class="blank"></span>, so the fill is <code>pos(<span class="blank"></span>,<span class="blank"></span>,0)</code> to <code>pos(<span class="blank"></span>,<span class="blank"></span>,0)</code>."</div>
+      <div class="pair-prompt">Out loud. X first, then Y.</div>
+    </div>
+  </div>
+
+  <!-- 11 · STEP 2 / 7 — v2 rectangle -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">v2 &middot; a rectangle<span class="activity-tag">STEP 2 / 7</span></div>
+    <h2>White wall: X 0&rarr;5, Y 1&rarr;3</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>MOSS_BLOCK</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(MOSS_BLOCK, pos(0, 0, 0), pos(5, 0, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">0</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">1</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">2</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. Now Y is a range too.</span><br><span class="fn">✅ A white wall, 6 wide and 3 tall, on the bar.</span></p>
+  </div>
+
+  <!-- 12 · Trace Activity — student fills the counts -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Count every range</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">block</div>
+      <div class="cell head">X</div>
+      <div class="cell head">Y</div>
+      <div class="cell head">wide</div>
+      <div class="cell head">tall</div>
+
+      <div class="cell"><code>MOSS</code></div>
+      <div class="cell">0&rarr;5</div>
+      <div class="cell">0&rarr;0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell"><code>QUARTZ</code></div>
+      <div class="cell">0&rarr;5</div>
+      <div class="cell">1&rarr;3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell"><code>GOLD</code></div>
+      <div class="cell">0&rarr;1</div>
+      <div class="cell">4&rarr;6</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+    </div>
+    <p style="margin-top:.4em">End &minus; start, then add 1.</p>
+  </div>
+
+  <!-- 13 · STEP 3 / 7 — v3 left tower -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">v3 &middot; two rectangles<span class="activity-tag">STEP 3 / 7</span></div>
+    <h2>Left tower: X 0&rarr;1, Y 4&rarr;6</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>QUARTZ_BLOCK</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(QUARTZ_BLOCK, pos(0, 1, 0), pos(5, 3, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">0</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">4</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">5</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. 0&rarr;1 is 2 boxes.</span><br><span class="fn">✅ A gold tower, 2 wide and 3 tall, on the left.</span></p>
+  </div>
+
+  <!-- 14 · STEP 4 / 7 — v3 right tower -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">v3 &middot; two rectangles<span class="activity-tag">STEP 4 / 7</span></div>
+    <h2>Right tower: X 4&rarr;5, Y 4&rarr;6</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(1, 6, 0)</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(GOLD_BLOCK, pos(0, 4, 0), pos(1, 6, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">4</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">5</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. Same Y, new X.</span><br><span class="fn">✅ A matching tower on the right, same height.</span></p>
+  </div>
+
+  <!-- 15 · OPTIONAL — both mandatory visuals again -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Drill<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Read the rulers again</h2>
+<pre style="font-size:clamp(12px,2.1vmin,22px)"><span class="num">Y</span>
+<span class="num">3</span> ⬛⬛⬛⬛⬛⬛
+<span class="num">2</span> ⬛⬛🟨🟨⬛⬛
+<span class="num">1</span> ⬛⬛🟨🟨⬛⬛
+<span class="num">0</span> ⬛⬛⬛⬛⬛⬛
+  <span class="num">0 1 2 3 4 5 </span> <span class="num">X</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <p style="margin-top:.4em">X first, then Y. Say both ranges, then the line.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ <code>blocks.fill(GOLD_BLOCK, pos(2, 1, 0), pos(3, 2, 0))</code></span></p>
+  </div>
+
+  <!-- 16 · Common Mistake — X and Y swapped -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Common mistake</h2>
+    <p style="font-size:clamp(15px,2.5vmin,20px)">You want a wall <b>3 wide</b> and <b>6 tall</b>.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>)</pre>
+        <p>Lies flat. 6 wide, 3 tall.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">5</span>, <span class="num">0</span>)</pre>
+        <p>Stands up. 3 wide, 6 tall.</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">X first, then Y. Always.</p>
+    <p class="bilingual">X와 Y를 바꾸면 벽이 누워요.</p>
+  </div>
+
+  <!-- 17 · Debug 1 — X and Y swapped, wall builds sideways -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>The wall lay down</h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">X first, then Y.</p>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ What he got</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">3</span> ⬜⬜⬜⬜⬜⬜
+<span class="num">2</span> ⬜⬜⬜⬜⬜⬜
+<span class="num">1</span> ⬜⬜⬜⬜⬜⬜
+<span class="num">0</span> ⬛⬛⬛⬛⬛⬛
+  <span class="num">0 1 2 3 4 5 </span> <span class="num">X</span></pre>
+    </div>
+    <details class="debug-card">
+      <summary>He wanted 3 wide, 6 tall. What is wrong?</summary>
+      <div class="err">X took Y's numbers.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">Swap them: <code>pos(1, 0, 0), pos(3, 5, 0)</code></p>
+    </details>
+  </div>
+
+  <!-- 18 · Debug 2 — pos(3,3,0) where pos(2,2,0) was meant (his real 08-25 slip) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>One square off</h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">X first, then Y.</p>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Wanted 🟩 &middot; got 🟨</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">3</span> ⬛⬛⬛🟨
+<span class="num">2</span> ⬛⬛🟩⬛
+<span class="num">1</span> ⬛⬛⬛⬛
+<span class="num">0</span> ⬛⬛⬛⬛
+  <span class="num">0 1 2 3 </span> <span class="num">X</span></pre>
+    </div>
+    <details class="debug-card">
+      <summary>Why is it in the wrong square?</summary>
+      <div class="err">He counted 1, 2, 3. The boxes count 0, 1, 2, 3.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">The 3rd box is <b>2</b>. Use <code>pos(2, 2, 0)</code>.</p>
+    </details>
+  </div>
+
+  <!-- 19 · Debug 3 — MOSS BLOCK with a space -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>The run stopped</h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">X first, then Y.</p>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="fn">blocks.fill</span>(<span class="str">MOSS BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))</pre>
+    <details class="debug-card">
+      <summary>Nothing built. What is wrong?</summary>
+      <div class="err">SyntaxError: invalid syntax</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">A space splits the name in two. Use the underscore: <code>MOSS_BLOCK</code>. No quotes, all CAPS.</p>
+    </details>
+  </div>
+
+  <!-- 20 · OPTIONAL Debug 4 — end pos smaller than start pos -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Nothing appeared</h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">X first, then Y.</p>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>))</pre>
+    <details class="debug-card">
+      <summary>No error, no blocks. What is wrong?</summary>
+      <div class="err">The end corner is smaller than the start corner.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">Start with the small numbers: <code>pos(4, 4, 0), pos(5, 6, 0)</code></p>
+    </details>
+  </div>
+
+  <!-- 21 · STEP 5 / 7 — v4 pole -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">v4 &middot; three fills<span class="activity-tag">STEP 5 / 7</span></div>
+    <h2>Pole: X 2&rarr;2, Y 4&rarr;8</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(5, 6, 0)</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(GOLD_BLOCK, pos(4, 4, 0), pos(5, 6, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">8</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.35em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">4</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">5</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">6</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">7</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. 2&rarr;2 is one column.</span><br><span class="fn">✅ A thin pole, 5 tall, between the towers.</span></p>
+  </div>
+
+  <!-- 22 · STEP 6 / 7 — v4 flag -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">v4 &middot; three fills<span class="activity-tag">STEP 6 / 7</span></div>
+    <h2>Flag: X 3&rarr;5, Y 7&rarr;8</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>OAK_PLANKS</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(OAK_PLANKS, pos(2, 4, 0), pos(2, 8, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.5vmin,15px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">8</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.5vmin,15px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">8</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">REDSTONE_BLOCK</span>, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">7</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">8</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.35em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.25em">
+      <span class="code-chip">Y</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">7</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">8</div>
+      <div class="iter-item">9</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. 3&rarr;5 is 3 boxes.</span><br><span class="fn">✅ A red flag, 3 wide and 2 tall, on the pole.</span></p>
+  </div>
+
+  <!-- 23 · OPTIONAL STEP 7 / 7 — v4 lamp, a one-block range -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">v4 &middot; step 7 / 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Lamp: X 2&rarr;2, Y 9&rarr;9</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>REDSTONE_BLOCK</code><br>📍 New line goes <b>UNDER</b> <code>blocks.fill(REDSTONE_BLOCK, pos(3, 7, 0), pos(5, 8, 0))</code> &middot; indent <b>0</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">8</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">REDSTONE_BLOCK</span>, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">7</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">8</span>, <span class="num">0</span>))</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO gate</span>
+<span class="fn">blocks.fill</span>(<span class="str">MOSS_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">0</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>, <span class="fn">pos</span>(<span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">6</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">8</span>, <span class="num">0</span>))
+<span class="fn">blocks.fill</span>(<span class="str">REDSTONE_BLOCK</span>, <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">7</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">8</span>, <span class="num">0</span>))</span>
+<span style="display:block;background:rgba(56,208,224,.14)"><span class="fn">blocks.fill</span>(<span class="str">SEA_LANTERN</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">9</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">9</span>, <span class="num">0</span>))</span></pre>
+    <div class="iter-row" style="margin-top:.35em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 X first, then Y. Same start and end = one block.</span><br><span class="fn">✅ One glowing block on top of the pole.</span></p>
+  </div>
+
+  <!-- 24 · OPTIONAL — Code Talk Frame again -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill purple">Code Talk<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Say it again</h2>
+    <div class="frame-card">
+      <div class="label">Pick any line you wrote</div>
+      <div class="frame">"X goes from <span class="blank"></span> to <span class="blank"></span>, Y goes from <span class="blank"></span> to <span class="blank"></span>, so the fill is <code>pos(<span class="blank"></span>,<span class="blank"></span>,0)</code> to <code>pos(<span class="blank"></span>,<span class="blank"></span>,0)</code>."</div>
+      <div class="pair-prompt">Seven lines, seven sentences. X first, then Y.</div>
+    </div>
+  </div>
+
+  <!-- 25 · Quick Quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1 &middot; X goes 2&rarr;7. How many wide?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">6. Because 7 &minus; 2 = 5, add 1.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2 &middot; In <code>pos(4, 9, 0)</code>, which number is Y?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">9. X first, then Y, then Z.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26 · OPTIONAL Modify — fill in the blanks -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Fill the blanks</h2>
+    <p style="font-size:clamp(15px,2.5vmin,20px)">X first, then Y. A red block, <b>4 wide</b> and <b>2 tall</b>, from X 6, Y 0.</p>
+<pre style="font-size:clamp(12px,2.1vmin,22px)"><span class="fn">blocks.fill</span>(<span class="str">REDSTONE_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">__</span>, <span class="kw">__</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="kw">__</span>, <span class="kw">__</span>, <span class="num">0</span>))</pre>
+    <details class="debug-card">
+      <summary>Say the sentence first, then check</summary>
+      <div class="err">X 6&rarr;9 is 4 boxes. Y 0&rarr;1 is 2 boxes.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)"><code>pos(6, 0, 0), pos(9, 1, 0)</code></p>
+    </details>
+  </div>
+
+  <!-- 27 · Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🚀</h2>
+    <ul class="check-list">
+      <li>Say it out loud: X first, then Y</li>
+      <li>Count X on the bottom ruler</li>
+      <li>Count Y on the side ruler</li>
+      <li>Type ONE <code>blocks.fill</code> line</li>
+      <li>Run it. Look. Then the next line.</li>
+    </ul>
+  </div>
+
+  <!-- 28 · OPTIONAL Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus rungs</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span> Cut a door: <code>AIR</code>, X 2&rarr;3, Y 1&rarr;2.</div>
+      <div class="item"><span class="lvl">★★</span> Make the flag 2 blocks wider. Which number changes?</div>
+      <div class="item"><span class="lvl">★★★</span> Build the whole gate again at Z 1. One number changes on every line.</div>
+    </div>
+  </div>
+
+  <!-- 29 · Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One last count</h2>
+    <div class="exit">
+      <div class="label">Before you go</div>
+      <p style="font-size:clamp(16px,2.7vmin,22px)">X 3&rarr;8, Y 2&rarr;2. How wide? How tall? Then say the whole sentence.</p>
+    </div>
+    <div class="iter-row" style="margin-top:.5em">
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.4em"><span class="fn">✅ 6 wide, 1 tall.</span></p>
+  </div>
+
+  <!-- 30 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="emoji">📏</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">X first, then Y</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Count from 0. Add 1. Every time.</p>
+    <p class="bilingual">다음 시간: 한 줄로 여러 번 채우기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&#8249;</button><span class="counter" id="counter">1 / 30</span><button id="next">&#8250;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

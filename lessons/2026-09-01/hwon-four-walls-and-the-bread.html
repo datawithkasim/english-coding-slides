@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Four Walls and the Bread · Hwon</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Reused verbatim from 2026-08-25 hwon-drive-super-dario.html — same deck series,
+     same visual language. No new components. */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px);
+               user-select: none; -webkit-user-select: none; touch-action: none; }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  /* version badge on section slides */
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Super Dario · Four Walls &amp; the Bread 🍞</div>
+
+  <!-- 1 title -->
+  <div class="slide active center-all">
+    <div class="emoji">🧱</div>
+    <h1>Four Walls<br>and the Bread</h1>
+    <p class="line" style="margin-top:.3em">Lock Dario inside the screen.<br>Then let him <b>eat</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 walls</span><span class="chip">v2 bread</span>
+      <span class="chip">v3 yum</span><span class="chip">v4 score</span>
+    </div>
+  </div>
+
+  <!-- 2 recap = homework check -->
+  <div class="slide">
+    <div class="pill purple">Homework check</div>
+    <h2>Your down wall</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">SENT TO YOU — the bug</div>
+        <div class="was"><pre>    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span></pre></div>
+        <p class="quiet">Two up walls. No down wall.</p>
+      </div>
+      <div>
+        <div class="recap-q">
+          <div class="label">You say it — out loud</div>
+          <div class="q">What did you change in the second block?</div>
+          <details><summary>Show answer</summary><div class="ans"><code>&lt;</code> → <code>&gt;</code>, and <code>0</code> → <code>HEIGHT - super_dario['h']</code>.</div></details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 y-axis visual (mandatory, early) -->
+  <div class="slide">
+    <div class="pill">The screen 📐</div>
+    <div class="two">
+      <div>
+        <h2 style="margin-bottom:.3em">y = 0 is the TOP</h2>
+        <p class="line">Go <b>down</b> the screen, y gets <b>bigger</b>.</p>
+        <p class="line" style="margin-top:.3em">Bottom of the screen is y = <b>800</b>.</p>
+        <p class="bilingual">y는 아래로 갈수록 커져요</p>
+        <p class="quiet" style="margin-top:.4em">Drag the slider. Watch him fall.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="yaxC" width="330" height="340"></canvas>
+        <div class="slid"><span>y</span><input type="range" id="yaxS" min="0" max="760" value="0"><span class="out" id="yaxO">0</span></div>
+        <div class="readout">super_dario['y'] = <b id="yaxB">0</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Park on the bread</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Run your game. Drive Dario right on top of the bread. What happens?</div>
+      <details><summary>Reveal</summary><div class="ans">Nothing. Nobody is checking. Today we make the game notice.</div></details>
+    </div>
+  </div>
+
+  <!-- 5 vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">Rect</span>
+      <span class="gloss">an invisible box: across, down, wide, tall</span>
+      <span class="ko">보이지 않는 상자</span>
+      <span class="term">colliderect</span>
+      <span class="gloss">asks two boxes: are you touching?</span>
+      <span class="ko">겹치나요?</span>
+      <span class="term">respawn</span>
+      <span class="gloss">move a thing to a fresh spot instead of deleting it</span>
+      <span class="ko">다시 나타나기</span>
+    </div>
+  </div>
+
+  <!-- 6 v1 concept + clear the old wall lines -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">The wall rule.</p>
+        <p class="line" style="margin-top:.4em">Too far? <b>Put him back</b>.<br>Four edges, four copies.</p>
+        <p class="line" style="margin-top:.5em;color:#ffb86c"><b>Do this first:</b></p>
+        <p class="where">🔍 FIND <code>3. RENDERING LAYER</code></p>
+        <p class="where">📍 Delete every line between <code>super_dario['y'] += super_dario['speed']</code> and that comment.</p>
+        <p class="quiet">Blank slate. We type all four.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="waC" width="330" height="200"></canvas>
+        <div class="slid"><span>x</span><input type="range" id="waX" min="0" max="900" value="400"><span class="out" id="waXO">400</span></div>
+        <div style="text-align:center"><button class="btn alt" id="waT">walls: OFF</button></div>
+        <div class="readout" id="waMsg">no walls</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 STEP 1 left wall -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 1 / 12 · left wall</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>        super_dario[<span class="str">'y'</span>] += super_dario[<span class="str">'speed'</span>]
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>        super_dario[<span class="str">'y'</span>] += super_dario[<span class="str">'speed'</span>]
+
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'x'</span>] = <span class="num">0</span>
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+        <p class="where">🔍 FIND <code>3. RENDERING LAYER</code></p>
+        <p class="where">📍 Under <code>super_dario['y'] += super_dario['speed']</code> · indent <b>4</b> spaces</p>
+        <p class="where">🟣 0 is the left edge. Smaller than 0 is off-screen.</p>
+        <p class="where">✅ Hold ← — he stops at the left.</p>
+      </div>
+      <div><canvas class="sim" id="e1" width="200" height="215" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 8 STEP 2 right wall -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 2 / 12 · right wall</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'x'</span>] = <span class="num">0</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'x'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]</pre></div>
+        <p class="where">🔍 FIND <code>super_dario['x'] = 0</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 <code>x</code> is the <b>LEFT</b> edge → right edge is <code>x + w</code> → limit is <code>WIDTH - w</code>.</p>
+        <p class="where">✅ Hold → — all of him stays on screen.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>left edge</th><td>x</td></tr>
+          <tr><th>right edge</th><td>x + 40</td></tr>
+          <tr><th>biggest x</th><td>800 − 40 = 760</td></tr>
+        </table>
+        <canvas class="sim" id="e2" width="200" height="215" style="max-width:200px;margin-top:.4em"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 STEP 3 top wall -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 3 / 12 · top wall</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span></pre></div>
+        <p class="where">🔍 FIND <code>super_dario['x'] = WIDTH - super_dario['w']</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 y = 0 is the top. Below 0 is above the screen.</p>
+        <p class="where">✅ Hold ↑ — he stops at y = 0.</p>
+      </div>
+      <div><canvas class="sim" id="e3" width="200" height="215" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 10 STEP 4 bottom wall -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 4 / 12 · bottom wall</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]:
+        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]</pre></div>
+        <p class="where">🔍 FIND <code>super_dario['y'] = 0</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 Big y is the bottom. His feet are y + 40.</p>
+        <p class="where">✅ Hold ↓ — he stops at 760. <b>v1 done.</b></p>
+      </div>
+      <div><canvas class="sim" id="e4" width="200" height="215" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 11 debug 1 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 1</div>
+    <h2>Half of him escapes</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">if super_dario['x'] &gt; 800:<br>&nbsp;&nbsp;&nbsp;&nbsp;super_dario['x'] = 800</div>
+          <details><summary>Why? 🔍</summary>
+            <p class="line" style="margin-top:.3em"><code>x</code> is the left edge. At x = 800 his left edge is on the wall — the other 40 is outside.</p>
+          </details>
+        </div>
+        <div class="tag-new">FIX</div>
+        <div class="now"><pre>    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]</pre></div>
+      </div>
+      <div><canvas class="sim" id="d1C" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">x = 800 → he is <b>half out</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 debug 2 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 2</div>
+    <h2>The down wall does nothing</h2>
+    <div class="debug-card">
+      <div class="err">if super_dario['y'] &lt; 0:&nbsp;&nbsp;&nbsp;&nbsp;<span style="opacity:.6"># up wall</span><br>
+      if super_dario['y'] &lt; 0:&nbsp;&nbsp;&nbsp;&nbsp;<span style="opacity:.6"># meant to be down</span></div>
+      <details><summary>What is wrong? 🔍</summary>
+        <p class="line" style="margin-top:.3em">Same test twice. Nothing ever checks the <b>bottom</b>. He drops out the floor.</p>
+      </details>
+    </div>
+    <div class="tag-new">FIX — second block only</div>
+    <div class="now" style="max-width:36em;width:100%"><pre>    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]:
+        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]</pre></div>
+  </div>
+
+  <!-- 13 trace activity -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Trace it ✍️</div>
+    <h2>Right wall, three frames</h2>
+    <p class="line">speed 6 · w 40 · limit <b>760</b></p>
+    <div class="trace-grid cols-4" style="max-width:40em">
+      <div class="cell head">frame</div><div class="cell head">x before</div><div class="cell head">+ speed</div><div class="cell head">x after wall</div>
+      <div class="cell">1</div><div class="cell"><code>750</code></div><div class="cell"><code>756</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">756</span></details></div>
+      <div class="cell">2</div><div class="cell"><code>756</code></div><div class="cell"><code>762</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">760</span></details></div>
+      <div class="cell">3</div><div class="cell"><code>760</code></div><div class="cell"><code>766</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">760</span></details></div>
+    </div>
+  </div>
+
+  <!-- 14 STEP 5 bread (v2) -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 5 / 12 · the bread</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD — tiny, sized for 400</div>
+        <div class="was"><pre>bread = {
+    <span class="str">'x'</span>: <span class="num">320</span>,  <span class="str">'y'</span>: <span class="num">300</span>,
+    <span class="str">'h'</span>: <span class="num">20</span>,   <span class="str">'w'</span>: <span class="num">15</span>,</pre></div>
+        <div class="tag-new">NEW — bigger, far away</div>
+        <div class="now"><pre>bread = {
+    <span class="str">'x'</span>: <span class="num">600</span>,  <span class="str">'y'</span>: <span class="num">600</span>,
+    <span class="str">'h'</span>: <span class="num">30</span>,   <span class="str">'w'</span>: <span class="num">30</span>,</pre></div>
+        <p class="where">🔍 FIND <code>bread = {</code></p>
+        <p class="where">📍 The two lines inside it · indent <b>4</b> spaces</p>
+        <p class="where">🟣 Screen is 800 now. Bigger target.</p>
+        <p class="where">✅ Run — bigger bread, bottom right. <b>v2 done.</b></p>
+      </div>
+      <div><canvas class="sim" id="brC" width="210" height="210" style="max-width:220px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 15 v3 concept: Rect -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">A Rect is an invisible box.</p>
+        <p class="line" style="margin-top:.4em">Same four numbers you already use:<br><b>across, down, wide, tall</b>.</p>
+        <p class="line" style="margin-top:.4em">Python can ask two boxes: <b>touching?</b></p>
+        <p class="bilingual">상자 두 개가 겹치는지 물어봐요</p>
+      </div>
+      <div>
+        <canvas class="sim" id="rectC" width="330" height="200"></canvas>
+        <div class="slid"><span>Dario x</span><input type="range" id="rcX" min="0" max="760" value="120"><span class="out" id="rcO">120</span></div>
+        <div class="readout" id="rcMsg">not touching</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 STEP 6 dario_rect -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 6 / 12 · Dario's box</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]
+
+    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>super_dario['y'] = HEIGHT - super_dario['h']</code></p>
+    <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 One box, built fresh every frame, wrapped around Dario.</p>
+    <p class="where">✅ Run — looks the same, no error.</p>
+  </div>
+
+  <!-- 17 STEP 7 bread_rect -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 7 / 12 · the bread's box</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>dario_rect = pygame.Rect(</code></p>
+    <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 Same shape, bread's numbers. Now there are two boxes.</p>
+    <p class="where">✅ Run — still no change, still no error.</p>
+  </div>
+
+  <!-- 18 STEP 8 colliderect -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 8 / 12 · are they touching?</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>bread_rect = pygame.Rect(</code></p>
+    <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 The two boxes overlap → the <code>if</code> is true.</p>
+    <p class="where">✅ Drive onto the bread — <code>yum</code> floods the terminal. <b>v3 done.</b></p>
+  </div>
+
+  <!-- 19 debug 3 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 3</div>
+    <h2>yum before you move</h2>
+    <div class="debug-card">
+      <div class="err">if dario_rect.colliderect:</div>
+      <details><summary>What is missing? 🔍</summary>
+        <p class="line" style="margin-top:.3em">The <code>()</code> and the other box. Without them Python never <b>asks</b> the question — it just sees the tool, which is always true. <code>yum</code> prints from frame 1.</p>
+      </details>
+    </div>
+    <div class="compare-row" style="margin-top:.5em">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if dario_rect.colliderect:</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if dario_rect.colliderect(bread_rect):</pre></div>
+    </div>
+  </div>
+
+  <!-- 20 v4 concept: respawn -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Eaten bread does not die.</p>
+        <p class="line" style="margin-top:.4em">It <b>moves</b>. New x, new y, picked at random.</p>
+        <p class="line" style="margin-top:.4em">Score goes up by <b>1</b> each time.</p>
+        <p class="quiet" style="margin-top:.4em">Press the button. Same bread, new home.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="rndC" width="260" height="260" style="max-width:260px"></canvas>
+        <div style="text-align:center"><button class="btn" id="rndB">eat it 🍞</button></div>
+        <div class="readout">score = <b id="rndS">0</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 21 STEP 9 import random -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 9 / 12 · get the dice</div>
+    <div style="max-width:34em;width:100%;text-align:left">
+      <div class="tag-old">OLD — line 1 of your file</div>
+      <div class="was"><pre><span class="kw">import</span> pygame</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre><span class="kw">import</span> pygame
+<span class="kw">import</span> random</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>import pygame</code></p>
+    <p class="where">📍 Under it, very top of the file · indent <b>0</b> spaces</p>
+    <p class="where">🟣 <code>random</code> is the tool that picks the new spot.</p>
+    <p class="where">✅ Run — no error.</p>
+  </div>
+
+  <!-- 22 STEP 10 score = 0 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 10 / 12 · start the score</div>
+    <div style="max-width:34em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre>running = <span class="kw">True</span>
+<span class="kw">while</span> running:</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre>score = <span class="num">0</span>
+
+running = <span class="kw">True</span>
+<span class="kw">while</span> running:</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>running = True</code></p>
+    <p class="where">📍 Above that line · indent <b>0</b> spaces</p>
+    <p class="where">🟣 Outside the loop, so it is not reset every frame.</p>
+    <p class="where">✅ Run — nothing new yet, no error.</p>
+  </div>
+
+  <!-- 23 STEP 11 respawn -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 11 / 12 · move the bread</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>print("yum")</code></p>
+    <p class="where">📍 Under it, inside the <code>if</code> · indent <b>8</b> spaces</p>
+    <p class="where">🟣 Same limit as the walls: <code>WIDTH - w</code> keeps it on screen.</p>
+    <p class="where">✅ Eat it — the bread jumps somewhere new.</p>
+  </div>
+
+  <!-- 24 STEP 12 score -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 12 / 12 · count it</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>print("yum")</code></p>
+    <p class="where">📍 Replace that one line with these two · indent <b>8</b> spaces</p>
+    <p class="where">🟣 One bite, one point.</p>
+    <p class="where">✅ Terminal shows <code>yum 1</code>, <code>yum 2</code>, <code>yum 3</code>. <b>v4 done.</b></p>
+  </div>
+
+  <!-- 25 debug 4 OPTIONAL -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Bug hunt 🐛 · 4</div>
+    <h2>The bread will not sit still</h2>
+    <div class="debug-card">
+      <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;if dario_rect.colliderect(bread_rect):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;score = score + 1<br>&nbsp;&nbsp;&nbsp;&nbsp;bread['x'] = random.randint(0, WIDTH - bread['w'])</div>
+      <details><summary>Look at the indent 🔍</summary>
+        <p class="line" style="margin-top:.3em">That line sits at <b>4</b> spaces — outside the <code>if</code>. It runs every frame.</p>
+      </details>
+    </div>
+    <p class="where">✅ Fix: indent it to <b>8</b> spaces.</p>
+  </div>
+
+  <!-- 26 full loop OPTIONAL -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Check your loop</div>
+<pre class="tiny">    keys = pygame.key.get_pressed()
+    <span class="com"># ... your four key blocks stay exactly as they are ...</span>
+
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'x'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]:
+        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]
+
+    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre>
+    <p class="quiet" style="margin-top:.3em">Line by line. Every wall <code>if</code> at 4 spaces.</p>
+  </div>
+
+  <!-- 27 quiz 1 OPTIONAL -->
+  <div class="slide mcq" data-correct="0" data-explain="x is his left edge. 800 − 40 = 760 keeps all of him on screen.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Screen is 800. Dario is 40 wide. Biggest allowed <code>'x'</code>?</div>
+    <div class="opts">
+      <button class="opt">760</button>
+      <button class="opt">800</button>
+      <button class="opt">840</button>
+      <button class="opt">400</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 28 code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say both, out loud</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"<code>y = 0</code> is the <span class="blank"></span> of the screen, so bigger <code>y</code> means <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"<code>x</code> is the <span class="blank"></span> edge, so the right edge is <code>x</code> plus <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at the line in your file while you say it.</div>
+    </div>
+  </div>
+
+  <!-- 29 stretch OPTIONAL -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch ★ · fill the blanks</div>
+    <p class="line big" style="margin-bottom:.3em">Draw the score on screen.</p>
+    <div class="skel" style="max-width:40em">
+<pre class="tiny">    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(<span class="blank">???</span>), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="blank">???</span>))</pre></div>
+    <p class="where">📍 Under <code>pygame.draw.rect(screen, PINK, (bread[</code> · indent <b>4</b> spaces</p>
+    <p class="quiet">Which variable holds the number? Which y puts it at the top?</p>
+  </div>
+
+  <!-- 30 close -->
+  <div class="slide center-all">
+    <div class="emoji">🍞</div>
+    <p class="line big">Four walls. One hungry Dario.</p>
+    <p class="line" style="margin-top:.4em">Next: <b>a timer</b>, and bread that is worth points.</p>
+    <p class="bilingual">다음 시간: 시간 제한 만들기</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 30</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var SKY = '#87cde1', DARIO = '#e33', BREAD = '#ffc0cb', RED = '#ff5555', AMB = '#ffb86c';
+
+  /* ---------- slide 3: the y axis ---------- */
+  (function () {
+    var c = $('yaxC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 56, T = 16, SZ = c.width - L - 14, S = SZ / 800;
+    function draw() {
+      var y = +$('yaxS').value;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      ctx.font = '11px monospace'; ctx.textAlign = 'right';
+      [0, 200, 400, 600, 800].forEach(function (v) {
+        var py = T + v * S;
+        ctx.strokeStyle = '#8a97b8'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(L - 6, py); ctx.lineTo(L, py); ctx.stroke();
+        ctx.fillStyle = (v === 0) ? AMB : '#8a97b8';
+        ctx.fillText(String(v), L - 9, py + 4);
+      });
+      ctx.strokeStyle = AMB; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(30, T + 4); ctx.lineTo(30, T + SZ - 6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(24, T + SZ - 18); ctx.lineTo(30, T + SZ - 6); ctx.lineTo(36, T + SZ - 18); ctx.stroke();
+      ctx.save(); ctx.translate(15, T + SZ / 2); ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.fillStyle = AMB; ctx.font = 'bold 12px monospace';
+      ctx.fillText('y gets bigger', 0, 0); ctx.restore();
+      ctx.fillStyle = BREAD; ctx.fillRect(L + 600 * S, T + 600 * S, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(L + 120 * S, T + y * S, 40 * S, 40 * S);
+      ctx.textAlign = 'left'; ctx.fillStyle = '#123'; ctx.font = 'bold 12px monospace';
+      ctx.fillText('y = 0  ← TOP', L + 6, T + 14);
+      ctx.fillText('y = 800  BOTTOM', L + 6, T + SZ - 6);
+      $('yaxO').textContent = y; $('yaxB').textContent = y;
+    }
+    $('yaxS').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- edge minis: same y-axis motif on all four ---------- */
+  function edgeMini(id, which) {
+    var c = $(id); if (!c) return;
+    var ctx = c.getContext('2d'), L = 32, T = 20, SZ = c.width - L - 12, S = SZ / 800;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+    /* y arrow — every wall slide carries it */
+    ctx.strokeStyle = AMB; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(16, T + 2); ctx.lineTo(16, T + SZ - 5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(12, T + SZ - 13); ctx.lineTo(16, T + SZ - 5); ctx.lineTo(20, T + SZ - 13); ctx.stroke();
+    ctx.fillStyle = AMB; ctx.font = 'bold 9px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('y=0', 16, T - 7);
+    ctx.save(); ctx.translate(9, T + SZ / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('y bigger', 0, 0); ctx.restore();
+    var d = { x: 380, y: 380 }, lab = '';
+    ctx.lineWidth = 5; ctx.strokeStyle = RED; ctx.beginPath();
+    if (which === 'left')   { d = { x: 0,   y: 380 }; ctx.moveTo(L, T);           ctx.lineTo(L, T + SZ);           lab = 'x = 0'; }
+    if (which === 'right')  { d = { x: 760, y: 380 }; ctx.moveTo(L + SZ, T);      ctx.lineTo(L + SZ, T + SZ);      lab = 'x = 760'; }
+    if (which === 'top')    { d = { x: 380, y: 0   }; ctx.moveTo(L, T);           ctx.lineTo(L + SZ, T);           lab = 'y = 0'; }
+    if (which === 'bottom') { d = { x: 380, y: 760 }; ctx.moveTo(L, T + SZ);      ctx.lineTo(L + SZ, T + SZ);      lab = 'y = 760'; }
+    ctx.stroke();
+    ctx.fillStyle = DARIO; ctx.fillRect(L + d.x * S, T + d.y * S, 40 * S, 40 * S);
+    ctx.fillStyle = RED; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(lab, L + SZ / 2, T + SZ + 16);
+  }
+  edgeMini('e1', 'left'); edgeMini('e2', 'right');
+  edgeMini('e3', 'top');  edgeMini('e4', 'bottom');
+
+  /* ---------- slide 6: walls on / off ---------- */
+  (function () {
+    var c = $('waC'); if (!c) return;
+    var ctx = c.getContext('2d'), walls = false;
+    function draw() {
+      var xin = +$('waX').value, S = c.width / 800, maxX = 760;
+      var x = walls ? Math.max(0, Math.min(maxX, xin)) : xin;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(0, 0, c.width, c.height);
+      if (walls) {
+        ctx.strokeStyle = (xin !== x) ? RED : '#1f7f2f';
+        ctx.lineWidth = 5; ctx.strokeRect(2, 2, c.width - 4, c.height - 4);
+      }
+      ctx.fillStyle = BREAD; ctx.fillRect(600 * S, 120, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(x * S, 70, 40 * S, 40 * S);
+      $('waXO').textContent = xin;
+      if (!walls) $('waMsg').textContent = 'no walls — he can leave';
+      else if (xin > maxX) $('waMsg').textContent = xin + ' is too far → put back to 760';
+      else $('waMsg').textContent = 'inside — the wall does nothing';
+    }
+    $('waX').addEventListener('input', draw);
+    $('waT').addEventListener('click', function () {
+      walls = !walls; this.textContent = 'walls: ' + (walls ? 'ON' : 'OFF');
+      draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- debug 1: half out ---------- */
+  (function () {
+    var c = $('d1C'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 12, T = 14, SZ = c.width - 60, S = SZ / 800;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = RED; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(L + SZ, T); ctx.lineTo(L + SZ, T + SZ); ctx.stroke();
+    ctx.fillStyle = DARIO; ctx.fillRect(L + 800 * S, T + 300 * S, 40 * S, 40 * S);
+    ctx.fillStyle = 'rgba(227,51,51,.3)'; ctx.fillRect(L + 760 * S, T + 300 * S, 40 * S, 40 * S);
+    ctx.fillStyle = RED; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('x = 800', L + SZ / 2, T + SZ + 16);
+  })();
+
+  /* ---------- slide 14: the bigger bread ---------- */
+  (function () {
+    var c = $('brC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 10, T = 10, SZ = c.width - 20, S = SZ / 800;
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+    ctx.fillStyle = 'rgba(255,192,203,.35)'; ctx.fillRect(L + 320 * S, T + 300 * S, 15 * S, 20 * S);
+    ctx.fillStyle = BREAD; ctx.fillRect(L + 600 * S, T + 600 * S, 30 * S, 30 * S);
+    ctx.fillStyle = DARIO; ctx.fillRect(L + 20 * S, T + 100 * S, 40 * S, 40 * S);
+    ctx.fillStyle = '#123'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('old', L + 320 * S - 4, T + 300 * S - 4);
+    ctx.fillText('new 600,600', L + 600 * S - 46, T + 600 * S - 5);
+  })();
+
+  /* ---------- slide 15: two boxes touching ---------- */
+  (function () {
+    var c = $('rectC'); if (!c) return;
+    var ctx = c.getContext('2d'), S = c.width / 800, BX = 520, BY = 60, BW = 30, BH = 30;
+    function draw() {
+      var x = +$('rcX').value, y = 60;
+      ctx.fillStyle = SKY; ctx.fillRect(0, 0, c.width, c.height);
+      var hit = (x < BX + BW) && (x + 40 > BX) && (y < BY + BH) && (y + 40 > BY);
+      ctx.fillStyle = BREAD; ctx.fillRect(BX * S, BY * S + 40, BW * S, BH * S);
+      ctx.strokeStyle = hit ? '#1f7f2f' : '#123'; ctx.lineWidth = 2;
+      ctx.strokeRect(BX * S, BY * S + 40, BW * S, BH * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(x * S, y * S + 40, 40 * S, 40 * S);
+      ctx.strokeRect(x * S, y * S + 40, 40 * S, 40 * S);
+      $('rcO').textContent = x;
+      $('rcMsg').textContent = hit ? 'colliderect → True 🍞' : 'colliderect → False';
+    }
+    $('rcX').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- slide 20: respawn ---------- */
+  (function () {
+    var c = $('rndC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 8, T = 8, SZ = c.width - 16, S = SZ / 800;
+    var b = { x: 600, y: 600 }, score = 0;
+    function draw() {
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      ctx.fillStyle = BREAD; ctx.fillRect(L + b.x * S, T + b.y * S, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(L + 40 * S, T + 40 * S, 40 * S, 40 * S);
+      $('rndS').textContent = score;
+    }
+    $('rndB').addEventListener('click', function () {
+      b.x = Math.floor(Math.random() * 771);
+      b.y = Math.floor(Math.random() * 771);
+      score++; draw(); this.blur();
+    });
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>
