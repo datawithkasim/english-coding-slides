@@ -126,322 +126,59 @@
   <div class="slide active center-all">
     <div class="emoji">🎮</div>
     <h1>Start the platformer</h1>
-    <p class="line" style="margin-top:.3em">Mark the homework. Look at what you built.<br>Then build a thing that <b>falls and jumps</b>.</p>
+    <p class="line" style="margin-top:.3em">A new file, six steps.<br>By the end it <b>falls, jumps, walks and lands on a platform</b>.</p>
     <div class="chips" style="margin-top:.7em">
-      <span class="chip on">1 · homework</span><span class="chip">2 · your game</span><span class="chip">3 · gravity + jump</span>
+      <span class="chip on">gravity</span><span class="chip">jump</span><span class="chip">walk</span><span class="chip">a platform</span>
     </div>
   </div>
 
-  <!-- 2 recap = homework -->
-  <div class="slide">
-    <div class="pill purple">Recap · homework</div>
-    <h2>Four bugs. You hunted them.</h2>
-    <ul class="tick" style="max-width:26em">
-      <li>the spread spawn</li>
-      <li>the right wall</li>
-      <li>the Boss counter</li>
-      <li>boss rage</li>
-    </ul>
-    <p class="quiet" style="margin-top:.4em">You say what you changed first. Then the slide shows the fix.</p>
-    <p class="bilingual">숙제 먼저 확인해요</p>
-  </div>
-
-  <!-- 3 predict -->
+  <!-- 2 predict -->
   <div class="slide">
     <div class="pill">Predict 🤔</div>
-    <h2>Boss 4 hits the right wall</h2>
+    <h2>One frame of falling</h2>
     <div class="predict-card">
       <div class="label">Predict</div>
-      <pre>boss["vx"] = 6
-if boss["x"] &gt; WIDTH - boss["w"]:
-    boss["vx"] = -BOSS_SPEED</pre>
-      <div class="q">Speed 6 goes in. What speed comes out?</div>
-      <details><summary>Reveal</summary><div class="ans">−3. BOSS_SPEED is always 3, so boss 4 slows down at every right wall.</div></details>
+      <pre>GRAVITY = 0.6
+player["vy"] = -12
+player["y"]  = 300
+
+player["vy"] += GRAVITY
+player["y"]  += player["vy"]</pre>
+      <div class="q">After ONE frame, is y bigger or smaller than 300?</div>
+      <details><summary>Reveal</summary><div class="ans">Smaller. 288.6. vy is still negative, so y goes down in number, which is <b>up</b> the screen.</div></details>
     </div>
   </div>
 
-  <!-- 4 vocab -->
+  <!-- 3 vocab -->
   <div class="slide">
     <div class="pill">Vocab</div>
-    <h2>Three words, three projects</h2>
+    <h2>Four words for today</h2>
     <div class="vocab-table">
-      <span class="term">state</span>
-      <span class="gloss">the mode an enemy is in: patrol, chase, flee</span>
-      <span class="ko">상태</span>
+      <span class="term">vy</span>
+      <span class="gloss">vertical speed &mdash; how far you move up or down this frame</span>
+      <span class="ko">세로 속도</span>
       <span class="term">gravity</span>
-      <span class="gloss">speed you add downward every frame</span>
+      <span class="gloss">a small amount added to vy every single frame</span>
       <span class="ko">중력</span>
-      <span class="term">file</span>
-      <span class="gloss">data your game saves, then loads later</span>
-      <span class="ko">파일</span>
+      <span class="term">on_ground</span>
+      <span class="gloss">True when your feet are on something solid</span>
+      <span class="ko">땅에 닿음</span>
+      <span class="term">platform</span>
+      <span class="gloss">a rectangle you can stand on, above the floor</span>
+      <span class="ko">발판</span>
     </div>
   </div>
 
-  <!-- 5 the map -->
-  <div class="slide center-all">
-    <div class="pill">Your game 🏆</div>
-    <p class="line big" style="margin-bottom:.2em">One frame of your main loop.</p>
-    <canvas class="sim" id="mapC" width="760" height="330" style="max-width:760px"></canvas>
-    <p class="quiet" style="margin-top:.35em">★ = a line you wrote yourself.</p>
-  </div>
-
-  <!-- 6 the four lines -->
-  <div class="slide">
-    <div class="pill">Your game 🏆</div>
-    <h2>Four lines you wrote</h2>
-    <div class="two" style="align-items:start;text-align:left">
-      <div>
-        <p class="quiet">levels</p>
-<pre class="tiny">boss_hp = BOSS_MAX_HP + (boss_level - 1) * 10
-boss_speed = BOSS_SPEED + (boss_level - 1)</pre>
-        <p class="quiet" style="margin-top:.5em">the wall</p>
-<pre class="tiny">boss["vx"] = -abs(boss["vx"])</pre>
-      </div>
-      <div>
-        <p class="quiet">the spread</p>
-<pre class="tiny">for vx in [-4, -2, 0, 2, 4]:</pre>
-        <p class="quiet" style="margin-top:.5em">the win</p>
-<pre class="tiny">if boss_level &gt; BOSSES_TO_WIN:
-    game_won = True</pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- 7 level dial -->
-  <div class="slide">
-    <div class="pill">Watch it!</div>
-    <div class="two">
-      <div>
-        <p class="line big">Your formula, live.</p>
-<pre>hp    = BOSS_MAX_HP + (boss_level - 1) * 10
-speed = BOSS_SPEED  + (boss_level - 1)</pre>
-        <p class="quiet" style="margin-top:.4em">Drag it. One formula makes every boss.</p>
-      </div>
-      <div>
-        <canvas class="sim" id="lvC" width="360" height="200"></canvas>
-        <div class="slid"><span>boss_level</span><input type="range" id="lvS" min="1" max="5" value="1"><span class="out" id="lvO">1</span></div>
-        <div class="readout">hp <b id="lvHp">20</b> &nbsp; speed <b id="lvSp">3</b></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 8 trace activity -->
-  <div class="slide">
-    <div class="pill">Trace it</div>
-    <h2>You fill the boxes</h2>
-    <div class="trace-grid" style="max-width:28em">
-      <div class="cell head">boss_level</div><div class="cell head">hp</div><div class="cell head">speed</div>
-      <div class="cell"><code>1</code></div><div class="cell"><code>20</code></div><div class="cell"><code>3</code></div>
-      <div class="cell"><code>2</code></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">30</span></details></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
-      <div class="cell"><code>3</code></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">40</span></details></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
-      <div class="cell"><code>5</code></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
-    </div>
-    <p class="quiet" style="margin-top:.4em">Say the number before you tap.</p>
-  </div>
-
-  <!-- 9 common mistake -->
-  <div class="slide">
-    <div class="pill">⚠️ Watch out</div>
-    <h2>The colon</h2>
-    <div class="compare-row">
-      <div class="col bad"><span class="tag">✗ broken</span><pre>if boss_level &gt; BOSSES_TO_WIN
-    game_won = True</pre></div>
-      <div class="col good"><span class="tag">✓ fixed</span><pre>if boss_level &gt; BOSSES_TO_WIN:
-    game_won = True</pre></div>
-    </div>
-    <p class="why" style="text-align:center">🟣 <code>SyntaxError: expected ':'</code> — every <code>if</code> ends with one.</p>
-  </div>
-
-  <!-- 10 homework 1 -->
-  <div class="slide center-all">
-    <div class="steptag">HOMEWORK 1 / 4</div>
-    <p class="line" style="margin-bottom:.3em">Bullets spawned off the boss's left side.</p>
-    <div class="find" style="max-width:40em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>boss["w"] / (2 - 8)</code></div>
-    <div class="debug-card" style="max-width:40em;width:100%;text-align:left">
-      <div class="tag-old">OLD — the bug</div>
-      <div class="was"><pre class="tiny">                        "x": boss["x"] + boss["w"] / (2 - 8),</pre></div>
-      <div class="err">boss["w"] is 90 → 90 / -6 → -15</div>
-      <details><summary>▸ Show the fix</summary>
-        <div class="tag-new">NEW</div>
-        <div class="now"><pre class="tiny">                        "x": boss["x"] + boss["w"] / 2 - 4,</pre></div>
-      </details>
-    </div>
-    <p class="where">📍 Inside the spread loop, first line of the dict. Indent 24 spaces.</p>
-    <p class="why">🟣 Brackets moved. <code>/ 2</code> = middle, <code>- 4</code> = half a bullet.</p>
-    <p class="chk">✅ The fan starts at the boss's middle.</p>
-  </div>
-
-  <!-- 11 homework 2 -->
-  <div class="slide center-all">
-    <div class="steptag">HOMEWORK 2 / 4</div>
-    <p class="line" style="margin-bottom:.3em">Fast bosses slowed down at the right wall.</p>
-    <div class="find" style="max-width:40em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>boss["vx"] = -BOSS_SPEED</code></div>
-    <div class="debug-card" style="max-width:40em;width:100%;text-align:left">
-      <div class="tag-old">OLD — the bug</div>
-      <div class="was"><pre class="tiny">            if boss["x"] &gt; WIDTH - boss["w"]:
-                boss["x"] = WIDTH - boss["w"]
-                boss["vx"] = -BOSS_SPEED</pre></div>
-      <div class="err">boss 4 goes in at 6, comes out at 3</div>
-      <details><summary>▸ Show the fix</summary>
-        <div class="tag-new">NEW</div>
-        <div class="now"><pre class="tiny">            if boss["x"] &gt; WIDTH - boss["w"]:
-                boss["x"] = WIDTH - boss["w"]
-                boss["vx"] = -abs(boss["vx"])</pre></div>
-      </details>
-    </div>
-    <p class="where">📍 Only the last line changes. Indent 16 spaces.</p>
-    <p class="why">🟣 <code>abs()</code> drops the minus. The minus in front puts it back.</p>
-    <p class="chk">✅ Boss 4 stays fast after every bounce.</p>
-  </div>
-
-  <!-- 12 homework 3 -->
-  <div class="slide center-all">
-    <div class="steptag">HOMEWORK 3 / 4</div>
-    <p class="line" style="margin-bottom:.3em">The Boss counter never appeared.</p>
-    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>pygame.display.flip()</code></div>
-    <div class="debug-card" style="max-width:44em;width:100%;text-align:left">
-      <div class="tag-old">OLD — the bug</div>
-      <div class="was"><pre class="tiny">    pygame.display.flip()
-    boss_txt = font.render(f"Boss {boss_level} / {BOSSES_TO_WIN}", True, WHITE)
-    screen.blit(boss_txt, (10, 70))</pre></div>
-      <div class="err">flip() shows the screen. Drawing after it is wiped next frame.</div>
-      <details><summary>▸ Show the fix</summary>
-        <div class="tag-new">NEW</div>
-        <div class="now"><pre class="tiny">    boss_txt = font.render(f"Boss {boss_level} / {BOSSES_TO_WIN}", True, WHITE)
-    screen.blit(boss_txt, (10, 70))
-    pygame.display.flip()</pre></div>
-      </details>
-    </div>
-    <p class="where">📍 The two lines move <b>above</b> flip(). Indent 4 spaces, same as it.</p>
-    <p class="why">🟣 Draw everything first, flip last.</p>
-    <p class="chk">✅ <code>Boss 2 / 5</code> sits top-left while you play.</p>
-  </div>
-
-  <!-- 13 homework 4 -->
-  <div class="slide center-all">
-    <div class="steptag">HOMEWORK 4 / 4</div>
-    <p class="line" style="margin-bottom:.3em">Boss 10 fired a wall of bullets.</p>
-    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>BOSS_SHOOT_COOLDOWN - boss_level * 5</code></div>
-    <div class="debug-card" style="max-width:44em;width:100%;text-align:left">
-      <div class="tag-old">OLD — the bug</div>
-      <div class="was"><pre class="tiny">                boss_shoot_timer = BOSS_SHOOT_COOLDOWN - boss_level * 5</pre></div>
-      <div class="err">level 9 → 45 - 45 = 0. level 10 → -5. It shoots every frame.</div>
-      <details><summary>▸ Show the fix</summary>
-        <div class="tag-new">NEW</div>
-        <div class="now"><pre class="tiny">                boss_shoot_timer = max(10, BOSS_SHOOT_COOLDOWN - boss_level * 5)</pre></div>
-      </details>
-    </div>
-    <p class="where">📍 Same line, wrapped in <code>max(</code> … <code>)</code>. Indent 16 spaces.</p>
-    <p class="why">🟣 <code>max()</code> keeps the bigger number. Never under 10.</p>
-    <p class="chk">✅ Boss 10 is angry, not impossible.</p>
-  </div>
-
-  <!-- 14 OPTIONAL debug 5 -->
-  <div class="slide center-all">
-    <span class="activity-tag">OPTIONAL</span>
-    <div class="pill">Debug ★</div>
-    <p class="line big" style="margin-bottom:.2em">Where does a bullet start?</p>
-    <canvas class="sim" id="ctrC" width="380" height="150"></canvas>
-    <div class="trace-grid" style="max-width:30em">
-      <div class="cell head">piece</div><div class="cell head">maths</div><div class="cell head">value</div>
-      <div class="cell"><code>boss["x"]</code></div><div class="cell">—</div><div class="cell"><code>100</code></div>
-      <div class="cell"><code>boss["w"] / 2</code></div><div class="cell"><code>90 / 2</code></div><div class="cell"><code>45</code></div>
-      <div class="cell"><code>- 4</code></div><div class="cell">half a bullet</div><div class="cell"><code>-4</code></div>
-      <div class="cell"><code>"x"</code></div><div class="cell"><code>100 + 45 - 4</code></div>
-      <div class="cell"><details><summary>?</summary><span class="reveal">141</span></details></div>
-    </div>
-  </div>
-
-  <!-- 15 modify 1 -->
-  <div class="slide center-all">
-    <div class="steptag">MODIFY 1</div>
-    <p class="line" style="margin-bottom:.3em">Seven bullets. You fill the two blanks.</p>
-    <div class="skel" style="max-width:38em;width:100%">
-<pre>for vx in [<span class="blank">?</span>, -4, -2, 0, 2, 4, <span class="blank">?</span>]:</pre></div>
-    <div class="find" style="max-width:38em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>for vx in [-4, -2, 0, 2, 4]:</code></div>
-    <div style="max-width:38em;width:100%;text-align:left">
-      <div class="tag-old">OLD</div>
-      <div class="was"><pre class="tiny">                for vx in [-4, -2, 0, 2, 4]:</pre></div>
-      <div class="tag-new">NEW</div>
-      <div class="now"><pre class="tiny">                for vx in [-6, -4, -2, 0, 2, 4, 6]:</pre></div>
-    </div>
-    <p class="where">📍 Same line, same spot. Indent 16 spaces.</p>
-    <p class="why">🟣 Seven numbers in the list = seven bullets.</p>
-    <p class="chk">✅ Count the purple bullets. Seven.</p>
-  </div>
-
-  <!-- 16 OPTIONAL modify 2 -->
-  <div class="slide center-all">
-    <span class="activity-tag">OPTIONAL</span>
-    <div class="steptag">MODIFY 2 ★★</div>
-    <p class="line" style="margin-bottom:.3em">The fan grows with the boss level.</p>
-    <div class="find" style="max-width:44em;width:100%"><span class="fl">🔍 Find (Ctrl+F)</span><code>for vx in [-6, -4, -2, 0, 2, 4, 6]:</code></div>
-    <div style="max-width:44em;width:100%;text-align:left">
-      <div class="tag-old">OLD</div>
-      <div class="was"><pre class="tiny">                for vx in [-6, -4, -2, 0, 2, 4, 6]:</pre></div>
-      <div class="tag-new">NEW</div>
-      <div class="now"><pre class="tiny">                for vx in range(-boss_level * 2, boss_level * 2 + 1, 2):</pre></div>
-    </div>
-    <p class="where">📍 Same line. Indent 16 spaces.</p>
-    <p class="why">🟣 Boss 1 → 3 bullets. Boss 3 → 7 bullets.</p>
-    <p class="chk">✅ The fan gets wider each boss.</p>
-  </div>
-
-  <!-- 17 OPTIONAL quiz 1 -->
-  <div class="slide mcq" data-correct="0" data-explain="abs(6) = 6, then the minus makes it -6. The boss keeps its own speed.">
-    <span class="activity-tag">OPTIONAL</span>
-    <div class="pill">Quiz</div>
-    <div class="q">Boss 4's <code>vx</code> is 6. It hits the right wall. What does <code>-abs(boss["vx"])</code> give?</div>
-    <div class="opts">
-      <button class="opt">-6</button>
-      <button class="opt">-3</button>
-      <button class="opt">6</button>
-      <button class="opt">0</button>
-    </div>
-    <div class="qfeedback"></div>
-  </div>
-
-  <!-- 18 OPTIONAL quiz 2 -->
-  <div class="slide mcq" data-correct="0" data-explain="flip() shows the frame. Anything drawn after it is wiped before the next flip.">
-    <span class="activity-tag">OPTIONAL</span>
-    <div class="pill">Quiz</div>
-    <div class="q">You blit the counter <b>after</b> <code>pygame.display.flip()</code>. What do you see?</div>
-    <div class="opts">
-      <button class="opt">Nothing at all</button>
-      <button class="opt">It shows one frame late</button>
-      <button class="opt">The game crashes</button>
-      <button class="opt">It shows in the wrong colour</button>
-    </div>
-    <div class="qfeedback"></div>
-  </div>
-
-  <!-- 19 code talk 1 -->
-  <div class="slide">
-    <div class="pill purple">Code Talk</div>
-    <h2>Say it out loud</h2>
-    <div class="frame-card">
-      <div class="label">Sentence frame</div>
-      <div class="frame">"<code>abs()</code> turns <span class="blank"></span> into <span class="blank"></span>, so the boss always moves <span class="blank"></span>."</div>
-      <div class="pair-prompt">Point at the right-wall line while you say it.</div>
-    </div>
-  </div>
-
-  <!-- 20 next project, decided -->
+  <!-- 4 next project, decided -->
   <div class="slide center-all">
     <div class="emoji">🦘</div>
     <h1>Next: a platformer</h1>
-    <p class="line" style="margin-top:.3em">Meteor Shooter is finished. Today you start the jumping game.</p>
+    <p class="line" style="margin-top:.3em">Meteor Shooter is finished. Today is all the jumping game.</p>
     <p class="quiet" style="margin-top:.4em">Same Pygame. Brand new physics.</p>
     <p class="bilingual">오늘부터 점프 게임 시작해요</p>
   </div>
 
-  <!-- 21 what we are building -->
+  <!-- 5 what we are building -->
   <div class="slide">
     <div class="pill">The plan</div>
     <h2>Fall unless you jump 🦘</h2>
@@ -460,7 +197,7 @@ player["y"]  += player["vy"]</pre>
     </div>
   </div>
 
-  <!-- 22 concept: up is negative -->
+  <!-- 6 concept: up is negative -->
   <div class="slide">
     <div class="pill purple">Concept</div>
     <h2>On screen, <b>up is negative</b></h2>
@@ -483,7 +220,7 @@ y = 400  &lt;- ground</pre>
     <p class="bilingual">화면은 아래로 갈수록 y가 커져요. 위로 = 마이너스</p>
   </div>
 
-  <!-- 23 concept: gravity is one small add, every frame -->
+  <!-- 7 concept: gravity is one small add, every frame -->
   <div class="slide">
     <div class="pill purple">Concept</div>
     <h2>Gravity = one small add, every frame</h2>
@@ -500,9 +237,9 @@ y = 400  &lt;- ground</pre>
     <p class="bilingual">한 프레임마다 vy에 조금씩 더해요. 그게 포물선이 돼요.</p>
   </div>
 
-  <!-- 24 STEP 1 the player and the constants -->
+  <!-- 8 STEP 1 the player and the constants -->
   <div class="slide">
-    <div class="pill">v1 &middot; new file<span class="activity-tag">STEP 1 / 4</span></div>
+    <div class="pill">v1 &middot; new file<span class="activity-tag">STEP 1 / 6</span></div>
     <h2>The player, and three constants</h2>
     <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> the top of your new file &middot; 📍 above the game loop &middot; indent <b>0</b></p>
 <pre class="tiny"><span class="com"># platformer.py</span>
@@ -518,9 +255,9 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     <p class="quiet" style="margin-top:.35em">🟣 Same dict shape as your boss. <code>vy</code> is the only new key.<br>🟣 CAPS because they never change &mdash; your own rule.<br>✅ Run it. A block sits on the ground and does nothing.</p>
   </div>
 
-  <!-- 25 STEP 2 gravity -->
+  <!-- 9 STEP 2 gravity -->
   <div class="slide">
-    <div class="pill">v2 &middot; it falls<span class="activity-tag">STEP 2 / 4</span></div>
+    <div class="pill">v2 &middot; it falls<span class="activity-tag">STEP 2 / 6</span></div>
     <h2>Two lines and it falls</h2>
     <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>while running:</code> &middot; 📍 inside the loop, before you draw &middot; indent <b>4</b></p>
     <div class="two">
@@ -540,9 +277,9 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     <p class="quiet" style="margin-top:.35em">🟣 vy grows, then y follows vy. Order matters.<br>✅ Run it. The block sinks through the floor and vanishes. That is correct for now.</p>
   </div>
 
-  <!-- 26 STEP 3 the floor -->
+  <!-- 10 STEP 3 the floor -->
   <div class="slide">
-    <div class="pill">v3 &middot; it lands<span class="activity-tag">STEP 3 / 4</span></div>
+    <div class="pill">v3 &middot; it lands<span class="activity-tag">STEP 3 / 6</span></div>
     <h2>Stop at the floor</h2>
     <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>player["y"]  += player["vy"]</code> &middot; 📍 the next line under it &middot; indent <b>4</b></p>
 <pre class="tiny">    player[<span class="str">"vy"</span>] += GRAVITY
@@ -555,9 +292,43 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     <p class="quiet" style="margin-top:.35em">🟣 Three things on landing: put it back on the floor, kill the speed, remember it is standing.<br>🟣 Colon after <code>if</code>. Check it before you run.<br>✅ Run it. The block drops once and stays on the ground.</p>
   </div>
 
-  <!-- 27 STEP 4 the jump -->
+  <!-- 11 trace activity -->
   <div class="slide">
-    <div class="pill">v4 &middot; it jumps<span class="activity-tag">STEP 4 / 4</span></div>
+    <div class="pill">Trace it</div>
+    <h2>You fill the boxes</h2>
+    <p class="quiet" style="margin-bottom:.3em">Start: <code>vy = -12</code>, <code>y = 300</code>, <code>GRAVITY = 0.6</code>. Each frame: vy += 0.6, then y += vy.</p>
+    <div class="trace-grid" style="max-width:28em">
+      <div class="cell head">frame</div><div class="cell head">vy</div><div class="cell head">y</div>
+      <div class="cell"><code>1</code></div><div class="cell"><code>-11.4</code></div><div class="cell"><code>288.6</code></div>
+      <div class="cell"><code>2</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">-10.8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">277.8</span></details></div>
+      <div class="cell"><code>3</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">-10.2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">267.6</span></details></div>
+      <div class="cell"><code>20</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0.0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">top of the jump</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Say the number before you tap. vy hitting 0 is the top of the arc.</p>
+  </div>
+
+  <!-- 12 common mistake: colon -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The colon, again</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if player["y"] &gt;= GROUND_Y
+    player["vy"] = 0</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if player["y"] &gt;= GROUND_Y:
+    player["vy"] = 0</pre></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 <code>SyntaxError: expected ':'</code> — this is the one that got you last lesson. Read the line before you run.</p>
+  </div>
+
+  <!-- 13 STEP 4 the jump -->
+  <div class="slide">
+    <div class="pill">v4 &middot; it jumps<span class="activity-tag">STEP 4 / 6</span></div>
     <h2>Space to jump</h2>
     <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>for event in pygame.event.get():</code> &middot; 📍 inside that for loop &middot; indent <b>8</b></p>
 <pre class="tiny">    <span class="kw">for</span> event <span class="kw">in</span> pygame.event.get():
@@ -571,7 +342,73 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     <p class="quiet" style="margin-top:.35em">🟣 JUMP_POWER is <b>-12</b>. Negative sends it up.<br>🟣 <code>and player["on_ground"]</code> is what stops flying. No key, no double jump.<br>✅ Run it. Press space. It jumps once, arcs, lands.</p>
   </div>
 
-  <!-- 28 check -->
+  <!-- 14 debug: no on_ground guard -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>He flies</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if event.key == pygame.K_SPACE:
+    player["vy"] = JUMP_POWER</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if event.key == pygame.K_SPACE and player["on_ground"]:
+    player["vy"] = JUMP_POWER
+    player["on_ground"] = False</pre></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 Without the guard, space works in mid-air. Hold it and he never comes down.</p>
+  </div>
+
+  <!-- 15 STEP 5 arrows -->
+  <div class="slide">
+    <div class="pill">v5 &middot; it walks<span class="activity-tag">STEP 5 / 6</span></div>
+    <h2>Left and right</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>player["vy"] += GRAVITY</code> &middot; 📍 the line <b>above</b> it &middot; indent <b>4</b></p>
+<pre class="tiny"><span style="display:block;background:rgba(56,208,224,.14)">    keys = pygame.key.get_pressed()
+    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        player[<span class="str">"x"</span>] -= SPEED
+    <span class="kw">if</span> keys[pygame.K_RIGHT]:
+        player[<span class="str">"x"</span>] += SPEED
+</span>    player[<span class="str">"vy"</span>] += GRAVITY</pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Add <code>SPEED = 5</code> up with your other constants.<br>🟣 <code>get_pressed()</code> is held-down. KEYDOWN is one tap. Jump is a tap, walking is held.<br>✅ Run it. Arrows slide him along the floor. He still jumps with space.</p>
+  </div>
+
+  <!-- 16 STEP 6 one platform -->
+  <div class="slide">
+    <div class="pill">v6 &middot; something to land on<span class="activity-tag">STEP 6 / 6</span></div>
+    <h2>One platform</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> your floor check <code>if player["y"] &gt;= GROUND_Y:</code> &middot; 📍 <b>above</b> it &middot; indent <b>4</b></p>
+<pre class="tiny"><span class="com"># up with the constants</span>
+platform = {<span class="str">"x"</span>: <span class="num">260</span>, <span class="str">"y"</span>: <span class="num">240</span>, <span class="str">"w"</span>: <span class="num">140</span>, <span class="str">"h"</span>: <span class="num">16</span>}
+
+<span class="com"># inside the loop, before the floor check</span>
+<span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">if</span> (player[<span class="str">"vy"</span>] > <span class="num">0</span>
+            <span class="kw">and</span> player[<span class="str">"x"</span>] + player[<span class="str">"w"</span>] > platform[<span class="str">"x"</span>]
+            <span class="kw">and</span> player[<span class="str">"x"</span>] < platform[<span class="str">"x"</span>] + platform[<span class="str">"w"</span>]
+            <span class="kw">and</span> player[<span class="str">"y"</span>] >= platform[<span class="str">"y"</span>]
+            <span class="kw">and</span> player[<span class="str">"y"</span>] < platform[<span class="str">"y"</span>] + <span class="num">20</span>):
+        player[<span class="str">"y"</span>] = platform[<span class="str">"y"</span>]
+        player[<span class="str">"vy"</span>] = <span class="num">0</span>
+        player[<span class="str">"on_ground"</span>] = <span class="kw">True</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Same three landing lines as the floor. Only the test changed.<br>🟣 Draw it too: <code>pygame.draw.rect(screen, GREEN, (platform["x"], platform["y"], platform["w"], platform["h"]))</code><br>✅ Run it. Walk under it, jump, land on top.</p>
+  </div>
+
+  <!-- 17 debug: the platform grabs him -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>Why <code>player["vy"] &gt; 0</code>?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Take that first line out and jump up through the platform.</p>
+        <p class="quiet" style="margin-top:.5em">He sticks to it on the way <b>up</b>. You land on a platform you are still rising through.</p>
+        <p class="quiet"><code>vy &gt; 0</code> means "only while falling". That one test is the whole difference.</p>
+      </div>
+      <div>
+<pre class="tiny">vy &lt; 0   🡅  rising   &#8594; pass through
+vy &gt; 0   🡇  falling  &#8594; can land</pre>
+      </div>
+    </div>
+    <p class="bilingual">떨어질 때만 착지해요. 올라갈 때는 통과해요.</p>
+  </div>
+
+  <!-- 18 check -->
   <div class="slide">
     <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
     <h2>Three questions</h2>
@@ -590,7 +427,7 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     </div>
   </div>
 
-  <!-- 29 code talk 2 -->
+  <!-- 19 code talk 2 -->
   <div class="slide">
     <div class="pill purple">Code Talk</div>
     <h2>Say the physics</h2>
@@ -601,7 +438,7 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     </div>
   </div>
 
-  <!-- 30 make -->
+  <!-- 20 make -->
   <div class="slide">
     <div class="pill">Your turn!</div>
     <h2>Start it now 🚀</h2>
@@ -609,11 +446,11 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
       <li>New file: <code>platformer.py</code></li>
       <li>Copy your Meteor Shooter window setup in.</li>
       <li>Type STEP 1, run it. A block on the ground.</li>
-      <li>Then STEP 2, 3, 4. Run after every step.</li>
+      <li>Then STEP 2 to 6. Run after every single step.</li>
     </ul>
   </div>
 
-  <!-- 31 OPTIONAL stretch -->
+  <!-- 21 OPTIONAL stretch -->
   <div class="slide">
     <span class="activity-tag">OPTIONAL</span>
     <div class="pill purple">Stretch</div>
@@ -626,7 +463,7 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     <p class="quiet" style="margin-top:.4em">★★ is next lesson. Try it if you want a head start.</p>
   </div>
 
-  <!-- 32 OPTIONAL exit ticket -->
+  <!-- 22 OPTIONAL exit ticket -->
   <div class="slide">
     <span class="activity-tag">OPTIONAL</span>
     <div class="pill">Exit ticket</div>
@@ -640,7 +477,7 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
     </div>
   </div>
 
-  <!-- 33 close -->
+  <!-- 23 close -->
   <div class="slide center-all">
     <div class="emoji">🚀</div>
     <p class="line big">One game shipped. <b>The next one is running.</b></p>
@@ -649,7 +486,7 @@ player = {<span class="str">"x"</span>: <span class="num">80</span>, <span class
   </div>
 
   <div class="nav">
-    <button id="prev">‹</button><span class="counter" id="counter">1 / 33</span><button id="next">›</button>
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 23</span><button id="next">›</button>
   </div>
 </div>
 <script src="../../assets/deck.js"></script>

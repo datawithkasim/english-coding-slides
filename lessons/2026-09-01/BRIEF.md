@@ -296,15 +296,23 @@ without being reminded.
 fix the right wall `-BOSS_SPEED` with `-abs()`, add a Boss x/5 counter UI, add
 boss rage (`cooldown - boss_level * 5`).
 
-**Today (Kasim's decision, 2026-09-01):** **check the homework, celebrate the
-finished game, then start the platformer.** The project is not a choice any
-more. Kasim already told the mother on 2026-08-25 that finishing the shooter was
+**Today (Kasim's decision, 2026-09-01):** **the whole lesson is the platformer.**
+No homework marking, no tour of the finished shooter — he cut both. The project
+is not a choice any more. Kasim already told the mother on 2026-08-25 that finishing the shooter was
 so Jason "could move on to the platformer game", so offering three doors would
 contradict what she was told.
 
-New idea today: **gravity and jumping** — `vy`, `vy += GRAVITY`, `y += vy`, the
-floor clamp, and `JUMP_POWER = -12` on space with an `on_ground` guard. It is a
-new file, `platformer.py`, not an edit of the shooter.
+New idea today: **gravity and jumping**, six steps in a new file
+`platformer.py`, not an edit of the shooter:
+1. player dict + `GRAVITY` / `JUMP_POWER` / `GROUND_Y`
+2. `vy += GRAVITY`, `y += vy` — it falls through the floor
+3. the floor clamp — it lands
+4. space → `vy = JUMP_POWER`, behind an `on_ground` guard
+5. arrow keys with `get_pressed()` — held, not tapped
+6. one platform, landing only while `vy > 0`
+
+Debug slides cover the two things that actually bite him: the missing colon
+after `if`, and jumping in mid-air when the `on_ground` guard is left off.
 
 This deck has an unusual shape. It is **one third review, one third celebration,
 one third a choice.** Build it that way.
