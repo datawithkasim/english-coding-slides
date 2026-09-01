@@ -121,14 +121,26 @@ build, not once.
 
 ---
 
-## 17:00 KST · 15:00 HCMC · EUNWOO — `eunwoo-two-strands.html`
+## 17:00 KST · 15:00 HCMC · EUNWOO — `eunwoo-see-the-numbers.html`
 
-**Track:** MS002, Coordinates, Minecraft Python · **Source:** log 2026-08-24 +
-yesterday's deck `../2026-08-31/eunwoo-see-the-numbers.html`
+**Track:** MS002, Coordinates, Minecraft Python · **Source:** log, 2026-08-24
 
-⚠ **No transcript or log exists for yesterday's 08-31 lesson yet.** Build from
-the 08-31 deck plan and the 08-24 log. Treat v1–v2 of the spiral (the list, the
-`%` wrap) as **taught but not yet solid** — recap them fast, do not re-teach.
+⚠ **Corrected mid-run on 2026-09-01.** The 08-31 lesson never happened. Three
+independent checks agree: Notion full-text search returns nothing for Eunwoo
+after 2026-08-24, there is no `tools_log_drafts` or `tools_lesson_logs` row for
+08-31, and **Monday 2026-08-31 had no EUNWOO calendar event at all** (that day
+was AMY, NEO, JUN, ETHAN, YUNHO). He had already moved off Monday onto this
+Tuesday 17:00 slot.
+
+So `../2026-08-31/eunwoo-see-the-numbers.html` was built for a slot that no
+longer existed and was never delivered. **That deck is today's deck** — it was
+written from the 08-24 draft, so its Recap slot already recaps the right lesson.
+It has been copied into this folder unchanged and re-verified (38 slides,
+counter matches, asset paths correct, no quoted-string API bug).
+
+`eunwoo-two-strands.html` stays in this folder **unlinked from `index.html`**.
+It is the correct next lesson, queued for whenever he finishes the number
+reading. Do not teach it today — its Recap assumes a lesson that did not happen.
 
 **Covered last time (08-24 log)**
 - Coordinate values stored in lists (`XS`, `ZS`)
@@ -138,9 +150,6 @@ the 08-31 deck plan and the 08-24 log. Treat v1–v2 of the spiral (the list, th
 - Gold and emerald blocks placed with `blocks.fill()` and `pos()`
 - A DNA-spiral structure
 
-**Covered yesterday (08-31 deck):** `%` on a number line, the 4-hour clock model,
-`XS[i % 4]` as index → list → coordinate, the `i / i%4 / ax / az` trace table.
-
 **✓ Wins** — worked out on her own that the DNA spiral needed obsidian; noticed
 her code ran clean where the teacher's did not.
 
@@ -149,28 +158,41 @@ her code ran clean where the teacher's did not.
 - **Does not understand how `ax`, `az`, `bx`, `bz` are calculated.** The algebra
   idea is new to her.
 
-**Today:** **the second strand.** v3 of the ramp — `bx`, `bz` as the first
-strand *plus an offset*. This is the exact slide where the algebra she does not
-have becomes unavoidable, so teach the offset as **one number added to a number
-she already has**, never as new algebra.
+**Today:** make the numbers visible. Nothing new gets added to the program — the
+program she already has gets **opened up and read**.
 
-- Slot 5 model: two ropes twisting. Strand A is the loop she already has.
-  Strand B **is strand A shifted**. Draw them side by side, same `i`, one arrow
-  labelled `+ offset`.
-- **Trace-heavy again.** Use `.trace-grid`. Extend yesterday's table with two new
-  columns, `bx` and `bz`, and fill them from `ax + 4`, `az + 4` for `i = 0…7`.
-- Ramp: v3 second strand at a fixed offset · v4 the rungs between the strands
-  (a `blocks.fill` from A to B each turn) · OPTIONAL v5 height with `i`.
+This is a **trace-heavy deck**. It uses `.trace-grid` far more than usual.
 
-**Debug slides (3+)** — (1) `bx = ax` with no offset, so both strands land on top
-of each other; (2) the offset added to `i` instead of to `ax`, so the shift grows
-every turn; (3) `bx` computed **outside** the loop, so every rung starts in the
-same place; (4) OPTIONAL: `XS[i % 8]` where the list only has 4 items.
+Step 1 — `%` on its own, with no Minecraft in sight. A row of 12 numbers and what
+`i % 4` gives for each. Slot 5 model: a **clock with 4 hours**; counting past 3
+lands back on 0. The wrap-around arrow is drawn.
 
-**Code Talk Frame** — force the sentence she still cannot produce:
-"`bx` is `ax` plus ___, so strand B sits ___ blocks away from strand A."
-Then the harder one: "I changed ___, and that fixed it because ___."
-Make her say the second one **twice** — this is the *"it just got fixed"* fix.
+| `i` | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|---|
+| `i % 4` | 0 | 1 | 2 | 3 | 0 | 1 | 2 | 3 | 0 |
+
+Step 2 — `XS[i % 4]`: the index picks a slot in the list, the list gives back a
+coordinate. The list is drawn as four labelled boxes with an arrow landing in one.
+
+Step 3 — the coordinate table she was promised on 07-21 (*"build a coordinate
+table so Eunwoo finds the pattern rule herself"*). She fills in `i`, `i % 4`,
+`ax`, `az` for `i = 0…7`, and states the rule.
+
+Ramp: v1 four blocks from a list · v2 the loop with `%` wrapping · v3 the second
+strand `bx`, `bz` offset from the first · v4 the full spiral with height.
+
+**Debug slides** — (1) `XS[i]` without `%` → `IndexError` once `i` passes the
+list length; (2) `i % 8` where `i % 4` was meant → the pattern repeats too
+slowly; (3) the index used as the coordinate directly, so blocks land at 0,1,2,3
+instead of the list values; (4) OPTIONAL: `blocks.fill` vs `blocks.place` mixed
+up — her real 07-21 mistake.
+
+**Code Talk Frame** — force the sentence she could not produce:
+"`i % 4` gives ___, so `XS[i % 4]` picks ___, which puts the block at ___."
+This directly answers the *"it just got fixed"* problem. She says it twice.
+
+**Next lesson, already built:** `eunwoo-two-strands.html` in this folder —
+`bx`/`bz` as `ax`/`az` plus an offset, then the rungs between the strands.
 
 ---
 
