@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>이현 — Maze: the agent looks first</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Minecraft · MakeCode Blocks · 이현 · 2 Sep 2026</div>
+
+  <!-- ============ SLOT 1 — Title + Objective ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Maze · Day 1</div>
+    <div class="emoji">🧭</div>
+    <h1>The Agent<br>Looks First</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you <span class="sub">detect</span> + <span class="sub">decide</span>.</p>
+    <p class="bilingual">에이전트가 벽을 먼저 보고 움직여요</p>
+  </div>
+
+  <!-- ============ SLOT 2 — Recap: the fence ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your garden fence</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">You built the fence alone. Which three agent blocks did you use?</div>
+      <details><summary>Show answer</summary><div class="ans">agent move · agent place · agent turn</div></details>
+    </div>
+    <p class="bilingual">울타리 = 이동 + 놓기 + 회전</p>
+  </div>
+
+  <!-- ============ SLOT 2b — Recap: garden ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2b</span>
+    <div class="pill purple">Recap<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your garden</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">You picked three flowers yourself. Name them.</div>
+      <details><summary>Show answer</summary><div class="ans">peony · lily of the valley · lilac. Plus a pond and animals.</div></details>
+    </div>
+    <p class="bilingual">꽃 세 가지, 연못, 동물</p>
+  </div>
+
+  <!-- ============ SLOT 2c — Recap: pyramid ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2c</span>
+    <div class="pill purple">Recap<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your pyramid</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Each layer shrank by 2. A side of 9 gives how many layers?</div>
+      <details><summary>Show answer</summary><div class="ans">5. Halve 9, round up. 9 · 7 · 5 · 3 · 1.</div></details>
+    </div>
+    <p class="bilingual">반으로 나누고 올림</p>
+  </div>
+
+  <!-- ============ SLOT 2d — Homework check ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2d</span>
+    <div class="pill">📷 Show me</div>
+    <h2>Your flower garden</h2>
+    <ul class="check-list">
+      <li>Fence built by code, not by hand</li>
+      <li>Three or more flower types</li>
+      <li>A pond</li>
+      <li>Two or more animals</li>
+    </ul>
+    <p class="bilingual">숙제 정원 보여 주세요</p>
+  </div>
+
+  <!-- ============ SLOT 2e — Join the world ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2e</span>
+    <div class="pill">Get in 🎮</div>
+    <h2>Join Kasim's world</h2>
+    <ul class="check-list">
+      <li>Kasim hosts the maze world</li>
+      <li>Kasim shows you how to join</li>
+      <li>Join it from the Play menu</li>
+      <li>Press <code>C</code> to open Code Builder</li>
+    </ul>
+    <p class="bilingual">파일 열지 않아요. 접속만 해요</p>
+  </div>
+
+  <!-- ============ SLOT 3 — Predict (Hook) ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Two mazes, one plan</h2>
+    <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">turn on row 3</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">maze A</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">turn on row 4</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">maze B</text></g></svg>
+    <div class="predict-card" style="margin-top:.5em">
+      <div class="label">Predict first</div>
+      <div class="q">Blocks written for maze A. Do they solve maze B?</div>
+      <details><summary>Reveal</summary><div class="ans">No. The agent hits a wall. That is today's problem.</div></details>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 4 — Vocab ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Four new words</h2>
+    <div class="vocab-table">
+      <span class="term">detect</span>
+      <span class="gloss">feel for a block one way</span>
+      <span class="ko">감지</span>
+
+      <span class="term">true</span>
+      <span class="gloss">yes, a wall is there</span>
+      <span class="ko">참</span>
+
+      <span class="term">false</span>
+      <span class="gloss">no wall, the way is open</span>
+      <span class="ko">거짓</span>
+
+      <span class="term">if</span>
+      <span class="gloss">only run this when true</span>
+      <span class="ko">만약</span>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 4b — Vocab 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4b</span>
+    <div class="pill">Vocab<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three more</h2>
+    <div class="vocab-table">
+      <span class="term">else</span>
+      <span class="gloss">run this when it is false</span>
+      <span class="ko">아니면</span>
+
+      <span class="term">drawer</span>
+      <span class="gloss">a colour menu on the left</span>
+      <span class="ko">서랍</span>
+
+      <span class="term">socket</span>
+      <span class="gloss">the hole a block drops into</span>
+      <span class="ko">끼우는 구멍</span>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 5 — Concept: the maze from above ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Look down on the maze</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">agent stands here</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="182" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="212.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.3em;text-align:center">Grey = wall. Black = floor. Arrow = the agent.</p>
+  </div>
+
+  <!-- ============ SLOT 5b — Concept: the wall ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5b</span>
+    <div class="pill">Concept</div>
+    <h2>Same question, new answer</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">two steps later</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g></svg>
+    <p style="margin-top:.3em;text-align:center">The agent moved. Now the answer flips to <b>true</b>.</p>
+    <p class="bilingual" style="text-align:center">위치가 바뀌면 답도 바뀌어요</p>
+  </div>
+
+  <!-- ============ SLOT 5c — Concept: one question, two answers ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5c</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A question with only two answers</h2>
+    <svg viewBox="0 0 440 200" style="width:min(760px,92%);margin:.2em auto 0;display:block">
+      <rect x="110" y="6" width="220" height="46" rx="10" fill="#1e1e2e" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="220" y="36" text-anchor="middle" font-size="19" fill="#e8eef6">wall ahead?</text>
+      <path d="M190 54 L110 96" stroke="#8a97b8" stroke-width="3" fill="none"/>
+      <path d="M250 54 L330 96" stroke="#8a97b8" stroke-width="3" fill="none"/>
+      <rect x="16" y="100" width="180" height="52" rx="10" fill="rgba(255,121,198,.16)" stroke="#ff79c6" stroke-width="3"/>
+      <text x="106" y="133" text-anchor="middle" font-size="21" fill="#ff79c6">🧱 true</text>
+      <rect x="244" y="100" width="180" height="52" rx="10" fill="rgba(80,250,123,.16)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="334" y="133" text-anchor="middle" font-size="21" fill="#50fa7b">⬛ false</text>
+      <text x="106" y="182" text-anchor="middle" font-size="16" fill="#8a97b8">turn right</text>
+      <text x="334" y="182" text-anchor="middle" font-size="16" fill="#8a97b8">step forward</text>
+    </svg>
+    <p class="bilingual" style="text-align:center">답은 참 아니면 거짓, 두 가지뿐</p>
+  </div>
+
+  <!-- ============ SLOT 5d — Concept: written plan vs looking ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5d</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two kinds of plan</h2>
+    <div class="bubble-card you">Fence plan: "walk 5, turn, walk 5." You knew the shape before you started.</div>
+    <div class="bubble-card computer">Maze plan: you do not know the shape. The walls decide each step.</div>
+    <p class="bilingual">미로는 벽이 정해요</p>
+  </div>
+
+  <!-- ============ SLOT 5e — Concept: forward turns with the agent ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5e</span>
+    <div class="pill">Concept</div>
+    <h2>Forward turns with the agent</h2>
+    <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">facing up</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">same cell, turned</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="74" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="96.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="67.0,160.0 40.0,148.0 40.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">The agent never moved. It only turned, and the answer flipped.</p>
+    <p class="bilingual" style="text-align:center">앞쪽은 에이전트 기준이에요</p>
+  </div>
+
+  <!-- ============ SLOT 5f — Concept: four directions ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5f</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The dropdown picks the way</h2>
+    <svg viewBox="0 0 400 250" style="width:min(700px,90%);margin:.2em auto 0;display:block">
+      <rect x="150" y="95" width="100" height="60" rx="10" fill="#12141c" stroke="#38d0e0" stroke-width="3"/>
+      <polygon points="200,110 186,138 214,138" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="150" y="20" width="100" height="60" rx="10" fill="rgba(56,208,224,.14)" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="200" y="57" text-anchor="middle" font-size="19" fill="#38d0e0">forward</text>
+      <rect x="20" y="95" width="110" height="60" rx="10" fill="#1e1e2e" stroke="#8a97b8" stroke-width="3"/>
+      <text x="75" y="132" text-anchor="middle" font-size="19" fill="#8a97b8">left</text>
+      <rect x="270" y="95" width="110" height="60" rx="10" fill="#1e1e2e" stroke="#8a97b8" stroke-width="3"/>
+      <text x="325" y="132" text-anchor="middle" font-size="19" fill="#8a97b8">right</text>
+      <rect x="150" y="170" width="100" height="60" rx="10" fill="#1e1e2e" stroke="#8a97b8" stroke-width="3"/>
+      <text x="200" y="207" text-anchor="middle" font-size="19" fill="#8a97b8">back</text>
+    </svg>
+    <p style="margin-top:.2em;text-align:center">Today we always use <b>forward</b>.</p>
+  </div>
+
+  <!-- ============ v1 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Build v1 · STEP 1 / 4</div>
+    <h2>Start the command</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack"><div class="mcb-drop">empty workspace</div></div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player hot">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#d83b01">Player</span> drawer</p>
+    <p><b>🔍 FIND</b> orange <b>on chat command</b> block.</p>
+    <p><b>📍 WHERE</b> drop it on empty workspace. Type <b>go</b>.</p>
+    <p><b>🟣 WHY</b> chat word <code>go</code> starts your blocks.</p>
+    <p><b>✅ CHECK</b> the white hole reads <code>go</code>.</p>
+  </div>
+
+  <!-- ============ v1 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6b</span>
+    <div class="pill">Build v1 · STEP 2 / 4</div>
+    <h2>Walk up the corridor</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in">
+              <div class="mcb agent hot">agent move <span class="dd">forward</span> <span class="val">2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> purple <b>agent move</b> block.</p>
+    <p><b>📍 WHERE</b> inside <b>on chat command go</b>. Set number <b>2</b>.</p>
+    <p><b>🟣 WHY</b> the corridor is two cells.</p>
+    <p><b>✅ CHECK</b> agent stops under the wall.</p>
+  </div>
+
+  <!-- ============ v1 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6c</span>
+    <div class="pill">Build v1 · STEP 3 / 4</div>
+    <h2>Turn at the corner</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">2</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in">
+              <div class="mcb agent dim">agent move <span class="dd">forward</span> <span class="val">2</span></div>
+              <div class="mcb agent hot">agent turn <span class="dd">right</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> the purple <b>agent turn</b> block.</p>
+    <p><b>📍 WHERE</b> snap under <b>agent move forward 2</b>.</p>
+    <p><b>🟣 WHY</b> the corridor bends right here.</p>
+    <p><b>✅ CHECK</b> the dropdown reads <b>right</b>.</p>
+  </div>
+
+  <!-- ============ v1 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6d</span>
+    <div class="pill">Build v1 · STEP 4 / 4</div>
+    <h2>Walk out</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">2</span></div>
+              <div class="mcb agent">agent turn <span class="dd">right</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">go</span></div>
+            <div class="mcb-in">
+              <div class="mcb agent dim">agent move <span class="dd">forward</span> <span class="val">2</span></div>
+              <div class="mcb agent dim">agent turn <span class="dd">right</span></div>
+              <div class="mcb agent hot">agent move <span class="dd">forward</span> <span class="val">4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> a second <b>agent move</b> block.</p>
+    <p><b>📍 WHERE</b> snap under <b>agent turn right</b>. Set number <b>4</b>.</p>
+    <p><b>🟣 WHY</b> four cells reach the exit.</p>
+    <p><b>✅ CHECK</b> type <code>go</code>. The agent leaves.</p>
+  </div>
+
+  <!-- ============ v1 runs ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6e</span>
+    <div class="pill">Run it · v1</div>
+    <h2>It works 🎉</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">the route you wrote</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><circle cx="52.0" cy="204.0" r="5" fill="#38d0e0" opacity=".55"/><circle cx="52.0" cy="160.0" r="5" fill="#38d0e0" opacity=".55"/><circle cx="96.0" cy="160.0" r="5" fill="#38d0e0" opacity=".55"/><circle cx="140.0" cy="160.0" r="5" fill="#38d0e0" opacity=".55"/><circle cx="184.0" cy="160.0" r="5" fill="#38d0e0" opacity=".55"/><circle cx="228.0" cy="160.0" r="5" fill="#38d0e0" opacity=".55"/><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">2 up, right, 4 across</text></g></svg>
+    <p style="margin-top:.3em;text-align:center">Your three blocks drew this exact route.</p>
+    <p class="bilingual" style="text-align:center">이 미로에서는 완벽해요</p>
+  </div>
+
+  <!-- ============ v1 breaks ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6f</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Kasim moves one wall</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">maze B</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="67.0,160.0 40.0,148.0 40.0,172.0" fill="#ff5f56" stroke="#0a0d13" stroke-width="2"/><text x="96.0" y="169.0" text-anchor="middle" font-size="24" fill="#ff5f56">&#10006;</text><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff5f56" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff5f56">stuck. same blocks.</text></g></svg>
+    <p style="margin-top:.3em;text-align:center">Same blocks. The agent turns too early and jams.</p>
+    <p class="bilingual" style="text-align:center">벽 하나 옮기면 끝이에요</p>
+  </div>
+
+  <!-- ============ why it broke ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6g</span>
+    <div class="pill">Concept</div>
+    <h2>Why it broke</h2>
+    <div class="bubble-card you">You typed the maze into the numbers: <b>2</b>, right, <b>4</b>.</div>
+    <div class="bubble-card computer">The agent never looked. It only counted.</div>
+    <div class="you-are-here">
+      <span class="label">Today</span>
+      Give the agent eyes.
+    </div>
+    <p class="bilingual">숫자 대신 눈을 주기</p>
+  </div>
+
+  <!-- ============ v2 · the detect block ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6h</span>
+    <div class="pill">Build v2 · STEP 1 / 1</div>
+    <h2>One brand new block</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack"><div class="mcb-drop">nothing yet</div></div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb agent hot">agent detect <span class="dd">block</span> <span class="dd">forward</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> pointed purple <b>agent detect</b> block.</p>
+    <p><b>📍 WHERE</b> drop it on bare workspace, alone.</p>
+    <p><b>🟣 WHY</b> it answers true or false.</p>
+    <p><b>✅ CHECK</b> dropdowns read <b>block</b> and <b>forward</b>.</p>
+  </div>
+
+  <!-- ============ v2 · read the answer, false ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6i</span>
+    <div class="pill">Read it · v2</div>
+    <h2>Answer it yourself: floor</h2>
+    <div class="mcb-stack"><div class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></div></div>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">agent stands here</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="182" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="212.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">Dashed cell = the cell the block asks about.</p>
+  </div>
+
+  <!-- ============ v2 · read the answer, true ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6j</span>
+    <div class="pill">Read it · v2</div>
+    <h2>Answer it yourself: wall</h2>
+    <div class="mcb-stack"><div class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></div></div>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">two steps later</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">Same block, new cell, opposite answer.</p>
+  </div>
+
+  <!-- ============ trace activity ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>You be the agent</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">step</div>
+      <div class="cell head">agent on</div>
+      <div class="cell head">cell ahead</div>
+      <div class="cell head">detect says</div>
+
+      <div class="cell">1</div>
+      <div class="cell">row 1</div>
+      <div class="cell">⬛ floor</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">false</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">row 2</div>
+      <div class="cell">⬛ floor</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">false</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">row 3</div>
+      <div class="cell">🧱 wall</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">true</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">row 3, faces right</div>
+      <div class="cell">⬛ floor</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">false</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 7b — Trace 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7b</span>
+    <div class="pill">Trace it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Now maze B</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">maze B, step 3</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">you answer it</text></g></svg>
+    <div class="trace-grid cols-4">
+      <div class="cell head">step</div>
+      <div class="cell head">agent on</div>
+      <div class="cell head">cell ahead</div>
+      <div class="cell head">detect says</div>
+
+      <div class="cell">3</div>
+      <div class="cell">row 3</div>
+      <div class="cell">⬛ floor</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">false</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">row 4</div>
+      <div class="cell">🧱 wall</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">true</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ v3 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Build v3 · STEP 1 / 4</div>
+    <h2>A second command</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack"><div class="mcb-drop">bare workspace</div></div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player hot">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#d83b01">Player</span> drawer</p>
+    <p><b>🔍 FIND</b> a second <b>on chat command</b> block.</p>
+    <p><b>📍 WHERE</b> below your <b>go</b> command. Type <b>step</b>.</p>
+    <p><b>🟣 WHY</b> one chat word, one decision.</p>
+    <p><b>✅ CHECK</b> two orange hats on the workspace.</p>
+  </div>
+
+  <!-- ============ v3 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8b</span>
+    <div class="pill">Build v3 · STEP 2 / 4</div>
+    <h2>Add the if block</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in">
+              <div class="mcb-c logic hot">
+                <div class="hat">if <span class="mcb-drop">?</span> then</div>
+                <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#006970">Logic</span> drawer</p>
+    <p><b>🔍 FIND</b> teal <b>if … then</b> block.</p>
+    <p><b>📍 WHERE</b> inside <b>on chat command step</b>.</p>
+    <p><b>🟣 WHY</b> runs inside blocks only when true.</p>
+    <p><b>✅ CHECK</b> top bar has one empty hole.</p>
+  </div>
+
+  <!-- ============ v3 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8c</span>
+    <div class="pill">Build v3 · STEP 3 / 4</div>
+    <h2>Drop detect into the hole</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in">
+              <div class="mcb-c logic">
+                <div class="hat">if <span class="mcb-drop">?</span> then</div>
+                <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in">
+              <div class="mcb-c logic">
+                <div class="hat">if <span class="mcb agent hot">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+                <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p><b>🔍 FIND</b> your <b>agent detect</b> block.</p>
+    <p><b>📍 WHERE</b> into the empty hole after <b>if</b>.</p>
+    <p><b>🟣 WHY</b> the if block needs a question.</p>
+    <p><b>✅ CHECK</b> the hole is full, nothing loose.</p>
+  </div>
+
+  <!-- ============ v3 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8d</span>
+    <div class="pill">Build v3 · STEP 4 / 4</div>
+    <h2>Turn at a wall</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in">
+              <div class="mcb-c logic">
+                <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+                <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c player">
+            <div class="hat">on chat command <span class="val">step</span></div>
+            <div class="mcb-in">
+              <div class="mcb-c logic">
+                <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+                <div class="mcb-in">
+                  <div class="mcb agent hot">agent turn <span class="dd">right</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> another <b>agent turn</b> block.</p>
+    <p><b>📍 WHERE</b> inside the if mouth, not under.</p>
+    <p><b>🟣 WHY</b> a wall means a new way.</p>
+    <p><b>✅ CHECK</b> type <code>step</code>. It turns.</p>
+  </div>
+
+  <!-- ============ v3 · what happens when clear ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8e</span>
+    <div class="pill">Run it · v3</div>
+    <h2>Now try it on floor</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">way is clear</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="182" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="212.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.3em;text-align:center">The answer is false, so the if block runs nothing. The agent stands still.</p>
+    <p class="bilingual" style="text-align:center">거짓이면 아무것도 안 해요</p>
+  </div>
+
+  <!-- ============ v4 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Build v4 · STEP 1 / 2</div>
+    <h2>Open the else mouth</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent turn <span class="dd">right</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c logic hot">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent turn <span class="dd">right</span></div>
+            </div>
+            <div class="hat">else</div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p><b>🔍 FIND</b> the small <b>⊕</b> under the if block.</p>
+    <p><b>📍 WHERE</b> click it once.</p>
+    <p><b>🟣 WHY</b> false needs its own plan.</p>
+    <p><b>✅ CHECK</b> the block reads if … then … else.</p>
+  </div>
+
+  <!-- ============ v4 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9b</span>
+    <div class="pill">Build v4 · STEP 2 / 2</div>
+    <h2>Move when clear</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent turn <span class="dd">right</span></div>
+            </div>
+            <div class="hat">else</div>
+            <div class="mcb-in"><div class="mcb-drop">drop blocks here</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in">
+              <div class="mcb agent dim">agent turn <span class="dd">right</span></div>
+            </div>
+            <div class="hat">else</div>
+            <div class="mcb-in">
+              <div class="mcb agent hot">agent move <span class="dd">forward</span> <span class="val">1</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>🔍 FIND</b> another <b>agent move</b> block. Set number <b>1</b>.</p>
+    <p><b>📍 WHERE</b> inside the <b>else</b> mouth.</p>
+    <p><b>🟣 WHY</b> one clear cell, one small step.</p>
+    <p><b>✅ CHECK</b> type <code>step</code> on floor. It walks.</p>
+  </div>
+
+  <!-- ============ v4 · full picture ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9c</span>
+    <div class="pill">Run it · v4</div>
+    <h2>Your whole maze brain</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c player">
+        <div class="hat">on chat command <span class="val">step</span></div>
+        <div class="mcb-in">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent turn <span class="dd">right</span></div>
+            </div>
+            <div class="hat">else</div>
+            <div class="mcb-in">
+              <div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:.4em"><b>✅ CHECK</b> type <code>step</code> seven times. The agent walks out.</p>
+  </div>
+
+  <!-- ============ viz-if ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Watch it!</div>
+    <h2>One question, two doors</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">🧱 wall in front</span>
+        <span class="case case-b">⬛ floor in front</span>
+      </div>
+      <div class="if-cond">agent detect block forward</div>
+      <div class="if-branches">
+        <div class="if-branch true">agent turn right</div>
+        <div class="if-branch false">agent move forward 1</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Agent does</div>
+        <div class="out-line out-a">turns right</div>
+        <div class="out-line out-b">steps one cell</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ walk steps 1-3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10b</span>
+    <div class="pill">Watch it!</div>
+    <h2>Steps 1 to 3</h2>
+    <svg viewBox="0 0 948 344" style="width:min(960px,96%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 1</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="182" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="212.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 2</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,189.0 40.0,216.0 64.0,216.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(632,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 3</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">Two false answers, then true. Step 3 is the turn.</p>
+  </div>
+
+  <!-- ============ walk steps 4-6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10c</span>
+    <div class="pill">Watch it!</div>
+    <h2>Steps 4 to 6</h2>
+    <svg viewBox="0 0 948 344" style="width:min(960px,96%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 4</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="74" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="96.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="67.0,160.0 40.0,148.0 40.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 5</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="118" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="140.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="111.0,160.0 84.0,148.0 84.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(632,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 6</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="162" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="184.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="155.0,160.0 128.0,148.0 128.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">The agent faces right now. Three clear cells, three steps.</p>
+  </div>
+
+  <!-- ============ walk steps 7-8 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10d</span>
+    <div class="pill">Watch it!</div>
+    <h2>Step 7, then out</h2>
+    <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 7</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="206" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="228.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="199.0,160.0 172.0,148.0 172.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">after step 7</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="243.0,160.0 216.0,148.0 216.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">out of the maze</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">Seven chats, one exit. You never counted the corridor.</p>
+    <p class="bilingual" style="text-align:center">길이를 몰라도 나가요</p>
+  </div>
+
+  <!-- ============ maze B payoff ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10e</span>
+    <div class="pill">🎉 Payoff</div>
+    <h2>Same blocks solve maze B</h2>
+    <svg viewBox="0 0 948 344" style="width:min(960px,96%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 3</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 4</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="50" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="80.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,101.0 40.0,128.0 64.0,128.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g><g transform="translate(632,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 5</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="94" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="123.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="122.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="74" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="96.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="67.0,116.0 40.0,104.0 40.0,128.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">You changed nothing. The wall answered later, so the turn came later.</p>
+    <p class="bilingual" style="text-align:center">블록 그대로, 미로만 달라요</p>
+  </div>
+
+  <!-- ============ SLOT 10f — Predict the chat count ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10f</span>
+    <div class="pill">Predict 🤔<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count before you type</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+      <div class="q">Maze A took 7 chats. Maze B is one cell longer. How many?</div>
+      <details><summary>Reveal</summary><div class="ans">8. Three moves up, one turn, four moves across.</div></details>
+    </div>
+    <p class="bilingual">한 칸 길면 한 번 더</p>
+  </div>
+
+  <!-- ============ Common Mistake: the wait rule ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Wait for the agent to stop</h2>
+    <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">asked while walking</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,189.0 40.0,216.0 64.0,216.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">asked after it stopped</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="94" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="124.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,145.0 40.0,172.0 64.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g></svg>
+    <p style="margin-top:.2em;text-align:center">Detect answers about where the agent is <b>now</b>. Ask early, get the old answer.</p>
+    <p class="bilingual" style="text-align:center">멈춘 뒤에 다음 명령</p>
+  </div>
+
+  <!-- ============ Common Mistake: the wait rule, side by side ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11b</span>
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>This is a bug, not manners</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+        <p>Type <code>step</code>, <code>step</code>, <code>step</code> fast.</p>
+        <p>Agent still walking. It reads the old cell and misses the wall.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+        <p>Type <code>step</code>. Watch the agent stop.</p>
+        <p>Then type <code>step</code> again.</p>
+      </div>
+    </div>
+    <p class="bilingual">빨리 치면 틀린 답을 봐요</p>
+  </div>
+
+  <!-- ============ Debug 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — it turns every time</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+        <div class="mcb-in"><div class="mcb-drop">empty</div></div>
+      </div>
+      <div class="mcb agent">agent turn <span class="dd">right</span></div>
+    </div>
+    <div class="debug-card">
+      <div class="err">The agent spins on the spot and never walks.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">turn block outside the if</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="67.0,248.0 40.0,236.0 40.0,260.0" fill="#ff5f56" stroke="#0a0d13" stroke-width="2"/><text x="96.0" y="257.0" text-anchor="middle" font-size="24" fill="#ff5f56">&#10006;</text><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff5f56" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff5f56">turned on step 1</text></g></svg>
+        <p style="margin-top:.3em">The turn block sits under the if, not inside. Drag it in.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ Debug 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — wrong way</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">left</span></span> then</div>
+        <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+        <div class="hat">else</div>
+        <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+      </div>
+    </div>
+    <div class="debug-card">
+      <div class="err">On the very first chat the agent turns and jams.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">detect points left</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="8" y="226" width="22" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="19.0" y="256.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff79c6" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff79c6">wall ahead? true</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">so it turns right</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="67.0,248.0 40.0,236.0 40.0,260.0" fill="#ff5f56" stroke="#0a0d13" stroke-width="2"/><text x="96.0" y="257.0" text-anchor="middle" font-size="24" fill="#ff5f56">&#10006;</text><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff5f56" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff5f56">faces the wall</text></g></svg>
+        <p style="margin-top:.3em">A wall sits on the left the whole way. Set it back to <b>forward</b>.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ Debug 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — it freezes</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+        <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+      </div>
+    </div>
+    <div class="debug-card">
+      <div class="err">Floor ahead, and the agent does nothing at all.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.3em">No else mouth, so false has no plan. Click <b>⊕</b>, then fill it.</p>
+        <div class="mcb-stack">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+            <div class="hat">else</div>
+            <div class="mcb-in"><div class="mcb agent hot">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ Debug 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Find the bug — swapped mouths</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+        <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+        <div class="hat">else</div>
+        <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+      </div>
+    </div>
+    <div class="debug-card">
+      <div class="err">The agent turns on open floor, then bumps the wall.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <svg viewBox="0 0 632 344" style="width:min(680px,92%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 1 &#8212; false</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="30" y="182" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="52.0" y="212.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="52.0,233.0 40.0,260.0 64.0,260.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#50fa7b" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#50fa7b">wall ahead? false</text></g><g transform="translate(316,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">step 2</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><polygon points="67.0,248.0 40.0,236.0 40.0,260.0" fill="#ff5f56" stroke="#0a0d13" stroke-width="2"/><text x="96.0" y="257.0" text-anchor="middle" font-size="24" fill="#ff5f56">&#10006;</text><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#ff5f56" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#ff5f56">turned, now blocked</text></g></svg>
+        <p style="margin-top:.3em">Swap them. Turn belongs to <b>true</b>, move to <b>else</b>.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ Debug 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Find the bug — wrong dropdown</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">redstone</span> <span class="dd">forward</span></span> then</div>
+        <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+        <div class="hat">else</div>
+        <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+      </div>
+    </div>
+    <div class="debug-card">
+      <div class="err">The agent walks straight into stone walls.</div>
+      <details>
+        <summary>Reveal fix</summary>
+        <p style="margin-top:.3em">The first dropdown asks what to feel for. Stone is not redstone.</p>
+        <div class="mcb-stack">
+          <div class="mcb agent hot">agent detect <span class="dd">block</span> <span class="dd">forward</span></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ Modify 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill the two holes</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb-drop">? ?</span> then</div>
+        <div class="mcb-in"><div class="mcb-drop">? ?</div></div>
+        <div class="hat">else</div>
+        <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Hole 1 asks the question. Hole 2 handles a wall.</p>
+    <p class="bilingual">질문 하나, 행동 하나</p>
+  </div>
+
+  <!-- ============ Modify 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Change right to left</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c logic">
+        <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+        <div class="mcb-in"><div class="mcb agent hot">agent turn <span class="dd">left</span></div></div>
+        <div class="hat">else</div>
+        <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Run it. Where does the agent end up, and why?</p>
+    <p class="bilingual">왼쪽으로 돌면 어디로 갈까요</p>
+  </div>
+
+  <!-- ============ Quiz 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <svg viewBox="0 0 316 344" style="width:min(400px,60%);margin:.2em auto 0;display:block"><g transform="translate(0,0)"><text x="158.0" y="22" text-anchor="middle" font-size="19" fill="#8a97b8">agent is here</text><rect x="8" y="28" width="264" height="264" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="226" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="226" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="182" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="182" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="74" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="118" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="162" y="138" width="44" height="44" fill="#12141c" stroke="#2a2d3d" stroke-width="2"/><rect x="206" y="138" width="44" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><rect x="30" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="94" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="30" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="74" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="118" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="162" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="206" y="50" width="44" height="44" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/><rect x="250" y="138" width="22" height="44" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="2"/><text x="261.0" y="167.0" text-anchor="middle" font-size="20" fill="#50fa7b">&#8594;</text><text x="294" y="166.0" text-anchor="middle" font-size="14" fill="#50fa7b">OUT</text><rect x="162" y="138" width="44" height="44" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/><text x="184.0" y="168.0" text-anchor="middle" font-size="22" fill="#38d0e0">?</text><polygon points="155.0,160.0 128.0,148.0 128.0,172.0" fill="#38d0e0" stroke="#0a0d13" stroke-width="2"/><rect x="30" y="300" width="220" height="36" rx="9" fill="none" stroke="#38d0e0" stroke-width="3"/><text x="140" y="325" text-anchor="middle" font-size="18" fill="#38d0e0">wall ahead?</text></g></svg>
+    <div class="quiz-card">
+      <div class="q">What does detect answer here?</div>
+      <div class="opts">
+        <details><summary>A. true</summary><div class="ans">No. The cell in front is floor.</div></details>
+        <details><summary>B. false</summary><div class="ans">✓ Floor ahead, so false. The agent moves.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Quiz 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19b</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">Which mouth of the if block runs when detect says false?</div>
+      <div class="opts">
+        <details><summary>A. the then mouth</summary><div class="ans">No. That one needs true.</div></details>
+        <details><summary>B. the else mouth</summary><div class="ans">✓ A false answer sends the agent to else.</div></details>
+      </div>
+    </div>
+    <p class="bilingual">거짓이면 else</p>
+  </div>
+
+  <!-- ============ Quiz 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19c</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Question 3</h2>
+    <div class="quiz-card">
+      <div class="q">Which drawer holds the if block?</div>
+      <div class="opts">
+        <details><summary>A. Agent</summary><div class="ans">No. Agent holds move, turn and detect.</div></details>
+        <details><summary>B. Logic</summary><div class="ans">✓ The teal Logic drawer.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Quiz 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19d</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Question 4</h2>
+    <div class="quiz-card">
+      <div class="q">Why did your v1 blocks fail in maze B?</div>
+      <div class="opts">
+        <details><summary>A. the numbers matched only maze A</summary><div class="ans">✓ You wrote one maze into numbers.</div></details>
+        <details><summary>B. the agent was broken</summary><div class="ans">No. The agent did what you said.</div></details>
+      </div>
+    </div>
+    <p class="bilingual">숫자는 미로 하나만 맞아요</p>
+  </div>
+
+  <!-- ============ Code Talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud 🗣️</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Detect says <span class="blank"></span>, so the agent <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Your turn!</div>
+    <h2>Walk it out 🤖</h2>
+    <ul class="check-list">
+      <li>Put the agent at the maze start</li>
+      <li>Type <code>step</code></li>
+      <li>Wait until it stops</li>
+      <li>Repeat until the agent is out</li>
+      <li>Count your chats out loud</li>
+    </ul>
+  </div>
+
+  <!-- ============ v5 · repeat ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Build v5 · STEP 1 / 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stop typing, start looping</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+        <div class="mcb-stack">
+          <div class="mcb-c logic">
+            <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+            <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+            <div class="hat">else</div>
+            <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="col good"><span class="tag">NEW</span>
+        <div class="mcb-stack">
+          <div class="mcb-c loops hot">
+            <div class="hat">repeat <span class="val">7</span> times</div>
+            <div class="mcb-in">
+              <div class="mcb-c logic">
+                <div class="hat">if <span class="mcb agent">agent detect <span class="dd">block</span> <span class="dd">forward</span></span> then</div>
+                <div class="mcb-in"><div class="mcb agent">agent turn <span class="dd">right</span></div></div>
+                <div class="hat">else</div>
+                <div class="mcb-in"><div class="mcb agent">agent move <span class="dd">forward</span> <span class="val">1</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#107c10">Loops</span> drawer</p>
+    <p><b>🔍 FIND</b> green <b>repeat</b> block.</p>
+    <p><b>📍 WHERE</b> wrap around your if block. Number <b>7</b>.</p>
+    <p><b>🟣 WHY</b> maze A takes seven decisions.</p>
+    <p><b>✅ CHECK</b> one chat, the agent walks out.</p>
+  </div>
+
+  <!-- ============ Stretch: wool trail ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Leave a trail</h2>
+    <div class="mcb-stack">
+      <div class="mcb-c player">
+        <div class="hat">on chat command <span class="val">trail</span></div>
+        <div class="mcb-in">
+          <div class="mcb agent hot">agent place on move <span class="dd">on</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#5c2d91">Agent</span> drawer</p>
+    <p><b>📍 WHERE</b> a new chat command <b>trail</b>.</p>
+    <p><b>🟣 WHY</b> it drops a block every step.</p>
+    <p><b>✅ CHECK</b> look back. The path is painted.</p>
+  </div>
+
+  <!-- ============ Stretch list ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23b</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Fill the agent with wool, then run the trail command.</div>
+      <div class="item"><span class="lvl">★★</span>Build your own maze with three turns.</div>
+      <div class="item"><span class="lvl">★★★</span>Make the agent turn left instead, and find a maze it solves.</div>
+    </div>
+  </div>
+
+  <!-- ============ Homework ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">📚 Homework</div>
+    <h2>This week</h2>
+    <ul class="check-list">
+      <li>Kasim sends you a maze world file</li>
+      <li>Double-click the file to open it</li>
+      <li>Build the if / else step command</li>
+      <li>Get the agent out, record the screen</li>
+      <li>Write one line: what does false mean?</li>
+    </ul>
+    <p class="bilingual">미로 월드 파일은 카카오로 보내요</p>
+  </div>
+
+  <!-- ============ Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Say your answer</div>
+      <p style="margin-top:.4em">Why must you wait for the agent to stop before the next chat?</p>
+      <p class="bilingual" style="margin-top:.4em">왜 기다려야 할까요</p>
+    </div>
+  </div>
+
+  <!-- ============ Close ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">You gave<br>the agent eyes.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: a repeat block, so one chat solves the whole maze.</p>
+    <p class="bilingual">다음: 반복 블록으로 한 번에</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 62</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

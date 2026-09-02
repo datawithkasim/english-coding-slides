@@ -2038,3 +2038,91 @@ ul li { margin-bottom: .35em; }
   border-radius:10px;padding:1em 1.2em;margin-top:1em;text-align:left;
   font-size:clamp(17px,3vmin,26px);line-height:1.75}
 .model-box b{color:var(--accent)}
+
+/* ============================================================
+   MakeCode block track — drawn blocks, not text
+   SEOHOO and IHYEON drag blocks in MakeCode; they do not read
+   Python yet. Their decks draw the block the way the toolbox
+   draws it, so a slide is a picture of the thing on their screen.
+   Colours follow the pxt-minecraft category palette.
+   ============================================================ */
+.mcb-stack { display: inline-flex; flex-direction: column; align-items: flex-start;
+  gap: 0; margin: .5em 0; text-align: left; }
+.mcb-stack + .mcb-stack { margin-left: 1.2em; }
+
+/* one block */
+.mcb { position: relative; display: inline-flex; align-items: center; flex-wrap: wrap;
+  gap: .45em; font-family: "Inter", system-ui, sans-serif; font-weight: 700;
+  font-size: clamp(14px, 2.5vmin, 22px); color: #fff; line-height: 1.15;
+  padding: .48em .9em; border-radius: 7px; border: 2px solid rgba(0,0,0,.28);
+  box-shadow: 0 2px 0 rgba(0,0,0,.28); background: #5c5c5c; margin-bottom: .18em; }
+/* the notch that makes it read as a puzzle piece */
+.mcb::after { content: ""; position: absolute; left: 1.1em; bottom: -6px;
+  width: 1.1em; height: 6px; border-radius: 0 0 5px 5px; background: inherit; }
+.mcb:last-child::after { content: none; }
+
+/* toolbox categories */
+.mcb.player  { background: #d83b01; }
+.mcb.agent   { background: #5c2d91; }
+.mcb.blocks  { background: #a1662f; }
+.mcb.pos     { background: #59922b; }
+.mcb.mobs    { background: #008272; }
+.mcb.loops   { background: #107c10; }
+.mcb.logic   { background: #006970; }
+.mcb.vars    { background: #b8102e; }
+.mcb.math    { background: #712672; }
+
+/* value holes sitting inside a block */
+.mcb .dd, .mcb-c > .hat .dd  { background: rgba(0,0,0,.26); border-radius: 999px; padding: .1em .7em;
+  font-weight: 800; letter-spacing: .01em; }
+.mcb .dd::after, .mcb-c > .hat .dd::after { content: " ▾"; opacity: .75; font-size: .8em; }
+.mcb .val, .mcb-c > .hat .val { background: #fff; color: #1a1a1a; border-radius: 999px;
+  padding: .08em .7em; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mcb .ovar, .mcb-c > .hat .ovar { background: #b8102e; border: 2px solid rgba(0,0,0,.25);
+  border-radius: 999px; padding: .06em .7em; font-weight: 800; }
+.mcb .swatch, .mcb-c > .hat .swatch { width: .95em; height: .95em; border-radius: 3px;
+  border: 2px solid rgba(0,0,0,.35); display: inline-block; }
+
+/* C-shaped blocks: on-chat, repeat, if — they wrap other blocks */
+.mcb-c { display: inline-block; border-radius: 8px; padding: 0 0 .5em;
+  box-shadow: 0 2px 0 rgba(0,0,0,.28); margin: .5em 0; }
+.mcb-c.player { background: #d83b01; }
+.mcb-c.loops  { background: #107c10; }
+.mcb-c.logic  { background: #006970; }
+.mcb-c > .hat { display: flex; align-items: center; flex-wrap: wrap; gap: .45em;
+  color: #fff; font-weight: 700; font-size: clamp(14px, 2.5vmin, 22px);
+  padding: .5em .9em; }
+.mcb-c > .mcb-in { margin: 0 .5em 0 1.5em; padding: .35em .45em;
+  background: rgba(0,0,0,.16); border-radius: 6px; min-height: 1.4em;
+  display: flex; flex-direction: column; align-items: flex-start; }
+
+/* new / unchanged, same meaning as .hot and .dim in the text decks */
+.mcb.hot, .mcb-c.hot { outline: 3px solid var(--accent); outline-offset: 3px; }
+.mcb.dim, .mcb-c.dim { opacity: .38; }
+.mcb .mk, .mcb-c > .hat .mk { background: var(--accent); color: #0b0e14; border-radius: 5px;
+  padding: 0 .4em; font-size: .72em; font-weight: 800; letter-spacing: .04em; }
+
+/* empty socket the student drags into */
+.mcb-drop { border: 3px dashed var(--accent); border-radius: 7px;
+  padding: .48em 1.4em; color: var(--accent); font-weight: 800;
+  font-size: clamp(13px, 2.2vmin, 20px); margin-bottom: .18em; }
+
+/* toolbox drawer hint — where in the left menu the block lives */
+.mcb-from { display: inline-flex; align-items: center; gap: .4em; margin-top: .5em;
+  font-size: clamp(13px, 2.1vmin, 19px); color: var(--ink); opacity: .8; }
+.mcb-from .drawer { border-radius: 5px; padding: .1em .55em; color: #fff;
+  font-weight: 800; font-size: .9em; }
+
+/* ============================================================
+   OLD/NEW line highlighting inside code blocks
+   Every text deck had been re-declaring these in its own private
+   <style> block, so a deck that forgot rendered its v1→v4 ramp as
+   flat text. Same values as the decks used; a private block still
+   overrides, so nothing existing changes.
+   ============================================================ */
+pre .hot { display: block; background: rgba(255,184,108,.16); }
+pre .bad { display: block; background: rgba(255,85,85,.16); }
+pre .dim { display: block; color: #4a5670; }
+pre .mk  { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+  color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+pre .mk.old { color: #ff5555; border-color: #ff5555; }

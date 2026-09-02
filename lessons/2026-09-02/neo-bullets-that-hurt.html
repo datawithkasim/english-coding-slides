@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — Bullets That Hurt (Neo · 2026-09-02)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.8em, 2.5vmin, 1.6em); justify-content: center;
+          flex-wrap: wrap; margin-top: .6em; }
+  .rd { text-align: center; }
+  .sqrow { display: flex; gap: .35em; justify-content: center; align-items: flex-end;
+           background: rgb(152,251,152); border: 2px solid var(--soft); border-radius: .4em;
+           padding: .6em .7em; min-height: 3em; }
+  .sq { width: clamp(16px, 3vmin, 26px); height: clamp(16px, 3vmin, 26px); border-radius: .15em; }
+  .sq.s2 { width: clamp(12px, 2.2vmin, 19px); height: clamp(12px, 2.2vmin, 19px); }
+  .sq.s3 { width: clamp(20px, 3.8vmin, 32px); height: clamp(20px, 3.8vmin, 32px); }
+  .rl { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent);
+        font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  .badge-row { display: flex; gap: clamp(.8em, 3vmin, 2em); justify-content: center; margin-top: .7em; }
+  .badge { text-align: center; }
+  .badge .bx { width: clamp(46px, 8vmin, 72px); height: clamp(46px, 8vmin, 72px);
+               background: #22252e; border: 2px solid var(--soft); border-radius: .4em; margin: 0 auto; }
+  .badge .nt { font-family: "JetBrains Mono", monospace; font-weight: 700;
+               background: #ffb86c; color: #0a0d13; border-radius: .25em;
+               padding: .05em .5em; font-size: clamp(12px, 2vmin, 17px);
+               display: inline-block; margin-top: -0.7em; position: relative; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS003 · Pygame Turret Base · Neo · 2 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Homework 2</div>
+    <div class="emoji">💥</div>
+    <h1>Bullets<br>That Hurt</h1>
+    <p class="line" style="margin-top:.4em">Bronze bullets fly straight through you.<br>Today they <b>land</b> — then you get a <b>health bar</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 rect</span><span class="chip">v2 hit</span><span class="chip">v3 remove</span><span class="chip">v4 health bar</span>
+    </div>
+    <p class="bilingual">적 총알이 나를 맞혀요, 체력 바도 만들어요</p>
+  </div>
+
+  <!-- 2 · The hour -->
+  <div class="slide">
+    <div class="pill purple">The hour</div>
+    <h2>Short review, long build</h2>
+    <div class="stage-bar" style="justify-content:flex-start">
+      <div class="step done"></div><div class="step current"></div>
+      <div class="step"></div><div class="step"></div><div class="step"></div>
+    </div>
+    <div class="topic-grid three" style="margin-top:.6em">
+      <div class="topic-chip"><div class="head">FIX 1</div><div class="desc">bullet flood</div></div>
+      <div class="topic-chip"><div class="head">FIX 2</div><div class="desc">boss never dies</div></div>
+      <div class="topic-chip purple"><div class="head">v1–v3</div><div class="desc">bullets hit you</div></div>
+      <div class="topic-chip purple"><div class="head">v4</div><div class="desc">your health bar</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">13 steps. You type every one.</p>
+  </div>
+
+  <!-- 3 · Recap — Neo's own 31 August lesson -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Monday, your enemy guns</h2>
+    <div class="recap-q">
+      <div class="q">1. <code>enemy["bullet_cooldown"] -= 1</code> — how often does that run?</div>
+      <details><summary>Show answer</summary><div class="ans">Once per frame, per enemy. 60 times a second.</div></details>
+      <div class="q" style="margin-top:.4em">2. Why <code>random.randint(60, 80)</code> and not a plain <code>70</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">Every enemy fires on its own beat, not together.</div></details>
+      <div class="q" style="margin-top:.4em">3. In a bullet dict, what do <code>vx</code> and <code>vy</code> hold?</div>
+      <details><summary>Show answer</summary><div class="ans">How far it moves across, and down, each frame.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 · Recap visual — spawn from the enemy centre -->
+  <div class="slide">
+    <div class="pill">Recap 🎨</div>
+    <h2>Where your bullet is born</h2>
+    <svg viewBox="0 0 480 250" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="150" y="40" width="180" height="60" fill="#c29b41" stroke="#e8eef6" stroke-width="2"/>
+      <line x1="150" y1="24" x2="330" y2="24" stroke="#38d0e0" stroke-width="3"/>
+      <text x="196" y="17" fill="#38d0e0" font-size="19">enemy["w"]</text>
+      <line x1="240" y1="40" x2="240" y2="100" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <rect x="232" y="100" width="16" height="16" fill="#cd7f32" stroke="#e8eef6" stroke-width="2"/>
+      <text x="42" y="52" fill="#e8eef6" font-size="19">enemy["x"]</text>
+      <line x1="150" y1="45" x2="150" y2="132" stroke="#8a97b8" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="262" y="118" fill="#cd7f32" font-size="19">bullet</text>
+      <text x="40" y="170" fill="#f1fa8c" font-size="21">x = enemy["x"] + enemy["w"] // 2</text>
+      <text x="40" y="202" fill="#f1fa8c" font-size="21">y = enemy["y"] + enemy["h"]</text>
+      <text x="40" y="232" fill="#8a97b8" font-size="17">centre across · bottom edge down</text>
+    </svg>
+    <div class="why">🟣 Then <code>pygame.draw.rect()</code> paints it BRONZE, 8 by 8.</div>
+    <p class="bilingual">가운데에서, 아래쪽에서 태어나요</p>
+  </div>
+
+  <!-- 5 · HOMEWORK 1 — the bug -->
+  <div class="slide">
+    <div class="pill">🐛 Homework 1</div>
+    <h2>The bronze flood</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>## HOMEWORK 1 ##</code></div>
+<pre class="tiny"><span class="dim">        if enemy["bullet_cooldown"] &lt;= 0:</span>
+<span class="dim">            enemy_bullets.append({ ... })</span>
+<span class="hot">        enemy["bullet_cooldown"] = enemy["bullet_cooldown"]</span></pre>
+    <div class="debug-card"><div class="err">No error. Every enemy drags a long bronze bar behind it.</div></div>
+    <div class="why">🟣 The timer hits 0 and stays at 0, so it fires every frame.</div>
+  </div>
+
+  <!-- 6 · HOMEWORK 1 — why, drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>A timer that never climbs back</h2>
+    <svg viewBox="0 0 500 220" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="6" y="26" fill="#8a97b8" font-size="17">frame</text>
+      <text x="6" y="72" fill="#8a97b8" font-size="17">cooldown</text>
+      <text x="6" y="140" fill="#8a97b8" font-size="17">fires?</text>
+      <text x="120" y="26" fill="#e8eef6" font-size="19">1</text>
+      <text x="190" y="26" fill="#e8eef6" font-size="19">2</text>
+      <text x="260" y="26" fill="#e8eef6" font-size="19">3</text>
+      <text x="330" y="26" fill="#e8eef6" font-size="19">4</text>
+      <text x="400" y="26" fill="#e8eef6" font-size="19">5</text>
+      <text x="118" y="72" fill="#bd93f9" font-size="24">2</text>
+      <text x="188" y="72" fill="#bd93f9" font-size="24">1</text>
+      <text x="258" y="72" fill="#ff5555" font-size="24">0</text>
+      <text x="328" y="72" fill="#ff5555" font-size="24">0</text>
+      <text x="398" y="72" fill="#ff5555" font-size="24">0</text>
+      <text x="116" y="140" fill="#8a97b8" font-size="21">no</text>
+      <text x="186" y="140" fill="#8a97b8" font-size="21">no</text>
+      <text x="250" y="140" fill="#cd7f32" font-size="21">YES</text>
+      <text x="320" y="140" fill="#cd7f32" font-size="21">YES</text>
+      <text x="390" y="140" fill="#cd7f32" font-size="21">YES</text>
+      <rect x="252" y="158" width="16" height="16" fill="#cd7f32"/>
+      <rect x="252" y="178" width="16" height="16" fill="#cd7f32"/>
+      <rect x="252" y="198" width="16" height="16" fill="#cd7f32"/>
+      <text x="290" y="196" fill="#cd7f32" font-size="19">one bar, not one bullet</text>
+    </svg>
+    <p class="bilingual">0에서 멈추면 매 프레임 발사돼요</p>
+  </div>
+
+  <!-- 7 · Common Mistake — x = x -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>A line that does nothing</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ does nothing</span>
+<pre>cooldown = cooldown</pre>
+        <p style="margin-top:.4em">Value out of the box, same value back in. Nothing moved.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ does something</span>
+<pre>cooldown = <span class="fn">random</span>.<span class="fn">randint</span>(<span class="num">60</span>, <span class="num">120</span>)</pre>
+        <p style="margin-top:.4em">A <b>new</b> value goes in.</p>
+      </div>
+    </div>
+    <div class="why">🟣 <code>=</code> means "put this in that box".</div>
+    <p class="bilingual">= 는 같다가 아니라 넣는다예요</p>
+  </div>
+
+  <!-- 8 · FIX 1 -->
+  <div class="slide">
+    <div class="steptag">FIX 1 / 2</div>
+    <h2>Reset the timer, inside the if</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>= enemy["bullet_cooldown"]</code></div>
+    <div class="tag-old">OLD — delete all 3 lines</div>
+    <div class="was"><pre class="tiny">        ## HOMEWORK 1 ## the bullet flood. the line under this one does
+        ## NOTHING. fix the spawn here.
+        enemy["bullet_cooldown"] = enemy["bullet_cooldown"]</pre></div>
+    <div class="tag-new">NEW — type 1 line, inside the if</div>
+    <div class="now"><pre class="tiny"><span class="dim">        if enemy["bullet_cooldown"] &lt;= 0:</span>
+<span class="dim">            enemy_bullets.append({ ... })</span>
+<span class="hot">            enemy["bullet_cooldown"] = random.randint(60, 120)</span></pre></div>
+    <div class="where">📍 Indent <b>12</b> — level with <code>enemy_bullets.append</code>, under the closing <code>})</code></div>
+    <div class="chk">✅ Neo runs it — single bronze squares now, no bars.</div>
+  </div>
+
+  <!-- 9 · Indent warning for FIX 1 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Indent 12, not 8</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ indent 8</span>
+<pre class="tiny">        if ... &lt;= 0:
+            append(...)
+        cooldown = 90</pre>
+        <p style="margin-top:.4em">Runs every frame. The timer never reaches 0. Nobody fires.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ indent 12</span>
+<pre class="tiny">        if ... &lt;= 0:
+            append(...)
+            cooldown = 90</pre>
+        <p style="margin-top:.4em">Runs only after a shot.</p>
+      </div>
+    </div>
+    <p class="bilingual">들여쓰기가 곧 규칙이에요</p>
+  </div>
+
+  <!-- 10 · HOMEWORK 3 — the bug -->
+  <div class="slide">
+    <div class="pill">🐛 Homework 3</div>
+    <h2>The boss will not die</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>## HOMEWORK 3 ##</code></div>
+<pre class="tiny"><span class="dim">            if bullet_rect.colliderect(boss_rect):</span>
+<span class="dim">                boss["hp"] -= 1</span>
+<span class="dim">                for _ in range(3): ... particles ...</span>
+<span class="hot">            elif boss["hp"] &lt; 1:</span>
+<span class="hot">                boss = None</span>
+<span class="hot">                score += 30</span></pre>
+    <div class="debug-card"><div class="err">No error. Boss hp drops below 0 and it keeps shooting forever.</div></div>
+    <div class="why">🟣 <code>elif</code> only runs when the <code>if</code> above was <b>False</b>.</div>
+  </div>
+
+  <!-- 11 · HOMEWORK 3 — why, drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>The door you never open</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="150" y="12" width="210" height="44" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+      <text x="166" y="41" fill="#e8eef6" font-size="19">bullet hits boss?</text>
+      <line x1="200" y1="56" x2="120" y2="100" stroke="#50fa7b" stroke-width="3"/>
+      <line x1="310" y1="56" x2="390" y2="100" stroke="#8a97b8" stroke-width="3" stroke-dasharray="5 4"/>
+      <text x="112" y="84" fill="#50fa7b" font-size="18">True</text>
+      <text x="356" y="84" fill="#8a97b8" font-size="18">False</text>
+      <rect x="18" y="102" width="204" height="46" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="32" y="131" fill="#e8eef6" font-size="18">hp -= 1 · particles</text>
+      <rect x="278" y="102" width="204" height="46" rx="8" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="292" y="131" fill="#ff5555" font-size="18">elif hp &lt; 1: boss dies</text>
+      <text x="18" y="188" fill="#f1fa8c" font-size="19">A bullet just hit, so Python takes the left door.</text>
+      <text x="18" y="216" fill="#ff5555" font-size="19">The death check hides behind the right door.</text>
+      <text x="18" y="242" fill="#8a97b8" font-size="17">Nothing ever opens it.</text>
+    </svg>
+  </div>
+
+  <!-- 12 · FIX 2 -->
+  <div class="slide">
+    <div class="steptag">FIX 2 / 2</div>
+    <h2>Move the death check inside</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>elif boss["hp"] &lt; 1:</code></div>
+    <div class="tag-old">OLD — delete all 5 lines</div>
+    <div class="was"><pre class="tiny">            ## HOMEWORK 3 ## the boss will not die. these 3 lines are in
+            ## the wrong place. fix them here.
+            elif boss["hp"] &lt; 1:
+                boss = None
+                score += 30</pre></div>
+    <div class="tag-new">NEW — type this under the particle loop</div>
+    <div class="now"><pre class="tiny"><span class="hot">                if boss["hp"] &lt;= 0:</span>
+<span class="hot">                    boss = None</span>
+<span class="hot">                    score += 30</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>16</b>, its two lines at <b>20</b> — inside <code>if bullet_rect.colliderect(boss_rect):</code></div>
+    <div class="chk">✅ Neo runs it — reach score 100, kill the boss, score jumps by 30.</div>
+  </div>
+
+  <!-- 13 · Review done, bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🎯</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">Two fixed.<br>One empty.</h1>
+    <div class="find" style="margin-top:.6em"><span class="fl">🔍 Find (Ctrl+F)</span><code>## HOMEWORK 2 ##</code></div>
+    <p class="line" style="margin-top:.5em">"enemy bullets hit the player. write it here"<br>Nothing under it. That is the rest of today.</p>
+    <p class="bilingual">이제 새로운 걸 만들어요</p>
+  </div>
+
+  <!-- 14 · Predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Do these two boxes touch?</h2>
+    <div class="predict-card">
+      <div class="label">Predict — say True or False out loud first</div>
+<pre>ship   = pygame.<span class="fn">Rect</span>(<span class="num">100</span>, <span class="num">200</span>, <span class="num">60</span>, <span class="num">40</span>)
+bullet = pygame.<span class="fn">Rect</span>(<span class="num">140</span>, <span class="num">235</span>, <span class="num">8</span>, <span class="num">8</span>)
+
+<span class="fn">print</span>(bullet.<span class="fn">colliderect</span>(ship))</pre>
+      <details><summary>Reveal output</summary><div class="ans">True</div></details>
+    </div>
+  </div>
+
+  <!-- 15 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">pygame.Rect(x, y, w, h)</span>
+      <span class="gloss">an invisible box: corner, then size</span>
+      <span class="ko">보이지 않는 상자</span>
+
+      <span class="term">hitbox</span>
+      <span class="gloss">the box the game tests, not the picture</span>
+      <span class="ko">판정 박스</span>
+
+      <span class="term">.colliderect(other)</span>
+      <span class="gloss">True if the two boxes overlap</span>
+      <span class="ko">겹치면 True</span>
+    </div>
+  </div>
+
+  <!-- 16 · Concept — a Rect is 4 numbers -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Four numbers, one box</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="140" y="70" width="200" height="110" fill="rgba(65,105,225,.35)" stroke="#4169e1" stroke-width="3"/>
+      <circle cx="140" cy="70" r="8" fill="#ff79c6"/>
+      <text x="30" y="60" fill="#ff79c6" font-size="19">x, y</text>
+      <text x="30" y="82" fill="#8a97b8" font-size="15">top-left</text>
+      <line x1="140" y1="200" x2="340" y2="200" stroke="#38d0e0" stroke-width="3"/>
+      <text x="212" y="226" fill="#38d0e0" font-size="19">w</text>
+      <line x1="366" y1="70" x2="366" y2="180" stroke="#bd93f9" stroke-width="3"/>
+      <text x="382" y="132" fill="#bd93f9" font-size="19">h</text>
+      <text x="150" y="132" fill="#e8eef6" font-size="20">your ship</text>
+    </svg>
+<pre>player_rect = pygame.<span class="fn">Rect</span>(player[<span class="str">"x"</span>], player[<span class="str">"y"</span>], PLAYER_WIDTH, PLAYER_HEIGHT)</pre>
+    <div class="why">🟣 This line is already in your file. You do not type it again.</div>
+  </div>
+
+  <!-- 17 · colliderect frame 1 -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frame 1 — far apart</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="40" y="40" width="40" height="40" fill="rgba(205,127,50,.4)" stroke="#cd7f32" stroke-width="3"/>
+      <text x="34" y="30" fill="#cd7f32" font-size="17">bullet</text>
+      <rect x="230" y="130" width="180" height="70" fill="rgba(65,105,225,.35)" stroke="#4169e1" stroke-width="3"/>
+      <text x="272" y="222" fill="#4169e1" font-size="17">your ship</text>
+      <text x="150" y="60" fill="#8a97b8" font-size="20">no shared pixels</text>
+      <text x="150" y="96" fill="#ff5555" font-size="30">False</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ eb_rect.colliderect(player_rect)</div>
+      <div style="opacity:1">False</div>
+    </div>
+  </div>
+
+  <!-- 18 · colliderect frame 2 -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frame 2 — closer, still nothing</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="240" y="80" width="40" height="40" fill="rgba(205,127,50,.4)" stroke="#cd7f32" stroke-width="3"/>
+      <text x="234" y="70" fill="#cd7f32" font-size="17">bullet</text>
+      <rect x="230" y="130" width="180" height="70" fill="rgba(65,105,225,.35)" stroke="#4169e1" stroke-width="3"/>
+      <text x="272" y="222" fill="#4169e1" font-size="17">your ship</text>
+      <line x1="260" y1="120" x2="260" y2="130" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="290" y="128" fill="#f1fa8c" font-size="18">10 px gap</text>
+      <text x="40" y="100" fill="#ff5555" font-size="30">False</text>
+      <text x="40" y="134" fill="#8a97b8" font-size="18">a gap is a gap</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ eb_rect.colliderect(player_rect)</div>
+      <div style="opacity:1">False</div>
+    </div>
+  </div>
+
+  <!-- 19 · colliderect frame 3 -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frame 3 — they overlap</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="240" y="112" width="40" height="40" fill="rgba(205,127,50,.4)" stroke="#cd7f32" stroke-width="3"/>
+      <rect x="230" y="130" width="180" height="70" fill="rgba(65,105,225,.35)" stroke="#4169e1" stroke-width="3"/>
+      <rect x="240" y="130" width="40" height="22" fill="#f1fa8c" stroke="#f1fa8c" stroke-width="2"/>
+      <text x="234" y="104" fill="#cd7f32" font-size="17">bullet</text>
+      <text x="292" y="146" fill="#f1fa8c" font-size="18">shared pixels</text>
+      <text x="272" y="222" fill="#4169e1" font-size="17">your ship</text>
+      <text x="40" y="120" fill="#50fa7b" font-size="32">True</text>
+      <text x="40" y="154" fill="#8a97b8" font-size="18">one shared pixel is enough</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ eb_rect.colliderect(player_rect)</div>
+      <div style="opacity:1">True</div>
+    </div>
+  </div>
+
+  <!-- 20 · colliderect frame 4 -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frame 4 — still True</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="230" y="130" width="180" height="70" fill="rgba(65,105,225,.35)" stroke="#4169e1" stroke-width="3"/>
+      <rect x="290" y="145" width="40" height="40" fill="#f1fa8c" stroke="#cd7f32" stroke-width="3"/>
+      <text x="272" y="222" fill="#4169e1" font-size="17">your ship</text>
+      <text x="40" y="120" fill="#50fa7b" font-size="32">True</text>
+      <text x="40" y="154" fill="#f1fa8c" font-size="18">True again next frame</text>
+      <text x="40" y="184" fill="#ff5555" font-size="18">and again, and again...</text>
+    </svg>
+    <div class="why">🟣 The bullet stays inside for many frames. Remember that. It is the bug in v2.</div>
+  </div>
+
+  <!-- 21 · Concept — the shape of the answer -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>It answers yes or no</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">bullet on your ship</span>
+        <span class="case case-b">bullet in the sky</span>
+      </div>
+      <div class="if-cond">eb_rect.colliderect(player_rect)</div>
+      <div class="if-branches">
+        <div class="if-branch true">lives -= 1</div>
+        <div class="if-branch false">keep flying</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ what happens</div>
+        <div class="out-line out-a">Lives: 3 → 2</div>
+        <div class="out-line out-b">nothing</div>
+      </div>
+    </div>
+    <div class="why">🟣 Same shape as your boss-bullet check. You already own this.</div>
+    <p class="bilingual">겹치면 True, 아니면 False</p>
+  </div>
+
+  <!-- 22 · Point at his own code -->
+  <div class="slide">
+    <div class="pill">Your file 📂</div>
+    <h2>You wrote this already</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>surviving_boss_bullets = []</code></div>
+<pre class="tiny"><span class="dim">    surviving_boss_bullets = []</span>
+<span class="dim">    for b in boss_bullets:</span>
+<span class="dim">        b_rect = pygame.Rect(b["x"], b["y"], BULLET_WIDTH, BULLET_HEIGHT)</span>
+<span class="dim">        if b_rect.colliderect(player_rect):</span>
+<span class="dim">            lives -= 1</span>
+<span class="dim">        else:</span>
+<span class="dim">            surviving_boss_bullets.append(b)</span>
+<span class="dim">    boss_bullets = surviving_boss_bullets</span></pre>
+    <div class="why">🟣 Today you build the same 8 lines for <code>enemy_bullets</code>.</div>
+  </div>
+
+  <!-- 23 · v1 intro -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <h2>v1 — build the box</h2>
+    <p class="line">Nothing hits anything yet.<br>One <b>Rect</b> per bronze bullet.</p>
+    <div class="road">
+      <div class="rd"><div class="rl">v1</div><div class="rt">make the rect</div></div>
+      <div class="rd"><div class="rl">v2</div><div class="rt">lose a life</div></div>
+      <div class="rd"><div class="rl">v3</div><div class="rt">delete the bullet</div></div>
+      <div class="rd"><div class="rl">v4</div><div class="rt">health bar</div></div>
+    </div>
+  </div>
+
+  <!-- 24 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 13</div>
+    <h2>A box for every bronze bullet</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>## HOMEWORK 2 ##</code></div>
+    <div class="tag-new">NEW — type 2 lines under the marker</div>
+    <div class="now"><pre class="tiny"><span class="dim">    ## HOMEWORK 2 ## enemy bullets hit the player. write it here</span>
+<span class="hot">    for eb in enemy_bullets:</span>
+<span class="hot">        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</span></pre></div>
+    <div class="where">📍 <code>for</code> at indent <b>4</b> · <code>eb_rect</code> at indent <b>8</b></div>
+    <div class="why">🟣 <code>ENEMY_B_W</code> and <code>ENEMY_B_H</code> are the bronze bullet's own size.</div>
+    <div class="chk">✅ Neo runs it — game plays exactly the same, no red text.</div>
+  </div>
+
+  <!-- 25 · v2 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <h2>v2 — make it cost a life</h2>
+    <p class="line">Two more lines. Ask the question, then pay.</p>
+<pre class="tiny">        if eb_rect.colliderect(player_rect):
+            lives -= 1</pre>
+    <p class="quiet" style="margin-top:.4em">Watch the Lives number when you fly into a bullet. Something is wrong.</p>
+    <p class="bilingual">맞으면 목숨이 줄어요</p>
+  </div>
+
+  <!-- 26 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 13</div>
+    <h2>Ask the question</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>eb_rect = pygame.Rect</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">    for eb in enemy_bullets:
+        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny"><span class="dim">    for eb in enemy_bullets:</span>
+<span class="dim">        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</span>
+<span class="hot">        if eb_rect.colliderect(player_rect):</span>
+<span class="hot">            lives -= 1</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>8</b>, level with <code>eb_rect</code> · <code>lives</code> at <b>12</b></div>
+    <div class="chk">✅ Neo runs it — fly into a bronze bullet. Lives goes 3 → 0 instantly. GAME OVER.</div>
+  </div>
+
+  <!-- 27 · DEBUG 1 — the v3 bug, posed -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — three lives, one bullet</h2>
+<pre class="tiny">        if eb_rect.colliderect(player_rect):
+            lives -= 1</pre>
+    <div class="debug-card"><div class="err">No error. One bullet touches you and all 3 lives vanish in a blink.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The bullet is still there next frame. <code>colliderect</code> says True again, and again. <b>Delete the bullet when it hits.</b></p>
+      <p class="bilingual">총알을 지워야 한 번만 아파요</p>
+    </details>
+  </div>
+
+  <!-- 28 · the 24 frames, drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>One bullet, 24 frames</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="30" y="120" width="440" height="60" fill="rgba(65,105,225,.3)" stroke="#4169e1" stroke-width="3"/>
+      <text x="34" y="200" fill="#4169e1" font-size="17">your ship, 40 px tall</text>
+      <rect x="60" y="126" width="14" height="14" fill="#cd7f32"/>
+      <rect x="130" y="140" width="14" height="14" fill="#cd7f32"/>
+      <rect x="200" y="152" width="14" height="14" fill="#cd7f32"/>
+      <rect x="270" y="162" width="14" height="14" fill="#cd7f32"/>
+      <rect x="340" y="170" width="14" height="14" fill="#cd7f32"/>
+      <text x="52" y="118" fill="#e8eef6" font-size="16">f1</text>
+      <text x="122" y="118" fill="#e8eef6" font-size="16">f2</text>
+      <text x="192" y="118" fill="#e8eef6" font-size="16">f3</text>
+      <text x="262" y="118" fill="#e8eef6" font-size="16">f4</text>
+      <text x="332" y="118" fill="#e8eef6" font-size="16">f5</text>
+      <text x="30" y="40" fill="#ff5555" font-size="22">True · True · True · True · True ...</text>
+      <text x="30" y="76" fill="#f1fa8c" font-size="20">lives 3 → 2 → 1 → 0 → GAME OVER</text>
+    </svg>
+    <div class="why">🟣 The bullet moves 2 px a frame. It stays inside you for about 24 frames.</div>
+  </div>
+
+  <!-- 29 · v3 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <h2>v3 — the bullet must go</h2>
+    <p class="line">Same trick as your boss bullets: an <b>empty basket</b>, the misses go in, the basket becomes the list.</p>
+    <div class="road">
+      <div class="rd"><div class="rl">STEP 3</div><div class="rt">empty basket</div></div>
+      <div class="rd"><div class="rl">STEP 4</div><div class="rt">misses go in</div></div>
+      <div class="rd"><div class="rl">STEP 5</div><div class="rt">basket wins</div></div>
+    </div>
+    <p class="bilingual">맞은 총알은 바구니에 안 들어가요</p>
+  </div>
+
+  <!-- 30 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 13</div>
+    <h2>The empty basket</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>for eb in enemy_bullets:</code></div>
+    <div class="tag-new">NEW — one line ABOVE the for</div>
+    <div class="now"><pre class="tiny"><span class="hot">    surviving_enemy_bullets = []</span>
+<span class="dim">    for eb in enemy_bullets:</span>
+<span class="dim">        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, one line above the <code>for</code></div>
+    <div class="why">🟣 An empty list, ready to hold the bullets that missed.</div>
+    <div class="chk">✅ Neo runs it — nothing changes yet. Keep going.</div>
+  </div>
+
+  <!-- 31 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 13</div>
+    <h2>Misses go in the basket</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if eb_rect.colliderect(player_rect):</code></div>
+    <div class="tag-new">NEW — 2 lines under <code>lives -= 1</code></div>
+    <div class="now"><pre class="tiny"><span class="dim">        if eb_rect.colliderect(player_rect):</span>
+<span class="dim">            lives -= 1</span>
+<span class="hot">        else:</span>
+<span class="hot">            surviving_enemy_bullets.append(eb)</span></pre></div>
+    <div class="where">📍 <code>else:</code> at indent <b>8</b>, exactly under the <code>if</code> · <code>append</code> at <b>12</b></div>
+    <div class="why">🟣 Hit it → not in the basket. Missed → in the basket.</div>
+    <div class="chk">✅ Neo runs it — still crashes. One line left.</div>
+  </div>
+
+  <!-- 32 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 13</div>
+    <h2>The basket becomes the list</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>surviving_enemy_bullets.append(eb)</code></div>
+    <div class="tag-new">NEW — one line under the loop</div>
+    <div class="now"><pre class="tiny"><span class="dim">        else:</span>
+<span class="dim">            surviving_enemy_bullets.append(eb)</span>
+<span class="hot">    enemy_bullets = surviving_enemy_bullets</span></pre></div>
+    <div class="where">📍 Indent <b>4</b> — same column as <code>for</code></div>
+    <div class="why">🟣 Not in the basket, so it is gone.</div>
+    <div class="chk">✅ v3 done. Neo runs it — one bullet, one life. 3 → 2.</div>
+  </div>
+
+  <!-- 33 · v3 result, whole block -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <h2>v3 — your whole block</h2>
+<pre class="tiny"><span class="hot">    surviving_enemy_bullets = []</span>
+<span class="hot">    for eb in enemy_bullets:</span>
+<span class="hot">        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</span>
+<span class="hot">        if eb_rect.colliderect(player_rect):</span>
+<span class="hot">            lives -= 1</span>
+<span class="hot">        else:</span>
+<span class="hot">            surviving_enemy_bullets.append(eb)</span>
+<span class="hot">    enemy_bullets = surviving_enemy_bullets</span></pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">Lives: 3 → 2 → 1 → GAME OVER. Homework 2 is done.</div>
+    </div>
+  </div>
+
+  <!-- 34 · DEBUG 2 — wrong width -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the invisible giant</h2>
+<pre class="tiny">        eb_rect = pygame.Rect(eb["x"], eb["y"], enemy["w"], enemy["h"])</pre>
+    <div class="debug-card"><div class="err">No error. You lose lives with empty sky around your ship.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A tank is 55 px wide. The bronze bullet is 8. The hitbox was 7 times the picture. Use the bullet's own size: <code>ENEMY_B_W, ENEMY_B_H</code>.</p>
+      <p class="bilingual">그림 크기와 판정 크기가 같아야 해요</p>
+    </details>
+  </div>
+
+  <!-- 35 · DEBUG 3 — remove while looping -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — skipped bullets</h2>
+<pre class="tiny">    for eb in enemy_bullets:
+        eb_rect = pygame.Rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)
+        if eb_rect.colliderect(player_rect):
+            lives -= 1
+            enemy_bullets.remove(eb)</pre>
+    <div class="debug-card"><div class="err">No error. Some bullets fly through you and cost nothing.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Removing an item slides the rest down one place. The loop skips the one that moved. Build a new list instead.</p>
+      <p class="bilingual">돌면서 지우면 하나씩 건너뛰어요</p>
+    </details>
+  </div>
+
+  <!-- 36 · v4 intro -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="emoji">🩸</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">Your own<br>health bar</h1>
+    <p class="line" style="margin-top:.5em">The boss has one. You do not.<br>Today you copy the shape of <b>your own</b> boss bar.</p>
+    <p class="bilingual">보스처럼 나도 체력 바를 가져요</p>
+  </div>
+
+  <!-- 37 · point at his boss bar -->
+  <div class="slide">
+    <div class="pill">Your file 📂<span class="activity-tag">Neo answers</span></div>
+    <h2>Read it. What must change?</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code># 3. Boss Health Bar UI</code></div>
+<pre class="tiny"><span class="dim">        health_percentage = boss["hp"] / boss["max_hp"]</span>
+<span class="dim">        health_bar_width = int(health_percentage * boss["w"])</span>
+<span class="dim">        pygame.draw.rect(screen, BLOOD_RED, (boss["x"], boss["y"] - 15, boss["w"], 6))</span>
+<span class="dim">        pygame.draw.rect(screen, BRILLIANT_RED, (boss["x"], boss["y"] - 15, health_bar_width, 6))</span></pre>
+    <div class="practice-task">Point at every word that has to change for YOUR ship. Say them out loud before the next slide.</div>
+  </div>
+
+  <!-- 38 · the swap table -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Five swaps, nothing else</h2>
+    <div class="trace-grid">
+      <div class="cell head">boss bar</div>
+      <div class="cell head">→</div>
+      <div class="cell head">your bar</div>
+
+      <div class="cell"><code>boss["hp"]</code></div><div class="cell">→</div><div class="cell"><code>player_hp</code></div>
+      <div class="cell"><code>boss["max_hp"]</code></div><div class="cell">→</div><div class="cell"><code>player_max_hp</code></div>
+      <div class="cell"><code>boss["w"]</code></div><div class="cell">→</div><div class="cell"><code>PLAYER_WIDTH</code></div>
+      <div class="cell"><code>boss["x"]</code></div><div class="cell">→</div><div class="cell"><code>player["x"]</code></div>
+      <div class="cell"><code>boss["y"] - 15</code></div><div class="cell">→</div><div class="cell"><code>player["y"] - 12</code></div>
+    </div>
+    <div class="why">🟣 Same four lines. New names. That is the whole idea.</div>
+  </div>
+
+  <!-- 39 · the bar maths, drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Percentage becomes pixels</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="10" y="30" fill="#8a97b8" font-size="17">player_hp</text>
+      <text x="10" y="90" fill="#8a97b8" font-size="17">100</text>
+      <text x="10" y="150" fill="#8a97b8" font-size="17">60</text>
+      <text x="10" y="210" fill="#8a97b8" font-size="17">20</text>
+      <rect x="110" y="72" width="240" height="22" fill="#660000"/>
+      <rect x="110" y="72" width="240" height="22" fill="#ff0003"/>
+      <rect x="110" y="132" width="240" height="22" fill="#660000"/>
+      <rect x="110" y="132" width="144" height="22" fill="#ff0003"/>
+      <rect x="110" y="192" width="240" height="22" fill="#660000"/>
+      <rect x="110" y="192" width="48" height="22" fill="#ff0003"/>
+      <text x="368" y="90" fill="#f1fa8c" font-size="18">1.0 × 60 = 60</text>
+      <text x="368" y="150" fill="#f1fa8c" font-size="18">0.6 × 60 = 36</text>
+      <text x="368" y="210" fill="#f1fa8c" font-size="18">0.2 × 60 = 12</text>
+      <text x="110" y="40" fill="#38d0e0" font-size="18">health_bar_width, in pixels</text>
+    </svg>
+    <p class="bilingual">비율에 폭을 곱하면 픽셀이에요</p>
+  </div>
+
+  <!-- 40 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 13</div>
+    <h2>Give yourself health</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>lives = 3</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">lives = 3</span>
+<span class="hot">player_hp = 100</span></pre></div>
+    <div class="where">📍 Indent <b>0</b> — hard against the left edge, like <code>lives = 3</code></div>
+    <div class="why">🟣 Health right now. It will go down.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 41 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 13</div>
+    <h2>Remember what full means</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>player_hp = 100</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">lives = 3</span>
+<span class="dim">player_hp = 100</span>
+<span class="hot">player_max_hp = 100</span></pre></div>
+    <div class="where">📍 Indent <b>0</b>, directly under <code>player_hp</code></div>
+    <div class="why">🟣 This one never changes. It is the full tank, same job as <code>boss["max_hp"]</code>.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 42 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 13</div>
+    <h2>Bullets take health, not lives</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if eb_rect.colliderect(player_rect):</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">        if eb_rect.colliderect(player_rect):
+            lives -= 1</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny"><span class="dim">        if eb_rect.colliderect(player_rect):</span>
+<span class="hot">            player_hp -= 20</span></pre></div>
+    <div class="where">📍 Indent <b>12</b> — replace the <code>lives -= 1</code> line only</div>
+    <div class="why">🟣 5 bronze hits empty the tank. Boss bullets still cost a whole life.</div>
+    <div class="chk">✅ Neo runs it — get hit. Lives stays 3. Nothing on screen yet.</div>
+  </div>
+
+  <!-- 43 · STEP 9 -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 13</div>
+    <h2>How full is the tank?</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>screen.blit(lives_text, (10, 45))</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    screen.blit(lives_text, (10, 45))</span>
+<span class="hot">    health_percentage = player_hp / player_max_hp</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, level with <code>screen.blit</code></div>
+    <div class="why">🟣 100 / 100 = 1.0 · 60 / 100 = 0.6. Exactly the boss line, new names.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 44 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 13</div>
+    <h2>Turn the ratio into pixels</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>health_percentage = player_hp</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    health_percentage = player_hp / player_max_hp</span>
+<span class="hot">    health_bar_width = int(health_percentage * PLAYER_WIDTH)</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, directly under the line you just typed</div>
+    <div class="why">🟣 <code>PLAYER_WIDTH</code> is 60, so the full bar is 60 px wide.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 45 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 13</div>
+    <h2>Draw the empty bar</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>health_bar_width = int(</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    health_bar_width = int(health_percentage * PLAYER_WIDTH)</span>
+<span class="hot">    pygame.draw.rect(screen, BLOOD_RED, (player["x"], player["y"] - 12, PLAYER_WIDTH, 6))</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>. Order inside the brackets: <code>x, y, w, h</code></div>
+    <div class="why">🟣 The dark track. Always full width.</div>
+    <div class="chk">✅ Neo runs it — a dark red stripe sits just above your ship.</div>
+  </div>
+
+  <!-- 46 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 13</div>
+    <h2>Draw the health on top</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>BLOOD_RED, (player["x"]</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    pygame.draw.rect(screen, BLOOD_RED, (player["x"], player["y"] - 12, PLAYER_WIDTH, 6))</span>
+<span class="hot">    pygame.draw.rect(screen, BRILLIANT_RED, (player["x"], player["y"] - 12, health_bar_width, 6))</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>. Two things differ.</div>
+    <div class="why">🟣 Bright bar on the track. Only its width moves.</div>
+    <div class="chk">✅ Neo runs it — take a hit, the bright bar shrinks.</div>
+  </div>
+
+  <!-- 47 · STEP 13 -->
+  <div class="slide">
+    <div class="steptag">STEP 13 / 13</div>
+    <h2>Empty tank ends the game</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if lives &lt;= 0:</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">    if lives &lt;= 0:
+        game_over = True</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny"><span class="hot">    if lives &lt;= 0 or player_hp &lt;= 0:</span>
+<span class="dim">        game_over = True</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>. Change the top line only, leave <code>game_over</code> alone.</div>
+    <div class="why">🟣 <code>or</code> = either one ends it.</div>
+    <div class="chk">✅ Neo runs it — take 5 bronze hits. Bar empties, GAME OVER.</div>
+  </div>
+
+  <!-- 48 · v4 result -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <h2>v4 — the bar block</h2>
+<pre class="tiny"><span class="dim">    screen.blit(lives_text, (10, 45))</span>
+<span class="hot">    health_percentage = player_hp / player_max_hp</span>
+<span class="hot">    health_bar_width = int(health_percentage * PLAYER_WIDTH)</span>
+<span class="hot">    pygame.draw.rect(screen, BLOOD_RED, (player["x"], player["y"] - 12, PLAYER_WIDTH, 6))</span>
+<span class="hot">    pygame.draw.rect(screen, BRILLIANT_RED, (player["x"], player["y"] - 12, health_bar_width, 6))</span></pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">a red bar rides above your ship and shrinks when bronze lands</div>
+    </div>
+  </div>
+
+  <!-- 49 · DEBUG 4 — the lagging bar -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the bar that lags</h2>
+<pre class="tiny">    # drawn up here, right after the player rectangle
+    health_bar_width = int(health_percentage * PLAYER_WIDTH)
+    ...
+    # the hit happens 200 lines LOWER
+    player_hp -= 20</pre>
+    <div class="debug-card"><div class="err">No error. The bar always shows the health you had one frame ago.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Python runs top to bottom. Draw the bar <b>after</b> every hit is counted.</p>
+      <p class="bilingual">계산이 먼저, 그리기가 나중</p>
+    </details>
+  </div>
+
+  <!-- 50 · Trace activity -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>You fill in the bar</h2>
+<pre class="tiny">player_max_hp = 100    PLAYER_WIDTH = 60
+health_bar_width = int(health_percentage * PLAYER_WIDTH)</pre>
+    <div class="trace-grid cols-5">
+      <div class="cell head">hits</div>
+      <div class="cell head">0</div><div class="cell head">1</div><div class="cell head">2</div><div class="cell head">4</div>
+
+      <div class="cell"><code>player_hp</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">100</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">80</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">20</span></details></div>
+
+      <div class="cell"><code>percentage</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1.0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0.8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0.6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0.2</span></details></div>
+
+      <div class="cell"><code>bar width</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">48</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">36</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">12</span></details></div>
+    </div>
+  </div>
+
+  <!-- 51 · Quiz 1 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">Why did one bullet cost every life?</div>
+      <div class="opts">
+        <details><summary>A. It stayed inside the ship for many frames</summary><div class="ans">✓ True fired again and again.</div></details>
+        <details><summary>B. colliderect is broken</summary><div class="ans">No. It answered correctly every frame.</div></details>
+        <details><summary>C. lives started too low</summary><div class="ans">No. Lives started at 3.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 52 · Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q"><code>player_hp</code> is 40. How wide is the bright bar?</div>
+      <div class="opts">
+        <details><summary>A. 24 px</summary><div class="ans">✓ 0.4 × 60 = 24.</div></details>
+        <details><summary>B. 40 px</summary><div class="ans">No. That is health, not pixels.</div></details>
+        <details><summary>C. 60 px</summary><div class="ans">No. That is a full tank.</div></details>
+      </div>
+    </div>
+    <p class="bilingual">비율 × 폭 = 픽셀</p>
+  </div>
+
+  <!-- 52 · Code Talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>colliderect</code> gives me <span class="blank"></span>, so I put it in an <span class="blank"></span>. The bullet must be <span class="blank"></span> or it hurts me every <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 53 · Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Run the checklist</h2>
+    <ul class="check-list">
+      <li>Bronze squares, no long bars → FIX 1 works</li>
+      <li>Boss dies at score 100 → FIX 2 works</li>
+      <li>One bronze hit = 20 health, not 3 lives</li>
+      <li>Bar above the ship shrinks in 5 steps</li>
+      <li>Empty bar → GAME OVER</li>
+    </ul>
+  </div>
+
+  <!-- 54 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">One line, no looking back</div>
+      <p style="margin-top:.4em">Why does a bullet have to be <b>removed</b> when it hits you?</p>
+      <p class="bilingual" style="margin-top:.4em">왜 총알을 지워야 할까요?</p>
+    </div>
+  </div>
+
+  <!-- 55 · Close & bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">Overlap is<br>a question.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: the ship that cannot be hit twice.</p>
+    <p class="bilingual">다음 시간: 잠깐 무적이 되는 우주선</p>
+  </div>
+
+  <!-- ============ OPTIONAL OVERFLOW — Neo works fast ============ -->
+
+  <!-- 56 · bonus menu -->
+  <div class="slide">
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four more upgrades</h2>
+    <div class="topic-grid three">
+      <div class="topic-chip"><div class="head">A · Invincible</div><div class="desc">no double hits</div></div>
+      <div class="topic-chip"><div class="head">B · Aim</div><div class="desc">centre the bullet</div></div>
+      <div class="topic-chip purple"><div class="head">C · Sparks</div><div class="desc">bronze particles</div></div>
+      <div class="topic-chip purple"><div class="head">D · Warning</div><div class="desc">gold bar when low</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Pick one. Each is 1 to 4 lines.</p>
+  </div>
+
+  <!-- 57 · invincibility concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A shield, counted in frames</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="8" y="30" fill="#8a97b8" font-size="17">hit_cooldown</text>
+      <rect x="140" y="14" width="60" height="26" fill="#ff0003"/>
+      <text x="152" y="34" fill="#0a0d13" font-size="18">45</text>
+      <rect x="215" y="14" width="60" height="26" fill="#c29b41"/>
+      <text x="230" y="34" fill="#0a0d13" font-size="18">30</text>
+      <rect x="290" y="14" width="60" height="26" fill="#c29b41"/>
+      <text x="308" y="34" fill="#0a0d13" font-size="18">1</text>
+      <rect x="365" y="14" width="60" height="26" fill="#3a424a"/>
+      <text x="384" y="34" fill="#e8eef6" font-size="18">0</text>
+      <text x="8" y="92" fill="#8a97b8" font-size="17">can be hurt?</text>
+      <text x="152" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="230" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="305" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="378" y="92" fill="#50fa7b" font-size="19">YES</text>
+      <text x="8" y="150" fill="#f1fa8c" font-size="19">Same counter you wrote for the enemy guns.</text>
+      <text x="8" y="182" fill="#38d0e0" font-size="19">Set it high, take 1 off every frame, wait for 0.</text>
+    </svg>
+    <p class="bilingual">적 총 쿨다운과 똑같은 방법이에요</p>
+  </div>
+
+  <!-- 58 · BONUS A1 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 1 / 4</div>
+    <h2>Make the counter</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>player_max_hp = 100</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">player_max_hp = 100</span>
+<span class="hot">hit_cooldown = 0</span></pre></div>
+    <div class="where">📍 Indent <b>0</b></div>
+    <div class="why">🟣 0 means "you can be hurt right now".</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 59 · BONUS A2 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 2 / 4</div>
+    <h2>Count it down</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>shoot_cooldown = shoot_cooldown - 1</code></div>
+    <div class="tag-new">NEW — 2 lines under that block</div>
+    <div class="now"><pre class="tiny"><span class="dim">    if shoot_cooldown &gt; 0:</span>
+<span class="dim">        shoot_cooldown = shoot_cooldown - 1</span>
+<span class="hot">    if hit_cooldown &gt; 0:</span>
+<span class="hot">        hit_cooldown -= 1</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · <code>hit_cooldown -= 1</code> at <b>8</b></div>
+    <div class="why">🟣 One off every frame, exactly like your gun timer.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 60 · BONUS A3 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 3 / 4</div>
+    <h2>Only hurt when the shield is down</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if eb_rect.colliderect(player_rect):</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">        if eb_rect.colliderect(player_rect):</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">        if eb_rect.colliderect(player_rect) and hit_cooldown &lt;= 0:</pre></div>
+    <div class="where">📍 Same line, indent <b>8</b>. Add to the end, colon last.</div>
+    <div class="why">🟣 <code>and</code> = both must be true.</div>
+    <div class="chk">✅ Neo runs it — game unchanged. The shield is stuck at 0. Next step raises it.</div>
+  </div>
+
+  <!-- 61 · BONUS A4 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 4 / 4</div>
+    <h2>Raise the shield on a hit</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>player_hp -= 20</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">            player_hp -= 20</span>
+<span class="hot">            hit_cooldown = 45</span></pre></div>
+    <div class="where">📍 Indent <b>12</b>, level with <code>player_hp</code></div>
+    <div class="why">🟣 45 frames is about three quarters of a second.</div>
+    <div class="chk">✅ Neo runs it — sit in the bullet stream. Health drops in slow steps.</div>
+  </div>
+
+  <!-- 62 · DEBUG 5 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the shield that never drops</h2>
+<pre class="tiny">    if hit_cooldown &gt; 0:
+        hit_cooldown = hit_cooldown</pre>
+    <div class="debug-card"><div class="err">No error. Nothing can ever hurt you again.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">You have met this exact line today. It puts the same value straight back. Write <code>hit_cooldown -= 1</code>.</p>
+      <p class="bilingual">오늘 아침에 본 그 버그예요</p>
+    </details>
+  </div>
+
+  <!-- 63 · aim concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The bullet sits off-centre</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="120" y="30" width="160" height="50" fill="#c29b41" stroke="#e8eef6" stroke-width="2"/>
+      <line x1="200" y1="24" x2="200" y2="130" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="206" y="22" fill="#ff79c6" font-size="16">enemy centre</text>
+      <rect x="200" y="82" width="22" height="22" fill="#cd7f32" stroke="#ff5555" stroke-width="3"/>
+      <text x="234" y="100" fill="#ff5555" font-size="18">left edge on the centre</text>
+      <rect x="120" y="150" width="160" height="50" fill="#c29b41" stroke="#e8eef6" stroke-width="2"/>
+      <rect x="189" y="200" width="22" height="22" fill="#cd7f32" stroke="#50fa7b" stroke-width="3"/>
+      <line x1="200" y1="146" x2="200" y2="226" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="234" y="220" fill="#50fa7b" font-size="18">bullet centre on the centre</text>
+      <text x="14" y="60" fill="#8a97b8" font-size="18">now</text>
+      <text x="14" y="180" fill="#8a97b8" font-size="18">fixed</text>
+    </svg>
+    <div class="why">🟣 Half the bullet's own width, taken back off. Same trick as your player gun.</div>
+  </div>
+
+  <!-- 64 · BONUS B -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 1 / 1</div>
+    <h2>Centre the bronze bullet</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>"x": enemy["x"] + enemy["w"] // 2,</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">                "x": enemy["x"] + enemy["w"] // 2,</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">                "x": enemy["x"] + (enemy["w"] // 2) - (ENEMY_B_W // 2),</pre></div>
+    <div class="where">📍 Same line, indent <b>16</b>. Keep the comma.</div>
+    <div class="why">🟣 Half the bullet, 4 px, taken back off.</div>
+    <div class="chk">✅ Neo runs it — bullets leave the middle of each enemy.</div>
+  </div>
+
+  <!-- 65 · BONUS C -->
+  <div class="slide">
+    <div class="steptag">BONUS C · 1 / 1</div>
+    <h2>Bronze sparks on a hit</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>player_hp -= 20</code></div>
+    <div class="tag-new">NEW — under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">            player_hp -= 20</span>
+<span class="hot">            for _ in range(8):</span>
+<span class="hot">                particles.append({</span>
+<span class="hot">                    "x": eb["x"],</span>
+<span class="hot">                    "y": eb["y"],</span>
+<span class="hot">                    "vx": random.uniform(-3, 3),</span>
+<span class="hot">                    "vy": random.uniform(-3, 3),</span>
+<span class="hot">                    "life": random.randint(10, 30),</span>
+<span class="hot">                    "color": BRONZE,</span>
+<span class="hot">                    "radius": random.randint(3, 6)</span>
+<span class="hot">                })</span></pre></div>
+    <div class="where">📍 <code>for</code> at indent <b>12</b>, <code>particles.append(</code> at <b>16</b>, the keys at <b>20</b></div>
+    <div class="why">🟣 Same particle dict you already use for boss hits, new colour.</div>
+    <div class="chk">✅ Neo runs it — 8 bronze dots burst where the bullet landed.</div>
+  </div>
+
+  <!-- 66 · BONUS D -->
+  <div class="slide">
+    <div class="steptag">BONUS D · 1 / 1</div>
+    <h2>Gold bar when you are low</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>BRILLIANT_RED, (player["x"]</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    pygame.draw.rect(screen, BRILLIANT_RED, (player["x"], player["y"] - 12, health_bar_width, 6))</span>
+<span class="hot">    if health_percentage &lt; 0.3:</span>
+<span class="hot">        pygame.draw.rect(screen, ANTIQUE_GOLD, (player["x"], player["y"] - 12, health_bar_width, 6))</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · the draw line at <b>8</b></div>
+    <div class="why">🟣 Painted last, so gold covers red.</div>
+    <div class="chk">✅ Neo runs it — take 4 hits. The bar turns gold.</div>
+  </div>
+
+  <!-- 67 · DEBUG 6 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the small r</h2>
+<pre class="tiny">        eb_rect = pygame.rect(eb["x"], eb["y"], ENEMY_B_W, ENEMY_B_H)</pre>
+    <div class="debug-card"><div class="err">AttributeError: module 'pygame' has no attribute 'rect'</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Capital <b>R</b>. <code>pygame.Rect</code>. Python names are case-sensitive, the same trap as a dictionary key.</p>
+      <p class="bilingual">대문자 R이어야 해요</p>
+    </details>
+  </div>
+
+  <!-- 68 · DEBUG 7 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the wrong constant</h2>
+<pre class="tiny">        eb_rect = pygame.Rect(eb["x"], eb["y"], BULLET_WIDTH, BULLET_HEIGHT)</pre>
+    <div class="debug-card"><div class="err">No error. Bullets clip your ship and cost nothing about one time in five.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>BULLET_HEIGHT</code> is 5. The bronze bullet is 8 tall. Wrong box, nearly right, hardest kind to see. Use <code>ENEMY_B_W, ENEMY_B_H</code>.</p>
+      <p class="bilingual">비슷한 이름이 제일 위험해요</p>
+    </details>
+  </div>
+
+  <!-- 69 · DEBUG 8 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the bar off the top</h2>
+<pre class="tiny">    pygame.draw.rect(screen, BLOOD_RED, (player["x"], player["y"] - 12, PLAYER_WIDTH, 6))</pre>
+    <div class="debug-card"><div class="err">No error. Fly to the very top of the screen and the bar disappears.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">At <code>player["y"] = 0</code> the bar is drawn at −12, above the window. Try <code>max(0, player["y"] - 12)</code> in both draw lines.</p>
+      <p class="bilingual">화면 위로 나가면 안 보여요</p>
+    </details>
+  </div>
+
+  <!-- 70 · Modify — faded blanks -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Fill the four blanks</h2>
+<pre class="tiny">    surviving_enemy_bullets = []
+    for eb in enemy_bullets:
+        eb_rect = pygame.Rect(eb["x"], eb["y"], ___, ___)
+        if eb_rect.___(player_rect):
+            player_hp -= 20
+        else:
+            surviving_enemy_bullets.append(eb)
+    enemy_bullets = ___</pre>
+    <p class="quiet" style="margin-top:.4em">Bullet size, bullet size, the question, the basket.</p>
+  </div>
+
+  <!-- 71 · Modify 2 -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Make a tank hit hurt more</h2>
+<pre class="tiny">    # in make_enemy(), the tank branch, add one key
+    "damage": ___,
+
+    # then in your hit check
+    player_hp -= ___</pre>
+    <p class="quiet" style="margin-top:.4em">The bullet dict would have to carry the number too. Say where it comes from.</p>
+    <p class="bilingual">총알이 피해량을 들고 다녀야 해요</p>
+  </div>
+
+  <!-- 72 · Stretch list -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>player_hp -= 20</code> to 10. Now it takes 10 hits.</div>
+      <div class="item"><span class="lvl">★★</span>Refill 20 health every time the boss dies.</div>
+      <div class="item"><span class="lvl">★★★</span>Flash the ship white while <code>hit_cooldown</code> is above 0.</div>
+    </div>
+  </div>
+
+  <!-- 73 · Homework close -->
+  <div class="slide center-all">
+    <div class="emoji">📓</div>
+    <h1 style="font-size:clamp(32px,5.6vmin,50px)">Save it.<br>All three markers gone.</h1>
+    <p class="line" style="margin-top:.5em">Search your file for <code>## HOMEWORK</code>.<br>If Ctrl+F finds nothing, you are done.</p>
+    <p class="bilingual">세 개 다 없어지면 끝이에요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 74</span><button id="next">&rsaquo;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
