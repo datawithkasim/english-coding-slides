@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trees That Take Orders · Eric</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · ERIC KIM · MBS002 · Minecraft Python · 2026-09-03</div>
+
+  <!-- 1 · SLOT 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft · Python</div>
+    <div class="emoji">🌳</div>
+    <h1>Trees that<br>take orders</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">One function. <span class="sub">Any spot.</span> <span class="sub">Any leaf.</span></p>
+    <p class="bilingual">함수에 값을 건네주기 — 매개변수</p>
+  </div>
+
+  <!-- 2 · SLOT 2: Recap & Retrieve — Eric's own 08-27 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap · your 08-27</div>
+    <h2>Your tree function</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Your <code>leaves_type</code> list held <b>4</b> leaf types. How many times did <code>for leaves in leaves_type</code> run?</div>
+      <details><summary>Show answer</summary><div class="ans">4 times. One pass per item. You worked that out yourself.</div></details>
+    </div>
+    <p class="bilingual">지난 시간: def make_tree(), 리스트, 반복문</p>
+  </div>
+
+  <!-- 3 · SLOT 3: Recap — how he moved each tree -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Recap · your 08-27</div>
+    <h2>How you moved each tree</h2>
+<pre style="font-size:clamp(13px,2.3vmin,26px)">    x1 = <span class="num">1</span>
+    x2 = <span class="num">1</span>
+    <span class="com"># trunk and leaves get built here</span>
+    x1 += <span class="num">10</span>
+    x2 += <span class="num">10</span></pre>
+    <p style="margin-top:.5em">Those lines live <b>inside</b> the function.</p>
+    <p class="bilingual">나무 위치가 함수 안에 갇혀 있었어요</p>
+  </div>
+
+  <!-- 4 · SLOT 4: The pain, drawn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">The problem</div>
+    <h2>The spot is locked inside 🔒</h2>
+    <svg viewBox="0 0 620 250" style="width:min(80vmin,880px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="330" height="150" rx="14" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="40" y="58" font-family="monospace" font-size="21" fill="#ff79c6">def make_tree():</text>
+      <rect x="52" y="72" width="150" height="34" rx="8" fill="#ff5555" fill-opacity="0.22" stroke="#ff5555" stroke-width="2"/>
+      <text x="62" y="96" font-family="monospace" font-size="20" fill="#e8eef6">x = 1</text>
+      <text x="62" y="134" font-family="monospace" font-size="20" fill="#8a97b8">blocks.fill(...)</text>
+      <text x="46" y="197" font-family="sans-serif" font-size="18" font-weight="700" fill="#ff5555">🔧 open it up to move the tree</text>
+      <rect x="400" y="140" width="200" height="10" fill="#33502e"/>
+      <rect x="494" y="92" width="12" height="48" fill="#7a5230"/>
+      <rect x="474" y="58" width="52" height="40" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="500" y="176" font-family="monospace" font-size="18" fill="#8a97b8" text-anchor="middle">always x = 1</text>
+      <text x="500" y="212" font-family="sans-serif" font-size="18" font-weight="700" fill="#38d0e0" text-anchor="middle">one spot, forever</text>
+    </svg>
+    <p class="bilingual">위치를 바꾸려면 함수 안을 열어야 해요</p>
+  </div>
+
+  <!-- 5 · SLOT 5: The bad way — one function per tree -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">The problem</div>
+    <h2>Three trees, the slow way</h2>
+<pre style="font-size:clamp(13px,2.3vmin,26px)"><span class="bad"><span class="kw">def</span> <span class="fn">make_tree</span>():</span><span class="bad">    x = <span class="num">1</span></span><span class="bad"><span class="kw">def</span> <span class="fn">make_tree2</span>():</span><span class="bad">    x = <span class="num">11</span></span><span class="bad"><span class="kw">def</span> <span class="fn">make_tree3</span>():</span><span class="bad">    x = <span class="num">21</span></span></pre>
+    <p style="margin-top:.5em">One whole function per tree. A forest would need 50.</p>
+    <p class="bilingual">나무마다 함수 하나? 안 돼요</p>
+  </div>
+
+  <!-- 6 · SLOT 6: Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What appears?</h2>
+    <div class="predict-card">
+      <div class="label">Predict — do not run it</div>
+<pre><span class="fn">make_tree</span>(<span class="num">1</span>)
+<span class="fn">make_tree</span>(<span class="num">11</span>)
+<span class="fn">make_tree</span>(<span class="num">21</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans">Three trees. One function. x = 1, then 11, then 21.</div></details>
+    </div>
+  </div>
+
+  <!-- 7 · SLOT 7: Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">parameter</span>
+      <span class="gloss">an empty slot in the <code>def</code> line</span>
+      <span class="ko">매개변수</span>
+
+      <span class="term">argument</span>
+      <span class="gloss">the value you drop into that slot</span>
+      <span class="ko">인자</span>
+
+      <span class="term">call</span>
+      <span class="gloss">run the function and hand it values</span>
+      <span class="ko">호출</span>
+    </div>
+  </div>
+
+  <!-- 8 · SLOT 8: Concept — the order slip -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Concept</div>
+    <h2>You hand a value in 📨</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <span class="input-pill">21</span>
+        <span class="arrow-icon">➡️</span>
+        <span class="target-box"><span class="name">x</span><span class="val">21</span></span>
+      </div>
+      <div class="read-line"><span class="fn">pos</span>(<span class="out">21</span>, 0, z)</div>
+    </div>
+    <p style="margin-top:.4em">The slot holds it. The body uses it. No editing inside.</p>
+    <p class="bilingual">값을 건네주면 슬롯이 받아요</p>
+  </div>
+
+  <!-- 9 · SLOT 9: Concept — the make_tree box and its three slots -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept</div>
+    <h2>The <code>make_tree</code> box 📦</h2>
+    <svg viewBox="0 0 640 340" style="width:min(86vmin,960px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="30" y="8" width="110" height="44" rx="10" fill="#8b5cf6"/>
+      <text x="85" y="38" font-family="monospace" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">21</text>
+      <rect x="190" y="8" width="110" height="44" rx="10" fill="#8b5cf6"/>
+      <text x="245" y="38" font-family="monospace" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">1</text>
+      <rect x="350" y="8" width="250" height="44" rx="10" fill="#8b5cf6"/>
+      <text x="475" y="37" font-family="monospace" font-size="19" font-weight="800" fill="#fff" text-anchor="middle">CHERRY_LEAVES</text>
+      <path d="M85,56 C85,105 285,95 285,127" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+      <polygon points="279,127 291,127 285,141" fill="#8b5cf6"/>
+      <path d="M245,56 C245,105 383,95 383,127" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+      <polygon points="377,127 389,127 383,141" fill="#8b5cf6"/>
+      <path d="M475,56 C475,105 521,95 521,127" stroke="#8b5cf6" stroke-width="3" fill="none"/>
+      <polygon points="515,127 527,127 521,141" fill="#8b5cf6"/>
+      <rect x="20" y="140" width="610" height="72" rx="14" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="36" y="185" font-family="monospace" font-size="22" fill="#ff79c6">def make_tree(</text>
+      <rect x="250" y="158" width="70" height="38" rx="19" fill="#fff"/>
+      <text x="285" y="185" font-family="monospace" font-size="22" font-weight="800" fill="#1a1a1a" text-anchor="middle">x</text>
+      <text x="330" y="185" font-family="monospace" font-size="22" fill="#e8eef6">,</text>
+      <rect x="348" y="158" width="70" height="38" rx="19" fill="#fff"/>
+      <text x="383" y="185" font-family="monospace" font-size="22" font-weight="800" fill="#1a1a1a" text-anchor="middle">z</text>
+      <text x="428" y="185" font-family="monospace" font-size="22" fill="#e8eef6">,</text>
+      <rect x="446" y="158" width="150" height="38" rx="19" fill="#fff"/>
+      <text x="521" y="185" font-family="monospace" font-size="22" font-weight="800" fill="#1a1a1a" text-anchor="middle">leaf</text>
+      <text x="600" y="185" font-family="monospace" font-size="22" fill="#ff79c6">):</text>
+      <rect x="20" y="296" width="610" height="10" fill="#33502e"/>
+      <rect x="314" y="252" width="12" height="44" fill="#7a5230"/>
+      <rect x="294" y="220" width="52" height="38" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="40" y="252" font-family="sans-serif" font-size="19" font-weight="700" fill="#50fa7b">builds ↓</text>
+      <text x="320" y="328" font-family="monospace" font-size="18" fill="#8a97b8" text-anchor="middle">x 21 · z 1 · cherry</text>
+    </svg>
+  </div>
+
+  <!-- 10 · SLOT 10: Concept — call flows down, control comes back -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Watch it! 👀</div>
+    <h2>Call ➜ body ➜ back</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">make_tree(<span class="arg">21</span>, <span class="arg">1</span>, <span class="arg">CHERRY_LEAVES</span>)</span>
+        <span class="fn-result">→ <span class="rv">tree at x 21</span></span>
+      </div>
+      <div class="fn-flow-down">↓ call</div>
+      <div class="fn-body">
+        <div class="fn-sig">def make_tree(<span class="param">x</span>, <span class="param">z</span>, <span class="param">leaf</span>):</div>
+        <div class="fn-line">blocks.fill(OAK_LOG, pos(<span class="param-use">x</span>, 0, <span class="param-use">z</span>), pos(<span class="param-use">x</span>, 4, <span class="param-use">z</span>))</div>
+      </div>
+      <div class="fn-flow-up">↑ done</div>
+    </div>
+    <p class="bilingual">값이 들어가고, 끝나면 돌아와요</p>
+  </div>
+
+  <!-- 11 · SLOT 11: MANDATED VISUAL — three orders, three trees -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Concept</div>
+    <h2>Same box. Three orders.</h2>
+    <svg viewBox="0 0 660 300" style="width:min(88vmin,980px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="14" y="14" width="250" height="42" rx="9" fill="#232b3a" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="30" y="42" font-family="monospace" font-size="19" fill="#e8eef6">make_tree(<tspan fill="#f1fa8c">1</tspan>, 1, cherry)</text>
+      <rect x="14" y="70" width="250" height="42" rx="9" fill="#232b3a" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="30" y="98" font-family="monospace" font-size="19" fill="#e8eef6">make_tree(<tspan fill="#f1fa8c">11</tspan>, 1, dark)</text>
+      <rect x="14" y="126" width="250" height="42" rx="9" fill="#232b3a" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="30" y="154" font-family="monospace" font-size="19" fill="#e8eef6">make_tree(<tspan fill="#f1fa8c">21</tspan>, 1, pale)</text>
+      <path d="M270,35 L330,35" stroke="#38d0e0" stroke-width="3"/><polygon points="330,28 344,35 330,42" fill="#38d0e0"/>
+      <path d="M270,91 L330,91" stroke="#38d0e0" stroke-width="3"/><polygon points="330,84 344,91 330,98" fill="#38d0e0"/>
+      <path d="M270,147 L330,147" stroke="#38d0e0" stroke-width="3"/><polygon points="330,140 344,147 330,154" fill="#38d0e0"/>
+      <rect x="360" y="228" width="290" height="10" fill="#33502e"/>
+      <rect x="404" y="188" width="10" height="40" fill="#7a5230"/>
+      <rect x="387" y="158" width="44" height="34" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="500" y="188" width="10" height="40" fill="#7a5230"/>
+      <rect x="483" y="158" width="44" height="34" rx="9" fill="#2f5d34" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="596" y="188" width="10" height="40" fill="#7a5230"/>
+      <rect x="579" y="158" width="44" height="34" rx="9" fill="#b9c8a0" stroke="#0a0d13" stroke-width="2"/>
+      <text x="409" y="258" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 1</text>
+      <text x="505" y="258" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 11</text>
+      <text x="601" y="258" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 21</text>
+      <text x="505" y="288" font-family="sans-serif" font-size="18" font-weight="700" fill="#50fa7b" text-anchor="middle">one function · three trees</text>
+    </svg>
+  </div>
+
+  <!-- 12 · SLOT 12: Concept — def names slots, call fills them -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Concept</div>
+    <h2>Two lines, one deal 🤝</h2>
+    <svg viewBox="0 0 620 240" style="width:min(84vmin,900px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="42" font-family="sans-serif" font-size="17" font-weight="700" fill="#38d0e0">def line — names the slots</text>
+      <rect x="20" y="56" width="580" height="50" rx="10" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+      <text x="36" y="89" font-family="monospace" font-size="22" fill="#ff79c6">def make_tree(<tspan fill="#38d0e0">x</tspan>, <tspan fill="#38d0e0">z</tspan>, <tspan fill="#38d0e0">leaf</tspan>):</text>
+      <path d="M172,150 L172,112" stroke="#f1fa8c" stroke-width="3"/><polygon points="166,112 178,112 172,100" fill="#f1fa8c"/>
+      <path d="M241,150 L241,112" stroke="#f1fa8c" stroke-width="3"/><polygon points="235,112 247,112 241,100" fill="#f1fa8c"/>
+      <path d="M330,150 L330,112" stroke="#f1fa8c" stroke-width="3"/><polygon points="324,112 336,112 330,100" fill="#f1fa8c"/>
+      <rect x="20" y="152" width="580" height="50" rx="10" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/>
+      <text x="36" y="185" font-family="monospace" font-size="22" fill="#50fa7b">make_tree(<tspan fill="#f1fa8c">21</tspan>, <tspan fill="#f1fa8c">1</tspan>, <tspan fill="#f1fa8c">CHERRY_LEAVES</tspan>)</text>
+      <text x="20" y="232" font-family="sans-serif" font-size="17" font-weight="700" fill="#f1fa8c">call line — fills them, in order</text>
+    </svg>
+  </div>
+
+  <!-- 13 · SLOT 13: Coordinates -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Concept</div>
+    <h2>Where the numbers point</h2>
+    <svg viewBox="0 0 560 250" style="width:min(76vmin,820px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="190" width="440" height="10" fill="#33502e"/>
+      <path d="M100,190 L100,40" stroke="#38d0e0" stroke-width="3"/><polygon points="94,40 106,40 100,26" fill="#38d0e0"/>
+      <text x="118" y="46" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">y — up · starts at 0</text>
+      <path d="M100,190 L470,190" stroke="#8b5cf6" stroke-width="3"/><polygon points="470,184 470,196 486,190" fill="#8b5cf6"/>
+      <text x="300" y="222" font-family="monospace" font-size="20" font-weight="800" fill="#8b5cf6">x — sideways · starts at 1</text>
+      <path d="M100,190 L200,240" stroke="#f1fa8c" stroke-width="3"/><polygon points="197,232 205,246 189,244" fill="#f1fa8c"/>
+      <text x="212" y="246" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c">z — starts at 1</text>
+      <rect x="330" y="126" width="12" height="64" fill="#7a5230"/>
+      <rect x="308" y="90" width="56" height="42" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+    </svg>
+    <p style="margin-top:.3em">Trunk runs <code>y 0</code> to <code>y 4</code>. Leaves sit at <code>y 5</code> and <code>y 6</code>.</p>
+  </div>
+
+  <!-- 14 · SLOT 14: STEP 1 / 21 — type v1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Step 1 / 21 · ✋ you type first<span class="activity-tag">v1</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> nothing yet — a brand new Python file.<br>📍 Start at <b>line 1</b>. Indents used: <b>4</b> and <b>8</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot"><span class="kw">def</span> <span class="fn">make_tree</span>():<span class="mk">NEW</span></span><span class="hot">    x = <span class="num">1</span></span><span class="hot">    z = <span class="num">1</span></span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">OAK_LOG</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x, <span class="num">4</span>, z))</span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">CHERRY_LEAVES</span>,</span><span class="hot">        <span class="fn">pos</span>(x - <span class="num">1</span>, <span class="num">5</span>, z - <span class="num">1</span>), <span class="fn">pos</span>(x + <span class="num">1</span>, <span class="num">6</span>, z + <span class="num">1</span>))</span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"forest"</span>, make_tree)</span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> this is last week's tree, rebuilt clean.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → one cherry tree grows at x 1.</span></p>
+  </div>
+
+  <!-- 15 · SLOT 15: v1 on screen -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">v1 · what you see</div>
+    <h2>One tree. Always here.</h2>
+    <svg viewBox="0 0 560 195" style="width:min(78vmin,860px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="150" width="560" height="12" fill="#33502e"/>
+      <rect x="64" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="44" y="46" width="52" height="46" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="70" y="182" font-family="monospace" font-size="18" fill="#8a97b8" text-anchor="middle">x = 1</text>
+      <text x="330" y="110" font-family="sans-serif" font-size="22" font-weight="700" fill="#8a97b8" text-anchor="middle">nothing over here</text>
+    </svg>
+    <p style="margin-top:.3em">Run it ten times and you get <b>the same tree</b> ten times.</p>
+  </div>
+
+  <!-- 16 · SLOT 16: STEP 2 / 21 — the wrapper -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Step 2 / 21 · ✋ you type first<span class="activity-tag">v1</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>player.on_chat("forest", make_tree)</code><br>📍 The two new lines go <b>ABOVE</b> it, indent <b>0</b> and <b>4</b>. Then fix that line.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad"><span class="fn">player.on_chat</span>(<span class="str">"forest"</span>, make_tree)<span class="mk old">OLD</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot"><span class="kw">def</span> <span class="fn">on_forest</span>():<span class="mk">NEW</span></span><span class="hot">    <span class="fn">make_tree</span>()<span class="mk">NEW</span></span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"forest"</span>, on_forest)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> <code>on_chat</code> cannot hand values over. <code>on_forest</code> can.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → the same one tree. Nothing looks different.</span></p>
+  </div>
+
+  <!-- 17 · SLOT 17: why the wrapper exists -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Concept</div>
+    <h2>Who gives the orders?</h2>
+    <svg viewBox="0 0 640 190" style="width:min(86vmin,940px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="60" width="150" height="60" rx="12" fill="#141b27" stroke="#8a97b8" stroke-width="2"/>
+      <text x="85" y="88" font-family="monospace" font-size="17" fill="#e8eef6" text-anchor="middle">chat</text>
+      <text x="85" y="110" font-family="monospace" font-size="17" fill="#f1fa8c" text-anchor="middle">"forest"</text>
+      <path d="M164,90 L206,90" stroke="#38d0e0" stroke-width="3"/><polygon points="206,83 220,90 206,97" fill="#38d0e0"/>
+      <rect x="226" y="60" width="170" height="60" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="311" y="97" font-family="monospace" font-size="19" fill="#50fa7b" text-anchor="middle">on_forest()</text>
+      <text x="311" y="42" font-family="sans-serif" font-size="16" font-weight="700" fill="#38d0e0" text-anchor="middle">the order writer</text>
+      <path d="M400,90 L442,90" stroke="#8b5cf6" stroke-width="3"/><polygon points="442,83 456,90 442,97" fill="#8b5cf6"/>
+      <text x="428" y="72" font-family="monospace" font-size="15" fill="#f1fa8c" text-anchor="middle">21, 1, cherry</text>
+      <rect x="462" y="60" width="170" height="60" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="547" y="97" font-family="monospace" font-size="19" fill="#50fa7b" text-anchor="middle">make_tree(...)</text>
+      <text x="547" y="42" font-family="sans-serif" font-size="16" font-weight="700" fill="#8b5cf6" text-anchor="middle">the builder</text>
+      <text x="320" y="170" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">chat can only say "go" — on_forest says "go, and here are the values"</text>
+    </svg>
+  </div>
+
+  <!-- 18 · SLOT 18: STEP 3 / 21 — the first parameter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Step 3 / 21 · ✋ you type first<span class="activity-tag">v2</span></div>
+    <p class="practice-task">🔍 <b>FIND ①</b> <code>def make_tree():</code> &nbsp; <b>②</b> <code>make_tree()</code><br>📍 ① file line <b>1</b>, indent <b>0</b> &nbsp;·&nbsp; ② inside <code>on_forest</code>, indent <b>4</b></p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad"><span class="kw">def</span> <span class="fn">make_tree</span>():<span class="mk old">OLD ①</span></span><span class="hot"><span class="kw">def</span> <span class="fn">make_tree</span>(x):<span class="mk">NEW ①</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>()<span class="mk old">OLD ②</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">1</span>)<span class="mk">NEW ②</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> both lines change together, or Python errors.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → still one tree at x 1.</span></p>
+  </div>
+
+  <!-- 19 · SLOT 19: what actually changed -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Concept</div>
+    <h2>The slot is now open</h2>
+    <svg viewBox="0 0 620 200" style="width:min(84vmin,900px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="34" font-family="sans-serif" font-size="17" font-weight="700" fill="#ff5555">before</text>
+      <rect x="20" y="46" width="270" height="48" rx="10" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="36" y="78" font-family="monospace" font-size="20" fill="#ff79c6">def make_tree():</text>
+      <text x="36" y="128" font-family="monospace" font-size="19" fill="#8a97b8">x = 1  ← decided here</text>
+      <text x="330" y="34" font-family="sans-serif" font-size="17" font-weight="700" fill="#50fa7b">after</text>
+      <rect x="330" y="46" width="270" height="48" rx="10" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="346" y="78" font-family="monospace" font-size="20" fill="#ff79c6">def make_tree(<tspan fill="#38d0e0">x</tspan>):</text>
+      <rect x="346" y="108" width="240" height="34" rx="17" fill="#fff"/>
+      <text x="466" y="133" font-family="monospace" font-size="18" font-weight="800" fill="#1a1a1a" text-anchor="middle">x ← filled by the caller</text>
+      <text x="310" y="182" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">the function stopped deciding · the caller decides</text>
+    </svg>
+  </div>
+
+  <!-- 20 · SLOT 20: STEP 4 / 21 — delete x = 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Step 4 / 21 · ✋ you type first<span class="activity-tag">v2</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    x = 1</code> — the line right under <code>def make_tree(x):</code><br>📍 Indent <b>4</b>. <b>Delete the whole line.</b></p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">make_tree</span>(x):</span><span class="bad">    x = <span class="num">1</span><span class="mk old">DELETE</span></span><span class="dim">    z = <span class="num">1</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">make_tree</span>(x):</span><span class="hot">    z = <span class="num">1</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> that line overwrites your value. It throws the order away.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → still one tree at x 1. Same picture, real slot.</span></p>
+  </div>
+
+  <!-- 21 · SLOT 21: why deleting mattered -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Concept</div>
+    <h2>The order thrown in the bin 🗑️</h2>
+    <svg viewBox="0 0 620 210" style="width:min(84vmin,900px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="120" height="40" rx="10" fill="#8b5cf6"/>
+      <text x="80" y="48" font-family="monospace" font-size="21" font-weight="800" fill="#fff" text-anchor="middle">21</text>
+      <path d="M80,64 L80,96" stroke="#8b5cf6" stroke-width="3"/><polygon points="74,96 86,96 80,110" fill="#8b5cf6"/>
+      <rect x="20" y="116" width="120" height="40" rx="20" fill="#fff"/>
+      <text x="80" y="144" font-family="monospace" font-size="21" font-weight="800" fill="#1a1a1a" text-anchor="middle">x = 21</text>
+      <path d="M150,136 L206,136" stroke="#ff5555" stroke-width="3"/><polygon points="206,129 220,136 206,143" fill="#ff5555"/>
+      <rect x="228" y="112" width="200" height="48" rx="10" fill="#141b27" stroke="#ff5555" stroke-width="3"/>
+      <text x="328" y="143" font-family="monospace" font-size="20" fill="#e8eef6" text-anchor="middle">x = 1</text>
+      <text x="328" y="98" font-family="sans-serif" font-size="17" font-weight="700" fill="#ff5555" text-anchor="middle">this line runs next</text>
+      <path d="M438,136 L494,136" stroke="#ff5555" stroke-width="3"/><polygon points="494,129 508,136 494,143" fill="#ff5555"/>
+      <text x="560" y="144" font-family="monospace" font-size="30" text-anchor="middle">🗑️</text>
+      <text x="310" y="196" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">21 arrives, then gets replaced by 1 — every single time</text>
+    </svg>
+  </div>
+
+  <!-- 22 · SLOT 22: STEP 5 / 21 — the second call -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Step 5 / 21 · ✋ you type first<span class="activity-tag">v2</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    make_tree(1)</code><br>📍 One new line <b>directly under</b> it. Indent <b>4</b> — same as the line above.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">on_forest</span>():</span><span class="dim">    <span class="fn">make_tree</span>(<span class="num">1</span>)</span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> one function, two orders, two trees.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → two cherry trees, 10 blocks apart.</span></p>
+  </div>
+
+  <!-- 23 · SLOT 23: two trees on screen -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">v2 · what you see</div>
+    <h2>Two trees. One function. 🎉</h2>
+    <svg viewBox="0 0 560 195" style="width:min(78vmin,860px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="150" width="560" height="12" fill="#33502e"/>
+      <rect x="94" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="74" y="46" width="52" height="46" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="100" y="182" font-family="monospace" font-size="18" fill="#8a97b8" text-anchor="middle">make_tree(1)</text>
+      <rect x="374" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="354" y="46" width="52" height="46" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="380" y="182" font-family="monospace" font-size="18" fill="#8a97b8" text-anchor="middle">make_tree(11)</text>
+      <path d="M130,120 L350,120" stroke="#38d0e0" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="240" y="112" font-family="monospace" font-size="17" fill="#38d0e0" text-anchor="middle">10 blocks</text>
+    </svg>
+    <p class="bilingual">함수는 하나, 나무는 두 그루</p>
+  </div>
+
+  <!-- 24 · SLOT 24: Common Mistake 1 — missing comma (his own △) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The missing comma</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre style="font-size:clamp(12px,2vmin,22px)">    <span class="fn">make_tree</span>(<span class="num">11</span> <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</pre>
+        <p>Python sees <b>11 1</b> as one broken thing.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre style="font-size:clamp(12px,2vmin,22px)">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</pre>
+        <p>A comma between <b>every</b> value.</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">Count the commas: 3 values → <b>2</b> commas.</p>
+    <p class="bilingual">값 사이마다 쉼표를 꼭 넣어요</p>
+  </div>
+
+  <!-- 25 · SLOT 25: Common Mistake 2 — mismatched paren (his own △) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The paren that never closed</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre style="font-size:clamp(12px,2vmin,22px)">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span></pre>
+        <p>One <code>(</code> open, none closed.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre style="font-size:clamp(12px,2vmin,22px)">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</pre>
+        <p>Every <code>(</code> gets a <code>)</code>.</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">Habit: type <code>()</code> first, then fill the middle.</p>
+    <p class="bilingual">괄호는 열면 바로 닫아요</p>
+  </div>
+
+  <!-- 26 · SLOT 26: Quick quiz -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">In <code>def make_tree(x):</code> — what is <code>x</code> called?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">A parameter (매개변수). The empty slot.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">In <code>make_tree(11)</code> — what is <code>11</code> called?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">An argument (인자). The value you hand in.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 27 · SLOT 27: Concept — x and z, the two ground directions -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Concept</div>
+    <h2>Two numbers pick a floor tile</h2>
+    <svg viewBox="0 0 460 300" style="width:min(62vmin,620px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#2b3547" stroke-width="1" fill="none">
+        <rect x="60" y="40" width="360" height="216"/>
+        <path d="M132,40 L132,256 M204,40 L204,256 M276,40 L276,256 M348,40 L348,256"/>
+        <path d="M60,94 L420,94 M60,148 L420,148 M60,202 L420,202"/>
+      </g>
+      <text x="96" y="30" font-family="monospace" font-size="16" fill="#8b5cf6" text-anchor="middle">x 1</text>
+      <text x="168" y="30" font-family="monospace" font-size="16" fill="#8b5cf6" text-anchor="middle">x 11</text>
+      <text x="240" y="30" font-family="monospace" font-size="16" fill="#8b5cf6" text-anchor="middle">x 21</text>
+      <text x="312" y="30" font-family="monospace" font-size="16" fill="#8b5cf6" text-anchor="middle">x 31</text>
+      <text x="44" y="72" font-family="monospace" font-size="16" fill="#f1fa8c" text-anchor="end">z 1</text>
+      <text x="44" y="126" font-family="monospace" font-size="16" fill="#f1fa8c" text-anchor="end">z 11</text>
+      <text x="44" y="180" font-family="monospace" font-size="16" fill="#f1fa8c" text-anchor="end">z 21</text>
+      <circle cx="96" cy="67" r="16" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <circle cx="168" cy="121" r="16" fill="#2f5d34" stroke="#0a0d13" stroke-width="2"/>
+      <text x="240" y="288" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">top-down view · x across, z down</text>
+    </svg>
+  </div>
+
+  <!-- 28 · SLOT 28: STEP 6 / 21 — add z -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Step 6 / 21 · ✋ you type first<span class="activity-tag">v3</span></div>
+    <p class="practice-task">🔍 <b>FIND ①</b> <code>def make_tree(x):</code> &nbsp; <b>②</b> <code>make_tree(1)</code> and <code>make_tree(11)</code><br>📍 ① indent <b>0</b> &nbsp;·&nbsp; ② inside <code>on_forest</code>, indent <b>4</b></p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad"><span class="kw">def</span> <span class="fn">make_tree</span>(x):<span class="mk old">OLD ①</span></span><span class="hot"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z):<span class="mk">NEW ①</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>(<span class="num">1</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>)<span class="mk old">OLD ②</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>)</span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>)<span class="mk">NEW ②</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> a second slot, so the caller picks depth too.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → the same two trees. Nothing moved yet.</span></p>
+  </div>
+
+  <!-- 29 · SLOT 29: STEP 7 / 21 — delete z = 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Step 7 / 21 · ✋ you type first<span class="activity-tag">v3</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    z = 1</code> — the line under <code>def make_tree(x, z):</code><br>📍 Indent <b>4</b>. <b>Delete the whole line.</b></p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z):</span><span class="bad">    z = <span class="num">1</span><span class="mk old">DELETE</span></span><span class="dim">    <span class="fn">blocks.fill</span>(<span class="str">OAK_LOG</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x, <span class="num">4</span>, z))</span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z):</span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">OAK_LOG</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x, <span class="num">4</span>, z))</span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> same trap as <code>x</code>. It would bin every z you send.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → still two trees in a straight line.</span></p>
+  </div>
+
+  <!-- 30 · SLOT 30: STEP 8 / 21 — move the second tree in z -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">Step 8 / 21 · ✋ you type first<span class="activity-tag">v3</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    make_tree(11, 1)</code><br>📍 Same line, indent <b>4</b>. Change the <b>second</b> number only.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>)<span class="mk old">OLD</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> proof that the second slot really steers z.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → tree 2 slides 10 blocks back — no longer in line with tree 1.</span></p>
+  </div>
+
+  <!-- 31 · SLOT 31: top-down map of the two trees -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">v3 · what you see</div>
+    <h2>Two numbers, two spots</h2>
+    <svg viewBox="0 0 460 280" style="width:min(60vmin,600px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#2b3547" stroke-width="1" fill="none">
+        <rect x="70" y="30" width="340" height="200"/>
+        <path d="M155,30 L155,230 M240,30 L240,230 M325,30 L325,230"/>
+        <path d="M70,80 L410,80 M70,130 L410,130 M70,180 L410,180"/>
+      </g>
+      <text x="112" y="22" font-family="monospace" font-size="15" fill="#8b5cf6" text-anchor="middle">x 1</text>
+      <text x="197" y="22" font-family="monospace" font-size="15" fill="#8b5cf6" text-anchor="middle">x 11</text>
+      <text x="56" y="60" font-family="monospace" font-size="15" fill="#f1fa8c" text-anchor="end">z 1</text>
+      <text x="56" y="160" font-family="monospace" font-size="15" fill="#f1fa8c" text-anchor="end">z 11</text>
+      <circle cx="112" cy="55" r="15" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="112" y="255" font-family="monospace" font-size="15" fill="#8a97b8" text-anchor="middle">(1, 1)</text>
+      <circle cx="197" cy="155" r="15" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="240" y="200" font-family="monospace" font-size="15" fill="#8a97b8" text-anchor="middle">(11, 11)</text>
+      <text x="240" y="274" font-family="sans-serif" font-size="17" font-weight="700" fill="#50fa7b" text-anchor="middle">first number = x · second number = z</text>
+    </svg>
+  </div>
+
+  <!-- 32 · SLOT 32: Trace activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Which slot gets which value?</h2>
+    <p style="font-size:clamp(14px,2.2vmin,20px);color:var(--com)"><code>def make_tree(x, z):</code></p>
+    <div class="trace-grid">
+      <div class="cell head"><code>call line</code></div>
+      <div class="cell head"><code>x</code></div>
+      <div class="cell head"><code>z</code></div>
+
+      <div class="cell"><code>make_tree(1, 1)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell"><code>make_tree(11, 11)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+
+      <div class="cell"><code>make_tree(31, 1)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">31</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell"><code>make_tree(1, 31)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">31</span></details></div>
+    </div>
+    <p style="margin-top:.4em;font-size:clamp(14px,2.2vmin,20px)">Write both columns first. Then tap.</p>
+  </div>
+
+  <!-- 33 · SLOT 33: Concept — a slot can hold a block -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">Concept</div>
+    <h2>A slot holds anything</h2>
+    <div class="iter-row" style="margin:.6em 0">
+      <div class="iter-item" style="color:var(--num)">21</div>
+      <div class="iter-item" style="color:var(--str)">CHERRY_LEAVES</div>
+      <div class="iter-item" style="color:var(--str)">DARK_OAK_LEAVES</div>
+    </div>
+    <svg viewBox="0 0 600 120" style="width:min(80vmin,860px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <path d="M300,4 L300,32" stroke="#8b5cf6" stroke-width="3"/><polygon points="294,32 306,32 300,46" fill="#8b5cf6"/>
+      <rect x="60" y="52" width="480" height="52" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="300" y="87" font-family="monospace" font-size="22" fill="#ff79c6" text-anchor="middle">def make_tree(x, z, <tspan fill="#38d0e0">leaf</tspan>):</text>
+    </svg>
+    <p style="margin-top:.4em">A number, or a block name. The slot does not care.</p>
+    <p class="bilingual">슬롯에는 숫자도, 블록 이름도 들어가요</p>
+  </div>
+
+  <!-- 34 · SLOT 34: STEP 9 / 21 — add the leaf parameter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">Step 9 / 21 · ✋ you type first<span class="activity-tag">v4</span></div>
+    <p class="practice-task">🔍 <b>FIND ①</b> <code>def make_tree(x, z):</code> &nbsp; <b>②</b> <code>make_tree(1, 1)</code> and <code>make_tree(11, 11)</code><br>📍 ① indent <b>0</b> &nbsp;·&nbsp; ② indent <b>4</b>, inside <code>on_forest</code></p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z):<span class="mk old">OLD ①</span></span><span class="hot"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z, leaf):<span class="mk">NEW ①</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>)<span class="mk old">OLD ②</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>, <span class="str">CHERRY_LEAVES</span>)<span class="mk">NEW ②</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> open the third slot before anything uses it.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → the same two cherry trees.</span></p>
+  </div>
+
+  <!-- 35 · SLOT 35: STEP 10 / 21 — use leaf inside -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">Step 10 / 21 · ✋ you type first<span class="activity-tag">v4</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    blocks.fill(CHERRY_LEAVES,</code><br>📍 Inside <code>make_tree</code>, indent <b>4</b>. Swap one word.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">blocks.fill</span>(<span class="str">CHERRY_LEAVES</span>,<span class="mk old">OLD</span></span><span class="dim">        <span class="fn">pos</span>(x - <span class="num">1</span>, <span class="num">5</span>, z - <span class="num">1</span>), <span class="fn">pos</span>(x + <span class="num">1</span>, <span class="num">6</span>, z + <span class="num">1</span>))</span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot">    <span class="fn">blocks.fill</span>(leaf,<span class="mk">NEW</span></span><span class="dim">        <span class="fn">pos</span>(x - <span class="num">1</span>, <span class="num">5</span>, z - <span class="num">1</span>), <span class="fn">pos</span>(x + <span class="num">1</span>, <span class="num">6</span>, z + <span class="num">1</span>))</span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> now the body uses the slot instead of one fixed block.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → still two cherry trees. Both callers said cherry.</span></p>
+  </div>
+
+  <!-- 36 · SLOT 36: STEP 11 / 21 — a different leaf -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">Step 11 / 21 · ✋ you type first<span class="activity-tag">v4</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    make_tree(11, 11, CHERRY_LEAVES)</code><br>📍 Same line, indent <b>4</b>. Change the <b>third</b> value only.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>, <span class="str">CHERRY_LEAVES</span>)<span class="mk old">OLD</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>, <span class="str">DARK_OAK_LEAVES</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> one function now grows two different species.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → one pink tree, one dark green tree.</span></p>
+  </div>
+
+  <!-- 37 · SLOT 37: same box, different leaf -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">v4 · what you see</div>
+    <h2>Same box. Different leaf.</h2>
+    <svg viewBox="0 0 560 195" style="width:min(78vmin,860px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="150" width="560" height="12" fill="#33502e"/>
+      <rect x="94" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="74" y="46" width="52" height="46" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="100" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">CHERRY_LEAVES</text>
+      <rect x="374" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="354" y="46" width="52" height="46" rx="10" fill="#2f5d34" stroke="#0a0d13" stroke-width="2"/>
+      <text x="380" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">DARK_OAK_LEAVES</text>
+    </svg>
+    <p class="bilingual">같은 함수, 다른 잎</p>
+  </div>
+
+  <!-- 38 · SLOT 38: Concept — the slots fill in order -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">Concept</div>
+    <h2>Order decides everything</h2>
+    <svg viewBox="0 0 620 210" style="width:min(84vmin,900px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="30" font-family="monospace" font-size="19" fill="#50fa7b">make_tree(1, 21, cherry)</text>
+      <path d="M60,42 L60,74" stroke="#f1fa8c" stroke-width="3"/><polygon points="54,74 66,74 60,86" fill="#f1fa8c"/>
+      <path d="M160,42 L160,74" stroke="#f1fa8c" stroke-width="3"/><polygon points="154,74 166,74 160,86" fill="#f1fa8c"/>
+      <rect x="20" y="90" width="80" height="38" rx="19" fill="#fff"/>
+      <text x="60" y="116" font-family="monospace" font-size="19" font-weight="800" fill="#1a1a1a" text-anchor="middle">x=1</text>
+      <rect x="120" y="90" width="90" height="38" rx="19" fill="#fff"/>
+      <text x="165" y="116" font-family="monospace" font-size="19" font-weight="800" fill="#1a1a1a" text-anchor="middle">z=21</text>
+      <text x="20" y="168" font-family="sans-serif" font-size="17" font-weight="700" fill="#38d0e0">near you, far to the side</text>
+      <text x="330" y="30" font-family="monospace" font-size="19" fill="#50fa7b">make_tree(21, 1, cherry)</text>
+      <path d="M375,42 L375,74" stroke="#f1fa8c" stroke-width="3"/><polygon points="369,74 381,74 375,86" fill="#f1fa8c"/>
+      <path d="M478,42 L478,74" stroke="#f1fa8c" stroke-width="3"/><polygon points="472,74 484,74 478,86" fill="#f1fa8c"/>
+      <rect x="330" y="90" width="90" height="38" rx="19" fill="#fff"/>
+      <text x="375" y="116" font-family="monospace" font-size="19" font-weight="800" fill="#1a1a1a" text-anchor="middle">x=21</text>
+      <rect x="438" y="90" width="80" height="38" rx="19" fill="#fff"/>
+      <text x="478" y="116" font-family="monospace" font-size="19" font-weight="800" fill="#1a1a1a" text-anchor="middle">z=1</text>
+      <text x="330" y="168" font-family="sans-serif" font-size="17" font-weight="700" fill="#8b5cf6">far away, right in front</text>
+      <text x="310" y="200" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">same three values · swapped order · different tree</text>
+    </svg>
+  </div>
+
+  <!-- 39 · SLOT 39: Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>make_tree</code> has <span class="blank"></span> parameters. I called it with <span class="blank"></span>, so the tree grows at <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Stuck? Pick one — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+    </div>
+  </div>
+
+  <!-- 40 · SLOT 40: STEP 12 / 21 — a row of four -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill">Step 12 / 21 · ✋ you type first<span class="activity-tag">v4</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    make_tree(11, 11, DARK_OAK_LEAVES)</code><br>📍 Change that line, then add two lines under it. All indent <b>4</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">11</span>, <span class="str">DARK_OAK_LEAVES</span>)<span class="mk old">OLD</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>, <span class="str">DARK_OAK_LEAVES</span>)<span class="mk">NEW</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">21</span>, <span class="num">1</span>, <span class="str">PALE_OAK_LEAVES</span>)<span class="mk">NEW</span></span><span class="hot">    <span class="fn">make_tree</span>(<span class="num">31</span>, <span class="num">1</span>, <span class="str">OAK_LEAVES</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> four orders, one builder. Your 08-27 leaf types, all four.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → a straight row of four trees, four colours.</span></p>
+  </div>
+
+  <!-- 41 · SLOT 41: the row of four -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="pill">v4 · what you see</div>
+    <h2>A row of four 🌸🌲🌿🍃</h2>
+    <svg viewBox="0 0 560 195" style="width:min(84vmin,940px);height:auto;display:block;margin:.3em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="150" width="560" height="12" fill="#33502e"/>
+      <rect x="64" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="44" y="46" width="52" height="46" rx="10" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <text x="70" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 1</text>
+      <rect x="194" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="174" y="46" width="52" height="46" rx="10" fill="#2f5d34" stroke="#0a0d13" stroke-width="2"/>
+      <text x="200" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 11</text>
+      <rect x="324" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="304" y="46" width="52" height="46" rx="10" fill="#b9c8a0" stroke="#0a0d13" stroke-width="2"/>
+      <text x="330" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 21</text>
+      <rect x="454" y="88" width="12" height="62" fill="#7a5230"/>
+      <rect x="434" y="46" width="52" height="46" rx="10" fill="#4d8b3b" stroke="#0a0d13" stroke-width="2"/>
+      <text x="460" y="182" font-family="monospace" font-size="17" fill="#8a97b8" text-anchor="middle">x 31</text>
+    </svg>
+    <p style="margin-top:.2em">Four call lines. Notice: only <b>one number</b> changes each time.</p>
+  </div>
+
+  <!-- 42 · SLOT 42: Concept — range(4) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="pill">Watch it! 👀</div>
+    <h2><code>range(4)</code> counts the passes</h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">0</div><div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div>
+      </div>
+      <div class="var-row"><span class="label">i = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ the loop body runs</div>
+        <div class="out-line">pass 1</div>
+        <div class="out-line">pass 2</div>
+        <div class="out-line">pass 3</div>
+        <div class="out-line">pass 4</div>
+      </div>
+    </div>
+    <p style="margin-top:.3em"><code>range(4)</code> → four passes. The count starts at 0.</p>
+    <p class="bilingual">range(4)는 네 번 반복해요</p>
+  </div>
+
+  <!-- 43 · SLOT 43: MANDATED per-pass frames of the forest loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">Concept</div>
+    <h2>One call per pass</h2>
+    <svg viewBox="0 0 660 210" style="width:min(90vmin,1000px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <rect x="8" y="8" width="150" height="170" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="83" y="34" font-family="monospace" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0 · x = 1</text>
+        <rect x="20" y="150" width="126" height="8" fill="#33502e"/>
+        <rect x="77" y="112" width="10" height="38" fill="#7a5230"/>
+        <rect x="60" y="84" width="44" height="32" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+        <text x="83" y="172" font-family="monospace" font-size="14" fill="#8a97b8" text-anchor="middle">make_tree(1, ...)</text>
+      </g>
+      <g>
+        <rect x="176" y="8" width="150" height="170" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="251" y="34" font-family="monospace" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1 · x = 11</text>
+        <rect x="188" y="150" width="126" height="8" fill="#33502e"/>
+        <rect x="245" y="112" width="10" height="38" fill="#7a5230"/>
+        <rect x="228" y="84" width="44" height="32" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+        <text x="251" y="172" font-family="monospace" font-size="14" fill="#8a97b8" text-anchor="middle">make_tree(11, ...)</text>
+      </g>
+      <g>
+        <rect x="344" y="8" width="150" height="170" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="419" y="34" font-family="monospace" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2 · x = 21</text>
+        <rect x="356" y="150" width="126" height="8" fill="#33502e"/>
+        <rect x="413" y="112" width="10" height="38" fill="#7a5230"/>
+        <rect x="396" y="84" width="44" height="32" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+        <text x="419" y="172" font-family="monospace" font-size="14" fill="#8a97b8" text-anchor="middle">make_tree(21, ...)</text>
+      </g>
+      <g>
+        <rect x="512" y="8" width="150" height="170" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="587" y="34" font-family="monospace" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 3 · x = 31</text>
+        <rect x="524" y="150" width="126" height="8" fill="#33502e"/>
+        <rect x="581" y="112" width="10" height="38" fill="#7a5230"/>
+        <rect x="564" y="84" width="44" height="32" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+        <text x="587" y="172" font-family="monospace" font-size="14" fill="#8a97b8" text-anchor="middle">make_tree(31, ...)</text>
+      </g>
+      <text x="330" y="202" font-family="sans-serif" font-size="17" font-weight="700" fill="#50fa7b" text-anchor="middle">x grows by 10 at the end of every pass</text>
+    </svg>
+  </div>
+
+  <!-- 44 · SLOT 44: STEP 13 / 21 — the forest loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">Step 13 / 21 · ✋ you type first<span class="activity-tag">v5</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>make_tree(1, 1, CHERRY_LEAVES)</code> and the three lines under it<br>📍 Delete all four. Type these instead. Indents: <b>4</b>, <b>4</b>, <b>8</b>, <b>8</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">    <span class="fn">make_tree</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">11</span>, <span class="num">1</span>, <span class="str">DARK_OAK_LEAVES</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">21</span>, <span class="num">1</span>, <span class="str">PALE_OAK_LEAVES</span>)</span><span class="bad">    <span class="fn">make_tree</span>(<span class="num">31</span>, <span class="num">1</span>, <span class="str">OAK_LEAVES</span>)<span class="mk old">OLD</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot">    x = <span class="num">1</span><span class="mk">NEW</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):<span class="mk">NEW</span></span><span class="hot">        <span class="fn">make_tree</span>(x, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)<span class="mk">NEW</span></span><span class="hot">        x += <span class="num">10</span><span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> your own <code>x += 10</code> habit, now doing the counting.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four cherry trees at x 1, 11, 21, 31.</span></p>
+  </div>
+
+  <!-- 45 · SLOT 45: Trace the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>What is <code>x</code> each pass?</h2>
+    <p style="font-size:clamp(14px,2.2vmin,20px);color:var(--com)"><code>x = 1</code> before the loop · <code>x += 10</code> at the end of each pass</p>
+    <div class="trace-grid">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head"><code>x</code> when make_tree runs</div>
+      <div class="cell head"><code>x</code> after <code>+= 10</code></div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">21</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">21</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">31</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">31</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">41</span></details></div>
+    </div>
+  </div>
+
+  <!-- 46 · SLOT 46: Quick quiz 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">Change <code>range(4)</code> to <code>range(6)</code>. How many trees? Where is the last one?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">6 trees. Last at x = 51.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">Move <code>x += 10</code> out of the loop, to indent 4. What happens?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">All four land on x = 1, stacked up.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 47 · SLOT 47: Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">✋ your turn — teacher waits</div>
+    <h2>Your forest 🌲</h2>
+    <ul class="check-list">
+      <li>Change <code>range(4)</code> to <code>range(8)</code>. Run <code>forest</code>.</li>
+      <li>Change <code>x += 10</code> to <code>x += 5</code>. Run again.</li>
+      <li>Change <code>CHERRY_LEAVES</code> to <code>PALE_OAK_LEAVES</code>. Run again.</li>
+      <li>Add <code>make_tree(1, 21, OAK_LEAVES)</code> after the loop.</li>
+    </ul>
+    <p style="margin-top:.3em">One change. One run. Say what you expect first.</p>
+  </div>
+
+  <!-- 48 · SLOT 48: Concept — a function can answer back -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A function can answer back 📤</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">x = make_tree(<span class="arg">1</span>, 1, CHERRY_LEAVES)</span>
+        <span class="fn-result">→ <span class="rv">11</span></span>
+      </div>
+      <div class="fn-flow-down">↓ call</div>
+      <div class="fn-body">
+        <div class="fn-sig">def make_tree(<span class="param">x</span>, z, leaf):</div>
+        <div class="fn-line">return <span class="param-use">x</span> + 10</div>
+      </div>
+      <div class="fn-flow-up">↑ hands 11 back</div>
+    </div>
+    <p style="margin-top:.3em"><code>return</code> sends one value out of the function.</p>
+    <p class="bilingual">return은 값을 밖으로 돌려줘요</p>
+  </div>
+
+  <!-- 49 · SLOT 49: STEP 14 / 21 — add return -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="pill">Step 14 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>        pos(x - 1, 5, z - 1), pos(x + 1, 6, z + 1))</code><br>📍 One new line <b>under</b> it. Indent <b>4</b> — line up with <code>blocks.fill</code>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim">    <span class="fn">blocks.fill</span>(leaf,</span><span class="dim">        <span class="fn">pos</span>(x - <span class="num">1</span>, <span class="num">5</span>, z - <span class="num">1</span>), <span class="fn">pos</span>(x + <span class="num">1</span>, <span class="num">6</span>, z + <span class="num">1</span>))</span><span class="hot">    <span class="kw">return</span> x + <span class="num">10</span><span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> the function now says where the <b>next</b> tree should go.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four trees, exactly as before. Nobody catches the answer yet.</span></p>
+  </div>
+
+  <!-- 50 · SLOT 50: STEP 15 / 21 — catch the answer -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 50</span>
+    <div class="pill">Step 15 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>        make_tree(x, 1, CHERRY_LEAVES)</code> and the <code>x += 10</code> under it<br>📍 Both inside the loop, indent <b>8</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">        <span class="fn">make_tree</span>(x, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)</span><span class="bad">        x += <span class="num">10</span><span class="mk old">OLD</span></span></pre>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> the returned value <b>is</b> the next x. Two lines become one.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → the same four trees at 1, 11, 21, 31.</span></p>
+  </div>
+
+  <!-- 51 · SLOT 51: the return feeding x -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 51</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The answer becomes the next order</h2>
+    <svg viewBox="0 0 640 210" style="width:min(86vmin,940px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="16" y="70" width="120" height="52" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="76" y="103" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c" text-anchor="middle">x = 1</text>
+      <path d="M140,96 L182,96" stroke="#38d0e0" stroke-width="3"/><polygon points="182,89 196,96 182,103" fill="#38d0e0"/>
+      <rect x="202" y="70" width="150" height="52" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="277" y="103" font-family="monospace" font-size="18" fill="#50fa7b" text-anchor="middle">make_tree(x, ...)</text>
+      <path d="M356,96 L398,96" stroke="#50fa7b" stroke-width="3"/><polygon points="398,89 412,96 398,103" fill="#50fa7b"/>
+      <text x="378" y="80" font-family="monospace" font-size="15" fill="#50fa7b" text-anchor="middle">return</text>
+      <rect x="418" y="70" width="120" height="52" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="478" y="103" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c" text-anchor="middle">x = 11</text>
+      <path d="M478,128 C478,180 76,180 76,130" stroke="#8b5cf6" stroke-width="3" fill="none" stroke-dasharray="7 6"/>
+      <polygon points="70,130 82,130 76,118" fill="#8b5cf6"/>
+      <text x="300" y="200" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">next pass starts with the value that came back</text>
+    </svg>
+  </div>
+
+  <!-- 52 · SLOT 52: Concept — a slot with a spare value -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 52</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A slot with a spare inside</h2>
+    <svg viewBox="0 0 620 210" style="width:min(84vmin,900px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="30" width="580" height="56" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="36" y="67" font-family="monospace" font-size="20" fill="#ff79c6">def make_tree(x, z, <tspan fill="#38d0e0">leaf</tspan>=<tspan fill="#f1fa8c">CHERRY_LEAVES</tspan>):</text>
+      <rect x="20" y="118" width="270" height="50" rx="10" fill="#141b27" stroke="#8a97b8" stroke-width="2"/>
+      <text x="155" y="149" font-family="monospace" font-size="18" fill="#50fa7b" text-anchor="middle">make_tree(1, 1)</text>
+      <text x="155" y="192" font-family="sans-serif" font-size="17" font-weight="700" fill="#f1fa8c" text-anchor="middle">leaf = CHERRY_LEAVES</text>
+      <rect x="330" y="118" width="270" height="50" rx="10" fill="#141b27" stroke="#8a97b8" stroke-width="2"/>
+      <text x="465" y="149" font-family="monospace" font-size="16" fill="#50fa7b" text-anchor="middle">make_tree(1, 1, OAK_LEAVES)</text>
+      <text x="465" y="192" font-family="sans-serif" font-size="17" font-weight="700" fill="#f1fa8c" text-anchor="middle">leaf = OAK_LEAVES</text>
+    </svg>
+    <p style="margin-top:.2em">Skip the value and the spare is used. Send one and it wins.</p>
+    <p class="bilingual">기본값 — 안 주면 준비된 값을 써요</p>
+  </div>
+
+  <!-- 53 · SLOT 53: STEP 16 / 21 — default value -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 53</span>
+    <div class="pill">Step 16 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>def make_tree(x, z, leaf):</code><br>📍 File line <b>1</b>, indent <b>0</b>. Add <code>=CHERRY_LEAVES</code> after <code>leaf</code>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z, leaf):<span class="mk old">OLD</span></span><span class="hot"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z, leaf=<span class="str">CHERRY_LEAVES</span>):<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> the third value becomes optional, not required.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four cherry trees, exactly as before.</span></p>
+  </div>
+
+  <!-- 54 · SLOT 54: STEP 17 / 21 — call without the leaf -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 54</span>
+    <div class="pill">Step 17 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>        x = make_tree(x, 1, CHERRY_LEAVES)</code><br>📍 Inside the loop, indent <b>8</b>. Drop the third value.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>, <span class="str">CHERRY_LEAVES</span>)<span class="mk old">OLD</span></span><span class="hot">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> shorter to type, and the spare fills the slot for you.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four cherry trees. Identical picture, shorter line.</span></p>
+  </div>
+
+  <!-- 55 · SLOT 55: rule — default slots go last -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 55</span>
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spares go at the end</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre style="font-size:clamp(11px,1.9vmin,20px)"><span class="kw">def</span> <span class="fn">make_tree</span>(leaf=<span class="str">OAK_LEAVES</span>, x, z):</pre>
+        <p>Python cannot tell where the plain slots start.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre style="font-size:clamp(11px,1.9vmin,20px)"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z, leaf=<span class="str">OAK_LEAVES</span>):</pre>
+        <p>Plain slots first. Spares last.</p>
+      </div>
+    </div>
+    <p class="bilingual">기본값이 있는 슬롯은 항상 뒤에</p>
+  </div>
+
+  <!-- 56 · SLOT 56: Concept — same shape, new function -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 56</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Same shape, new builder 🏠</h2>
+    <svg viewBox="0 0 620 220" style="width:min(84vmin,900px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="270" height="120" rx="14" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="155" y="56" font-family="monospace" font-size="17" fill="#ff79c6" text-anchor="middle">def make_tree(x, z, leaf)</text>
+      <rect x="149" y="104" width="10" height="30" fill="#7a5230"/>
+      <rect x="133" y="76" width="42" height="30" rx="8" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="330" y="20" width="270" height="120" rx="14" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="465" y="56" font-family="monospace" font-size="17" fill="#ff79c6" text-anchor="middle">def make_house(x, z)</text>
+      <rect x="437" y="94" width="56" height="40" fill="#b98a54" stroke="#0a0d13" stroke-width="2"/>
+      <polygon points="429,94 501,94 465,68" fill="#8a4b32" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="457" y="108" width="16" height="16" fill="#7fd6f2" stroke="#0a0d13" stroke-width="2"/>
+      <text x="310" y="180" font-family="sans-serif" font-size="19" font-weight="700" fill="#50fa7b" text-anchor="middle">two slots, two numbers, one build — same idea</text>
+      <text x="310" y="208" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">learn the pattern once, reuse it forever</text>
+    </svg>
+  </div>
+
+  <!-- 57 · SLOT 57: STEP 18 / 21 — define make_house -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 57</span>
+    <div class="pill">Step 18 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>def on_forest():</code><br>📍 The new function goes <b>ABOVE</b> it. Indents <b>0</b> then <b>4</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="hot"><span class="kw">def</span> <span class="fn">make_house</span>(x, z):<span class="mk">NEW</span></span><span class="hot">    <span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>,</span><span class="hot">        <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x + <span class="num">4</span>, <span class="num">3</span>, z + <span class="num">4</span>))</span><span class="hot">    <span class="fn">blocks.place</span>(<span class="str">GLASS</span>, <span class="fn">pos</span>(x + <span class="num">2</span>, <span class="num">2</span>, z))</span><span class="hot"> </span><span class="dim"><span class="kw">def</span> <span class="fn">on_forest</span>():</span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> a second builder, built the same way as the first.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four trees, no house yet. Nobody called it.</span></p>
+  </div>
+
+  <!-- 58 · SLOT 58: STEP 19 / 21 — call make_house -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 58</span>
+    <div class="pill">Step 19 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>        x = make_tree(x, 1)</code><br>📍 One new line <b>under</b> the loop, indent <b>4</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):</span><span class="dim">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>)</span><span class="hot">    <span class="fn">make_house</span>(<span class="num">1</span>, <span class="num">11</span>)<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> indent <b>4</b> means it runs once, after all four trees.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four trees, then one wooden house behind.</span></p>
+  </div>
+
+  <!-- 59 · SLOT 59: the village -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 59</span>
+    <div class="pill">What you see<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A village map</h2>
+    <svg viewBox="0 0 460 280" style="width:min(60vmin,600px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="#2b3547" stroke-width="1" fill="none">
+        <rect x="60" y="30" width="360" height="200"/>
+        <path d="M150,30 L150,230 M240,30 L240,230 M330,30 L330,230"/>
+        <path d="M60,80 L420,80 M60,130 L420,130 M60,180 L420,180"/>
+      </g>
+      <text x="105" y="22" font-family="monospace" font-size="14" fill="#8b5cf6" text-anchor="middle">x 1</text>
+      <text x="195" y="22" font-family="monospace" font-size="14" fill="#8b5cf6" text-anchor="middle">x 11</text>
+      <text x="285" y="22" font-family="monospace" font-size="14" fill="#8b5cf6" text-anchor="middle">x 21</text>
+      <text x="375" y="22" font-family="monospace" font-size="14" fill="#8b5cf6" text-anchor="middle">x 31</text>
+      <text x="48" y="60" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="end">z 1</text>
+      <text x="48" y="160" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="end">z 11</text>
+      <circle cx="105" cy="55" r="14" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <circle cx="195" cy="55" r="14" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <circle cx="285" cy="55" r="14" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <circle cx="375" cy="55" r="14" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+      <rect x="86" y="136" width="52" height="48" fill="#b98a54" stroke="#0a0d13" stroke-width="2"/>
+      <text x="112" y="208" font-family="monospace" font-size="14" fill="#8a97b8" text-anchor="middle">make_house(1, 11)</text>
+      <text x="240" y="266" font-family="sans-serif" font-size="17" font-weight="700" fill="#50fa7b" text-anchor="middle">two functions, one chat command</text>
+    </svg>
+  </div>
+
+  <!-- 60 · SLOT 60: Concept — a list of leaves, picked by index -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 60</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your 08-27 list, feeding the slot</h2>
+    <div class="viz viz-index">
+      <div class="iter-row">
+        <div class="iter-item">CHERRY</div><div class="iter-item">DARK_OAK</div><div class="iter-item">PALE_OAK</div><div class="iter-item">OAK</div>
+      </div>
+      <div class="idx-expr"><span class="idx-name">leaves_type</span>[<span class="idx-num"><span>0</span><span>1</span><span>2</span><span>3</span></span>]</div>
+      <div class="output-box">
+        <div class="out-label">▸ goes into the leaf slot</div>
+        <div class="out-line">CHERRY_LEAVES</div>
+        <div class="out-line">DARK_OAK_LEAVES</div>
+        <div class="out-line">PALE_OAK_LEAVES</div>
+        <div class="out-line">OAK_LEAVES</div>
+      </div>
+    </div>
+    <p style="margin-top:.3em"><code>i</code> is already counting 0, 1, 2, 3. Use it as the slot number.</p>
+  </div>
+
+  <!-- 61 · SLOT 61: STEP 20 / 21 — the list -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 61</span>
+    <div class="pill">Step 20 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>    x = 1</code> inside <code>on_forest</code><br>📍 Two new lines <b>ABOVE</b> it. Indent <b>4</b>, then <b>8</b>.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="dim"><span class="kw">def</span> <span class="fn">on_forest</span>():</span><span class="hot">    leaves_type = [<span class="str">CHERRY_LEAVES</span>, <span class="str">DARK_OAK_LEAVES</span>,<span class="mk">NEW</span></span><span class="hot">        <span class="str">PALE_OAK_LEAVES</span>, <span class="str">OAK_LEAVES</span>]<span class="mk">NEW</span></span><span class="dim">    x = <span class="num">1</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> your 08-27 list, four types, in order.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four cherry trees still. The list is not used yet.</span></p>
+  </div>
+
+  <!-- 62 · SLOT 62: STEP 21 / 21 — index into the list -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 62</span>
+    <div class="pill">Step 21 / 21 · ✋ you type first<span class="activity-tag">OPTIONAL</span></div>
+    <p class="practice-task">🔍 <b>FIND</b> <code>        x = make_tree(x, 1)</code><br>📍 Inside the loop, indent <b>8</b>. Add a third value.</p>
+<pre style="font-size:clamp(12px,2.1vmin,24px)"><span class="bad">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>)<span class="mk old">OLD</span></span><span class="hot">        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>, leaves_type[i])<span class="mk">NEW</span></span></pre>
+    <p style="margin-top:.4em">🟣 <b>Why:</b> pass 0 takes slot 0, pass 1 takes slot 1. <code>i</code> does both jobs.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:.95"><span class="fn">✅ Chat <code>forest</code> → four trees, four different leaf colours, in a row.</span></p>
+  </div>
+
+  <!-- 63 · SLOT 63: per-pass frames with the leaf list -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 63</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One <code>i</code>, two jobs</h2>
+    <svg viewBox="0 0 660 200" style="width:min(90vmin,1000px);height:auto;display:block;margin:.2em auto" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <rect x="8" y="8" width="150" height="160" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="83" y="32" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+        <text x="83" y="54" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="middle">x 1 · slot 0</text>
+        <rect x="20" y="142" width="126" height="8" fill="#33502e"/>
+        <rect x="77" y="108" width="10" height="34" fill="#7a5230"/>
+        <rect x="60" y="80" width="44" height="32" rx="9" fill="#f4a3c8" stroke="#0a0d13" stroke-width="2"/>
+        <text x="83" y="164" font-family="monospace" font-size="13" fill="#8a97b8" text-anchor="middle">CHERRY</text>
+      </g>
+      <g>
+        <rect x="176" y="8" width="150" height="160" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="251" y="32" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+        <text x="251" y="54" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="middle">x 11 · slot 1</text>
+        <rect x="188" y="142" width="126" height="8" fill="#33502e"/>
+        <rect x="245" y="108" width="10" height="34" fill="#7a5230"/>
+        <rect x="228" y="80" width="44" height="32" rx="9" fill="#2f5d34" stroke="#0a0d13" stroke-width="2"/>
+        <text x="251" y="164" font-family="monospace" font-size="13" fill="#8a97b8" text-anchor="middle">DARK_OAK</text>
+      </g>
+      <g>
+        <rect x="344" y="8" width="150" height="160" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="419" y="32" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+        <text x="419" y="54" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="middle">x 21 · slot 2</text>
+        <rect x="356" y="142" width="126" height="8" fill="#33502e"/>
+        <rect x="413" y="108" width="10" height="34" fill="#7a5230"/>
+        <rect x="396" y="80" width="44" height="32" rx="9" fill="#b9c8a0" stroke="#0a0d13" stroke-width="2"/>
+        <text x="419" y="164" font-family="monospace" font-size="13" fill="#8a97b8" text-anchor="middle">PALE_OAK</text>
+      </g>
+      <g>
+        <rect x="512" y="8" width="150" height="160" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+        <text x="587" y="32" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 3</text>
+        <text x="587" y="54" font-family="monospace" font-size="14" fill="#f1fa8c" text-anchor="middle">x 31 · slot 3</text>
+        <rect x="524" y="142" width="126" height="8" fill="#33502e"/>
+        <rect x="581" y="108" width="10" height="34" fill="#7a5230"/>
+        <rect x="564" y="80" width="44" height="32" rx="9" fill="#4d8b3b" stroke="#0a0d13" stroke-width="2"/>
+        <text x="587" y="164" font-family="monospace" font-size="13" fill="#8a97b8" text-anchor="middle">OAK</text>
+      </g>
+      <text x="330" y="192" font-family="sans-serif" font-size="17" font-weight="700" fill="#50fa7b" text-anchor="middle">i picks the spot and the leaf at the same time</text>
+    </svg>
+  </div>
+
+  <!-- 64 · SLOT 64: Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 64</span>
+    <div class="pill">Stretch 🚀<span class="activity-tag">OPTIONAL</span></div>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add a fourth slot: <code>def make_tree(x, z, leaf, trunk)</code>. Pass <code>STONE</code> as the trunk.</div>
+      <div class="item"><span class="lvl">★★</span>Add <code>height</code> as a slot. Use it in <code>pos(x, height, z)</code> so trees vary.</div>
+      <div class="item"><span class="lvl">★★★</span>Put <code>make_house(x, 11)</code> inside the loop. Four trees, four houses.</div>
+      <div class="item"><span class="lvl">★★★</span>Loop <code>z</code> too, so the forest fills a square, not a line.</div>
+    </div>
+  </div>
+
+  <!-- 65 · SLOT 65: Full program -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 65</span>
+    <div class="pill">Full program<span class="activity-tag">OPTIONAL</span></div>
+<pre style="font-size:clamp(10px,1.75vmin,20px)"><span class="kw">def</span> <span class="fn">make_tree</span>(x, z, leaf=<span class="str">CHERRY_LEAVES</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">OAK_LOG</span>, <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x, <span class="num">4</span>, z))
+    <span class="fn">blocks.fill</span>(leaf,
+        <span class="fn">pos</span>(x - <span class="num">1</span>, <span class="num">5</span>, z - <span class="num">1</span>), <span class="fn">pos</span>(x + <span class="num">1</span>, <span class="num">6</span>, z + <span class="num">1</span>))
+    <span class="kw">return</span> x + <span class="num">10</span>
+
+<span class="kw">def</span> <span class="fn">make_house</span>(x, z):
+    <span class="fn">blocks.fill</span>(<span class="str">OAK_PLANKS</span>,
+        <span class="fn">pos</span>(x, <span class="num">0</span>, z), <span class="fn">pos</span>(x + <span class="num">4</span>, <span class="num">3</span>, z + <span class="num">4</span>))
+    <span class="fn">blocks.place</span>(<span class="str">GLASS</span>, <span class="fn">pos</span>(x + <span class="num">2</span>, <span class="num">2</span>, z))
+
+<span class="kw">def</span> <span class="fn">on_forest</span>():
+    leaves_type = [<span class="str">CHERRY_LEAVES</span>, <span class="str">DARK_OAK_LEAVES</span>,
+        <span class="str">PALE_OAK_LEAVES</span>, <span class="str">OAK_LEAVES</span>]
+    x = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+        x = <span class="fn">make_tree</span>(x, <span class="num">1</span>, leaves_type[i])
+    <span class="fn">make_house</span>(<span class="num">1</span>, <span class="num">11</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"forest"</span>, on_forest)</pre>
+    <p style="margin-top:.3em;font-size:clamp(14px,2.2vmin,20px)">Point at the three slots. Then point at the four values.</p>
+  </div>
+
+  <!-- 66 · SLOT 66: Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 66</span>
+    <div class="pill">Exit ticket</div>
+    <div class="exit">
+      <div class="label">Write it, then say it</div>
+      <p style="margin-top:.3em">Write the one call line that grows a dark oak tree at x 41, z 1.</p>
+      <details><summary>Show answer</summary>
+        <p style="margin-top:.3em"><code>make_tree(41, 1, DARK_OAK_LEAVES)</code></p>
+      </details>
+    </div>
+    <p class="bilingual">슬롯 순서: x, z, leaf</p>
+  </div>
+
+  <!-- 67 · SLOT 67: Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 67</span>
+    <div class="emoji">🌳</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One function.<br>A whole forest.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a slot that decides <span class="sub">if</span> a tree gets built at all.</p>
+    <p class="bilingual">다음 시간: 지을지 말지 정하는 조건</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 67</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

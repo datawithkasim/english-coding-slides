@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Make the Cat Jump (Serena · 2026-09-03)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.8em, 2.5vmin, 1.6em); justify-content: center;
+          flex-wrap: wrap; margin-top: .6em; }
+  .rd { text-align: center; }
+  .rl { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent);
+        font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Serena · Pygame Cat Platformer · 3 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Python · pygame</div>
+    <div class="emoji">🐱</div>
+    <h1>Make the<br>Cat Jump</h1>
+    <p class="line" style="margin-top:.4em">Your cat falls forever.<br>Today it <b>jumps</b>, then it <b>lands</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 gravity</span><span class="chip">v2 kick up</span><span class="chip">v3 floor</span><span class="chip">v4 on_ground</span><span class="chip">v5 platform</span>
+    </div>
+    <p class="bilingual">점프하고 바닥에 착지해요</p>
+  </div>
+
+  <!-- 2 · The hour -->
+  <div class="slide">
+    <div class="pill purple">The hour</div>
+    <h2>Short warm-up, long build</h2>
+    <div class="stage-bar" style="justify-content:flex-start">
+      <div class="step done"></div><div class="step current"></div>
+      <div class="step"></div><div class="step"></div><div class="step"></div>
+    </div>
+    <div class="topic-grid three" style="margin-top:.6em">
+      <div class="topic-chip"><div class="head">WARM-UP</div><div class="desc">the cat's box</div></div>
+      <div class="topic-chip purple"><div class="head">v2 · v3</div><div class="desc">jump and land</div></div>
+      <div class="topic-chip purple"><div class="head">v4</div><div class="desc">no flying</div></div>
+      <div class="topic-chip purple"><div class="head">v5</div><div class="desc">a platform</div></div>
+      <div class="topic-chip"><div class="head">BONUS</div><div class="desc">6 more ideas</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">14 steps. You type every one.</p>
+  </div>
+
+  <!-- 3 · Recap — Serena's own 27 August lesson -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Last time, your cat</h2>
+    <div class="recap-q">
+      <div class="q">1. Why two <code>if</code>s for the arrow keys, not <code>if</code> / <code>elif</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">Two <code>if</code>s let LEFT and UP both run — diagonal movement.</div></details>
+      <div class="q" style="margin-top:.4em">2. What does <code>cat_vel_y += cat_gravity</code> do each frame?</div>
+      <details><summary>Show answer</summary><div class="ans">Adds 1 to the falling speed. Every frame, forever.</div></details>
+      <div class="q" style="margin-top:.4em">3. Is <code>y = 50</code> high or low on the screen?</div>
+      <details><summary>Show answer</summary><div class="ans">High. Smaller y is higher up.</div></details>
+    </div>
+  </div>
+
+  <!-- 4 · Recap visual — the gravity she already wrote -->
+  <div class="slide">
+    <div class="pill">Recap 🎨</div>
+    <h2>Your two gravity lines</h2>
+<pre>    cat_vel_y += cat_gravity
+    cat_y += cat_vel_y</pre>
+    <svg viewBox="0 0 500 190" style="width:100%;max-height:38vh" aria-hidden="true">
+      <text x="8" y="26" fill="#8a97b8" font-size="17">frame</text>
+      <text x="8" y="76" fill="#8a97b8" font-size="17">cat_vel_y</text>
+      <text x="8" y="126" fill="#8a97b8" font-size="17">cat_y</text>
+      <text x="8" y="172" fill="#8a97b8" font-size="17">moved</text>
+      <text x="150" y="26" fill="#e8eef6" font-size="19">1</text>
+      <text x="230" y="26" fill="#e8eef6" font-size="19">2</text>
+      <text x="310" y="26" fill="#e8eef6" font-size="19">3</text>
+      <text x="390" y="26" fill="#e8eef6" font-size="19">4</text>
+      <text x="146" y="76" fill="#bd93f9" font-size="22">1</text>
+      <text x="226" y="76" fill="#bd93f9" font-size="22">2</text>
+      <text x="306" y="76" fill="#bd93f9" font-size="22">3</text>
+      <text x="386" y="76" fill="#bd93f9" font-size="22">4</text>
+      <text x="140" y="126" fill="#e8eef6" font-size="22">301</text>
+      <text x="220" y="126" fill="#e8eef6" font-size="22">303</text>
+      <text x="300" y="126" fill="#e8eef6" font-size="22">306</text>
+      <text x="380" y="126" fill="#e8eef6" font-size="22">310</text>
+      <text x="146" y="172" fill="#f1fa8c" font-size="19">1 px</text>
+      <text x="226" y="172" fill="#f1fa8c" font-size="19">2 px</text>
+      <text x="306" y="172" fill="#f1fa8c" font-size="19">3 px</text>
+      <text x="386" y="172" fill="#f1fa8c" font-size="19">4 px</text>
+    </svg>
+    <div class="why">🟣 Falls faster every frame. You explained this one yourself.</div>
+  </div>
+
+  <!-- 5 · WARM-UP · the box -->
+  <div class="slide">
+    <div class="pill">Warm-up 🎨</div>
+    <h2>Your cat is a box</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="160" y="60" width="180" height="130" fill="rgba(255,184,108,.28)" stroke="#ffb86c" stroke-width="3"/>
+      <text x="196" y="140" fill="#e8eef6" font-size="30">🐱</text>
+      <circle cx="160" cy="60" r="9" fill="#ff79c6"/>
+      <text x="18" y="40" fill="#ff79c6" font-size="20">cat_x, cat_y</text>
+      <text x="18" y="64" fill="#8a97b8" font-size="16">this ONE dot</text>
+      <line x1="160" y1="212" x2="340" y2="212" stroke="#38d0e0" stroke-width="3"/>
+      <text x="204" y="238" fill="#38d0e0" font-size="20">cat_width</text>
+      <line x1="366" y1="60" x2="366" y2="190" stroke="#bd93f9" stroke-width="3"/>
+      <text x="378" y="130" fill="#bd93f9" font-size="20">cat_height</text>
+    </svg>
+    <div class="why">🟣 The dot is the <b>top-left corner</b>. Not the middle.</div>
+    <p class="bilingual">x, y는 왼쪽 위 모서리예요</p>
+  </div>
+
+  <!-- 6 · WARM-UP · the four edges -->
+  <div class="slide">
+    <div class="pill">Warm-up 🎨</div>
+    <h2>Four edges, from one dot</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="170" y="70" width="160" height="110" fill="rgba(255,184,108,.22)" stroke="#ffb86c" stroke-width="3"/>
+      <circle cx="170" cy="70" r="8" fill="#ff79c6"/>
+      <line x1="170" y1="40" x2="170" y2="205" stroke="#50fa7b" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="14" y="36" fill="#50fa7b" font-size="18">left = cat_x</text>
+      <line x1="330" y1="40" x2="330" y2="205" stroke="#38d0e0" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="250" y="36" fill="#38d0e0" font-size="18">right = cat_x + cat_width</text>
+      <line x1="140" y1="70" x2="360" y2="70" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="14" y="94" fill="#ff79c6" font-size="18">top = cat_y</text>
+      <line x1="140" y1="180" x2="360" y2="180" stroke="#f1fa8c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="14" y="228" fill="#f1fa8c" font-size="18">feet = cat_y + cat_height</text>
+      <text x="222" y="146" fill="#e8eef6" font-size="28">🐱</text>
+    </svg>
+    <div class="why">🟣 Python stores the dot only. The other two edges you <b>add</b>.</div>
+  </div>
+
+  <!-- 7 · WARM-UP · real numbers -->
+  <div class="slide">
+    <div class="pill">Warm-up 🔢</div>
+    <h2>Put real numbers in</h2>
+<pre>cat_x = <span class="num">100</span>
+cat_y = <span class="num">300</span>
+cat_width = <span class="num">60</span>
+cat_height = <span class="num">60</span></pre>
+    <div class="trace-grid" style="margin-top:.4em">
+      <div class="cell head">edge</div><div class="cell head">maths</div><div class="cell head">value</div>
+      <div class="cell">left</div><div class="cell"><code>cat_x</code></div><div class="cell">100</div>
+      <div class="cell">right</div><div class="cell"><code>cat_x + cat_width</code></div><div class="cell">160</div>
+      <div class="cell">top</div><div class="cell"><code>cat_y</code></div><div class="cell">300</div>
+      <div class="cell">feet</div><div class="cell"><code>cat_y + cat_height</code></div><div class="cell">360</div>
+    </div>
+  </div>
+
+  <!-- 8 · WARM-UP · why the right wall needs + cat_width -->
+  <div class="slide">
+    <div class="pill">Warm-up 🎨</div>
+    <h2>Why your wall line adds the width</h2>
+    <svg viewBox="0 0 500 240" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="420" y1="10" x2="420" y2="230" stroke="#e8eef6" stroke-width="4"/>
+      <text x="428" y="24" fill="#e8eef6" font-size="16">WIDTH</text>
+      <rect x="380" y="30" width="90" height="60" fill="rgba(255,85,85,.25)" stroke="#ff5555" stroke-width="3"/>
+      <circle cx="380" cy="30" r="7" fill="#ff5555"/>
+      <text x="392" y="72" fill="#e8eef6" font-size="24">🐱</text>
+      <text x="18" y="52" fill="#ff5555" font-size="18">if cat_x &gt; WIDTH:</text>
+      <text x="18" y="78" fill="#8a97b8" font-size="16">dot inside, half the cat outside</text>
+      <rect x="330" y="140" width="90" height="60" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="3"/>
+      <circle cx="330" cy="140" r="7" fill="#50fa7b"/>
+      <text x="342" y="182" fill="#e8eef6" font-size="24">🐱</text>
+      <text x="18" y="164" fill="#50fa7b" font-size="18">if cat_x + cat_width &gt; WIDTH:</text>
+      <text x="18" y="190" fill="#8a97b8" font-size="16">the right edge stops at the wall</text>
+    </svg>
+    <div class="why">🟣 A wall touches the <b>edge</b>, never the dot.</div>
+    <p class="bilingual">벽은 모서리에 닿아요</p>
+  </div>
+
+  <!-- 9 · WARM-UP quiz -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>cat_y = 300</code>, <code>cat_height = 60</code>. Where are the feet?</div>
+      <div class="opts">
+        <details><summary>A. 300</summary><div class="ans">✗ That is the top of the cat.</div></details>
+        <details><summary>B. 360</summary><div class="ans">✓ <code>cat_y + cat_height</code>.</div></details>
+        <details><summary>C. 240</summary><div class="ans">✗ Subtracting goes up, not down.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. The cat walks right. Which number grows?</div>
+      <div class="opts">
+        <details><summary>A. cat_width</summary><div class="ans">✗ The cat never changes size.</div></details>
+        <details><summary>B. cat_x</summary><div class="ans">✓ Only the dot moves. The edges follow it.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 · WARM-UP bridge to the floor check -->
+  <div class="slide">
+    <div class="pill">Bridge 🌉</div>
+    <h2>The feet number is today's lesson</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:40vh" aria-hidden="true">
+      <line x1="20" y1="170" x2="480" y2="170" stroke="#e8eef6" stroke-width="4"/>
+      <text x="20" y="196" fill="#e8eef6" font-size="17">HEIGHT — the bottom of the window</text>
+      <rect x="180" y="70" width="90" height="70" fill="rgba(255,184,108,.25)" stroke="#ffb86c" stroke-width="3"/>
+      <text x="204" y="122" fill="#e8eef6" font-size="28">🐱</text>
+      <line x1="225" y1="140" x2="225" y2="170" stroke="#f1fa8c" stroke-width="3"/>
+      <circle cx="180" cy="140" r="7" fill="#f1fa8c"/>
+      <text x="238" y="160" fill="#f1fa8c" font-size="18">gap left to fall</text>
+      <text x="20" y="40" fill="#38d0e0" font-size="20">if cat_y + cat_height &gt; HEIGHT:</text>
+      <text x="20" y="64" fill="#8a97b8" font-size="16">"have the feet gone through the floor?"</text>
+    </svg>
+    <div class="why">🟣 Same shape as your wall line. Feet instead of right edge.</div>
+    <p class="bilingual">발 위치로 바닥을 확인해요</p>
+  </div>
+
+  <!-- 11 · Reminder — smaller y is higher -->
+  <div class="slide">
+    <div class="pill">Remember 🎨</div>
+    <h2>Smaller y = higher up</h2>
+    <svg viewBox="0 0 500 250" style="width:100%;max-height:46vh" aria-hidden="true">
+      <defs><marker id="a11" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#bd93f9"/></marker></defs>
+      <line x1="90" y1="20" x2="90" y2="230" stroke="#8a97b8" stroke-width="3"/>
+      <text x="10" y="34" fill="#8a97b8" font-size="17">y = 0</text>
+      <text x="10" y="94" fill="#8a97b8" font-size="17">y = 100</text>
+      <text x="10" y="154" fill="#8a97b8" font-size="17">y = 300</text>
+      <text x="10" y="224" fill="#8a97b8" font-size="17">y = 600</text>
+      <circle cx="90" cy="28" r="5" fill="#8a97b8"/><circle cx="90" cy="88" r="5" fill="#8a97b8"/>
+      <circle cx="90" cy="148" r="5" fill="#8a97b8"/><circle cx="90" cy="218" r="5" fill="#8a97b8"/>
+      <text x="140" y="100" fill="#e8eef6" font-size="30">🐱</text>
+      <text x="186" y="96" fill="#50fa7b" font-size="19">high in the sky</text>
+      <text x="140" y="230" fill="#e8eef6" font-size="30">🐱</text>
+      <text x="186" y="226" fill="#ff5555" font-size="19">on the floor</text>
+      <line x1="420" y1="30" x2="420" y2="212" stroke="#bd93f9" stroke-width="4" marker-end="url(#a11)"/>
+      <text x="330" y="130" fill="#bd93f9" font-size="19">y grows</text>
+      <text x="330" y="154" fill="#bd93f9" font-size="19">downwards</text>
+    </svg>
+    <p class="bilingual">y가 작을수록 위쪽이에요</p>
+  </div>
+
+  <!-- 12 · Reminder — so up must be negative -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>So going up is a minus</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <rect x="30" y="50" width="200" height="90" rx="10" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="48" y="86" fill="#50fa7b" font-size="23">cat_vel_y = -15</text>
+      <text x="48" y="114" fill="#e8eef6" font-size="18">y changes by -15</text>
+      <text x="48" y="136" fill="#8a97b8" font-size="16">= up 15 pixels</text>
+      <rect x="270" y="50" width="200" height="90" rx="10" fill="#141b27" stroke="#ff79c6" stroke-width="3"/>
+      <text x="288" y="86" fill="#ff79c6" font-size="23">cat_vel_y = +4</text>
+      <text x="288" y="114" fill="#e8eef6" font-size="18">y changes by +4</text>
+      <text x="288" y="136" fill="#8a97b8" font-size="16">= down 4 pixels</text>
+      <text x="76" y="180" fill="#f1fa8c" font-size="21">minus = rise</text>
+      <text x="320" y="180" fill="#f1fa8c" font-size="21">plus = fall</text>
+    </svg>
+    <div class="why">🟣 A jump is one big <b>negative</b> velocity, once.</div>
+    <p class="bilingual">위로 가려면 음수예요</p>
+  </div>
+
+  <!-- 13 · Predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Say it before you run it</h2>
+    <div class="predict-card">
+      <div class="label">Predict — the cat is standing still</div>
+<pre>cat_vel_y = <span class="num">-15</span>
+cat_y += cat_vel_y</pre>
+      <p class="line" style="margin-top:.4em">Up, down, or nowhere?</p>
+      <details><summary>Reveal answer</summary><div class="ans">Up. 15 pixels up, in one frame.</div></details>
+    </div>
+  </div>
+
+  <!-- 14 · Predict 2 -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>And the frame after that?</h2>
+    <div class="predict-card">
+      <div class="label">Predict — gravity still runs every frame</div>
+<pre>cat_vel_y = <span class="num">-15</span>
+cat_vel_y += cat_gravity
+cat_y += cat_vel_y</pre>
+      <details><summary>Reveal answer</summary><div class="ans">-15 becomes -14. Still up, but 1 pixel less.</div></details>
+    </div>
+    <div class="why">🟣 Gravity eats the kick, one pixel at a time.</div>
+  </div>
+
+  <!-- 15 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">velocity</span>
+      <span class="gloss">how far it moves this frame</span>
+      <span class="ko">속도</span>
+
+      <span class="term">jump kick</span>
+      <span class="gloss">one big negative velocity, once</span>
+      <span class="ko">위로 주는 힘</span>
+
+      <span class="term">clamp</span>
+      <span class="gloss">force a number back to a limit</span>
+      <span class="ko">값을 붙잡기</span>
+    </div>
+  </div>
+
+  <!-- 16 · Concept — velocity is an arrow -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Velocity is an arrow length</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <defs>
+        <marker id="up16" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 z" fill="#50fa7b"/></marker>
+        <marker id="dn16" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 z" fill="#ff79c6"/></marker>
+      </defs>
+      <line x1="60" y1="130" x2="480" y2="130" stroke="#232b3a" stroke-width="2"/>
+      <text x="16" y="30" fill="#8a97b8" font-size="17">cat_vel_y</text>
+      <line x1="110" y1="130" x2="110" y2="34" stroke="#50fa7b" stroke-width="6" marker-end="url(#up16)"/>
+      <text x="88" y="158" fill="#50fa7b" font-size="20">-15</text>
+      <line x1="200" y1="130" x2="200" y2="82" stroke="#50fa7b" stroke-width="6" marker-end="url(#up16)"/>
+      <text x="184" y="158" fill="#50fa7b" font-size="20">-7</text>
+      <circle cx="290" cy="130" r="7" fill="#f1fa8c"/>
+      <text x="282" y="158" fill="#f1fa8c" font-size="20">0</text>
+      <line x1="370" y1="130" x2="370" y2="162" stroke="#ff79c6" stroke-width="6" marker-end="url(#dn16)"/>
+      <text x="354" y="196" fill="#ff79c6" font-size="20">+4</text>
+      <line x1="450" y1="130" x2="450" y2="200" stroke="#ff79c6" stroke-width="6" marker-end="url(#dn16)"/>
+      <text x="430" y="226" fill="#ff79c6" font-size="20">+9</text>
+    </svg>
+    <div class="why">🟣 Big minus = long arrow up. Zero = no arrow at all.</div>
+  </div>
+
+  <!-- 17 · Concept — gravity eats the kick -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Gravity eats the kick</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:38vh" aria-hidden="true">
+      <text x="20" y="34" fill="#e8eef6" font-size="18">cat_vel_y after every frame</text>
+      <rect x="20" y="55" width="90" height="60" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="42" y="94" fill="#50fa7b" font-size="24">-15</text>
+      <text x="122" y="94" fill="#8a97b8" font-size="22">+1</text>
+      <rect x="160" y="55" width="90" height="60" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="182" y="94" fill="#50fa7b" font-size="24">-14</text>
+      <text x="262" y="94" fill="#8a97b8" font-size="22">+1</text>
+      <rect x="300" y="55" width="90" height="60" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="322" y="94" fill="#50fa7b" font-size="24">-13</text>
+      <text x="402" y="96" fill="#8a97b8" font-size="26">...</text>
+      <text x="20" y="164" fill="#f1fa8c" font-size="19">15 frames later it reaches 0. Then it turns positive.</text>
+    </svg>
+    <div class="why">🟣 You never write "stop rising". The +1 does it for you.</div>
+    <p class="bilingual">중력이 점프를 조금씩 깎아요</p>
+  </div>
+
+  <!-- 18 · Arc strip A -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frames 0–5 — going up</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="200" x2="490" y2="200" stroke="#e8eef6" stroke-width="3"/>
+      <text x="10" y="222" fill="#8a97b8" font-size="15">floor</text>
+      <text x="30" y="192" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="110" y="172" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="190" y="148" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="270" y="126" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="350" y="108" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="430" y="94" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="10" y="16" fill="#38d0e0" font-size="15">cat_vel_y</text>
+      <text x="30" y="40" fill="#8a97b8" font-size="16">f0</text>
+      <text x="110" y="40" fill="#8a97b8" font-size="16">f1</text>
+      <text x="190" y="40" fill="#8a97b8" font-size="16">f2</text>
+      <text x="270" y="40" fill="#8a97b8" font-size="16">f3</text>
+      <text x="350" y="40" fill="#8a97b8" font-size="16">f4</text>
+      <text x="430" y="40" fill="#8a97b8" font-size="16">f5</text>
+      <text x="22" y="66" fill="#50fa7b" font-size="20">-15</text>
+      <text x="102" y="66" fill="#50fa7b" font-size="20">-14</text>
+      <text x="182" y="66" fill="#50fa7b" font-size="20">-13</text>
+      <text x="262" y="66" fill="#50fa7b" font-size="20">-12</text>
+      <text x="342" y="66" fill="#50fa7b" font-size="20">-11</text>
+      <text x="422" y="66" fill="#50fa7b" font-size="20">-10</text>
+    </svg>
+    <div class="why">🟣 Every arrow is shorter. The cat still rises.</div>
+  </div>
+
+  <!-- 19 · Arc strip B -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frames 5–10 — slowing down</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="208" x2="490" y2="208" stroke="#e8eef6" stroke-width="3"/>
+      <text x="10" y="226" fill="#8a97b8" font-size="15">floor</text>
+      <text x="30" y="86" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="110" y="76" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="190" y="68" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="270" y="62" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="350" y="58" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="430" y="55" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="30" y="124" fill="#8a97b8" font-size="16">f5</text>
+      <text x="110" y="124" fill="#8a97b8" font-size="16">f6</text>
+      <text x="190" y="124" fill="#8a97b8" font-size="16">f7</text>
+      <text x="270" y="124" fill="#8a97b8" font-size="16">f8</text>
+      <text x="350" y="124" fill="#8a97b8" font-size="16">f9</text>
+      <text x="426" y="124" fill="#8a97b8" font-size="16">f10</text>
+      <text x="22" y="152" fill="#50fa7b" font-size="20">-10</text>
+      <text x="108" y="152" fill="#50fa7b" font-size="20">-9</text>
+      <text x="188" y="152" fill="#50fa7b" font-size="20">-8</text>
+      <text x="268" y="152" fill="#50fa7b" font-size="20">-7</text>
+      <text x="348" y="152" fill="#50fa7b" font-size="20">-6</text>
+      <text x="428" y="152" fill="#50fa7b" font-size="20">-5</text>
+      <text x="10" y="184" fill="#f1fa8c" font-size="17">the gaps between cats get smaller</text>
+    </svg>
+    <div class="why">🟣 Still negative, so still rising — just barely.</div>
+  </div>
+
+  <!-- 20 · Arc strip C — the sign flip -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frames 12–17 — the sign flips</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="230" y="26" width="160" height="120" rx="10" fill="rgba(241,250,140,.07)" stroke="#f1fa8c" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="40" y="76" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="120" y="68" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="200" y="64" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="280" y="64" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="360" y="68" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="440" y="76" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="38" y="106" fill="#8a97b8" font-size="16">f12</text>
+      <text x="118" y="106" fill="#8a97b8" font-size="16">f13</text>
+      <text x="198" y="106" fill="#8a97b8" font-size="16">f14</text>
+      <text x="278" y="106" fill="#8a97b8" font-size="16">f15</text>
+      <text x="358" y="106" fill="#8a97b8" font-size="16">f16</text>
+      <text x="438" y="106" fill="#8a97b8" font-size="16">f17</text>
+      <text x="38" y="136" fill="#50fa7b" font-size="22">-3</text>
+      <text x="118" y="136" fill="#50fa7b" font-size="22">-2</text>
+      <text x="198" y="136" fill="#50fa7b" font-size="22">-1</text>
+      <text x="282" y="136" fill="#f1fa8c" font-size="26">0</text>
+      <text x="356" y="136" fill="#ff79c6" font-size="22">+1</text>
+      <text x="436" y="136" fill="#ff79c6" font-size="22">+2</text>
+      <text x="120" y="180" fill="#f1fa8c" font-size="20">0 is the top of the jump</text>
+      <text x="120" y="208" fill="#8a97b8" font-size="17">nobody wrote it. Gravity got there.</text>
+    </svg>
+    <p class="bilingual">0에서 방향이 바뀌어요</p>
+  </div>
+
+  <!-- 21 · Arc strip D -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Frames 17–22 — falling again</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="214" x2="490" y2="214" stroke="#e8eef6" stroke-width="3"/>
+      <text x="10" y="26" fill="#f1fa8c" font-size="18">the gaps grow again — this is your old gravity</text>
+      <text x="30" y="56" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="110" y="64" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="190" y="78" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="270" y="98" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="350" y="124" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="430" y="156" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="30" y="184" fill="#8a97b8" font-size="16">f17</text>
+      <text x="110" y="184" fill="#8a97b8" font-size="16">f18</text>
+      <text x="190" y="184" fill="#8a97b8" font-size="16">f19</text>
+      <text x="270" y="184" fill="#8a97b8" font-size="16">f20</text>
+      <text x="350" y="184" fill="#8a97b8" font-size="16">f21</text>
+      <text x="430" y="184" fill="#8a97b8" font-size="16">f22</text>
+      <text x="30" y="208" fill="#ff79c6" font-size="20">+2</text>
+      <text x="110" y="208" fill="#ff79c6" font-size="20">+3</text>
+      <text x="190" y="208" fill="#ff79c6" font-size="20">+4</text>
+      <text x="270" y="208" fill="#ff79c6" font-size="20">+5</text>
+      <text x="350" y="208" fill="#ff79c6" font-size="20">+6</text>
+      <text x="430" y="208" fill="#ff79c6" font-size="20">+7</text>
+    </svg>
+    <div class="why">🟣 Coming down uses the exact code you already had.</div>
+  </div>
+
+  <!-- 22 · the whole arc -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>One jump, whole arc</h2>
+    <svg viewBox="0 0 500 240" style="width:100%;max-height:46vh" aria-hidden="true">
+      <line x1="10" y1="212" x2="490" y2="212" stroke="#e8eef6" stroke-width="3"/>
+      <path d="M25,212 Q245,-30 465,212" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="7 6"/>
+      <text x="200" y="40" fill="#f1fa8c" font-size="19">up 105 pixels, then back</text>
+      <text x="14" y="210" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="90" y="140" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="170" y="98" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="240" y="86" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="310" y="98" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="390" y="140" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="460" y="210" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="10" y="236" fill="#50fa7b" font-size="17">-15</text>
+      <text x="86" y="236" fill="#50fa7b" font-size="17">-9</text>
+      <text x="166" y="236" fill="#50fa7b" font-size="17">-3</text>
+      <text x="242" y="236" fill="#f1fa8c" font-size="19">0</text>
+      <text x="306" y="236" fill="#ff79c6" font-size="17">+3</text>
+      <text x="386" y="236" fill="#ff79c6" font-size="17">+9</text>
+      <text x="452" y="236" fill="#ff79c6" font-size="17">+15</text>
+    </svg>
+    <div class="why">🟣 Up and down are the same numbers, mirrored.</div>
+  </div>
+
+  <!-- 23 · trace table -->
+  <div class="slide">
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Fill the last row out loud</h2>
+    <div class="trace-grid">
+      <div class="cell head">frame</div><div class="cell head">cat_vel_y</div><div class="cell head">cat_y</div>
+      <div class="cell">0</div><div class="cell">-15</div><div class="cell">540</div>
+      <div class="cell">1</div><div class="cell">-14</div><div class="cell">526</div>
+      <div class="cell">2</div><div class="cell">-13</div><div class="cell">513</div>
+      <div class="cell">3</div><div class="cell">-12</div><div class="cell">501</div>
+      <div class="cell">4</div><div class="cell">?</div><div class="cell">?</div>
+    </div>
+    <details class="debug-card" style="margin-top:.4em"><summary>Reveal</summary>
+      <div class="ans">-11, and 501 - 11 = 490.</div></details>
+  </div>
+
+  <!-- 24 · where the code lives -->
+  <div class="slide">
+    <div class="pill">Your file 📂</div>
+    <h2>The indent map of your loop</h2>
+<pre class="tiny">while running:                              <span class="com"># indent 0</span>
+    for event in pygame.event.get():        <span class="com"># indent 4</span>
+        if event.type == pygame.QUIT:       <span class="com"># indent 8</span>
+            running = False                 <span class="com"># indent 12</span>
+
+    keys = pygame.key.get_pressed()         <span class="com"># indent 4</span>
+    cat_vel_y += cat_gravity                <span class="com"># indent 4</span>
+    cat_y += cat_vel_y                      <span class="com"># indent 4</span></pre>
+    <div class="why">🟣 Two homes today: <b>inside the event loop</b> (8) and <b>the main loop</b> (4).</div>
+  </div>
+
+  <!-- 25 · v2 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span><span>v5</span></div>
+    <h2>v2 — SPACE kicks the cat up</h2>
+    <p class="line">Two steps. First prove the key works.<br>Then swap the print for the kick.</p>
+    <div class="road">
+      <div class="rd"><div class="rl">STEP 1</div><div class="rt">SPACE prints</div></div>
+      <div class="rd"><div class="rl">STEP 2</div><div class="rt">SPACE kicks</div></div>
+    </div>
+    <p class="bilingual">스페이스로 위로 차올려요</p>
+  </div>
+
+  <!-- 26 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 14</div>
+    <h2>Make SPACE say hello</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if event.type == pygame.QUIT:</code></div>
+    <div class="tag-new">NEW — 3 lines under <code>running = False</code></div>
+    <div class="now"><pre class="tiny">    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+<span class="hot">        if event.type == pygame.KEYDOWN:</span>
+<span class="hot">            if event.key == pygame.K_SPACE:</span>
+<span class="hot">                print("SPACE")</span></pre></div>
+    <div class="where">📍 Inside the event <code>for</code>. <code>if event.type</code> at indent <b>8</b> · <code>if event.key</code> at <b>12</b> · <code>print</code> at <b>16</b></div>
+    <div class="why">🟣 KEYDOWN fires <b>once</b> per press.</div>
+    <div class="chk">✅ Serena runs it — tap SPACE, "SPACE" appears in the terminal.</div>
+  </div>
+
+  <!-- 27 · indent warning for STEP 1 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Indent 8, not 4</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ indent 4</span>
+<pre class="tiny">    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    if event.type == pygame.KEYDOWN:</pre>
+        <p style="margin-top:.4em">Outside the loop. Only the last event is ever checked.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ indent 8</span>
+<pre class="tiny">    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:</pre>
+        <p style="margin-top:.4em">Level with the QUIT check. Every event gets looked at.</p>
+      </div>
+    </div>
+    <p class="bilingual">들여쓰기가 규칙이에요</p>
+  </div>
+
+  <!-- 28 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 14</div>
+    <h2>Swap the print for the kick</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>print("SPACE")</code></div>
+    <div class="tag-old">OLD — delete this 1 line</div>
+    <div class="was"><pre class="tiny">                print("SPACE")</pre></div>
+    <div class="tag-new">NEW — type this 1 line instead</div>
+    <div class="now"><pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+<span class="hot">                cat_vel_y = -15</span></pre></div>
+    <div class="where">📍 Same spot, indent <b>16</b>.</div>
+    <div class="why">🟣 <code>=</code> not <code>-=</code>. The kick <b>replaces</b> the speed.</div>
+    <div class="chk">✅ Serena runs it — tap SPACE, the cat leaps, then falls off screen.</div>
+  </div>
+
+  <!-- 29 · v2 result, drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>It jumps. It never stops.</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="20" y="10" width="330" height="180" fill="none" stroke="#232b3a" stroke-width="3"/>
+      <text x="26" y="212" fill="#8a97b8" font-size="16">the window ends here</text>
+      <path d="M40,180 Q130,20 220,180" fill="none" stroke="#38d0e0" stroke-width="3" stroke-dasharray="6 5"/>
+      <path d="M220,180 L262,222" fill="none" stroke="#ff5555" stroke-width="3"/>
+      <text x="118" y="48" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="254" y="226" fill="#ff5555" font-size="22">🐱</text>
+      <text x="290" y="226" fill="#ff5555" font-size="17">gone</text>
+      <text x="366" y="60" fill="#f1fa8c" font-size="18">cat_y keeps</text>
+      <text x="366" y="84" fill="#f1fa8c" font-size="18">growing:</text>
+      <text x="366" y="112" fill="#e8eef6" font-size="18">600</text>
+      <text x="366" y="136" fill="#e8eef6" font-size="18">640</text>
+      <text x="366" y="160" fill="#e8eef6" font-size="18">690</text>
+      <text x="366" y="184" fill="#e8eef6" font-size="18">750 ...</text>
+    </svg>
+    <div class="why">🟣 Nothing in your file says "stop at the bottom". That is v3.</div>
+  </div>
+
+  <!-- 30 · Common mistake — held key -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>KEYDOWN, not "key held"</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ held key</span>
+<pre class="tiny">    keys = pygame.key.get_pressed()
+    if keys[pygame.K_SPACE]:
+        cat_vel_y = -15</pre>
+        <p style="margin-top:.4em">Runs every frame you hold SPACE. The cat flies away like a helicopter.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ key press</span>
+<pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                cat_vel_y = -15</pre>
+        <p style="margin-top:.4em">Runs once per press. One tap, one jump.</p>
+      </div>
+    </div>
+    <p class="bilingual">누른 순간 한 번만 실행돼요</p>
+  </div>
+
+  <!-- 31 · v3 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span><span>v5</span></div>
+    <h2>v3 — build a floor</h2>
+    <p class="line">The warm-up line, for real:<br><b>cat_y + cat_height</b> against <b>HEIGHT</b>.</p>
+    <div class="road">
+      <div class="rd"><div class="rl">STEP 3</div><div class="rt">stop falling</div></div>
+      <div class="rd"><div class="rl">STEP 4</div><div class="rt">snap the feet</div></div>
+    </div>
+    <p class="bilingual">발이 바닥을 넘으면 멈춰요</p>
+  </div>
+
+  <!-- 32 · Concept — the floor test -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Two numbers, one question</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="20" y1="160" x2="480" y2="160" stroke="#e8eef6" stroke-width="4"/>
+      <text x="400" y="182" fill="#e8eef6" font-size="17">HEIGHT = 600</text>
+      <rect x="60" y="60" width="70" height="60" fill="rgba(80,250,123,.2)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="78" y="104" fill="#e8eef6" font-size="24">🐱</text>
+      <circle cx="130" cy="120" r="6" fill="#50fa7b"/>
+      <text x="42" y="146" fill="#50fa7b" font-size="17">feet = 520</text>
+      <text x="42" y="42" fill="#50fa7b" font-size="17">520 &gt; 600 → False</text>
+      <rect x="300" y="130" width="70" height="60" fill="rgba(255,85,85,.2)" stroke="#ff5555" stroke-width="3"/>
+      <text x="318" y="174" fill="#e8eef6" font-size="24">🐱</text>
+      <circle cx="370" cy="190" r="6" fill="#ff5555"/>
+      <text x="378" y="212" fill="#ff5555" font-size="17">feet = 640</text>
+      <text x="282" y="42" fill="#ff5555" font-size="17">640 &gt; 600 → True</text>
+      <text x="282" y="66" fill="#8a97b8" font-size="15">already through the floor</text>
+    </svg>
+    <div class="why">🟣 True means the cat has <b>already</b> gone too far. You pull it back.</div>
+  </div>
+
+  <!-- 33 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 14</div>
+    <h2>Stop the falling speed</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_y += cat_vel_y</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny">    cat_vel_y += cat_gravity
+    cat_y += cat_vel_y
+<span class="hot">    if cat_y + cat_height &gt; HEIGHT:</span>
+<span class="hot">        cat_vel_y = 0</span></pre></div>
+    <div class="where">📍 In the main <code>while</code>, NOT the event loop. <code>if</code> at indent <b>4</b> · <code>cat_vel_y</code> at <b>8</b></div>
+    <div class="why">🟣 Feet past the floor → kill the speed.</div>
+    <div class="chk">✅ Serena runs it — the cat stops racing down. Now it sinks slowly.</div>
+  </div>
+
+  <!-- 34 · why it still sinks -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Why it still creeps down</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:40vh" aria-hidden="true">
+      <text x="10" y="26" fill="#8a97b8" font-size="16">every frame, in this order</text>
+      <rect x="20" y="40" width="140" height="46" rx="8" fill="#141b27" stroke="#ff79c6" stroke-width="2"/>
+      <text x="32" y="70" fill="#ff79c6" font-size="17">vel += 1 → vel = 1</text>
+      <rect x="180" y="40" width="140" height="46" rx="8" fill="#141b27" stroke="#e8eef6" stroke-width="2"/>
+      <text x="192" y="70" fill="#e8eef6" font-size="17">cat_y += 1</text>
+      <rect x="340" y="40" width="140" height="46" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="352" y="70" fill="#50fa7b" font-size="17">vel = 0 again</text>
+      <text x="20" y="122" fill="#f1fa8c" font-size="19">1 pixel down. Every frame. 60 a second.</text>
+      <line x1="20" y1="150" x2="470" y2="150" stroke="#232b3a" stroke-width="2"/>
+      <text x="30" y="180" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="110" y="186" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="190" y="192" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="270" y="198" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="350" y="204" fill="#ff5555" font-size="20">🐱</text>
+      <text x="400" y="204" fill="#ff5555" font-size="17">off screen</text>
+    </svg>
+    <div class="why">🟣 Killing the speed is not the same as putting the cat back.</div>
+  </div>
+
+  <!-- 35 · Concept — HEIGHT minus cat_height -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Where does the cat's dot go?</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="20" y1="180" x2="480" y2="180" stroke="#e8eef6" stroke-width="4"/>
+      <text x="330" y="204" fill="#e8eef6" font-size="17">HEIGHT = 600</text>
+      <rect x="120" y="120" width="90" height="60" fill="rgba(80,250,123,.2)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="146" y="166" fill="#e8eef6" font-size="26">🐱</text>
+      <circle cx="120" cy="120" r="8" fill="#ff79c6"/>
+      <text x="14" y="112" fill="#ff79c6" font-size="18">cat_y = 540</text>
+      <line x1="228" y1="120" x2="228" y2="180" stroke="#bd93f9" stroke-width="3"/>
+      <text x="238" y="156" fill="#bd93f9" font-size="18">cat_height = 60</text>
+      <text x="20" y="48" fill="#38d0e0" font-size="21">cat_y = HEIGHT - cat_height</text>
+      <text x="20" y="76" fill="#f1fa8c" font-size="20">600 - 60 = 540</text>
+      <text x="20" y="100" fill="#8a97b8" font-size="16">feet land exactly on 600</text>
+    </svg>
+    <div class="why">🟣 The dot must sit one whole cat <b>above</b> the floor.</div>
+    <p class="bilingual">키만큼 위로 올려놔요</p>
+  </div>
+
+  <!-- 36 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 14</div>
+    <h2>Snap the feet to the floor</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if cat_y + cat_height &gt; HEIGHT:</code></div>
+    <div class="tag-new">NEW — 1 line under <code>cat_vel_y = 0</code></div>
+    <div class="now"><pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+<span class="hot">        cat_y = HEIGHT - cat_height</span></pre></div>
+    <div class="where">📍 Indent <b>8</b> — level with <code>cat_vel_y = 0</code>, inside the <code>if</code></div>
+    <div class="why">🟣 Put the cat back on the floor line.</div>
+    <div class="chk">✅ Serena runs it — the cat rests on the floor. SPACE jumps and lands. v3 done.</div>
+  </div>
+
+  <!-- 37 · v3 whole block -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span><span>v5</span></div>
+    <h2>v3 — your whole block</h2>
+<pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                cat_vel_y = -15
+
+    cat_vel_y += cat_gravity
+    cat_y += cat_vel_y
+
+    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">Cat rests on the floor. SPACE jumps. It lands. Every time.</div>
+    </div>
+  </div>
+
+  <!-- 38 · Common mistake — forgot the height -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Forgetting the height</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ dot only</span>
+<pre class="tiny">    if cat_y &gt; HEIGHT:</pre>
+        <p style="margin-top:.4em">The whole cat falls out of the window first. It stops when nobody can see it.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ feet</span>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:</pre>
+        <p style="margin-top:.4em">The feet are what touch the floor.</p>
+      </div>
+    </div>
+    <div class="why">🟣 Exactly the same trap as your right wall.</div>
+  </div>
+
+  <!-- 39 · Common mistake — indent 4 -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Indent 8, not 4</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ indent 4</span>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+    cat_y = HEIGHT - cat_height</pre>
+        <p style="margin-top:.4em">Runs every frame. The cat is glued to the floor and can never jump.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ indent 8</span>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height</pre>
+        <p style="margin-top:.4em">Runs only when the feet crossed the floor.</p>
+      </div>
+    </div>
+    <p class="bilingual">한 칸 차이가 게임을 망쳐요</p>
+  </div>
+
+  <!-- 40 · Debug 1 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the buried cat</h2>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT</pre>
+    <div class="debug-card"><div class="err">No error. The cat lands and only its ears show at the bottom.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The dot is the <b>top</b> of the cat. Putting the top on 600 puts the whole body below the window. Use <code>HEIGHT - cat_height</code>.</p>
+      <p class="bilingual">점은 머리 위치예요</p>
+    </details>
+  </div>
+
+  <!-- 41 · Debug 2 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the trampoline cat</h2>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = -cat_vel_y
+        cat_y = HEIGHT - cat_height</pre>
+    <div class="debug-card"><div class="err">No error. The cat bounces forever and never rests.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Flipping the sign sends the speed back up. Landing means <b>zero</b> speed: <code>cat_vel_y = 0</code>.</p>
+      <p class="bilingual">착지는 속도가 0이에요</p>
+    </details>
+  </div>
+
+  <!-- 42 · Debug 3 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the jump does nothing</h2>
+<pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                cat_vel_y = 15</pre>
+    <div class="debug-card"><div class="err">No error. SPACE slams the cat into the floor instead of up.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Plus 15 means 15 pixels <b>down</b>. Up needs a minus: <code>cat_vel_y = -15</code>.</p>
+      <p class="bilingual">위로 가려면 마이너스예요</p>
+    </details>
+  </div>
+
+  <!-- 43 · v4 intro — the flying cat -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span><span>v5</span></div>
+    <h2>v4 — stop the flying cat</h2>
+    <svg viewBox="0 0 500 180" style="width:100%;max-height:34vh" aria-hidden="true">
+      <line x1="10" y1="160" x2="490" y2="160" stroke="#e8eef6" stroke-width="3"/>
+      <text x="30" y="150" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="110" y="118" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="190" y="86" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="270" y="56" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="350" y="30" fill="#ff5555" font-size="20">🐱</text>
+      <text x="386" y="30" fill="#ff5555" font-size="18">out of the sky</text>
+      <text x="20" y="30" fill="#f1fa8c" font-size="18">SPACE SPACE SPACE SPACE</text>
+    </svg>
+    <p class="line">Right now SPACE works in mid-air.<br>Tap it fast and the cat climbs forever.</p>
+    <p class="bilingual">공중에서는 못 뛰게 막아요</p>
+  </div>
+
+  <!-- 44 · Concept — a flag -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A flag is a yes/no box</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:38vh" aria-hidden="true">
+      <rect x="40" y="50" width="180" height="90" rx="12" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="66" y="92" fill="#8a97b8" font-size="18">on_ground</text>
+      <text x="66" y="126" fill="#50fa7b" font-size="30">True</text>
+      <text x="60" y="170" fill="#8a97b8" font-size="17">feet on something</text>
+      <rect x="280" y="50" width="180" height="90" rx="12" fill="#141b27" stroke="#ff5555" stroke-width="3"/>
+      <text x="306" y="92" fill="#8a97b8" font-size="18">on_ground</text>
+      <text x="306" y="126" fill="#ff5555" font-size="30">False</text>
+      <text x="300" y="170" fill="#8a97b8" font-size="17">in the air</text>
+    </svg>
+    <div class="why">🟣 One variable. Two possible values. Nothing else.</div>
+    <p class="bilingual">참 또는 거짓만 담아요</p>
+  </div>
+
+  <!-- 45 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 14</div>
+    <h2>Make the flag</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_gravity = </code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">cat_vel_y = 0
+cat_gravity = 1
+<span class="hot">on_ground = False</span></pre></div>
+    <div class="where">📍 Indent <b>0</b> — hard against the left edge</div>
+    <div class="why">🟣 The cat starts in the air, so it starts False.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet. No red text.</div>
+  </div>
+
+  <!-- 46 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 14</div>
+    <h2>Landing raises the flag</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_y = HEIGHT - cat_height</code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height
+<span class="hot">        on_ground = True</span></pre></div>
+    <div class="where">📍 Indent <b>8</b> — inside the floor <code>if</code>, level with the two lines above it</div>
+    <div class="why">🟣 Feet on the floor means standing.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet. Two steps to go.</div>
+  </div>
+
+  <!-- 47 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 14</div>
+    <h2>Leaving the floor drops the flag</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>on_ground = True</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height
+        on_ground = True
+<span class="hot">    else:</span>
+<span class="hot">        on_ground = False</span></pre></div>
+    <div class="where">📍 <code>else:</code> at indent <b>4</b>, exactly under the <code>if</code> · <code>on_ground</code> at <b>8</b></div>
+    <div class="why">🟣 Not touching the floor → in the air.</div>
+    <div class="chk">✅ Serena runs it — still nothing. One step to go.</div>
+  </div>
+
+  <!-- 48 · Watch it — the flag over frames -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>The flag, frame by frame</h2>
+    <div class="trace-grid">
+      <div class="cell head">frame</div><div class="cell head">feet</div><div class="cell head">on_ground</div>
+      <div class="cell">before SPACE</div><div class="cell">600</div><div class="cell">True</div>
+      <div class="cell">1</div><div class="cell">586</div><div class="cell">False</div>
+      <div class="cell">10</div><div class="cell">505</div><div class="cell">False</div>
+      <div class="cell">15</div><div class="cell">495</div><div class="cell">False</div>
+      <div class="cell">29</div><div class="cell">600</div><div class="cell">True</div>
+    </div>
+    <div class="why">🟣 True only on the frames the feet are down.</div>
+  </div>
+
+  <!-- 49 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 14</div>
+    <h2>Only jump when standing</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if event.key == pygame.K_SPACE:</code></div>
+    <div class="tag-old">OLD — this 1 line</div>
+    <div class="was"><pre class="tiny">            if event.key == pygame.K_SPACE:</pre></div>
+    <div class="tag-new">NEW — same line, two words longer</div>
+    <div class="now"><pre class="tiny">        if event.type == pygame.KEYDOWN:
+<span class="hot">            if event.key == pygame.K_SPACE and on_ground:</span>
+                cat_vel_y = -15</pre></div>
+    <div class="where">📍 Same line, indent <b>12</b>. Keep the colon.</div>
+    <div class="why">🟣 <code>and</code> means both must be true.</div>
+    <div class="chk">✅ Serena runs it — hammer SPACE mid-air. Nothing happens. v4 done.</div>
+  </div>
+
+  <!-- 50 · Concept — the and gate -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Two locks on one door</h2>
+    <svg viewBox="0 0 500 220" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="20" y="30" width="150" height="50" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+      <text x="34" y="62" fill="#38d0e0" font-size="17">SPACE pressed</text>
+      <rect x="20" y="110" width="150" height="50" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+      <text x="46" y="142" fill="#38d0e0" font-size="17">on_ground</text>
+      <line x1="170" y1="55" x2="240" y2="85" stroke="#8a97b8" stroke-width="3"/>
+      <line x1="170" y1="135" x2="240" y2="105" stroke="#8a97b8" stroke-width="3"/>
+      <rect x="240" y="65" width="90" height="60" rx="8" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="268" y="103" fill="#bd93f9" font-size="24">and</text>
+      <line x1="330" y1="95" x2="380" y2="95" stroke="#8a97b8" stroke-width="3"/>
+      <rect x="380" y="65" width="100" height="60" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="392" y="103" fill="#50fa7b" font-size="19">jump!</text>
+      <text x="20" y="196" fill="#f1fa8c" font-size="18">One lock open is not enough. Both, or the door stays shut.</text>
+    </svg>
+    <p class="bilingual">둘 다 참일 때만 열려요</p>
+  </div>
+
+  <!-- 51 · Common mistake — or -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>and</code>, never <code>or</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ or</span>
+<pre class="tiny">if event.key == pygame.K_SPACE or on_ground:</pre>
+        <p style="margin-top:.4em">Standing on the floor makes it True with no key at all. The cat jumps by itself.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ and</span>
+<pre class="tiny">if event.key == pygame.K_SPACE and on_ground:</pre>
+        <p style="margin-top:.4em">Key AND floor. Both.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 52 · Common mistake — else in the wrong place -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The <code>else</code> must line up</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ indent 8</span>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        else:</pre>
+        <p style="margin-top:.4em"><code>IndentationError</code>. Python cannot find the <code>if</code> it belongs to.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ indent 4</span>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+    else:</pre>
+        <p style="margin-top:.4em"><code>else</code> starts in the same column as its <code>if</code>.</p>
+      </div>
+    </div>
+    <p class="bilingual">else는 if와 같은 칸이에요</p>
+  </div>
+
+  <!-- 53 · Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. The cat is at the top of its jump. What is <code>on_ground</code>?</div>
+      <div class="opts">
+        <details><summary>A. True</summary><div class="ans">✗ The feet are 105 pixels above the floor.</div></details>
+        <details><summary>B. False</summary><div class="ans">✓ The <code>else</code> set it False this frame.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Delete the line <code>on_ground = True</code>. What happens?</div>
+      <div class="opts">
+        <details><summary>A. The cat jumps twice</summary><div class="ans">✗ It gets fewer jumps, not more.</div></details>
+        <details><summary>B. The cat never jumps again</summary><div class="ans">✓ The flag stays False forever.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 54 · v4 whole block -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span><span>v5</span></div>
+    <h2>v4 — your whole block</h2>
+<pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and on_ground:
+                cat_vel_y = -15
+
+    cat_vel_y += cat_gravity
+    cat_y += cat_vel_y
+
+    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height
+        on_ground = True
+    else:
+        on_ground = False</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">A real platformer jump. One per landing.</div>
+    </div>
+  </div>
+
+  <!-- 55 · v5 intro -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <div class="emoji">🟩</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">Something<br>to land on</h1>
+    <p class="line" style="margin-top:.5em">A ledge in the sky.<br>The same two moves as the floor: <b>stop</b>, then <b>snap</b>.</p>
+    <p class="bilingual">공중 발판을 만들어요</p>
+  </div>
+
+  <!-- 56 · Concept — a platform is 4 numbers -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A ledge is a box too</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="200" x2="490" y2="200" stroke="#e8eef6" stroke-width="4"/>
+      <text x="10" y="222" fill="#8a97b8" font-size="15">floor · HEIGHT = 600</text>
+      <rect x="180" y="120" width="200" height="24" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="3"/>
+      <circle cx="180" cy="120" r="8" fill="#ff79c6"/>
+      <text x="10" y="112" fill="#ff79c6" font-size="17">platform_x = 300</text>
+      <text x="10" y="136" fill="#ff79c6" font-size="17">platform_y = 520</text>
+      <line x1="180" y1="164" x2="380" y2="164" stroke="#38d0e0" stroke-width="3"/>
+      <text x="212" y="188" fill="#38d0e0" font-size="17">platform_width = 200</text>
+      <line x1="404" y1="120" x2="404" y2="144" stroke="#bd93f9" stroke-width="3"/>
+      <text x="414" y="140" fill="#bd93f9" font-size="16">height 20</text>
+      <text x="60" y="60" fill="#e8eef6" font-size="24">🐱</text>
+      <text x="98" y="60" fill="#8a97b8" font-size="16">same 4 numbers as your cat</text>
+    </svg>
+    <p class="bilingual">발판도 상자예요</p>
+  </div>
+
+  <!-- 57 · STEP 9 -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 14</div>
+    <h2>Give the ledge its numbers</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>on_ground = False</code></div>
+    <div class="tag-new">NEW — 4 lines under it, top of the file</div>
+    <div class="now"><pre class="tiny">on_ground = False
+<span class="hot">platform_x = 300</span>
+<span class="hot">platform_y = 520</span>
+<span class="hot">platform_width = 200</span>
+<span class="hot">platform_height = 20</span></pre></div>
+    <div class="where">📍 Indent <b>0</b>, above <code>while running:</code></div>
+    <div class="why">🟣 Numbers first. Nothing draws yet.</div>
+    <div class="chk">✅ Serena runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 58 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 14</div>
+    <h2>Paint the ledge</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>screen.fill(</code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    screen.fill( ... )   # your background line, do not change</span>
+<span class="hot">    pygame.draw.rect(screen, (90, 200, 120), (platform_x, platform_y, platform_width, platform_height))</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, right under the fill so the cat paints on top</div>
+    <div class="why">🟣 Draw order: background, then ledge, then cat.</div>
+    <div class="chk">✅ Serena runs it — a green ledge appears. The cat falls through it.</div>
+  </div>
+
+  <!-- 59 · Concept — over the platform -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>"Over the ledge" needs both edges</h2>
+    <svg viewBox="0 0 500 240" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="180" y="130" width="160" height="20" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="70" y="70" width="70" height="55" fill="rgba(255,85,85,.2)" stroke="#ff5555" stroke-width="2"/>
+      <text x="86" y="110" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="46" y="60" fill="#ff5555" font-size="16">too far left</text>
+      <rect x="220" y="70" width="70" height="55" fill="rgba(80,250,123,.2)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="236" y="110" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="228" y="60" fill="#50fa7b" font-size="16">over it</text>
+      <rect x="380" y="70" width="70" height="55" fill="rgba(255,85,85,.2)" stroke="#ff5555" stroke-width="2"/>
+      <text x="396" y="110" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="368" y="60" fill="#ff5555" font-size="16">too far right</text>
+      <text x="14" y="190" fill="#38d0e0" font-size="17">cat_x + cat_width &gt; platform_x</text>
+      <text x="14" y="212" fill="#8a97b8" font-size="15">right edge is past the ledge's left edge</text>
+      <text x="270" y="190" fill="#38d0e0" font-size="17">cat_x &lt; platform_x + platform_width</text>
+      <text x="270" y="212" fill="#8a97b8" font-size="15">left edge is before the ledge's right edge</text>
+    </svg>
+    <div class="why">🟣 Your warm-up numbers, doing real work.</div>
+  </div>
+
+  <!-- 60 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 14</div>
+    <h2>One name for "over the ledge"</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>on_ground = False</code> <span class="quiet">(inside the else)</span></div>
+    <div class="tag-new">NEW — 1 line under the floor block</div>
+    <div class="now"><pre class="tiny">    else:
+        on_ground = False
+
+<span class="hot">    over_platform = cat_x + cat_width &gt; platform_x and cat_x &lt; platform_x + platform_width</span></pre></div>
+    <div class="where">📍 Indent <b>4</b> — level with the <code>else</code></div>
+    <div class="why">🟣 One True/False box. Keeps the next line short.</div>
+    <div class="chk">✅ Serena runs it — no change yet.</div>
+  </div>
+
+  <!-- 61 · Concept — feet below the ledge top -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>And the feet must have crossed it</h2>
+    <svg viewBox="0 0 500 220" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="60" y="130" width="160" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="100" y="60" width="70" height="55" fill="rgba(255,85,85,.15)" stroke="#ff5555" stroke-width="2"/>
+      <text x="116" y="100" fill="#e8eef6" font-size="22">🐱</text>
+      <circle cx="170" cy="115" r="6" fill="#ff5555"/>
+      <text x="40" y="180" fill="#ff5555" font-size="17">feet 505 &gt; 520? No</text>
+      <text x="40" y="202" fill="#8a97b8" font-size="15">still above — keep falling</text>
+      <rect x="290" y="130" width="160" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="330" y="88" width="70" height="55" fill="rgba(80,250,123,.15)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="346" y="128" fill="#e8eef6" font-size="22">🐱</text>
+      <circle cx="400" cy="143" r="6" fill="#50fa7b"/>
+      <text x="276" y="180" fill="#50fa7b" font-size="17">feet 527 &gt; 520? Yes</text>
+      <text x="276" y="202" fill="#8a97b8" font-size="15">crossed it — land</text>
+    </svg>
+    <div class="why">🟣 Same test as the floor, with <code>platform_y</code> instead of <code>HEIGHT</code>.</div>
+  </div>
+
+  <!-- 62 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 14</div>
+    <h2>Stop on the ledge</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>over_platform = cat_x + cat_width</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny">    over_platform = cat_x + cat_width &gt; platform_x and cat_x &lt; platform_x + platform_width
+<span class="hot">    if over_platform and cat_y + cat_height &gt; platform_y:</span>
+<span class="hot">        cat_vel_y = 0</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · <code>cat_vel_y</code> at <b>8</b></div>
+    <div class="why">🟣 Kill the falling speed, exactly like the floor.</div>
+    <div class="chk">✅ Serena runs it — jump onto the ledge. The cat stops, then sinks slowly through it.</div>
+  </div>
+
+  <!-- 63 · STEP 13 -->
+  <div class="slide">
+    <div class="steptag">STEP 13 / 14</div>
+    <h2>Snap the feet to the ledge</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if over_platform and</code></div>
+    <div class="tag-new">NEW — 1 line under <code>cat_vel_y = 0</code></div>
+    <div class="now"><pre class="tiny">    if over_platform and cat_y + cat_height &gt; platform_y:
+        cat_vel_y = 0
+<span class="hot">        cat_y = platform_y - cat_height</span></pre></div>
+    <div class="where">📍 Indent <b>8</b> — inside the <code>if</code>, level with <code>cat_vel_y = 0</code></div>
+    <div class="why">🟣 520 - 60 = 460. The dot sits one cat above the ledge.</div>
+    <div class="chk">✅ Serena runs it — the cat stands on the green ledge. SPACE does nothing up there.</div>
+  </div>
+
+  <!-- 64 · STEP 14 -->
+  <div class="slide">
+    <div class="steptag">STEP 14 / 14</div>
+    <h2>The ledge counts as ground</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_y = platform_y - cat_height</code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">    if over_platform and cat_y + cat_height &gt; platform_y:
+        cat_vel_y = 0
+        cat_y = platform_y - cat_height
+<span class="hot">        on_ground = True</span></pre></div>
+    <div class="where">📍 Indent <b>8</b> — third line inside the same <code>if</code></div>
+    <div class="why">🟣 The flag does not care what you stand on.</div>
+    <div class="chk">✅ Serena runs it — land on the ledge, then jump from it. v5 done.</div>
+  </div>
+
+  <!-- 65 · v5 whole block -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <h2>v5 — your whole block</h2>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_vel_y = 0
+        cat_y = HEIGHT - cat_height
+        on_ground = True
+    else:
+        on_ground = False
+
+    over_platform = cat_x + cat_width &gt; platform_x and cat_x &lt; platform_x + platform_width
+    if over_platform and cat_y + cat_height &gt; platform_y:
+        cat_vel_y = 0
+        cat_y = platform_y - cat_height
+        on_ground = True</pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ Run it</div>
+      <div style="opacity:1">Floor, ledge, jump, land, jump again.</div>
+    </div>
+  </div>
+
+  <!-- 66 · Debug 4 — the grabby ledge -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the ledge grabs you</h2>
+    <svg viewBox="0 0 500 180" style="width:100%;max-height:34vh" aria-hidden="true">
+      <line x1="10" y1="160" x2="490" y2="160" stroke="#e8eef6" stroke-width="3"/>
+      <rect x="200" y="80" width="180" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="60" y="152" fill="#e8eef6" font-size="24">🐱</text>
+      <text x="120" y="140" fill="#8a97b8" font-size="26">→</text>
+      <text x="180" y="152" fill="#e8eef6" font-size="24">🐱</text>
+      <text x="240" y="74" fill="#ff5555" font-size="24">🐱</text>
+      <path d="M215,140 L245,96" stroke="#ff5555" stroke-width="3" stroke-dasharray="5 4"/>
+      <text x="286" y="60" fill="#ff5555" font-size="18">yanked up</text>
+    </svg>
+    <div class="debug-card"><div class="err">No error. Walk along the floor under the ledge and the cat teleports on top of it.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">On the floor the feet (600) are past <code>platform_y</code> (520), so the test says True. Land only while <b>falling</b>. That is BONUS D.</p>
+    </details>
+  </div>
+
+  <!-- 67 · Code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>cat_vel_y = -15</code> makes the cat <span class="blank"></span> because <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.5em">"The cat lands when <span class="blank"></span> is bigger than <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 68 · Modify — faded -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill the four blanks</h2>
+<pre class="tiny">    if cat_y + ___ &gt; HEIGHT:
+        cat_vel_y = ___
+        cat_y = HEIGHT - ___
+        on_ground = ___</pre>
+    <p class="quiet" style="margin-top:.4em">Height, stop, height, flag.</p>
+  </div>
+
+  <!-- 69 · Modify 2 -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Move the ledge, out loud</h2>
+    <div class="practice-task">Say which single number you change so the ledge sits on the LEFT of the screen, and which one makes it twice as long.</div>
+    <details class="debug-card"><summary>Reveal</summary>
+      <div class="ans"><code>platform_x</code> for the side. <code>platform_width</code> for the length.</div></details>
+  </div>
+
+  <!-- 70 · Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Build it 🚀</h2>
+    <ul class="check-list">
+      <li>Jump on the floor. Land. Jump again.</li>
+      <li>Jump onto the green ledge and stand on it.</li>
+      <li>Jump from the ledge and land back on the floor.</li>
+      <li>Hammer SPACE in mid-air. Nothing happens.</li>
+    </ul>
+  </div>
+
+  <!-- 71 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">Exit ticket</div>
+    <h2>One line, before the bonuses</h2>
+    <div class="exit">
+      <div class="label">Answer in one sentence</div>
+      <p class="line" style="margin-top:.4em">Why does <code>cat_vel_y</code> pass through <b>0</b> at the top of every jump?</p>
+    </div>
+    <p class="bilingual">꼭대기에서 속도가 0이 되는 이유</p>
+  </div>
+
+  <!-- 72 · Bonus map -->
+  <div class="slide">
+    <div class="pill purple">Bonus road<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Six more ideas, in order</h2>
+    <div class="topic-grid three">
+      <div class="topic-chip"><div class="head">A</div><div class="desc">tune the jump</div></div>
+      <div class="topic-chip"><div class="head">B</div><div class="desc">double jump</div></div>
+      <div class="topic-chip"><div class="head">C</div><div class="desc">many ledges</div></div>
+      <div class="topic-chip purple"><div class="head">D</div><div class="desc">land only falling</div></div>
+      <div class="topic-chip purple"><div class="head">E</div><div class="desc">coyote time</div></div>
+      <div class="topic-chip purple"><div class="head">F</div><div class="desc">max fall speed</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Do them in this order. Each one builds on the last.</p>
+  </div>
+
+  <!-- 73 · Bonus A concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One number decides the height</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="205" x2="490" y2="205" stroke="#e8eef6" stroke-width="3"/>
+      <path d="M30,205 Q80,140 130,205" fill="none" stroke="#8a97b8" stroke-width="3"/>
+      <text x="46" y="128" fill="#8a97b8" font-size="18">-10</text>
+      <text x="42" y="150" fill="#8a97b8" font-size="15">45 px</text>
+      <path d="M180,205 Q240,50 300,205" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <text x="216" y="40" fill="#38d0e0" font-size="18">-15</text>
+      <text x="208" y="62" fill="#38d0e0" font-size="15">105 px</text>
+      <path d="M350,205 Q420,-40 490,205" fill="none" stroke="#50fa7b" stroke-width="3"/>
+      <text x="396" y="30" fill="#50fa7b" font-size="18">-20</text>
+      <text x="388" y="52" fill="#50fa7b" font-size="15">190 px</text>
+      <text x="10" y="228" fill="#f1fa8c" font-size="17">a bigger minus = a much taller jump</text>
+    </svg>
+    <div class="why">🟣 Give that number a <b>name</b>, and you can tune it in one place.</div>
+    <p class="bilingual">점프 높이를 변수에 담아요</p>
+  </div>
+
+  <!-- 74 · BONUS A 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 1 / 2</div>
+    <h2>Name the jump height</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_gravity = </code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">cat_gravity = 1
+<span class="hot">cat_jump = -15</span>
+on_ground = False</pre></div>
+    <div class="where">📍 Indent <b>0</b>, top of the file</div>
+    <div class="why">🟣 A box holding the kick, so it lives in one place.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet.</div>
+  </div>
+
+  <!-- 75 · BONUS A 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 2 / 2</div>
+    <h2>Use the name</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_vel_y = -15</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">                cat_vel_y = -15</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">                cat_vel_y = cat_jump</pre></div>
+    <div class="where">📍 Same line, indent <b>16</b>, inside the SPACE <code>if</code></div>
+    <div class="why">🟣 Now the top of the file controls the whole jump.</div>
+    <div class="chk">✅ Serena runs it — same jump. Then change -15 to -20 and it goes much higher.</div>
+  </div>
+
+  <!-- 76 · A tuning table -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Tune it, one number</h2>
+    <div class="trace-grid">
+      <div class="cell head">cat_jump</div><div class="cell head">frames in the air</div><div class="cell head">height</div>
+      <div class="cell">-8</div><div class="cell">16</div><div class="cell">28 px</div>
+      <div class="cell">-10</div><div class="cell">20</div><div class="cell">45 px</div>
+      <div class="cell">-15</div><div class="cell">30</div><div class="cell">105 px</div>
+      <div class="cell">-20</div><div class="cell">40</div><div class="cell">190 px</div>
+    </div>
+    <div class="why">🟣 Double the kick, roughly four times the height.</div>
+  </div>
+
+  <!-- 77 · Bonus B concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count the jumps you have left</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="200" x2="490" y2="200" stroke="#e8eef6" stroke-width="3"/>
+      <path d="M30,200 Q100,90 170,180" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <path d="M170,180 Q250,40 340,200" fill="none" stroke="#50fa7b" stroke-width="3"/>
+      <text x="24" y="196" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="160" y="176" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="336" y="196" fill="#e8eef6" font-size="20">🐱</text>
+      <rect x="20" y="24" width="120" height="40" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="34" y="52" fill="#50fa7b" font-size="18">jumps_left 2</text>
+      <rect x="160" y="24" width="120" height="40" rx="8" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/>
+      <text x="174" y="52" fill="#f1fa8c" font-size="18">jumps_left 1</text>
+      <rect x="300" y="24" width="120" height="40" rx="8" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="314" y="52" fill="#ff5555" font-size="18">jumps_left 0</text>
+      <text x="10" y="224" fill="#8a97b8" font-size="16">landing puts it back to 2</text>
+    </svg>
+    <p class="bilingual">남은 점프 횟수를 세요</p>
+  </div>
+
+  <!-- 78 · BONUS B 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 1 / 4</div>
+    <h2>Make the counter</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_jump = -15</code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">cat_jump = -15
+<span class="hot">jumps_left = 2</span>
+on_ground = False</pre></div>
+    <div class="where">📍 Indent <b>0</b>, top of the file</div>
+    <div class="why">🟣 Two jumps before you must touch something.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet.</div>
+  </div>
+
+  <!-- 79 · BONUS B 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 2 / 4</div>
+    <h2>Landing refills the counter</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_y = platform_y - cat_height</code></div>
+    <div class="tag-new">NEW — 2 lines under the whole platform block, with a blank line above</div>
+    <div class="now"><pre class="tiny">    if over_platform and cat_y + cat_height &gt; platform_y:
+        cat_vel_y = 0
+        cat_y = platform_y - cat_height
+        on_ground = True
+
+<span class="hot">    if on_ground:</span>
+<span class="hot">        jumps_left = 2</span></pre></div>
+    <div class="where">📍 <code>if on_ground</code> at indent <b>4</b> · <code>jumps_left</code> at <b>8</b></div>
+    <div class="why">🟣 One refill line covers the floor AND every ledge.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet.</div>
+  </div>
+
+  <!-- 80 · BONUS B 3 -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 3 / 4</div>
+    <h2>Ask the counter, not the flag</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>and on_ground:</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">            if event.key == pygame.K_SPACE and on_ground:</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">            if event.key == pygame.K_SPACE and jumps_left &gt; 0:</pre></div>
+    <div class="where">📍 Same line, indent <b>12</b></div>
+    <div class="why">🟣 In the air with 1 left is still allowed.</div>
+    <div class="chk">✅ Serena runs it — the cat can now fly forever. One line missing.</div>
+  </div>
+
+  <!-- 81 · BONUS B 4 -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 4 / 4</div>
+    <h2>Spend one jump</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_vel_y = cat_jump</code></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">            if event.key == pygame.K_SPACE and jumps_left &gt; 0:
+                cat_vel_y = cat_jump
+<span class="hot">                jumps_left -= 1</span></pre></div>
+    <div class="where">📍 Indent <b>16</b> — level with <code>cat_vel_y</code>, inside the same <code>if</code></div>
+    <div class="why">🟣 <code>-=</code> takes one off. At 0 the door shuts.</div>
+    <div class="chk">✅ Serena runs it — exactly two jumps, then nothing until she lands.</div>
+  </div>
+
+  <!-- 82 · B trace -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The counter, step by step</h2>
+    <div class="trace-grid">
+      <div class="cell head">what happens</div><div class="cell head">jumps_left</div><div class="cell head">SPACE works?</div>
+      <div class="cell">standing</div><div class="cell">2</div><div class="cell">yes</div>
+      <div class="cell">jump 1</div><div class="cell">1</div><div class="cell">yes</div>
+      <div class="cell">jump 2 in mid-air</div><div class="cell">0</div><div class="cell">no</div>
+      <div class="cell">lands</div><div class="cell">2</div><div class="cell">yes</div>
+    </div>
+    <p class="bilingual">착지하면 다시 2가 돼요</p>
+  </div>
+
+  <!-- 83 · Bonus C concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three ledges, one list</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="10" y1="205" x2="490" y2="205" stroke="#e8eef6" stroke-width="3"/>
+      <rect x="180" y="150" width="130" height="16" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="50" y="100" width="100" height="16" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="350" y="60" width="120" height="16" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="184" y="144" fill="#8a97b8" font-size="15">x 300 · y 520</text>
+      <text x="54" y="94" fill="#8a97b8" font-size="15">x 80 · y 420</text>
+      <text x="354" y="54" fill="#8a97b8" font-size="15">x 560 · y 340</text>
+      <text x="20" y="196" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="10" y="30" fill="#f1fa8c" font-size="18">one loop checks all three</text>
+    </svg>
+    <div class="why">🟣 A list of dictionaries. Same shape as your enemy lists.</div>
+    <p class="bilingual">발판을 리스트에 담아요</p>
+  </div>
+
+  <!-- 84 · BONUS C 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS C · 1 / 3</div>
+    <h2>Turn 4 numbers into a list</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>platform_x = 300</code></div>
+    <div class="tag-old">OLD — delete all 4 lines</div>
+    <div class="was"><pre class="tiny">platform_x = 300
+platform_y = 520
+platform_width = 200
+platform_height = 20</pre></div>
+    <div class="tag-new">NEW — type these 5 lines</div>
+    <div class="now"><pre class="tiny"><span class="hot">platforms = [</span>
+<span class="hot">    {"x": 300, "y": 520, "w": 200, "h": 20},</span>
+<span class="hot">    {"x": 80, "y": 420, "w": 150, "h": 20},</span>
+<span class="hot">    {"x": 560, "y": 340, "w": 180, "h": 20},</span>
+<span class="hot">]</span></pre></div>
+    <div class="where">📍 <code>platforms = [</code> at indent <b>0</b> · each ledge at <b>4</b> · the <code>]</code> back at <b>0</b></div>
+    <div class="why">🟣 One dictionary per ledge. Commas between them.</div>
+    <div class="chk">✅ Serena runs it — red text. Two steps fix it.</div>
+  </div>
+
+  <!-- 85 · BONUS C 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS C · 2 / 3</div>
+    <h2>Draw them in a loop</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>pygame.draw.rect(screen, (90, 200, 120)</code></div>
+    <div class="tag-old">OLD — 1 line</div>
+    <div class="was"><pre class="tiny">    pygame.draw.rect(screen, (90, 200, 120), (platform_x, platform_y, platform_width, platform_height))</pre></div>
+    <div class="tag-new">NEW — 2 lines</div>
+    <div class="now"><pre class="tiny"><span class="hot">    for p in platforms:</span>
+<span class="hot">        pygame.draw.rect(screen, (90, 200, 120), (p["x"], p["y"], p["w"], p["h"]))</span></pre></div>
+    <div class="where">📍 <code>for</code> at indent <b>4</b> · the draw line at <b>8</b></div>
+    <div class="why">🟣 One pass per ledge. Three ledges, three rectangles.</div>
+    <div class="chk">✅ Serena runs it — three green ledges appear. Still red text about landing.</div>
+  </div>
+
+  <!-- 86 · BONUS C 3 -->
+  <div class="slide">
+    <div class="steptag">BONUS C · 3 / 3</div>
+    <h2>Land on any of them</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>over_platform = cat_x + cat_width</code></div>
+    <div class="tag-old">OLD — delete these 5 lines</div>
+    <div class="was"><pre class="tiny">    over_platform = cat_x + cat_width &gt; platform_x and cat_x &lt; platform_x + platform_width
+    if over_platform and cat_y + cat_height &gt; platform_y:
+        cat_vel_y = 0
+        cat_y = platform_y - cat_height
+        on_ground = True</pre></div>
+    <div class="tag-new">NEW — type these 6 lines</div>
+    <div class="now"><pre class="tiny"><span class="hot">    for p in platforms:</span>
+<span class="hot">        over = cat_x + cat_width &gt; p["x"] and cat_x &lt; p["x"] + p["w"]</span>
+<span class="hot">        if over and cat_y + cat_height &gt; p["y"]:</span>
+<span class="hot">            cat_vel_y = 0</span>
+<span class="hot">            cat_y = p["y"] - cat_height</span>
+<span class="hot">            on_ground = True</span></pre></div>
+    <div class="where">📍 <code>for</code> at <b>4</b> · <code>over</code> and <code>if</code> at <b>8</b> · the rest at <b>12</b></div>
+    <div class="why">🟣 Your same five lines, new names.</div>
+    <div class="chk">✅ Serena runs it — all three ledges work. Walking under one still yanks her up.</div>
+  </div>
+
+  <!-- 87 · Bonus D concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Ledges catch you only on the way down</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <defs><marker id="upD" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#ff5555"/></marker>
+        <marker id="dnD" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#50fa7b"/></marker></defs>
+      <rect x="40" y="110" width="160" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="90" y="190" fill="#e8eef6" font-size="22">🐱</text>
+      <line x1="120" y1="170" x2="120" y2="140" stroke="#ff5555" stroke-width="5" marker-end="url(#upD)"/>
+      <text x="30" y="216" fill="#ff5555" font-size="17">cat_vel_y = -9 · rising</text>
+      <text x="30" y="90" fill="#ff5555" font-size="17">pass through</text>
+      <rect x="290" y="110" width="160" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="340" y="70" fill="#e8eef6" font-size="22">🐱</text>
+      <line x1="370" y1="76" x2="370" y2="104" stroke="#50fa7b" stroke-width="5" marker-end="url(#dnD)"/>
+      <text x="280" y="216" fill="#50fa7b" font-size="17">cat_vel_y = +6 · falling</text>
+      <text x="280" y="160" fill="#50fa7b" font-size="17">land on it</text>
+    </svg>
+    <div class="why">🟣 Standing still means <code>cat_vel_y</code> is 0, so the ledge lets go.</div>
+    <p class="bilingual">떨어질 때만 착지해요</p>
+  </div>
+
+  <!-- 88 · BONUS D 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS D · 1 / 2</div>
+    <h2>Only land while falling</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if over and cat_y + cat_height</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">        if over and cat_y + cat_height &gt; p["y"]:</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">        if over and cat_vel_y &gt; 0 and cat_y + cat_height &gt; p["y"]:</pre></div>
+    <div class="where">📍 Same line, indent <b>8</b>. Keep the colon.</div>
+    <div class="why">🟣 Positive velocity means going down.</div>
+    <div class="chk">✅ Serena runs it — walking under a ledge no longer yanks her up.</div>
+  </div>
+
+  <!-- 89 · D2 concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A landing window, not the whole sky below</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="140" y="60" width="220" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="140" y="78" width="220" height="30" fill="rgba(80,250,123,.12)" stroke="#50fa7b" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="368" y="98" fill="#50fa7b" font-size="16">25 px window</text>
+      <text x="170" y="104" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="200" y="100" fill="#50fa7b" font-size="16">feet just crossed → land</text>
+      <text x="170" y="190" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="200" y="186" fill="#ff5555" font-size="16">feet 80 px past → too late, keep falling</text>
+      <text x="14" y="30" fill="#8a97b8" font-size="16">a very fast fall can skip straight past a thin ledge</text>
+    </svg>
+    <div class="why">🟣 Without the window, a ledge far above can still grab you.</div>
+  </div>
+
+  <!-- 90 · BONUS D 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS D · 2 / 2</div>
+    <h2>Close the window</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if over and cat_vel_y &gt; 0</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">        if over and cat_vel_y &gt; 0 and cat_y + cat_height &gt; p["y"]:</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">        if over and cat_vel_y &gt; 0 and cat_y + cat_height &gt; p["y"] and cat_y + cat_height &lt; p["y"] + 25:</pre></div>
+    <div class="where">📍 Same line, indent <b>8</b>. No line break.</div>
+    <div class="why">🟣 Land only in the first 25 pixels past the top edge.</div>
+    <div class="chk">✅ Serena runs it — she drops past other ledges, lands on the one under her feet.</div>
+  </div>
+
+  <!-- 91 · Bonus E concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Coyote time — a moment of mercy</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="20" y="120" width="180" height="18" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="150" y="114" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="220" y="114" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="290" y="126" fill="#e8eef6" font-size="22">🐱</text>
+      <text x="360" y="150" fill="#e8eef6" font-size="22">🐱</text>
+      <rect x="205" y="150" width="130" height="34" rx="8" fill="rgba(241,250,140,.1)" stroke="#f1fa8c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="214" y="173" fill="#f1fa8c" font-size="17">8 frames of grace</text>
+      <text x="14" y="40" fill="#8a97b8" font-size="17">She walks off the edge, then presses SPACE one moment late.</text>
+      <text x="14" y="66" fill="#50fa7b" font-size="18">Real games still let her jump. It feels fair.</text>
+      <text x="352" y="200" fill="#ff5555" font-size="16">too late now</text>
+    </svg>
+    <p class="bilingual">모서리를 지나도 잠깐은 점프돼요</p>
+  </div>
+
+  <!-- 92 · BONUS E 1 -->
+  <div class="slide">
+    <div class="steptag">BONUS E · 1 / 3</div>
+    <h2>Make the grace timer</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>jumps_left = 2</code> <span class="quiet">(the one at the top, indent 0)</span></div>
+    <div class="tag-new">NEW — 1 line under it</div>
+    <div class="now"><pre class="tiny">jumps_left = 2
+<span class="hot">coyote = 0</span></pre></div>
+    <div class="where">📍 Indent <b>0</b>, top of the file</div>
+    <div class="why">🟣 A countdown of frames since she left the ground.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet.</div>
+  </div>
+
+  <!-- 93 · BONUS E 2 -->
+  <div class="slide">
+    <div class="steptag">BONUS E · 2 / 3</div>
+    <h2>Refill it, then count it down</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if on_ground:</code></div>
+    <div class="tag-new">NEW — 4 lines ABOVE <code>if on_ground:</code></div>
+    <div class="now"><pre class="tiny"><span class="hot">    if on_ground:</span>
+<span class="hot">        coyote = 8</span>
+<span class="hot">    else:</span>
+<span class="hot">        coyote -= 1</span>
+
+    if on_ground:
+        jumps_left = 2</pre></div>
+    <div class="where">📍 Both <code>if</code> and <code>else</code> at indent <b>4</b> · their lines at <b>8</b></div>
+    <div class="why">🟣 On the ground: full 8. In the air: one less each frame.</div>
+    <div class="chk">✅ Serena runs it — nothing changes yet. One step to go.</div>
+  </div>
+
+  <!-- 94 · BONUS E 3 -->
+  <div class="slide">
+    <div class="steptag">BONUS E · 3 / 3</div>
+    <h2>Pretend she is still standing</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>coyote -= 1</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny">    else:
+        coyote -= 1
+<span class="hot">    if coyote &gt; 0:</span>
+<span class="hot">        on_ground = True</span>
+
+    if on_ground:
+        jumps_left = 2</pre></div>
+    <div class="where">📍 <code>if coyote</code> at indent <b>4</b> · <code>on_ground</code> at <b>8</b></div>
+    <div class="why">🟣 For 8 frames the game acts as if her feet were down.</div>
+    <div class="chk">✅ Serena runs it — walk off a ledge, press SPACE late, she still jumps.</div>
+  </div>
+
+  <!-- 95 · Bonus F concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Falling too fast to be caught</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="60" y="120" width="180" height="16" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="110" y="46" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="110" y="196" fill="#ff5555" font-size="20">🐱</text>
+      <path d="M124,56 L124,186" stroke="#ff5555" stroke-width="3" stroke-dasharray="6 6"/>
+      <text x="150" y="80" fill="#ff5555" font-size="17">cat_vel_y = 45</text>
+      <text x="150" y="104" fill="#8a97b8" font-size="15">one frame jumps 45 px</text>
+      <text x="150" y="170" fill="#ff5555" font-size="17">right through the ledge</text>
+      <rect x="300" y="120" width="160" height="16" fill="rgba(90,200,120,.5)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="350" y="114" fill="#e8eef6" font-size="20">🐱</text>
+      <text x="300" y="86" fill="#50fa7b" font-size="17">capped at 20</text>
+      <text x="300" y="176" fill="#50fa7b" font-size="17">the ledge catches her</text>
+    </svg>
+    <div class="why">🟣 Nothing checks the pixels <b>between</b> two frames. Slow the fall down.</div>
+    <p class="bilingual">너무 빠르면 발판을 통과해요</p>
+  </div>
+
+  <!-- 96 · BONUS F -->
+  <div class="slide">
+    <div class="steptag">BONUS F · 1 / 1</div>
+    <h2>Cap the falling speed</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>cat_vel_y += cat_gravity</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny">    cat_vel_y += cat_gravity
+<span class="hot">    if cat_vel_y &gt; 20:</span>
+<span class="hot">        cat_vel_y = 20</span>
+    cat_y += cat_vel_y</pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · <code>cat_vel_y = 20</code> at <b>8</b>. Must be ABOVE <code>cat_y += cat_vel_y</code>.</div>
+    <div class="why">🟣 Clamp it before it is used, not after.</div>
+    <div class="chk">✅ Serena runs it — a long fall now lands on the ledge below.</div>
+  </div>
+
+  <!-- 97 · Debug 5 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the cat is stuck at the top</h2>
+<pre class="tiny">        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and on_ground:
+                cat_vel_y = cat_jump
+                on_ground = True</pre>
+    <div class="debug-card"><div class="err">No error. The cat floats up and never comes down.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Setting the flag True inside the jump lets SPACE fire every frame. Delete that line — only the <b>landing</b> sets it True.</p>
+      <p class="bilingual">깃발은 착지에서만 켜요</p>
+    </details>
+  </div>
+
+  <!-- 98 · Debug 6 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the cat twitches on the floor</h2>
+<pre class="tiny">    if cat_y + cat_height &gt; HEIGHT:
+        cat_y = HEIGHT - cat_height
+    else:
+        on_ground = False</pre>
+    <div class="debug-card"><div class="err">No error. The cat shivers on the floor and never jumps.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The speed was never zeroed, and the flag was never raised. Both lines belong inside the <code>if</code>: <code>cat_vel_y = 0</code> and <code>on_ground = True</code>.</p>
+    </details>
+  </div>
+
+  <!-- 99 · Debug 7 -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the ledge is invisible</h2>
+<pre class="tiny">    pygame.display.flip()
+    for p in platforms:
+        pygame.draw.rect(screen, (90, 200, 120), (p["x"], p["y"], p["w"], p["h"]))</pre>
+    <div class="debug-card"><div class="err">No error. The cat lands on nothing. No green ledge anywhere.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>flip()</code> shows the picture. Anything drawn after it waits for the next frame and is wiped by <code>screen.fill</code>. Draw <b>before</b> the flip.</p>
+      <p class="bilingual">그리기는 flip 앞에 와야 해요</p>
+    </details>
+  </div>
+
+  <!-- 100 · Stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Set <code>cat_jump = -22</code>. Place a ledge she can only just reach.</div>
+      <div class="item"><span class="lvl">★★</span>Give each ledge a <code>"colour"</code> key. Paint them differently.</div>
+      <div class="item"><span class="lvl">★★★</span>Add a coin: a small rect that vanishes when the cat's box touches it.</div>
+    </div>
+  </div>
+
+  <!-- 101 · Close -->
+  <div class="slide center-all">
+    <div class="emoji">🏁</div>
+    <h1 style="font-size:clamp(32px,5.6vmin,50px)">A jump is<br>three numbers</h1>
+    <p class="line" style="margin-top:.5em">A negative kick. A +1 that eats it.<br>A floor line that says <b>stop</b>.</p>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: moving ledges, and a cat that can be caught</p>
+    <p class="bilingual">다음엔 움직이는 발판이에요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 101</span><button id="next">&rsaquo;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
