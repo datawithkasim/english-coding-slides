@@ -4,9 +4,9 @@ Seven lessons on the calendar. **RYAN's 09:00 KST lesson already happened this
 morning** (transcript in Drive, ledger row written) — no deck, no message.
 Six decks needed, 15:00 → 21:50 Korea time.
 
-**Topics are Kasim's, given this morning. They override `promised`.** He named
+**Topics are Kasim's, given this morning. They override `promised`.** Kasim named
 five by track; the concrete next step inside each track is named below and was
-read back to him. IAN he did not name — that one is the Idea line.
+read back to Kasim. IAN was not named — that one is the Idea line.
 
 | Time | Student | Topic | Deck |
 |---|---|---|---|
@@ -98,7 +98,7 @@ white number ovals.
 - `for leaves in leaves_type` to cycle block types per tree
 - `x1 += 10` / `x2 += 10` to space trees apart
 
-✓ Self-checked the for-loop himself: "4 types → loops 4 times"
+✓ Self-checked the for-loop unprompted: "4 types → loops 4 times"
 △ List syntax slips — missing commas, mismatched parens; asks before self-debugging
 △ Copies code from screen instead of typing independently
 
@@ -107,7 +107,7 @@ white number ovals.
 
 **Today's new idea:** give the function **parameters**. `def make_tree(x, z, leaf)`
 so one function builds a tree *anywhere*, with *any* leaf, instead of walking a
-global x1 forward by 10 each time. Ramp: v1 the function he has → v2 one
+global x1 forward by 10 each time. Ramp: v1 the function Eric has → v2 one
 parameter `x` → v3 add `z` → v4 add `leaf`, then call it four times to plant a
 row, then call it from inside a loop to plant a forest.
 Visual required: the same `make_tree` box with different values dropping into the
@@ -141,7 +141,7 @@ as the ✅ check wording, not as the lesson.
 **Today's new idea:** **change the variable inside the loop.** Last week `long`
 was set once and stayed 5. Today `change long by 1` sits *inside* the repeat, so
 every pass draws a longer arm — a growing staircase / spiral instead of a square.
-Ramp: v1 the square he has → v2 add `change long by 1` inside → v3 turn it into a
+Ramp: v1 the square JJ has → v2 add `change long by 1` inside → v3 turn it into a
 spiral → v4 a staircase using `move up` once per pass.
 Visual required: one frame per loop pass with the value of `long` printed and the
 arm drawn that many blocks long — pass 1 = 5, pass 2 = 6, pass 3 = 7, pass 4 = 8.
@@ -155,7 +155,7 @@ Reference deck for tone: `../2026-09-02/ihyeon-maze-first-turn.html`.
 ## 19:00 KST · 17:00 HCMC — DANIEL PYTHON ADVENTURES · Python
 
 **⚠ No log and no draft for 2026-08-27, and no Drive transcript for that date.**
-His newest facts are from **2026-08-20**. Write the recap and the parent message
+The newest facts are from **2026-08-20**. Write the recap and the parent message
 against 08-20, not 08-27.
 
 **Last lesson (2026-08-20 draft):**
@@ -167,7 +167,7 @@ against 08-20, not 08-27.
 - String vs integer type errors
 
 ✓ Wrote the slippers/gecko purchase calculation with `int()` after one explanation
-△ Waited for hints on missing capital letters instead of finding them himself
+△ Waited for hints on missing capital letters instead of finding them unprompted
 
 **Unmet last week (the promise from 08-20):**
 > "Next lesson: variable reassignment, to fix the value-not-updating issue found today"
@@ -179,7 +179,7 @@ Plain `money = money - 20` was seen on 08-13, so the new thing is the shorthand
 and, more importantly, *reassigning in a loop so the value accumulates*.
 Ramp: v1 print a fixed balance → v2 `money = money - price` once → v3 `money -= price`
 → v4 ask the price with `input()` + `int()` and subtract it → v5 wrap it in a
-`while` so he can buy several things and watch the balance fall.
+`while` so Daniel can buy several things and watch the balance fall.
 Visual required: a money box redrawn after each purchase, with the old value
 crossed out and the new value beside it, one frame per purchase.
 △ missing-capital-letter slip becomes a Common Mistake slide (`Money` vs `money`).
@@ -204,10 +204,10 @@ Reference deck for tone: `../2026-08-31/ethan-for-loops-range.html`.
 △ Waited to be asked instead of saying "Teacher, I did it"
 
 **Unmet last week:** nothing missed.
-**Said next (2026-08-20 draft):** give her time to try before the teacher types —
+**Said next (2026-08-20 draft):** give Seohyeon time to try before the teacher types —
 that is a teaching note, not a topic.
 
-**Today's new idea:** **a loop inside a loop.** She has already changed a variable
+**Today's new idea:** **a loop inside a loop.** Seohyeon has already changed a variable
 inside one repeat (the pyramid). The new construct is nesting: an outer
 `repeat` that runs a whole inner `repeat` each pass. Build a flat floor
 (rows × columns), then stack floors into a solid tower.
@@ -215,8 +215,8 @@ Ramp: v1 one `repeat` = one line of blocks → v2 wrap it in a second `repeat` +
 turn = a square floor → v3 add `agent move up` between floors = a tower →
 v4 shrink each floor with `change side by -1` = a stepped pyramid.
 Visual required: a grid filling in one cell at a time, with **both** counters
-shown side by side — outer pass 1/3, inner pass 1/5 — so she can see the inner
-loop finish completely before the outer one advances.
+shown side by side — outer pass 1/3, inner pass 1/5 — so the inner
+loop is seen to finish completely before the outer one advances.
 △ `right` vs `forward` becomes a Common Mistake slide with a top-down arrow
 diagram of the agent's facing.
 
@@ -236,18 +236,18 @@ Reference deck for tone: `../2026-09-02/seohoo-pixels-with-a-loop.html`.
 - Wall collision (`if cat_x < 0`, `if cat_x + cat_width > WIDTH`)
 
 ✓ Instantly got if-vs-elif: separate ifs allow diagonal movement
-✓ Explained gravity herself — velocity gains 1 every frame
+✓ Explained gravity unprompted — velocity gains 1 every frame
 △ Not solid that (x, y) is the **top-left corner** — confused why collisions need
   `cat_x + cat_width` and `cat_y` minus height
 
 **Unmet last week:** nothing missed.
 **Said next:** nothing recorded.
 
-**Today's new idea:** **jumping, and landing.** Gravity already pulls her cat
+**Today's new idea:** **jumping, and landing.** Gravity already pulls the cat
 down forever. Today: SPACE sets `cat_vel_y` to a *negative* number (an upward
 kick) and a floor check stops the fall. Then: only allow a jump when standing on
-the ground (`on_ground` flag), so she cannot fly.
-Ramp: v1 gravity as she has it → v2 SPACE sets `cat_vel_y = -15` → v3 floor
+the ground (`on_ground` flag), so the cat cannot fly.
+Ramp: v1 gravity as Serena has it → v2 SPACE sets `cat_vel_y = -15` → v3 floor
 check `if cat_y + cat_height > HEIGHT` clamps and zeroes velocity → v4 `on_ground`
 flag blocks mid-air jumps → v5 a platform to land on.
 Visual required: a frame-by-frame strip of the jump arc with `cat_vel_y` printed
@@ -275,7 +275,7 @@ Reference deck for tone: `../2026-09-02/neo-bullets-that-hurt.html`.
 - **Copied the nav code by hand across 9 HTML pages**; debugged missing and
   duplicate home links
 
-✓ Chose his own nav background and hover colours; types CSS fast
+✓ Chose own nav background and hover colours; types CSS fast
 △ Waits for the teacher to type first
 △ Forgets semicolons
 △ Missed a duplicate link while copy-pasting
@@ -283,9 +283,9 @@ Reference deck for tone: `../2026-09-02/neo-bullets-that-hurt.html`.
 **Unmet last week:** nothing missed.
 **Said next:** nothing recorded.
 
-**Today's new idea:** **one external `style.css`, linked from all 9 pages.** He
+**Today's new idea:** **one external `style.css`, linked from all 9 pages.** Ian
 just felt the exact pain this solves — nine copies of the same CSS, and a
-copy-paste bug he had to hunt. Today: cut the CSS out of the `<style>` block,
+copy-paste bug that had to be hunted down. Today: cut the CSS out of the `<style>` block,
 paste it into `style.css`, add one `<link>` line per page, then change the nav
 colour **once** and watch all nine pages change.
 Ramp: v1 the page as it is → v2 create `style.css` and move the nav rules → v3
