@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snake — The Snake That Keeps Going (Yungun · 2026-09-05)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Pygame Snake · Yungun · 5 Sep 2026</div>
+
+  <!-- ============ 1 · Title ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pygame Snake</div>
+    <div class="emoji">🍎</div>
+    <h1>The Snake That<br>Keeps Going</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">place</span> food with <span class="sub">random</span> — then make the snake <span class="sub">grow</span>.</p>
+    <p class="bilingual">오늘은 먹이를 만들고 뱀을 길게 해요</p>
+  </div>
+
+  <!-- ============ 2 · Your file right now ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Your file</div>
+    <h2>What <code>main.py</code> already does</h2>
+<pre>direction = (<span class="num">1</span>, <span class="num">0</span>)
+
+<span class="kw">while</span> running:
+    <span class="kw">if</span> time_since_last_move &gt;= MOVE_INTERVAL:
+        head_x, head_y = snake_body[<span class="num">0</span>]
+        new_head = (head_x + direction[<span class="num">0</span>], head_y + direction[<span class="num">1</span>])
+        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        snake_body.<span class="fn">pop</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">A purple square slides across mint green. It never stops.</div>
+    </div>
+  </div>
+
+  <!-- ============ 3 · Recap · direction is a two-slot box ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Recap</div>
+    <h2><code>direction</code> has two slots</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">direction[0]</span><span class="val">1 · across ➡️</span></div>
+      <div class="varbox"><span class="name">direction[1]</span><span class="val">0 · down ⬇️</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Same two slots as last time. Slot <b>0</b> across, slot <b>1</b> down.</p>
+    <p class="bilingual center">0번 가로, 1번 세로</p>
+  </div>
+
+  <!-- ============ 4 · Recap · the compass ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Recap</div>
+    <h2>Four keys, four boxes</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">➡️</div><div class="name">right</div><div class="ex">(1, 0)</div></div>
+      <div class="opt-card"><div class="ico">⬅️</div><div class="name">left</div><div class="ex">(-1, 0)</div></div>
+      <div class="opt-card"><div class="ico">⬆️</div><div class="name">up</div><div class="ex">(0, -1)</div></div>
+      <div class="opt-card"><div class="ico">⬇️</div><div class="name">down</div><div class="ex">(0, 1)</div></div>
+    </div>
+    <p class="center" style="margin-top:.5em">A key press <b>sets</b> the box. It does not move the snake.</p>
+  </div>
+
+  <!-- ============ 5 · Recap quiz ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Quick check</div>
+    <h2>Two questions</h2>
+    <div class="recap-q">
+      <div class="label">Your own code</div>
+      <div class="q">1. You let go of the arrow key. Does the snake stop?</div>
+      <details><summary>Show answer</summary><div class="ans">No. <code>direction</code> still holds the same two numbers.</div></details>
+      <div class="q" style="margin-top:.5em">2. Which slot does <code>(0, -1)</code> change?</div>
+      <details><summary>Show answer</summary><div class="ans">Slot 1 — the down slot. Minus one means up.</div></details>
+    </div>
+  </div>
+
+  <!-- ============ 6 · Say the sentence (the gap) ============ -->
+  <div class="slide">
+    <span class="slot-badge">SAY IT</span>
+    <div class="pill">🗣️ Say it out loud</div>
+    <h2>One full sentence</h2>
+    <div class="frame-card">
+      <div class="label">Read this aloud, twice</div>
+      <div class="frame">"<code>direction[0]</code> is <b>how far across</b> the snake moves <b>each step</b>."</div>
+      <div class="frame" style="margin-top:.4em">"<code>direction[1]</code> is <b>how far down</b> the snake moves <b>each step</b>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 7 · Fill-the-blank twin ============ -->
+  <div class="slide">
+    <span class="slot-badge">SAY IT</span>
+    <div class="pill">🗣️ Now with gaps<span class="activity-tag">activity</span></div>
+    <h2>Same sentence, your words</h2>
+    <div class="frame-card">
+      <div class="label">Fill the blanks out loud</div>
+      <div class="frame">"<code>direction[0]</code> is how far <span class="blank"></span> the snake moves each <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"When <code>direction</code> is <code>(0, 1)</code>, the snake moves <span class="blank"></span>."</div>
+      <div class="pair-prompt">문장 전체로 말해요</div>
+    </div>
+  </div>
+
+  <!-- ============ 8 · Watch it · head + direction ============ -->
+  <div class="slide">
+    <span class="slot-badge">WATCH</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One step, over and over</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">head_x · across →</div>
+        <div class="cg-track"><div class="cg-sprite">🐍</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">head_x + direction[0]</span> = <span class="cg-val"><span>15</span><span>16</span><span>17</span><span>18</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Every 150 milliseconds, the head number goes up by one.</p>
+  </div>
+
+  <!-- ============ 9 · Trace activity · new_head ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Where does the head land?</h2>
+<pre>direction = (<span class="num">1</span>, <span class="num">0</span>)      <span class="com"># head starts at (15, 10)</span></pre>
+    <div class="trace-grid">
+      <div class="cell head">step</div>
+      <div class="cell head">head_x</div>
+      <div class="cell head">head_y</div>
+
+      <div class="cell">start</div>
+      <div class="cell">15</div>
+      <div class="cell">10</div>
+
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">16</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">17</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">18</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 10 · The problem today ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">The problem 🤔</div>
+    <h2>The snake has nowhere to go</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ now</span>
+        <p>🐍 slides forever.<br>Nothing to chase.<br>Never gets longer.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ by the end</span>
+        <p>🍎 food appears.<br>Snake eats it.<br>Snake gets longer.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">오늘은 먹이를 만들어요</p>
+  </div>
+
+  <!-- ============ 11 · Predict ============ -->
+  <div class="slide">
+    <span class="slot-badge">PREDICT</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What number comes out?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Run this line five times.</div>
+<pre><span class="kw">import</span> random
+<span class="fn">print</span>(random.<span class="fn">randint</span>(<span class="num">0</span>, <span class="num">29</span>))</pre>
+      <details><summary>Reveal output</summary><div class="ans">A whole number from 0 to 29. A different one nearly every run.</div></details>
+    </div>
+  </div>
+
+  <!-- ============ 12 · Vocab ============ -->
+  <div class="slide">
+    <span class="slot-badge">VOCAB</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">random</span>
+      <span class="gloss">Python's dice box — you must import it</span>
+      <span class="ko">랜덤 · 무작위</span>
+
+      <span class="term">randint</span>
+      <span class="gloss">pick one whole number between two limits</span>
+      <span class="ko">정수 뽑기</span>
+
+      <span class="term">grid square</span>
+      <span class="gloss">one cell of the board, counted 0, 1, 2…</span>
+      <span class="ko">격자 칸</span>
+    </div>
+  </div>
+
+  <!-- ============ 13 · Concept · the board ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Your board is 30 by 20</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">WIDTH // CELL_SIZE</span><span class="val">600 ÷ 20 = 30</span></div>
+      <div class="varbox"><span class="name">HEIGHT // CELL_SIZE</span><span class="val">400 ÷ 20 = 20</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Those two lines are already at the top of your file.</p>
+    <p class="bilingual center">가로 30칸, 세로 20칸</p>
+  </div>
+
+  <!-- ============ 14 · Concept · counting from zero ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Count it 🔢</div>
+    <h2>30 squares, numbered 0 to 29</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">across ➡️</div>
+      <div class="iter-row">
+        <div class="iter-item">0</div>
+        <div class="iter-item">1</div>
+        <div class="iter-item">2</div>
+        <div class="iter-item">…</div>
+        <div class="iter-item">28</div>
+        <div class="iter-item">29</div>
+      </div>
+      <div class="viz-arrow">⬇ 30 squares in total</div>
+    </div>
+    <p class="center">Start at 0, so the last one is <b>30 − 1 = 29</b>.</p>
+    <p class="bilingual center">0부터 세면 마지막은 29</p>
+  </div>
+
+  <!-- ============ 15 · Concept · the dice ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Watch it! 🎲</div>
+    <h2><code>randint</code> rolls a dice</h2>
+<pre>random.<span class="fn">randint</span>(<span class="num">0</span>, <span class="num">29</span>)</pre>
+    <div style="text-align:center;margin-top:.5em">
+      <div class="dice" id="dx1" data-dice data-range="0-29">
+        <div class="face">?</div>
+        <div class="dlabel">you get <span class="arrow">→</span> <span class="val">?</span></div>
+      </div>
+    </div>
+    <p class="center">Both limits can come out. 0 can win. 29 can win.</p>
+  </div>
+
+  <!-- ============ 16 · Concept · two rolls make a square ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Two rolls = one square</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">roll 1</span><span class="val">7 · across</span></div>
+      <div class="varbox"><span class="name">roll 2</span><span class="val">3 · down</span></div>
+      <div class="varbox" style="border-color:var(--accent-2)"><span class="name" style="color:var(--accent-2)">food</span><span class="val">(7, 3)</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Same shape as <code>direction</code>: two slots in one box.</p>
+    <p class="bilingual center">두 번 뽑으면 한 칸</p>
+  </div>
+
+  <!-- ============ 17 · Concept · insert and pop ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>How the snake moves now</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">snake_body</div>
+      <div class="iter-row">
+        <div class="iter-item">🟪 new head</div>
+        <div class="iter-item">🟪</div>
+        <div class="iter-item">🟪</div>
+        <div class="iter-item">❌ tail popped</div>
+      </div>
+      <div class="viz-arrow">⬇ one in the front, one out of the back</div>
+    </div>
+    <p class="center">Length never changes. That is why the snake stays one square.</p>
+  </div>
+
+  <!-- ============ 18 · Concept · eating skips the pop ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">The big idea 🌟</div>
+    <h2>Eating means: skip the pop</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">no food</span>
+        <p>insert head ➕<br>pop tail ➖<br><b>length stays</b></p>
+      </div>
+      <div class="col good"><span class="tag">ate food</span>
+        <p>insert head ➕<br>tail stays 🟪<br><b>length grows</b></p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">먹으면 꼬리를 안 빼요</p>
+  </div>
+
+  <!-- ============ 19 · Today's plan ============ -->
+  <div class="slide">
+    <span class="slot-badge">PLAN</span>
+    <div class="pill">Today's plan 🗺️</div>
+    <h2>Five tiny versions</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🐍</div><div class="name">v1 · now</div><div class="ex">slides, nothing to eat</div></div>
+      <div class="opt-card"><div class="ico">🎲</div><div class="name">v2 · pick a square</div><div class="ex">random.randint</div></div>
+      <div class="opt-card"><div class="ico">🍎</div><div class="name">v3 · draw the food</div><div class="ex">a pink square</div></div>
+      <div class="opt-card"><div class="ico">😋</div><div class="name">v4 · eat it</div><div class="ex">food jumps away</div></div>
+      <div class="opt-card"><div class="ico">📏</div><div class="name">v5 · grow</div><div class="ex">skip the pop</div></div>
+      <div class="opt-card"><div class="ico">🏆</div><div class="name">bonus</div><div class="ex">score, speed, walls</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 20 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 1 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v2 · Bring in the dice box</h2>
+<pre><span style="display:block;opacity:.35"><span class="kw">import</span> pygame</span><span style="display:block;background:rgba(56,208,224,.13)"><span class="kw">import</span> random<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>import pygame</code><br>
+      📍 <b>WHERE:</b> the line under it · 0 spaces<br>
+      🟣 <b>WHY:</b> <code>random</code> does not exist until you import it<br>
+      ✅ <b>CHECK:</b> run — the snake still slides, no red error
+    </div>
+  </div>
+
+  <!-- ============ 21 · Where imports live ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>The very top of your file</h2>
+<pre><span class="kw">import</span> pygame
+<span class="kw">import</span> random
+
+pygame.<span class="fn">init</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Rule</div>
+      <div style="opacity:1">Imports sit above everything else, at 0 spaces.</div>
+    </div>
+    <p class="bilingual">import는 맨 위에</p>
+  </div>
+
+  <!-- ============ 22 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 2 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v2 · Pick the food square</h2>
+<pre><span style="display:block;opacity:.35">direction = (1, 0)</span><span style="display:block;opacity:.35">time_since_last_move = 0</span><span style="display:block;background:rgba(56,208,224,.13)">food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>time_since_last_move = 0</code><br>
+      📍 <b>WHERE:</b> the line under it · 0 spaces<br>
+      🟣 <b>WHY:</b> one square is chosen once, before the loop starts<br>
+      ✅ <b>CHECK:</b> run — no red error. Nothing new on screen yet.
+    </div>
+  </div>
+
+  <!-- ============ 23 · Zoom in · reading the line ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Read the new line in three parts</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">food =</span><span class="val">the box</span></div>
+      <div class="varbox"><span class="name">randint(0, 29)</span><span class="val">across</span></div>
+      <div class="varbox"><span class="name">randint(0, 19)</span><span class="val">down</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em"><code>GRID_WIDTH</code> is 30, so <code>GRID_WIDTH - 1</code> is 29.</p>
+    <p class="bilingual center">이름 · 가로 · 세로</p>
+  </div>
+
+  <!-- ============ 24 · Why minus one ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Why <code>- 1</code>?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ randint(0, 30)</span>
+<pre>food = (<span class="num">30</span>, <span class="num">5</span>)</pre>
+        <p>Square 30 is off the right edge. You never see the food.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ randint(0, 29)</span>
+<pre>food = (<span class="num">29</span>, <span class="num">5</span>)</pre>
+        <p>Square 29 is the last real one. Always on screen.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">0부터 세니까 하나 빼요</p>
+  </div>
+
+  <!-- ============ 25 · Trace activity · randint range ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Could this come out?</h2>
+    <div class="trace-grid">
+      <div class="cell head">value</div>
+      <div class="cell head">randint(0, 29)</div>
+      <div class="cell head">randint(0, 19)</div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">19</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">29</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">30</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 26 · Concept · squares to pixels ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Square number → pixels</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">food = (7, 3)</div>
+      <div class="iter-row">
+        <div class="iter-item">7 × 20 = 140</div>
+        <div class="iter-item">3 × 20 = 60</div>
+      </div>
+      <div class="viz-arrow">⬇ draw a 20 × 20 box at 140 across, 60 down</div>
+    </div>
+    <p class="center">Your snake line already does this. The food copies it.</p>
+    <p class="bilingual center">칸 번호 × 20 = 픽셀</p>
+  </div>
+
+  <!-- ============ 27 · The line it copies ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Already in your file 📄</div>
+    <h2>Copy the shape you have</h2>
+<pre><span class="com"># the snake line you already wrote</span>
+rect = (gx * CELL_SIZE, gy * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+
+<span class="com"># the food line — same shape, different box</span>
+food_rect = (food[<span class="num">0</span>] * CELL_SIZE, food[<span class="num">1</span>] * CELL_SIZE, CELL_SIZE, CELL_SIZE)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Same four parts</div>
+      <div style="opacity:1">across · down · width · height</div>
+    </div>
+  </div>
+
+  <!-- ============ 28 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 3 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Build the food box</h2>
+<pre><span style="display:block;opacity:.35">    <span class="kw">for</span> (gx, gy) <span class="kw">in</span> snake_body:</span><span style="display:block;opacity:.35">        rect = (gx * CELL_SIZE, gy * CELL_SIZE, CELL_SIZE, CELL_SIZE)</span><span style="display:block;opacity:.35">        pygame.draw.<span class="fn">rect</span>(screen, PASTEL_LAVENDER, rect)</span><span style="display:block;background:rgba(56,208,224,.13)">    food_rect = (food[<span class="num">0</span>] * CELL_SIZE, food[<span class="num">1</span>] * CELL_SIZE, CELL_SIZE, CELL_SIZE)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.draw.rect(screen, PASTEL_LAVENDER, rect)</code><br>
+      📍 <b>WHERE:</b> the line under it · <b>4 spaces</b> (back out of the for loop)<br>
+      🟣 <b>WHY:</b> turn the square number into pixels<br>
+      ✅ <b>CHECK:</b> run — no red error. Still nothing pink.
+    </div>
+  </div>
+
+  <!-- ============ 29 · Indent warning ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>4 spaces, not 8</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ 8 spaces</span>
+<pre>    <span class="kw">for</span> (gx, gy) <span class="kw">in</span> snake_body:
+        rect = (...)
+        food_rect = (...)</pre>
+        <p>Inside the for loop. Rebuilt for every snake square.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ 4 spaces</span>
+<pre>    <span class="kw">for</span> (gx, gy) <span class="kw">in</span> snake_body:
+        rect = (...)
+    food_rect = (...)</pre>
+        <p>Out of the for loop. Built once per frame.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 30 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 4 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Draw the food 🍎</h2>
+<pre><span style="display:block;opacity:.35">    food_rect = (food[0] * CELL_SIZE, food[1] * CELL_SIZE, CELL_SIZE, CELL_SIZE)</span><span style="display:block;background:rgba(56,208,224,.13)">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PINK, food_rect)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>food_rect = (food[0] * CELL_SIZE</code><br>
+      📍 <b>WHERE:</b> the line under it · 4 spaces<br>
+      🟣 <b>WHY:</b> a box on its own is invisible until you draw it<br>
+      ✅ <b>CHECK:</b> run — a <b>pink square</b> appears. Run again: a new spot.
+    </div>
+  </div>
+
+  <!-- ============ 31 · Run v3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>v3 — the drawing part</h2>
+<pre>    screen.<span class="fn">fill</span>(PASTEL_MINT)
+    <span class="kw">for</span> (gx, gy) <span class="kw">in</span> snake_body:
+        rect = (gx * CELL_SIZE, gy * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+        pygame.draw.<span class="fn">rect</span>(screen, PASTEL_LAVENDER, rect)
+    food_rect = (food[<span class="num">0</span>] * CELL_SIZE, food[<span class="num">1</span>] * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PINK, food_rect)
+
+    pygame.display.<span class="fn">flip</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">Purple snake sliding. One pink square sitting still.</div>
+    </div>
+  </div>
+
+  <!-- ============ 32 · Common mistake · draw order ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Draw after the fill</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PINK, food_rect)
+    screen.<span class="fn">fill</span>(PASTEL_MINT)</pre>
+        <p>The fill paints mint over the food. Nothing pink.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>    screen.<span class="fn">fill</span>(PASTEL_MINT)
+    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PINK, food_rect)</pre>
+        <p>Fill first, then draw on top.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">칠하고 나서 그려요</p>
+  </div>
+
+  <!-- ============ 33 · Predict · matching ============ -->
+  <div class="slide">
+    <span class="slot-badge">PREDICT</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>True or false?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>new_head = (<span class="num">7</span>, <span class="num">3</span>)
+food     = (<span class="num">7</span>, <span class="num">4</span>)
+<span class="fn">print</span>(new_head == food)</pre>
+      <details><summary>Reveal output</summary><div class="ans"><code>False</code> — slot 0 matches, slot 1 does not. Both must match.</div></details>
+    </div>
+  </div>
+
+  <!-- ============ 34 · Concept · both slots must match ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Both slots, or no match</h2>
+    <div class="match-flow">
+      <div class="row skip">(7, 3) vs (5, 3) <span class="verdict">✗ across differs</span></div>
+      <div class="row skip">(7, 3) vs (7, 4) <span class="verdict">✗ down differs</span></div>
+      <div class="row hit">(7, 3) vs (7, 3) <span class="verdict">✓ EAT</span></div>
+      <div class="row skip">(8, 3) vs (7, 3) <span class="verdict">✗ across differs</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">The snake must land <b>exactly</b> on the food square.</p>
+    <p class="bilingual center">두 칸 다 같아야 먹어요</p>
+  </div>
+
+  <!-- ============ 35 · STEP 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 5 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Eat it 😋</h2>
+<pre><span style="display:block;opacity:.35">        snake_body.<span class="fn">insert</span>(0, new_head)</span><span style="display:block;background:rgba(56,208,224,.13)">        <span class="kw">if</span> new_head == food:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">        snake_body.<span class="fn">pop</span>()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>snake_body.insert(0, new_head)</code><br>
+      📍 <b>WHERE:</b> the two lines under it · <code>if</code> = <b>8 spaces</b>, <code>food =</code> = <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> when the head lands on the food, roll a new square<br>
+      ✅ <b>CHECK:</b> steer onto the pink square — it jumps somewhere new
+    </div>
+  </div>
+
+  <!-- ============ 36 · Where it sits ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>The whole moving block</h2>
+<pre>    <span class="kw">if</span> time_since_last_move &gt;= MOVE_INTERVAL:
+        time_since_last_move -= MOVE_INTERVAL
+        head_x, head_y = snake_body[<span class="num">0</span>]
+        new_head = (head_x + direction[<span class="num">0</span>], head_y + direction[<span class="num">1</span>])
+        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        <span class="kw">if</span> new_head == food:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+        snake_body.<span class="fn">pop</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Why here</div>
+      <div style="opacity:1"><code>new_head</code> only exists inside this block.</div>
+    </div>
+  </div>
+
+  <!-- ============ 37 · Trace activity · does it eat ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Does the snake eat?</h2>
+<pre>food = (<span class="num">18</span>, <span class="num">10</span>)   <span class="com"># head starts at (15, 10), going right</span></pre>
+    <div class="trace-grid">
+      <div class="cell head">step</div>
+      <div class="cell head">new_head</div>
+      <div class="cell head">eat?</div>
+
+      <div class="cell">1</div>
+      <div class="cell">(16, 10)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">(17, 10)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">(18, 10)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">YES 🍎</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">(19, 10)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 38 · Common mistake · = vs == ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>One equals, or two?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        <span class="kw">if</span> new_head = food:</pre>
+        <p>Red error: <code>SyntaxError: invalid syntax</code>. One <code>=</code> stores.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        <span class="kw">if</span> new_head == food:</pre>
+        <p>Two <code>==</code> asks a question. It answers True or False.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">= 는 저장, == 는 질문</p>
+  </div>
+
+  <!-- ============ 39 · Debug 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — the food never moves</h2>
+<pre>        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        snake_body.<span class="fn">pop</span>()
+
+    <span class="kw">if</span> new_head == food:
+        food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))</pre>
+    <div class="debug-card"><div class="err">NameError: name 'new_head' is not defined</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The <code>if</code> is at 4 spaces, outside the timed block. Move it to <b>8 spaces</b>, under <code>insert</code>.</p>
+      <p class="bilingual">들여쓰기 8칸으로</p>
+    </details>
+  </div>
+
+  <!-- ============ 40 · Debug 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — it eats on the wrong row</h2>
+<pre>        <span class="kw">if</span> new_head[<span class="num">0</span>] == food[<span class="num">0</span>]:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))</pre>
+    <div class="debug-card"><div class="err">No crash. The food jumps even when the snake is nowhere near it.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">This only checks slot 0. Compare the <b>whole boxes</b>: <code>if new_head == food:</code></p>
+      <p class="bilingual">두 칸 모두 비교해요</p>
+    </details>
+  </div>
+
+  <!-- ============ 41 · Quiz 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>random.randint(0, 19)</code> can give…</div>
+      <div class="opts">
+        <details><summary>A. 20</summary><div class="ans">No — 19 is the top.</div></details>
+        <details><summary>B. 0</summary><div class="ans">✓ Both limits can come out.</div></details>
+        <details><summary>C. 19.5</summary><div class="ans">No — whole numbers only.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>new_head == food</code> is True when…</div>
+      <div class="opts">
+        <details><summary>A. slot 0 matches</summary><div class="ans">No — not enough.</div></details>
+        <details><summary>B. both slots match</summary><div class="ans">✓ The whole box must match.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 42 · Modify 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH ___ <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT ___ <span class="num">1</span>))
+
+<span class="kw">if</span> new_head ___ food:</pre>
+    <p style="margin-top:.6em"><b>Hint:</b> counting starts at 0, and a question needs two symbols.</p>
+  </div>
+
+  <!-- ============ 43 · Concept · length stays ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Right now the length never changes</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">insert head → 2 long</div>
+        <div class="ra-line">pop tail → 1 long</div>
+        <div class="ra-line">insert head → 2 long</div>
+        <div class="ra-line">pop tail → 1 long</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">len(snake_body)</span>
+        <span class="ra-vals"><span>2</span><span>1</span><span>2</span><span>1</span></span>
+      </div>
+    </div>
+    <p class="bilingual">넣고 빼니까 길이가 그대로</p>
+  </div>
+
+  <!-- ============ 44 · Concept · skip the pop ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">The big idea 🌟</div>
+    <h2>Skip one pop, keep one square</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">move · insert, pop</div>
+        <div class="ra-line">EAT · insert, no pop</div>
+        <div class="ra-line">move · insert, pop</div>
+        <div class="ra-line">EAT · insert, no pop</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">len(snake_body)</span>
+        <span class="ra-vals"><span>1</span><span>2</span><span>2</span><span>3</span></span>
+      </div>
+    </div>
+    <p class="bilingual">먹을 때만 꼬리를 남겨요</p>
+  </div>
+
+  <!-- ============ 45 · Concept · if/else picture ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One question, two doors</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <div class="case case-a">new_head == food</div>
+        <div class="case case-b">new_head ≠ food</div>
+      </div>
+      <div class="if-cond"><code>if new_head == food:</code></div>
+      <div class="if-branches">
+        <div class="if-branch true">new food square · tail stays</div>
+        <div class="if-branch false">pop the tail</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ length</div>
+        <div class="out-line out-a">grows by 1</div>
+        <div class="out-line out-b">stays the same</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 46 · STEP 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 6 / 13</span>
+    <div class="pill">Type it</div>
+    <h2>v5 · Grow 📏</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        snake_body.<span class="fn">pop</span>()<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        <span class="kw">else</span>:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">            snake_body.<span class="fn">pop</span>()<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>snake_body.pop()</code><br>
+      📍 <b>WHERE:</b> replace that one line with these two · <code>else:</code> = <b>8 spaces</b>, <code>snake_body.pop()</code> = <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> eating skips the pop, so the tail stays<br>
+      ✅ <b>CHECK:</b> eat one square — the snake is now <b>two</b> squares long
+    </div>
+  </div>
+
+  <!-- ============ 47 · Run v5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>v5 — the finished block</h2>
+<pre>    <span class="kw">if</span> time_since_last_move &gt;= MOVE_INTERVAL:
+        time_since_last_move -= MOVE_INTERVAL
+        head_x, head_y = snake_body[<span class="num">0</span>]
+        new_head = (head_x + direction[<span class="num">0</span>], head_y + direction[<span class="num">1</span>])
+        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        <span class="kw">if</span> new_head == food:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">Eat pink, the tail grows one square. It is a real snake game.</div>
+    </div>
+  </div>
+
+  <!-- ============ 48 · Indent ladder ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Count the spaces</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">4 spaces</span><span class="val">if time_since…</span></div>
+      <div class="varbox"><span class="name">8 spaces</span><span class="val">if new_head == food:</span></div>
+      <div class="varbox"><span class="name">8 spaces</span><span class="val">else:</span></div>
+      <div class="varbox"><span class="name">12 spaces</span><span class="val">snake_body.pop()</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em"><code>if</code> and <code>else</code> must line up exactly.</p>
+    <p class="bilingual center">if 와 else 는 같은 칸</p>
+  </div>
+
+  <!-- ============ 49 · Trace · length ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>How long is the snake?</h2>
+    <div class="trace-grid">
+      <div class="cell head">step</div>
+      <div class="cell head">ate?</div>
+      <div class="cell head">length after</div>
+
+      <div class="cell">start</div>
+      <div class="cell">—</div>
+      <div class="cell">1</div>
+
+      <div class="cell">1</div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">YES 🍎</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">no</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">YES 🍎</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 50 · Common mistake · else indent ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>else</code> in the wrong place</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        <span class="kw">if</span> new_head == food:
+            food = (...)
+            <span class="kw">else</span>:
+                snake_body.<span class="fn">pop</span>()</pre>
+        <p><code>IndentationError</code>. The <code>else</code> is inside the <code>if</code>.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        <span class="kw">if</span> new_head == food:
+            food = (...)
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()</pre>
+        <p>Same 8 spaces as the <code>if</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 51 · Debug 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 3 — it never grows</h2>
+<pre>        <span class="kw">if</span> new_head == food:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+        snake_body.<span class="fn">pop</span>()</pre>
+    <div class="debug-card"><div class="err">No crash. The food jumps, but the snake stays one square.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The <code>pop</code> still runs every step. Put <code>else:</code> above it and push <code>pop</code> to 12 spaces.</p>
+      <p class="bilingual">pop 을 else 안으로</p>
+    </details>
+  </div>
+
+  <!-- ============ 52 · Debug 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 4 — the snake grows forever</h2>
+<pre>        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        <span class="kw">if</span> new_head == food:
+            food = (...)</pre>
+    <div class="debug-card"><div class="err">No crash. Every step adds a square. The snake fills the screen.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">There is no <code>pop</code> at all. Add <code>else:</code> and <code>snake_body.pop()</code> under the <code>if</code>.</p>
+      <p class="bilingual">안 먹으면 꼬리를 빼야 해요</p>
+    </details>
+  </div>
+
+  <!-- ============ 53 · Quiz 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two more</h2>
+    <div class="quiz-card">
+      <div class="q">3. <code>snake_body.pop()</code> removes…</div>
+      <div class="opts">
+        <details><summary>A. the head</summary><div class="ans">No — <code>insert(0, …)</code> adds the head.</div></details>
+        <details><summary>B. the last square</summary><div class="ans">✓ The tail.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">4. The snake grows because…</div>
+      <div class="opts">
+        <details><summary>A. we add two heads</summary><div class="ans">No — still one head.</div></details>
+        <details><summary>B. we skip the pop</summary><div class="ans">✓ The tail stays behind.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 54 · Modify 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — fill the whole block</h2>
+<pre>        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        <span class="kw">if</span> new_head ___ food:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, ___), random.<span class="fn">randint</span>(<span class="num">0</span>, ___))
+        ___:
+            snake_body.___()</pre>
+    <p style="margin-top:.5em"><b>Hint:</b> the limits are named. Look at the top of your file.</p>
+  </div>
+
+  <!-- ============ 55 · Code talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell Kasim in one sentence</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>if new_head == food</code> asks <span class="blank"></span>, so when it is true the snake <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"<code>else: snake_body.pop()</code> runs when <span class="blank"></span>, and it removes <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 56 · Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">YOUR TURN</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in <code>main.py</code></h2>
+    <ul class="check-list">
+      <li><code>import random</code> under <code>import pygame</code></li>
+      <li><code>food = (...)</code> under <code>time_since_last_move = 0</code></li>
+      <li><code>food_rect = (...)</code> at 4 spaces, after the snake for loop</li>
+      <li><code>pygame.draw.rect(screen, PASTEL_PINK, food_rect)</code></li>
+      <li><code>if new_head == food:</code> under <code>insert</code></li>
+      <li><code>else:</code> then <code>snake_body.pop()</code></li>
+      <li>Run. Eat three squares. Count the tail</li>
+    </ul>
+  </div>
+
+  <!-- ============ 57 · Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXIT</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one full sentence</div>
+      <p style="margin-top:.4em">Point at the line that makes the snake longer — then say <b>why</b> skipping it grows the tail.</p>
+      <p class="bilingual" style="margin-top:.4em">문장 전체로 말해요</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL: PUSH PAST IT ================= -->
+
+  <!-- ============ 58 · Optional intro ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">BONUS</span>
+    <div class="pill">Push past it<span class="activity-tag">OPTIONAL</span></div>
+    <div class="emoji">🏆</div>
+    <h1 style="font-size:clamp(32px,5.5vmin,48px)">Four more ideas</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">score · speed · wrapping walls · fair food</p>
+  </div>
+
+  <!-- ============ 59 · Concept · score ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A counting box</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">score = 0</div>
+        <div class="ra-line">ate → score = score + 1</div>
+        <div class="ra-line">ate → score = score + 1</div>
+        <div class="ra-line">ate → score = score + 1</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">score</span>
+        <span class="ra-vals"><span>0</span><span>1</span><span>2</span><span>3</span></span>
+      </div>
+    </div>
+    <p class="bilingual">같은 상자, 값만 바뀌어요</p>
+  </div>
+
+  <!-- ============ 60 · STEP 7 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 7 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Open the scoreboard</h2>
+<pre><span style="display:block;opacity:.35">pygame.display.<span class="fn">set_caption</span>(<span class="str">"Snake"</span>)</span><span style="display:block;background:rgba(56,208,224,.13)">score = <span class="num">0</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.display.set_caption("Snake")</code><br>
+      📍 <b>WHERE:</b> the line under it · 0 spaces<br>
+      🟣 <b>WHY:</b> the count must start before the loop, once<br>
+      ✅ <b>CHECK:</b> run — nothing changes yet, no red error
+    </div>
+  </div>
+
+  <!-- ============ 61 · STEP 8 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 8 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Count each bite</h2>
+<pre><span style="display:block;opacity:.35">        <span class="kw">if</span> new_head == food:</span><span style="display:block;background:rgba(56,208,224,.13)">            score = score + <span class="num">1</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">            food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if new_head == food:</code><br>
+      📍 <b>WHERE:</b> the line under it · 12 spaces<br>
+      🟣 <b>WHY:</b> only a bite should add one<br>
+      ✅ <b>CHECK:</b> run — no red error. Still nothing visible.
+    </div>
+  </div>
+
+  <!-- ============ 62 · Concept · f-string in the caption ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The window title can talk</h2>
+    <div class="viz var-fill">
+      <div class="step-row">
+        <div class="input-pill">score = 3</div>
+        <div class="arrow-icon">➡️</div>
+        <div class="target-box"><span class="name">caption</span><span class="val">Snake  score: 3</span></div>
+      </div>
+      <div class="read-line">
+        f<span class="str">"Snake  score: {score}"</span> <span class="com"># →</span> <span class="out">"Snake  score: 3"</span>
+      </div>
+    </div>
+    <p class="center">The <code>{ }</code> holds the value, exactly like your <code>print</code> lines.</p>
+  </div>
+
+  <!-- ============ 63 · STEP 9 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 9 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Show the score 🏆</h2>
+<pre><span style="display:block;opacity:.35">            score = score + 1</span><span style="display:block;background:rgba(56,208,224,.13)">            pygame.display.<span class="fn">set_caption</span>(f<span class="str">"Snake  score: {score}"</span>)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>score = score + 1</code><br>
+      📍 <b>WHERE:</b> the line under it · 12 spaces<br>
+      🟣 <b>WHY:</b> the window bar is a free scoreboard<br>
+      ✅ <b>CHECK:</b> eat one — the window title reads <code>Snake  score: 1</code>
+    </div>
+  </div>
+
+  <!-- ============ 64 · Concept · MOVE_INTERVAL ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>MOVE_INTERVAL</code> is a wait, not a speed</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">milliseconds between steps</div>
+      <div class="iter-row">
+        <div class="iter-item">150 · slow</div>
+        <div class="iter-item">120</div>
+        <div class="iter-item">90</div>
+        <div class="iter-item">60 · fast</div>
+      </div>
+      <div class="viz-arrow">⬇ smaller wait = faster snake</div>
+    </div>
+    <p class="bilingual center">숫자가 작을수록 빨라요</p>
+  </div>
+
+  <!-- ============ 65 · Maths · the wait shrinking ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Count it 🔢<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Ten off, every bite</h2>
+    <div class="trace-grid">
+      <div class="cell head">bites</div>
+      <div class="cell head">MOVE_INTERVAL</div>
+      <div class="cell head">still &gt; 60?</div>
+
+      <div class="cell">0</div>
+      <div class="cell">150</div>
+      <div class="cell">yes</div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">8</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">70</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">9</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no — it stops here</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 66 · STEP 10 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 10 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Faster every bite ⚡</h2>
+<pre><span style="display:block;opacity:.35">            pygame.display.set_caption(f"Snake  score: {score}")</span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> MOVE_INTERVAL &gt; <span class="num">60</span>:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">10</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.display.set_caption(f"Snake  score: {score}")</code><br>
+      📍 <b>WHERE:</b> the two lines under it · <code>if</code> = <b>12 spaces</b>, <code>MOVE_INTERVAL =</code> = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> the guard stops the game becoming unplayable<br>
+      ✅ <b>CHECK:</b> eat three — the snake is clearly quicker
+    </div>
+  </div>
+
+  <!-- ============ 67 · Concept · the wall ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>What happens at square 30?</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">across · 0 → 29 → off the edge</div>
+        <div class="cg-track"><div class="cg-sprite">🐍</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">head_x</span> = <span class="cg-val"><span>27</span><span>28</span><span>29</span><span>30 ⚠️</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Square 30 is drawn outside the window. The snake vanishes.</p>
+  </div>
+
+  <!-- ============ 68 · Maths · the % clock ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Count it 🔢<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>%</code> wraps the number round</h2>
+    <div class="trace-grid">
+      <div class="cell head">head_x</div>
+      <div class="cell head">head_x % 30</div>
+      <div class="cell head">on screen?</div>
+
+      <div class="cell">28</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">28</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">29</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">29</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">30</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell">yes — left edge</div>
+
+      <div class="cell">31</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell">yes</div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">30 을 넘으면 0 으로 돌아와요</p>
+  </div>
+
+  <!-- ============ 69 · STEP 11 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 11 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Walk through the wall 🌀</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        new_head = (head_x + direction[<span class="num">0</span>], head_y + direction[<span class="num">1</span>])<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        new_head = ((head_x + direction[<span class="num">0</span>]) % GRID_WIDTH, (head_y + direction[<span class="num">1</span>]) % GRID_HEIGHT)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>new_head = (head_x + direction[0], head_y + direction[1])</code><br>
+      📍 <b>WHERE:</b> replace that whole line · 8 spaces<br>
+      🟣 <b>WHY:</b> <code>%</code> sends 30 back to 0<br>
+      ✅ <b>CHECK:</b> drive off the right edge — the snake comes back on the left
+    </div>
+  </div>
+
+  <!-- ============ 70 · Concept · food on the snake ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Unfair food</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ unfair</span>
+        <p>🍎 lands under the snake's own tail. You cannot see it. You cannot reach it.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fair</span>
+        <p>Keep rolling until the food lands on an empty square.</p>
+      </div>
+    </div>
+    <p class="bilingual" style="margin-top:.4em">뱀 위에 먹이가 생기면 다시 뽑아요</p>
+  </div>
+
+  <!-- ============ 71 · Concept · in ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>in</code> asks: is it in the list?</h2>
+    <div class="match-flow">
+      <div class="row skip">(3, 4) in [(7, 3), (7, 4)] <span class="verdict">✗ False</span></div>
+      <div class="row hit">(7, 4) in [(7, 3), (7, 4)] <span class="verdict">✓ True</span></div>
+      <div class="row skip">(9, 1) in [(7, 3), (7, 4)] <span class="verdict">✗ False</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Python checks every square in the list for you.</p>
+  </div>
+
+  <!-- ============ 72 · STEP 12 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 12 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Fair food 🎯</h2>
+<pre><span style="display:block;opacity:.35">            food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))</span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">while</span> food <span class="kw">in</span> snake_body:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">        <span class="kw">else</span>:</span><span style="display:block;opacity:.35">            snake_body.pop()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>else:</code> — the only one in the file<br>
+      📍 <b>WHERE:</b> the two new lines go <b>above</b> it · <code>while</code> = <b>12 spaces</b>, <code>food =</code> = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> keep rolling until the square is empty<br>
+      ✅ <b>CHECK:</b> play with a long snake — food never hides under it
+    </div>
+  </div>
+
+  <!-- ============ 73 · Concept · game over ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Biting yourself ends the game</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">snake_body</div>
+      <div class="iter-row">
+        <div class="iter-item">🟪 (7,3)</div>
+        <div class="iter-item">🟪 (7,4)</div>
+        <div class="iter-item">🟪 (8,4)</div>
+        <div class="iter-item">➡️ new_head (7,4) 💥</div>
+      </div>
+      <div class="viz-arrow">⬇ new_head is already in the list → running = False</div>
+    </div>
+    <p class="bilingual center">자기 몸에 닿으면 끝</p>
+  </div>
+
+  <!-- ============ 74 · STEP 13 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 13 / 13</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Game over 💥</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        <span class="kw">if</span> new_head <span class="kw">in</span> snake_body:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">            running = <span class="kw">False</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">        snake_body.<span class="fn">insert</span>(0, new_head)</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>snake_body.insert(0, new_head)</code><br>
+      📍 <b>WHERE:</b> the two lines <b>above</b> it · <code>if</code> = <b>8 spaces</b>, <code>running =</code> = <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> check before the head joins the list<br>
+      ✅ <b>CHECK:</b> grow to 4, then turn the <b>same</b> way three times — the window closes
+    </div>
+  </div>
+
+  <!-- ============ 75 · Debug 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug 5 — game over on step one</h2>
+<pre>        snake_body.<span class="fn">insert</span>(<span class="num">0</span>, new_head)
+        <span class="kw">if</span> new_head <span class="kw">in</span> snake_body:
+            running = <span class="kw">False</span></pre>
+    <div class="debug-card"><div class="err">No crash. The window shuts the moment you run it.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>insert</code> already put <code>new_head</code> in the list, so it always matches. Check <b>before</b> the insert.</p>
+      <p class="bilingual">insert 전에 확인해요</p>
+    </details>
+  </div>
+
+  <!-- ============ 76 · Quiz 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two bonus questions</h2>
+    <div class="quiz-card">
+      <div class="q">5. <code>30 % 30</code> gives…</div>
+      <div class="opts">
+        <details><summary>A. 30</summary><div class="ans">No — that is the wall.</div></details>
+        <details><summary>B. 0</summary><div class="ans">✓ Straight back to the left edge.</div></details>
+        <details><summary>C. 1</summary><div class="ans">No — that is 31 % 30.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">6. Smaller <code>MOVE_INTERVAL</code> means…</div>
+      <div class="opts">
+        <details><summary>A. slower</summary><div class="ans">No — it is a wait.</div></details>
+        <details><summary>B. faster</summary><div class="ans">✓ Less waiting between steps.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 77 · Trace · full block ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four steps, everything at once</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">step</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2 · ate 🍎</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4 · ate 🍎</div>
+
+      <div class="cell">length</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">score</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">MOVE_INTERVAL</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">150</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">140</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">140</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">130</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 78 · Stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">STRETCH</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>PASTEL_PINK</code> to <code>PASTEL_MAGENTA</code> in the food draw line.</div>
+      <div class="item"><span class="lvl">★★</span>Add a second food box called <code>bonus_food</code> with its own two rolls.</div>
+      <div class="item"><span class="lvl">★★★</span>Grow by <b>two</b> squares per bite. Hint: <code>snake_body.insert(0, new_head)</code> twice.</div>
+    </div>
+  </div>
+
+  <!-- ============ 79 · The whole file ============ -->
+  <div class="slide">
+    <span class="slot-badge">REFERENCE</span>
+    <div class="pill">Reference 📄<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every line you added today</h2>
+<pre><span class="kw">import</span> random
+
+food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+
+        <span class="kw">if</span> new_head == food:
+            food = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()
+
+    food_rect = (food[<span class="num">0</span>] * CELL_SIZE, food[<span class="num">1</span>] * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PINK, food_rect)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Six lines</div>
+      <div style="opacity:1">That is the whole lesson.</div>
+    </div>
+  </div>
+
+  <!-- ============ 80 · Close & Bridge ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">CLOSE</span>
+    <div class="emoji">🍎</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Eat = skip the pop.<br>That is growing.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: a game over screen and a high score.</p>
+    <p class="bilingual">다음 시간: 게임 오버 화면</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 80</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MANIM — Many Things At Once (Andy · 2026-09-05)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Manim · Andy · 5 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Manim · Lesson 2</div>
+    <div class="emoji">🎞️</div>
+    <h1>Many Things<br>At Once</h1>
+    <p class="line" style="margin-top:.4em">One <b>self.play</b> moved one shape.<br>Today one line moves <b>three</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v1 one shape</span><span class="chip">v2 three shapes</span>
+      <span class="chip">v3 one play</span><span class="chip">v4 VGroup</span><span class="chip">v5 timing</span>
+    </div>
+    <p class="bilingual">한 줄로 세 개를 동시에</p>
+  </div>
+
+  <!-- 2 · Recap 1 -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Last time</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which line makes the circle <b>slide</b>, not appear?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>self.play(circle.animate.shift(UP * 3))</code><br>The word <code>animate</code> is the slider.</div></details>
+    </div>
+    <p class="bilingual">지난 시간: 도형 하나, 동작 하나</p>
+  </div>
+
+  <!-- 3 · Recap 2 — names already on screen -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Names you already use</h2>
+    <div class="chips" style="margin-top:.5em">
+      <span class="chip on">circle</span><span class="chip on">square</span>
+      <span class="chip on">title</span><span class="chip on">group</span>
+    </div>
+    <div class="icon-row" style="margin-top:.4em"><span>⚪</span><span>🟨</span><span>🔤</span><span>🎁</span></div>
+    <p class="line center" style="margin-top:.4em">Same four names today. Nothing gets renamed.</p>
+    <p class="bilingual center">이름은 그대로 써요</p>
+  </div>
+
+  <!-- 4 · House rule — ANDY types -->
+  <div class="slide">
+    <div class="pill">House rule</div>
+    <h2>ANDY types. Every line.</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">ANDY reads the step</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s2">ANDY types it</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s3">ANDY presses Run</div>
+      <div class="arrow">▼</div>
+      <div class="cc-step s4">ANDY reads the ✅</div>
+    </div>
+    <p class="quiet center" style="margin-top:.5em">Use autocomplete. Let it finish the method names for you.</p>
+  </div>
+
+  <!-- 5 · Predict hook -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>How long is this video?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        self.play(Create(circle))
+        self.play(Create(square))
+        self.play(Write(title))</pre>
+      <details><summary>Reveal output</summary><div class="ans">3 seconds. Each <code>self.play</code> waits for the one above it to finish.</div></details>
+    </div>
+    <p class="bilingual">self.play 하나에 1초</p>
+  </div>
+
+  <!-- 6 · Concept — three plays, three moments -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Three plays = three moments</h2>
+    <svg viewBox="0 0 560 210" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="60" y1="176" x2="530" y2="176" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="60" y1="166" x2="60" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="200" y1="166" x2="200" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="340" y1="166" x2="340" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="480" y1="166" x2="480" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <text x="52" y="204" fill="#8a97b8" font-size="15">0s</text>
+      <text x="192" y="204" fill="#8a97b8" font-size="15">1s</text>
+      <text x="332" y="204" fill="#8a97b8" font-size="15">2s</text>
+      <text x="472" y="204" fill="#8a97b8" font-size="15">3s</text>
+      <rect x="60" y="20" width="140" height="36" rx="7" fill="rgba(56,208,224,.22)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="72" y="44" fill="#38d0e0" font-size="16">Create(circle)</text>
+      <rect x="200" y="68" width="140" height="36" rx="7" fill="rgba(241,250,140,.18)" stroke="#f1fa8c" stroke-width="2"/>
+      <text x="210" y="92" fill="#f1fa8c" font-size="16">Create(square)</text>
+      <rect x="340" y="116" width="140" height="36" rx="7" fill="rgba(189,147,249,.22)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="358" y="140" fill="#bd93f9" font-size="16">Write(title)</text>
+    </svg>
+    <div class="why">🟣 One <code>self.play</code> line = one second, then the next one starts.</div>
+  </div>
+
+  <!-- 7 · Concept — commas = one moment -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Commas = one moment</h2>
+    <svg viewBox="0 0 560 210" style="width:100%;max-height:44vh" aria-hidden="true">
+      <line x1="60" y1="176" x2="530" y2="176" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="60" y1="166" x2="60" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="200" y1="166" x2="200" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="340" y1="166" x2="340" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="480" y1="166" x2="480" y2="186" stroke="#8a97b8" stroke-width="2"/>
+      <text x="52" y="204" fill="#8a97b8" font-size="15">0s</text>
+      <text x="192" y="204" fill="#8a97b8" font-size="15">1s</text>
+      <text x="332" y="204" fill="#8a97b8" font-size="15">2s</text>
+      <text x="472" y="204" fill="#8a97b8" font-size="15">3s</text>
+      <rect x="60" y="20" width="140" height="36" rx="7" fill="rgba(56,208,224,.22)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="72" y="44" fill="#38d0e0" font-size="16">Create(circle)</text>
+      <rect x="60" y="68" width="140" height="36" rx="7" fill="rgba(241,250,140,.18)" stroke="#f1fa8c" stroke-width="2"/>
+      <text x="70" y="92" fill="#f1fa8c" font-size="16">Create(square)</text>
+      <rect x="60" y="116" width="140" height="36" rx="7" fill="rgba(189,147,249,.22)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="78" y="140" fill="#bd93f9" font-size="16">Write(title)</text>
+      <text x="222" y="92" fill="#50fa7b" font-size="19">◀ all three, 1 second</text>
+    </svg>
+    <div class="why">🟣 Commas inside <b>one</b> <code>self.play</code> start every animation together.</div>
+  </div>
+
+  <!-- 8 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">a, b, c</span>
+      <span class="gloss">animations in one play — all at once</span>
+      <span class="ko">동시에</span>
+
+      <span class="term">VGroup</span>
+      <span class="gloss">ties objects into one object</span>
+      <span class="ko">묶음</span>
+
+      <span class="term">self.wait</span>
+      <span class="gloss">holds the picture still</span>
+      <span class="ko">멈춤</span>
+
+      <span class="term">run_time</span>
+      <span class="gloss">how many seconds one play takes</span>
+      <span class="ko">재생 시간</span>
+    </div>
+  </div>
+
+  <!-- 9 · Roadmap -->
+  <div class="slide">
+    <div class="pill">The plan</div>
+    <h2>14 steps, 5 versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">⚪</div><div class="name">v1 · one shape</div><div class="ex">steps 1–4</div></div>
+      <div class="opt-card"><div class="ico">🟨</div><div class="name">v2 · three shapes</div><div class="ex">steps 5–8</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">v3 · one play, three</div><div class="ex">step 9</div></div>
+      <div class="opt-card"><div class="ico">🎁</div><div class="name">v4 · VGroup</div><div class="ex">steps 10–11</div></div>
+      <div class="opt-card"><div class="ico">⏱️</div><div class="name">v5 · timing</div><div class="ex">steps 12–14</div></div>
+    </div>
+    <p class="quiet center" style="margin-top:.4em">Press Run after every version. Never two steps at once.</p>
+  </div>
+
+  <!-- 10 · △ Why .animate — MANDATORY -->
+  <div class="slide">
+    <div class="pill">⚠️ The big one</div>
+    <h2>Why <code>.animate</code>?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ jumps</span>
+<pre>square.shift(RIGHT * 2)</pre></div>
+      <div class="col good"><span class="tag">✓ slides</span>
+<pre>self.play(square.animate.shift(RIGHT * 2))</pre></div>
+    </div>
+    <svg viewBox="0 0 600 232" style="width:100%;max-height:38vh" aria-hidden="true">
+      <text x="26" y="16" fill="#ff5555" font-size="15">no .animate — it is simply there</text>
+      <rect x="26" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="34" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="138" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="212" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="250" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="324" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="362" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="436" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="474" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="548" y="50" width="18" height="18" fill="#ff5555"/>
+      <text x="150" y="114" fill="#8a97b8" font-size="16">same end · different journey</text>
+      <text x="382" y="114" fill="#8a97b8" font-size="18">▼</text>
+      <text x="26" y="136" fill="#50fa7b" font-size="15">.animate — 15 drawn frames in between</text>
+      <rect x="26" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="34" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="138" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="164" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="250" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="296" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="362" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="428" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="474" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="548" y="170" width="18" height="18" fill="#50fa7b"/>
+      <text x="26" y="228" fill="#8a97b8" font-size="14">frame 1</text>
+      <text x="524" y="228" fill="#8a97b8" font-size="14">frame 15</text>
+    </svg>
+    <p class="bilingual">.animate가 중간 장면을 그려요</p>
+  </div>
+
+  <!-- 11 · Mistake — shift inside play -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake — <code>.shift</code> inside <code>self.play</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>self.play(square.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>self.play(square.animate.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ it slides</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>.shift()</code> hands back a <b>square</b>. <code>.animate.shift()</code> hands back an <b>animation</b>.</p>
+    <p class="bilingual">animate 빼면 애니메이션이 아니에요</p>
+  </div>
+
+  <!-- 12 · Reading .animate in three pieces -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Read it in three pieces</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <rect x="20" y="30" width="150" height="52" rx="9" fill="rgba(56,208,224,.16)" stroke="#38d0e0" stroke-width="3"/>
+      <text x="56" y="63" fill="#38d0e0" font-size="21">square</text>
+      <text x="180" y="63" fill="#8a97b8" font-size="26">.</text>
+      <rect x="200" y="30" width="150" height="52" rx="9" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="234" y="63" fill="#c4a8ff" font-size="21">animate</text>
+      <text x="360" y="63" fill="#8a97b8" font-size="26">.</text>
+      <rect x="380" y="30" width="200" height="52" rx="9" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="398" y="63" fill="#50fa7b" font-size="21">shift(RIGHT * 2)</text>
+      <text x="42" y="112" fill="#8a97b8" font-size="17">▼</text>
+      <text x="20" y="140" fill="#e8eef6" font-size="17">which object</text>
+      <text x="252" y="112" fill="#8a97b8" font-size="17">▼</text>
+      <text x="196" y="140" fill="#e8eef6" font-size="17">make it an animation</text>
+      <text x="452" y="112" fill="#8a97b8" font-size="17">▼</text>
+      <text x="398" y="140" fill="#e8eef6" font-size="17">what changes</text>
+      <text x="20" y="182" fill="#ffb86c" font-size="17">Drop the middle box and Manim has nothing to play.</text>
+    </svg>
+  </div>
+
+  <!-- 13 · △ Units not pixels — MANDATORY -->
+  <div class="slide">
+    <div class="pill">📐 Units</div>
+    <h2>Manim units, never pixels</h2>
+    <svg viewBox="0 0 640 386" style="width:100%;max-height:52vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="74" y1="172" x2="74" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="185.5" y1="172" x2="185.5" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="445.4" y1="172" x2="445.4" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="594" y1="172" x2="594" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <text x="64" y="203" fill="#8a97b8" font-size="15">-7</text>
+      <text x="176" y="203" fill="#8a97b8" font-size="15">-4</text>
+      <text x="441" y="203" fill="#8a97b8" font-size="15">3</text>
+      <text x="588" y="203" fill="#8a97b8" font-size="15">7</text>
+      <line x1="328" y1="30" x2="341" y2="30" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="328" y1="327" x2="341" y2="327" stroke="#8a97b8" stroke-width="2"/>
+      <text x="344" y="46" fill="#8a97b8" font-size="15">4</text>
+      <text x="344" y="322" fill="#8a97b8" font-size="15">-4</text>
+      <circle cx="334" cy="178.5" r="7" fill="#38d0e0"/>
+      <text x="286" y="222" fill="#38d0e0" font-size="17">centre 0, 0</text>
+      <circle cx="445.4" cy="178.5" r="9" fill="#50fa7b"/>
+      <text x="374" y="152" fill="#50fa7b" font-size="17">move_to([3, 0, 0])</text>
+      <line x1="46" y1="30" x2="46" y2="327" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="40" y1="30" x2="52" y2="30" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="40" y1="327" x2="52" y2="327" stroke="#ffb86c" stroke-width="2"/>
+      <text x="2" y="172" fill="#ffb86c" font-size="15">8</text>
+      <text x="2" y="192" fill="#ffb86c" font-size="15">units</text>
+      <line x1="70" y1="352" x2="598" y2="352" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="70" y1="346" x2="70" y2="358" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="598" y1="346" x2="598" y2="358" stroke="#ffb86c" stroke-width="2"/>
+      <text x="252" y="378" fill="#ffb86c" font-size="16">14.2 units wide</text>
+    </svg>
+    <div class="why">🟣 Three numbers: x, y, z. Flat drawings always end in <code>0</code>.</div>
+  </div>
+
+  <!-- 14 · Units 2 — the ruler with today's shapes -->
+  <div class="slide">
+    <div class="pill">📐 Units</div>
+    <h2>Where today's shapes land</h2>
+    <svg viewBox="0 0 640 360" style="width:100%;max-height:52vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#4a5670" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#4a5670" stroke-width="2"/>
+      <circle cx="185.5" cy="178.5" r="37" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="140" y="240" fill="#38d0e0" font-size="16">.shift(LEFT * 4)</text>
+      <rect x="297" y="141.5" width="74" height="74" fill="none" stroke="#f1fa8c" stroke-width="4"/>
+      <text x="292" y="240" fill="#f1fa8c" font-size="16">no shift</text>
+      <text x="452" y="186" fill="#bd93f9" font-size="26">Motion</text>
+      <text x="424" y="240" fill="#bd93f9" font-size="16">.shift(RIGHT * 4)</text>
+      <line x1="334" y1="141" x2="334" y2="80" stroke="#50fa7b" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="344" y="104" fill="#50fa7b" font-size="16">UP * 2</text>
+      <text x="86" y="318" fill="#8a97b8" font-size="15">screen edge is 7.1, so 4 is safely inside</text>
+    </svg>
+    <div class="why">🟣 <code>LEFT * 4</code> means four units, every screen size, every time.</div>
+  </div>
+
+  <!-- 15 · Where the new scene goes -->
+  <div class="slide">
+    <div class="pill">Setup</div>
+    <h2>A new scene at the bottom</h2>
+<pre class="tiny"><span class="dim">class FirstScene(Scene):        # skipped</span>
+<span class="dim">    def construct(self):</span>
+<span class="dim">        circle = Circle(color=BLUE, radius=2)</span>
+<span class="dim">        self.play(Create(circle))</span>
+<span class="dim"> </span>
+<span class="hot">class MotionScene(Scene):       # this one plays</span></pre>
+    <div class="why">🟣 The server films the <b>last</b> class in the file. Everything above is skipped, not broken.</div>
+    <p class="bilingual">맨 아래 장면만 재생돼요</p>
+  </div>
+
+  <!-- 16 · v1 intro -->
+  <div class="slide">
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span><span>v5</span></div>
+    <h2>v1 — one shape, one move</h2>
+    <div class="icon-row"><span>⚪</span><span>➡️</span><span>⚪</span></div>
+    <p class="line center" style="margin-top:.5em">Four steps ANDY has typed before. Warm the fingers up.</p>
+    <div class="chips" style="margin-top:.5em">
+      <span class="chip on">1 shell</span><span class="chip on">2 circle</span>
+      <span class="chip on">3 Create</span><span class="chip on">4 animate</span>
+    </div>
+  </div>
+
+  <!-- 17 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 14</div>
+    <h2>Start the new scene</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>from manim import *</code> — line 1. Leave it.</div>
+    <div class="where">📍 Press <b>Ctrl+End</b>. Blank line, then <b>column 0</b>. Indent <code>def</code> by <b>4</b>.</div>
+<pre><span class="dim"> </span>
+<span class="hot">class MotionScene(Scene):</span>
+<span class="hot">    def construct(self):</span></pre>
+    <div class="why">🟣 The last class in the file is the one that plays.</div>
+    <div class="chk">✅ Check: a colon ends both lines. Do not Run yet.</div>
+  </div>
+
+  <!-- 18 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 14</div>
+    <h2>Make the circle</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>class MotionScene(Scene):</code></div>
+    <div class="where">📍 Under <code>def construct(self):</code>. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">class MotionScene(Scene):</span>
+<span class="dim">    def construct(self):</span>
+<span class="hot">        circle = Circle(color=BLUE)</span></pre>
+    <div class="why">🟣 Same name as last week — <code>circle</code>. Never renamed.</div>
+    <div class="chk">✅ Check: capital <code>C</code>, capital <code>BLUE</code>, no quotes.</div>
+  </div>
+
+  <!-- 19 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 14</div>
+    <h2>Draw it</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>circle = Circle(color=BLUE)</code></div>
+    <div class="where">📍 The next line down. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        circle = Circle(color=BLUE)</span>
+<span class="hot">        self.play(Create(circle))</span></pre>
+    <div class="why">🟣 <code>Create</code> is the animation. <code>self.play</code> runs it.</div>
+    <div class="chk">✅ Run — a blue circle draws itself in the middle.</div>
+  </div>
+
+  <!-- 20 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 14</div>
+    <h2>Slide it left</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(Create(circle))</code> — the <b>bottom</b> one, the line you typed at STEP 3.</div>
+    <div class="where">📍 The next line down. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        circle = Circle(color=BLUE)</span>
+<span class="dim">        self.play(Create(circle))</span>
+<span class="hot">        self.play(circle.animate.shift(LEFT * 4))</span></pre>
+    <div class="why">🟣 <code>LEFT * 4</code> is four Manim units. Not pixels.</div>
+    <div class="chk">✅ v1 done. Run — the circle draws, then slides left.</div>
+  </div>
+
+  <!-- 21 · v2 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span><span>v5</span></div>
+    <h2>v2 — three shapes on the stage</h2>
+    <svg viewBox="0 0 640 260" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="70" y="10" width="528" height="220" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <circle cx="185.5" cy="120" r="34" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="300" y="86" width="68" height="68" fill="none" stroke="#f1fa8c" stroke-width="4"/>
+      <text x="450" y="130" fill="#bd93f9" font-size="26">Motion</text>
+      <text x="150" y="256" fill="#38d0e0" font-size="16">circle</text>
+      <text x="308" y="256" fill="#f1fa8c" font-size="16">square</text>
+      <text x="466" y="256" fill="#bd93f9" font-size="16">title</text>
+    </svg>
+    <p class="line center" style="margin-top:.3em">ANDY needs three things before one line can move three things.</p>
+  </div>
+
+  <!-- 22 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 14</div>
+    <h2>Delete one line</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(circle.animate.shift(LEFT * 4))</code></div>
+    <div class="where">📍 The last line of <code>construct</code>. Delete the whole line.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        circle = Circle(color=BLUE)
+        self.play(Create(circle))
+        self.play(circle.animate.shift(LEFT * 4))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        circle = Circle(color=BLUE)
+        self.play(Create(circle))</pre></div>
+    <div class="why">🟣 The move is about to happen on the line that makes the circle.</div>
+    <div class="chk">✅ Run — the circle draws in the middle and stays there.</div>
+  </div>
+
+  <!-- 23 · Concept — two jobs for shift -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Two jobs for <code>shift</code></h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📍</div><div class="name">.shift() when you make it</div><div class="ex">starts there — 1 frame</div></div>
+      <div class="opt-card"><div class="ico">🎬</div><div class="name">.animate.shift() in a play</div><div class="ex">travels there — 15 frames</div></div>
+    </div>
+    <svg viewBox="0 0 600 120" style="width:100%;max-height:26vh" aria-hidden="true">
+      <rect x="26" y="16" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="46" cy="48" r="11" fill="#ffb86c"/>
+      <text x="26" y="104" fill="#ffb86c" font-size="15">born on the left</text>
+      <text x="150" y="54" fill="#8a97b8" font-size="18">vs</text>
+      <rect x="200" y="16" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="284" cy="48" r="11" fill="#50fa7b"/>
+      <rect x="312" y="16" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="362" cy="48" r="11" fill="#50fa7b"/>
+      <rect x="424" y="16" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="444" cy="48" r="11" fill="#50fa7b"/>
+      <text x="200" y="104" fill="#50fa7b" font-size="15">walks to the left over 1 second</text>
+    </svg>
+  </div>
+
+  <!-- 24 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 14</div>
+    <h2>Place the circle when you make it</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>circle = Circle(color=BLUE)</code></div>
+    <div class="where">📍 Same line. Type <code>.shift(LEFT * 4)</code> on the end. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        circle = Circle(color=BLUE)</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        circle = Circle(color=BLUE).shift(LEFT * 4)</pre></div>
+    <div class="why">🟣 No animation — the circle is born four units left.</div>
+    <div class="chk">✅ Run — the circle draws itself on the left. No sliding.</div>
+  </div>
+
+  <!-- 25 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 14</div>
+    <h2>Make the square</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>circle = Circle(color=BLUE).shift(LEFT * 4)</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        circle = Circle(color=BLUE).shift(LEFT * 4)</span>
+<span class="hot">        square = Square(color=YELLOW)</span>
+<span class="dim">        self.play(Create(circle))</span></pre>
+    <div class="why">🟣 No <code>.shift</code>, so the square sits at the centre — <code>0, 0</code>.</div>
+    <div class="chk">✅ Run — still only the circle. The square is made, not shown.</div>
+  </div>
+
+  <!-- 26 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 14</div>
+    <h2>Make the text</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>square = Square(color=YELLOW)</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        square = Square(color=YELLOW)</span>
+<span class="hot">        title = Text("Motion").shift(RIGHT * 4)</span>
+<span class="dim">        self.play(Create(circle))</span></pre>
+    <div class="why">🟣 Four units right. Quotes around the word.</div>
+    <div class="chk">✅ v2 done. Run — still only the circle draws.</div>
+  </div>
+
+  <!-- 27 · Predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Three shapes made. What shows?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        circle = Circle(color=BLUE).shift(LEFT * 4)
+        square = Square(color=YELLOW)
+        title = Text("Motion").shift(RIGHT * 4)
+        self.play(Create(circle))</pre>
+      <details><summary>Reveal output</summary><div class="ans">Only the circle. Nothing reaches the stage without a <code>self.play</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- 28 · Mistake — made is not shown -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Made is not shown</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ invisible</span>
+<pre>        square = Square(color=YELLOW)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ no error. The square never appears.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ on screen</span>
+<pre>        square = Square(color=YELLOW)
+        self.play(Create(square))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ the square draws itself</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">A silent video is the hardest bug. No error means nothing was <b>played</b>.</p>
+    <p class="bilingual">에러가 없어도 비어 있을 수 있어요</p>
+  </div>
+
+  <!-- 29 · v3 intro — the lesson -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span><span>v5</span></div>
+    <h2>v3 — one play, three animations</h2>
+    <div class="icon-row"><span>⚪</span><span>🟨</span><span>🔤</span></div>
+    <p class="line center" style="margin-top:.5em">Commas between them. They all start together.</p>
+    <p class="bilingual center">오늘의 핵심</p>
+  </div>
+
+  <!-- 30 · Frames — three changes in one moment -->
+  <div class="slide">
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One second, drawn frame by frame</h2>
+    <svg viewBox="0 0 600 150" style="width:100%;max-height:38vh" aria-hidden="true">
+      <rect x="8" y="20" width="110" height="76" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="30" cy="58" r="12" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".2"/>
+      <rect x="52" y="46" width="24" height="24" fill="none" stroke="#f1fa8c" stroke-width="3" opacity=".2"/>
+      <text x="86" y="66" fill="#bd93f9" font-size="17" opacity=".2">M</text>
+      <rect x="126" y="20" width="110" height="76" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="148" cy="58" r="12" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".45"/>
+      <rect x="170" y="46" width="24" height="24" fill="none" stroke="#f1fa8c" stroke-width="3" opacity=".45"/>
+      <text x="204" y="66" fill="#bd93f9" font-size="17" opacity=".45">Mo</text>
+      <rect x="244" y="20" width="110" height="76" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="266" cy="58" r="12" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".65"/>
+      <rect x="288" y="46" width="24" height="24" fill="none" stroke="#f1fa8c" stroke-width="3" opacity=".65"/>
+      <text x="322" y="66" fill="#bd93f9" font-size="17" opacity=".65">Mot</text>
+      <rect x="362" y="20" width="110" height="76" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="384" cy="58" r="12" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".85"/>
+      <rect x="406" y="46" width="24" height="24" fill="none" stroke="#f1fa8c" stroke-width="3" opacity=".85"/>
+      <text x="440" y="66" fill="#bd93f9" font-size="17" opacity=".85">Moti</text>
+      <rect x="480" y="20" width="110" height="76" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="502" cy="58" r="12" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="524" y="46" width="24" height="24" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="556" y="66" fill="#bd93f9" font-size="17">Motion</text>
+      <text x="8" y="122" fill="#8a97b8" font-size="15">frame 1</text>
+      <text x="248" y="122" fill="#50fa7b" font-size="16">all three grow at the same time</text>
+      <text x="536" y="122" fill="#8a97b8" font-size="15">frame 15</text>
+    </svg>
+  </div>
+
+  <!-- 31 · STEP 9 — the wow -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 14</div>
+    <h2>Three animations, one line</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(Create(circle))</code> — the <b>bottom</b> one, inside <code>MotionScene</code>.</div>
+    <div class="where">📍 Same line, inside the same brackets. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(Create(circle))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(Create(circle), Create(square), Write(title))</pre></div>
+    <div class="why">🟣 Commas, not extra <code>self.play</code> lines. One second, three animations.</div>
+    <div class="chk">✅ v3 done. Run — all three appear together. 🎉</div>
+  </div>
+
+  <!-- 32 · Same shapes, different clock -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Same shapes, different clock</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🐢</div><div class="name">three self.play lines</div><div class="ex">3 seconds · one after another</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">one self.play, commas</div><div class="ex">1 second · all together</div></div>
+    </div>
+    <p class="line center" style="margin-top:.5em">Both are correct code. ANDY chooses the feel.</p>
+    <p class="bilingual center">둘 다 맞아요, 느낌이 달라요</p>
+  </div>
+
+  <!-- 33 · Mistake — missing comma -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake — the missing comma</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>self.play(Create(circle) Create(square))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>SyntaxError: invalid syntax. Perhaps you forgot a comma?</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>self.play(Create(circle), Create(square))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ both draw together</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Python names this one for you. Read the error, add the comma.</p>
+    <p class="bilingual">쉼표 하나가 전부예요</p>
+  </div>
+
+  <!-- 34 · Mistake — objects instead of animations -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake — shapes inside <code>self.play</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>self.play(circle, square, title)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>self.play(Create(circle), Create(square), Write(title))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ three animations, one second</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Commas do not change the rule: every item must be a <b>doing</b>, not a <b>thing</b>.</p>
+  </div>
+
+  <!-- 35 · Trace activity -->
+  <div class="slide">
+    <div class="pill purple">Trace<span class="activity-tag">activity</span></div>
+    <h2>What is on screen?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head"></div>
+      <div class="cell head">circle</div>
+      <div class="cell head">square</div>
+      <div class="cell head">title</div>
+
+      <div class="cell"><code>0.0s</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+
+      <div class="cell"><code>0.5s</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">half drawn</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">half drawn</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">half written</span></details></div>
+
+      <div class="cell"><code>1.0s</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">done</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">done</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">done</span></details></div>
+    </div>
+  </div>
+
+  <!-- 36 · v4 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span><span>v5</span></div>
+    <h2>v4 — three shapes, one object</h2>
+    <div class="icon-row"><span>⚪</span><span>🟨</span><span>🔤</span><span>➡️</span><span>🎁</span></div>
+    <p class="line center" style="margin-top:.5em">Right now moving all three costs three animations. <code>VGroup</code> makes it one.</p>
+    <p class="bilingual center">셋을 하나로 묶어요</p>
+  </div>
+
+  <!-- 37 · VGroup concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>VGroup is a bag</h2>
+    <svg viewBox="0 0 600 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="30" y="70" width="270" height="110" rx="14" fill="none" stroke="#8b5cf6" stroke-width="4" stroke-dasharray="9 6"/>
+      <text x="34" y="60" fill="#8b5cf6" font-size="18">group</text>
+      <circle cx="82" cy="125" r="26" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="140" y="99" width="52" height="52" fill="none" stroke="#f1fa8c" stroke-width="4"/>
+      <text x="212" y="134" fill="#bd93f9" font-size="20">Motion</text>
+      <text x="318" y="132" fill="#50fa7b" font-size="30">▶</text>
+      <rect x="360" y="40" width="220" height="110" rx="14" fill="rgba(139,92,246,.14)" stroke="#8b5cf6" stroke-width="4"/>
+      <circle cx="404" cy="95" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="450" y="73" width="44" height="44" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="508" y="103" fill="#bd93f9" font-size="17">Motion</text>
+      <text x="366" y="180" fill="#50fa7b" font-size="17">one .animate moves all three</text>
+      <line x1="470" y1="168" x2="470" y2="196" stroke="#50fa7b" stroke-width="3"/>
+    </svg>
+    <div class="why">🟣 The shapes stay themselves. <code>group</code> is a new handle on all three.</div>
+  </div>
+
+  <!-- 38 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 14</div>
+    <h2>Tie them together</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(Create(circle), Create(square), Write(title))</code></div>
+    <div class="where">📍 The line <b>under</b> it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(Create(circle), Create(square), Write(title))</span>
+<span class="hot">        group = VGroup(circle, square, title)</span></pre>
+    <div class="why">🟣 Capital <code>V</code>, capital <code>G</code>. Same name as last week — <code>group</code>.</div>
+    <div class="chk">✅ Run — the video looks the same. Making a group shows nothing.</div>
+  </div>
+
+  <!-- 39 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 14</div>
+    <h2>Move all three as one</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>group = VGroup(circle, square, title)</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        group = VGroup(circle, square, title)</span>
+<span class="hot">        self.play(group.animate.shift(UP * 2))</span></pre>
+    <div class="why">🟣 One <code>.animate</code>, three shapes. They keep their spacing.</div>
+    <div class="chk">✅ v4 done. Run — the whole row slides up together.</div>
+  </div>
+
+  <!-- 40 · Mistake — group made too early -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Mistake — the group made too early</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>        group = VGroup(circle, square, title)
+        circle = Circle(color=BLUE)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>NameError: name 'circle' is not defined</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>        circle = Circle(color=BLUE)
+        group = VGroup(circle, square, title)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ the shapes exist first</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Python reads top to bottom. A bag cannot hold a shape that does not exist yet.</p>
+    <p class="bilingual">도형을 먼저 만들어요</p>
+  </div>
+
+  <!-- 41 · Mistake — group without animate -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The same <code>.animate</code> rule</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>self.play(group.shift(UP * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>self.play(group.animate.shift(UP * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ the row slides up</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">A <code>VGroup</code> obeys the same rule as one shape. <code>.animate</code> or nothing plays.</p>
+  </div>
+
+  <!-- 42 · v5 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <h2>v5 — ANDY sets the clock</h2>
+    <div class="icon-row"><span>⏱️</span><span>🎞️</span><span>🐢</span></div>
+    <p class="line center" style="margin-top:.5em">Timing stops being something that happens. It becomes something ANDY chooses.</p>
+    <p class="bilingual center">시간도 내가 정해요</p>
+  </div>
+
+  <!-- 43 · wait concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2><code>self.wait(1)</code> = 15 still frames</h2>
+    <svg viewBox="0 0 600 160" style="width:100%;max-height:38vh" aria-hidden="true">
+      <rect x="10" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="34" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".4"/>
+      <rect x="104" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="128" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".8"/>
+      <rect x="198" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="222" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <text x="10" y="100" fill="#38d0e0" font-size="15">self.play — it changes</text>
+      <rect x="300" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="324" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="394" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="418" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="488" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="512" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <text x="300" y="100" fill="#ffb86c" font-size="15">self.wait(1) — nothing changes</text>
+      <text x="10" y="140" fill="#8a97b8" font-size="15">Manim still draws every frame. They are simply identical.</text>
+    </svg>
+  </div>
+
+  <!-- 44 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 14</div>
+    <h2>Hold the picture</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>group = VGroup(circle, square, title)</code></div>
+    <div class="where">📍 A new line <b>above</b> it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(Create(circle), Create(square), Write(title))</span>
+<span class="hot">        self.wait(1)</span>
+<span class="dim">        group = VGroup(circle, square, title)</span></pre>
+    <div class="why">🟣 One second of stillness so the eye catches up before the row moves.</div>
+    <div class="chk">✅ Run — the three shapes appear, pause, then slide up.</div>
+  </div>
+
+  <!-- 45 · STEP 13 -->
+  <div class="slide">
+    <div class="steptag">STEP 13 / 14</div>
+    <h2>Stretch one play</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(group.animate.shift(UP * 2))</code></div>
+    <div class="where">📍 Same line. Type <code>, run_time=2</code> before the <b>last</b> bracket. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(group.animate.shift(UP * 2))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(group.animate.shift(UP * 2), run_time=2)</pre></div>
+    <div class="why">🟣 <code>run_time</code> belongs to <code>self.play</code>, so it sits outside <code>shift</code>'s brackets.</div>
+    <div class="chk">✅ Run — the row now takes two slow seconds to rise.</div>
+  </div>
+
+  <!-- 46 · run_time concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2><code>run_time</code> stretches the frames</h2>
+    <svg viewBox="0 0 600 180" style="width:100%;max-height:40vh" aria-hidden="true">
+      <text x="10" y="20" fill="#38d0e0" font-size="16">run_time=1  →  15 frames</text>
+      <rect x="10" y="30" width="280" height="30" rx="6" fill="rgba(56,208,224,.22)" stroke="#38d0e0" stroke-width="2"/>
+      <line x1="66" y1="30" x2="66" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="122" y1="30" x2="122" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="178" y1="30" x2="178" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="234" y1="30" x2="234" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <text x="10" y="96" fill="#50fa7b" font-size="16">run_time=2  →  30 frames</text>
+      <rect x="10" y="106" width="560" height="30" rx="6" fill="rgba(80,250,123,.18)" stroke="#50fa7b" stroke-width="2"/>
+      <line x1="122" y1="106" x2="122" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="234" y1="106" x2="234" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="346" y1="106" x2="346" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="458" y1="106" x2="458" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <text x="10" y="166" fill="#8a97b8" font-size="15">Same start, same end. More frames in between = slower.</text>
+    </svg>
+  </div>
+
+  <!-- 47 · STEP 14 -->
+  <div class="slide">
+    <div class="steptag">STEP 14 / 14</div>
+    <h2>Land the ending</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(group.animate.shift(UP * 2), run_time=2)</code></div>
+    <div class="where">📍 The line under it — the very last line. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.shift(UP * 2), run_time=2)</span>
+<span class="hot">        self.wait(1)</span></pre>
+    <div class="why">🟣 Without it the video cuts the instant the row stops.</div>
+    <div class="chk">✅ v5 done. Run — appear, pause, rise slowly, hold. 🎉</div>
+  </div>
+
+  <!-- 48 · Full file -->
+  <div class="slide">
+    <div class="pill">Read back</div>
+    <h2>Your whole scene</h2>
+<pre class="tiny"><span class="kw">class</span> <span class="fn">MotionScene</span>(Scene):
+    <span class="kw">def</span> <span class="fn">construct</span>(self):
+        circle = <span class="fn">Circle</span>(color=BLUE).<span class="fn">shift</span>(LEFT * <span class="num">4</span>)
+        square = <span class="fn">Square</span>(color=YELLOW)
+        title = <span class="fn">Text</span>(<span class="str">"Motion"</span>).<span class="fn">shift</span>(RIGHT * <span class="num">4</span>)
+        self.<span class="fn">play</span>(<span class="fn">Create</span>(circle), <span class="fn">Create</span>(square), <span class="fn">Write</span>(title))
+        self.<span class="fn">wait</span>(<span class="num">1</span>)
+        group = <span class="fn">VGroup</span>(circle, square, title)
+        self.<span class="fn">play</span>(group.animate.<span class="fn">shift</span>(UP * <span class="num">2</span>), run_time=<span class="num">2</span>)
+        self.<span class="fn">wait</span>(<span class="num">1</span>)</pre>
+    <p class="quiet" style="margin-top:.4em">Two <code>self.play</code> lines. Four animations. Five seconds of video.</p>
+  </div>
+
+  <!-- 49 · Code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>self.play(a, b, c)</code> runs <span class="blank"></span> animations in <span class="blank"></span> second."</div>
+      <div class="frame" style="margin-top:.4em">"<code>VGroup</code> lets me move <span class="blank"></span> with <span class="blank"></span> line."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 50 · Quiz 1 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">Why does <code>self.play(square.shift(RIGHT))</code> fail?</div>
+      <div class="opts">
+        <details><summary>A. <code>shift</code> is spelled wrong</summary><div class="ans">No. The spelling is fine.</div></details>
+        <details><summary>B. <code>.shift()</code> hands back a square, not an animation</summary><div class="ans">✓ Correct. <code>self.play</code> only takes animations.</div></details>
+        <details><summary>C. <code>RIGHT</code> needs quotes</summary><div class="ans">No. Manim's directions are CAPITALS with no quotes.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 51 · Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">How long does <code>self.play(A, B, C, run_time=2)</code> last?</div>
+      <div class="opts">
+        <details><summary>A. 6 seconds</summary><div class="ans">No. Commas do not add time.</div></details>
+        <details><summary>B. 2 seconds</summary><div class="ans">✓ Correct. One play, one clock, three animations sharing it.</div></details>
+        <details><summary>C. 1 second</summary><div class="ans">No. <code>run_time=2</code> doubled it.</div></details>
+      </div>
+    </div>
+    <p class="bilingual">쉼표는 시간을 늘리지 않아요</p>
+  </div>
+
+  <!-- 52 · Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn! 🚀</div>
+    <h2>ANDY drives 🚗</h2>
+    <ul class="check-list">
+      <li>v1 — class, construct, <code>circle</code>, <code>Create</code>, <code>.animate.shift</code></li>
+      <li>v2 — delete the move, place at creation, add <code>square</code> and <code>title</code></li>
+      <li>v3 — one <code>self.play</code>, two commas</li>
+      <li>v4 — <code>group = VGroup(...)</code>, then one <code>.animate</code></li>
+      <li>v5 — <code>self.wait(1)</code>, <code>run_time=2</code>, <code>self.wait(1)</code></li>
+      <li>Run after every version. Never two steps at once.</li>
+    </ul>
+  </div>
+
+  <!-- 53 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">You want the circle and the square to move <b>together</b>. Do you write two <code>self.play</code> lines, or one line with a comma?</p>
+      <p class="bilingual" style="margin-top:.4em">동시에 움직이려면?</p>
+    </div>
+  </div>
+
+  <!-- 54 · Close & bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One play.<br>Three animations.<br>One second.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: animations that start one after another, on purpose.</p>
+    <p class="bilingual">다음 시간: 하나씩 시작하기</p>
+  </div>
+
+  <!-- 55 · LaggedStart concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Together, or one after another?</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="10" y="20" fill="#38d0e0" font-size="16">self.play(a, b, c)  —  all start at 0s</text>
+      <rect x="10" y="30" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="58" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="86" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="136" fill="#50fa7b" font-size="16">LaggedStart(a, b, c, lag_ratio=0.5)  —  staggered</text>
+      <rect x="10" y="146" width="180" height="16" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="100" y="166" width="180" height="16" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="190" y="186" width="180" height="12" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="300" y="70" fill="#8a97b8" font-size="15">same three animations</text>
+      <text x="400" y="160" fill="#8a97b8" font-size="15">each waits half a beat</text>
+    </svg>
+  </div>
+
+  <!-- 56 · BONUS 1 — LaggedStart -->
+  <div class="slide">
+    <div class="steptag">BONUS 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stagger the entrance</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(Create(circle), Create(square), Write(title))</code></div>
+    <div class="where">📍 Same line. Wrap the three animations in <code>LaggedStart(...)</code>. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(Create(circle), Create(square), Write(title))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(LaggedStart(Create(circle), Create(square), Write(title), lag_ratio=0.5))</pre></div>
+    <div class="why">🟣 <code>lag_ratio=0.5</code> starts each one halfway through the one before.</div>
+    <div class="chk">✅ Run — circle, then square, then text, overlapping.</div>
+  </div>
+
+  <!-- 57 · move_to concept -->
+  <div class="slide">
+    <div class="pill">📐 Units<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>move_to</code> is an address</h2>
+    <svg viewBox="0 0 640 356" style="width:100%;max-height:50vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#4a5670" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#4a5670" stroke-width="2"/>
+      <rect x="297" y="67" width="74" height="74" fill="none" stroke="#4a5670" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="256" y="58" fill="#8a97b8" font-size="15">square is here now</text>
+      <rect x="408" y="141.5" width="74" height="74" fill="none" stroke="#50fa7b" stroke-width="4"/>
+      <circle cx="445.4" cy="178.5" r="6" fill="#50fa7b"/>
+      <text x="396" y="240" fill="#50fa7b" font-size="17">[3, 0, 0]</text>
+      <line x1="334" y1="104" x2="440" y2="170" stroke="#50fa7b" stroke-width="3" stroke-dasharray="7 5"/>
+      <text x="86" y="312" fill="#8a97b8" font-size="15">x = 3, y = 0, z = 0 — the centre of the square lands on the dot</text>
+    </svg>
+    <div class="why">🟣 <code>shift</code> says how far. <code>move_to</code> says exactly where.</div>
+  </div>
+
+  <!-- 58 · BONUS 2 — move_to -->
+  <div class="slide">
+    <div class="steptag">BONUS 2<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Send the square to an address</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.wait(1)</code> — the <b>last</b> one.</div>
+    <div class="where">📍 The new line goes at the very bottom. Indent <b>8</b>.</div>
+<pre><span class="dim">        self.wait(1)</span>
+<span class="hot">        self.play(square.animate.move_to([3, 0, 0]))</span></pre>
+    <div class="why">🟣 Three numbers in square brackets. Flat art always ends in <code>0</code>.</div>
+    <div class="chk">✅ Run — the square parks right of centre.</div>
+  </div>
+
+  <!-- 59 · BONUS 3 — two different animations at once -->
+  <div class="slide">
+    <div class="steptag">BONUS 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two different changes, one second</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(square.animate.move_to([3, 0, 0]))</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(square.animate.move_to([3, 0, 0]))</span>
+<span class="hot">        self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</span></pre>
+    <div class="why">🟣 The comma does not care that the two changes are different.</div>
+    <div class="chk">✅ Run — the circle fills in while the square spins. Same second.</div>
+  </div>
+
+  <!-- 60 · next_to concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Placing without numbers</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <circle cx="180" cy="130" r="38" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="150" y="186" fill="#38d0e0" font-size="16">circle</text>
+      <text x="132" y="66" fill="#bd93f9" font-size="24">Motion</text>
+      <line x1="180" y1="80" x2="180" y2="88" stroke="#8a97b8" stroke-width="2"/>
+      <text x="240" y="70" fill="#8a97b8" font-size="16">title.animate.next_to(circle, UP)</text>
+      <text x="240" y="104" fill="#8a97b8" font-size="15">no coordinates typed at all</text>
+      <text x="240" y="140" fill="#50fa7b" font-size="15">move the circle later and</text>
+      <text x="240" y="164" fill="#50fa7b" font-size="15">the text does not follow — it is a one-off placement</text>
+    </svg>
+  </div>
+
+  <!-- 61 · BONUS 4 — next_to -->
+  <div class="slide">
+    <div class="steptag">BONUS 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Park the text above the circle</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</span>
+<span class="hot">        self.play(title.animate.next_to(circle, UP))</span></pre>
+    <div class="why">🟣 Two things in the brackets: which object, which side.</div>
+    <div class="chk">✅ Run — the text slides over and sits on top of the circle.</div>
+  </div>
+
+  <!-- 62 · arrange concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>.arrange()</code> tidies the bag</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="10" y="20" fill="#ff5555" font-size="16">scattered</text>
+      <circle cx="60" cy="66" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="180" y="30" width="40" height="40" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="100" y="96" fill="#bd93f9" font-size="17">Motion</text>
+      <text x="290" y="66" fill="#50fa7b" font-size="26">▶</text>
+      <text x="350" y="20" fill="#50fa7b" font-size="16">group.animate.arrange(RIGHT, buff=1)</text>
+      <circle cx="380" cy="66" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="428" y="46" width="40" height="40" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="486" y="74" fill="#bd93f9" font-size="17">Motion</text>
+      <line x1="402" y1="110" x2="428" y2="110" stroke="#ffb86c" stroke-width="3"/>
+      <text x="382" y="134" fill="#ffb86c" font-size="15">buff = the gap</text>
+      <text x="10" y="180" fill="#8a97b8" font-size="15">One line puts every member of the group in a neat row.</text>
+    </svg>
+  </div>
+
+  <!-- 63 · BONUS 5 — arrange -->
+  <div class="slide">
+    <div class="steptag">BONUS 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Line the group back up</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(title.animate.next_to(circle, UP))</code></div>
+    <div class="where">📍 The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(title.animate.next_to(circle, UP))</span>
+<span class="hot">        self.play(group.animate.arrange(RIGHT, buff=1))</span></pre>
+    <div class="why">🟣 <code>RIGHT</code> = lay them left to right. <code>buff=1</code> = one unit of gap.</div>
+    <div class="chk">✅ Run — the three shapes snap into an even row.</div>
+  </div>
+
+  <!-- 64 · always_redraw concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A shape that keeps up</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <circle cx="120" cy="60" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="420" y="36" width="48" height="48" fill="none" stroke="#f1fa8c" stroke-width="4"/>
+      <line x1="144" y1="60" x2="420" y2="60" stroke="#50fa7b" stroke-width="3"/>
+      <circle cx="120" cy="150" r="24" fill="none" stroke="#38d0e0" stroke-width="4" opacity=".45"/>
+      <circle cx="250" cy="150" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <line x1="274" y1="142" x2="420" y2="76" stroke="#50fa7b" stroke-width="3"/>
+      <text x="150" y="112" fill="#8a97b8" font-size="15">the circle moves…</text>
+      <text x="300" y="186" fill="#50fa7b" font-size="15">…and the green line redraws itself every frame</text>
+    </svg>
+    <div class="why">🟣 A normal line is drawn once. <code>always_redraw</code> rebuilds it 15 times a second.</div>
+  </div>
+
+  <!-- 65 · BONUS 6 — always_redraw -->
+  <div class="slide">
+    <div class="steptag">BONUS 6<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A rubber band between two shapes</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(group.animate.arrange(RIGHT, buff=1))</code></div>
+    <div class="where">📍 Three new lines under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.arrange(RIGHT, buff=1))</span>
+<span class="hot">        band = always_redraw(lambda: Line(circle.get_center(), square.get_center(), color=GREEN))</span>
+<span class="hot">        self.add(band)</span>
+<span class="hot">        self.play(circle.animate.shift(DOWN * 2))</span></pre>
+    <div class="why">🟣 <code>self.add</code> shows it with no animation. The band then follows on its own.</div>
+    <div class="chk">✅ Run — the green line stays glued to both shapes.</div>
+  </div>
+
+  <!-- 66 · BONUS 7 — FadeOut -->
+  <div class="slide">
+    <div class="steptag">BONUS 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Clear the stage</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>self.play(circle.animate.shift(DOWN * 2))</code></div>
+    <div class="where">📍 Two new lines under it — the very bottom. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(circle.animate.shift(DOWN * 2))</span>
+<span class="hot">        self.remove(band)</span>
+<span class="hot">        self.play(FadeOut(group))</span></pre>
+    <div class="why">🟣 The band must go first — it redraws itself and would ignore a fade.</div>
+    <div class="chk">✅ Run — the line vanishes, then all three shapes fade out together. 🎉</div>
+  </div>
+
+  <!-- 67 · animations that are not .animate -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Animations that need no <code>.animate</code></h2>
+    <div class="vocab-table">
+      <span class="term">Create</span>
+      <span class="gloss">draws a shape line by line</span>
+      <span class="ko">그리기</span>
+
+      <span class="term">Write</span>
+      <span class="gloss">draws Text like a pen</span>
+      <span class="ko">쓰기</span>
+
+      <span class="term">FadeIn</span>
+      <span class="gloss">anything appears softly</span>
+      <span class="ko">나타나기</span>
+
+      <span class="term">FadeOut</span>
+      <span class="gloss">anything leaves softly</span>
+      <span class="ko">사라지기</span>
+    </div>
+    <p class="quiet" style="margin-top:.4em">These four are already animations. <code>.animate</code> is for <b>changing</b> what is on screen.</p>
+  </div>
+
+  <!-- 68 · timing toolkit -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The whole timing toolkit</h2>
+    <svg viewBox="0 0 600 220" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="10" y="24" fill="#38d0e0" font-size="16">self.play(a)</text>
+      <rect x="230" y="8" width="120" height="20" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="66" fill="#38d0e0" font-size="16">self.play(a, b, c)</text>
+      <rect x="230" y="38" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="230" y="50" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="230" y="62" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="110" fill="#50fa7b" font-size="16">run_time=2</text>
+      <rect x="230" y="94" width="240" height="20" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="10" y="152" fill="#ffb86c" font-size="16">self.wait(1)</text>
+      <rect x="230" y="136" width="120" height="20" rx="5" fill="rgba(255,184,108,.2)" stroke="#ffb86c" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="10" y="194" fill="#bd93f9" font-size="16">LaggedStart(a, b, c)</text>
+      <rect x="230" y="172" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <rect x="290" y="184" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <rect x="350" y="196" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="490" y="24" fill="#8a97b8" font-size="14">1 second</text>
+      <text x="490" y="110" fill="#8a97b8" font-size="14">2 seconds</text>
+    </svg>
+  </div>
+
+  <!-- 69 · Mistake — run_time in the wrong brackets -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake — <code>run_time</code> in the wrong brackets</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>self.play(group.animate.shift(UP * 2, run_time=2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ <code>TypeError: shift() got an unexpected keyword argument 'run_time'</code></p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>self.play(group.animate.shift(UP * 2), run_time=2)</pre>
+        <p style="margin-top:.4em;font-size:.85em">→ two slow seconds</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>shift</code> owns the inner brackets. <code>self.play</code> owns the outer ones. <code>run_time</code> belongs to the play.</p>
+    <p class="bilingual">괄호 위치가 전부예요</p>
+  </div>
+
+  <!-- 70 · Stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>run_time=2</code> to <code>run_time=5</code>. Watch the same move crawl.</div>
+      <div class="item"><span class="lvl">★★</span>Add a fourth shape — <code>Triangle()</code> — and put it in the <code>VGroup</code> too.</div>
+      <div class="item"><span class="lvl">★★★</span>One <code>self.play</code> where the circle rotates, the square scales and the title changes colour, all at once.</div>
+    </div>
+  </div>
+
+  <!-- 71 · Lesson 3 preview -->
+  <div class="slide center-all">
+    <div class="pill">Next up<span class="activity-tag">OPTIONAL</span></div>
+    <p class="line big">What lesson 3 adds</p>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📈</div><div class="name">Plot a curve</div><div class="ex">axes.plot(...)</div></div>
+      <div class="opt-card"><div class="ico">🎚️</div><div class="name">A number that slides</div><div class="ex">ValueTracker</div></div>
+      <div class="opt-card"><div class="ico">🏷️</div><div class="name">Labels that follow</div><div class="ex">always_redraw</div></div>
+      <div class="opt-card"><div class="ico">🎥</div><div class="name">Camera moves</div><div class="ex">MovingCameraScene</div></div>
+    </div>
+    <p class="bilingual">다음 시간: 움직이는 그래프</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 71</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
