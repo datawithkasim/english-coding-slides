@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS002 — The Agent Does The Placing (NELLIE)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS002 &middot; Minecraft Blocks &middot; NELLIE &middot; 2026-09-04</div>
+
+  <!-- 1 · SLOT 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Agent &middot; place on move</div>
+    <div class="emoji">&#129302;</div>
+    <h1>The Agent<br>Does The Placing</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">You will <span class="sub">switch</span> place on move + <span class="sub">loop</span> a wall</p>
+    <p class="bilingual">오늘은 손이 아니라 코드가 블록을 놓아요</p>
+  </div>
+
+  <!-- 2 · SLOT 2: THE HOOK — one block by hand vs the trail -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill">&#128064; Look</div>
+    <h2>Last week: your hand</h2>
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" style="width:min(88vmin,1000px);height:auto;display:block;margin:.1em auto">
+      <rect x="10" y="10" width="330" height="280" rx="12" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="175" y="46" font-family="sans-serif" font-size="22" font-weight="800" fill="#ff9a9a" text-anchor="middle">&#9995; by hand</text>
+      <text x="175" y="128" font-size="54" text-anchor="middle">&#9995;</text>
+      <rect x="50" y="186" width="42" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="96" y="186" width="42" height="42" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="142" y="186" width="42" height="42" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="188" y="186" width="42" height="42" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="234" y="186" width="42" height="42" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="175" y="266" font-family="sans-serif" font-size="19" font-weight="700" fill="#8a97b8" text-anchor="middle">1 block, 1 click</text>
+      <rect x="360" y="10" width="330" height="280" rx="12" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="525" y="46" font-family="sans-serif" font-size="22" font-weight="800" fill="#50fa7b" text-anchor="middle">&#129302; the agent</text>
+      <text x="525" y="128" font-size="54" text-anchor="middle">&#129302;</text>
+      <rect x="378" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="416" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="454" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="492" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="530" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="568" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="606" y="186" width="34" height="42" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="662" y="218" font-size="30" text-anchor="middle">&#129302;</text>
+      <text x="525" y="266" font-family="sans-serif" font-size="19" font-weight="700" fill="#8a97b8" text-anchor="middle">7 blocks, 0 clicks</text>
+    </svg>
+    <p class="bilingual">오늘 손은 쉬어요</p>
+  </div>
+
+  <!-- 3 · SLOT 2b: the size of the win -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2b</span>
+    <div class="pill">&#128064; Look</div>
+    <h2>A wall is 28 blocks</h2>
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:min(88vmin,1000px);height:auto;display:block;margin:.2em auto">
+      <text x="20" y="62" font-family="sans-serif" font-size="20" font-weight="800" fill="#ff9a9a">by hand</text>
+      <rect x="160" y="36" width="510" height="38" rx="8" fill="#ff5555"/>
+      <text x="415" y="62" font-family="sans-serif" font-size="20" font-weight="800" fill="#0a0d13" text-anchor="middle">28 clicks</text>
+      <text x="20" y="152" font-family="sans-serif" font-size="20" font-weight="800" fill="#50fa7b">by code</text>
+      <rect x="160" y="126" width="30" height="38" rx="8" fill="#50fa7b"/>
+      <text x="212" y="152" font-family="sans-serif" font-size="20" font-weight="800" fill="#8a97b8">1 word</text>
+      <text x="415" y="196" font-family="sans-serif" font-size="18" font-weight="700" fill="#8a97b8" text-anchor="middle">4 sides &#215; 7 blocks = 28</text>
+    </svg>
+    <p class="bilingual">같은 벽, 클릭 28번 vs 1번</p>
+  </div>
+
+  <!-- 4 · SLOT 3: Recap — the rainbow tower -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Recap &middot; 28 Aug</div>
+    <h2>Your rainbow tower</h2>
+    <div style="display:flex;gap:1.6em;align-items:center;flex-wrap:wrap;justify-content:center">
+      <svg viewBox="0 0 200 232" xmlns="http://www.w3.org/2000/svg" style="width:min(30vmin,200px);height:auto">
+        <rect x="30" y="16" width="140" height="26" fill="#f38baa"/>
+        <rect x="30" y="44" width="140" height="26" fill="#8932b8"/>
+        <rect x="30" y="72" width="140" height="26" fill="#3c44aa"/>
+        <rect x="30" y="100" width="140" height="26" fill="#5e7c16"/>
+        <rect x="30" y="128" width="140" height="26" fill="#fed83d"/>
+        <rect x="30" y="156" width="140" height="26" fill="#f9801d"/>
+        <rect x="30" y="184" width="140" height="26" fill="#b02e26"/>
+        <text x="100" y="226" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">7 layers, 7 fill blocks</text>
+      </svg>
+      <div class="recap-q" style="flex:1;min-width:300px">
+        <div class="label">Your own win</div>
+        <div class="q">You saw two layers, then wrote the other five alone. What changed each layer?</div>
+        <details><summary>Show answer</summary><div class="ans">The colour, and the y numbers: 3&ndash;5, then 6&ndash;8.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · SLOT 3b: Recap — the fill block, drawn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3b</span>
+    <div class="pill purple">Recap</div>
+    <h2>The block you used</h2>
+    <div class="mcb-stack">
+      <div class="mcb blocks">fill <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span> from <span class="mcb pos" style="background:#59967A">~ <span class="val">1</span> ~ <span class="val">0</span> ~ <span class="val">1</span></span> to <span class="mcb pos" style="background:#59967A">~ <span class="val">3</span> ~ <span class="val">2</span> ~ <span class="val">3</span></span></div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#7ABB55">Blocks</span> drawer</p>
+    <p style="margin:.3em 0">The <code>~</code> is a label, not a number. It means <b>from where you stand</b>.</p>
+    <p class="bilingual">~ 는 내 위치 기준이라는 뜻이에요</p>
+  </div>
+
+  <!-- 6 · SLOT 3c: Recap — counting a range -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3c</span>
+    <div class="pill purple">Recap</div>
+    <h2>0, 1, 2 is three</h2>
+    <svg viewBox="0 0 520 150" xmlns="http://www.w3.org/2000/svg" style="width:min(70vmin,760px);height:auto;display:block;margin:.2em auto">
+      <rect x="60" y="30" width="80" height="60" rx="6" fill="#38d0e0"/>
+      <text x="100" y="70" font-family="monospace" font-size="26" font-weight="800" fill="#0a0d13" text-anchor="middle">0</text>
+      <rect x="160" y="30" width="80" height="60" rx="6" fill="#38d0e0"/>
+      <text x="200" y="70" font-family="monospace" font-size="26" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+      <rect x="260" y="30" width="80" height="60" rx="6" fill="#38d0e0"/>
+      <text x="300" y="70" font-family="monospace" font-size="26" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+      <text x="200" y="128" font-family="sans-serif" font-size="20" font-weight="800" fill="#50fa7b" text-anchor="middle">2 &minus; 0 + 1 = 3 blocks</text>
+      <text x="430" y="76" font-size="40" text-anchor="middle">&#9989;</text>
+    </svg>
+    <p style="margin:.2em 0">End minus start, then add 1. Count the first block too.</p>
+  </div>
+
+  <!-- 7 · SLOT 3d: Recap — the coordinate rule -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3d</span>
+    <div class="pill purple">Recap &middot; the rule</div>
+    <h2>y starts at 0. x and z start at 1.</h2>
+    <svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <rect x="16" y="12" width="300" height="196" rx="10" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+      <text x="166" y="40" font-family="sans-serif" font-size="19" font-weight="800" fill="#8b5cf6" text-anchor="middle">y &mdash; up</text>
+      <rect x="80" y="168" width="200" height="22" fill="#5e7c16"/>
+      <text x="64" y="185" font-family="monospace" font-size="17" font-weight="800" fill="#8b5cf6" text-anchor="end">0</text>
+      <rect x="80" y="142" width="200" height="22" fill="#4a6412"/>
+      <text x="64" y="159" font-family="monospace" font-size="17" font-weight="800" fill="#8b5cf6" text-anchor="end">1</text>
+      <rect x="80" y="116" width="200" height="22" fill="#4a6412"/>
+      <text x="64" y="133" font-family="monospace" font-size="17" font-weight="800" fill="#8b5cf6" text-anchor="end">2</text>
+      <text x="166" y="86" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">bottom row is y 0</text>
+      <rect x="344" y="12" width="300" height="196" rx="10" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+      <text x="494" y="40" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">x and z &mdash; along the floor</text>
+      <text x="378" y="122" font-size="30" text-anchor="middle">&#129485;</text>
+      <rect x="404" y="92" width="34" height="34" rx="4" fill="#38d0e0"/>
+      <text x="421" y="116" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+      <rect x="444" y="92" width="34" height="34" rx="4" fill="#2b93a1"/>
+      <text x="461" y="116" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+      <rect x="484" y="92" width="34" height="34" rx="4" fill="#2b93a1"/>
+      <text x="501" y="116" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">3</text>
+      <text x="494" y="166" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">first free square is 1</text>
+    </svg>
+    <p class="bilingual">y는 0부터, x와 z는 1부터예요</p>
+  </div>
+
+  <!-- 8 · SLOT 3e: Recap — the agent blocks already seen -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3e</span>
+    <div class="pill purple">Recap</div>
+    <h2>You met the agent</h2>
+    <div class="mcb-stack">
+      <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+      <div class="mcb agent dim">agent turn <span class="dd">left</span></div>
+    </div>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">The agent walked 7 blocks. What did it leave behind?</div>
+      <details><summary>Show answer</summary><div class="ans">Nothing. It only walked. Today we fix that.</div></details>
+    </div>
+  </div>
+
+  <!-- 9 · SLOT 4: Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">agent</span>
+      <span class="gloss">your robot helper in the world</span>
+      <span class="ko">에이전트</span>
+      <span class="term">place on move</span>
+      <span class="gloss">a switch: drop a block every step</span>
+      <span class="ko">이동하며 놓기</span>
+      <span class="term">trail</span>
+      <span class="gloss">the line of blocks left behind</span>
+      <span class="ko">지나간 자리</span>
+    </div>
+  </div>
+
+  <!-- 10 · SLOT 5: Concept — the backpack and the switch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>The agent carries blocks</h2>
+    <svg viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <text x="110" y="122" font-size="60" text-anchor="middle">&#129302;</text>
+      <text x="110" y="176" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">the agent</text>
+      <rect x="230" y="52" width="180" height="120" rx="12" fill="#141b27" stroke="#D83B01" stroke-width="3"/>
+      <text x="320" y="82" font-family="sans-serif" font-size="17" font-weight="800" fill="#D83B01" text-anchor="middle">backpack</text>
+      <rect x="266" y="98" width="36" height="36" rx="4" fill="#b02e26"/>
+      <rect x="308" y="98" width="36" height="36" rx="4" fill="#b02e26"/>
+      <rect x="350" y="98" width="36" height="36" rx="4" fill="#b02e26"/>
+      <text x="320" y="158" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">red wool</text>
+      <text x="450" y="124" font-size="30" text-anchor="middle">&#10142;</text>
+      <rect x="490" y="52" width="156" height="120" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="568" y="82" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">the switch</text>
+      <rect x="516" y="102" width="104" height="40" rx="20" fill="#3a3a52"/>
+      <circle cx="600" cy="122" r="15" fill="#50fa7b"/>
+      <text x="544" y="129" font-family="sans-serif" font-size="16" font-weight="800" fill="#e8eef6">ON</text>
+      <text x="330" y="222" font-family="sans-serif" font-size="19" font-weight="800" fill="#e8eef6" text-anchor="middle">Blocks in the backpack + switch ON = a trail</text>
+    </svg>
+    <p class="bilingual">가방에 블록, 스위치는 켜기</p>
+  </div>
+
+  <!-- 11 · SLOT 5b: Concept — OFF vs ON -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5b</span>
+    <div class="pill">Concept</div>
+    <h2>One switch, two worlds</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; OFF</span>
+        <div class="mcb-stack"><div class="mcb agent">agent place on move <span class="dd">OFF</span></div></div>
+        <svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <rect x="6" y="18" width="34" height="34" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="44" y="18" width="34" height="34" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="82" y="18" width="34" height="34" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="120" y="18" width="34" height="34" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="158" y="18" width="34" height="34" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+          <text x="222" y="46" font-size="26" text-anchor="middle">&#129302;</text>
+        </svg>
+      </div>
+      <div class="col good"><span class="tag">&#10003; ON</span>
+        <div class="mcb-stack"><div class="mcb agent">agent place on move <span class="dd">ON</span></div></div>
+        <svg viewBox="0 0 260 70" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+          <rect x="6" y="18" width="34" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="44" y="18" width="34" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="82" y="18" width="34" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="120" y="18" width="34" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+          <rect x="158" y="18" width="34" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+          <text x="222" y="46" font-size="26" text-anchor="middle">&#129302;</text>
+        </svg>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+  </div>
+
+  <!-- 12 · SLOT 5c: Concept — the block lands behind -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5c</span>
+    <div class="pill">Concept</div>
+    <h2>The block lands behind</h2>
+    <svg viewBox="0 0 700 265" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+      <text x="20" y="46" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8">start</text>
+      <rect x="150" y="16" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="200" y="16" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="250" y="16" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="173" y="52" font-size="28" text-anchor="middle">&#129302;</text>
+      <text x="20" y="146" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8">move 1</text>
+      <rect x="150" y="116" width="46" height="46" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="200" y="116" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="250" y="116" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="223" y="152" font-size="28" text-anchor="middle">&#129302;</text>
+      <text x="20" y="246" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8">move 2</text>
+      <rect x="150" y="216" width="46" height="46" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="200" y="216" width="46" height="46" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="250" y="216" width="46" height="46" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="273" y="252" font-size="28" text-anchor="middle">&#129302;</text>
+      <text x="500" y="132" font-family="sans-serif" font-size="21" font-weight="800" fill="#50fa7b" text-anchor="middle">Step off a square</text>
+      <text x="500" y="164" font-family="sans-serif" font-size="21" font-weight="800" fill="#50fa7b" text-anchor="middle">&#8594; a block fills it</text>
+    </svg>
+    <p class="bilingual">떠난 자리에 블록이 생겨요</p>
+  </div>
+
+  <!-- 13 · SLOT 5d: Concept — never on its own square -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5d</span>
+    <div class="pill">Concept</div>
+    <h2>Never on its own square</h2>
+    <svg viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <rect x="30" y="20" width="260" height="200" rx="10" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="160" y="48" font-family="sans-serif" font-size="18" font-weight="800" fill="#ff9a9a" text-anchor="middle">&#10007; standing there</text>
+      <rect x="112" y="112" width="60" height="60" rx="5" fill="#b02e26" stroke="#ff5555" stroke-width="3"/>
+      <text x="142" y="156" font-size="32" text-anchor="middle">&#129302;</text>
+      <text x="160" y="204" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">no room for a block</text>
+      <rect x="370" y="20" width="260" height="200" rx="10" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="500" y="48" font-family="sans-serif" font-size="18" font-weight="800" fill="#50fa7b" text-anchor="middle">&#10003; move first</text>
+      <rect x="422" y="112" width="60" height="60" rx="5" fill="#b02e26" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="486" y="112" width="60" height="60" rx="5" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="516" y="156" font-size="32" text-anchor="middle">&#129302;</text>
+      <text x="500" y="204" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">the old square fills</text>
+    </svg>
+    <p style="margin:.2em 0">Move first. Then the block has somewhere to go.</p>
+  </div>
+
+  <!-- 14 · SLOT 6: Predict — switch off -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>What appears?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="mcb-c player">
+        <div class="hat">on chat command <span class="val">wall</span></div>
+        <div class="mcb-in">
+          <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+          <div class="mcb agent">agent place on move <span class="dd">OFF</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+        </div>
+      </div>
+      <details><summary>Reveal</summary><div class="ans">Nothing. The agent walks 7 and the floor stays empty.</div></details>
+    </div>
+  </div>
+
+  <!-- 15 · SLOT 6b: Predict — empty backpack -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6b</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>And now?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="mcb-c player">
+        <div class="hat">on chat command <span class="val">wall</span></div>
+        <div class="mcb-in">
+          <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+        </div>
+      </div>
+      <details><summary>Reveal</summary><div class="ans">Still nothing. The switch is on, but the backpack is empty.</div></details>
+    </div>
+  </div>
+
+  <!-- 16 · SLOT 7: the plan -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">The plan</div>
+    <h2>Four versions today</h2>
+    <div class="stage-bar">
+      <div class="step current"><span class="num">v1</span> it walks</div>
+      <div class="step"><span class="num">v2</span> one block</div>
+      <div class="step"><span class="num">v3</span> a trail</div>
+      <div class="step"><span class="num">v4</span> a square</div>
+    </div>
+    <p style="margin-top:.6em">We build v1 first. Never the finished thing first.</p>
+    <p class="bilingual">한 번에 하나씩 바꿔요</p>
+  </div>
+
+  <!-- 17 · STEP 1 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">STEP 1 / 15</div>
+    <h2>Start the program</h2>
+    <p style="margin:0">&#128269; FIND: the empty grey workspace</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-drop">empty workspace</div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player hot">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#0078D7">Player</span> drawer</p>
+    <p style="margin:0">&#128205; Drop it on the empty workspace. Type <code>wall</code> in the white hole.</p>
+    <p style="margin:0">&#128995; Typing <code>wall</code> in chat runs your code.</p>
+    <p style="margin:0">&#9989; Type <code>wall</code> in chat. Nothing happens. Correct.</p>
+  </div>
+
+  <!-- 18 · STEP 2 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">STEP 2 / 15</div>
+    <h2>Make it walk</h2>
+    <p style="margin:0">&#128269; FIND: the empty mouth of the chat block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent hot">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Drop it INSIDE the mouth. Change the <span class="val">1</span> to <span class="val">7</span>.</p>
+    <p style="margin:0">&#128995; This is the block you already know.</p>
+    <p style="margin:0">&#9989; Type <code>wall</code>. The agent walks 7 squares.</p>
+  </div>
+
+  <!-- 19 · RUN v1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Run v1</div>
+    <h2>It walks. Nothing else.</h2>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <rect x="20" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="64" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="108" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="152" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="196" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="240" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="284" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="350" y="66" font-size="30" text-anchor="middle">&#129302;</text>
+      <text x="530" y="60" font-family="sans-serif" font-size="20" font-weight="800" fill="#ff9a9a" text-anchor="middle">7 empty squares</text>
+    </svg>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>the agent moved 7 &middot; blocks placed: 0</div>
+    </div>
+    <p class="bilingual">아직 아무것도 안 놓여요</p>
+  </div>
+
+  <!-- 20 · STEP 3 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">STEP 3 / 15</div>
+    <h2>Fill the backpack</h2>
+    <p style="margin:0">&#128269; FIND: the <code>agent move</code> block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Drop it ABOVE <code>agent move forward</code>. Pick <b>Red Wool</b>.</p>
+    <p style="margin:0">&#128995; An empty backpack places nothing.</p>
+    <p style="margin:0">&#9989; Run it. Still 7 empty squares.</p>
+  </div>
+
+  <!-- 21 · STEP 4 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">STEP 4 / 15</div>
+    <h2>Place one block</h2>
+    <p style="margin:0">&#128269; FIND: the bottom of the stack</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb agent hot">agent place <span class="dd">forward</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it UNDER <code>agent move forward</code>, inside the mouth.</p>
+    <p style="margin:0">&#128995; <code>agent place</code> drops exactly one block.</p>
+    <p style="margin:0">&#9989; Run it. One red block appears.</p>
+  </div>
+
+  <!-- 22 · RUN v2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Run v2</div>
+    <h2>One block. Slow.</h2>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <rect x="20" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="64" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="108" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="152" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="196" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="240" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="284" y="34" width="40" height="40" rx="4" fill="#3a3a52" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="350" y="66" font-size="30" text-anchor="middle">&#129302;</text>
+      <rect x="378" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#50fa7b" stroke-width="3"/>
+      <text x="540" y="60" font-family="sans-serif" font-size="20" font-weight="800" fill="#50fa7b" text-anchor="middle">1 block placed</text>
+    </svg>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>blocks placed: 1 &middot; blocks still needed: 27</div>
+    </div>
+  </div>
+
+  <!-- 23 · SLOT 14: why one place block is not enough -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Think</div>
+    <h2>28 place blocks?</h2>
+    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+      <rect x="20" y="20" width="300" height="150" rx="10" fill="#141b27" stroke="#ff5555" stroke-width="2"/>
+      <text x="170" y="52" font-family="sans-serif" font-size="18" font-weight="800" fill="#ff9a9a" text-anchor="middle">one block each</text>
+      <rect x="50" y="70" width="240" height="14" rx="4" fill="#D83B01"/>
+      <rect x="50" y="90" width="240" height="14" rx="4" fill="#D83B01"/>
+      <rect x="50" y="110" width="240" height="14" rx="4" fill="#D83B01"/>
+      <rect x="50" y="130" width="240" height="14" rx="4" fill="#D83B01"/>
+      <text x="170" y="162" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">&#8230; 28 of them</text>
+      <text x="360" y="102" font-size="26" text-anchor="middle">&#10142;</text>
+      <rect x="392" y="20" width="290" height="150" rx="10" fill="#141b27" stroke="#50fa7b" stroke-width="2"/>
+      <text x="537" y="52" font-family="sans-serif" font-size="18" font-weight="800" fill="#50fa7b" text-anchor="middle">one switch</text>
+      <rect x="430" y="90" width="214" height="30" rx="8" fill="#D83B01"/>
+      <text x="537" y="111" font-family="sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">place on move ON</text>
+      <text x="537" y="152" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">1 block, every step</text>
+    </svg>
+    <p class="bilingual">블록 28개 말고 스위치 하나</p>
+  </div>
+
+  <!-- 24 · STEP 5 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">STEP 5 / 15</div>
+    <h2>Take the place block out</h2>
+    <p style="margin:0">&#128269; FIND: <code>agent place forward</code>, the bottom block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb agent">agent place <span class="dd">forward</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0">&#128205; Drag <code>agent place forward</code> to the toolbox. It disappears.</p>
+    <p style="margin:0">&#128995; The switch will do this job, 7 times over.</p>
+    <p style="margin:0">&#9989; Two blocks left inside the mouth.</p>
+  </div>
+
+  <!-- 25 · STEP 6 / 15 — the moment -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">STEP 6 / 15</div>
+    <h2>Flip the switch</h2>
+    <p style="margin:0">&#128269; FIND: the gap under <code>agent set block</code></p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent hot">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it UNDER <code>agent set block</code>. Choose <b>ON</b>.</p>
+    <p style="margin:0">&#128995; Now every step drops a block by itself.</p>
+    <p style="margin:0">&#9989; Run it. A red line, 7 long.</p>
+  </div>
+
+  <!-- 26 · SLOT 17: THE ANIMATION — the trail grows -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">Watch it! &#9889;</div>
+    <h2>The trail grows</h2>
+    <div class="mcb-stack">
+      <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+      <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+    </div>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">1</div><div class="iter-item">2</div><div class="iter-item">3</div><div class="iter-item">4</div><div class="iter-item">5</div>
+      </div>
+      <div class="var-row"><span class="label">blocks behind = </span><span class="var-vals"><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span><span class="var-val">4</span><span class="var-val">5</span></span></div>
+      <div class="output-box">
+        <div class="out-label">&#9656; In the world</div>
+        <div class="out-line">step 1 &#8594; &#128997;</div>
+        <div class="out-line">step 2 &#8594; &#128997;&#128997;</div>
+        <div class="out-line">step 3 &#8594; &#128997;&#128997;&#128997;</div>
+        <div class="out-line">step 4 &#8594; &#128997;&#128997;&#128997;&#128997;</div>
+        <div class="out-line">step 5 &#8594; &#128997;&#128997;&#128997;&#128997;&#128997;</div>
+      </div>
+    </div>
+    <p style="margin:.3em 0">&#8230; then step 6 and step 7. Seven blocks.</p>
+  </div>
+
+  <!-- 27 · RUN v3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Run v3</div>
+    <h2>Your hands did nothing</h2>
+    <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <rect x="20" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="64" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="108" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="152" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="196" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="240" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <rect x="284" y="34" width="40" height="40" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="350" y="66" font-size="30" text-anchor="middle">&#129302;</text>
+      <text x="530" y="60" font-family="sans-serif" font-size="20" font-weight="800" fill="#50fa7b" text-anchor="middle">7 blocks, 1 word</text>
+    </svg>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>blocks placed: 7 &middot; clicks: 0</div>
+    </div>
+    <p class="bilingual">코드가 놓았어요, 손이 아니라</p>
+  </div>
+
+  <!-- 28 · STEP 7 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">STEP 7 / 15</div>
+    <h2>Add an empty loop</h2>
+    <p style="margin:0">&#128269; FIND: the gap under <code>agent move forward</code></p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb-c loops hot">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#569138">Loops</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it UNDER <code>agent move forward</code>.</p>
+    <p style="margin:0">&#128995; An empty loop does nothing yet.</p>
+    <p style="margin:0">&#9989; Run it. Same 7 blocks as before.</p>
+  </div>
+
+  <!-- 29 · STEP 8 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">STEP 8 / 15</div>
+    <h2>Move the walk inside</h2>
+    <p style="margin:0">&#128269; FIND: <code>agent move forward by 7</code>, above the loop</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent hot">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0">&#128205; Drag it INTO the mouth of <code>repeat 4 times</code>.</p>
+    <p style="margin:0">&#128995; Blocks inside the loop run 4 times.</p>
+    <p style="margin:0">&#9989; Run it. One very long red line, 28 blocks.</p>
+  </div>
+
+  <!-- 30 · RUN: the line, not a square -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Run it</div>
+    <h2>28 blocks, one line</h2>
+    <svg viewBox="0 0 700 140" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+      <rect x="16" y="52" width="620" height="34" rx="4" fill="#b02e26" stroke="#4d4d6b" stroke-width="2"/>
+      <text x="326" y="76" font-family="sans-serif" font-size="17" font-weight="800" fill="#fff" text-anchor="middle">7 + 7 + 7 + 7 = 28 in a row</text>
+      <text x="664" y="82" font-size="28" text-anchor="middle">&#129302;</text>
+      <text x="326" y="126" font-family="sans-serif" font-size="19" font-weight="800" fill="#ff9a9a" text-anchor="middle">&#10007; a wall needs corners</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>blocks placed: 28 &middot; corners: 0</div>
+    </div>
+    <p class="bilingual">돌지 않아서 그냥 직선이에요</p>
+  </div>
+
+  <!-- 31 · Concept: four left turns -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Concept</div>
+    <h2>Four left turns close it</h2>
+    <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" style="width:min(58vmin,520px);height:auto;display:block;margin:.2em auto">
+      <line x1="300" y1="240" x2="300" y2="80" stroke="#b02e26" stroke-width="14" stroke-linecap="round"/>
+      <line x1="300" y1="80" x2="140" y2="80" stroke="#b02e26" stroke-width="14" stroke-linecap="round"/>
+      <line x1="140" y1="80" x2="140" y2="240" stroke="#b02e26" stroke-width="14" stroke-linecap="round"/>
+      <line x1="140" y1="240" x2="300" y2="240" stroke="#b02e26" stroke-width="14" stroke-linecap="round"/>
+      <text x="326" y="168" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">1 &#8593;</text>
+      <text x="220" y="58" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">2 &#8592;</text>
+      <text x="114" y="168" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">3 &#8595;</text>
+      <text x="220" y="278" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">4 &#8594;</text>
+      <text x="300" y="248" font-size="26" text-anchor="middle">&#129302;</text>
+      <text x="220" y="168" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">back where</text>
+      <text x="220" y="192" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">it started</text>
+    </svg>
+    <p style="margin:.2em 0">Walk, turn left. Four times. The wall closes itself.</p>
+    <p class="bilingual">왼쪽으로 네 번 돌면 제자리</p>
+  </div>
+
+  <!-- 32 · STEP 9 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">STEP 9 / 15</div>
+    <h2>Turn at every corner</h2>
+    <p style="margin:0">&#128269; FIND: inside <code>repeat 4 times</code>, under the move block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+            <div class="mcb agent dim">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent dim">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent hot">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it UNDER the move block, still INSIDE <code>repeat 4 times</code>.</p>
+    <p style="margin:0">&#128995; Walk a side, then turn. Four times.</p>
+    <p style="margin:0">&#9989; Run it. A closed red square.</p>
+  </div>
+
+  <!-- 33 · ANIMATION: one frame per pass -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Watch it! &#9889;</div>
+    <h2>One pass at a time</h2>
+    <div class="mcb-c loops">
+      <div class="hat">repeat <span class="val">4</span> times</div>
+      <div class="mcb-in">
+        <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+        <div class="mcb agent">agent turn <span class="dd">left</span></div>
+      </div>
+    </div>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">pass 1</div><div class="iter-item">pass 2</div><div class="iter-item">pass 3</div><div class="iter-item">pass 4</div>
+      </div>
+      <div class="var-row"><span class="label">facing = </span><span class="var-vals"><span class="var-val">north &#8593;</span><span class="var-val">west &#8592;</span><span class="var-val">south &#8595;</span><span class="var-val">east &#8594;</span></span></div>
+      <div class="output-box">
+        <div class="out-label">&#9656; The wall</div>
+        <div class="out-line">side 1 &#8593; 7 blocks, then turn &#8630;</div>
+        <div class="out-line">side 2 &#8592; 7 blocks, then turn &#8630;</div>
+        <div class="out-line">side 3 &#8595; 7 blocks, then turn &#8630;</div>
+        <div class="out-line">side 4 &#8594; 7 blocks &#8212; closed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 34 · RUN v4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">Run v4</div>
+    <h2>A wall, zero clicks</h2>
+    <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg" style="width:min(70vmin,780px);height:auto;display:block;margin:.2em auto">
+      <rect x="190" y="30" width="320" height="200" rx="6" fill="none" stroke="#b02e26" stroke-width="18"/>
+      <text x="350" y="120" font-family="sans-serif" font-size="21" font-weight="800" fill="#8a97b8" text-anchor="middle">a closed square</text>
+      <text x="350" y="152" font-family="sans-serif" font-size="21" font-weight="800" fill="#50fa7b" text-anchor="middle">28 red wool</text>
+      <text x="510" y="238" font-size="26" text-anchor="middle">&#129302;</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>blocks placed by you: 0 &middot; by the agent: all of them</div>
+    </div>
+    <p class="bilingual">벽 하나, 클릭 0번</p>
+  </div>
+
+  <!-- 35 · Common mistake: turn outside the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>The turn must be inside</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+        <div class="mcb-c loops">
+          <div class="hat">repeat <span class="val">4</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          </div>
+        </div>
+        <div class="mcb-stack"><div class="mcb agent">agent turn <span class="dd">left</span></div></div>
+        <p style="margin:.2em 0">one long line, one turn at the end</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+        <div class="mcb-c loops">
+          <div class="hat">repeat <span class="val">4</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          </div>
+        </div>
+        <p style="margin:.2em 0">a corner every pass</p>
+      </div>
+    </div>
+    <p class="bilingual">루프 안이어야 매번 돌아요</p>
+  </div>
+
+  <!-- 36 · Debug 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Debug 1<span class="activity-tag">activity</span></div>
+    <h2>Nothing appeared</h2>
+    <div class="mcb-c player">
+      <div class="hat">on chat command <span class="val">wall</span></div>
+      <div class="mcb-in">
+        <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+        <div class="mcb agent">agent place on move <span class="dd">OFF</span></div>
+        <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+      </div>
+    </div>
+    <details class="debug-card">
+      <summary>&#128269; Which block is wrong?</summary>
+      <div class="err">the agent walked, the floor stayed empty</div>
+      <p style="margin:.2em 0">The switch reads <b>OFF</b>. Click the hole, choose <b>ON</b>.</p>
+    </details>
+  </div>
+
+  <!-- 37 · Debug 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Debug 2<span class="activity-tag">activity</span></div>
+    <h2>The switch is on. Still nothing.</h2>
+    <div class="mcb-c player">
+      <div class="hat">on chat command <span class="val">wall</span></div>
+      <div class="mcb-in">
+        <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+        <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+      </div>
+    </div>
+    <details class="debug-card">
+      <summary>&#128269; What is missing?</summary>
+      <div class="err">nothing to place &#8212; the backpack is empty</div>
+      <p style="margin:.2em 0">Add <code>agent set block</code> at the top. Pick a wool colour.</p>
+    </details>
+  </div>
+
+  <!-- 38 · Debug 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">Debug 3<span class="activity-tag">activity</span></div>
+    <h2>Built by hand, not by code</h2>
+    <svg viewBox="0 0 660 150" xmlns="http://www.w3.org/2000/svg" style="width:min(80vmin,900px);height:auto;display:block;margin:.2em auto">
+      <text x="90" y="86" font-size="44" text-anchor="middle">&#9995;</text>
+      <rect x="140" y="52" width="44" height="44" rx="4" fill="#b02e26" stroke="#ff5555" stroke-width="3"/>
+      <text x="162" y="132" font-family="sans-serif" font-size="16" font-weight="700" fill="#ff9a9a" text-anchor="middle">you placed it</text>
+      <text x="300" y="84" font-size="26" text-anchor="middle">&#10142;</text>
+      <rect x="360" y="30" width="280" height="90" rx="10" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+      <text x="500" y="72" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">the code ran</text>
+      <text x="500" y="100" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">and placed nothing</text>
+    </svg>
+    <details class="debug-card">
+      <summary>&#128269; Why did the code look broken?</summary>
+      <div class="err">the wall was already there &#8212; your hand built it</div>
+      <p style="margin:.2em 0">Break it, walk away, then type <code>wall</code>. Judge the code alone.</p>
+    </details>
+  </div>
+
+  <!-- 39 · Debug 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">Debug 4<span class="activity-tag">activity</span></div>
+    <h2>The square will not close</h2>
+    <div class="mcb-c loops">
+      <div class="hat">repeat <span class="val">4</span> times</div>
+      <div class="mcb-in">
+        <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+      </div>
+    </div>
+    <div class="mcb-stack">
+      <div class="mcb agent">agent turn <span class="dd">left</span></div>
+    </div>
+    <details class="debug-card">
+      <summary>&#128269; Where is the turn?</summary>
+      <div class="err">one long line, then one turn at the end</div>
+      <p style="margin:.2em 0">The turn sits under the loop. Drag it INSIDE <code>repeat 4 times</code>.</p>
+    </details>
+  </div>
+
+  <!-- 40 · Trace activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which way is it facing?</h2>
+    <p style="margin:0">The agent starts facing <b>north &#8593;</b> and turns left each pass.</p>
+    <div class="trace-grid">
+      <div class="cell head">pass</div><div class="cell head">facing</div><div class="cell head">side drawn</div>
+      <div class="cell">1</div><div class="cell">north &#8593;</div><div class="cell">7 blocks up</div>
+      <div class="cell">2</div><div class="cell"><details><summary>?</summary><span class="reveal">west &#8592;</span></details></div><div class="cell">7 blocks left</div>
+      <div class="cell">3</div><div class="cell"><details><summary>?</summary><span class="reveal">south &#8595;</span></details></div><div class="cell">7 blocks down</div>
+      <div class="cell">4</div><div class="cell"><details><summary>?</summary><span class="reveal">east &#8594;</span></details></div><div class="cell">7 blocks right</div>
+    </div>
+  </div>
+
+  <!-- 41 · Quiz 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Quick quiz<span class="activity-tag">activity</span></div>
+    <h2>How many blocks?</h2>
+    <div class="quiz-card">
+      <div class="q">The switch is ON. The agent walks 7. How many blocks appear?</div>
+      <div class="opts">
+        <details><summary>7</summary><div class="ans">&#10003; One block per step.</div></details>
+        <details><summary>1</summary><div class="ans">That is <code>agent place</code>, not the switch.</div></details>
+        <details><summary>0</summary><div class="ans">That is the switch left OFF.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 42 · Quiz 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32b</span>
+    <div class="pill">Quick quiz<span class="activity-tag">activity</span></div>
+    <h2>Where does it land?</h2>
+    <div class="quiz-card">
+      <div class="q">The agent steps forward. Where does the block appear?</div>
+      <div class="opts">
+        <details><summary>on the square it just left</summary><div class="ans">&#10003; Behind it, every step.</div></details>
+        <details><summary>under the agent</summary><div class="ans">No room. The agent stands there.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 42 · Code talk -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>agent place on move ON</code> makes the agent <span class="blank"></span> because <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 43 · STEP 10 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">STEP 10 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Change the whole colour</h2>
+    <p style="margin:0">&#128269; FIND: the wool picker in <code>agent set block</code></p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-stack">
+          <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-stack">
+          <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#3c44aa"></span> blue wool</span></div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0">&#128205; Click the picker inside <code>agent set block</code>. Choose <b>Blue Wool</b>.</p>
+    <p style="margin:0">&#128995; One picker controls all 28 blocks.</p>
+    <p style="margin:0">&#9989; Run it. The whole square is blue.</p>
+  </div>
+
+  <!-- 44 · Concept: the six directions -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The agent has six ways</h2>
+    <svg viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" style="width:min(76vmin,860px);height:auto;display:block;margin:.2em auto">
+      <text x="330" y="132" font-size="40" text-anchor="middle">&#129302;</text>
+      <rect x="270" y="16" width="120" height="34" rx="8" fill="#D83B01"/>
+      <text x="330" y="40" font-family="sans-serif" font-size="16" font-weight="800" fill="#fff" text-anchor="middle">up &#8593;</text>
+      <rect x="270" y="200" width="120" height="34" rx="8" fill="#D83B01"/>
+      <text x="330" y="224" font-family="sans-serif" font-size="16" font-weight="800" fill="#fff" text-anchor="middle">down &#8595;</text>
+      <rect x="60" y="108" width="140" height="34" rx="8" fill="#D83B01"/>
+      <text x="130" y="132" font-family="sans-serif" font-size="16" font-weight="800" fill="#fff" text-anchor="middle">back &#8592;</text>
+      <rect x="460" y="108" width="140" height="34" rx="8" fill="#D83B01"/>
+      <text x="530" y="132" font-family="sans-serif" font-size="16" font-weight="800" fill="#fff" text-anchor="middle">forward &#8594;</text>
+      <rect x="120" y="24" width="110" height="30" rx="8" fill="#8F6D40"/>
+      <text x="175" y="45" font-family="sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">left</text>
+      <rect x="430" y="24" width="110" height="30" rx="8" fill="#8F6D40"/>
+      <text x="485" y="45" font-family="sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">right</text>
+    </svg>
+    <p style="margin:.2em 0"><code>agent move up by 1</code> lifts it one block higher.</p>
+    <p class="bilingual">위로 올라가면 벽이 한 층 높아져요</p>
+  </div>
+
+  <!-- 45 · STEP 11 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">STEP 11 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Climb one block</h2>
+    <p style="margin:0">&#128269; FIND: the gap UNDER <code>repeat 4 times</code></p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent set block <span class="dd"><span class="swatch" style="background:#3c44aa"></span> blue wool</span></div>
+            <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent set block <span class="dd"><span class="swatch" style="background:#3c44aa"></span> blue wool</span></div>
+            <div class="mcb agent dim">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops dim">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent hot">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it UNDER the whole loop, not inside it.</p>
+    <p style="margin:0">&#128995; After the lap, the agent rises one block.</p>
+    <p style="margin:0">&#9989; Run it. One square. The agent ends higher.</p>
+  </div>
+
+  <!-- 46 · STEP 12 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">STEP 12 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A second, bigger loop</h2>
+    <p style="margin:0">&#128269; FIND: the gap under <code>agent move up</code></p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb agent dim">agent place on move <span class="dd">ON</span></div>
+            <div class="mcb-c loops dim">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent dim">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+            <div class="mcb-c loops hot">
+              <div class="hat">repeat <span class="val">3</span> times</div>
+              <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#569138">Loops</span> drawer</p>
+    <p style="margin:0">&#128205; Snap it at the bottom of the chat mouth. Type <span class="val">3</span>.</p>
+    <p style="margin:0">&#128995; This loop repeats a whole lap.</p>
+    <p style="margin:0">&#9989; Run it. Nothing changes. The loop is empty.</p>
+  </div>
+
+  <!-- 47 · STEP 13 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">STEP 13 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Put the lap inside</h2>
+    <p style="margin:0">&#128269; FIND: the <code>repeat 4 times</code> block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">3</span> times</div>
+              <div class="mcb-in"><div class="mcb-drop">nothing inside yet</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c player">
+          <div class="hat">on chat command <span class="val">wall</span></div>
+          <div class="mcb-in">
+            <div class="mcb-c loops hot">
+              <div class="hat">repeat <span class="val">3</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb-c loops">
+                  <div class="hat">repeat <span class="val">4</span> times</div>
+                  <div class="mcb-in">
+                    <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                    <div class="mcb agent">agent turn <span class="dd">left</span></div>
+                  </div>
+                </div>
+                <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0">&#128205; Drag it INTO the mouth of <code>repeat 3 times</code>. The move-up block follows.</p>
+    <p style="margin:0">&#128995; A loop can hold another loop.</p>
+    <p style="margin:0">&#9989; Run it. A wall 7 wide, 3 high.</p>
+  </div>
+
+  <!-- 48 · ANIMATION: viz-3, the wall rises -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill">Watch it!<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three laps, three layers</h2>
+    <div class="mcb-c loops">
+      <div class="hat">repeat <span class="val">3</span> times</div>
+      <div class="mcb-in">
+        <div class="mcb-c loops dim">
+          <div class="hat">repeat <span class="val">4</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          </div>
+        </div>
+        <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+      </div>
+    </div>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">lap 1</div><div class="iter-item">lap 2</div><div class="iter-item">lap 3</div>
+      </div>
+      <div class="var-row"><span class="label">wall height = </span><span class="var-vals"><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span></span></div>
+      <div class="output-box">
+        <div class="out-label">&#9656; The wall</div>
+        <div class="out-line">lap 1 &#8594; 28 blocks, then climb</div>
+        <div class="out-line">lap 2 &#8594; 56 blocks, then climb</div>
+        <div class="out-line">lap 3 &#8594; 84 blocks &#8212; a room</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 49 · RUN v5 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill">Run v5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>84 blocks, still zero clicks</h2>
+    <svg viewBox="0 0 660 230" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,800px);height:auto;display:block;margin:.2em auto">
+      <rect x="150" y="40" width="360" height="34" fill="#3c44aa" stroke="#1e2470" stroke-width="2"/>
+      <rect x="150" y="76" width="360" height="34" fill="#3c44aa" stroke="#1e2470" stroke-width="2"/>
+      <rect x="150" y="112" width="360" height="34" fill="#3c44aa" stroke="#1e2470" stroke-width="2"/>
+      <text x="330" y="180" font-family="sans-serif" font-size="19" font-weight="800" fill="#8a97b8" text-anchor="middle">3 layers, all four sides</text>
+      <text x="546" y="146" font-size="26" text-anchor="middle">&#129302;</text>
+    </svg>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">&#9656; In the world</div>
+      <div>3 &#215; 28 = 84 blocks placed by the agent</div>
+    </div>
+    <p class="bilingual">방 하나가 생겼어요</p>
+  </div>
+
+  <!-- 50 · Concept: loop inside loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Inside runs first</h2>
+    <svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="width:min(78vmin,880px);height:auto;display:block;margin:.2em auto">
+      <rect x="20" y="16" width="620" height="188" rx="12" fill="none" stroke="#569138" stroke-width="4"/>
+      <text x="120" y="44" font-family="sans-serif" font-size="17" font-weight="800" fill="#8bd45f">repeat 3 times</text>
+      <rect x="50" y="60" width="440" height="120" rx="10" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="150" y="86" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0">repeat 4 times</text>
+      <rect x="80" y="104" width="380" height="30" rx="6" fill="#D83B01"/>
+      <text x="270" y="125" font-family="sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">move forward 7, turn left</text>
+      <text x="270" y="162" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">runs 4 times, then the outer goes round once</text>
+      <rect x="510" y="104" width="110" height="30" rx="6" fill="#D83B01"/>
+      <text x="565" y="125" font-family="sans-serif" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">move up 1</text>
+    </svg>
+    <p style="margin:.2em 0">4 sides &#215; 3 laps = 12 walls in one run.</p>
+    <p class="bilingual">안쪽이 다 끝나야 바깥쪽이 한 번 돌아요</p>
+  </div>
+
+  <!-- 51 · STEP 14 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="pill">STEP 14 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Make it a tower</h2>
+    <p style="margin:0">&#128269; FIND: the number <span class="val">3</span> in the outer loop</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c loops">
+          <div class="hat">repeat <span class="val">3</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-c loops hot">
+          <div class="hat">repeat <span class="val">10</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb-c loops">
+              <div class="hat">repeat <span class="val">4</span> times</div>
+              <div class="mcb-in">
+                <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+                <div class="mcb agent">agent turn <span class="dd">left</span></div>
+              </div>
+            </div>
+            <div class="mcb agent">agent move <span class="dd">up</span> by <span class="val">1</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0">&#128205; Click the <span class="val">3</span> in the OUTER loop. Type <span class="val">10</span>.</p>
+    <p style="margin:0">&#128995; One number sets the height of the whole tower.</p>
+    <p style="margin:0">&#9989; Run it. A wall 10 blocks tall, 280 blocks.</p>
+  </div>
+
+  <!-- 52 · Concept: a loop repeats the SAME thing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A loop repeats the same thing</h2>
+    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:min(78vmin,880px);height:auto;display:block;margin:.2em auto">
+      <text x="160" y="34" font-family="sans-serif" font-size="17" font-weight="800" fill="#8bd45f" text-anchor="middle">repeat 4 times</text>
+      <rect x="50" y="52" width="50" height="50" rx="6" fill="#3c44aa"/>
+      <rect x="110" y="52" width="50" height="50" rx="6" fill="#3c44aa"/>
+      <rect x="170" y="52" width="50" height="50" rx="6" fill="#3c44aa"/>
+      <rect x="230" y="52" width="50" height="50" rx="6" fill="#3c44aa"/>
+      <text x="165" y="136" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">same colour, 4 sides</text>
+      <text x="500" y="34" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">written out, 4 times</text>
+      <rect x="390" y="52" width="50" height="50" rx="6" fill="#b02e26"/>
+      <rect x="450" y="52" width="50" height="50" rx="6" fill="#fed83d"/>
+      <rect x="510" y="52" width="50" height="50" rx="6" fill="#80c71f"/>
+      <rect x="570" y="52" width="50" height="50" rx="6" fill="#3c44aa"/>
+      <text x="505" y="136" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">a new colour each side</text>
+      <text x="330" y="180" font-family="sans-serif" font-size="18" font-weight="800" fill="#e8eef6" text-anchor="middle">Want each side different? Write the sides out.</text>
+    </svg>
+    <p class="bilingual">루프는 똑같은 것만 반복해요</p>
+  </div>
+
+  <!-- 53 · STEP 15 / 15 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">STEP 15 / 15<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four sides, four colours</h2>
+    <p style="margin:0">&#128269; FIND: the <code>repeat 4 times</code> block</p>
+    <div style="display:flex;gap:1.6em;align-items:flex-start;flex-wrap:wrap;margin-top:.2em">
+      <div><p style="margin:0"><b class="kw">OLD</b></p>
+        <div class="mcb-c loops">
+          <div class="hat">repeat <span class="val">4</span> times</div>
+          <div class="mcb-in">
+            <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+            <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          </div>
+        </div>
+      </div>
+      <div><p style="margin:0"><b class="fn">NEW</b></p>
+        <div class="mcb-stack">
+          <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#b02e26"></span> red wool</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#fed83d"></span> yellow wool</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#80c71f"></span> lime wool</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          <div class="mcb agent">agent turn <span class="dd">left</span></div>
+          <div class="mcb agent hot">agent set block <span class="dd"><span class="swatch" style="background:#3c44aa"></span> blue wool</span></div>
+          <div class="mcb agent">agent move <span class="dd">forward</span> by <span class="val">7</span></div>
+          <div class="mcb agent">agent turn <span class="dd">left</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:0">&#128205; Drag the loop away. Build four pairs, one per colour.</p>
+    <p style="margin:0">&#128995; Different every side means no loop.</p>
+    <p style="margin:0">&#9989; Run it. Four coloured walls.</p>
+  </div>
+
+  <!-- 54 · Habit: switch it off -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">Habit</div>
+    <h2>Switch it off at the end</h2>
+    <div class="mcb-stack">
+      <div class="mcb-drop">&#8230; your build finishes here</div>
+      <div class="mcb agent hot">agent place on move <span class="dd">OFF</span></div>
+    </div>
+    <p class="mcb-from">from the <span class="drawer" style="background:#D83B01">Agent</span> drawer</p>
+    <p style="margin:.2em 0">Leave it ON and the next walk paints blocks you did not want.</p>
+    <p class="bilingual">끝나면 스위치를 꺼요</p>
+  </div>
+
+  <!-- 55 · Your turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build it yourself &#128640;</h2>
+    <ul class="check-list">
+      <li>New chat command: <code>room</code></li>
+      <li><code>agent set block</code> &#8212; any wool you like</li>
+      <li><code>agent place on move</code> &#8594; <b>ON</b></li>
+      <li><code>repeat 4 times</code>: move forward 5, turn left</li>
+      <li>Run it. Zero blocks by hand.</li>
+    </ul>
+  </div>
+
+  <!-- 56 · Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Go further</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">&#9733;</span> Swap <code>turn left</code> for <code>turn right</code>. Same square, other way round.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;</span> Rebuild your rainbow tower with the agent, one colour per lap.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;&#9733;</span> Make a room: walls with the agent, then <code>fill</code> the inside with air.</div>
+    </div>
+    <p class="bilingual">지난주 무지개 탑을 에이전트로 다시</p>
+  </div>
+
+  <!-- 57 · Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One question</h2>
+    <div class="exit">
+      <div class="label">Before you close the laptop</div>
+      <p style="margin:.3em 0">Your agent walked 10 squares and left nothing. Name the two blocks to check.</p>
+      <details><summary>Show answer</summary><div class="ans"><code>agent set block</code> and <code>agent place on move ON</code></div></details>
+    </div>
+  </div>
+
+  <!-- 58 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="emoji">&#127959;&#65039;</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Your hands never<br>touched a block</h1>
+    <div class="stage-bar" style="margin-top:.6em">
+      <div class="step done"><span class="num">v1</span> it walks</div>
+      <div class="step done"><span class="num">v2</span> one block</div>
+      <div class="step done"><span class="num">v3</span> a trail</div>
+      <div class="step current"><span class="num">v4</span> a square</div>
+    </div>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: one number that changes on every pass</p>
+    <p class="bilingual">다음엔 숫자가 매번 바뀌어요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&#8249;</button><span class="counter" id="counter">1 / 59</span><button id="next">&#8250;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
