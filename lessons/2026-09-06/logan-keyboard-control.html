@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drive It With The Keys (Logan · 2026-09-06)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Pygame · Keyboard · Logan · 6 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pygame · Week 2</div>
+    <div class="emoji">🎮</div>
+    <h1>Drive It<br>With The Keys</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Open the <span class="sub">Homework</span> project. Not Workspace.</p>
+    <p class="bilingual">오늘은 방향키로 움직여요</p>
+  </div>
+
+  <!-- 2 · Recap — his real file -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Your square cannot move yet</h2>
+<pre><span class="dim">    screen.<span class="fn">fill</span>(PASTEL_YELLOW)
+    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, <span class="num">100</span>, <span class="num">100</span>))</span><span class="bad">    <span class="com">#X_EXAMPLE = X_EXAMPLE - 5</span></span><span class="bad">    <span class="com">#Y_EXAMPLE = Y_EXAMPLE + 5</span></span></pre>
+    <div class="recap-q">
+      <div class="q">Both moving lines start with <code>#</code>. What does that do?</div>
+      <details><summary>Show answer</summary><div class="ans">Switches the line off. Python skips it.</div></details>
+    </div>
+  </div>
+
+  <!-- 3 · Predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Run it and hold ←</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">A cyan square on yellow. You hold the left arrow.</div>
+      <details><summary>Reveal</summary><div class="ans">It does not move. Nothing reads the keyboard, and both moving lines are switched off.</div></details>
+    </div>
+    <p class="bilingual">아직 아무것도 안 움직여요</p>
+  </div>
+
+  <!-- 4 · Vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">#</span>
+      <span class="gloss">switches a line off</span>
+      <span class="ko">주석 · 실행 안 함</span>
+
+      <span class="term">key.get_pressed()</span>
+      <span class="gloss">which keys are down right now</span>
+      <span class="ko">키 상태 읽기</span>
+
+      <span class="term">WIDTH - 100</span>
+      <span class="gloss">the line the square cannot cross</span>
+      <span class="ko">한계선</span>
+    </div>
+  </div>
+
+  <!-- 5 · THE PICTURE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept 💡</div>
+    <h2>The map of your window</h2>
+    <svg viewBox="0 0 440 250" style="width:100%;max-height:38vh;display:block;margin:.2em auto">
+      <rect x="90" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <line x1="90" y1="22" x2="266" y2="22" stroke="#ff7849" stroke-width="3"/>
+      <polygon points="280,22 264,15 264,29" fill="#ff7849"/>
+      <text x="140" y="14" fill="#ff7849" font-size="15" font-weight="700">X_EXAMPLE → WIDTH</text>
+      <line x1="77" y1="35" x2="77" y2="211" stroke="#ff7849" stroke-width="3"/>
+      <polygon points="77,225 70,209 84,209" fill="#ff7849"/>
+      <text x="2" y="130" fill="#ff7849" font-size="14" font-weight="700">Y ↓ HEIGHT</text>
+      <circle cx="90" cy="35" r="7" fill="#ff7849"/>
+      <text x="99" y="57" fill="#8a3a12" font-size="16" font-weight="700">(0, 0)</text>
+      <rect x="166" y="111" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="166" cy="111" r="5" fill="#d81b60"/>
+      <text x="206" y="112" fill="#1a2233" font-size="13" font-weight="700">(200, 200)</text>
+      <text x="292" y="180" fill="#e8eef6" font-size="14">500 × 500</text>
+    </svg>
+    <p class="center">Zero is the <b>top-left</b>. Y grows <b>downward</b>.</p>
+    <p class="bilingual center">0은 왼쪽 위, y는 아래로</p>
+  </div>
+
+  <!-- 6 · THE PICTURE — the anchor dot -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Concept 💡</div>
+    <h2>The pink dot is X, Y</h2>
+    <svg viewBox="0 0 440 250" style="width:100%;max-height:36vh;display:block;margin:.2em auto">
+      <rect x="90" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="90" cy="35" r="7" fill="#ff7849"/>
+      <text x="99" y="55" fill="#8a3a12" font-size="14" font-weight="700">(0, 0)</text>
+      <rect x="166" y="111" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="166" cy="111" r="6" fill="#d81b60"/>
+      <text x="112" y="106" fill="#d81b60" font-size="14" font-weight="700">X, Y</text>
+      <line x1="166" y1="158" x2="204" y2="158" stroke="#1a7a44" stroke-width="2"/>
+      <text x="210" y="163" fill="#1a2233" font-size="13" font-weight="700">100 wide</text>
+      <line x1="158" y1="111" x2="158" y2="149" stroke="#1a7a44" stroke-width="2"/>
+      <text x="96" y="185" fill="#1a2233" font-size="13" font-weight="700">100 tall</text>
+    </svg>
+    <p class="center">The square grows <b>right and down</b> from that dot.</p>
+    <p class="bilingual center">점에서 오른쪽·아래로 자라요</p>
+  </div>
+
+  <!-- 7 · THE PICTURE — key directions -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Which key does what</h2>
+    <svg viewBox="0 0 460 250" style="width:100%;max-height:34vh;display:block;margin:.2em auto">
+      <rect x="100" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="100" cy="35" r="6" fill="#ff7849"/>
+      <rect x="176" y="111" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="176" cy="111" r="5" fill="#d81b60"/>
+      <line x1="170" y1="130" x2="142" y2="130" stroke="#0b7285" stroke-width="3"/>
+      <polygon points="130,130 144,123 144,137" fill="#0b7285"/>
+      <text x="0" y="122" fill="#38d0e0" font-size="14" font-weight="700">← X - 5</text>
+      <line x1="220" y1="130" x2="248" y2="130" stroke="#0b7285" stroke-width="3"/>
+      <polygon points="260,130 246,123 246,137" fill="#0b7285"/>
+      <text x="296" y="122" fill="#38d0e0" font-size="14" font-weight="700">→ X + 5</text>
+      <line x1="195" y1="105" x2="195" y2="82" stroke="#6d28d9" stroke-width="3"/>
+      <polygon points="195,68 188,84 202,84" fill="#6d28d9"/>
+      <text x="208" y="76" fill="#8b5cf6" font-size="14" font-weight="700">↑ Y - 5</text>
+      <line x1="195" y1="155" x2="195" y2="178" stroke="#6d28d9" stroke-width="3"/>
+      <polygon points="195,192 188,176 202,176" fill="#6d28d9"/>
+      <text x="208" y="196" fill="#8b5cf6" font-size="14" font-weight="700">↓ Y + 5</text>
+    </svg>
+    <p class="center"><b>Up is minus.</b> Down is plus. Y grows downward.</p>
+    <p class="bilingual center">위로 가려면 빼요</p>
+  </div>
+
+  <!-- 8 · Plan -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Plan 🗺️</div>
+    <h2>Four versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🧍</div><div class="name">v1 · it sits</div><div class="ex">your file today</div></div>
+      <div class="opt-card"><div class="ico">💨</div><div class="name">v2 · it drifts</div><div class="ex">the homework lines</div></div>
+      <div class="opt-card"><div class="ico">🎮</div><div class="name">v3 · it steers</div><div class="ex">4 arrow keys</div></div>
+      <div class="opt-card"><div class="ico">🧱</div><div class="name">v4 · it stops</div><div class="ex">the four walls</div></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Every version runs before we add the next.</p>
+  </div>
+
+  <!-- 9 · Concept — the # switch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept 💡</div>
+    <h2># is an off switch</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ switched off</span>
+<pre>    <span class="com">#X_EXAMPLE = X_EXAMPLE - 5</span></pre>
+        <p>Python reads it as a note and skips it. Nothing happens.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ switched on</span>
+<pre>    X_EXAMPLE = X_EXAMPLE - <span class="num">5</span></pre>
+        <p>Now it runs every frame. The square moves.</p>
+      </div>
+    </div>
+    <p class="bilingual"># 지우면 그 줄이 살아나요</p>
+  </div>
+
+  <!-- 10 · His 15 colours -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Your 15 colour names</h2>
+    <svg viewBox="0 0 640 250" style="width:100%;max-height:36vh;display:block;margin:.2em auto">
+      <rect x="10" y="14" width="112" height="46" rx="7" fill="#ffd1dc"/><text x="66" y="42" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">PINK</text>
+      <rect x="136" y="14" width="112" height="46" rx="7" fill="#ffbec8"/><text x="192" y="42" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">ROSE</text>
+      <rect x="262" y="14" width="112" height="46" rx="7" fill="#ffa0a0"/><text x="318" y="42" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">RED</text>
+      <rect x="388" y="14" width="112" height="46" rx="7" fill="#ffcdb2"/><text x="444" y="42" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">PEACH</text>
+      <rect x="514" y="14" width="112" height="46" rx="7" fill="#ffc896"/><text x="570" y="42" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">ORANGE</text>
+
+      <rect x="10" y="76" width="112" height="46" rx="7" fill="#fdfd96" stroke="#ffffff" stroke-width="4"/><text x="66" y="104" fill="#1a2233" font-size="12" font-weight="800" text-anchor="middle">YELLOW</text>
+      <rect x="136" y="76" width="112" height="46" rx="7" fill="#d7f5aa"/><text x="192" y="104" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">LIME</text>
+      <rect x="262" y="76" width="112" height="46" rx="7" fill="#b4f0be"/><text x="318" y="104" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">GREEN</text>
+      <rect x="388" y="76" width="112" height="46" rx="7" fill="#aaf0dc"/><text x="444" y="104" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">MINT</text>
+      <rect x="514" y="76" width="112" height="46" rx="7" fill="#a0e6e1"/><text x="570" y="104" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">TEAL</text>
+
+      <rect x="10" y="138" width="112" height="46" rx="7" fill="#a0ebf5" stroke="#ffffff" stroke-width="4"/><text x="66" y="166" fill="#1a2233" font-size="12" font-weight="800" text-anchor="middle">CYAN</text>
+      <rect x="136" y="138" width="112" height="46" rx="7" fill="#aad2fa"/><text x="192" y="166" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">BLUE</text>
+      <rect x="262" y="138" width="112" height="46" rx="7" fill="#becbfa"/><text x="318" y="166" fill="#1a2233" font-size="11" font-weight="700" text-anchor="middle">PERIWINKLE</text>
+      <rect x="388" y="138" width="112" height="46" rx="7" fill="#d7c3fa"/><text x="444" y="166" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">LAVENDER</text>
+      <rect x="514" y="138" width="112" height="46" rx="7" fill="#dcb4f5"/><text x="570" y="166" fill="#1a2233" font-size="12" font-weight="700" text-anchor="middle">PURPLE</text>
+
+      <text x="10" y="212" fill="#e8eef6" font-size="15" font-weight="700">every name starts with PASTEL_</text>
+      <text x="10" y="236" fill="#e8eef6" font-size="15" font-weight="700">background = PASTEL_YELLOW · square = PASTEL_CYAN</text>
+    </svg>
+    <p class="bilingual center">이름만 바꾸면 색이 바뀌어요</p>
+  </div>
+
+  <!-- 11 · v1 top of file -->
+  <div class="slide">
+    <span class="slot-badge">v1</span>
+    <div class="pill">Start here ▶</div>
+    <h2>v1 — the top of your file</h2>
+<pre><span class="dim">WIDTH = <span class="num">500</span>
+HEIGHT = <span class="num">500</span>
+
+screen = pygame.display.<span class="fn">set_mode</span>((WIDTH, HEIGHT))
+pygame.display.<span class="fn">set_caption</span>(<span class="str">"Logan Game"</span>)
+clock = pygame.time.<span class="fn">Clock</span>()
+
+<span class="com"># your 15 PASTEL_ colours</span>
+
+X_EXAMPLE = WIDTH // <span class="num">2</span> - (<span class="num">50</span>)
+Y_EXAMPLE = HEIGHT // <span class="num">2</span> - (<span class="num">50</span>)</span></pre>
+    <p style="margin-top:.4em"><code>500 // 2 - 50</code> = 200. That is why it starts in the middle.</p>
+    <p class="bilingual">가운데에서 시작해요</p>
+  </div>
+
+  <!-- 12 · v1 the loop -->
+  <div class="slide">
+    <span class="slot-badge">v1</span>
+    <div class="pill">Start here ▶</div>
+    <h2>v1 — inside the loop</h2>
+<pre><span class="dim">    screen.<span class="fn">fill</span>(PASTEL_YELLOW)
+    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, <span class="num">100</span>, <span class="num">100</span>))
+    <span class="com"># --- WORKSHEET STEP 1 and STEP 2 : the line below is switched off ---</span>
+    <span class="com">#X_EXAMPLE = X_EXAMPLE - 5</span>
+    <span class="com"># --- WORKSHEET STEP 4 : this line is switched off too ---</span>
+    <span class="com">#Y_EXAMPLE = Y_EXAMPLE + 5</span>
+    <span class="com"># --- WORKSHEET STEP 3 and STEP 5 : the two if blocks go under this line ---</span>
+
+    pygame.display.<span class="fn">flip</span>()
+    clock.<span class="fn">tick</span>(<span class="num">60</span>)</span></pre>
+    <p style="margin-top:.3em">✅ Run it. A still cyan square. Those comments are your map.</p>
+  </div>
+
+  <!-- 13 · STEP 1 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 1 / 26</span>
+    <div class="pill">Switch it on</div>
+    <h2>v2 · Delete one # </h2>
+<pre><span class="dim">    <span class="com"># --- WORKSHEET STEP 1 and STEP 2 : the line below is switched off ---</span></span><span class="hot">    X_EXAMPLE = X_EXAMPLE - <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>#X_EXAMPLE = X_EXAMPLE - 5</code><br>
+      📍 <b>WHERE:</b> that same line · delete <b>only the #</b> · <b>4 spaces</b> stay<br>
+      🟣 <b>WHY:</b> a live line runs 60 times a second<br>
+      ✅ <b>CHECK:</b> the square drifts left, then leaves the window
+    </div>
+  </div>
+
+  <!-- 14 · Watch it — the drift -->
+  <div class="slide">
+    <span class="slot-badge">WATCH</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One line, every frame</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">frame 1 · X - 5</div>
+        <div class="ra-line">frame 2 · X - 5</div>
+        <div class="ra-line">frame 3 · X - 5</div>
+        <div class="ra-line">frame 4 · X - 5</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">X_EXAMPLE</span>
+        <span class="ra-vals"><span>200</span><span>195</span><span>190</span><span>185</span></span>
+      </div>
+    </div>
+    <p class="bilingual center">한 프레임에 5씩 줄어요</p>
+  </div>
+
+  <!-- 15 · STEP 2 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 2 / 26</span>
+    <div class="pill">Switch it on</div>
+    <h2>v2 · Delete the other #</h2>
+<pre><span class="dim">    <span class="com"># --- WORKSHEET STEP 4 : this line is switched off too ---</span></span><span class="hot">    Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>#Y_EXAMPLE = Y_EXAMPLE + 5</code><br>
+      📍 <b>WHERE:</b> that same line · delete <b>only the #</b> · <b>4 spaces</b> stay<br>
+      🟣 <b>WHY:</b> plus on Y pushes it down, not up<br>
+      ✅ <b>CHECK:</b> it now drifts <b>down and left</b> together
+    </div>
+  </div>
+
+  <!-- 16 · PICTURE — the drift path -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Where the drift goes</h2>
+    <svg viewBox="0 0 440 250" style="width:100%;max-height:36vh;display:block;margin:.2em auto">
+      <rect x="90" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="90" cy="35" r="6" fill="#ff7849"/>
+      <text x="99" y="55" fill="#8a3a12" font-size="13" font-weight="700">(0, 0)</text>
+      <rect x="166" y="111" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".3"/>
+      <rect x="147" y="130" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".5"/>
+      <rect x="128" y="149" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".72"/>
+      <rect x="109" y="168" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="109" cy="168" r="5" fill="#d81b60"/>
+      <line x1="166" y1="111" x2="115" y2="162" stroke="#d81b60" stroke-width="2"/>
+      <polygon points="106,171 118,158 121,169" fill="#d81b60"/>
+      <text x="292" y="100" fill="#e8eef6" font-size="15" font-weight="700">X gets smaller</text>
+      <text x="292" y="128" fill="#e8eef6" font-size="15" font-weight="700">Y gets bigger</text>
+      <text x="292" y="156" fill="#e8eef6" font-size="15" font-weight="700">= down-left</text>
+    </svg>
+    <p class="center">It never stops, and it never turns. You are not driving.</p>
+    <p class="bilingual center">멈추지도, 방향을 바꾸지도 못해요</p>
+  </div>
+
+  <!-- 17 · STEP 3 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 3 / 26</span>
+    <div class="pill">Switch it off</div>
+    <h2>Turn the drift off again</h2>
+<pre><span class="hot">    <span class="com">#X_EXAMPLE = X_EXAMPLE - 5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>X_EXAMPLE = X_EXAMPLE - 5</code><br>
+      📍 <b>WHERE:</b> that same line · type <code>#</code> in front of the X · <b>4 spaces</b> stay<br>
+      🟣 <b>WHY:</b> the keyboard should decide, not gravity<br>
+      ✅ <b>CHECK:</b> it only drifts down now
+    </div>
+  </div>
+
+  <!-- 18 · STEP 4 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 4 / 26</span>
+    <div class="pill">Switch it off</div>
+    <h2>Turn the other one off</h2>
+<pre><span class="hot">    <span class="com">#Y_EXAMPLE = Y_EXAMPLE + 5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Y_EXAMPLE = Y_EXAMPLE + 5</code><br>
+      📍 <b>WHERE:</b> that same line · type <code>#</code> in front of the Y · <b>4 spaces</b> stay<br>
+      🟣 <b>WHY:</b> a still square is a clean start<br>
+      ✅ <b>CHECK:</b> the square sits still again, like v1
+    </div>
+  </div>
+
+  <!-- 19 · Concept — keys is a row of switches -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>keys is a row of switches</h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">← LEFT</div>
+        <div class="iter-item">→ RIGHT</div>
+        <div class="iter-item">↑ UP</div>
+        <div class="iter-item">↓ DOWN</div>
+      </div>
+      <div class="var-row"><span class="label">held down → </span><span class="var-vals"><span class="var-val">X - 5</span><span class="var-val">X + 5</span><span class="var-val">Y - 5</span><span class="var-val">Y + 5</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Every frame, Python checks all four switches.</p>
+    <p class="bilingual center">한 프레임마다 네 개 다 확인해요</p>
+  </div>
+
+  <!-- 20 · STEP 5 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 5 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Read the keyboard</h2>
+<pre><span class="dim">    <span class="com"># --- WORKSHEET STEP 3 and STEP 5 : the two if blocks go under this line ---</span></span><span class="hot">    keys = pygame.key.<span class="fn">get_pressed</span>()<span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code># --- WORKSHEET STEP 3 and STEP 5</code><br>
+      📍 <b>WHERE:</b> the line straight under that comment · <b>4 spaces</b> in<br>
+      🟣 <b>WHY:</b> your worksheet says the blocks go here<br>
+      ✅ <b>CHECK:</b> run it — nothing moves yet, no red error
+    </div>
+  </div>
+
+  <!-- 21 · STEP 6 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 6 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Left arrow ←</h2>
+<pre><span class="dim">    keys = pygame.key.<span class="fn">get_pressed</span>()</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_LEFT]:<span class="mk">NEW</span></span><span class="hot">        X_EXAMPLE = X_EXAMPLE - <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>keys = pygame.key.get_pressed()</code><br>
+      📍 <b>WHERE:</b> the 2 lines under it · <b>4 spaces</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> left means a smaller X<br>
+      ✅ <b>CHECK:</b> hold ← — the cyan square slides left
+    </div>
+  </div>
+
+  <!-- 22 · STEP 7 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 7 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Right arrow →</h2>
+<pre><span class="dim">    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT]:<span class="mk">NEW</span></span><span class="hot">        X_EXAMPLE = X_EXAMPLE + <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_LEFT]:</code><br>
+      📍 <b>WHERE:</b> 2 lines below it, under the indented line · <b>4</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> right means a bigger X<br>
+      ✅ <b>CHECK:</b> hold → — it slides right
+    </div>
+  </div>
+
+  <!-- 23 · Watch it -->
+  <div class="slide">
+    <span class="slot-badge">WATCH</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Holding → for 4 frames</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">X_EXAMPLE · across →</div>
+        <div class="cg-track"><div class="cg-sprite">🟦</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">X_EXAMPLE</span> = <span class="cg-val"><span>200</span><span>205</span><span>210</span><span>215</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">+5 every frame, but only while you hold it.</p>
+    <p class="bilingual center">누르는 동안만 더해요</p>
+  </div>
+
+  <!-- 24 · STEP 8 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 8 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Up arrow ↑ is minus</h2>
+<pre><span class="dim">    <span class="kw">if</span> keys[pygame.K_RIGHT]:
+        X_EXAMPLE = X_EXAMPLE + <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_UP]:<span class="mk">NEW</span></span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE - <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_RIGHT]:</code><br>
+      📍 <b>WHERE:</b> 2 lines below it, under the indented line · <b>4</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> Y grows downward, so up must <b>subtract</b><br>
+      ✅ <b>CHECK:</b> hold ↑ — it climbs toward the top
+    </div>
+  </div>
+
+  <!-- 25 · STEP 9 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 9 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Down arrow ↓</h2>
+<pre><span class="dim">    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_DOWN]:<span class="mk">NEW</span></span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_UP]:</code><br>
+      📍 <b>WHERE:</b> 2 lines below it, under the indented line · <b>4</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> down means a bigger Y<br>
+      ✅ <b>CHECK:</b> all four arrows steer the square
+    </div>
+  </div>
+
+  <!-- 26 · v3 -->
+  <div class="slide">
+    <span class="slot-badge">v3</span>
+    <div class="pill">Version ✅</div>
+    <h2>v3 — it steers</h2>
+<pre><span class="dim">    <span class="com"># --- WORKSHEET STEP 3 and STEP 5 : the two if blocks go under this line ---</span></span><span class="hot">    keys = pygame.key.<span class="fn">get_pressed</span>()</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_LEFT]:</span><span class="hot">        X_EXAMPLE = X_EXAMPLE - <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT]:</span><span class="hot">        X_EXAMPLE = X_EXAMPLE + <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_UP]:</span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE - <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> keys[pygame.K_DOWN]:</span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span></span></pre>
+    <p style="margin-top:.3em">✅ Nine new lines. All four arrows work.</p>
+  </div>
+
+  <!-- 27 · DEBUG 1 -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG 1</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 1 — up goes down</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span></pre>
+        <p>↑ drives it to the bottom.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - <span class="num">5</span></pre>
+        <p>0 is the top, so up subtracts.</p>
+      </div>
+    </div>
+    <p class="bilingual">위로 가려면 Y를 빼요</p>
+  </div>
+
+  <!-- 28 · Trace it -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Start at 200, 200</h2>
+    <div class="trace-grid">
+      <div class="cell head">You hold</div>
+      <div class="cell head">X_EXAMPLE</div>
+      <div class="cell head">Y_EXAMPLE</div>
+
+      <div class="cell">→</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">205</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+
+      <div class="cell">↑</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">195</span></details></div>
+
+      <div class="cell">↓</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">200</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">205</span></details></div>
+
+      <div class="cell">← and ↓</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">195</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">205</span></details></div>
+    </div>
+    <p class="bilingual">두 개를 같이 누르면 대각선이에요</p>
+  </div>
+
+  <!-- 29 · Predict -->
+  <div class="slide">
+    <span class="slot-badge">PREDICT</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Hold ← for ten seconds</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">X_EXAMPLE keeps dropping. 100 … 0 … -300. What do you see?</div>
+      <details><summary>Reveal</summary><div class="ans">An empty yellow window. The square is still drawn — off the screen.</div></details>
+    </div>
+    <p class="bilingual">화면 밖으로 나가버려요</p>
+  </div>
+
+  <!-- 30 · PICTURE — why WIDTH - 100 -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Why the limit is WIDTH − 100</h2>
+    <svg viewBox="0 0 640 262" style="width:100%;max-height:36vh;display:block;margin:.2em auto">
+      <text x="20" y="30" fill="#ff5555" font-size="18" font-weight="700">X = 500 = WIDTH</text>
+      <rect x="20" y="60" width="160" height="160" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="20" cy="60" r="5" fill="#ff7849"/>
+      <rect x="180" y="124" width="32" height="32" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".55"/>
+      <circle cx="180" cy="124" r="4" fill="#d81b60"/>
+      <text x="20" y="245" fill="#ff5555" font-size="16" font-weight="700">all gone</text>
+
+      <text x="240" y="30" fill="#ffb86c" font-size="18" font-weight="700">X = 450</text>
+      <rect x="240" y="60" width="160" height="160" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="240" cy="60" r="5" fill="#ff7849"/>
+      <rect x="384" y="124" width="32" height="32" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".55"/>
+      <rect x="384" y="124" width="16" height="32" fill="#a6e9f5"/>
+      <circle cx="384" cy="124" r="4" fill="#d81b60"/>
+      <text x="240" y="245" fill="#ffb86c" font-size="16" font-weight="700">half gone</text>
+
+      <text x="460" y="30" fill="#50fa7b" font-size="18" font-weight="700">X = WIDTH − 100</text>
+      <rect x="460" y="60" width="160" height="160" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="460" cy="60" r="5" fill="#ff7849"/>
+      <rect x="588" y="124" width="32" height="32" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="588" cy="124" r="4" fill="#d81b60"/>
+      <text x="460" y="245" fill="#50fa7b" font-size="16" font-weight="700">fits exactly ✓</text>
+    </svg>
+    <p class="center">The pink dot is the <b>left</b> corner. Stop it a whole square early.</p>
+    <p class="bilingual center">사각형 너비만큼 빼요</p>
+  </div>
+
+  <!-- 31 · Concept — the clamp -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Went too far? Put it back</h2>
+    <div class="match-flow">
+      <div class="row skip">X_EXAMPLE = 380<span class="verdict">inside</span></div>
+      <div class="row skip">X_EXAMPLE = 400<span class="verdict">on the line</span></div>
+      <div class="row hit">X_EXAMPLE = 415 → 400<span class="verdict">too far</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">The check runs after the move, every frame.</p>
+    <p class="bilingual center">움직인 다음에 확인해요</p>
+  </div>
+
+  <!-- 32 · STEP 10 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 10 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Left wall</h2>
+<pre><span class="dim">    <span class="kw">if</span> keys[pygame.K_DOWN]:
+        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> X_EXAMPLE &lt; <span class="num">0</span>:<span class="mk">NEW</span></span><span class="hot">        X_EXAMPLE = <span class="num">0</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_DOWN]:</code><br>
+      📍 <b>WHERE:</b> 2 lines below it, under the indented line · <b>4</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> 0 is the left edge, never less<br>
+      ✅ <b>CHECK:</b> hold ← — it stops flat on the left wall
+    </div>
+  </div>
+
+  <!-- 33 · STEP 11 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 11 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Right wall</h2>
+<pre><span class="dim">    <span class="kw">if</span> X_EXAMPLE &lt; <span class="num">0</span>:
+        X_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - <span class="num">100</span>:<span class="mk">NEW</span></span><span class="hot">        X_EXAMPLE = WIDTH - <span class="num">100</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>X_EXAMPLE = 0</code><br>
+      📍 <b>WHERE:</b> the 2 lines under it · <b>4 spaces</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> the dot is the left corner — subtract the width<br>
+      ✅ <b>CHECK:</b> hold → — it stops with the whole square showing
+    </div>
+  </div>
+
+  <!-- 34 · STEP 12 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 12 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Top wall</h2>
+<pre><span class="dim">    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - <span class="num">100</span>:
+        X_EXAMPLE = WIDTH - <span class="num">100</span></span><span class="hot">    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:<span class="mk">NEW</span></span><span class="hot">        Y_EXAMPLE = <span class="num">0</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>X_EXAMPLE = WIDTH - 100</code><br>
+      📍 <b>WHERE:</b> the 2 lines under it · <b>4 spaces</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> Y = 0 is the very top row<br>
+      ✅ <b>CHECK:</b> hold ↑ — it stops flat on the ceiling
+    </div>
+  </div>
+
+  <!-- 35 · STEP 13 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 13 / 26</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Bottom wall</h2>
+<pre><span class="dim">    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:
+        Y_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - <span class="num">100</span>:<span class="mk">NEW</span></span><span class="hot">        Y_EXAMPLE = HEIGHT - <span class="num">100</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Y_EXAMPLE = 0</code><br>
+      📍 <b>WHERE:</b> the 2 lines under it · <b>4 spaces</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> the dot is the <b>top</b> corner — subtract the height<br>
+      ✅ <b>CHECK:</b> all four walls hold the square in
+    </div>
+  </div>
+
+  <!-- 36 · v4 -->
+  <div class="slide">
+    <span class="slot-badge">v4</span>
+    <div class="pill">Version ✅</div>
+    <h2>v4 — it stops</h2>
+<pre><span class="dim">    <span class="kw">if</span> keys[pygame.K_DOWN]:
+        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span></span><span class="hot">    <span class="kw">if</span> X_EXAMPLE &lt; <span class="num">0</span>:</span><span class="hot">        X_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - <span class="num">100</span>:</span><span class="hot">        X_EXAMPLE = WIDTH - <span class="num">100</span></span><span class="hot">    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:</span><span class="hot">        Y_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - <span class="num">100</span>:</span><span class="hot">        Y_EXAMPLE = HEIGHT - <span class="num">100</span></span></pre>
+    <p style="margin-top:.3em">✅ The square can never leave the window.</p>
+  </div>
+
+  <!-- 37 · DEBUG 2 -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG 2</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug 2 — half the square hides</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH:
+        X_EXAMPLE = WIDTH</pre>
+        <p>The dot stops at 500 — the square is already outside.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - <span class="num">100</span>:
+        X_EXAMPLE = WIDTH - <span class="num">100</span></pre>
+        <p>Stop the dot a whole square early.</p>
+      </div>
+    </div>
+    <p class="bilingual">점이 왼쪽 위 모서리예요</p>
+  </div>
+
+  <!-- 38 · Trace the clamp -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>After the wall checks</h2>
+    <div class="trace-grid">
+      <div class="cell head">X before</div>
+      <div class="cell head">X after</div>
+      <div class="cell head">Why</div>
+
+      <div class="cell">250</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">250</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">inside</span></details></div>
+
+      <div class="cell">-5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">below 0</span></details></div>
+
+      <div class="cell">415</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">400</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">past WIDTH-100</span></details></div>
+
+      <div class="cell">400</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">400</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">exactly on the line</span></details></div>
+    </div>
+  </div>
+
+  <!-- 39 · Quiz -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Square is 40 wide. Right limit?</div>
+      <div class="opts">
+        <details><summary>A. WIDTH</summary><div class="ans">40 pixels hide.</div></details>
+        <details><summary>B. WIDTH - 40</summary><div class="ans">✓ Subtract the width.</div></details>
+        <details><summary>C. WIDTH + 40</summary><div class="ans">Off screen.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>if keys[pygame.K_UP]:</code> should do…</div>
+      <div class="opts">
+        <details><summary>A. Y_EXAMPLE = Y_EXAMPLE + 5</summary><div class="ans">Goes down.</div></details>
+        <details><summary>B. Y_EXAMPLE = Y_EXAMPLE - 5</summary><div class="ans">✓ Up subtracts.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 40 · Code Talk -->
+  <div class="slide">
+    <span class="slot-badge">TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>keys[pygame.K_LEFT]</code> is true when <span class="blank"></span>, so <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"The right limit is <code>WIDTH - 100</code> because <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 41 · Your turn -->
+  <div class="slide">
+    <span class="slot-badge">MAKE</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Build it in Homework</h2>
+    <ul class="check-list">
+      <li>Delete both <code>#</code>. Run. It drifts</li>
+      <li>Put both <code>#</code> back. Run. It stops</li>
+      <li>Add <code>keys = pygame.key.get_pressed()</code></li>
+      <li>Add the four <code>if keys</code> blocks</li>
+      <li>Add the four wall blocks</li>
+      <li>Push into every corner. It must not escape</li>
+    </ul>
+  </div>
+
+  <!-- 42 · Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">EXIT</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one full sentence</div>
+      <p style="margin-top:.4em">Why is the right-hand limit <code>WIDTH - 100</code> and not <code>WIDTH</code>?</p>
+      <p class="bilingual" style="margin-top:.4em">문장으로 설명해요</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- 43 · Stage header — speed -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">NEW IDEA 3<span class="activity-tag">OPTIONAL</span></span>
+    <div class="num">3</div>
+    <div class="stage-label">one number, one place</div>
+    <h1>A speed variable</h1>
+    <p class="bilingual">숫자 하나로 속도를 바꿔요</p>
+  </div>
+
+  <!-- 44 · Concept — speed feeds four lines -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>One box feeds four lines</h2>
+    <svg viewBox="0 0 640 230" style="width:100%;max-height:36vh;display:block;margin:.2em auto">
+      <rect x="14" y="80" width="170" height="70" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="99" y="110" fill="#38d0e0" font-size="17" font-weight="700" text-anchor="middle">speed</text>
+      <text x="99" y="138" fill="#e8eef6" font-size="24" font-weight="700" text-anchor="middle">5</text>
+      <line x1="190" y1="112" x2="290" y2="30" stroke="#8b5cf6" stroke-width="2"/>
+      <line x1="190" y1="112" x2="290" y2="85" stroke="#8b5cf6" stroke-width="2"/>
+      <line x1="190" y1="118" x2="290" y2="145" stroke="#8b5cf6" stroke-width="2"/>
+      <line x1="190" y1="118" x2="290" y2="200" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="300" y="36" fill="#f5f5f5" font-size="17" font-weight="700">X_EXAMPLE - speed</text>
+      <text x="300" y="91" fill="#f5f5f5" font-size="17" font-weight="700">X_EXAMPLE + speed</text>
+      <text x="300" y="151" fill="#f5f5f5" font-size="17" font-weight="700">Y_EXAMPLE - speed</text>
+      <text x="300" y="206" fill="#f5f5f5" font-size="17" font-weight="700">Y_EXAMPLE + speed</text>
+    </svg>
+    <p class="center">Change the box, all four change.</p>
+    <p class="bilingual center">상자만 바꾸면 네 줄이 따라와요</p>
+  </div>
+
+  <!-- 45 · STEP 14 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 14 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>v5 · Make the box</h2>
+<pre><span class="dim">X_EXAMPLE = WIDTH // <span class="num">2</span> - (<span class="num">50</span>)
+Y_EXAMPLE = HEIGHT // <span class="num">2</span> - (<span class="num">50</span>)</span><span class="hot">speed = <span class="num">5</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Y_EXAMPLE = HEIGHT // 2 - (50)</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>0 spaces</b>, hard left<br>
+      🟣 <b>WHY:</b> it lives outside the loop, so it is made once<br>
+      ✅ <b>CHECK:</b> run it — plays exactly the same as v4
+    </div>
+  </div>
+
+  <!-- 46 · STEP 15 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 15 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Swap it</div>
+    <h2>v5 · Four 5s become speed</h2>
+    <div class="compare-row">
+      <div class="col"><p><b class="kw">OLD</b></p>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - <span class="num">5</span>
+    <span class="kw">if</span> keys[pygame.K_RIGHT]:
+        X_EXAMPLE = X_EXAMPLE + <span class="num">5</span>
+    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - <span class="num">5</span>
+    <span class="kw">if</span> keys[pygame.K_DOWN]:
+        Y_EXAMPLE = Y_EXAMPLE + <span class="num">5</span></pre>
+      </div>
+      <div class="col"><p><b class="fn">NEW</b></p>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - speed
+    <span class="kw">if</span> keys[pygame.K_RIGHT]:
+        X_EXAMPLE = X_EXAMPLE + speed
+    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - speed
+    <span class="kw">if</span> keys[pygame.K_DOWN]:
+        Y_EXAMPLE = Y_EXAMPLE + speed</pre>
+      </div>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_LEFT]:</code> · <b>📍</b> the four indented lines below · <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> no quotes — <code>speed</code> is the box, not the word<br>
+      ✅ <b>CHECK:</b> moves the same as before
+    </div>
+  </div>
+
+  <!-- 47 · v5 -->
+  <div class="slide">
+    <span class="slot-badge">v5<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Version ✅</div>
+    <h2>v5 — it sprints</h2>
+<pre><span class="dim">Y_EXAMPLE = HEIGHT // <span class="num">2</span> - (<span class="num">50</span>)</span><span class="hot">speed = <span class="num">5</span></span></pre>
+<pre><span class="dim">    keys = pygame.key.<span class="fn">get_pressed</span>()</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_LEFT]:</span><span class="hot">        X_EXAMPLE = X_EXAMPLE - speed</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT]:</span><span class="hot">        X_EXAMPLE = X_EXAMPLE + speed</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_UP]:</span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE - speed</span><span class="hot">    <span class="kw">if</span> keys[pygame.K_DOWN]:</span><span class="hot">        Y_EXAMPLE = Y_EXAMPLE + speed</span></pre>
+    <p style="margin-top:.3em">✅ One number now controls the whole game.</p>
+  </div>
+
+  <!-- 48 · Try it -->
+  <div class="slide">
+    <span class="slot-badge">TRY IT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Try it</div>
+    <h2>Change one number</h2>
+    <div class="practice-task">1. Set <code>speed = 1</code>. Run. Crawling.</div>
+    <div class="practice-task">2. Set <code>speed = 15</code>. Run. Rocket.</div>
+    <div class="practice-task">3. Set <code>speed = 200</code>. Run. It teleports corner to corner.</div>
+    <p class="practice-hint">Only one line changes each time.</p>
+  </div>
+
+  <!-- 49 · Stage header — SIZE -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">NEW IDEA 4<span class="activity-tag">OPTIONAL</span></span>
+    <div class="num">4</div>
+    <div class="stage-label">the number in three places</div>
+    <h1>A size variable</h1>
+    <p class="bilingual">크기도 상자에 담아요</p>
+  </div>
+
+  <!-- 50 · Concept — SIZE in three places -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>100 is typed in 3 places</h2>
+    <svg viewBox="0 0 640 220" style="width:100%;max-height:34vh;display:block;margin:.2em auto">
+      <rect x="14" y="75" width="170" height="70" rx="12" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="99" y="105" fill="#38d0e0" font-size="17" font-weight="700" text-anchor="middle">SIZE</text>
+      <text x="99" y="133" fill="#e8eef6" font-size="24" font-weight="700" text-anchor="middle">100</text>
+      <line x1="190" y1="105" x2="290" y2="38" stroke="#8b5cf6" stroke-width="2"/>
+      <line x1="190" y1="110" x2="290" y2="110" stroke="#8b5cf6" stroke-width="2"/>
+      <line x1="190" y1="115" x2="290" y2="182" stroke="#8b5cf6" stroke-width="2"/>
+      <text x="300" y="44" fill="#f5f5f5" font-size="16" font-weight="700">draw.rect(… SIZE, SIZE)</text>
+      <text x="300" y="116" fill="#f5f5f5" font-size="16" font-weight="700">X limit: WIDTH − SIZE</text>
+      <text x="300" y="188" fill="#f5f5f5" font-size="16" font-weight="700">Y limit: HEIGHT − SIZE</text>
+    </svg>
+    <p class="center">Change the square's size and both walls follow.</p>
+    <p class="bilingual center">크기를 바꾸면 벽도 따라와요</p>
+  </div>
+
+  <!-- 51 · STEP 16 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 16 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>v6 · Make the size box</h2>
+<pre><span class="dim">speed = <span class="num">5</span></span><span class="hot">SIZE = <span class="num">100</span><span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>speed = 5</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> capital letters mean "never changes"<br>
+      ✅ <b>CHECK:</b> run it — still exactly the same
+    </div>
+  </div>
+
+  <!-- 52 · STEP 17 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 17 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Swap it</div>
+    <h2>v6 · The drawing line</h2>
+    <div class="compare-row">
+      <div class="col"><p><b class="kw">OLD</b></p>
+<pre>    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, <span class="num">100</span>, <span class="num">100</span>))</pre>
+      </div>
+      <div class="col"><p><b class="fn">NEW</b></p>
+<pre>    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE))</pre>
+      </div>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>(X_EXAMPLE, Y_EXAMPLE, 100, 100)</code><br>
+      📍 <b>WHERE:</b> that same line · <b>4 spaces</b> in, inside the loop<br>
+      🟣 <b>WHY:</b> the square asks the box how big it is<br>
+      ✅ <b>CHECK:</b> run it — same square, same size
+    </div>
+  </div>
+
+  <!-- 53 · STEP 18 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 18 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Swap it</div>
+    <h2>v6 · Both wall limits</h2>
+    <div class="compare-row">
+      <div class="col"><p><b class="kw">OLD</b></p>
+<pre>    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - <span class="num">100</span>:
+        X_EXAMPLE = WIDTH - <span class="num">100</span>
+    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:
+        Y_EXAMPLE = <span class="num">0</span>
+    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - <span class="num">100</span>:
+        Y_EXAMPLE = HEIGHT - <span class="num">100</span></pre>
+      </div>
+      <div class="col"><p><b class="fn">NEW</b></p>
+<pre>    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - SIZE:
+        X_EXAMPLE = WIDTH - SIZE
+    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:
+        Y_EXAMPLE = <span class="num">0</span>
+    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - SIZE:
+        Y_EXAMPLE = HEIGHT - SIZE</pre>
+      </div>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>WIDTH - 100</code>, then <code>HEIGHT - 100</code> · <b>📍</b> all four of them<br>
+      🟣 <b>WHY:</b> the wall must move when the square resizes<br>
+      ✅ <b>CHECK:</b> run it — walls still hold it in
+    </div>
+  </div>
+
+  <!-- 54 · v6 -->
+  <div class="slide">
+    <span class="slot-badge">v6<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Version ✅</div>
+    <h2>v6 — one number, one square</h2>
+<pre><span class="dim">speed = <span class="num">5</span></span><span class="hot">SIZE = <span class="num">100</span></span></pre>
+<pre><span class="dim">    <span class="kw">if</span> X_EXAMPLE &lt; <span class="num">0</span>:
+        X_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> X_EXAMPLE &gt; WIDTH - SIZE:</span><span class="hot">        X_EXAMPLE = WIDTH - SIZE</span><span class="dim">    <span class="kw">if</span> Y_EXAMPLE &lt; <span class="num">0</span>:
+        Y_EXAMPLE = <span class="num">0</span></span><span class="hot">    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - SIZE:</span><span class="hot">        Y_EXAMPLE = HEIGHT - SIZE</span></pre>
+    <p style="margin-top:.3em">✅ Same game. Now one number owns the size.</p>
+  </div>
+
+  <!-- 55 · Try SIZE = 50 -->
+  <div class="slide">
+    <span class="slot-badge">TRY IT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Try it</div>
+    <h2>Set SIZE = 50 and look</h2>
+    <svg viewBox="0 0 440 250" style="width:100%;max-height:32vh;display:block;margin:.2em auto">
+      <rect x="90" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="90" cy="35" r="6" fill="#ff7849"/>
+      <text x="99" y="55" fill="#8a3a12" font-size="13" font-weight="700">(0, 0)</text>
+      <rect x="261" y="111" width="19" height="19" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="261" cy="111" r="4" fill="#d81b60"/>
+      <text x="120" y="106" fill="#1a2233" font-size="14" font-weight="700">X stops at 450</text>
+      <text x="120" y="130" fill="#1a7a44" font-size="14" font-weight="700">WIDTH − 50 = 450</text>
+    </svg>
+    <p class="center">The wall moved by itself. You changed one line.</p>
+    <p class="bilingual center">한 줄만 바꿨는데 벽이 움직여요</p>
+  </div>
+
+  <!-- 56 · Stage header — the block -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">NEW IDEA 5<span class="activity-tag">OPTIONAL</span></span>
+    <div class="num">5</div>
+    <div class="stage-label">a second rectangle</div>
+    <h1>A wall you<br>cannot cross</h1>
+    <p class="bilingual">지나갈 수 없는 벽을 만들어요</p>
+  </div>
+
+  <!-- 57 · Concept — pygame.Rect -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>pygame.Rect is a box with a name</h2>
+    <svg viewBox="0 0 440 250" style="width:100%;max-height:34vh;display:block;margin:.2em auto">
+      <rect x="90" y="35" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <circle cx="90" cy="35" r="6" fill="#ff7849"/>
+      <text x="99" y="55" fill="#8a3a12" font-size="13" font-weight="700">(0, 0)</text>
+      <rect x="166" y="111" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="166" cy="111" r="4" fill="#d81b60"/>
+      <text x="112" y="107" fill="#0b7285" font-size="13" font-weight="700">player</text>
+      <rect x="204" y="149" width="38" height="38" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <circle cx="204" cy="149" r="4" fill="#d81b60"/>
+      <text x="246" y="176" fill="#c084fc" font-size="13" font-weight="700">block · PASTEL_PURPLE</text>
+      <text x="292" y="70" fill="#e8eef6" font-size="14">block sits at</text>
+      <text x="292" y="92" fill="#e8eef6" font-size="14">(300, 300)</text>
+      <text x="292" y="120" fill="#e8eef6" font-size="14">SIZE × SIZE</text>
+    </svg>
+    <p class="center">Four numbers: X, Y, width, height — with a name on it.</p>
+    <p class="bilingual center">이름 붙은 사각형이에요</p>
+  </div>
+
+  <!-- 58 · STEP 19 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 19 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Make the block</h2>
+<pre><span class="dim">speed = <span class="num">5</span>
+SIZE = <span class="num">100</span></span><span class="hot">block = pygame.<span class="fn">Rect</span>(<span class="num">300</span>, <span class="num">300</span>, SIZE, SIZE)<span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>SIZE = 100</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>0 spaces</b>, hard left<br>
+      🟣 <b>WHY:</b> the block never moves, so build it once<br>
+      ✅ <b>CHECK:</b> run it — still invisible, nothing draws it
+    </div>
+  </div>
+
+  <!-- 59 · STEP 20 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 20 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Draw the block</h2>
+<pre><span class="dim">    screen.<span class="fn">fill</span>(PASTEL_YELLOW)</span><span class="hot">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PURPLE, block)<span class="mk">NEW</span></span><span class="dim">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE))</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>screen.fill(PASTEL_YELLOW)</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>4 spaces</b> in<br>
+      🟣 <b>WHY:</b> purple first, so cyan draws on top of it<br>
+      ✅ <b>CHECK:</b> a purple square appears. You still walk through it
+    </div>
+  </div>
+
+  <!-- 60 · Concept — colliderect -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>colliderect asks: do they overlap?</h2>
+    <svg viewBox="0 0 620 260" style="width:100%;max-height:34vh;display:block;margin:.2em auto">
+      <rect x="30" y="40" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="87" y="97" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <rect x="144" y="154" width="38" height="38" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <text x="30" y="28" fill="#f5f5f5" font-size="16" font-weight="700">apart</text>
+      <text x="30" y="252" fill="#ff79c6" font-size="18" font-weight="700">False</text>
+
+      <rect x="340" y="40" width="190" height="190" rx="6" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="454" y="154" width="38" height="38" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <rect x="439" y="139" width="38" height="38" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".85"/>
+      <text x="340" y="28" fill="#f5f5f5" font-size="16" font-weight="700">touching</text>
+      <text x="340" y="252" fill="#50fa7b" font-size="18" font-weight="700">True</text>
+    </svg>
+    <p class="center">One question. One answer: True or False.</p>
+    <p class="bilingual center">겹치면 True예요</p>
+  </div>
+
+  <!-- 61 · Concept — remember, move, put back -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>Remember → move → put back</h2>
+    <svg viewBox="0 0 640 250" style="width:100%;max-height:32vh;display:block;margin:.2em auto">
+      <text x="20" y="26" fill="#38d0e0" font-size="16" font-weight="700">1 · remember</text>
+      <rect x="20" y="45" width="150" height="150" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="80" y="105" width="30" height="30" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <rect x="110" y="135" width="30" height="30" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <text x="20" y="220" fill="#e8eef6" font-size="14">old_x = 200</text>
+
+      <text x="250" y="26" fill="#ffb86c" font-size="16" font-weight="700">2 · move</text>
+      <rect x="250" y="45" width="150" height="150" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="340" y="135" width="30" height="30" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <rect x="331" y="126" width="30" height="30" fill="#a6e9f5" stroke="#2a3340" stroke-width="1" opacity=".85"/>
+      <text x="250" y="220" fill="#ffb86c" font-size="14">X = 270 · overlap!</text>
+
+      <text x="480" y="26" fill="#50fa7b" font-size="16" font-weight="700">3 · put back</text>
+      <rect x="480" y="45" width="150" height="150" rx="5" fill="#f7f2b0" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="540" y="105" width="30" height="30" fill="#a6e9f5" stroke="#2a3340" stroke-width="1"/>
+      <rect x="570" y="135" width="30" height="30" fill="#dcb4f5" stroke="#2a3340" stroke-width="1"/>
+      <text x="480" y="220" fill="#50fa7b" font-size="14">X = old_x = 200</text>
+    </svg>
+    <p class="center">You never stop the move. You undo it.</p>
+    <p class="bilingual center">막는 게 아니라 되돌려요</p>
+  </div>
+
+  <!-- 62 · STEP 21 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 21 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Remember the old X</h2>
+<pre><span class="hot">    old_x = X_EXAMPLE<span class="mk">NEW</span></span><span class="dim">    keys = pygame.key.<span class="fn">get_pressed</span>()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>keys = pygame.key.get_pressed()</code><br>
+      📍 <b>WHERE:</b> the line <b>ABOVE</b> it · <b>4 spaces</b> in<br>
+      🟣 <b>WHY:</b> save the safe spot before anything moves<br>
+      ✅ <b>CHECK:</b> run it — plays exactly the same
+    </div>
+  </div>
+
+  <!-- 63 · STEP 22 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 22 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Remember the old Y</h2>
+<pre><span class="dim">    old_x = X_EXAMPLE</span><span class="hot">    old_y = Y_EXAMPLE<span class="mk">NEW</span></span><span class="dim">    keys = pygame.key.<span class="fn">get_pressed</span>()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>old_x = X_EXAMPLE</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>4 spaces</b> in<br>
+      🟣 <b>WHY:</b> two numbers moved, so save both<br>
+      ✅ <b>CHECK:</b> run it — still the same
+    </div>
+  </div>
+
+  <!-- 64 · STEP 23 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 23 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Make the player box</h2>
+<pre><span class="dim">    <span class="kw">if</span> Y_EXAMPLE &gt; HEIGHT - SIZE:
+        Y_EXAMPLE = HEIGHT - SIZE
+</span><span class="hot">    player = pygame.<span class="fn">Rect</span>(X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE)<span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Y_EXAMPLE = HEIGHT - SIZE</code><br>
+      📍 <b>WHERE:</b> skip a blank line, then type · <b>4 spaces</b> in<br>
+      🟣 <b>WHY:</b> the cyan square needs a name to compare<br>
+      ✅ <b>CHECK:</b> run it — nothing looks different
+    </div>
+  </div>
+
+  <!-- 65 · STEP 24 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 24 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Put X back</h2>
+<pre><span class="dim">    player = pygame.<span class="fn">Rect</span>(X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE)</span><span class="hot">    <span class="kw">if</span> player.<span class="fn">colliderect</span>(block):<span class="mk">NEW</span></span><span class="hot">        X_EXAMPLE = old_x<span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>player = pygame.Rect(X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE)</code><br>
+      📍 <b>WHERE:</b> the 2 lines under it · <b>4 spaces</b>, then <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> overlapping? then undo the sideways move<br>
+      ✅ <b>CHECK:</b> ← and → are blocked. ↑ and ↓ still pass through
+    </div>
+  </div>
+
+  <!-- 66 · STEP 25 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 25 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Type it</div>
+    <h2>Put Y back too</h2>
+<pre><span class="dim">    <span class="kw">if</span> player.<span class="fn">colliderect</span>(block):
+        X_EXAMPLE = old_x</span><span class="hot">        Y_EXAMPLE = old_y<span class="mk">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>X_EXAMPLE = old_x</code><br>
+      📍 <b>WHERE:</b> the line straight under it · <b>8 spaces</b> in<br>
+      🟣 <b>WHY:</b> the up-down move needs undoing as well<br>
+      ✅ <b>CHECK:</b> the purple square is now solid from every side
+    </div>
+  </div>
+
+  <!-- 67 · v7 -->
+  <div class="slide">
+    <span class="slot-badge">v7<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Version ✅</div>
+    <h2>v7 — the whole loop</h2>
+<pre><span class="dim">    screen.<span class="fn">fill</span>(PASTEL_YELLOW)</span><span class="hot">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_PURPLE, block)</span><span class="dim">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_CYAN, (X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE))
+    <span class="com"># --- WORKSHEET STEP 3 and STEP 5 : the two if blocks go under this line ---</span></span><span class="hot">    old_x = X_EXAMPLE</span><span class="hot">    old_y = Y_EXAMPLE</span><span class="dim">    keys = pygame.key.<span class="fn">get_pressed</span>()
+    <span class="com"># the four arrow-key blocks, then the four wall blocks</span>
+</span><span class="hot">    player = pygame.<span class="fn">Rect</span>(X_EXAMPLE, Y_EXAMPLE, SIZE, SIZE)</span><span class="hot">    <span class="kw">if</span> player.<span class="fn">colliderect</span>(block):</span><span class="hot">        X_EXAMPLE = old_x</span><span class="hot">        Y_EXAMPLE = old_y</span></pre>
+    <p style="margin-top:.3em">✅ Walls outside, one solid block inside.</p>
+  </div>
+
+  <!-- 68 · Stage header — WASD -->
+  <div class="slide center-all stage-header">
+    <span class="slot-badge">NEW IDEA 6<span class="activity-tag">OPTIONAL</span></span>
+    <div class="num">6</div>
+    <div class="stage-label">two keys, one job</div>
+    <h1>WASD as well</h1>
+    <p class="bilingual">화살표 말고 WASD도 써요</p>
+  </div>
+
+  <!-- 69 · Concept — or -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>or means either one</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <div class="case case-a">you press A</div>
+        <div class="case case-b">you press nothing</div>
+      </div>
+      <div class="if-cond">keys[K_LEFT] or keys[K_a]</div>
+      <div class="if-branches">
+        <div class="if-branch true">X_EXAMPLE - speed</div>
+        <div class="if-branch false">skip the block</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ on screen</div>
+        <div class="out-line out-a">it slides left</div>
+        <div class="out-line out-b">it stays still</div>
+      </div>
+    </div>
+    <p class="bilingual center">둘 중 하나만 눌러도 돼요</p>
+  </div>
+
+  <!-- 70 · STEP 26 -->
+  <div class="slide">
+    <span class="slot-badge">STEP 26 / 26<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Swap it</div>
+    <h2>Add the A key</h2>
+    <div class="compare-row">
+      <div class="col"><p><b class="kw">OLD</b></p>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - speed</pre>
+      </div>
+      <div class="col"><p><b class="fn">NEW</b></p>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT] <span class="kw">or</span> keys[pygame.K_a]:
+        X_EXAMPLE = X_EXAMPLE - speed</pre>
+      </div>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if keys[pygame.K_LEFT]:</code><br>
+      📍 <b>WHERE:</b> that same line · <b>4 spaces</b> in. Only the top line changes<br>
+      🟣 <b>WHY:</b> <code>or</code> fires the block for either key<br>
+      ✅ <b>CHECK:</b> ← works. A works too
+    </div>
+  </div>
+
+  <!-- 71 · Practice -->
+  <div class="slide">
+    <span class="slot-badge">TRY IT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Try it</div>
+    <h2>Now do the other three</h2>
+    <div class="practice-task">D goes with <code>K_RIGHT</code> → <code>pygame.K_d</code></div>
+    <div class="practice-task">W goes with <code>K_UP</code> → <code>pygame.K_w</code></div>
+    <div class="practice-task">S goes with <code>K_DOWN</code> → <code>pygame.K_s</code></div>
+    <p class="practice-hint">Lower case letters. K_a not K_A.</p>
+  </div>
+
+  <!-- 72 · Concept — four ifs, not elif -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">Concept 💡</div>
+    <h2>Why four ifs, not elif</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ no diagonal</span>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - speed
+    <span class="kw">elif</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - speed</pre>
+        <p>elif stops after the first hit. ← and ↑ together only goes left.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ diagonal works</span>
+<pre>    <span class="kw">if</span> keys[pygame.K_LEFT]:
+        X_EXAMPLE = X_EXAMPLE - speed
+    <span class="kw">if</span> keys[pygame.K_UP]:
+        Y_EXAMPLE = Y_EXAMPLE - speed</pre>
+        <p>Both run. The square moves up-left.</p>
+      </div>
+    </div>
+    <p class="bilingual">elif는 하나만 실행해요</p>
+  </div>
+
+  <!-- 73 · Stretch -->
+  <div class="slide">
+    <span class="slot-badge">STRETCH<span class="activity-tag">OPTIONAL</span></span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Set <code>WIDTH = 800</code>. The walls fix themselves.</div>
+      <div class="item"><span class="lvl">★★</span>Add a second block in <code>PASTEL_MINT</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Give the block its own X so it slides.</div>
+      <div class="item"><span class="lvl">★★★</span>Draw in <code>PASTEL_LIME</code> once you touch the block.</div>
+    </div>
+  </div>
+
+  <!-- 74 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">CLOSE</span>
+    <div class="emoji">🕹️</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Read the keys.<br>Change the numbers.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: something that chases you.</p>
+    <p class="bilingual">다음 시간: 쫓아오는 적을 만들어요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 74</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

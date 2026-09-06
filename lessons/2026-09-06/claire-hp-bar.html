@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — Damage, then the Health Bar (Claire · 2026-09-06)</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · Pygame · Claire · 6 Sep 2026</div>
+
+<!-- 1 · Title -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">Boss fight</div>
+  <div class="emoji">🟩</div>
+  <h1>Damage first,<br>then the bar</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Every line is <span class="sub">square brackets</span></p>
+  <div class="iter-row" style="margin-top:.8em">
+    <div class="iter-item">bullet</div><div class="iter-item">missile</div>
+    <div class="iter-item">width</div><div class="iter-item">colour</div>
+  </div>
+  <p class="bilingual">체력을 깎고, 체력바를 그려요</p>
+</div>
+
+<!-- 2 · Recap wins -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap</div>
+  <h2>Your three wins</h2>
+  <div class="recap-q">
+    <div class="q">1. Before testing, what did you do?</div>
+    <details><summary>Answer</summary><div class="ans">Pasted your homework in. No reminder.</div></details>
+    <div class="q" style="margin-top:.5em">2. Your own damage question?</div>
+    <details><summary>Answer</summary><div class="ans">Missiles vs bullets: same damage?</div></details>
+    <div class="q" style="margin-top:.5em">3. The edge case you caught?</div>
+    <details><summary>Answer</summary><div class="ans">"What if it is <b>equal</b>?"</div></details>
+  </div>
+</div>
+
+<!-- 3 · Worksheet step 2 already done -->
+<div class="slide">
+  <div class="pill purple">Already done ✅</div>
+  <h2>Worksheet step 2 is finished</h2>
+  <svg viewBox="0 0 520 168" style="width:100%;max-height:42vh" aria-hidden="true">
+    <rect x="10" y="10" width="500" height="120" rx="8" fill="#1e1e2e" stroke="#3a4255" stroke-width="2"/>
+    <rect x="230" y="20" width="60" height="34" rx="4" fill="#7a3fbf" stroke="#e8eef6" stroke-width="2"/>
+    <text x="238" y="43" fill="#e8eef6" font-size="14">BOSS</text>
+    <line x1="196" y1="30" x2="196" y2="72" stroke="#8a97b8" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="150" y="26" fill="#8a97b8" font-size="13">falls</text>
+    <line x1="20" y1="82" x2="500" y2="82" stroke="#ff7849" stroke-width="3"/>
+    <text x="20" y="102" fill="#ff7849" font-size="15">BOSS_STOP_Y = 250 — it stops here, and stays</text>
+    <text x="20" y="124" fill="#50fa7b" font-size="15">You wrote this. You asked about "equal" first.</text>
+    <text x="10" y="156" fill="#f1fa8c" font-size="16">Nothing to redo. Today is steps 3, 4 and 5.</text>
+  </svg>
+</div>
+
+<!-- 4 · Recap the bracket rule -->
+<div class="slide">
+  <div class="pill purple">Recap</div>
+  <h2>Last week's rule</h2>
+  <div class="recap-q">
+    <div class="q">You wrote the name → ?</div>
+    <details><summary>Answer</summary><div class="ans"><code>enemy["hp"]</code> — square brackets</div></details>
+    <div class="q" style="margin-top:.5em">Pygame built the part → ?</div>
+    <details><summary>Answer</summary><div class="ans"><code>enemy["rect"].centerx</code> — a dot</div></details>
+  </div>
+  <p class="bilingual">내가 붙인 이름은 대괄호</p>
+</div>
+
+<!-- 5 · The worksheet map -->
+<div class="slide">
+  <div class="pill">Today's map 🗺️</div>
+  <h2>Three markers to fill</h2>
+  <svg viewBox="0 0 520 190" style="width:100%;max-height:40vh" aria-hidden="true">
+    <rect x="10" y="8" width="500" height="38" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="24" y="33" fill="#50fa7b" font-size="16">STEP 2 · the boss stops</text>
+    <text x="410" y="33" fill="#50fa7b" font-size="18">✅ done</text>
+    <rect x="10" y="52" width="500" height="38" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="3"/>
+    <text x="24" y="77" fill="#e8eef6" font-size="16">STEP 3 · a bullet takes 1 hp off</text>
+    <text x="410" y="77" fill="#38d0e0" font-size="16">today</text>
+    <rect x="10" y="96" width="500" height="38" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="3"/>
+    <text x="24" y="121" fill="#e8eef6" font-size="16">STEP 4 · a missile takes 3 hp off</text>
+    <text x="410" y="121" fill="#38d0e0" font-size="16">today</text>
+    <rect x="10" y="140" width="500" height="38" rx="8" fill="#1e1e2e" stroke="#8b5cf6" stroke-width="3"/>
+    <text x="24" y="165" fill="#e8eef6" font-size="16">STEP 5 · the boss health bar</text>
+    <text x="410" y="165" fill="#bd93f9" font-size="16">today</text>
+  </svg>
+  <p class="center" style="margin-top:.4em">Open the <b>Homework</b> project. Not Workspace.</p>
+</div>
+
+<!-- 6 · PICTURE · her real enemies -->
+<div class="slide">
+  <div class="pill">Your game 🎮</div>
+  <h2>What you already wrote</h2>
+  <svg viewBox="0 0 520 186" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="12" y="16" fill="#8a97b8" font-size="13">enemy</text>
+    <text x="180" y="16" fill="#8a97b8" font-size="13">"hp"</text>
+    <text x="290" y="16" fill="#8a97b8" font-size="13">"points"</text>
+    <text x="410" y="16" fill="#8a97b8" font-size="13">bullets to kill</text>
+    <rect x="12" y="26" width="60" height="26" rx="4" fill="#4ade80"/>
+    <text x="86" y="45" fill="#e8eef6" font-size="15">GREEN</text>
+    <text x="186" y="45" fill="#bd93f9" font-size="17">1</text>
+    <text x="296" y="45" fill="#f1fa8c" font-size="17">50</text>
+    <text x="416" y="45" fill="#e8eef6" font-size="17">1</text>
+    <rect x="12" y="60" width="60" height="26" rx="4" fill="#ff4646"/>
+    <text x="86" y="79" fill="#e8eef6" font-size="15">RED</text>
+    <text x="186" y="79" fill="#bd93f9" font-size="17">2</text>
+    <text x="296" y="79" fill="#f1fa8c" font-size="17">40</text>
+    <text x="416" y="79" fill="#e8eef6" font-size="17">2</text>
+    <rect x="12" y="94" width="60" height="26" rx="4" fill="#e040c0"/>
+    <text x="86" y="113" fill="#e8eef6" font-size="15">MAGENTA</text>
+    <text x="186" y="113" fill="#bd93f9" font-size="17">3</text>
+    <text x="296" y="113" fill="#f1fa8c" font-size="17">30</text>
+    <text x="416" y="113" fill="#e8eef6" font-size="17">3</text>
+    <rect x="12" y="128" width="60" height="30" rx="4" fill="#7a3fbf" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="86" y="149" fill="#f1fa8c" font-size="15">BOSS</text>
+    <text x="186" y="149" fill="#bd93f9" font-size="17">10</text>
+    <text x="296" y="149" fill="#8a97b8" font-size="15">—</text>
+    <text x="416" y="149" fill="#f1fa8c" font-size="17">10</text>
+    <text x="12" y="180" fill="#ff5555" font-size="15">Right now none of this matters. Every hit kills.</text>
+  </svg>
+</div>
+
+<!-- 7 · Predict 1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>Is the MAGENTA dead?</h2>
+  <div class="predict-card">
+    <div class="label">Predict</div>
+<pre>enemy = {<span class="str">"hp"</span>: <span class="num">3</span>, <span class="str">"points"</span>: <span class="num">30</span>}
+
+enemy[<span class="str">"hp"</span>] -= <span class="num">1</span>
+enemy[<span class="str">"hp"</span>] -= <span class="num">1</span>
+<span class="fn">print</span>(enemy[<span class="str">"hp"</span>])</pre>
+    <details><summary>Reveal</summary><div class="ans">1 — still alive.<br>MAGENTA needs three bullets.</div></details>
+  </div>
+</div>
+
+<!-- 8 · Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>Three words today</h2>
+  <div class="vocab-table">
+    <span class="term">hp</span>
+    <span class="gloss">hits left before it dies</span>
+    <span class="ko">체력</span>
+
+    <span class="term">max_hp</span>
+    <span class="gloss">the hp it started with</span>
+    <span class="ko">최대 체력</span>
+
+    <span class="term">fraction</span>
+    <span class="gloss">one number divided by another</span>
+    <span class="ko">분수</span>
+  </div>
+</div>
+
+<!-- 9 · Concept drawer / part / torch -->
+<div class="slide">
+  <span class="slot-badge">SLOT 5</span>
+  <div class="pill">Concept 💡</div>
+  <h2>Drawer, part, or torch</h2>
+  <div class="opt-grid">
+    <div class="opt-card">
+      <div class="ico">🗄️</div>
+      <div class="name">You wrote the label</div>
+      <div class="ex">open the drawer<br>enemy["hp"]</div>
+    </div>
+    <div class="opt-card">
+      <div class="ico">⚙️</div>
+      <div class="name">Pygame built the part</div>
+      <div class="ex">name the part<br>.centerx</div>
+    </div>
+    <div class="opt-card">
+      <div class="ico">🔦</div>
+      <div class="name">Look, don't crash</div>
+      <div class="ex">peek inside<br>.get("is_boss")</div>
+    </div>
+  </div>
+  <p class="bilingual center">대괄호 · 점 · 안전하게 보기</p>
+</div>
+
+<!-- 10 · Concept read left to right -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>One line, all three</h2>
+<pre>enemy[<span class="str">"rect"</span>].centerx</pre>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">enemy</div><div class="edesc">Your dictionary → brackets.</div></div>
+    <div class="edge-card"><div class="ehead">["rect"]</div><div class="edesc">Hands you a Rect.</div></div>
+    <div class="edge-card"><div class="ehead">.centerx</div><div class="edesc">Pygame's part → a dot.</div></div>
+  </div>
+  <p class="bilingual">왼쪽부터 한 칸씩</p>
+</div>
+
+<!-- 11 · Concept keys are exact text -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2>A key is exact text</h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">your drawers are labelled in small letters</text>
+    <rect x="10" y="26" width="160" height="46" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="26" y="56" fill="#50fa7b" font-size="18">enemy["hp"]</text>
+    <text x="178" y="56" fill="#50fa7b" font-size="16">✓ 2</text>
+    <rect x="10" y="82" width="160" height="46" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="26" y="112" fill="#ff5555" font-size="18">enemy["HP"]</text>
+    <text x="178" y="112" fill="#ff5555" font-size="15">✗ KeyError</text>
+    <rect x="300" y="26" width="200" height="46" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="316" y="56" fill="#50fa7b" font-size="18">enemy["max_hp"]</text>
+    <rect x="300" y="82" width="200" height="46" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="316" y="112" fill="#ff5555" font-size="18">enemy["maxHP"]</text>
+    <text x="10" y="158" fill="#f1fa8c" font-size="17">Small letters. An underscore, not a capital.</text>
+  </svg>
+</div>
+
+<!-- 12 · STAGE 1 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">1</div>
+    <div class="stage-label">Worksheet step 3</div>
+    <h1>Bullets that hurt</h1>
+  </div>
+  <p class="bilingual">총알 한 발에 체력 1</p>
+</div>
+
+<!-- 13 · PICTURE every hit kills -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Right now every hit kills</h2>
+  <svg viewBox="0 0 520 190" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">the MAGENTA has 3 hp written on it</text>
+    <text x="10" y="44" fill="#ff5555" font-size="15">NOW</text>
+    <rect x="70" y="26" width="60" height="26" rx="4" fill="#e040c0"/>
+    <text x="146" y="45" fill="#8a97b8" font-size="20">→</text>
+    <text x="180" y="45" fill="#e8eef6" font-size="15">one bullet</text>
+    <text x="290" y="45" fill="#8a97b8" font-size="20">→</text>
+    <text x="326" y="45" fill="#ff5555" font-size="15">gone, hp untouched</text>
+    <line x1="10" y1="66" x2="510" y2="66" stroke="#3a4255" stroke-width="2"/>
+    <text x="10" y="98" fill="#50fa7b" font-size="15">SOON</text>
+    <rect x="70" y="80" width="60" height="26" rx="4" fill="#e040c0"/>
+    <text x="146" y="99" fill="#8a97b8" font-size="20">→</text>
+    <text x="180" y="99" fill="#e8eef6" font-size="15">bullet 1</text>
+    <text x="300" y="99" fill="#bd93f9" font-size="15">hp 3 → 2</text>
+    <text x="180" y="128" fill="#e8eef6" font-size="15">bullet 2</text>
+    <text x="300" y="128" fill="#bd93f9" font-size="15">hp 2 → 1</text>
+    <text x="180" y="156" fill="#e8eef6" font-size="15">bullet 3</text>
+    <text x="300" y="156" fill="#ff4646" font-size="15">hp 0 → gone</text>
+    <text x="10" y="184" fill="#f1fa8c" font-size="16">Without this the bar would sit full, then vanish.</text>
+  </svg>
+</div>
+
+<!-- 14 · Watch it · minus equals -->
+<div class="slide">
+  <div class="pill">Watch it 👀</div>
+  <h2>Minus equals, on the boss</h2>
+  <div class="viz viz-reassign">
+    <div class="ra-code">
+      <div class="ra-line">enemy["hp"] = 10</div>
+      <div class="ra-line">enemy["hp"] -= 1</div>
+      <div class="ra-line">enemy["hp"] -= 3</div>
+      <div class="ra-line">enemy["hp"] -= 3</div>
+    </div>
+    <div class="ra-box">
+      <span class="ra-name">enemy["hp"]</span>
+      <span class="ra-vals">
+        <span>10</span><span>9</span><span>6</span><span>3</span>
+      </span>
+    </div>
+  </div>
+  <p class="bilingual">읽고, 빼고, 다시 넣어요</p>
+</div>
+
+<!-- 15 · STEP 1 -->
+<div class="slide dense">
+  <div class="pill">STEP 1 / 25 · bullet</div>
+  <h2>The bullet takes 1 off</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                if bullet.colliderect(enemy["rect"]):
+                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 12])
+                    score += enemy["points"]
+                    enemies.remove(enemy)
+                    bullets.remove(bullet)
+                    hit_enemy = True
+                    break</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                if bullet.colliderect(enemy["rect"]):</span><span style="background:rgba(56,208,224,.16);display:block">                    enemy["hp"] -= 1</span><span style="opacity:.38;display:block">                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 12])</span><span style="opacity:.38;display:block">                    score += enemy["points"]</span><span style="opacity:.38;display:block">                    enemies.remove(enemy)</span><span style="opacity:.38;display:block">                    bullets.remove(bullet)</span><span style="opacity:.38;display:block">                    hit_enemy = True</span><span style="opacity:.38;display:block">                    break</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>WORKSHEET STEP 3</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">First line inside that <code>if</code>. Indent 20, level with <code>score +=</code>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Read hp, take 1, put it back.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Enemies still die on one hit. Not finished.</div></div>
+  </div>
+</div>
+
+<!-- 16 · PICTURE subtracting is not enough -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Subtracting is not enough</h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:42vh" aria-hidden="true">
+    <rect x="10" y="14" width="500" height="44" rx="8" fill="#1e1e2e" stroke="#3a4255" stroke-width="2"/>
+    <text x="24" y="42" fill="#e8eef6" font-size="16" font-family="monospace">enemy["hp"] -= 1</text>
+    <text x="320" y="42" fill="#50fa7b" font-size="15">hp 3 → 2 ✓</text>
+    <rect x="10" y="68" width="500" height="44" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="24" y="96" fill="#e8eef6" font-size="16" font-family="monospace">enemies.remove(enemy)</text>
+    <text x="320" y="96" fill="#ff5555" font-size="15">runs anyway ✗</text>
+    <text x="10" y="146" fill="#f1fa8c" font-size="17">hp drops to 2, then the enemy is deleted at 2.</text>
+    <text x="10" y="170" fill="#3cdc78" font-size="17">Removing must WAIT until hp reaches 0.</text>
+  </svg>
+</div>
+
+<!-- 17 · PICTURE which lines belong to the hit -->
+<div class="slide">
+  <div class="pill">⚠️ Think first</div>
+  <h2>The hit, or the kill?</h2>
+  <svg viewBox="0 0 520 200" style="width:100%;max-height:46vh" aria-hidden="true">
+    <text x="10" y="16" fill="#3cdc78" font-size="14">happens on the KILL — move these INSIDE</text>
+    <rect x="10" y="24" width="250" height="86" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="24" y="46" fill="#50fa7b" font-size="14" font-family="monospace">hits.append(...)</text>
+    <text x="24" y="70" fill="#50fa7b" font-size="14" font-family="monospace">score += ...</text>
+    <text x="24" y="94" fill="#50fa7b" font-size="14" font-family="monospace">enemies.remove(enemy)</text>
+    <text x="280" y="16" fill="#ff9c5b" font-size="14">happens on EVERY HIT — leave OUTSIDE</text>
+    <rect x="280" y="24" width="230" height="86" rx="8" fill="#1e1e2e" stroke="#ff9c5b" stroke-width="3"/>
+    <text x="294" y="46" fill="#ff9c5b" font-size="14" font-family="monospace">bullets.remove(bullet)</text>
+    <text x="294" y="70" fill="#ff9c5b" font-size="14" font-family="monospace">hit_enemy = True</text>
+    <text x="294" y="94" fill="#ff9c5b" font-size="14" font-family="monospace">break</text>
+    <text x="10" y="142" fill="#f1fa8c" font-size="16">The bullet is used up whether the enemy dies or not.</text>
+    <text x="10" y="168" fill="#e8eef6" font-size="16">One bullet still hits one enemy, so break stays too.</text>
+    <text x="10" y="194" fill="#8a97b8" font-size="14">Only the three green lines get four more spaces.</text>
+  </svg>
+</div>
+
+<!-- 18 · STEP 2 -->
+<div class="slide dense">
+  <div class="pill">STEP 2 / 25 · bullet</div>
+  <h2>Only die at zero</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                    enemy["hp"] -= 1
+                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 12])
+                    score += enemy["points"]
+                    enemies.remove(enemy)
+                    bullets.remove(bullet)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                    enemy["hp"] -= 1</span><span style="background:rgba(56,208,224,.16);display:block">                    if enemy["hp"] &lt;= 0:</span><span style="background:rgba(56,208,224,.16);display:block">                        hits.append([enemy["rect"].centerx, enemy["rect"].centery, 12])</span><span style="background:rgba(56,208,224,.16);display:block">                        score += enemy["points"]</span><span style="background:rgba(56,208,224,.16);display:block">                        enemies.remove(enemy)</span><span style="opacity:.38;display:block">                    bullets.remove(bullet)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>enemy["hp"] -= 1</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">New <code>if</code> at 20. Push three lines to 24.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>bullets.remove</code> stays out. It is used up.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">MAGENTA needs three bullets. Score moves once.</div></div>
+  </div>
+</div>
+
+<!-- 19 · PICTURE ordering trap -->
+<div class="slide">
+  <div class="pill">⚠️ The trap</div>
+  <h2>Where the score line sits</h2>
+  <svg viewBox="0 0 520 190" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">MAGENTA, 3 hp, 30 points · score line OUTSIDE</text>
+    <rect x="10" y="26" width="230" height="70" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="24" y="50" fill="#ff5555" font-size="15">bullet 1 → +30</text>
+    <text x="24" y="72" fill="#ff5555" font-size="15">bullet 2 → +30</text>
+    <text x="24" y="90" fill="#ff5555" font-size="14">one enemy pays 90</text>
+    <text x="280" y="16" fill="#8a97b8" font-size="13">score line INSIDE the hp check</text>
+    <rect x="280" y="26" width="230" height="70" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="294" y="50" fill="#8a97b8" font-size="15">bullet 1 → nothing</text>
+    <text x="294" y="72" fill="#8a97b8" font-size="15">bullet 2 → nothing</text>
+    <text x="294" y="90" fill="#50fa7b" font-size="14">bullet 3 → +30 once</text>
+    <text x="10" y="132" fill="#f1fa8c" font-size="17">Same three lines. Four extra spaces changes the game.</text>
+    <text x="10" y="160" fill="#e8eef6" font-size="16">Indent is not decoration. It says WHEN a line runs.</text>
+    <text x="10" y="184" fill="#8a97b8" font-size="14">Shoot a MAGENTA twice. The score must not move.</text>
+  </svg>
+</div>
+
+<!-- 20 · MAKE bullets -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Bullets do damage</h2>
+  <ul class="check-list">
+    <li>Find <code>WORKSHEET STEP 3</code></li>
+    <li>Add <code>enemy["hp"] -= 1</code> first</li>
+    <li>Wrap the three green lines only</li>
+    <li>GREEN 1 shot, RED 2, MAGENTA 3 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 21 · Concept why <= not == -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Why not equals zero?</h2>
+  <svg viewBox="0 0 520 186" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">a missile hits a RED, which has 2 hp</text>
+    <text x="10" y="46" fill="#e8eef6" font-size="18" font-family="monospace">2 - 3 = -1</text>
+    <rect x="10" y="62" width="240" height="56" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="24" y="88" fill="#ff5555" font-size="16" font-family="monospace">if hp == 0:</text>
+    <text x="24" y="110" fill="#ff5555" font-size="14">-1 is not 0. RED never dies.</text>
+    <rect x="270" y="62" width="240" height="56" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="284" y="88" fill="#50fa7b" font-size="16" font-family="monospace">if hp &lt;= 0:</text>
+    <text x="284" y="110" fill="#50fa7b" font-size="14">-1 is under 0. RED dies.</text>
+    <text x="10" y="152" fill="#f1fa8c" font-size="17">hp jumps straight past zero with real numbers.</text>
+    <text x="10" y="178" fill="#8a97b8" font-size="15">This is your BOSS_STOP_Y question again. You were right.</text>
+  </svg>
+</div>
+
+<!-- 22 · Trace bullets -->
+<div class="slide">
+  <div class="pill">Your trace ✏️</div>
+  <h2>One bullet each. Dead?</h2>
+  <div class="trace-grid">
+    <div class="cell head">enemy</div><div class="cell head">hp after</div><div class="cell head">dies?</div>
+
+    <div class="cell"><code>GREEN 1</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">yes, +50</span></details></div>
+
+    <div class="cell"><code>RED 2</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+    <div class="cell"><code>MAGENTA 3</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+    <div class="cell"><code>BOSS 10</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+  </div>
+</div>
+
+<!-- 23 · Quiz 1 -->
+<div class="slide mcq" data-correct="0" data-explain="The boss has 10 hp and a bullet takes 1.">
+  <div class="pill purple">Quiz</div>
+  <h2>Bullets to kill the boss?</h2>
+  <div class="opts">
+    <button class="opt">10</button>
+    <button class="opt">1</button>
+    <button class="opt">4</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 24 · STAGE 2 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">2</div>
+    <div class="stage-label">Worksheet step 4</div>
+    <h1>Missiles hit harder</h1>
+  </div>
+  <p class="bilingual">미사일 한 발에 체력 3</p>
+</div>
+
+<!-- 25 · PICTURE bullet vs missile -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Your two weapons differ</h2>
+  <svg viewBox="0 0 520 200" style="width:100%;max-height:46vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">BULLET · used up, then stops</text>
+    <rect x="30" y="80" width="46" height="24" rx="4" fill="#e040c0"/>
+    <rect x="110" y="80" width="46" height="24" rx="4" fill="#ff4646"/>
+    <rect x="190" y="80" width="46" height="24" rx="4" fill="#4ade80"/>
+    <line x1="14" y1="92" x2="28" y2="92" stroke="#f1fa8c" stroke-width="4"/>
+    <text x="14" y="52" fill="#f1fa8c" font-size="14">1 hp</text>
+    <text x="14" y="126" fill="#ff9c5b" font-size="13">bullets.remove + break</text>
+    <text x="14" y="146" fill="#8a97b8" font-size="13">the other two are safe</text>
+    <text x="280" y="16" fill="#8a97b8" font-size="13">MISSILE · flies on through</text>
+    <rect x="300" y="80" width="46" height="24" rx="4" fill="#e040c0"/>
+    <rect x="380" y="80" width="46" height="24" rx="4" fill="#ff4646"/>
+    <rect x="460" y="80" width="46" height="24" rx="4" fill="#4ade80"/>
+    <line x1="284" y1="92" x2="510" y2="92" stroke="#ff7849" stroke-width="4"/>
+    <text x="284" y="52" fill="#ff7849" font-size="14">3 hp each</text>
+    <text x="284" y="126" fill="#50fa7b" font-size="13">no remove, no break</text>
+    <text x="284" y="146" fill="#8a97b8" font-size="13">it can hit all three</text>
+    <text x="10" y="182" fill="#f1fa8c" font-size="16">So the missile block gets a different fix. Read yours.</text>
+  </svg>
+</div>
+
+<!-- 26 · STEP 3 -->
+<div class="slide dense">
+  <div class="pill">STEP 3 / 25 · missile</div>
+  <h2>The missile takes 3 off</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                if missile.colliderect(enemy["rect"]):
+                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 25])
+                    score += enemy["points"] * 2
+                    enemies.remove(enemy)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                if missile.colliderect(enemy["rect"]):</span><span style="background:rgba(56,208,224,.16);display:block">                    enemy["hp"] -= 3</span><span style="opacity:.38;display:block">                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 25])</span><span style="opacity:.38;display:block">                    score += enemy["points"] * 2</span><span style="opacity:.38;display:block">                    enemies.remove(enemy)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>WORKSHEET STEP 4</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">First line inside that <code>if</code>. Indent 20.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Three times a bullet, one number different.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Missiles still kill at once. Next step fixes it.</div></div>
+  </div>
+</div>
+
+<!-- 27 · PICTURE missile has nothing to leave out -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>This block has no leftovers</h2>
+  <svg viewBox="0 0 520 190" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">BULLET block</text>
+    <rect x="10" y="24" width="230" height="62" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="2"/>
+    <text x="24" y="46" fill="#50fa7b" font-size="14">3 lines move inside</text>
+    <text x="24" y="70" fill="#ff9c5b" font-size="14">3 lines stay outside</text>
+    <text x="280" y="16" fill="#8a97b8" font-size="13">MISSILE block</text>
+    <rect x="280" y="24" width="230" height="62" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="2"/>
+    <text x="294" y="46" fill="#50fa7b" font-size="14">3 lines move inside</text>
+    <text x="294" y="70" fill="#8a97b8" font-size="14">nothing stays outside</text>
+    <text x="10" y="126" fill="#f1fa8c" font-size="17">No bullets.remove, no hit_enemy, no break.</text>
+    <text x="10" y="152" fill="#e8eef6" font-size="16">So all three lines go in. Easier than the bullet.</text>
+    <text x="10" y="180" fill="#8a97b8" font-size="14">Never assume two blocks match. Read them.</text>
+  </svg>
+</div>
+
+<!-- 28 · STEP 4 -->
+<div class="slide dense">
+  <div class="pill">STEP 4 / 25 · missile</div>
+  <h2>Wrap all three</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                    enemy["hp"] -= 3
+                    hits.append([enemy["rect"].centerx, enemy["rect"].centery, 25])
+                    score += enemy["points"] * 2
+                    enemies.remove(enemy)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                    enemy["hp"] -= 3</span><span style="background:rgba(56,208,224,.16);display:block">                    if enemy["hp"] &lt;= 0:</span><span style="background:rgba(56,208,224,.16);display:block">                        hits.append([enemy["rect"].centerx, enemy["rect"].centery, 25])</span><span style="background:rgba(56,208,224,.16);display:block">                        score += enemy["points"] * 2</span><span style="background:rgba(56,208,224,.16);display:block">                        enemies.remove(enemy)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>enemy["hp"] -= 3</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">New <code>if</code> at 20. Push three lines to 24.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Nothing here belongs to the hit.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">One missile kills GREEN, RED and MAGENTA.</div></div>
+  </div>
+</div>
+
+<!-- 29 · MAKE missiles -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Missiles do damage</h2>
+  <ul class="check-list">
+    <li>Find <code>WORKSHEET STEP 4</code></li>
+    <li>Add <code>enemy["hp"] -= 3</code> first</li>
+    <li>Wrap all three lines under it</li>
+    <li>One missile into a row of enemies 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 30 · Concept missile scores double -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Your missile pays double</h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">you wrote this line yourself</text>
+    <rect x="10" y="26" width="500" height="42" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="24" y="53" fill="#f1fa8c" font-size="17" font-family="monospace">score += enemy["points"] * 2</text>
+    <text x="10" y="94" fill="#e8eef6" font-size="16">MAGENTA is 30 points. A missile kill pays 60.</text>
+    <text x="10" y="120" fill="#e8eef6" font-size="16">RED is 40. A missile kill pays 80.</text>
+    <text x="10" y="152" fill="#3cdc78" font-size="16">Now it only pays on the kill, so it is worth more.</text>
+    <text x="10" y="172" fill="#8a97b8" font-size="14">The brackets read the drawer. The 2 is plain maths.</text>
+  </svg>
+</div>
+
+<!-- 31 · Trace missiles -->
+<div class="slide">
+  <div class="pill">Your trace ✏️</div>
+  <h2>Missiles into the boss · 10 hp</h2>
+  <div class="trace-grid">
+    <div class="cell head">missile</div><div class="cell head">hp after</div><div class="cell head">dies?</div>
+
+    <div class="cell"><code>1st</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+    <div class="cell"><code>2nd</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+    <div class="cell"><code>3rd</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+    <div class="cell"><code>4th</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">-2</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">yes — that is why &lt;= 0</span></details></div>
+  </div>
+</div>
+
+<!-- 32 · Quiz 2 -->
+<div class="slide mcq" data-correct="0" data-explain="Your missile block has no missiles.remove and no break, so it keeps flying.">
+  <div class="pill purple">Quiz</div>
+  <h2>One missile, three enemies in a row</h2>
+  <div class="opts">
+    <button class="opt">It damages all three</button>
+    <button class="opt">It damages only the first</button>
+    <button class="opt">It crashes</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 33 · Predict 2 -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>What number comes out?</h2>
+  <div class="predict-card">
+    <div class="label">Predict</div>
+<pre>boss = {<span class="str">"hp"</span>: <span class="num">5</span>, <span class="str">"max_hp"</span>: <span class="num">10</span>}
+
+bar_width = (boss[<span class="str">"hp"</span>] / boss[<span class="str">"max_hp"</span>]) * <span class="num">200</span>
+<span class="fn">print</span>(bar_width)</pre>
+    <details><summary>Reveal</summary><div class="ans">100.0<br>Half the health, half the bar.</div></details>
+  </div>
+</div>
+
+<!-- 34 · PICTURE four bars -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Four bars, four fractions</h2>
+  <svg viewBox="0 0 520 172" style="width:100%;max-height:46vh" aria-hidden="true">
+    <text x="15" y="12" fill="#8a97b8" font-size="12">the boss · max_hp = 10 · a full bar = 200 px</text>
+    <rect x="15" y="24" width="100" height="34" rx="4" fill="none" stroke="#3a4255" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="15" y="24" width="100" height="34" rx="4" fill="#3cdc78"/>
+    <text x="15" y="80" fill="#f1fa8c" font-size="16">10 / 10</text>
+    <text x="15" y="102" fill="#bd93f9" font-size="16">= 1.0</text>
+    <text x="15" y="128" fill="#e8eef6" font-size="18" font-weight="700">200 px</text>
+    <text x="15" y="150" fill="#8a97b8" font-size="12">full</text>
+    <rect x="145" y="24" width="100" height="34" rx="4" fill="none" stroke="#3a4255" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="145" y="24" width="50" height="34" rx="4" fill="#3cdc78"/>
+    <text x="145" y="80" fill="#f1fa8c" font-size="16">5 / 10</text>
+    <text x="145" y="102" fill="#bd93f9" font-size="16">= 0.5</text>
+    <text x="145" y="128" fill="#e8eef6" font-size="18" font-weight="700">100 px</text>
+    <text x="145" y="150" fill="#8a97b8" font-size="12">half</text>
+    <rect x="275" y="24" width="100" height="34" rx="4" fill="none" stroke="#3a4255" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="275" y="24" width="20" height="34" rx="4" fill="#3cdc78"/>
+    <text x="275" y="80" fill="#f1fa8c" font-size="16">2 / 10</text>
+    <text x="275" y="102" fill="#bd93f9" font-size="16">= 0.2</text>
+    <text x="275" y="128" fill="#e8eef6" font-size="18" font-weight="700">40 px</text>
+    <text x="275" y="150" fill="#8a97b8" font-size="12">nearly dead</text>
+    <rect x="405" y="24" width="100" height="34" rx="4" fill="none" stroke="#3a4255" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="405" y="80" fill="#f1fa8c" font-size="16">0 / 10</text>
+    <text x="405" y="102" fill="#bd93f9" font-size="16">= 0.0</text>
+    <text x="405" y="128" fill="#ff5555" font-size="18" font-weight="700">0 px</text>
+    <text x="405" y="150" fill="#8a97b8" font-size="12">empty</text>
+  </svg>
+  <p class="bilingual center">분수가 너비가 돼요</p>
+</div>
+
+<!-- 35 · PICTURE one bar three steps -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>The boss took five hits</h2>
+  <svg viewBox="0 0 520 190" style="width:100%;max-height:44vh" aria-hidden="true">
+    <rect x="10" y="14" width="150" height="42" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="22" y="41" fill="#f1fa8c" font-size="14">hp 5 · max_hp 10</text>
+    <text x="172" y="42" fill="#8a97b8" font-size="22">→</text>
+    <rect x="196" y="14" width="130" height="42" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="208" y="41" fill="#bd93f9" font-size="15">5 / 10 = 0.5</text>
+    <text x="338" y="42" fill="#8a97b8" font-size="22">→</text>
+    <rect x="362" y="14" width="148" height="42" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="374" y="41" fill="#e8eef6" font-size="15">0.5 × 200 = 100</text>
+    <text x="10" y="92" fill="#8a97b8" font-size="13">what the screen shows</text>
+    <rect x="10" y="102" width="200" height="34" rx="4" fill="none" stroke="#3a4255" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="10" y="102" width="100" height="34" rx="4" fill="#3cdc78"/>
+    <line x1="10" y1="150" x2="110" y2="150" stroke="#3cdc78" stroke-width="3"/>
+    <text x="34" y="172" fill="#3cdc78" font-size="16" font-weight="700">100 px</text>
+    <line x1="110" y1="150" x2="210" y2="150" stroke="#3a4255" stroke-width="3"/>
+    <text x="132" y="172" fill="#8a97b8" font-size="16">gone</text>
+    <text x="240" y="128" fill="#f1fa8c" font-size="16">half the hp → half the bar</text>
+  </svg>
+</div>
+
+<!-- 36 · PICTURE why times 200 -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Why times 200?</h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">0.5 is not a number of pixels. 200 turns it into pixels.</text>
+    <line x1="10" y1="46" x2="410" y2="46" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="10" y1="38" x2="10" y2="54" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="210" y1="38" x2="210" y2="54" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="410" y1="38" x2="410" y2="54" stroke="#8a97b8" stroke-width="2"/>
+    <text x="4" y="72" fill="#bd93f9" font-size="15">0.0</text>
+    <text x="196" y="72" fill="#bd93f9" font-size="15">0.5</text>
+    <text x="400" y="72" fill="#bd93f9" font-size="15">1.0</text>
+    <text x="4" y="94" fill="#e8eef6" font-size="15">0 px</text>
+    <text x="188" y="94" fill="#e8eef6" font-size="15">100 px</text>
+    <text x="386" y="94" fill="#e8eef6" font-size="15">200 px</text>
+    <text x="10" y="132" fill="#f1fa8c" font-size="17">fraction × 200 = pixels</text>
+    <text x="10" y="162" fill="#8a97b8" font-size="14">Change 200 and the whole bar changes size.</text>
+  </svg>
+</div>
+
+<!-- 37 · Concept one slash -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>One slash keeps the decimal</h2>
+  <svg viewBox="0 0 520 158" style="width:100%;max-height:40vh" aria-hidden="true">
+    <rect x="10" y="14" width="240" height="58" rx="10" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="26" y="42" fill="#50fa7b" font-size="18">2 / 10  →  0.2</text>
+    <text x="26" y="64" fill="#8a97b8" font-size="13">one slash · a decimal</text>
+    <rect x="270" y="14" width="240" height="58" rx="10" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="286" y="42" fill="#ff5555" font-size="18">2 // 10  →  0</text>
+    <text x="286" y="64" fill="#8a97b8" font-size="13">two slashes · a whole number</text>
+    <text x="10" y="106" fill="#f1fa8c" font-size="17">0 × 200 = 0. The bar would vanish at 2 hp.</text>
+    <text x="10" y="140" fill="#e8eef6" font-size="17">The bar needs the decimal. Use one slash.</text>
+  </svg>
+</div>
+
+<!-- 38 · PICTURE count the brackets -->
+<div class="slide">
+  <div class="pill">⚠️ The spine</div>
+  <h2>Count the square brackets</h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="44" fill="#e8eef6" font-size="18" font-family="monospace">bar_width = (enemy[</text>
+    <text x="215" y="44" fill="#f1fa8c" font-size="18" font-family="monospace">"hp"</text>
+    <text x="258" y="44" fill="#e8eef6" font-size="18" font-family="monospace">] / enemy[</text>
+    <text x="366" y="44" fill="#f1fa8c" font-size="18" font-family="monospace">"max_hp"</text>
+    <text x="452" y="44" fill="#e8eef6" font-size="18" font-family="monospace">])</text>
+    <circle cx="210" cy="38" r="11" fill="none" stroke="#38d0e0" stroke-width="3"/>
+    <circle cx="264" cy="38" r="11" fill="none" stroke="#38d0e0" stroke-width="3"/>
+    <circle cx="361" cy="38" r="11" fill="none" stroke="#38d0e0" stroke-width="3"/>
+    <circle cx="458" cy="38" r="11" fill="none" stroke="#38d0e0" stroke-width="3"/>
+    <text x="10" y="92" fill="#38d0e0" font-size="18">4 square brackets · every one opens a drawer</text>
+    <rect x="10" y="108" width="130" height="46" rx="8" fill="#1e1e2e" stroke="#8a97b8" stroke-width="2"/>
+    <text x="24" y="137" fill="#8a97b8" font-size="17">( ) = maths</text>
+    <rect x="160" y="108" width="180" height="46" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="174" y="137" fill="#38d0e0" font-size="17">[ ] = a dictionary key</text>
+    <text x="360" y="137" fill="#f1fa8c" font-size="16">Never swap them.</text>
+  </svg>
+</div>
+
+<!-- 39 · STAGE 3 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">3</div>
+    <div class="stage-label">Worksheet step 5 · new idea 1</div>
+    <h1>A width made of a fraction</h1>
+  </div>
+  <p class="bilingual">체력을 너비로 바꿔요</p>
+</div>
+
+<!-- 40 · STEP 5 -->
+<div class="slide dense">
+  <div class="pill">STEP 5 / 25 · v1</div>
+  <h2>Give the bar a green</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">pygame.init()</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">pygame.init()</span><span style="background:rgba(56,208,224,.16);display:block">BAR_GREEN = (60, 220, 120)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>pygame.init()</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent 0, hard left.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Brand new name. Not in your file yet.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Game still runs. Nothing new yet.</div></div>
+  </div>
+  <p style="margin-top:.3em"><b>New names today:</b> <code>BAR_GREEN</code> <code>BAR_DARK</code> <code>BAR_ORANGE</code> <code>BAR_RED</code> <code>BAR_W</code></p>
+</div>
+
+<!-- 41 · STEP 6 -->
+<div class="slide dense">
+  <div class="pill">STEP 6 / 25 · v1</div>
+  <h2>Turn hp into pixels</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">            # --- WORKSHEET STEP 5 : the boss health bar goes under this line ---</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">            # --- WORKSHEET STEP 5 : the boss health bar goes under this line ---</span><span style="background:rgba(56,208,224,.16);display:block">            bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>WORKSHEET STEP 5</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the marker. Line up with the marker's <code>#</code>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The fraction becomes a pixel width.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">No crash. Nothing drawn yet.</div></div>
+  </div>
+</div>
+
+<!-- 42 · STEP 7 -->
+<div class="slide dense">
+  <div class="pill">STEP 7 / 25 · v1</div>
+  <h2>Draw the green rect</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">            bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">            bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</span><span style="background:rgba(56,208,224,.16);display:block">            pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_width =</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Same column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">x 300, y 40, then width and height.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">A bar appears. It looks wrong. Next slide.</div></div>
+  </div>
+</div>
+
+<!-- 43 · PICTURE six enemies one spot -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Every enemy, one spot</h2>
+  <svg viewBox="0 0 520 186" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">the draw line runs once per enemy, always at x 300 y 40</text>
+    <rect x="150" y="28" width="200" height="16" rx="3" fill="#3cdc78" opacity="0.35"/>
+    <rect x="150" y="28" width="150" height="16" rx="3" fill="#3cdc78" opacity="0.45"/>
+    <rect x="150" y="28" width="90" height="16" rx="3" fill="#3cdc78" opacity="0.6"/>
+    <rect x="150" y="28" width="40" height="16" rx="3" fill="#3cdc78"/>
+    <text x="366" y="42" fill="#ff5555" font-size="14">all on top of each other</text>
+    <rect x="40" y="80" width="50" height="30" rx="4" fill="#4ade80"/>
+    <rect x="130" y="80" width="50" height="30" rx="4" fill="#ff4646"/>
+    <rect x="220" y="80" width="50" height="30" rx="4" fill="#e040c0"/>
+    <rect x="310" y="80" width="50" height="30" rx="4" fill="#ff4646"/>
+    <rect x="400" y="70" width="80" height="46" rx="4" fill="#7a3fbf" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="404" y="99" fill="#f1fa8c" font-size="14">BOSS</text>
+    <text x="10" y="146" fill="#f1fa8c" font-size="17">Only the boss should own this bar.</text>
+    <text x="10" y="172" fill="#3cdc78" font-size="17">Ask one question first: is this the boss?</text>
+  </svg>
+</div>
+
+<!-- 44 · STEP 8 -->
+<div class="slide dense">
+  <div class="pill">STEP 8 / 25 · v1</div>
+  <h2>Boss only, please</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">            bar_width = (enemy["hp"] / enemy["max_hp"]) * 200
+            pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">            if enemy.get("is_boss"):</span><span style="background:rgba(56,208,224,.16);display:block">                bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</span><span style="background:rgba(56,208,224,.16);display:block">                pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_width =</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">New <code>if</code> in the marker's column. Push both lines 4 right.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The torch: look for the key, never crash.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">One bar. Only while the boss is alive.</div></div>
+  </div>
+</div>
+
+<!-- 45 · MAKE v1 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v1</h2>
+  <ul class="check-list">
+    <li><code>BAR_GREEN</code> under <code>pygame.init()</code></li>
+    <li><code>bar_width</code> under the step 5 marker</li>
+    <li>Then the draw line under that</li>
+    <li>Last, wrap both in the boss <code>if</code> 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 46 · Watch it viz-dict -->
+<div class="slide">
+  <div class="pill">Watch it 👀</div>
+  <h2>Brackets pick the drawer</h2>
+  <div class="viz viz-dict">
+    <div class="d-table">
+      <div class="d-row"><span class="d-key">"hp"</span><span class="d-sep">:</span><span class="d-val">5</span></div>
+      <div class="d-row"><span class="d-key">"max_hp"</span><span class="d-sep">:</span><span class="d-val">10</span></div>
+      <div class="d-row"><span class="d-key">"is_boss"</span><span class="d-sep">:</span><span class="d-val">True</span></div>
+    </div>
+    <div class="d-lookup">enemy[<span class="d-qs"><span class="d-q d-q1">"hp"</span><span class="d-q d-q2">"max_hp"</span></span>]</div>
+    <div class="output-box">
+      <div class="out-label">▸ value</div>
+      <div class="out-line d-out d-out1">5</div>
+      <div class="out-line d-out d-out2">10</div>
+    </div>
+  </div>
+</div>
+
+<!-- 47 · Trace widths -->
+<div class="slide">
+  <div class="pill">Your trace ✏️</div>
+  <h2>Fill the widths · max_hp 10</h2>
+  <div class="trace-grid">
+    <div class="cell head">hp</div><div class="cell head">fraction</div><div class="cell head">bar_width</div>
+
+    <div class="cell"><code>10</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">1.0</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">200.0</span></details></div>
+
+    <div class="cell"><code>8</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.8</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">160.0</span></details></div>
+
+    <div class="cell"><code>5</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.5</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">100.0</span></details></div>
+
+    <div class="cell"><code>1</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.1</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">20.0</span></details></div>
+  </div>
+</div>
+
+<!-- 48 · Debug 1 -->
+<div class="slide">
+  <div class="pill">🐛 Debug 1</div>
+  <h2>Round brackets</h2>
+<pre>bar_width = (enemy(<span class="str">"hp"</span>) / enemy[<span class="str">"max_hp"</span>]) * <span class="num">200</span></pre>
+  <div class="debug-card"><details><summary>Show error + fix</summary>
+    <div class="err">TypeError: 'dict' object is not callable</div>
+    <div>Round brackets call a function. Fix → <code>enemy["hp"]</code></div>
+  </details></div>
+</div>
+
+<!-- 49 · Debug 2 -->
+<div class="slide">
+  <div class="pill">🐛 Debug 2</div>
+  <h2>A dot on your own key</h2>
+<pre>bar_width = (enemy.hp / enemy.max_hp) * <span class="num">200</span></pre>
+  <div class="debug-card"><details><summary>Show error + fix</summary>
+    <div class="err">AttributeError: 'dict' object has no attribute 'hp'</div>
+    <div>You wrote that name, so use <code>enemy["hp"]</code></div>
+  </details></div>
+</div>
+
+<!-- 50 · Quiz 3 -->
+<div class="slide mcq" data-correct="0" data-explain="Brackets and a string open a key you wrote, spelled exactly.">
+  <div class="pill purple">Quiz</div>
+  <h2>Which one reads the hp?</h2>
+  <div class="opts">
+    <button class="opt"><code>enemy["hp"]</code></button>
+    <button class="opt"><code>enemy["HP"]</code></button>
+    <button class="opt"><code>enemy.hp</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 51 · STAGE 4 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">4</div>
+    <div class="stage-label">New idea 2</div>
+    <h1>Two rects, stacked</h1>
+  </div>
+  <p class="bilingual">어두운 바 위에 초록 바</p>
+</div>
+
+<!-- 52 · PICTURE empty bar vanishes -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>At 0 hp the bar disappears</h2>
+  <svg viewBox="0 0 520 200" style="width:100%;max-height:44vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">ONE RECT</text>
+    <rect x="10" y="26" width="180" height="24" rx="4" fill="#3cdc78"/>
+    <text x="196" y="44" fill="#e8eef6" font-size="14">10 hp</text>
+    <rect x="10" y="58" width="36" height="24" rx="4" fill="#3cdc78"/>
+    <text x="196" y="76" fill="#e8eef6" font-size="14">2 hp</text>
+    <text x="196" y="108" fill="#ff5555" font-size="14">0 hp</text>
+    <text x="10" y="144" fill="#ff5555" font-size="14">0 hp shows nothing. Dead, or broken?</text>
+    <text x="280" y="16" fill="#8a97b8" font-size="13">TWO RECTS</text>
+    <rect x="280" y="26" width="180" height="24" rx="4" fill="#282c38"/>
+    <rect x="280" y="26" width="180" height="24" rx="4" fill="#3cdc78"/>
+    <rect x="280" y="58" width="180" height="24" rx="4" fill="#282c38"/>
+    <rect x="280" y="58" width="36" height="24" rx="4" fill="#3cdc78"/>
+    <rect x="280" y="90" width="180" height="24" rx="4" fill="#282c38"/>
+    <text x="280" y="144" fill="#3cdc78" font-size="14">0 hp still shows a strip.</text>
+    <text x="10" y="182" fill="#f1fa8c" font-size="17">Draw the dark one first. Draw the green one on top.</text>
+  </svg>
+</div>
+
+<!-- 53 · STEP 9 -->
+<div class="slide dense">
+  <div class="pill">STEP 9 / 25 · v2</div>
+  <h2>Add the dark colour</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">BAR_GREEN = (60, 220, 120)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">BAR_GREEN = (60, 220, 120)</span><span style="background:rgba(56,208,224,.16);display:block">BAR_DARK = (40, 44, 56)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_GREEN</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under <code>BAR_GREEN</code>. Indent 0.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The empty part needs a colour too.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Game still runs. Screen unchanged.</div></div>
+  </div>
+</div>
+
+<!-- 54 · STEP 10 -->
+<div class="slide dense">
+  <div class="pill">STEP 10 / 25 · v2</div>
+  <h2>Dark bar goes first</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">                pygame.draw.rect(screen, BAR_DARK, (300, 40, 200, 16))</span><span style="opacity:.38;display:block">                pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_GREEN, (300</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">The line ABOVE it. Same column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Width 200 always. It never shrinks.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Green sits inside a dark strip.</div></div>
+  </div>
+</div>
+
+<!-- 55 · PICTURE painter order -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Later paint covers earlier paint</h2>
+  <svg viewBox="0 0 520 180" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">frame order</text>
+    <text x="10" y="44" fill="#8a97b8" font-size="15">1</text>
+    <rect x="34" y="24" width="200" height="28" rx="4" fill="#282c38"/>
+    <text x="248" y="44" fill="#e8eef6" font-size="15">dark, full 200</text>
+    <text x="10" y="88" fill="#8a97b8" font-size="15">2</text>
+    <rect x="34" y="68" width="200" height="28" rx="4" fill="#282c38"/>
+    <rect x="34" y="68" width="100" height="28" rx="4" fill="#3cdc78"/>
+    <text x="248" y="88" fill="#e8eef6" font-size="15">green, 100 on top</text>
+    <text x="10" y="140" fill="#ff5555" font-size="15">Swap them and the dark bar hides the green completely.</text>
+    <rect x="34" y="150" width="200" height="22" rx="4" fill="#282c38"/>
+    <text x="248" y="167" fill="#ff5555" font-size="15">wrong order</text>
+  </svg>
+</div>
+
+<!-- 56 · MAKE v2 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v2</h2>
+  <ul class="check-list">
+    <li><code>BAR_DARK</code> under <code>BAR_GREEN</code></li>
+    <li>Dark draw line <b>above</b> the green one</li>
+    <li>Dark uses <code>200</code>, green uses <code>bar_width</code></li>
+    <li>Ten bullets into the boss. Strip stays 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 57 · Quiz 4 -->
+<div class="slide mcq" data-correct="0" data-explain="Whatever you draw last sits on top.">
+  <div class="pill purple">Quiz</div>
+  <h2>Which rect is drawn first?</h2>
+  <div class="opts">
+    <button class="opt">The dark one, width 200</button>
+    <button class="opt">The green one, width bar_width</button>
+    <button class="opt">Order makes no difference</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 58 · STAGE 5 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">5</div>
+    <div class="stage-label">New idea 3 <span class="activity-tag">OPTIONAL</span></div>
+    <h1>Colour that follows health</h1>
+  </div>
+  <p class="bilingual">체력에 따라 색이 바뀌어요</p>
+</div>
+
+<!-- 59 · PICTURE colour bands -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Three bands on one line <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 176" style="width:100%;max-height:44vh" aria-hidden="true">
+    <rect x="10" y="30" width="120" height="34" rx="4" fill="#ff4646"/>
+    <rect x="130" y="30" width="120" height="34" rx="4" fill="#ffa500"/>
+    <rect x="250" y="30" width="250" height="34" rx="4" fill="#3cdc78"/>
+    <line x1="10" y1="74" x2="500" y2="74" stroke="#8a97b8" stroke-width="2"/>
+    <text x="4" y="94" fill="#bd93f9" font-size="15">0.0</text>
+    <text x="112" y="94" fill="#bd93f9" font-size="15">0.25</text>
+    <text x="232" y="94" fill="#bd93f9" font-size="15">0.5</text>
+    <text x="480" y="94" fill="#bd93f9" font-size="15">1.0</text>
+    <text x="10" y="124" fill="#3cdc78" font-size="16">frac &gt; 0.5 → green</text>
+    <text x="200" y="124" fill="#ffa500" font-size="16">frac &gt; 0.25 → orange</text>
+    <text x="410" y="124" fill="#ff4646" font-size="16">else → red</text>
+    <text x="10" y="158" fill="#f1fa8c" font-size="16">Boss hp 6 green, hp 3 orange, hp 2 red.</text>
+  </svg>
+</div>
+
+<!-- 60 · STEP 11 -->
+<div class="slide dense">
+  <div class="pill">STEP 11 / 25 · v3</div>
+  <h2>Name the fraction <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">                frac = enemy["hp"] / enemy["max_hp"]</span><span style="background:rgba(56,208,224,.16);display:block">                bar_width = frac * 200</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_width = (enemy</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Replace that one line. Same column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Compute once, use twice.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Bar looks exactly the same.</div></div>
+  </div>
+</div>
+
+<!-- 61 · Watch it viz-if -->
+<div class="slide">
+  <div class="pill">Watch it 👀</div>
+  <h2>One test, two doors <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="viz viz-if">
+    <div class="if-input">
+      <span class="case case-a">frac = 0.8</span>
+      <span class="case case-b">frac = 0.3</span>
+    </div>
+    <div class="if-cond">frac &gt; 0.5</div>
+    <div class="if-branches">
+      <div class="if-branch true">bar_color = BAR_GREEN</div>
+      <div class="if-branch false">check the elif</div>
+    </div>
+    <div class="if-output">
+      <div class="out-label">▸ colour</div>
+      <div class="out-line out-a">green</div>
+      <div class="out-line out-b">orange</div>
+    </div>
+  </div>
+</div>
+
+<!-- 62 · STEP 12 -->
+<div class="slide dense">
+  <div class="pill">STEP 12 / 25 · v3</div>
+  <h2>Two warning colours <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">BAR_DARK = (40, 44, 56)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">BAR_DARK = (40, 44, 56)</span><span style="background:rgba(56,208,224,.16);display:block">BAR_ORANGE = (255, 165, 0)</span><span style="background:rgba(56,208,224,.16);display:block">BAR_RED = (255, 70, 70)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_DARK</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under <code>BAR_DARK</code>. Indent 0.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">New names, so no clash with your enemy colours.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Game still runs. Screen unchanged.</div></div>
+  </div>
+</div>
+
+<!-- 63 · STEP 13 -->
+<div class="slide dense">
+  <div class="pill">STEP 13 / 25 · v3</div>
+  <h2>Pick the colour <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                bar_width = frac * 200</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                bar_width = frac * 200</span><span style="background:rgba(56,208,224,.16);display:block">                if frac &gt; 0.5:</span><span style="background:rgba(56,208,224,.16);display:block">                    bar_color = BAR_GREEN</span><span style="background:rgba(56,208,224,.16);display:block">                elif frac &gt; 0.25:</span><span style="background:rgba(56,208,224,.16);display:block">                    bar_color = BAR_ORANGE</span><span style="background:rgba(56,208,224,.16);display:block">                else:</span><span style="background:rgba(56,208,224,.16);display:block">                    bar_color = BAR_RED</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_width = frac</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it. <code>if</code> same column, <code>bar_color</code> 4 right.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">One of the three always wins.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">No crash. Bar still green.</div></div>
+  </div>
+</div>
+
+<!-- 64 · STEP 14 -->
+<div class="slide dense">
+  <div class="pill">STEP 14 / 25 · v3</div>
+  <h2>Use the chosen colour <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                pygame.draw.rect(screen, BAR_GREEN, (300, 40, bar_width, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">                pygame.draw.rect(screen, bar_color, (300, 40, bar_width, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_GREEN, (300</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Same line. Swap one word.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Small letters: a variable, not a constant.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Bar turns orange near hp 5, red near hp 2.</div></div>
+  </div>
+</div>
+
+<!-- 65 · MAKE v3 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v3 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li>Two colours under <code>BAR_DARK</code></li>
+    <li><code>if</code> / <code>elif</code> / <code>else</code> under <code>bar_width</code></li>
+    <li>Swap <code>BAR_GREEN</code> → <code>bar_color</code></li>
+    <li>Bullet the boss slowly. Watch it change 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 66 · Concept elif order -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Big number first <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 172" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">frac = 0.8 walks down the ladder</text>
+    <rect x="10" y="26" width="240" height="40" rx="8" fill="#1e1e2e" stroke="#28a745" stroke-width="3"/>
+    <text x="24" y="52" fill="#50fa7b" font-size="16">0.8 &gt; 0.5 ? YES → stop</text>
+    <rect x="10" y="76" width="240" height="34" rx="8" fill="#1e1e2e" stroke="#3a4255" stroke-width="2"/>
+    <text x="24" y="99" fill="#8a97b8" font-size="15">elif never runs</text>
+    <text x="270" y="16" fill="#8a97b8" font-size="13">swapped order</text>
+    <rect x="270" y="26" width="240" height="40" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="3"/>
+    <text x="284" y="52" fill="#ff5555" font-size="16">0.8 &gt; 0.25 ? YES → stop</text>
+    <rect x="270" y="76" width="240" height="34" rx="8" fill="#1e1e2e" stroke="#3a4255" stroke-width="2"/>
+    <text x="284" y="99" fill="#8a97b8" font-size="15">green never runs</text>
+    <text x="10" y="146" fill="#f1fa8c" font-size="17">Python stops at the first YES.</text>
+    <text x="10" y="168" fill="#e8eef6" font-size="16">So test the biggest number first.</text>
+  </svg>
+</div>
+
+<!-- 67 · Trace frac to colour -->
+<div class="slide">
+  <div class="pill">Your trace ✏️</div>
+  <h2>Boss hp out of 10 <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="trace-grid">
+    <div class="cell head">hp</div><div class="cell head">frac</div><div class="cell head">colour</div>
+
+    <div class="cell"><code>9</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.9</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">green</span></details></div>
+
+    <div class="cell"><code>5</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.5</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">orange</span></details></div>
+
+    <div class="cell"><code>3</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.3</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">orange</span></details></div>
+
+    <div class="cell"><code>2</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.2</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">red</span></details></div>
+  </div>
+</div>
+
+<!-- 68 · Quiz 5 -->
+<div class="slide mcq" data-correct="0" data-explain="0.5 is not greater than 0.5, so the elif takes it.">
+  <div class="pill purple">Quiz</div>
+  <h2>Boss on 5 hp. Bar colour? <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="opts">
+    <button class="opt">orange</button>
+    <button class="opt">green</button>
+    <button class="opt">red</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 69 · STAGE 6 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">6</div>
+    <div class="stage-label">New idea 4 <span class="activity-tag">OPTIONAL</span></div>
+    <h1>The bar rides the boss</h1>
+  </div>
+  <p class="bilingual">바가 보스를 따라다녀요</p>
+</div>
+
+<!-- 70 · PICTURE bar above the rect -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>Where the bar hangs <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 196" style="width:100%;max-height:44vh" aria-hidden="true">
+    <rect x="160" y="72" width="200" height="16" rx="3" fill="#282c38"/>
+    <rect x="160" y="72" width="100" height="16" rx="3" fill="#3cdc78"/>
+    <rect x="210" y="96" width="100" height="70" rx="6" fill="#7a3fbf" stroke="#e8eef6" stroke-width="2"/>
+    <text x="234" y="138" fill="#e8eef6" font-size="16">BOSS</text>
+    <line x1="260" y1="60" x2="260" y2="170" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="212" y="52" fill="#ff79c6" font-size="14">enemy["rect"].centerx</text>
+    <line x1="160" y1="64" x2="260" y2="64" stroke="#38d0e0" stroke-width="3"/>
+    <text x="24" y="68" fill="#38d0e0" font-size="14">minus 100</text>
+    <line x1="160" y1="88" x2="160" y2="96" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="8" y="112" fill="#f1fa8c" font-size="14">enemy["rect"].top</text>
+    <text x="8" y="132" fill="#f1fa8c" font-size="14">minus 24</text>
+    <text x="380" y="112" fill="#e8eef6" font-size="15">The rect moves.</text>
+    <text x="380" y="134" fill="#e8eef6" font-size="15">The bar moves with it.</text>
+    <text x="8" y="190" fill="#8a97b8" font-size="14">Brackets fetch the Rect. The dot reads its part.</text>
+  </svg>
+</div>
+
+<!-- 71 · Concept why minus 100 -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Why minus 100? <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 162" style="width:100%;max-height:40vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">a rect is drawn from its LEFT edge</text>
+    <rect x="110" y="34" width="200" height="30" rx="4" fill="#282c38"/>
+    <circle cx="110" cy="49" r="7" fill="#ff7849"/>
+    <text x="34" y="30" fill="#ff7849" font-size="14">bar_x</text>
+    <line x1="210" y1="26" x2="210" y2="80" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="182" y="20" fill="#ff79c6" font-size="14">centerx</text>
+    <line x1="110" y1="76" x2="210" y2="76" stroke="#38d0e0" stroke-width="3"/>
+    <text x="128" y="98" fill="#38d0e0" font-size="15">100 = half of 200</text>
+    <text x="10" y="132" fill="#f1fa8c" font-size="17">Start half a bar to the left, and the middle lines up.</text>
+    <text x="10" y="156" fill="#8a97b8" font-size="14">Same rule as the top-right corner problem.</text>
+  </svg>
+</div>
+
+<!-- 72 · STEP 15 -->
+<div class="slide dense">
+  <div class="pill">STEP 15 / 25 · v4</div>
+  <h2>Work out bar_x <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                bar_width = frac * 200</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                bar_width = frac * 200</span><span style="background:rgba(56,208,224,.16);display:block">                bar_x = enemy["rect"].centerx - 100</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_width = frac</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Same column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Brackets for your key, dot for centerx.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">No crash. Bar has not moved yet.</div></div>
+  </div>
+</div>
+
+<!-- 73 · STEP 16 -->
+<div class="slide dense">
+  <div class="pill">STEP 16 / 25 · v4</div>
+  <h2>Work out bar_y <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                bar_x = enemy["rect"].centerx - 100</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                bar_x = enemy["rect"].centerx - 100</span><span style="background:rgba(56,208,224,.16);display:block">                bar_y = enemy["rect"].top - 24</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>bar_x = enemy</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Same column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Minus goes UP. y grows downward.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">No crash. Bar has not moved yet.</div></div>
+  </div>
+</div>
+
+<!-- 74 · STEP 17 -->
+<div class="slide dense">
+  <div class="pill">STEP 17 / 25 · v4</div>
+  <h2>Both draw lines <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                pygame.draw.rect(screen, BAR_DARK, (300, 40, 200, 16))
+                pygame.draw.rect(screen, bar_color, (300, 40, bar_width, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">                pygame.draw.rect(screen, BAR_DARK, (bar_x, bar_y, 200, 16))</span><span style="background:rgba(56,208,224,.16);display:block">                pygame.draw.rect(screen, bar_color, (bar_x, bar_y, bar_width, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>(300, 40</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Two lines. Same swap on each.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Both rects need the same corner.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Bar floats above the boss and follows.</div></div>
+  </div>
+</div>
+
+<!-- 75 · MAKE v4 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v4 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li><code>bar_x</code> then <code>bar_y</code></li>
+    <li>Swap <code>300, 40</code> on BOTH draw lines</li>
+    <li>Let the boss slide across</li>
+    <li>The bar should never lag 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 76 · Alt+click -->
+<div class="slide">
+  <div class="pill">Editor trick ⌨️</div>
+  <h2>Two identical edits <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">1</div><div class="edesc">Click just before the <code>3</code> of the first <code>300</code>.</div></div>
+    <div class="edge-card"><div class="ehead">2</div><div class="edesc">Hold <code>Alt</code>. Click before the second <code>300</code>.</div></div>
+    <div class="edge-card"><div class="ehead">3</div><div class="edesc">Two cursors. Type once, both change.</div></div>
+    <div class="edge-card"><div class="ehead">↩</div><div class="edesc">Press <code>Esc</code> to go back to one cursor.</div></div>
+  </div>
+  <p style="margin-top:.4em">Typing it twice is fine too.</p>
+</div>
+
+<!-- 77 · Quiz 6 -->
+<div class="slide mcq" data-correct="0" data-explain="Half of 200 is 100, so the bar centres on the boss.">
+  <div class="pill purple">Quiz</div>
+  <h2>Why subtract 100? <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="opts">
+    <button class="opt">Half the bar width, to centre it</button>
+    <button class="opt">To move the bar upward</button>
+    <button class="opt">Because the screen is 100 wide</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 78 · STAGE 7 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">7</div>
+    <div class="stage-label">New idea 5 <span class="activity-tag">OPTIONAL</span></div>
+    <h1>When the drawer is empty</h1>
+  </div>
+  <p class="bilingual">키가 없을 때</p>
+</div>
+
+<!-- 79 · PICTURE .get returns None -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>.get finds nothing <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 200" style="width:100%;max-height:44vh" aria-hidden="true">
+    <rect x="10" y="20" width="200" height="120" rx="10" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+    <text x="24" y="44" fill="#8a97b8" font-size="13">imagine a NEW enemy type</text>
+    <rect x="24" y="54" width="172" height="30" rx="4" fill="#2a2a3e"/>
+    <text x="36" y="74" fill="#f1fa8c" font-size="15">"hp" : 5</text>
+    <rect x="24" y="92" width="172" height="30" rx="4" fill="#2a2a3e"/>
+    <text x="36" y="112" fill="#f1fa8c" font-size="15">"points" : 20</text>
+    <text x="228" y="66" fill="#8a97b8" font-size="15">no "max_hp" drawer</text>
+    <text x="228" y="98" fill="#ff5555" font-size="17">.get("max_hp") → None</text>
+    <text x="10" y="164" fill="#ff5555" font-size="15">You forgot max_hp. 5 / None crashes.</text>
+    <text x="10" y="188" fill="#3cdc78" font-size="15">.get("max_hp", 1) hands back 1 instead.</text>
+  </svg>
+</div>
+
+<!-- 80 · Debug 3 -->
+<div class="slide">
+  <div class="pill">🐛 Debug 3</div>
+  <h2>Dividing by nothing <span class="activity-tag">OPTIONAL</span></h2>
+<pre>frac = enemy[<span class="str">"hp"</span>] / enemy.<span class="fn">get</span>(<span class="str">"max_hp"</span>)</pre>
+  <div class="debug-card"><details><summary>Show error + fix</summary>
+    <div class="err">TypeError: unsupported operand type(s) for /: 'int' and 'NoneType'</div>
+    <div>Fix → <code>enemy.get("max_hp", 1)</code>. The 1 is the backup.</div>
+  </details></div>
+</div>
+
+<!-- 81 · STEP 18 -->
+<div class="slide dense">
+  <div class="pill">STEP 18 / 25 · v5</div>
+  <h2>A safe max_hp <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                frac = enemy["hp"] / enemy["max_hp"]</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">                frac = enemy["hp"] / enemy.get("max_hp", 1)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>frac = enemy</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Same line. Replace it.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A missing key can never crash you now.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Boss bar behaves exactly as before.</div></div>
+  </div>
+</div>
+
+<!-- 82 · PICTURE negative hp -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>hp really does go negative <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 166" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">boss on 1 hp, one more missile</text>
+    <text x="10" y="44" fill="#e8eef6" font-size="16">hp = -2   →   frac = -0.2   →   width = -40</text>
+    <rect x="150" y="66" width="200" height="26" rx="4" fill="#282c38"/>
+    <line x1="150" y1="60" x2="150" y2="100" stroke="#ff79c6" stroke-width="2" stroke-dasharray="4 4"/>
+    <rect x="110" y="66" width="40" height="26" rx="2" fill="#ff4646"/>
+    <text x="14" y="84" fill="#ff5555" font-size="15">40 px LEFT</text>
+    <text x="366" y="84" fill="#8a97b8" font-size="15">bar_x</text>
+    <text x="10" y="128" fill="#f1fa8c" font-size="16">If a negative width were drawn, it spills the wrong way.</text>
+    <text x="10" y="154" fill="#3cdc78" font-size="17">Push any negative fraction back up to 0.</text>
+  </svg>
+</div>
+
+<!-- 83 · STEP 19 -->
+<div class="slide dense">
+  <div class="pill">STEP 19 / 25 · v5</div>
+  <h2>Stop at zero <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">                frac = enemy["hp"] / enemy.get("max_hp", 1)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">                frac = enemy["hp"] / enemy.get("max_hp", 1)</span><span style="background:rgba(56,208,224,.16);display:block">                if frac &lt; 0:</span><span style="background:rgba(56,208,224,.16);display:block">                    frac = 0</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>frac = enemy</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it. <code>if</code> same column, <code>frac</code> 4 right.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Width can never be negative now.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Runs as before. This one is a seatbelt.</div></div>
+  </div>
+</div>
+
+<!-- 84 · MAKE v5 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v5 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li>Swap in <code>.get("max_hp", 1)</code></li>
+    <li>Add the two guard lines under it</li>
+    <li>Run it. Nothing should look different</li>
+    <li>The width can never go negative 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 85 · Trace guard -->
+<div class="slide">
+  <div class="pill">Your trace ✏️</div>
+  <h2>After the guard · max_hp 10 <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="trace-grid">
+    <div class="cell head">hp</div><div class="cell head">raw frac</div><div class="cell head">after guard</div>
+
+    <div class="cell"><code>2</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.2</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.2</span></details></div>
+
+    <div class="cell"><code>0</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.0</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0.0</span></details></div>
+
+    <div class="cell"><code>-2</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">-0.2</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+  </div>
+</div>
+
+<!-- 86 · STAGE 8 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">8</div>
+    <div class="stage-label">New idea 6 <span class="activity-tag">OPTIONAL</span></div>
+    <h1>One recipe, every enemy</h1>
+  </div>
+  <p class="bilingual">함수 하나로 모든 적에게</p>
+</div>
+
+<!-- 87 · Watch it viz-func -->
+<div class="slide">
+  <div class="pill">Watch it 👀</div>
+  <h2>The dictionary goes in <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="viz viz-func">
+    <div class="fn-caller">
+      <span class="fn-callcode">draw_hp_bar(<span class="arg">enemy</span>)</span>
+      <span class="fn-result"><span class="rv">a bar on screen</span></span>
+    </div>
+    <div class="fn-flow-down">↓ call</div>
+    <div class="fn-body">
+      <div class="fn-sig">def draw_hp_bar(<span class="param">enemy</span>):</div>
+      <div class="fn-line">frac = <span class="param-use">enemy</span>["hp"] / <span class="param-use">enemy</span>.get("max_hp", 1)</div>
+    </div>
+    <div class="fn-flow-up">↑ done</div>
+  </div>
+</div>
+
+<!-- 88 · STEP 20 -->
+<div class="slide dense">
+  <div class="pill">STEP 20 / 25 · v6</div>
+  <h2>Build the recipe <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">while running:</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">def draw_hp_bar(enemy):</span><span style="background:rgba(56,208,224,.16);display:block">    frac = enemy["hp"] / enemy.get("max_hp", 1)</span><span style="background:rgba(56,208,224,.16);display:block">    if frac &lt; 0:</span><span style="background:rgba(56,208,224,.16);display:block">        frac = 0</span><span style="background:rgba(56,208,224,.16);display:block">    bar_width = frac * 200</span><span style="background:rgba(56,208,224,.16);display:block">    bar_x = enemy["rect"].centerx - 100</span><span style="background:rgba(56,208,224,.16);display:block">    bar_y = enemy["rect"].top - 24</span><span style="background:rgba(56,208,224,.16);display:block">    if frac &gt; 0.5:</span><span style="background:rgba(56,208,224,.16);display:block">        bar_color = BAR_GREEN</span><span style="background:rgba(56,208,224,.16);display:block">    elif frac &gt; 0.25:</span><span style="background:rgba(56,208,224,.16);display:block">        bar_color = BAR_ORANGE</span><span style="background:rgba(56,208,224,.16);display:block">    else:</span><span style="background:rgba(56,208,224,.16);display:block">        bar_color = BAR_RED</span><span style="background:rgba(56,208,224,.16);display:block">    pygame.draw.rect(screen, BAR_DARK, (bar_x, bar_y, 200, 16))</span><span style="background:rgba(56,208,224,.16);display:block">    pygame.draw.rect(screen, bar_color, (bar_x, bar_y, bar_width, 16))</span><span style="opacity:.38;display:block">while running:</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>while running:</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Above it. <code>def</code> at 0, body at 4.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Same lines, pulled far left.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Runs. Nothing changes yet.</div></div>
+  </div>
+</div>
+
+<!-- 89 · STEP 21 -->
+<div class="slide dense">
+  <div class="pill">STEP 21 / 25 · v6</div>
+  <h2>Delete, then call <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD — delete the 14</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">            if enemy.get("is_boss"):
+                frac = enemy["hp"] / enemy.get("max_hp", 1)
+                if frac &lt; 0:
+                    frac = 0
+                bar_width = frac * 200
+                bar_x = enemy["rect"].centerx - 100
+                bar_y = enemy["rect"].top - 24
+                if frac &gt; 0.5:
+                    bar_color = BAR_GREEN
+                elif frac &gt; 0.25:
+                    bar_color = BAR_ORANGE
+                else:
+                    bar_color = BAR_RED
+                pygame.draw.rect(screen, BAR_DARK, (bar_x, bar_y, 200, 16))
+                pygame.draw.rect(screen, bar_color, (bar_x, bar_y, bar_width, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">            if enemy.get("is_boss"):</span><span style="background:rgba(56,208,224,.16);display:block">                draw_hp_bar(enemy)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>if enemy.get("is_boss"):</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Keep that line. One call under it.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The recipe lives in one place now.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Boss bar looks identical.</div></div>
+  </div>
+</div>
+
+<!-- 90 · MAKE v6 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v6 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li>Write the <code>def</code> above <code>while running:</code></li>
+    <li>Run it before deleting anything</li>
+    <li>Then delete the 14 old lines</li>
+    <li>Leave one call behind 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 91 · PICTURE one recipe four callers -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>One recipe, four callers <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 186" style="width:100%;max-height:44vh" aria-hidden="true">
+    <rect x="170" y="10" width="180" height="40" rx="10" fill="#1e1e2e" stroke="#50fa7b" stroke-width="3"/>
+    <text x="186" y="36" fill="#50fa7b" font-size="16">draw_hp_bar(enemy)</text>
+    <line x1="200" y1="50" x2="60" y2="86" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="240" y1="50" x2="180" y2="86" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="280" y1="50" x2="320" y2="86" stroke="#8a97b8" stroke-width="2"/>
+    <line x1="320" y1="50" x2="450" y2="86" stroke="#8a97b8" stroke-width="2"/>
+    <rect x="20" y="94" width="80" height="12" rx="2" fill="#282c38"/>
+    <rect x="20" y="94" width="80" height="12" rx="2" fill="#3cdc78"/>
+    <rect x="30" y="112" width="60" height="34" rx="4" fill="#4ade80"/>
+    <text x="20" y="166" fill="#8a97b8" font-size="13">GREEN 1/1</text>
+    <rect x="140" y="94" width="80" height="12" rx="2" fill="#282c38"/>
+    <rect x="140" y="94" width="40" height="12" rx="2" fill="#ffa500"/>
+    <rect x="150" y="112" width="60" height="34" rx="4" fill="#ff4646"/>
+    <text x="140" y="166" fill="#8a97b8" font-size="13">RED 1/2</text>
+    <rect x="280" y="94" width="80" height="12" rx="2" fill="#282c38"/>
+    <rect x="280" y="94" width="54" height="12" rx="2" fill="#3cdc78"/>
+    <rect x="290" y="112" width="60" height="34" rx="4" fill="#e040c0"/>
+    <text x="280" y="166" fill="#8a97b8" font-size="13">MAGENTA 2/3</text>
+    <rect x="410" y="94" width="80" height="12" rx="2" fill="#282c38"/>
+    <rect x="410" y="94" width="16" height="12" rx="2" fill="#ff4646"/>
+    <rect x="420" y="112" width="60" height="34" rx="4" fill="#7a3fbf"/>
+    <text x="410" y="166" fill="#8a97b8" font-size="13">BOSS 2/10</text>
+    <text x="20" y="184" fill="#f1fa8c" font-size="14">Each caller hands over a different dictionary.</text>
+  </svg>
+</div>
+
+<!-- 92 · STEP 22 -->
+<div class="slide dense">
+  <div class="pill">STEP 22 / 25 · v7</div>
+  <h2>Drop the boss gate <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">            if enemy.get("is_boss"):
+                draw_hp_bar(enemy)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">            draw_hp_bar(enemy)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>if enemy.get("is_boss"):</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Both lines become one, in the marker's column.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">GREEN, RED and MAGENTA all have hp.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">A bar over every enemy on screen.</div></div>
+  </div>
+</div>
+
+<!-- 93 · MAKE v7 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v7 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li>Delete the <code>if</code> line</li>
+    <li>Pull the call back to the marker's column</li>
+    <li>Fill the screen with enemies 🎮</li>
+    <li>Too busy? Put the <code>if</code> back.</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 94 · Quiz 7 -->
+<div class="slide mcq" data-correct="0" data-explain="The caller hands one enemy dictionary to the parameter.">
+  <div class="pill purple">Quiz</div>
+  <h2>Inside the function, what is <code>enemy</code>? <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="opts">
+    <button class="opt">The one dictionary you passed in</button>
+    <button class="opt">Every enemy at once</button>
+    <button class="opt">A pygame Rect</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 95 · STAGE 9 header -->
+<div class="slide center-all">
+  <div class="stage-header">
+    <div class="num">9</div>
+    <div class="stage-label">New idea 7 <span class="activity-tag">OPTIONAL</span></div>
+    <h1>One number, one place</h1>
+  </div>
+  <p class="bilingual">숫자는 한 곳에만</p>
+</div>
+
+<!-- 96 · PICTURE 200 three times -->
+<div class="slide">
+  <div class="pill">Picture 🖼️</div>
+  <h2>200 is written three times <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 170" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="28" fill="#e8eef6" font-size="15" font-family="monospace">bar_width = frac * 200</text>
+    <circle cx="195" cy="22" r="16" fill="none" stroke="#ff5555" stroke-width="3"/>
+    <text x="10" y="60" fill="#e8eef6" font-size="15" font-family="monospace">bar_x = ...centerx - 100</text>
+    <circle cx="213" cy="54" r="16" fill="none" stroke="#ff5555" stroke-width="3"/>
+    <text x="10" y="92" fill="#e8eef6" font-size="15" font-family="monospace">...(bar_x, bar_y, 200, 16)</text>
+    <circle cx="186" cy="86" r="16" fill="none" stroke="#ff5555" stroke-width="3"/>
+    <text x="300" y="60" fill="#ff5555" font-size="15">Want a 300 bar?</text>
+    <text x="300" y="86" fill="#ff5555" font-size="15">Three edits, three chances</text>
+    <text x="300" y="108" fill="#ff5555" font-size="15">to forget one.</text>
+    <text x="10" y="140" fill="#3cdc78" font-size="17">BAR_W = 200 at the top. Then one edit forever.</text>
+    <text x="10" y="164" fill="#8a97b8" font-size="14">CAPITALS mean: set once, never changed by the game.</text>
+  </svg>
+</div>
+
+<!-- 97 · STEP 23 -->
+<div class="slide dense">
+  <div class="pill">STEP 23 / 25 · v8</div>
+  <h2>Name the full width <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">BAR_RED = (255, 70, 70)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="opacity:.38;display:block">BAR_RED = (255, 70, 70)</span><span style="background:rgba(56,208,224,.16);display:block">BAR_W = 200</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_RED</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under <code>BAR_RED</code>. Indent 0.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">One name for the full-bar size.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Game still runs. Screen unchanged.</div></div>
+  </div>
+</div>
+
+<!-- 98 · STEP 24 -->
+<div class="slide dense">
+  <div class="pill">STEP 24 / 25 · v8</div>
+  <h2>Two maths lines <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">    bar_width = frac * 200
+    bar_x = enemy["rect"].centerx - 100</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">    bar_width = frac * BAR_W</span><span style="background:rgba(56,208,224,.16);display:block">    bar_x = enemy["rect"].centerx - BAR_W / 2</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>frac * 200</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Inside the function. Indent 4.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Half a bar is always half of BAR_W.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Bar unchanged, still centred.</div></div>
+  </div>
+</div>
+
+<!-- 99 · STEP 25 -->
+<div class="slide dense">
+  <div class="pill">STEP 25 / 25 · v8</div>
+  <h2>The dark draw line <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)">    pygame.draw.rect(screen, BAR_DARK, (bar_x, bar_y, 200, 16))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre style="font-size:clamp(11px,1.7vmin,15px)"><span style="background:rgba(56,208,224,.16);display:block">    pygame.draw.rect(screen, BAR_DARK, (bar_x, bar_y, BAR_W, 16))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>BAR_DARK, (bar_x</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Same line. One swap. Indent 4.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Last 200 gone from the function.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Set BAR_W to 300. Everything grows.</div></div>
+  </div>
+</div>
+
+<!-- 100 · MAKE v8 -->
+<div class="slide">
+  <div class="pill">Your turn 🚀</div>
+  <h2>Type v8 <span class="activity-tag">OPTIONAL</span></h2>
+  <ul class="check-list">
+    <li><code>BAR_W = 200</code> under <code>BAR_RED</code></li>
+    <li>Three swaps inside the function</li>
+    <li>Change <code>BAR_W</code> to 300 and run</li>
+    <li>Then to 80. Still centred? 🎮</li>
+  </ul>
+  <div class="exit"><div class="label">⏳ WAIT — 90 seconds. No hints.</div></div>
+</div>
+
+<!-- 101 · Concept smooth bar -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>A bar that slides <span class="activity-tag">OPTIONAL</span></h2>
+  <svg viewBox="0 0 520 178" style="width:100%;max-height:42vh" aria-hidden="true">
+    <text x="10" y="16" fill="#8a97b8" font-size="13">shown chases target by a tenth of the gap, every frame</text>
+    <rect x="10" y="28" width="200" height="20" rx="3" fill="#282c38"/>
+    <rect x="10" y="28" width="180" height="20" rx="3" fill="#3cdc78"/>
+    <text x="230" y="44" fill="#8a97b8" font-size="14">frame 1 · 180</text>
+    <rect x="10" y="56" width="200" height="20" rx="3" fill="#282c38"/>
+    <rect x="10" y="56" width="152" height="20" rx="3" fill="#3cdc78"/>
+    <text x="230" y="72" fill="#8a97b8" font-size="14">frame 4 · 152</text>
+    <rect x="10" y="84" width="200" height="20" rx="3" fill="#282c38"/>
+    <rect x="10" y="84" width="118" height="20" rx="3" fill="#ffa500"/>
+    <text x="230" y="100" fill="#8a97b8" font-size="14">frame 9 · 118</text>
+    <rect x="10" y="112" width="200" height="20" rx="3" fill="#282c38"/>
+    <rect x="10" y="112" width="100" height="20" rx="3" fill="#ffa500"/>
+    <text x="230" y="128" fill="#38d0e0" font-size="14">frame 20 · 100 target</text>
+    <text x="10" y="160" fill="#f1fa8c" font-size="16" font-family="monospace">shown = shown + (target - shown) * 0.1</text>
+  </svg>
+</div>
+
+<!-- 102 · Modify 1 -->
+<div class="slide">
+  <div class="pill">Try it</div>
+  <h2>Fill four blanks</h2>
+<pre>frac = enemy___<span class="str">"hp"</span>___ / enemy___<span class="str">"max_hp"</span>___</pre>
+  <div class="debug-card"><details><summary>Show answers</summary>
+    <div><code>[</code> · <code>]</code> · <code>[</code> · <code>]</code></div>
+  </details></div>
+  <p class="bilingual">전부 대괄호</p>
+</div>
+
+<!-- 103 · Modify 2 -->
+<div class="slide">
+  <div class="pill">Try it</div>
+  <h2>Bracket or dot?</h2>
+<pre>bar_x = enemy___<span class="str">"rect"</span>___ ___centerx - <span class="num">100</span></pre>
+  <div class="debug-card"><details><summary>Show answers</summary>
+    <div><code>[</code> · <code>]</code> · <code>.</code> — your key, then pygame's part</div>
+  </details></div>
+</div>
+
+<!-- 104 · Code Talk Frame -->
+<div class="slide">
+  <div class="pill purple">Code Talk</div>
+  <h2>Say the whole line</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame"><code>enemy["hp"]</code> uses <span class="blank"></span> because <span class="blank"></span>.<br>
+    <code>.centerx</code> uses <span class="blank"></span> because <span class="blank"></span>.</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+  </div>
+</div>
+
+<!-- 105 · The rule card -->
+<div class="slide">
+  <div class="pill">Remember 🧠</div>
+  <h2>The whole rule</h2>
+  <div class="model-box">
+    <b>[ ]</b> — a name you typed inside <code>{ }</code><br>
+    <b>.</b> — a part pygame built for you<br>
+    <b>( )</b> — maths, or calling something<br>
+    <b>.get(k, backup)</b> — look, and never crash
+  </div>
+  <p class="bilingual">네 가지, 헷갈리지 않게</p>
+</div>
+
+<!-- 106 · Stretch -->
+<div class="slide">
+  <div class="pill">Stretch ⭐</div>
+  <h2>Pick one <span class="activity-tag">OPTIONAL</span></h2>
+  <div class="stretch-list">
+    <div class="item"><span class="lvl">★</span>Make the bar 8 px tall instead of 16.</div>
+    <div class="item"><span class="lvl">★★</span>Hide the bar when <code>frac</code> is 1.0.</div>
+    <div class="item"><span class="lvl">★★★</span>Add the smooth slide from the last picture.</div>
+  </div>
+</div>
+
+<!-- 107 · Exit ticket -->
+<div class="slide">
+  <div class="pill">Exit ticket 🎟️</div>
+  <h2>One line, from memory</h2>
+  <div class="exit"><div class="label">Write the bar_width line without looking</div></div>
+  <div class="recap-q" style="margin-top:.6em">
+    <details><summary>Answer</summary><div class="ans"><code>bar_width = (enemy["hp"] / enemy["max_hp"]) * 200</code></div></details>
+  </div>
+</div>
+
+<!-- 108 · Close & Bridge -->
+<div class="slide center-all">
+  <div class="emoji">🟩</div>
+  <h1 style="font-size:clamp(30px,5.2vmin,50px)">Damage makes hp move.<br>The bar just reads it.</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a number printed on the bar</p>
+  <p class="bilingual">다음 시간엔 바 위에 숫자를</p>
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button><span class="counter" id="counter">1 / 108</span><button id="next">›</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>

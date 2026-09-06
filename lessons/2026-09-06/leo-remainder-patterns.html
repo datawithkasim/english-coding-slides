@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Remainder · Leo</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Helper kit copied verbatim from lessons/2026-08-30/leo-loop-that-changes.html
+     (which copied it from lessons/2026-08-25/leo-algorithms-nested-loops.html).
+     Same classes, nothing new invented. */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .bad { display: block; background: rgba(255,85,85,.16); }
+  pre .dim { display: block; color: #4a5670; }
+  pre .ln { color: #3d4759; user-select: none; display: inline-block; width: 2em;
+            text-align: right; padding-right: .6em; margin-right: .6em; }
+  pre .mk { float: right; margin-left: 1.2em; font-size: .62em; letter-spacing: .12em;
+            color: #ffb86c; border: 1px solid #ffb86c; border-radius: 2em; padding: 0 .6em; }
+  pre .mk.old { color: #ff5555; border-color: #ff5555; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  .rev { display: inline-block; cursor: pointer; user-select: none; margin: .4em 0;
+         border: 2px solid var(--accent-2); border-radius: 2em; padding: .25em 1.1em;
+         color: var(--accent-2); background: transparent;
+         font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .rev:hover { background: rgba(139,92,246,.15); }
+  .hid { display: none; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: var(--com); font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2.1vmin, 20px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .5em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Leo · MS002 · The Remainder ➗</div>
+
+  <!-- 1 · title -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft · Python</div>
+    <div class="emoji">➗</div>
+    <h1>One counter.<br>Six colours.</h1>
+    <p class="line" style="margin-top:.3em">A new symbol: <b>%</b><br><b>You type first</b>, every time.</p>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip on">v1 towers</span><span class="chip">v2 crash</span>
+      <span class="chip">v3 cycle</span><span class="chip">v4 patterns</span>
+    </div>
+    <p class="bilingual">나머지 연산자로 무늬 만들기</p>
+  </div>
+
+  <!-- 2 · warm-up: towers stand -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Warm-up</div>
+    <h2>Your towers stand</h2>
+    <div class="two wide-left">
+      <div><canvas class="sim" id="cA" width="360" height="230"></canvas></div>
+      <div>
+        <p class="line">Six towers. Heights <b>2, 3, 5, 8, 13, 21</b>.</p>
+        <p class="quiet" style="margin-top:.4em">Fibonacci is finished. Today is a new symbol.</p>
+        <p class="bilingual">지난 시간 건물은 완성</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · stuck frames EARLY -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Before we start</div>
+    <h2>Three things to say when stuck</h2>
+    <div class="frame-card">
+      <div class="label">Read one out loud — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 4 · what range(6) gives -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Check this first</div>
+    <h2>The six values of <code>i</code></h2>
+<pre class="tiny"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">6</span>):</pre>
+    <table class="vt">
+      <tr><th>turn</th><td>1st</td><td>2nd</td><td>3rd</td><td>4th</td><td>5th</td><td>6th</td></tr>
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em">Six turns. <b>First i is 0. Last i is 5.</b></p>
+    <p class="bilingual">i는 0부터 5까지</p>
+  </div>
+
+  <!-- 5 · list index numbers -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Concept</div>
+    <h2>Six colours, six index numbers</h2>
+    <table class="vt">
+      <tr><th>index</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+      <tr><th>colour</th><td>🟥</td><td>🟧</td><td>🟨</td><td>🟩</td><td>🟦</td><td>🟪</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>colors[0]</code> is red. <code>colors[5]</code> is purple.</p>
+    <p class="line"><b>There is no <code>colors[6]</code>.</b></p>
+    <p class="bilingual">리스트 번호는 0에서 5까지</p>
+  </div>
+
+  <!-- 6 · HOOK predict -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Twenty towers, six colours</h2>
+    <div class="predict-card">
+      <div class="label">Predict first — do not run it</div>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):
+    <span class="fn">blocks.fill</span>(colors[i],
+        <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+        <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</pre>
+      <details><summary>Reveal</summary><div class="ans">Six towers build. Then it stops dead: IndexError, list index out of range.</div></details>
+    </div>
+  </div>
+
+  <!-- 7 · the crash drawn -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">🐛 The bug</div>
+    <h2>Tower seven falls off the end</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+      <tr><th>colors[i]</th><td>🟥</td><td>🟧</td><td>🟨</td><td>🟩</td><td>🟦</td><td>🟪</td><td>💥</td></tr>
+    </table>
+<div class="output-box" style="margin-top:.4em"><div class="out-label">▸ Error</div><div style="opacity:1">IndexError: list index out of range</div></div>
+    <p class="line">The list stops at 5. <b>i keeps counting.</b></p>
+    <p class="bilingual">리스트는 5에서 끝나요</p>
+  </div>
+
+  <!-- 8 · why not type 20 colours -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Two ways to fix it</div>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ type more colours</span>
+<pre class="tiny">colors = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>,
+    <span class="str">YELLOW_WOOL</span>, <span class="str">LIME_WOOL</span>, ...]</pre>
+        <p>Want 100 towers? Type 100 colours.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ reuse the six</span>
+<pre class="tiny">colors[i % <span class="num">6</span>]</pre>
+        <p>Any number of towers. Six colours, on repeat.</p>
+      </div>
+    </div>
+    <p class="bilingual">여섯 색을 계속 돌려 써요</p>
+  </div>
+
+  <!-- 9 · vocab -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">remainder</span>
+      <span class="gloss">what is left after sharing into equal groups</span>
+      <span class="ko">나머지</span>
+      <span class="term">% (modulo)</span>
+      <span class="gloss">the symbol that gives you the remainder</span>
+      <span class="ko">나머지 연산자</span>
+      <span class="term">cycle</span>
+      <span class="gloss">counting that snaps back to the start</span>
+      <span class="ko">순환</span>
+    </div>
+  </div>
+
+  <!-- 10 · idea 1: sweets into bags -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">New idea 1</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="cS" width="380" height="250"></canvas>
+        <div class="slid">sweets<input type="range" id="sN" min="1" max="20" value="7"><span class="out" id="sNo">7</span></div>
+        <div class="slid">bag size<input type="range" id="sB" min="2" max="8" value="3"><span class="out" id="sBo">3</span></div>
+        <div class="readout" id="sOut">—</div>
+      </div>
+      <div>
+        <p class="line big">Share them out.</p>
+        <p class="line" style="margin-top:.4em">Fill bags. <b>%</b> is what stays in your hand.</p>
+        <p class="quiet" style="margin-top:.4em">No code yet. Just sweets.</p>
+        <p class="bilingual">봉지에 담고 남은 것</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 · nothing left over -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Concept</div>
+    <h2>Sometimes nothing is left</h2>
+    <p class="line" style="margin:.2em 0">🍬🍬🍬 🍬🍬🍬 🍬🍬🍬 🍬🍬🍬 &nbsp;✋</p>
+    <table class="vt">
+      <tr><th>sweets</th><th>bag size</th><th>full bags</th><th>in hand</th></tr>
+      <tr><td>12</td><td>3</td><td>4</td><td>0</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>12 % 3</code> is <b>0</b>. Every bag filled.</p>
+    <p class="bilingual">딱 맞으면 나머지는 0</p>
+  </div>
+
+  <!-- 12 · the bag that never fills -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Concept</div>
+    <h2>A bag that never fills</h2>
+    <p class="line" style="margin:.2em 0">✋🍬🍬🍬🍬 &nbsp;·&nbsp; bag needs 6</p>
+    <table class="vt">
+      <tr><th>sweets</th><th>bag size</th><th>full bags</th><th>in hand</th></tr>
+      <tr><td>4</td><td>6</td><td>0</td><td>4</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>4 % 6</code> is <b>4</b>. A small number stays itself.</p>
+    <p class="quiet">This is why towers 0 to 5 keep their colours.</p>
+    <p class="bilingual">작은 수는 그대로 남아요</p>
+  </div>
+
+  <!-- 13 · // and % -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Two questions, two symbols</div>
+    <div class="two">
+      <div class="model-box"><b>//</b> how many full bags?
+<pre class="tiny"><span class="num">17</span> // <span class="num">5</span>   <span class="com"># 3 full bags</span></pre>
+      </div>
+      <div class="model-box"><b>%</b> how many left in hand?
+<pre class="tiny"><span class="num">17</span> % <span class="num">5</span>    <span class="com"># 2 left over</span></pre>
+      </div>
+    </div>
+    <table class="vt">
+      <tr><th>n</th><td>17</td><td>12</td><td>4</td><td>25</td></tr>
+      <tr><th>n // 5</th><td>3</td><td>2</td><td>0</td><td>5</td></tr>
+      <tr><th>n % 5</th><td>2</td><td>2</td><td>4</td><td>0</td></tr>
+    </table>
+    <p class="bilingual">// 는 몫, % 는 나머지</p>
+  </div>
+
+  <!-- 14 · practice the remainder -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Trace it ✏️</div>
+    <h2>Say it, then tap</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">sum</div>
+      <div class="cell head">bag size</div>
+      <div class="cell head">full bags</div>
+      <div class="cell head">left in hand</div>
+
+      <div class="cell"><code>7 % 3</code></div>
+      <div class="cell">3</div>
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell"><code>9 % 3</code></div>
+      <div class="cell">3</div>
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+
+      <div class="cell"><code>8 % 6</code></div>
+      <div class="cell">6</div>
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell"><code>5 % 6</code></div>
+      <div class="cell">6</div>
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell"><code>13 % 6</code></div>
+      <div class="cell">6</div>
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+    </div>
+  </div>
+
+  <!-- 15 · idea 2: the counter strip -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">New idea 2</div>
+    <h2><code>%</code> wraps the counter round</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr>
+      <tr><th>i % 6</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em">Top row keeps climbing.<br><b>Bottom row goes round.</b></p>
+    <p class="bilingual">아래 줄은 계속 돌아요</p>
+  </div>
+
+  <!-- 16 · the snap-back -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Watch it! 🔬</div>
+    <h2>The moment it snaps back</h2>
+    <div class="chips" id="cwTop" style="margin-bottom:.3em"></div>
+    <div class="chips" id="cwBot"></div>
+    <div style="margin-top:.5em">
+      <button class="btn" id="cwNext">next i ▶</button>
+      <button class="btn alt" id="cwReset">reset</button>
+    </div>
+    <div class="readout" id="cwOut">i = <b>0</b> → i % 6 = <b>0</b></div>
+    <p class="quiet">Watch i = 5 turn into i = 6.</p>
+  </div>
+
+  <!-- 17 · i % n never reaches n -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">The rule</div>
+    <h2><code>i % n</code> never reaches <code>n</code></h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>i % 2</th><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+      <tr><th>i % 5</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>0</td><td>1</td><td>2</td></tr>
+      <tr><th>i % 6</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>0</td><td>1</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>% 6</code> gives <b>0 to 5</b>. Never 6.</p>
+    <p class="bilingual">n은 절대 안 나와요</p>
+  </div>
+
+  <!-- 18 · index numbers match -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Concept</div>
+    <h2>Same numbers, both rows</h2>
+    <table class="vt">
+      <tr><th>list index</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+      <tr><th>i % 6 gives</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+      <tr><th>colour</th><td>🟥</td><td>🟧</td><td>🟨</td><td>🟩</td><td>🟦</td><td>🟪</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>i % 6</code> only ever makes a <b>safe</b> index.</p>
+    <p class="line">So <code>colors[i % 6]</code> can never crash.</p>
+    <p class="bilingual">안전한 번호만 만들어요</p>
+  </div>
+
+  <!-- 19 · quiz 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">What is <code>20 % 6</code>?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans"><b>2</b> — three bags of 6 is 18, two left.
+        <table class="vt"><tr><th>i</th><td>18</td><td>19</td><td>20</td></tr><tr><th>i % 6</th><td>0</td><td>1</td><td>2</td></tr></table></div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">What is <code>6 % 6</code>?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans"><b>0</b> — one full bag, empty hand.
+        <table class="vt"><tr><th>i</th><td>5</td><td>6</td><td>7</td></tr><tr><th>i % 6</th><td>5</td><td>0</td><td>1</td></tr></table></div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 20 · roadmap -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">The plan</div>
+    <div class="opt-grid" style="max-width:920px">
+      <div class="opt-card"><div class="ico">⬜</div><div class="name">v1</div><div class="ex">20 plain towers</div></div>
+      <div class="opt-card"><div class="ico">💥</div><div class="name">v2</div><div class="ex">colours, then crash</div></div>
+      <div class="opt-card"><div class="ico">🌈</div><div class="name">v3</div><div class="ex">% fixes it</div></div>
+      <div class="opt-card"><div class="ico">🏁</div><div class="name">v4</div><div class="ex">stripes and grids</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Run after every version. One change, one run.</p>
+    <p class="bilingual">한 번에 하나씩</p>
+  </div>
+
+  <!-- 21 · STEP 1 · v1 base -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 1 / 13 · ✋ You type first — teacher waits</div>
+    <p class="quiet">NEW — type every line</p>
+<pre class="tiny"><span class="hot"><span class="kw">def</span> <span class="fn">rainbow</span>():</span><span class="hot">    x = <span class="num">2</span></span><span class="hot">    spacing = <span class="num">2</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span><span class="hot">        x = x + spacing</span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"rainbow"</span>, rainbow)</span></pre>
+    <p class="where">🔍 <code>player.on_chat("towers", towers)</code></p>
+    <p class="where">📍 All new lines go BELOW it. Indents: 4, 8, 12.</p>
+    <p class="where">🟣 A fresh command. Your towers stay.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → 20 white towers.</p>
+  </div>
+
+  <!-- 22 · run v1 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="vstep"><span class="on">v1</span><span>v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">Run it</div>
+    <canvas class="sim" id="cQ" width="380" height="180" style="max-width:420px"></canvas>
+    <p class="line" style="margin-top:.4em">20 towers. All the same. <b>Boring on purpose.</b></p>
+    <p class="quiet">Count them out loud before the next step.</p>
+    <p class="bilingual">먼저 흰 탑 20개</p>
+  </div>
+
+  <!-- 23 · STEP 2 · colors list -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 2 / 13 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">2</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">    x = <span class="num">2</span></span><span class="dim">    spacing = <span class="num">2</span></span><span class="hot">    colors = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>, <span class="str">YELLOW_WOOL</span>,<span class="mk">NEW</span></span><span class="hot">        <span class="str">LIME_WOOL</span>, <span class="str">LIGHT_BLUE_WOOL</span>, <span class="str">PURPLE_WOOL</span>]<span class="mk">NEW</span></span><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>spacing = 2</code></p>
+    <p class="where">📍 Two lines under it, ABOVE the <code>for</code>. Indents: 4 then 8.</p>
+    <p class="where">🟣 Above the loop, so the list is built once.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → still 20 white towers.</p>
+  </div>
+
+  <!-- 24 · STEP 3 · colors[i] crash on purpose -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="vstep"><span>v1</span><span class="on">v2</span><span>v3</span><span>v4</span></div>
+    <div class="pill">STEP 3 / 13 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="bad">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>,<span class="mk old">OLD</span></span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="hot">        <span class="fn">blocks.fill</span>(colors[i],<span class="mk">NEW</span></span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>blocks.fill(QUARTZ_BLOCK,</code></p>
+    <p class="where">📍 Same line, inside the <code>for</code> loop, 8 spaces in.</p>
+    <p class="where">🟣 We break it on purpose. Watch where it stops.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → 6 towers, then an error.</p>
+  </div>
+
+  <!-- 25 · the crash, live -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">🐛 Read the error</div>
+<div class="output-box" style="margin-top:.4em"><div class="out-label">▸ Output</div><div style="opacity:1">i = 5 → colors[5] → PURPLE_WOOL ✅</div><div style="opacity:1">i = 6 → colors[6] → IndexError 💥</div></div>
+    <table class="vt">
+      <tr><th>i</th><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>colors[i]</th><td>🟦</td><td>🟪</td><td>💥</td><td>💥</td></tr>
+    </table>
+    <p class="line" style="margin-top:.4em">Six items. <b>Seven asked for.</b></p>
+    <p class="bilingual">일곱 번째에서 멈춰요</p>
+  </div>
+
+  <!-- 26 · STEP 4 · the fix -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 4 / 13 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="bad">        <span class="fn">blocks.fill</span>(colors[i],<span class="mk old">OLD</span></span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="hot">        <span class="fn">blocks.fill</span>(colors[i % <span class="num">6</span>],<span class="mk">NEW</span></span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>blocks.fill(colors[i],</code></p>
+    <p class="where">📍 Same line, still inside the <code>for</code> loop, 8 spaces in.</p>
+    <p class="where">🟣 <code>% 6</code> keeps the index between 0 and 5.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → 20 towers, colours repeat.</p>
+  </div>
+
+  <!-- 27 · trace the cycle -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Trace it ✏️</div>
+    <h2>Which colour, which tower?</h2>
+    <div class="trace-grid">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head"><code>i % 6</code></div>
+      <div class="cell head">colour</div>
+
+      <div class="cell">5</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟪</span></details></div>
+
+      <div class="cell">6</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟥</span></details></div>
+
+      <div class="cell">9</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟩</span></details></div>
+
+      <div class="cell">12</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟥</span></details></div>
+
+      <div class="cell">19</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟧</span></details></div>
+    </div>
+  </div>
+
+  <!-- 28 · watch the towers cycle -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Watch it! 🔬</div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="cR" width="380" height="200"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="crNext">next tower ▶</button>
+          <button class="btn alt" id="crReset">reset</button>
+        </div>
+        <div class="readout" id="crOut">i = <b>—</b></div>
+      </div>
+      <div>
+        <p class="line big">Six colours. Twenty towers.</p>
+        <p class="line" style="margin-top:.4em">Say the next colour <b>before</b> you tap.</p>
+        <p class="bilingual">여섯 색이 계속 반복돼요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 29 · STEP 5 · proof -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 5 / 13 · ✋ You type first — teacher waits</div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="bad">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):<span class="mk old">OLD</span></span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">30</span>):<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <table class="vt">
+      <tr><th>i</th><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td></tr>
+      <tr><th>i % 6</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    </table>
+    <p class="where">🔍 <code>for i in range(20):</code></p>
+    <p class="where">📍 Same line, inside <code>def rainbow()</code>, 4 spaces in.</p>
+    <p class="where">🟣 Proof: any number of towers is safe now.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → 30 towers, no error.</p>
+  </div>
+
+  <!-- 30 · debug 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">🐛 Debug 1</div>
+    <h2>Seven towers, then a crash</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="bad">        <span class="fn">blocks.fill</span>(colors[i % <span class="num">7</span>],</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+    <table class="vt">
+      <tr><th>i</th><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>i % 7</th><td>4</td><td>5</td><td>6</td><td>0</td></tr>
+      <tr><th>colour</th><td>🟦</td><td>🟪</td><td>💥</td><td>🟥</td></tr>
+    </table>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">i % 7 can give 6. The list stops at 5.</div>
+      <p class="quiet">The number after <code>%</code> must match the list length: <code>% 6</code>.</p>
+    </details>
+  </div>
+
+  <!-- 31 · debug 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">🐛 Debug 2</div>
+    <h2>No crash. Purple never appears.</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="bad">        <span class="fn">blocks.fill</span>(colors[i % <span class="num">5</span>],</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)</span></pre>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+      <tr><th>i % 5</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>0</td><td>1</td></tr>
+      <tr><th>colour</th><td>🟥</td><td>🟧</td><td>🟨</td><td>🟩</td><td>🟦</td><td>🟥</td><td>🟧</td></tr>
+    </table>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">i % 5 never gives 5, so colors[5] is never read.</div>
+      <p class="quiet">Six colours needs <code>% 6</code>. Count the list, then match the number.</p>
+    </details>
+  </div>
+
+  <!-- 32 · watch out: order matters -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Order matters</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre class="tiny">colors[<span class="num">6</span> % i]</pre>
+        <p>i is 0 first. Sharing into 0 bags is impossible.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre class="tiny">colors[i % <span class="num">6</span>]</pre>
+        <p>Counter first, list size second.</p>
+      </div>
+    </div>
+    <table class="vt">
+      <tr><th>i</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+      <tr><th>6 % i</th><td>0</td><td>0</td><td>0</td><td>2</td><td>1</td></tr>
+    </table>
+    <p class="bilingual">순서 바뀌면 무늬도 망가져요</p>
+  </div>
+
+  <!-- 33 · watch out: brackets -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Where the brackets close</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre class="tiny">colors[i] % <span class="num">6</span></pre>
+        <p>The list is read <b>first</b>, with the raw i. Same crash.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre class="tiny">colors[i % <span class="num">6</span>]</pre>
+        <p>The maths happens <b>inside</b> the brackets, before the list.</p>
+      </div>
+    </div>
+    <table class="vt">
+      <tr><th>i</th><td>6</td></tr>
+      <tr><th>colors[i] % 6</th><td>💥</td></tr>
+      <tr><th>colors[i % 6]</th><td>🟥</td></tr>
+    </table>
+    <p class="bilingual">계산은 대괄호 안에서 먼저</p>
+  </div>
+
+  <!-- 34 · quiz 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">Quick quiz</div>
+    <div class="quiz-card">
+      <div class="q">Tower <code>i = 13</code>. Which colour?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">13 % 6 is <b>1</b> → 🟧 orange.
+        <table class="vt"><tr><th>i</th><td>12</td><td>13</td><td>14</td></tr><tr><th>i % 6</th><td>0</td><td>1</td><td>2</td></tr></table></div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">You add a 7th colour. What must change?</div>
+      <div class="opts">
+        <details><summary>Show answer</summary><div class="ans">The 6 becomes 7: <code>colors[i % 7]</code>.
+        <table class="vt"><tr><th>i</th><td>5</td><td>6</td><td>7</td></tr><tr><th>i % 7</th><td>5</td><td>6</td><td>0</td></tr></table></div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 35 · code talk + stuck frames LATE -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill purple">Code Talk</div>
+    <div class="frame-card" style="margin:.4em 0">
+      <div class="label">Say it out loud</div>
+      <div class="frame">"<code>i % 6</code> gives <span class="blank"></span> when i is <span class="blank"></span>, so tower <span class="blank"></span> is <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin:.4em 0">
+      <div class="label">Stuck? Pick one — never "I don't know"</div>
+      <div class="frame">"It breaks on line <span class="blank"></span>."</div>
+      <div class="frame">"I expected <span class="blank"></span> but I got <span class="blank"></span>."</div>
+      <div class="frame">"I don't know what <span class="blank"></span> means."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 36 · make / your turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">✋ You type first — teacher waits</div>
+    <h2>Your rainbow 🌈</h2>
+    <ul class="check-list">
+      <li>Change <code>range(30)</code> to <code>range(50)</code>. Run <code>rainbow</code>.</li>
+      <li>Swap <code>RED_WOOL</code> for <code>BLACK_WOOL</code>. Run again.</li>
+      <li>Change <code>spacing = 2</code> to <code>spacing = 1</code>. Run again.</li>
+    </ul>
+    <p class="quiet" style="margin-top:.4em">One change, one run. Say what changed.</p>
+  </div>
+
+  <!-- 37 · full program v3 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">Full program · v3</div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">rainbow</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">2</span>
+    colors = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>, <span class="str">YELLOW_WOOL</span>,
+        <span class="str">LIME_WOOL</span>, <span class="str">LIGHT_BLUE_WOOL</span>, <span class="str">PURPLE_WOOL</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">30</span>):
+        <span class="fn">blocks.fill</span>(colors[i % <span class="num">6</span>],
+            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)
+        x = x + spacing
+
+<span class="fn">player.on_chat</span>(<span class="str">"rainbow"</span>, rainbow)</pre>
+    <p class="quiet" style="margin-top:.3em">Point at the counter. Point at the wrap.</p>
+  </div>
+
+  <!-- 38 · checkpoint -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">Checkpoint ✅</div>
+    <div class="opt-grid" style="max-width:920px">
+      <div class="opt-card"><div class="ico">🍬</div><div class="name">left over</div><div class="ex">7 % 3 is 1</div></div>
+      <div class="opt-card"><div class="ico">🔁</div><div class="name">wraps round</div><div class="ex">0 1 2 3 4 5 0 1</div></div>
+      <div class="opt-card"><div class="ico">🌈</div><div class="name">safe index</div><div class="ex">colors[i % 6]</div></div>
+    </div>
+    <p class="line" style="margin-top:.5em">Three down. <b>Now the patterns.</b></p>
+    <p class="bilingual">이제 무늬를 만들어요</p>
+  </div>
+
+  <!-- 39 · idea 4: i % 2 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill">New idea 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>i % 2</code> splits everything in two</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+      <tr><th>i % 2</th><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em">Only two answers ever. <b>0 or 1.</b></p>
+    <p class="bilingual">0 아니면 1, 둘뿐이에요</p>
+  </div>
+
+  <!-- 40 · even and odd -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill">Concept<span class="activity-tag">OPTIONAL</span></div>
+    <div class="opt-grid two" style="max-width:760px">
+      <div class="opt-card"><div class="ico">⬜</div><div class="name">i % 2 == 0</div><div class="ex">0, 2, 4, 6 — even</div></div>
+      <div class="opt-card"><div class="ico">🟨</div><div class="name">i % 2 == 1</div><div class="ex">1, 3, 5, 7 — odd</div></div>
+    </div>
+    <p class="line" style="margin-top:.5em">Bags of two. Nothing left, or one left.</p>
+    <p class="bilingual">짝수와 홀수</p>
+  </div>
+
+  <!-- 41 · STEP 6 · stripes base -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 6 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="hot"><span class="kw">def</span> <span class="fn">stripes</span>():</span><span class="hot">    x = <span class="num">2</span></span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)</span><span class="hot">        x = x + <span class="num">2</span></span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"stripes"</span>, stripes)</span></pre>
+    <p class="where">🔍 <code>player.on_chat("rainbow", rainbow)</code></p>
+    <p class="where">📍 All new lines go BELOW it. Indents: 4, 8, 12.</p>
+    <p class="where">🟣 A second row at z = 3. Rainbow stays safe.</p>
+    <p class="where">✅ Chat <code>stripes</code> → 20 stone towers, new row.</p>
+  </div>
+
+  <!-- 42 · STEP 7 · if i % 2 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 7 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)</span><span class="dim">        x = x + <span class="num">2</span></span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="hot">        <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span>:<span class="mk">NEW</span></span><span class="hot">            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)</span><span class="hot">        <span class="kw">else</span>:<span class="mk">NEW</span></span><span class="hot">            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)</span><span class="dim">        x = x + <span class="num">2</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>blocks.fill(STONE,</code></p>
+    <p class="where">📍 <code>if</code> above it at 8 spaces. Old 3 fill lines move right 4.</p>
+    <p class="where">🟣 Even towers stone, odd towers gold.</p>
+    <p class="where">✅ Chat <code>stripes</code> → grey, gold, grey, gold.</p>
+  </div>
+
+  <!-- 43 · watch the stripes -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">Watch it! 🔬<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two wide-left">
+      <div><canvas class="sim" id="cP" width="380" height="190"></canvas></div>
+      <div>
+        <table class="vt">
+          <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+          <tr><th>i % 2</th><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><th>block</th><td>⬜</td><td>🟨</td><td>⬜</td><td>🟨</td><td>⬜</td><td>🟨</td></tr>
+        </table>
+        <p class="line" style="margin-top:.4em">One number picks the block.</p>
+        <p class="bilingual">번갈아 가며 쌓여요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 44 · trace i % 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stone or gold?</h2>
+    <div class="trace-grid">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head"><code>i % 2</code></div>
+      <div class="cell head">block</div>
+
+      <div class="cell">7</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟨 gold</span></details></div>
+
+      <div class="cell">10</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬜ stone</span></details></div>
+
+      <div class="cell">15</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">🟨 gold</span></details></div>
+
+      <div class="cell">18</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">⬜ stone</span></details></div>
+    </div>
+  </div>
+
+  <!-- 45 · debug 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">🐛 Debug 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>It will not even run</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):</span><span class="bad">        <span class="kw">if</span> i % <span class="num">2</span> = <span class="num">0</span>:</span><span class="dim">            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span></pre>
+    <table class="vt">
+      <tr><th>=</th><td>put this number in</td></tr>
+      <tr><th>==</th><td>are these two the same?</td></tr>
+    </table>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">SyntaxError: invalid syntax</div>
+      <p class="quiet">A question needs two: <code>if i % 2 == 0:</code></p>
+    </details>
+  </div>
+
+  <!-- 46 · STEP 8 · short gold towers -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 8 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">        <span class="kw">else</span>:</span><span class="dim">            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="dim">                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="bad">                <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)<span class="mk old">OLD</span></span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">        <span class="kw">else</span>:</span><span class="dim">            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="dim">                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">3</span>), REPLACE)<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>pos(x, 5, 3), REPLACE)</code> — the one under <code>else:</code></p>
+    <p class="where">📍 Inside the <code>else</code> block, 16 spaces in. Not the first one.</p>
+    <p class="where">🟣 <code>i % 2</code> now sets height as well as block.</p>
+    <p class="where">✅ Chat <code>stripes</code> → tall grey, short gold, tall grey.</p>
+  </div>
+
+  <!-- 47 · idea 5 part 1: // gives the row -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">New idea 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>%</code> and <code>//</code> together</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+      <tr><th>x = i % 5</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+      <tr><th>z = i // 5</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><b>%</b> is the column. <b>//</b> is the row.</p>
+    <p class="bilingual">% 는 칸, // 는 줄</p>
+  </div>
+
+  <!-- 48 · the other half of the strip -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">Keep counting<span class="activity-tag">OPTIONAL</span></div>
+    <table class="vt">
+      <tr><th>i</th><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+      <tr><th>x = i % 5</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+      <tr><th>z = i // 5</th><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td><td>3</td><td>3</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em">x goes round five times. <b>z climbs once.</b></p>
+    <p class="line">25 turns fill every square.</p>
+    <p class="bilingual">25번이면 정사각형 완성</p>
+  </div>
+
+  <!-- 49 · watch the grid fill -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="pill">Watch it! 🔬<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two wide-left">
+      <div>
+        <canvas class="sim" id="cG" width="380" height="330"></canvas>
+        <div style="text-align:center">
+          <button class="btn" id="cgNext">next i ▶</button>
+          <button class="btn" id="cgRow">finish row ▶▶</button>
+          <button class="btn alt" id="cgReset">reset</button>
+        </div>
+        <div class="readout" id="cgOut">i = <b>—</b></div>
+      </div>
+      <div>
+        <p class="line big">One loop. One square each turn.</p>
+        <p class="line" style="margin-top:.4em">Say the next <b>x</b> and <b>z</b> before you tap.</p>
+        <p class="bilingual">반복문 하나로 바닥 전체</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 50 · STEP 9 · the grid -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 50</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 9 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="hot"><span class="kw">def</span> <span class="fn">grid</span>():</span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">25</span>):</span><span class="hot">        x = i % <span class="num">5</span></span><span class="hot">        z = i // <span class="num">5</span></span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, z),</span><span class="hot">            <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</span><span class="hot"> </span><span class="hot"><span class="fn">player.on_chat</span>(<span class="str">"grid"</span>, grid)</span></pre>
+    <p class="where">🔍 <code>player.on_chat("stripes", stripes)</code></p>
+    <p class="where">📍 All new lines go BELOW it. Indents: 4, 8, 12.</p>
+    <p class="where">🟣 <code>x</code> and <code>z</code> are worked out from <code>i</code>, not counted.</p>
+    <p class="where">✅ Chat <code>grid</code> → a 5 × 5 stone floor.</p>
+  </div>
+
+  <!-- 51 · two routes, same build -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 51</span>
+    <div class="pill">Two routes, one build<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">The loop-inside-loop shape from your stairs</p>
+<pre class="tiny"><span class="kw">for</span> z <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+            <span class="fn">pos</span>(x, <span class="num">0</span>, z),
+            <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</pre>
+      </div>
+      <div>
+        <p class="quiet">Today's shape — one loop</p>
+<pre class="tiny"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">25</span>):
+    x = i % <span class="num">5</span>
+    z = i // <span class="num">5</span>
+    <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+        <span class="fn">pos</span>(x, <span class="num">0</span>, z),
+        <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</pre>
+      </div>
+    </div>
+    <p class="line" style="margin-top:.3em">Same 25 blocks. Same order. <b>Both correct.</b></p>
+    <p class="bilingual">두 가지 길, 같은 건물</p>
+  </div>
+
+  <!-- 52 · debug 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 52</span>
+    <div class="pill">🐛 Debug 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A 5 × 5 floor, turned sideways</h2>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">25</span>):</span><span class="bad">        x = i // <span class="num">5</span></span><span class="bad">        z = i % <span class="num">5</span></span></pre>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+      <tr><th>x = i // 5</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><th>z = i % 5</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>0</td></tr>
+    </table>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <div class="err">It fills down z first, not along x.</div>
+      <p class="quiet">Swap them back: <code>x = i % 5</code> and <code>z = i // 5</code>.</p>
+    </details>
+  </div>
+
+  <!-- 53 · checkerboard idea -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 53</span>
+    <div class="pill">New idea 6<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two wide-left">
+      <div><canvas class="sim" id="cC" width="300" height="300" style="max-width:280px"></canvas></div>
+      <div>
+        <p class="line big">Add the two, then <code>% 2</code>.</p>
+        <table class="vt">
+          <tr><th>x</th><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td></tr>
+          <tr><th>z</th><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><th>(x+z) % 2</th><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+        </table>
+        <p class="bilingual">체커보드 무늬</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 54 · STEP 10 · checkerboard -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 54</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 10 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">        z = i // <span class="num">5</span></span><span class="dim">        <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, z),</span><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">        z = i // <span class="num">5</span></span><span class="hot">        <span class="kw">if</span> (x + z) % <span class="num">2</span> == <span class="num">0</span>:<span class="mk">NEW</span></span><span class="hot">            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, z),</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</span><span class="hot">        <span class="kw">else</span>:<span class="mk">NEW</span></span><span class="hot">            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, z),</span><span class="hot">                <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>z = i // 5</code></p>
+    <p class="where">📍 <code>if</code> one line under it, 8 spaces. Old fill lines move right 4.</p>
+    <p class="where">🟣 The two coordinates decide the colour together.</p>
+    <p class="where">✅ Chat <code>grid</code> → a checkerboard floor.</p>
+  </div>
+
+  <!-- 55 · i % 6 sets height -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 55</span>
+    <div class="pill">New idea 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One cycle, two jobs</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>i % 6</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>0</td><td>1</td></tr>
+      <tr><th>2 + i % 6</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>2</td><td>3</td></tr>
+      <tr><th>colour</th><td>🟥</td><td>🟧</td><td>🟨</td><td>🟩</td><td>🟦</td><td>🟪</td><td>🟥</td><td>🟧</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em">Colour <b>and</b> height from the same number.</p>
+    <p class="bilingual">색과 높이가 같이 반복돼요</p>
+  </div>
+
+  <!-- 56 · STEP 11 · add y -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 56</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 11 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">30</span>):</span><span class="dim">        <span class="fn">blocks.fill</span>(colors[i % <span class="num">6</span>],</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">30</span>):</span><span class="hot">        y = <span class="num">2</span> + i % <span class="num">6</span><span class="mk">NEW</span></span><span class="dim">        <span class="fn">blocks.fill</span>(colors[i % <span class="num">6</span>],</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>for i in range(30):</code></p>
+    <p class="where">📍 One line under it, inside the loop, 8 spaces in.</p>
+    <p class="where">🟣 Work the height out first, use it next.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → nothing changes yet.</p>
+  </div>
+
+  <!-- 57 · STEP 12 · use y -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 57</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 12 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="bad">            <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">0</span>), REPLACE)<span class="mk old">OLD</span></span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),</span><span class="hot">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)<span class="mk">NEW</span></span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>pos(x, 5, 0), REPLACE)</code></p>
+    <p class="where">📍 Same line, 12 spaces in, inside <code>rainbow</code>.</p>
+    <p class="where">🟣 The cycle now drives the height too.</p>
+    <p class="where">✅ Chat <code>rainbow</code> → heights 2, 3, 4, 5, 6, 7, repeating.</p>
+  </div>
+
+  <!-- 58 · every third tower -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 58</span>
+    <div class="pill">New idea 8<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mark every third tower</h2>
+    <table class="vt">
+      <tr><th>i</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+      <tr><th>i % 3</th><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>1</td><td>2</td></tr>
+      <tr><th>cap</th><td>🟨</td><td>·</td><td>·</td><td>🟨</td><td>·</td><td>·</td><td>🟨</td><td>·</td><td>·</td></tr>
+    </table>
+    <p class="line" style="margin-top:.5em"><code>i % 3 == 0</code> is true every third turn.</p>
+    <p class="bilingual">3의 배수마다 표시</p>
+  </div>
+
+  <!-- 59 · STEP 13 · gold cap -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 59</span>
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 13 / 13 · ✋ You type first<span class="activity-tag">OPTIONAL</span></div>
+    <div class="two">
+      <div>
+        <p class="quiet">OLD</p>
+<pre class="tiny"><span class="dim">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+      </div>
+      <div>
+        <p class="quiet">NEW</p>
+<pre class="tiny"><span class="dim">            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)</span><span class="hot">        <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:<span class="mk">NEW</span></span><span class="hot">            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,</span><span class="hot">                <span class="fn">pos</span>(x, y + <span class="num">1</span>, <span class="num">0</span>),</span><span class="hot">                <span class="fn">pos</span>(x, y + <span class="num">1</span>, <span class="num">0</span>), REPLACE)</span><span class="dim">        x = x + spacing</span></pre>
+      </div>
+    </div>
+    <p class="where">🔍 <code>x = x + spacing</code></p>
+    <p class="where">📍 Four lines ABOVE it, inside the loop. Indents: 8, 12, 16, 16.</p>
+    <p class="where">🟣 A gold cap, one block above each third tower.</p>
+    <p class="where">✅ Towers 0, 3, 6, 9 wear gold hats.</p>
+  </div>
+
+  <!-- 60 · stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 60</span>
+    <div class="pill">Stretch 🚀<span class="activity-tag">OPTIONAL</span></div>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>In <code>grid</code>, change <code>range(25)</code> to <code>range(100)</code> and both 5s to 10 — a 10 × 10 floor.</div>
+      <div class="item"><span class="lvl">★★</span>In <code>stripes</code>, swap <code>i % 2</code> for <code>i % 4</code>. Which towers turn gold now?</div>
+      <div class="item"><span class="lvl">★★★</span>In <code>grid</code>, swap <code>(x + z) % 2</code> for <code>(x + z) % 3</code> — wide diagonal stripes.</div>
+    </div>
+  </div>
+
+  <!-- 61 · full program: rainbow -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 61</span>
+    <div class="pill">Full file 1 / 3 · <code>rainbow</code><span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">rainbow</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">2</span>
+    colors = [<span class="str">RED_WOOL</span>, <span class="str">ORANGE_WOOL</span>, <span class="str">YELLOW_WOOL</span>,
+        <span class="str">LIME_WOOL</span>, <span class="str">LIGHT_BLUE_WOOL</span>, <span class="str">PURPLE_WOOL</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">30</span>):
+        y = <span class="num">2</span> + i % <span class="num">6</span>
+        <span class="fn">blocks.fill</span>(colors[i % <span class="num">6</span>],
+            <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">0</span>),
+            <span class="fn">pos</span>(x, y, <span class="num">0</span>), REPLACE)
+        <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:
+            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,
+                <span class="fn">pos</span>(x, y + <span class="num">1</span>, <span class="num">0</span>),
+                <span class="fn">pos</span>(x, y + <span class="num">1</span>, <span class="num">0</span>), REPLACE)
+        x = x + spacing
+
+<span class="fn">player.on_chat</span>(<span class="str">"rainbow"</span>, rainbow)</pre>
+    <p class="quiet" style="margin-top:.3em">Three cycles: colour, height, gold cap.</p>
+  </div>
+
+  <!-- 62 · full program: stripes -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 62</span>
+    <div class="pill">Full file 2 / 3 · <code>stripes</code><span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">stripes</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>):
+        <span class="kw">if</span> i % <span class="num">2</span> == <span class="num">0</span>:
+            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),
+                <span class="fn">pos</span>(x, <span class="num">5</span>, <span class="num">3</span>), REPLACE)
+        <span class="kw">else</span>:
+            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,
+                <span class="fn">pos</span>(x, <span class="num">0</span>, <span class="num">3</span>),
+                <span class="fn">pos</span>(x, <span class="num">2</span>, <span class="num">3</span>), REPLACE)
+        x = x + <span class="num">2</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"stripes"</span>, stripes)</pre>
+    <p class="quiet" style="margin-top:.3em">One question, two answers, two builds.</p>
+  </div>
+
+  <!-- 63 · full program: grid -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 63</span>
+    <div class="pill">Full file 3 / 3 · <code>grid</code><span class="activity-tag">OPTIONAL</span></div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">grid</span>():
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">25</span>):
+        x = i % <span class="num">5</span>
+        z = i // <span class="num">5</span>
+        <span class="kw">if</span> (x + z) % <span class="num">2</span> == <span class="num">0</span>:
+            <span class="fn">blocks.fill</span>(<span class="str">STONE</span>,
+                <span class="fn">pos</span>(x, <span class="num">0</span>, z),
+                <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)
+        <span class="kw">else</span>:
+            <span class="fn">blocks.fill</span>(<span class="str">GOLD_BLOCK</span>,
+                <span class="fn">pos</span>(x, <span class="num">0</span>, z),
+                <span class="fn">pos</span>(x, <span class="num">0</span>, z), REPLACE)
+
+<span class="fn">player.on_chat</span>(<span class="str">"grid"</span>, grid)</pre>
+    <p class="quiet" style="margin-top:.3em">One loop. Twenty-five squares. Two colours.</p>
+  </div>
+
+  <!-- 64 · exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 64</span>
+    <div class="pill">Exit ticket</div>
+    <div class="exit">
+      <div class="label">Write it, then say it</div>
+      <p class="line" style="margin-top:.3em">Why can <code>colors[i % 6]</code> never crash?</p>
+      <table class="vt">
+        <tr><th>i</th><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+        <tr><th>i % 6</th><td>4</td><td>5</td><td>0</td><td>1</td></tr>
+      </table>
+      <details><summary class="rev" style="display:inline-block">show answer</summary>
+        <p class="line" style="margin-top:.3em"><code>% 6</code> only ever gives 0 to 5. Every one is a real index.</p></details>
+    </div>
+  </div>
+
+  <!-- 65 · close & bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 65</span>
+    <div class="emoji">➗</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One counter.<br>Every pattern.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next: a pattern that reacts to where you stand.</p>
+    <p class="bilingual">다음 시간: 내 위치에 반응하는 무늬</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 65</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var WOOL = ['#d64545', '#e08b2f', '#e3d24a', '#6fbf3f', '#4aa8dd', '#8b52c4'];
+
+  /* slide 2 — the towers that already stand (static side view) */
+  (function () {
+    var c = $('cA'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var XS = [2, 4, 6, 8, 10, 12], YS = [2, 3, 5, 8, 13, 21];
+    var COLS = 15, ROWS = 23, W = c.width, H = c.height;
+    var cell = Math.min(W / COLS, (H - 18) / ROWS);
+    var ox = (W - COLS * cell) / 2, base = H - 14;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+    for (var g = 0; g <= COLS; g++) {
+      ctx.beginPath();
+      ctx.moveTo(ox + g * cell, base - ROWS * cell);
+      ctx.lineTo(ox + g * cell, base);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = '#2b3547';
+    ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+    ctx.fillStyle = '#38d0e0';
+    for (var k = 0; k < 6; k++) {
+      for (var r = 0; r < YS[k]; r++) {
+        ctx.fillRect(ox + XS[k] * cell + 1, base - (r + 1) * cell + 1, cell - 2, cell - 2);
+      }
+    }
+  })();
+
+  /* slide 10 — sweets shared into bags */
+  (function () {
+    var c = $('cS'); if (!c) return;
+    var ctx = c.getContext('2d');
+    function draw() {
+      var n = +$('sN').value, b = +$('sB').value;
+      $('sNo').textContent = n; $('sBo').textContent = b;
+      var bags = Math.floor(n / b), left = n % b;
+      var W = c.width, H = c.height, r = 8;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      ctx.font = '11px monospace'; ctx.textAlign = 'left';
+      ctx.fillStyle = '#8a97b8'; ctx.fillText('full bags', 8, 13);
+      var bw = b * (2 * r + 4) + 12, x = 8, y = 22;
+      for (var i = 0; i < bags; i++) {
+        if (x + bw > W - 8) { x = 8; y += 44; }
+        ctx.strokeStyle = '#38d0e0'; ctx.lineWidth = 2;
+        ctx.strokeRect(x, y, bw, 32);
+        ctx.fillStyle = '#e3d24a';
+        for (var j = 0; j < b; j++) {
+          ctx.beginPath();
+          ctx.arc(x + 12 + j * (2 * r + 4), y + 16, r, 0, 6.284);
+          ctx.fill();
+        }
+        x += bw + 8;
+      }
+      var hy = H - 42;
+      ctx.fillStyle = '#8a97b8'; ctx.fillText('left in your hand', 8, hy - 6);
+      ctx.strokeStyle = '#ffb86c'; ctx.lineWidth = 2;
+      ctx.strokeRect(8, hy, W - 16, 32);
+      ctx.fillStyle = '#ffb86c';
+      for (var k = 0; k < left; k++) {
+        ctx.beginPath();
+        ctx.arc(22 + k * (2 * r + 4), hy + 16, r, 0, 6.284);
+        ctx.fill();
+      }
+      $('sOut').innerHTML = n + ' % ' + b + ' = <b>' + left + '</b>';
+    }
+    $('sN').addEventListener('input', draw);
+    $('sB').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* slide 16 — counter strip stepper */
+  (function () {
+    var top = $('cwTop'), bot = $('cwBot'); if (!top) return;
+    var N = 12, cur = 0, i;
+    for (i = 0; i < N; i++) {
+      var a = document.createElement('span');
+      a.className = 'chip'; a.textContent = i; top.appendChild(a);
+      var b = document.createElement('span');
+      b.className = 'chip'; b.textContent = i % 6; bot.appendChild(b);
+    }
+    function paint() {
+      for (var k = 0; k < N; k++) {
+        top.children[k].classList.toggle('on', k === cur);
+        bot.children[k].classList.toggle('on', k === cur);
+      }
+      $('cwOut').innerHTML = 'i = <b>' + cur + '</b> → i % 6 = <b>' + (cur % 6) + '</b>';
+    }
+    $('cwNext').addEventListener('click', function () { cur = (cur + 1) % N; paint(); this.blur(); });
+    $('cwReset').addEventListener('click', function () { cur = 0; paint(); this.blur(); });
+    paint();
+  })();
+
+  /* slide 22 — v1, twenty identical towers */
+  (function () {
+    var c = $('cQ'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var n = 20, W = c.width, H = c.height;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    var cw = W / (n + 1), base = H - 20, ch = (base - 14) / 6;
+    ctx.strokeStyle = '#2b3547';
+    ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+    ctx.fillStyle = '#e8edf7';
+    for (var k = 0; k < n; k++) {
+      for (var r = 0; r < 6; r++) {
+        ctx.fillRect(cw * (k + 0.5) + 1, base - (r + 1) * ch + 1, cw - 2, ch - 2);
+      }
+    }
+  })();
+
+  /* slide 28 — twenty towers, six colours, one tap each */
+  (function () {
+    var c = $('cR'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var n = 20, step = 0;
+    function draw() {
+      var W = c.width, H = c.height;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      var cw = W / (n + 1), base = H - 26, ch = (base - 14) / 6;
+      ctx.strokeStyle = '#2b3547';
+      ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+      ctx.font = '9px monospace'; ctx.textAlign = 'center';
+      for (var k = 0; k < step; k++) {
+        ctx.fillStyle = WOOL[k % 6];
+        for (var r = 0; r < 6; r++) {
+          ctx.fillRect(cw * (k + 0.5) + 1, base - (r + 1) * ch + 1, cw - 2, ch - 2);
+        }
+        ctx.fillStyle = '#8a97b8';
+        ctx.fillText(String(k), cw * (k + 1), base + 13);
+      }
+      ctx.textAlign = 'left';
+      var i = step - 1;
+      $('crOut').innerHTML = step
+        ? ('i = <b>' + i + '</b> → ' + i + ' % 6 = <b>' + (i % 6) + '</b>')
+        : 'i = <b>—</b>';
+    }
+    $('crNext').addEventListener('click', function () { if (step < n) step++; draw(); this.blur(); });
+    $('crReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* slide 43 — alternating stripes */
+  (function () {
+    var c = $('cP'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var n = 12, W = c.width, H = c.height;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    var cw = W / (n + 1), base = H - 26, ch = (base - 14) / 6;
+    ctx.strokeStyle = '#2b3547';
+    ctx.beginPath(); ctx.moveTo(0, base); ctx.lineTo(W, base); ctx.stroke();
+    ctx.font = '10px monospace'; ctx.textAlign = 'center';
+    for (var k = 0; k < n; k++) {
+      var even = (k % 2 === 0);
+      ctx.fillStyle = even ? '#9aa4b5' : '#e3d24a';
+      var h = even ? 6 : 3;
+      for (var r = 0; r < h; r++) {
+        ctx.fillRect(cw * (k + 0.5) + 1, base - (r + 1) * ch + 1, cw - 2, ch - 2);
+      }
+      ctx.fillStyle = '#8a97b8';
+      ctx.fillText(String(k), cw * (k + 1), base + 13);
+    }
+    ctx.textAlign = 'left';
+  })();
+
+  /* slide 49 — one loop fills a 5 x 5 grid, one square per pass */
+  (function () {
+    var c = $('cG'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var N = 5, step = 0;
+    function draw() {
+      var W = c.width, H = c.height, pad = 34;
+      var cell = Math.min((W - pad - 14) / N, (H - pad - 14) / N);
+      var ox = pad, oy = 10, x, z;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      for (z = 0; z < N; z++) {
+        for (x = 0; x < N; x++) {
+          var i = z * N + x, px = ox + x * cell, py = oy + z * cell;
+          ctx.strokeStyle = '#1c2432'; ctx.lineWidth = 1;
+          ctx.strokeRect(px, py, cell, cell);
+          if (i < step) {
+            ctx.fillStyle = (i === step - 1) ? '#ffb86c' : '#38d0e0';
+            ctx.fillRect(px + 2, py + 2, cell - 4, cell - 4);
+            ctx.fillStyle = '#0d1117';
+            ctx.font = 'bold 14px monospace';
+            ctx.fillText(String(i), px + cell / 2, py + cell / 2);
+          }
+        }
+      }
+      ctx.font = '11px monospace'; ctx.fillStyle = '#8a97b8';
+      for (var a = 0; a < N; a++) {
+        ctx.fillText('x=' + a, ox + a * cell + cell / 2, oy + N * cell + 13);
+        ctx.textAlign = 'right';
+        ctx.fillText('z=' + a, ox - 6, oy + a * cell + cell / 2);
+        ctx.textAlign = 'center';
+      }
+      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+      var j = step - 1;
+      $('cgOut').innerHTML = step
+        ? ('i = <b>' + j + '</b> → x = <b>' + (j % 5) + '</b>, z = <b>' + Math.floor(j / 5) + '</b>')
+        : 'i = <b>—</b>';
+    }
+    $('cgNext').addEventListener('click', function () { if (step < 25) step++; draw(); this.blur(); });
+    $('cgRow').addEventListener('click', function () {
+      step = Math.min(25, (Math.floor(step / 5) + 1) * 5); draw(); this.blur();
+    });
+    $('cgReset').addEventListener('click', function () { step = 0; draw(); this.blur(); });
+    draw();
+  })();
+
+  /* slide 53 — checkerboard floor */
+  (function () {
+    var c = $('cC'); if (!c) return;
+    var ctx = c.getContext('2d');
+    var N = 5, W = c.width, H = c.height, pad = 30;
+    var cell = Math.min((W - pad - 10) / N, (H - pad - 10) / N);
+    var ox = pad, oy = 8, x, z;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, W, H);
+    ctx.font = '11px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (z = 0; z < N; z++) {
+      for (x = 0; x < N; x++) {
+        ctx.fillStyle = ((x + z) % 2 === 0) ? '#9aa4b5' : '#e3d24a';
+        ctx.fillRect(ox + x * cell + 1, oy + z * cell + 1, cell - 2, cell - 2);
+      }
+    }
+    ctx.fillStyle = '#8a97b8';
+    for (var a = 0; a < N; a++) {
+      ctx.fillText('x=' + a, ox + a * cell + cell / 2, oy + N * cell + 12);
+      ctx.textAlign = 'right';
+      ctx.fillText('z=' + a, ox - 5, oy + a * cell + cell / 2);
+      ctx.textAlign = 'center';
+    }
+    ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  })();
+})();
+</script>
+</body>
+</html>

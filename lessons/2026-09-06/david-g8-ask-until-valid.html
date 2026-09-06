@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ask Until Valid — Abandoned Amusement Park (David · 2026-09-06)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Text Adventure · David · 6 Sep 2026</div>
+
+  <!-- ============ 1 · Title ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">David · Sun 19:00</div>
+    <div class="emoji">🎢</div>
+    <h1>Ask Until<br>Valid</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">ask again</span> until the answer is allowed.</p>
+    <p class="bilingual">올바른 답까지 다시 물어요</p>
+  </div>
+
+  <!-- ============ 2 · Welcome back — the park ============ -->
+  <div class="slide">
+    <span class="slot-badge">WELCOME BACK</span>
+    <div class="pill purple">Your game</div>
+    <h2>The Abandoned Amusement Park</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🎪</div><div class="name">Chapter 1</div><div class="ex">tent · clown · dog bone</div></div>
+      <div class="opt-card"><div class="ico">🚂</div><div class="name">Chapter 2</div><div class="ex">Railway Valley · wrench</div></div>
+      <div class="opt-card"><div class="ico">🏴‍☠️</div><div class="name">Chapter 4</div><div class="ex">Pirate Island · chests</div></div>
+    </div>
+    <p class="center" style="margin-top:.5em">You wrote all three. Chapter 1 is the only one that runs.</p>
+    <p class="bilingual center">오랜만에 다시 열어요</p>
+  </div>
+
+  <!-- ============ 3 · Your bag ============ -->
+  <div class="slide">
+    <span class="slot-badge">WELCOME BACK</span>
+    <div class="pill">Your bag 🎒</div>
+    <h2>Four things you start with</h2>
+    <div class="iter-row">
+      <div class="iter-item">'park map'</div>
+      <div class="iter-item">'pocket knife'</div>
+      <div class="iter-item">'camera'</div>
+      <div class="iter-item">'flashlight'</div>
+    </div>
+<pre>inventory = [<span class="str">'park map'</span>, <span class="str">'pocket knife'</span>, <span class="str">'camera'</span>, <span class="str">'flashlight'</span>]</pre>
+    <p class="center" style="margin-top:.4em">One list. The story adds to it later.</p>
+  </div>
+
+  <!-- ============ 4 · The three switches ============ -->
+  <div class="slide">
+    <span class="slot-badge">WELCOME BACK</span>
+    <div class="pill">Your switches 🎚️</div>
+    <h2>Each chapter has a flag</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">chapter_one</span><span class="val">None</span></div>
+      <div class="varbox"><span class="name">chapter_two</span><span class="val">None</span></div>
+      <div class="varbox"><span class="name">chapter_four</span><span class="val">None</span></div>
+    </div>
+<pre><span class="kw">while</span> chapter_one:   <span class="com"># only while the flag is True</span>
+    <span class="fn">print</span>(<span class="str">'the whole chapter lives in here'</span>)</pre>
+    <p class="bilingual center">플래그가 True일 때만 챕터가 열려요</p>
+  </div>
+
+  <!-- ============ 5 · Where you got to ============ -->
+  <div class="slide">
+    <span class="slot-badge">WELCOME BACK</span>
+    <div class="pill purple">You are here</div>
+    <h2>Where you stopped</h2>
+    <div class="match-flow">
+      <div class="row hit">Chapter 1 · strike the bell<span class="verdict">works</span></div>
+      <div class="row hit">Chapter 1 · the clown, the dog bone<span class="verdict">works</span></div>
+      <div class="row skip">Chapter 1 · pick an area<span class="verdict">💥 crash</span></div>
+      <div class="row skip">Chapter 2 and Chapter 4<span class="verdict">never run</span></div>
+    </div>
+    <p class="bilingual center" style="margin-top:.4em">여기서 멈췄어요</p>
+  </div>
+
+  <!-- ============ 6 · Run it ============ -->
+  <div class="slide">
+    <span class="slot-badge">WARM-UP</span>
+    <div class="pill">Run it ▶</div>
+    <h2>Play your own game</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">strike the bell or leave the tent? [strike/leave]</span> <span class="typed">strike</span></div>
+      <div class="line"><span class="prompt">open the door or escape?[open/escape]</span> <span class="typed">open</span></div>
+      <div class="line"><span class="prompt">talk to the clown?</span> <span class="typed">talk</span></div>
+      <div class="line"><span class="ok">You recieve a dog bone!</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Type <code>strike</code>, <code>open</code>, <code>talk</code>.</p>
+  </div>
+
+  <!-- ============ 7 · The crash ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 1 / 6</span>
+    <div class="pill">💥 It crashes</div>
+    <h2>One line further, red text</h2>
+    <div class="debug-box"><div class="debug-tag">crash</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">            <span class="fn">print</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-card"><div class="err">AttributeError: 'NoneType' object has no attribute 'lower'</div></div>
+  </div>
+
+  <!-- ============ 8 · Read the error ============ -->
+  <div class="slide">
+    <span class="slot-badge">READ IT</span>
+    <div class="pill">Read the error 🔎</div>
+    <h2>Three clues in one line</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">'NoneType'</div><div class="edesc">The thing on the left is <code>None</code> — nothing.</div></div>
+      <div class="edge-card"><div class="ehead">has no attribute</div><div class="edesc">You asked it for something it does not own.</div></div>
+      <div class="edge-card"><div class="ehead">'lower'</div><div class="edesc">What you asked for was <code>.lower()</code>.</div></div>
+    </div>
+    <p class="bilingual center" style="margin-top:.4em">None에는 .lower()가 없어요</p>
+  </div>
+
+  <!-- ============ 9 · print hands back nothing ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept</div>
+    <h2><code>print</code> hands back nothing</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">print(<span class="arg">'Where would you go?'</span>)</span>
+        <span class="fn-result">hands back <span class="rv">None</span></span>
+      </div>
+      <div class="fn-flow-down">↓ puts words on the screen</div>
+      <div class="fn-body">
+        <div class="fn-sig">screen:</div>
+        <div class="fn-line">Where would you go?</div>
+      </div>
+      <div class="fn-flow-up">↑ hands back None</div>
+    </div>
+    <p class="center" style="margin-top:.3em">So <code>None.lower()</code> crashes.</p>
+  </div>
+
+  <!-- ============ 10 · input hands back the answer ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept</div>
+    <h2><code>input</code> hands back the answer</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <span class="input-pill">you type: mansion</span>
+        <span class="arrow-icon">➜</span>
+        <div class="target-box"><span class="name">where_to_go</span><span class="val">'mansion'</span></div>
+      </div>
+      <div class="read-line">print(where_to_go) → <span class="out">mansion</span></div>
+    </div>
+    <p class="bilingual center">input은 답을 돌려줘요</p>
+  </div>
+
+  <!-- ============ 11 · print vs input ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️ COMPARE</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Two words that look alike</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ print</span>
+<pre>answer = <span class="fn">print</span>(<span class="str">'Red or blue?'</span>)
+<span class="fn">print</span>(answer)</pre>
+        <p>Shows the words. Hands back <code>None</code>.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ input</span>
+<pre>answer = <span class="fn">input</span>(<span class="str">'Red or blue?'</span>)
+<span class="fn">print</span>(answer)</pre>
+        <p>Shows the words, waits, hands back what you typed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 12 · Your writing is good ============ -->
+  <div class="slide">
+    <span class="slot-badge">👏</span>
+    <div class="pill purple">Your writing 👏</div>
+    <h2>This part is already good</h2>
+    <div class="bubble-card computer">"The clown says you are in The Otherworld..."</div>
+    <div class="bubble-card computer">"The pirate's laugh echoes across the water."</div>
+    <p class="center">You wrote those. The code is the easy half.</p>
+    <p class="bilingual center">글이 정말 좋아요</p>
+  </div>
+
+  <!-- ============ 13 · Vocab ============ -->
+  <div class="slide">
+    <span class="slot-badge">VOCAB</span>
+    <div class="pill">Vocab</div>
+    <h2>Four words today</h2>
+    <div class="vocab-table">
+      <span class="term">valid</span>
+      <span class="gloss">allowed — it is on the list</span>
+      <span class="ko">유효한</span>
+
+      <span class="term">not in</span>
+      <span class="gloss">missing from the list</span>
+      <span class="ko">안에 없다</span>
+
+      <span class="term">function</span>
+      <span class="gloss">a job you name once and reuse</span>
+      <span class="ko">함수</span>
+
+      <span class="term">flag</span>
+      <span class="gloss">a True or False switch</span>
+      <span class="ko">스위치</span>
+    </div>
+  </div>
+
+  <!-- ============ 14 · Today's plan ============ -->
+  <div class="slide">
+    <span class="slot-badge">PLAN</span>
+    <div class="stage-bar"><div class="step current"></div><div class="step"></div><div class="step"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Plan</div>
+    <h2>Four versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">💥</div><div class="name">v1 now</div><div class="ex">crashes · chapters 2 and 4 dead</div></div>
+      <div class="opt-card"><div class="ico">🎤</div><div class="name">v2 catch</div><div class="ex">input, stored in a variable</div></div>
+      <div class="opt-card"><div class="ico">🚪</div><div class="name">v3 gate</div><div class="ex">while ... not in ...</div></div>
+      <div class="opt-card"><div class="ico">🧰</div><div class="name">v4 ask()</div><div class="ex">one function · chapters connect</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 15 · NEW IDEA 1 header ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">NEW IDEA 1</span>
+    <div class="stage-header">
+      <div class="num">1</div>
+      <div class="stage-label">New idea</div>
+      <h1>Ask again<br>until it fits</h1>
+    </div>
+    <p class="bilingual">맞는 답이 나올 때까지 다시 물어요</p>
+  </div>
+
+  <!-- ============ 16 · Concept: the gate ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 🚪</div>
+    <h2>A gate, not a question</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">🧍 you type an answer</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">🚪 is it on the allowed list?</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">✗ no → go back round, ask again</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">✓ yes → the gate opens</div>
+    </div>
+    <p class="bilingual center">문이 열릴 때까지 반복해요</p>
+  </div>
+
+  <!-- ============ 17 · Predict ============ -->
+  <div class="slide">
+    <span class="slot-badge">PREDICT</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Your game today</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>where_to_go = <span class="fn">input</span>(<span class="str">'...[mansion/bumper cars/street]?'</span>)
+
+<span class="kw">if</span> where_to_go == <span class="str">'mansion'</span>:
+    <span class="fn">print</span>(<span class="str">'The mansion door creaks open.'</span>)</pre>
+      <div class="q">The player types <code>haunted mansion</code>. What happens?</div>
+      <details><summary>Reveal</summary><div class="ans">Nothing prints. No branch matches. The game goes silent.</div></details>
+    </div>
+  </div>
+
+  <!-- ============ 18 · Gate try 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">GATE · TRY 1</span>
+    <div class="pill">Try 1 🚪</div>
+    <h2>You type <code>banana</code></h2>
+    <div class="match-flow">
+      <div class="row skip">where_to_go = 'banana'<span class="verdict">typed</span></div>
+      <div class="row skip">valid_areas = ['mansion', 'bumper cars', 'street']<span class="verdict">the list</span></div>
+      <div class="row skip">'banana' not in valid_areas<span class="verdict">✗ True</span></div>
+      <div class="row skip">🚪 gate shut — go back round<span class="verdict">↺ ask again</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 19 · Gate try 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">GATE · TRY 2</span>
+    <div class="pill">Try 2 🚪</div>
+    <h2>You type <code>haunted mansion</code></h2>
+    <div class="match-flow">
+      <div class="row skip">where_to_go = 'haunted mansion'<span class="verdict">typed</span></div>
+      <div class="row skip">the list holds 'mansion', not 'haunted mansion'<span class="verdict">close</span></div>
+      <div class="row skip">'haunted mansion' not in valid_areas<span class="verdict">✗ True</span></div>
+      <div class="row skip">🚪 gate shut — go back round<span class="verdict">↺ ask again</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Close is not the same as equal.</p>
+  </div>
+
+  <!-- ============ 20 · Gate try 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">GATE · TRY 3</span>
+    <div class="pill">Try 3 🚪</div>
+    <h2>You type <code>MANSION</code></h2>
+    <div class="match-flow">
+      <div class="row skip">'MANSION'.lower() → 'mansion'<span class="verdict">cleaned</span></div>
+      <div class="row skip">where_to_go = 'mansion'<span class="verdict">stored</span></div>
+      <div class="row hit">'mansion' not in valid_areas<span class="verdict">✓ False</span></div>
+      <div class="row hit">🚪 gate opens — the story goes on<span class="verdict">→ through</span></div>
+    </div>
+    <p class="bilingual center" style="margin-top:.4em">.lower()가 대문자를 지워줘요</p>
+  </div>
+
+  <!-- ============ 21 · The gate running ============ -->
+  <div class="slide">
+    <span class="slot-badge">WATCH</span>
+    <div class="pill">Watch it 🎬</div>
+    <h2>The same three tries, on a loop</h2>
+    <div class="viz viz-while">
+      <div class="wh-var"><span class="vname">where_to_go</span> = <span class="vval"><span>''</span><span>'banana'</span><span>'haunted mansion'</span><span>'mansion'</span></span></div>
+      <div class="wh-cond">where_to_go not in valid_areas</div>
+      <div class="wh-body">where_to_go = input(...).lower()</div>
+      <div class="output-box">
+        <div class="out-label">▸ what happens</div>
+        <div class="out-line">ask again</div>
+        <div class="out-line">ask again</div>
+        <div class="out-line">ask again</div>
+        <div class="out-line wh-exit">→ gate opens</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 22 · A real session ============ -->
+  <div class="slide">
+    <span class="slot-badge">TERMINAL</span>
+    <div class="pill">Run it ▶</div>
+    <h2>What the player sees</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">banana</span></div>
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">haunted mansion</span></div>
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">MANSION</span></div>
+      <div class="line"><span class="ok">→ where_to_go = 'mansion' ✓ loop ends</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">It repeats. No crash, no silence.</p>
+  </div>
+
+  <!-- ============ 23 · The three lines ============ -->
+  <div class="slide">
+    <span class="slot-badge">THE SHAPE</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v3</span></div>
+    <div class="pill">The shape</div>
+    <h2>Three lines make a gate</h2>
+<pre>valid_areas = [<span class="str">'mansion'</span>, <span class="str">'bumper cars'</span>, <span class="str">'street'</span>]
+where_to_go = <span class="str">''</span>
+<span class="kw">while</span> where_to_go <span class="kw">not in</span> valid_areas:
+    where_to_go = <span class="fn">input</span>(<span class="str">'...'</span>).<span class="fn">lower</span>()</pre>
+    <p class="center" style="margin-top:.4em">List. Empty box. Loop. Re-ask inside.</p>
+  </div>
+
+  <!-- ============ 24 · Why start empty ============ -->
+  <div class="slide">
+    <span class="slot-badge">WHY</span>
+    <div class="pill">Why 🟣</div>
+    <h2>Why start with <code>''</code>?</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">where_to_go</span><span class="val">''</span></div>
+      <div class="viz-arrow">→</div>
+      <div class="varbox"><span class="name">is '' in the list?</span><span class="val">no</span></div>
+      <div class="viz-arrow">→</div>
+      <div class="varbox"><span class="name">so the loop</span><span class="val">runs once</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">An empty box is never valid. That is what makes the first question happen.</p>
+    <p class="bilingual center">빈 값이라서 한 번은 꼭 물어요</p>
+  </div>
+
+  <!-- ============ 25 · NEW IDEA 2 header ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">NEW IDEA 2</span>
+    <div class="stage-header">
+      <div class="num">2</div>
+      <div class="stage-label">New idea</div>
+      <h1>not in<br>a list you choose</h1>
+    </div>
+    <p class="bilingual">허용된 답 목록을 만들어요</p>
+  </div>
+
+  <!-- ============ 26 · in vs not in ============ -->
+  <div class="slide">
+    <span class="slot-badge">SIDE BY SIDE</span>
+    <div class="pill">You already do this</div>
+    <h2>Same word, other direction</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">✓ your file today</span>
+<pre><span class="kw">if</span> <span class="str">'dog bone'</span> <span class="kw">in</span> inventory:
+    where_to_go = <span class="fn">ask</span>(<span class="str">'...'</span>, valid_areas)</pre>
+        <p>In the bag? Carry on.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ new today</span>
+<pre><span class="kw">while</span> where_to_go <span class="kw">not in</span> valid_areas:
+    where_to_go = <span class="fn">input</span>(<span class="str">'...'</span>).<span class="fn">lower</span>()</pre>
+        <p>Missing from the list? Ask again.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">A bag, and a menu.</p>
+  </div>
+
+  <!-- ============ 27 · The allowed list is just a list ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept</div>
+    <h2>The menu is a list</h2>
+    <div class="viz viz-index">
+      <div class="iter-row">
+        <div class="iter-item">'mansion'</div>
+        <div class="iter-item">'bumper cars'</div>
+        <div class="iter-item">'street'</div>
+        <div class="iter-item">← nothing else</div>
+      </div>
+      <div class="idx-expr"><span class="idx-name">valid_areas</span>[<span class="idx-num"><span>0</span><span>1</span><span>2</span><span>—</span></span>]</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Anything not on this list sends the player back round.</p>
+  </div>
+
+  <!-- ============ 28 · bumper cars has a space ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️ DETAIL</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Your options are not all one word</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">'bumper cars'</div><div class="edesc">Two words, one string. The space is part of it.</div></div>
+      <div class="edge-card"><div class="ehead">'bumpercars'</div><div class="edesc">Not the same string. The gate stays shut.</div></div>
+      <div class="edge-card"><div class="ehead">Your prompt</div><div class="edesc">shows <code>[mansion/bumper cars/street]</code> — so it matches.</div></div>
+    </div>
+    <p class="bilingual center" style="margin-top:.4em">띄어쓰기도 글자예요</p>
+  </div>
+
+  <!-- ============ 29 · = vs == ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️ THE BIG ONE</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>One <code>=</code> or two?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ one =</span>
+<pre><span class="kw">if</span> strike_or_leave = <span class="str">'strike'</span>:
+    <span class="fn">print</span>(<span class="str">'A strange man appears!'</span>)</pre>
+        <p>One <code>=</code> means <b>put this in the box</b>. Python stops: SyntaxError.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ two == (your file)</span>
+<pre><span class="kw">if</span> strike_or_leave == <span class="str">'strike'</span>:
+    <span class="fn">print</span>(<span class="str">'A strange man appears!'</span>)</pre>
+        <p>Two <code>=</code> means <b>are these the same?</b> True or False.</p>
+      </div>
+    </div>
+    <p class="bilingual center">= 는 넣기, == 는 묻기</p>
+  </div>
+
+  <!-- ============ 30 · = vs == drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️ THE BIG ONE</span>
+    <div class="pill">Picture it</div>
+    <h2>Two different jobs</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">chapter_one = True</span><span class="val">📥 put True in the box</span></div>
+      <div class="varbox"><span class="name">chapter_one == True</span><span class="val">❓ is the box True?</span></div>
+    </div>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">open_chest = 'red'</span><span class="val">📥 store 'red'</span></div>
+      <div class="varbox"><span class="name">open_chest == 'red'</span><span class="val">❓ ask a question</span></div>
+    </div>
+    <p class="center" style="margin-top:.3em">Both are in your file. Both correct.</p>
+  </div>
+
+  <!-- ============ 31 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 1 / 23</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step current"></div><div class="step"></div><div class="step"></div><span class="num">v2</span></div>
+    <div class="pill">Type it</div>
+    <h2>v2 · Catch the answer</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 12 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">            <span class="fn">print</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 12 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">            where_to_go = <span class="fn">input</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>You sees three areas</code><br>
+      📍 <b>WHERE:</b> same line · 12 spaces<br>
+      🟣 <b>WHY:</b> <code>input</code> gives the answer back, <code>print</code> gives <code>None</code><br>
+      ✅ <b>CHECK:</b> run — it waits for you to type
+    </div>
+  </div>
+
+  <!-- ============ 32 · v2 check ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v2 · the crash is gone</h2>
+    <div class="terminal">
+      <div class="line"><span class="echo">You recieve a dog bone!</span></div>
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">banana</span></div>
+      <div class="line"><span class="ok">(no crash — but the game just ends)</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Progress. It takes any word though. Next: the gate.</p>
+  </div>
+
+  <!-- ============ 33 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 2 / 23</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v3</span></div>
+    <div class="pill">Type it</div>
+    <h2>v3 · The allowed list</h2>
+<pre style="font-size:clamp(11px,1.7vmin,17px);white-space:pre-wrap"><span class="dim">        if 'dog bone' in inventory:</span><span class="hot">            valid_areas = ['mansion', 'bumper cars', 'street']</span><span class="dim">            where_to_go = input('You tries to look around...').lower()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if 'dog bone' in inventory:</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 12 spaces<br>
+      🟣 <b>WHY:</b> the three words the player is allowed to type<br>
+      ✅ <b>CHECK:</b> run — nothing changes yet. Good.
+    </div>
+  </div>
+
+  <!-- ============ 34 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 3 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · The empty box</h2>
+<pre style="font-size:clamp(11px,1.7vmin,17px);white-space:pre-wrap"><span class="dim">            valid_areas = ['mansion', 'bumper cars', 'street']</span><span class="hot">            where_to_go = ''</span><span class="dim">            where_to_go = input('You tries to look around...').lower()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>valid_areas = [</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 12 spaces<br>
+      🟣 <b>WHY:</b> <code>''</code> is not on the list, so the loop must run once<br>
+      ✅ <b>CHECK:</b> run — still nothing changes. Good.
+    </div>
+  </div>
+
+  <!-- ============ 35 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 4 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · The gate line</h2>
+<pre style="font-size:clamp(11px,1.7vmin,17px);white-space:pre-wrap"><span class="dim">            where_to_go = ''</span><span class="hot">            while where_to_go not in valid_areas:</span><span class="dim">            where_to_go = input('You tries to look around...').lower()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>where_to_go = ''</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 12 spaces · colon at the end<br>
+      🟣 <b>WHY:</b> while the answer is missing from the list → repeat<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected. STEP 5 fixes it.
+    </div>
+  </div>
+
+  <!-- ============ 36 · Indent ruler ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces</div>
+    <h2>Where the four lines sit</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="com">|--4-|--8-|-12-|-16-|</span>
+<span class="dim">    if open_or_escape == 'open':      # 4</span>
+<span class="dim">        if 'dog bone' in inventory:   # 8</span>
+<span class="hot">            valid_areas = [...]       # 12</span><span class="hot">            where_to_go = ''          # 12</span><span class="hot">            while ... not in ...:     # 12</span><span class="hot">                where_to_go = input()  # 16</span></pre>
+    <p class="center" style="margin-top:.4em">Only the last line goes deeper. It is <b>inside</b> the while.</p>
+    <p class="bilingual center">while 안은 4칸 더 들어가요</p>
+  </div>
+
+  <!-- ============ 37 · STEP 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 5 / 23</span>
+    <div class="pill">Move it</div>
+    <h2>v3 · Push the question inside</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 12 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">            where_to_go = <span class="fn">input</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 16 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">                where_to_go = <span class="fn">input</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>where_to_go = input(</code><br>
+      📍 <b>WHERE:</b> same line · press Tab once · 12 → 16 spaces<br>
+      🟣 <b>WHY:</b> only a line inside the loop repeats<br>
+      ✅ <b>CHECK:</b> run — type <code>banana</code>, it asks again
+    </div>
+  </div>
+
+  <!-- ============ 38 · v3 block ============ -->
+  <div class="slide">
+    <span class="slot-badge">v3</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v3</span></div>
+    <div class="pill">Read it</div>
+    <h2>v3 · the whole gate</h2>
+<pre style="font-size:clamp(10px,1.6vmin,16px);white-space:pre-wrap"><span class="dim">        if 'dog bone' in inventory:</span><span class="hot">            valid_areas = ['mansion', 'bumper cars', 'street']</span><span class="hot">            where_to_go = ''</span><span class="hot">            while where_to_go not in valid_areas:</span><span class="hot">                where_to_go = input('You tries to look around the space. ... [mansion/bumper cars/street]?').lower()</span></pre>
+    <p class="center" style="margin-top:.4em">Four lines. Your game can no longer be broken by a wrong word.</p>
+  </div>
+
+  <!-- ============ 39 · v3 check ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v3 · the gate holds</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">banana</span></div>
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">(just Enter)</span></div>
+      <div class="line"><span class="prompt">Where would you go...?</span> <span class="typed">BUMPER CARS</span></div>
+      <div class="line"><span class="ok">→ where_to_go = 'bumper cars' ✓ through</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Try to break it. You cannot.</p>
+  </div>
+
+  <!-- ============ 40 · Trace activity ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Does the gate open?</h2>
+<pre>valid_areas = [<span class="str">'mansion'</span>, <span class="str">'bumper cars'</span>, <span class="str">'street'</span>]</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">typed</div>
+      <div class="cell head">after .lower()</div>
+      <div class="cell head">not in list?</div>
+      <div class="cell head">gate?</div>
+
+      <div class="cell">Street</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">street</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">opens</span></details></div>
+
+      <div class="cell">bumpercars</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">bumpercars</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">shut</span></details></div>
+
+      <div class="cell">MANSION</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">mansion</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">opens</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 41 · Quiz 1 ============ -->
+  <div class="slide mcq" data-correct="0" data-explain="not in gives True when the answer is missing — and True keeps a while loop going.">
+    <span class="slot-badge">QUIZ 1</span>
+    <div class="pill purple">Quiz</div>
+    <div class="qmeta">Question 1 of 3</div>
+    <div class="q">The player types <code>street</code>. What is <code>where_to_go not in valid_areas</code>?</div>
+    <div class="opts">
+      <button class="opt">False — so the loop stops</button>
+      <button class="opt">True — so the loop stops</button>
+      <button class="opt">False — so the loop repeats</button>
+      <button class="opt">It crashes</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ 42 · Code talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"While the answer is <span class="blank"></span> the list, the loop <span class="blank"></span> and asks again."</div>
+      <div class="frame" style="margin-top:.4em">"It stops when <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 43 · NEW IDEA 3 header ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">NEW IDEA 3</span>
+    <div class="stage-header">
+      <div class="num">3</div>
+      <div class="stage-label">New idea <span class="activity-tag">OPTIONAL</span></div>
+      <h1>Write the gate<br>once</h1>
+    </div>
+    <p class="bilingual">한 번만 쓰고 계속 재사용해요</p>
+  </div>
+
+  <!-- ============ 44 · The problem: five copies ============ -->
+  <div class="slide">
+    <span class="slot-badge">THE PROBLEM</span>
+    <div class="pill">🤔 Think <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Your game asks five questions</h2>
+    <div class="match-flow">
+      <div class="row skip">strike_or_leave<span class="verdict">needs a gate</span></div>
+      <div class="row skip">open_or_escape<span class="verdict">needs a gate</span></div>
+      <div class="row skip">talk_or_ignore<span class="verdict">needs a gate</span></div>
+      <div class="row skip">where_to_go<span class="verdict">has one now</span></div>
+      <div class="row skip">open_chest<span class="verdict">needs a gate</span></div>
+    </div>
+    <p class="center" style="margin-top:.3em">Four lines each. That is twenty lines of the same thing.</p>
+  </div>
+
+  <!-- ============ 45 · The wall vs five lines ============ -->
+  <div class="slide dense">
+    <span class="slot-badge">THE PAYOFF</span>
+    <div class="pill">Before and after <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Twenty lines, or five</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ by hand · 20 lines</span>
+<pre style="font-size:clamp(8px,1.25vmin,12px)">strike_or_leave = ''
+while strike_or_leave not in ['strike', 'leave']:
+    strike_or_leave = input('...[strike/leave]').lower()
+
+open_or_escape = ''
+while open_or_escape not in ['open', 'escape']:
+    open_or_escape = input('...[open/escape]').lower()
+
+talk_or_ignore = ''
+while talk_or_ignore not in ['talk', 'ignore']:
+    talk_or_ignore = input('...[talk/ignore]').lower()
+
+where_to_go = ''
+while where_to_go not in valid_areas:
+    where_to_go = input('...[mansion/bumper cars/street]?').lower()
+
+open_chest = ''
+while open_chest not in ['red', 'blue', 'green']:
+    open_chest = input('...[red/blue/green]').lower()</pre>
+      </div>
+      <div class="col good"><span class="tag">✓ with ask() · 5 lines</span>
+<pre style="font-size:clamp(8px,1.25vmin,12px)">strike_or_leave = ask('...[strike/leave]', ['strike', 'leave'])
+
+open_or_escape = ask('...[open/escape]', ['open', 'escape'])
+
+talk_or_ignore = ask('...[talk/ignore]', ['talk', 'ignore'])
+
+where_to_go = ask('...[mansion/bumper cars/street]?', valid_areas)
+
+open_chest = ask('...[red/blue/green]', ['red', 'blue', 'green'])</pre>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">Prompts shortened here to fit. Every step slide shows the real full line.</p>
+  </div>
+
+  <!-- ============ 46 · What a function hands back ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>You name a job, then use it</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">ask(<span class="arg">'strike or leave?'</span>, ['strike', 'leave'])</span>
+        <span class="fn-result">hands back <span class="rv">'strike'</span></span>
+      </div>
+      <div class="fn-flow-down">↓ call</div>
+      <div class="fn-body">
+        <div class="fn-sig">def ask(<span class="param">question</span>, options):</div>
+        <div class="fn-line">keep asking until valid, then return <span class="param-use">answer</span></div>
+      </div>
+      <div class="fn-flow-up">↑ return</div>
+    </div>
+    <p class="bilingual center">함수는 답을 돌려줘요</p>
+  </div>
+
+  <!-- ============ 47 · The two boxes ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two boxes you fill in</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">question</span><span class="val">the words you print</span></div>
+      <div class="varbox"><span class="name">options</span><span class="val">the list of allowed answers</span></div>
+    </div>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">question =</span><span class="val">'strike or leave?'</span></div>
+      <div class="varbox"><span class="name">options =</span><span class="val">['strike', 'leave']</span></div>
+    </div>
+    <p class="center" style="margin-top:.3em">Different words each time. Same gate every time.</p>
+  </div>
+
+  <!-- ============ 48 · STEP 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 6 / 23</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v4</span></div>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Name the job</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">ripped = None</span><span class="dim"> </span><span class="hot">def ask(question, options):</span><span class="dim"> </span><span class="dim"># ABANDONED AMUSEMENT PARK</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code># ABANDONED AMUSEMENT PARK</code><br>
+      📍 <b>WHERE:</b> new line <b>above</b> it, blank line each side · 0 spaces<br>
+      🟣 <b>WHY:</b> a job needs a name first<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. STEP 7 adds the body.
+    </div>
+  </div>
+
+  <!-- ============ 49 · STEP 7 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 7 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · The empty box, again</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">def ask(question, options):</span><span class="hot">    answer = ''</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>def ask(question, options):</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 4 spaces<br>
+      🟣 <b>WHY:</b> same trick as v3 — an empty box is never valid<br>
+      ✅ <b>CHECK:</b> run — the game plays exactly as before
+    </div>
+  </div>
+
+  <!-- ============ 50 · STEP 8 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 8 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · The gate line</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">def ask(question, options):</span><span class="dim">    answer = ''</span><span class="hot">    while answer not in options:</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>answer = ''</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 4 spaces · colon at the end<br>
+      🟣 <b>WHY:</b> <code>options</code> is whatever list the caller hands in<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 51 · STEP 9 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 9 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Ask inside the loop</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">def ask(question, options):</span><span class="dim">    answer = ''</span><span class="dim">    while answer not in options:</span><span class="hot">        answer = input(question).lower()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>while answer not in options:</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 8 spaces<br>
+      🟣 <b>WHY:</b> a fresh answer each round is what ends the loop<br>
+      ✅ <b>CHECK:</b> run — the game plays exactly as before
+    </div>
+  </div>
+
+  <!-- ============ 52 · STEP 10 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 10 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Hand the answer back</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">    while answer not in options:</span><span class="dim">        answer = input(question).lower()</span><span class="hot">    return answer</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>answer = input(question).lower()</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4</b> spaces, not 8 — level with <code>answer = ''</code><br>
+      🟣 <b>WHY:</b> at 8 spaces it returns the first wrong answer<br>
+      ✅ <b>CHECK:</b> run — the game plays as before
+    </div>
+  </div>
+
+  <!-- ============ 53 · 4 or 8 spaces ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces <span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>return</code> at 4, not 8</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ return at 8</span>
+<pre><span class="kw">while</span> answer <span class="kw">not in</span> options:
+    answer = <span class="fn">input</span>(question).<span class="fn">lower</span>()
+    <span class="kw">return</span> answer</pre>
+        <p>Inside the loop. Hands back the very first answer, even a wrong one.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ return at 4</span>
+<pre><span class="kw">while</span> answer <span class="kw">not in</span> options:
+    answer = <span class="fn">input</span>(question).<span class="fn">lower</span>()
+<span class="kw">return</span> answer</pre>
+        <p>After the loop. Only runs once the gate has opened.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 54 · Where ask() lives ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>The top of your file now</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">poisoned = None</span><span class="dim">burned = None</span><span class="dim">drunk = None</span><span class="dim">ripped = None</span><span class="dim"> </span><span class="hot">def ask(question, options):</span><span class="hot">    answer = ''</span><span class="hot">    while answer not in options:</span><span class="hot">        answer = input(question).lower()</span><span class="hot">    return answer</span><span class="dim"> </span><span class="dim"># ABANDONED AMUSEMENT PARK</span></pre>
+    <p class="center" style="margin-top:.4em">Above the story. A job must exist before anyone calls it.</p>
+  </div>
+
+  <!-- ============ 55 · Read ask() out loud ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Read it back to me</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>ask</code> takes a <span class="blank"></span> and a <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"It keeps asking while the answer is <span class="blank"></span> the options, then <span class="blank"></span> it."</div>
+      <div class="pair-prompt">한국어로 먼저 → 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 56 · STEP 11 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 11 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Three lines, one line</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 12, 12, 16 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(9px,1.4vmin,14px);white-space:pre-wrap">            where_to_go = <span class="str">''</span>
+            <span class="kw">while</span> where_to_go <span class="kw">not in</span> valid_areas:
+                where_to_go = <span class="fn">input</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.7em"><div class="debug-tag fix">NEW · 12 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(9px,1.4vmin,14px);white-space:pre-wrap">            where_to_go = <span class="fn">ask</span>(<span class="str">'You tries to look around the space. You sees three areas infornt of you. Haunted mansion, bumper cars, and the dark street. Where would you go [mansion/bumper cars/street]?'</span>, valid_areas)</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>where_to_go = ''</code> · delete it and the next two lines<br>
+      📍 <b>WHERE:</b> keep <code>valid_areas</code> · 12 spaces<br>
+      🟣 <b>WHY:</b> the gate now lives inside <code>ask</code><br>
+      ✅ <b>CHECK:</b> type <code>banana</code> — it still asks again
+    </div>
+  </div>
+
+  <!-- ============ 57 · STEP 12 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 12 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Guard the first choice</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 0 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">strike_or_leave = <span class="fn">input</span>(<span class="str">'Would you like to strike the bell or leave the tent? [strike/leave]'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 0 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">strike_or_leave = <span class="fn">ask</span>(<span class="str">'Would you like to strike the bell or leave the tent? [strike/leave]'</span>, [<span class="str">'strike'</span>, <span class="str">'leave'</span>])</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>strike_or_leave = input(</code><br>
+      📍 <b>WHERE:</b> same line · 0 spaces · swap <code>input</code> for <code>ask</code><br>
+      🟣 <b>WHY:</b> <code>banana</code> used to end the game silently<br>
+      ✅ <b>CHECK:</b> run — type <code>banana</code>, it asks again
+    </div>
+  </div>
+
+  <!-- ============ 58 · STEP 13 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 13 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Guard the door</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 4 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">    open_or_escape = <span class="fn">input</span>(<span class="str">'Would you rather open the door or escape from the man?[open/escape]'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 4 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">    open_or_escape = <span class="fn">ask</span>(<span class="str">'Would you rather open the door or escape from the man?[open/escape]'</span>, [<span class="str">'open'</span>, <span class="str">'escape'</span>])</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>open_or_escape = input(</code><br>
+      📍 <b>WHERE:</b> same line · 4 spaces — it is inside <code>while chapter_one:</code><br>
+      🟣 <b>WHY:</b> a wrong word here skipped both branches and ended chapter 1<br>
+      ✅ <b>CHECK:</b> run — type <code>door</code>, it asks again
+    </div>
+  </div>
+
+  <!-- ============ 59 · STEP 14 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 14 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Guard the clown</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 8 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">        talk_or_ignore = <span class="fn">input</span>(<span class="str">'Would you like to talk to the clown?'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 8 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">        talk_or_ignore = <span class="fn">ask</span>(<span class="str">'Would you like to talk to the clown? [talk/ignore]'</span>, [<span class="str">'talk'</span>, <span class="str">'ignore'</span>])</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>talk_or_ignore = input(</code><br>
+      📍 <b>WHERE:</b> same line · 8 spaces — inside <code>if open_or_escape == 'open':</code><br>
+      🟣 <b>WHY:</b> the old prompt never told the player the two words<br>
+      ✅ <b>CHECK:</b> run — the prompt now shows <code>[talk/ignore]</code>
+    </div>
+  </div>
+
+  <!-- ============ 60 · Show the words ============ -->
+  <div class="slide">
+    <span class="slot-badge">DESIGN</span>
+    <div class="pill">⚠️ Watch out <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Show the player the words</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ guessing</span>
+        <p>"...talk to the clown?"</p>
+        <p>Player types <code>yes</code>. Asks forever.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ told</span>
+        <p>"...talk to the clown? [talk/ignore]"</p>
+        <p>Player can see what to type.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">A gate needs a visible menu.</p>
+  </div>
+
+  <!-- ============ 61 · BUG 5 find it ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 5 / 6</span>
+    <div class="pill">🐛 Debug <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spot the odd one out</h2>
+    <div class="debug-box"><div class="debug-tag">in your file</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.6vmin,16px);white-space:pre-wrap"><span class="dim">    use_flashlight = input('Will you turn on your flashlight [yes/no]').lower()</span><span class="dim">    pick_up = input('Do you want to pick up the object [yes/no]').lower()</span><span class="bad">    open_chest = input('What color of the chest do you want to open [red/blue/green]')</span></pre>
+    </div>
+    <p class="center" style="margin-top:.5em">Every input in your file ends the same way. One does not.</p>
+  </div>
+
+  <!-- ============ 62 · BUG 5 reason ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 5 / 6</span>
+    <div class="pill">🐛 The reason <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Typing <code>Red</code> kills you</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">you type: Red</div>
+      <div class="arrow">↓ no .lower()</div>
+      <div class="cc-step s2">open_chest = 'Red'</div>
+      <div class="arrow">↓ 'Red' == 'red' is False</div>
+      <div class="cc-step s3">every elif is skipped</div>
+      <div class="cc-step s4">else: the pirate stabs you</div>
+    </div>
+    <p class="bilingual center">대문자 하나로 죽어요</p>
+  </div>
+
+  <!-- ============ 63 · STEP 15 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 15 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Guard the chests</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 4 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">    open_chest = <span class="fn">input</span>(<span class="str">'What color of the chest do you want to open [red/blue/green]'</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 4 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">    open_chest = <span class="fn">ask</span>(<span class="str">'What color of the chest do you want to open [red/blue/green]'</span>, [<span class="str">'red'</span>, <span class="str">'blue'</span>, <span class="str">'green'</span>])</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>open_chest = input(</code><br>
+      📍 <b>WHERE:</b> same line · 4 spaces — inside <code>while chapter_four:</code><br>
+      🟣 <b>WHY:</b> <code>ask</code> lowers the answer for you, so <code>Red</code> works now<br>
+      ✅ <b>CHECK:</b> run chapter 4 later — <code>Red</code> no longer kills you
+    </div>
+  </div>
+
+  <!-- ============ 64 · The count ============ -->
+  <div class="slide">
+    <span class="slot-badge">SCORE</span>
+    <div class="pill">Look what you did <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Five gates, five lines</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">by hand</span><span class="val">20 lines</span></div>
+      <div class="viz-arrow">➜</div>
+      <div class="varbox"><span class="name">with ask()</span><span class="val">5 lines + 5</span></div>
+    </div>
+    <div class="iter-row">
+      <div class="iter-item">strike_or_leave ✓</div>
+      <div class="iter-item">open_or_escape ✓</div>
+      <div class="iter-item">talk_or_ignore ✓</div>
+      <div class="iter-item">where_to_go ✓</div>
+      <div class="iter-item">open_chest ✓</div>
+    </div>
+    <p class="bilingual center" style="margin-top:.4em">한 번 쓰고 다섯 번 써요</p>
+  </div>
+
+  <!-- ============ 65 · Quiz 2 ============ -->
+  <div class="slide mcq" data-correct="0" data-explain="return sits at 4 spaces, after the loop, so it only runs once the gate has opened.">
+    <span class="slot-badge">QUIZ 2</span>
+    <div class="pill purple">Quiz <span class="activity-tag">OPTIONAL</span></div>
+    <div class="qmeta">Question 2 of 3</div>
+    <div class="q">Inside <code>ask</code>, how many spaces before <code>return answer</code>?</div>
+    <div class="opts">
+      <button class="opt">4 — it comes after the while loop</button>
+      <button class="opt">8 — it belongs inside the while loop</button>
+      <button class="opt">0 — return is always at the left edge</button>
+      <button class="opt">12 — same as the input line</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ 66 · NEW IDEA 4 header ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">NEW IDEA 4</span>
+    <div class="stage-header">
+      <div class="num">4</div>
+      <div class="stage-label">New idea <span class="activity-tag">OPTIONAL</span></div>
+      <h1>Switch the next<br>chapter on</h1>
+    </div>
+    <p class="bilingual">다음 챕터 스위치를 켜요</p>
+  </div>
+
+  <!-- ============ 67 · BUG 2 find it ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 2 / 6</span>
+    <div class="pill">🐛 Debug <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two chapters never run</h2>
+    <div class="debug-box"><div class="debug-tag">in your file</div>
+<pre style="margin-top:.4em;font-size:clamp(11px,1.8vmin,18px)"><span class="dim">chapter_one = None</span><span class="bad">chapter_two = None</span><span class="bad">chapter_four = None</span></pre>
+    </div>
+    <div class="match-flow" style="margin-top:.6em">
+      <div class="row skip">while chapter_two:<span class="verdict">skipped</span></div>
+      <div class="row skip">while chapter_four:<span class="verdict">skipped</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Search your whole file for <code>chapter_two = True</code>. It is not there.</p>
+  </div>
+
+  <!-- ============ 68 · BUG 2 reason — no arrow ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 2 / 6</span>
+    <div class="pill">🐛 The reason <span class="activity-tag">OPTIONAL</span></div>
+    <h2>No arrow between the boxes</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">chapter_one</span><span class="val">True ✓ runs</span></div>
+      <div class="varbox" style="border-color:#8a97b8;opacity:.4"><span class="name">chapter_two</span><span class="val">None ✗</span></div>
+      <div class="varbox" style="border-color:#8a97b8;opacity:.4"><span class="name">chapter_four</span><span class="val">None ✗</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Chapter 1 switches itself off and switches nothing on. The story stops.</p>
+    <p class="bilingual center">아무도 다음 스위치를 안 켜요</p>
+  </div>
+
+  <!-- ============ 69 · BUG 3 find it ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 3 / 6</span>
+    <div class="pill">🐛 Debug <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Chapter 2 starts with a question</h2>
+    <div class="debug-box"><div class="debug-tag">in your file</div>
+<pre style="margin-top:.4em;font-size:clamp(11px,1.8vmin,18px)"><span class="dim">while chapter_two:</span><span class="bad">    if 'railway valley key' in inventory:</span><span class="dim">        print('You found an entrance to the Railway Valley area locked.')</span></pre>
+    </div>
+    <p class="center" style="margin-top:.5em">Search your file for <code>railway valley key</code>. It appears once — here.</p>
+  </div>
+
+  <!-- ============ 70 · BUG 3 reason — the bag ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 3 / 6</span>
+    <div class="pill">🐛 The reason <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Nobody ever gives the key</h2>
+    <div class="iter-row">
+      <div class="iter-item">'park map'</div>
+      <div class="iter-item">'pocket knife'</div>
+      <div class="iter-item">'camera'</div>
+      <div class="iter-item">'flashlight'</div>
+      <div class="iter-item">'dog bone'</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Your bag after chapter 1. No key. So even if chapter 2 ran, the whole thing is skipped.</p>
+    <p class="bilingual center">가방에 열쇠가 없어요</p>
+  </div>
+
+  <!-- ============ 71 · STEP 16 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 16 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Give the key</h2>
+<pre style="font-size:clamp(10px,1.6vmin,16px);white-space:pre-wrap"><span class="dim">            valid_areas = ['mansion', 'bumper cars', 'street']</span><span class="dim">            where_to_go = ask('You tries to look around the space. ... ?', valid_areas)</span><span class="hot">            print('At the end of the dark street a rusted key lies in the grass.')</span><span class="hot">            inventory.append('railway valley key')</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>where_to_go = ask(</code><br>
+      📍 <b>WHERE:</b> two new lines under it · 12 spaces · not deeper<br>
+      🟣 <b>WHY:</b> chapter 2 asks for this exact string<br>
+      ✅ <b>CHECK:</b> run — the key line prints
+    </div>
+  </div>
+
+  <!-- ============ 72 · STEP 17 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 17 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Switch chapter 2 on</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">        break</span><span class="dim"> </span><span class="hot">    chapter_two = True</span><span class="dim">    chapter_one = False</span><span class="dim"> </span><span class="dim">### CHAPTER 2 LOOP ###</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>### CHAPTER 2 LOOP ###</code><br>
+      📍 <b>WHERE:</b> above the last <code>chapter_one = False</code> · 4 spaces<br>
+      🟣 <b>WHY:</b> chapter 1 must switch chapter 2 on before it stops<br>
+      ✅ <b>CHECK:</b> run — chapter 2 text appears
+    </div>
+  </div>
+
+  <!-- ============ 73 · STEP 18 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 18 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Switch chapter 4 on</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">        elif use_railway_valley_key == 'no':</span><span class="dim">            print('You tried to find another way to go deeep in the park...')</span><span class="dim"> </span><span class="hot">    chapter_four = True</span><span class="dim">    chapter_two = False</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>chapter_two = False</code><br>
+      📍 <b>WHERE:</b> new line directly above it · 4 spaces<br>
+      🟣 <b>WHY:</b> same chain again — chapter 2 hands over to chapter 4<br>
+      ✅ <b>CHECK:</b> run — you reach Pirate Island
+    </div>
+  </div>
+
+  <!-- ============ 74 · The arrows appear ============ -->
+  <div class="slide">
+    <span class="slot-badge">WATCH</span>
+    <div class="pill">Watch it 🎬 <span class="activity-tag">OPTIONAL</span></div>
+    <h2>The chain, switching on</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">chapter_one = True</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">while chapter_one: → chapter_two = True</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">while chapter_two: → chapter_four = True</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">while chapter_four: Pirate Island ✓</div>
+    </div>
+    <p class="bilingual center">챕터가 이어져요</p>
+  </div>
+
+  <!-- ============ 75 · v4 check ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶ <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Chapter 2 opens</h2>
+    <div class="terminal">
+      <div class="line"><span class="echo">a rusted key lies in the grass.</span></div>
+      <div class="line"><span class="prompt">Will you use the key [yes/no]</span> <span class="typed">yes</span></div>
+      <div class="line"><span class="ok">Railway Valley opens</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Text you wrote weeks ago. Never seen running until now.</p>
+  </div>
+
+  <!-- ============ 76 · Trace the flags ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Which chapters run?</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">moment</div>
+      <div class="cell head">chapter_one</div>
+      <div class="cell head">chapter_two</div>
+      <div class="cell head">chapter_four</div>
+
+      <div class="cell">start</div>
+      <div class="cell">None</div>
+      <div class="cell">None</div>
+      <div class="cell">None</div>
+
+      <div class="cell">you strike</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">None</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">None</span></details></div>
+
+      <div class="cell">end of ch 1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">None</span></details></div>
+
+      <div class="cell">end of ch 2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 77 · Why not all True at the start ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️ WATCH OUT</span>
+    <div class="pill">⚠️ Watch out <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Why not switch them all on now?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ all True at the top</span>
+<pre>chapter_one = <span class="kw">True</span>
+chapter_two = <span class="kw">True</span>
+chapter_four = <span class="kw">True</span></pre>
+        <p>Chapter 2 runs even if you died in the tent.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ one switches the next</span>
+<pre>chapter_one = <span class="kw">True</span>
+<span class="com"># chapter 1 sets chapter_two</span>
+<span class="com"># chapter 2 sets chapter_four</span></pre>
+        <p>Order is guaranteed.</p>
+      </div>
+    </div>
+    <p class="bilingual center">순서가 지켜져요</p>
+  </div>
+
+  <!-- ============ 78 · BUG 6 find it ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 6 / 6</span>
+    <div class="pill">🐛 Debug <span class="activity-tag">OPTIONAL</span></div>
+    <h2>The last two lines of your file</h2>
+    <div class="debug-box"><div class="debug-tag">in your file</div>
+<pre style="margin-top:.4em;font-size:clamp(12px,2vmin,20px)"><span class="bad">while game_over:</span><span class="bad">    print('You died...')</span></pre>
+    </div>
+    <p class="center" style="margin-top:.5em">What stops this loop?</p>
+    <p class="bilingual center">언제 멈출까요?</p>
+  </div>
+
+  <!-- ============ 79 · BUG 6 reason ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 6 / 6</span>
+    <div class="pill">🐛 The reason <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Nothing changes, so it never ends</h2>
+    <div class="viz viz-while">
+      <div class="wh-var"><span class="vname">game_over</span> = <span class="vval"><span>True</span><span>True</span><span>True</span><span>True</span></span></div>
+      <div class="wh-cond">game_over</div>
+      <div class="wh-body">print('You died...')</div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line">You died...</div>
+        <div class="out-line">You died...</div>
+        <div class="out-line">You died...</div>
+        <div class="out-line wh-exit">forever</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">Your gate loop changed <code>answer</code> each round. This one changes nothing.</p>
+  </div>
+
+  <!-- ============ 80 · break ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two ways out of a loop</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">✓ change the flag</span>
+<pre>game_over = <span class="kw">False</span></pre>
+        <p>Finish this round, then check the condition and stop.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ break</span>
+<pre><span class="kw">break</span></pre>
+        <p>Leave right now, mid-round. You used this in chapter 1 already.</p>
+      </div>
+    </div>
+    <p class="bilingual center">break는 지금 바로 나가요</p>
+  </div>
+
+  <!-- ============ 81 · STEP 19 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 19 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Print it once, then leave</h2>
+<pre style="font-size:clamp(12px,2vmin,20px)"><span class="dim">while game_over:</span><span class="dim">    print('You died...')</span><span class="hot">    break</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print('You died...')</code><br>
+      📍 <b>WHERE:</b> new line directly under it · 4 spaces · same level as the print<br>
+      🟣 <b>WHY:</b> one death message is enough<br>
+      ✅ <b>CHECK:</b> run, escape from the man — <code>You died...</code> prints once
+    </div>
+  </div>
+
+  <!-- ============ 82 · BUG 4 find it ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 4 / 6</span>
+    <div class="pill">🐛 Debug <span class="activity-tag">OPTIONAL</span></div>
+    <h2>The deepest line in your file</h2>
+    <div class="debug-box"><div class="debug-tag">in your file</div>
+<pre style="margin-top:.4em;font-size:clamp(9px,1.5vmin,15px);white-space:pre-wrap"><span class="dim">                    if 'wrench' in inventory:</span><span class="dim">                        print('You found a power box next to the the ride.')</span><span class="bad">                        input('Should you deactivate with your wrench [yes/no]').lower()</span></pre>
+    </div>
+    <p class="center" style="margin-top:.5em">Compare it with the line above the print. What is missing?</p>
+  </div>
+
+  <!-- ============ 83 · BUG 4 reason ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 4 / 6</span>
+    <div class="pill">🐛 The reason <span class="activity-tag">OPTIONAL</span></div>
+    <h2>No box to catch it</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <span class="input-pill">you type: yes</span>
+        <span class="arrow-icon">➜</span>
+        <div class="target-box"><span class="name">nowhere</span><span class="val">thrown away</span></div>
+      </div>
+      <div class="read-line">no variable = no <span class="out">if</span> can ever test it</div>
+    </div>
+    <p class="center" style="margin-top:.3em">The player answers. Python drops the answer on the floor.</p>
+    <p class="bilingual center">답을 담을 상자가 없어요</p>
+  </div>
+
+  <!-- ============ 84 · STEP 20 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 20 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Catch the wrench answer</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 24 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">                        <span class="fn">input</span>(<span class="str">'Should you deactivate with your wrench [yes/no]'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 24 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">                        use_wrench = <span class="fn">ask</span>(<span class="str">'Should you deactivate with your wrench [yes/no]'</span>, [<span class="str">'yes'</span>, <span class="str">'no'</span>])</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Should you deactivate with your wrench</code><br>
+      📍 <b>WHERE:</b> same line · <b>24</b> spaces — six levels deep, do not change it<br>
+      🟣 <b>WHY:</b> now an <code>if use_wrench == 'yes':</code> can follow<br>
+      ✅ <b>CHECK:</b> run — no red error
+    </div>
+  </div>
+
+  <!-- ============ 85 · A function calling a function ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four yes/no questions</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">yes_no(<span class="arg">'Will you use the key [yes/no]'</span>)</span>
+        <span class="fn-result">hands back <span class="rv">'yes'</span></span>
+      </div>
+      <div class="fn-flow-down">↓ call</div>
+      <div class="fn-body">
+        <div class="fn-sig">def yes_no(<span class="param">question</span>):</div>
+        <div class="fn-line">return ask(<span class="param-use">question</span>, ['yes', 'no'])</div>
+      </div>
+      <div class="fn-flow-up">↑ return</div>
+    </div>
+    <p class="center" style="margin-top:.3em">One job, handed to a bigger one.</p>
+  </div>
+
+  <!-- ============ 86 · STEP 21 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 21 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Name the yes/no job</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="dim">def ask(question, options):</span><span class="dim">    answer = ''</span><span class="dim">    while answer not in options:</span><span class="dim">        answer = input(question).lower()</span><span class="dim">    return answer</span><span class="dim"> </span><span class="hot">def yes_no(question):</span><span class="hot">    return ask(question, ['yes', 'no'])</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>return answer</code><br>
+      📍 <b>WHERE:</b> blank line, then two new lines · 0 spaces, then 4 spaces<br>
+      🟣 <b>WHY:</b> you never have to type <code>['yes', 'no']</code> again<br>
+      ✅ <b>CHECK:</b> run — the game plays exactly as before
+    </div>
+  </div>
+
+  <!-- ============ 87 · STEP 22 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 22 / 23</span>
+    <div class="pill">Replace it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Use the new job</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 8 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">        use_railway_valley_key = <span class="fn">input</span>(<span class="str">'Will you use the key [yes/no]'</span>).<span class="fn">lower</span>()</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.8em"><div class="debug-tag fix">NEW · 8 spaces</div>
+<pre style="margin-top:.4em;font-size:clamp(10px,1.5vmin,15px);white-space:pre-wrap">        use_railway_valley_key = <span class="fn">yes_no</span>(<span class="str">'Will you use the key [yes/no]'</span>)</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>use_railway_valley_key = input(</code><br>
+      📍 <b>WHERE:</b> same line · 8 spaces<br>
+      🟣 <b>WHY:</b> shorter, and guarded — <code>maybe</code> makes it ask again<br>
+      ✅ <b>CHECK:</b> run chapter 2 — type <code>maybe</code>, it asks again
+    </div>
+  </div>
+
+  <!-- ============ 88 · The unused flags ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four switches you never read</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">poisoned</span><span class="val">set True, never read</span></div>
+      <div class="varbox" style="border-color:#8a97b8;opacity:.4"><span class="name">burned</span><span class="val">never used</span></div>
+      <div class="varbox" style="border-color:#8a97b8;opacity:.4"><span class="name">drunk</span><span class="val">never used</span></div>
+      <div class="varbox" style="border-color:#8a97b8;opacity:.4"><span class="name">ripped</span><span class="val">never used</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">The red chest sets <code>poisoned = True</code>. Nothing ever asks about it.</p>
+    <p class="bilingual center">스위치는 읽어야 의미가 있어요</p>
+  </div>
+
+  <!-- ============ 89 · STEP 23 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 23 / 23</span>
+    <div class="pill">Type it <span class="activity-tag">OPTIONAL</span></div>
+    <h2>v4 · Make the poison matter</h2>
+<pre style="font-size:clamp(10px,1.6vmin,16px);white-space:pre-wrap"><span class="dim">    else:</span><span class="dim">        print('Hey, you didn\'t answered to my question. ...')</span><span class="dim"> </span><span class="hot">    if poisoned:</span><span class="hot">        print('The venom burns. Your vision blurs as you stagger up the beach.')</span><span class="hot">        game_over = True</span><span class="dim">    chapter_four = False</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>chapter_four = False</code><br>
+      📍 <b>WHERE:</b> three new lines above it · 4, 8, 8 spaces<br>
+      🟣 <b>WHY:</b> a flag that nothing reads changes nothing<br>
+      ✅ <b>CHECK:</b> run chapter 4, open the red chest — you die
+    </div>
+  </div>
+
+  <!-- ============ 90 · Retry counter ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count the wrong tries</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">tries = 0</div>
+        <div class="ra-line">wrong answer → tries = tries + 1</div>
+        <div class="ra-line">wrong answer → tries = tries + 1</div>
+        <div class="ra-line">tries == 3 → print a hint</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">tries</span>
+        <span class="ra-vals"><span>0</span><span>1</span><span>2</span><span>3</span></span>
+      </div>
+    </div>
+    <p class="bilingual center">세 번 틀리면 힌트를 줘요</p>
+  </div>
+
+  <!-- ============ 91 · Retry counter code ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Code <span class="activity-tag">OPTIONAL</span></div>
+    <h2>A kinder gate</h2>
+<pre style="font-size:clamp(11px,1.9vmin,19px)"><span class="kw">def</span> <span class="fn">ask</span>(question, options):
+    answer = <span class="str">''</span>
+    tries = <span class="num">0</span>
+    <span class="kw">while</span> answer <span class="kw">not in</span> options:
+        answer = <span class="fn">input</span>(question).<span class="fn">lower</span>()
+        tries = tries + <span class="num">1</span>
+        <span class="kw">if</span> tries == <span class="num">3</span>:
+            <span class="fn">print</span>(<span class="str">'Type one of these: '</span> + <span class="fn">str</span>(options))</pre>
+    <p class="center" style="margin-top:.3em">Change <code>ask</code> once. Every question in the park gets kinder.</p>
+  </div>
+
+  <!-- ============ 92 · strip ============ -->
+  <div class="slide">
+    <span class="slot-badge">NEW IDEA</span>
+    <div class="pill">Concept <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spaces at the edges</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">you type: "  mansion  "</div>
+      <div class="arrow">↓ .lower()</div>
+      <div class="cc-step s2">"  mansion  " — still has spaces</div>
+      <div class="arrow">↓ .strip()</div>
+      <div class="cc-step s3">"mansion"</div>
+      <div class="cc-step s4">gate opens ✓</div>
+    </div>
+    <p class="center" style="margin-top:.3em">In <code>ask</code>: <code>input(question).lower().strip()</code></p>
+  </div>
+
+  <!-- ============ 93 · The indent ladder ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Chapter 2 goes six levels deep</h2>
+<pre style="font-size:clamp(9px,1.5vmin,15px)"><span class="dim">while chapter_two:                                    0</span><span class="dim">    if 'railway valley key' in inventory:             4</span><span class="dim">        if use_railway_valley_key == 'yes':           8</span><span class="dim">            if use_flashlight == 'yes':              12</span><span class="dim">                if pick_up == 'yes':                 16</span><span class="dim">                    if 'wrench' in inventory:        20</span><span class="hot">                        use_wrench = ask(...)        24</span></pre>
+    <p class="center" style="margin-top:.4em">Every <code>if</code> pushes the next line four more spaces right.</p>
+    <p class="bilingual center">한 단계마다 네 칸씩</p>
+  </div>
+
+  <!-- ============ 94 · Quiz 3 ============ -->
+  <div class="slide mcq" data-correct="0" data-explain="Chapter 1 must set chapter_two = True before it sets chapter_one = False, or the story stops.">
+    <span class="slot-badge">QUIZ 3</span>
+    <div class="pill purple">Quiz <span class="activity-tag">OPTIONAL</span></div>
+    <div class="qmeta">Question 3 of 3</div>
+    <div class="q">Why did <code>while chapter_two:</code> never run?</div>
+    <div class="opts">
+      <button class="opt">Nothing ever set <code>chapter_two</code> to True</button>
+      <button class="opt">It was spelled wrong</button>
+      <button class="opt"><code>while</code> only works once per file</button>
+      <button class="opt"><code>None</code> is the same as True</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ 95 · Score ============ -->
+  <div class="slide center-all mcq-score">
+    <span class="slot-badge">SCORE</span>
+    <div class="emoji">🏆</div>
+    <h2>Quiz score <span class="activity-tag">OPTIONAL</span></h2>
+    <div class="score-val">0 / 3</div>
+    <div class="score-msg"></div>
+    <button class="quiz-reset">Try again</button>
+  </div>
+
+  <!-- ============ 96 · v4 top of file ============ -->
+  <div class="slide">
+    <span class="slot-badge">v4</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v4</span></div>
+    <div class="pill">Read it</div>
+    <h2>v4 · the top of your file <span class="activity-tag">OPTIONAL</span></h2>
+<pre style="font-size:clamp(10px,1.6vmin,16px);white-space:pre-wrap">inventory = [<span class="str">'park map'</span>, <span class="str">'pocket knife'</span>, <span class="str">'camera'</span>, <span class="str">'flashlight'</span>]
+
+chapter_one = <span class="kw">None</span>
+chapter_two = <span class="kw">None</span>
+chapter_four = <span class="kw">None</span>
+game_over = <span class="kw">None</span>
+
+<span class="kw">def</span> <span class="fn">ask</span>(question, options):
+    answer = <span class="str">''</span>
+    <span class="kw">while</span> answer <span class="kw">not in</span> options:
+        answer = <span class="fn">input</span>(question).<span class="fn">lower</span>()
+    <span class="kw">return</span> answer
+
+<span class="kw">def</span> <span class="fn">yes_no</span>(question):
+    <span class="kw">return</span> <span class="fn">ask</span>(question, [<span class="str">'yes'</span>, <span class="str">'no'</span>])</pre>
+    <p class="center" style="margin-top:.3em">Eight lines that guard every question in the park.</p>
+  </div>
+
+  <!-- ============ 97 · Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">YOUR TURN</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Finish the park</h2>
+    <ul class="check-list">
+      <li>Write chapter 3 — it is missing from your file</li>
+      <li>Guard every question in it with <code>ask</code></li>
+      <li>End chapter 3 with <code>chapter_four = True</code></li>
+      <li>Give the player one item they need later</li>
+    </ul>
+  </div>
+
+  <!-- ============ 98 · Stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">STRETCH</span>
+    <div class="pill purple">Stretch <span class="activity-tag">OPTIONAL</span></div>
+    <h2>Level up</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Add <code>.strip()</code> inside <code>ask</code></div>
+      <div class="item"><span class="lvl">★★</span>Use <code>yes_no</code> for <code>use_flashlight</code> and <code>pick_up</code></div>
+      <div class="item"><span class="lvl">★★</span>Add the retry counter and a hint after three wrong tries</div>
+      <div class="item"><span class="lvl">★★★</span>Give <code>burned</code>, <code>drunk</code> and <code>ripped</code> a scene each</div>
+    </div>
+  </div>
+
+  <!-- ============ 99 · Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXIT</span>
+    <div class="pill">Exit ticket 🎟️</div>
+    <h2>One line, in your own words</h2>
+    <div class="exit">
+      <div class="label">Write it down</div>
+      <p>What does <code>ask</code> do that plain <code>input</code> does not?</p>
+    </div>
+    <div class="frame-card">
+      <div class="label">If you are stuck</div>
+      <div class="frame">"<code>ask</code> keeps <span class="blank"></span> until the answer is <span class="blank"></span>."</div>
+    </div>
+  </div>
+
+  <!-- ============ 100 · Close ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">CLOSE</span>
+    <div class="emoji">🚪</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">Ask until valid.<br>Switch the next chapter on.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next: chapter 3, and items that change the ending.</p>
+    <p class="bilingual">다음 시간: 챕터 3</p>
+  </div>
+
+
+  <div class="nav">
+    <button id="prev">‹</button>
+    <span class="counter" id="counter">1 / 100</span>
+    <button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
