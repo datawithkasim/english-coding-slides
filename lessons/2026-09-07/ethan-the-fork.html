@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ETHAN — if / elif / else</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Python · ETHAN · 2026-09-07 · 19:00 KST · 17:00 HCMC · if / elif / else</div>
+
+  <!-- ============ 1 · Title ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Ethan · Mon 19:00</div>
+    <div class="emoji">🛤️</div>
+    <h1>The Fork<br>in the Road</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you'll <span class="sub">ask</span> a question and <span class="sub">choose</span> a road.</p>
+    <p class="bilingual">조건문으로 길이 갈라져요</p>
+  </div>
+
+  <!-- ============ 2 · Recap: the belt ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">You own this</div>
+    <h2>The belt 🏭</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">"pizza"</div>
+        <div class="iter-item">"kimchi"</div>
+        <div class="iter-item">"chicken"</div>
+      </div>
+      <div class="var-row"><span class="label">food = </span><span class="var-vals">
+        <span class="var-val">"pizza"</span>
+        <span class="var-val">"kimchi"</span>
+        <span class="var-val">"chicken"</span>
+      </span></div>
+      <div class="output-box">
+        <div class="out-label">▸ print(food)</div>
+        <div class="out-line">pizza</div>
+        <div class="out-line">kimchi</div>
+        <div class="out-line">chicken</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3 · Recap: range(5) ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">You own this</div>
+    <h2>The number machine ⚙️</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">0</div>
+        <div class="iter-item">1</div>
+        <div class="iter-item">2</div>
+        <div class="iter-item">3</div>
+        <div class="iter-item">4</div>
+      </div>
+      <div class="var-row"><span class="label">i = </span><span class="var-vals">
+        <span class="var-val">0</span>
+        <span class="var-val">1</span>
+        <span class="var-val">2</span>
+        <span class="var-val">3</span>
+        <span class="var-val">4</span>
+      </span></div>
+      <div class="output-box">
+        <div class="out-label">▸ print(i)</div>
+        <div class="out-line">0</div>
+        <div class="out-line">1</div>
+        <div class="out-line">2</div>
+        <div class="out-line">3</div>
+        <div class="out-line">4</div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">Five boxes. No 5 anywhere.</p>
+  </div>
+
+  <!-- ============ 4 · Recap: the times table Ethan built ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Your program</div>
+    <h2>Your times table</h2>
+<pre>number = <span class="num">7</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">13</span>):
+    <span class="fn">print</span>(f<span class="str">"{number} x {i} = {number * i}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">7 x 1 = 7</div>
+      <div style="opacity:1">7 x 2 = 14</div>
+      <div style="opacity:1">… down to 7 x 12 = 84</div>
+    </div>
+  </div>
+
+  <!-- ============ 5 · Carry 23 · v4 ask inside the loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">CARRY</span>
+    <div class="pill">Read it</div>
+    <h2>Ask inside the loop</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    food = <span class="fn">input</span>(<span class="str">"Name a food: "</span>)
+    <span class="fn">print</span>(f<span class="str">"{i}: I love {food}!"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">Name a food: pizza</div>
+      <div style="opacity:1">0: I love pizza!</div>
+      <div style="opacity:1">Name a food: kimchi</div>
+      <div style="opacity:1">1: I love kimchi!</div>
+    </div>
+    <p class="center" style="margin-top:.3em">Inside = it runs every pass.</p>
+  </div>
+
+  <!-- ============ 6 · Carry 24 · what goes inside { } ============ -->
+  <div class="slide">
+    <span class="slot-badge">CARRY</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>What goes inside <code>{ }</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">print</span>(f<span class="str">"number x i"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Prints the letters.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">print</span>(f<span class="str">"{number} x {i}"</span>)</pre>
+        <p style="margin-top:.4em;font-size:.85em">Prints <code>7 x 3</code>.</p>
+      </div>
+    </div>
+    <p class="bilingual">중괄호 안에는 변수 이름을 넣어요</p>
+  </div>
+
+  <!-- ============ 7 · Trace warm-up ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 0</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>One row per pass</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="fn">print</span>(i * <span class="num">10</span>)</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div>
+      <div class="cell head"><code>1</code></div>
+      <div class="cell head"><code>2</code></div>
+      <div class="cell head"><code>3</code></div>
+
+      <div class="cell"><code>i</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">prints</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">20</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">30</span></details></div>
+    </div>
+    <p class="center" style="margin-top:.4em">This table comes back all lesson.</p>
+  </div>
+
+  <!-- ============ 8 · Carry bug 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 1 / 5</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>It won't even start</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)
+    <span class="fn">print</span>(i)</pre>
+    <div class="debug-card">
+      <div class="err">SyntaxError: expected ':'</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Colon on the end: <code>range(5):</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 9 · Carry bug 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 2 / 5</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Nothing is inside</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+<span class="fn">print</span>(i)</pre>
+    <div class="debug-card">
+      <div class="err">IndentationError: expected an indented block</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Push <code>print(i)</code> four spaces right.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 10 · Carry bug 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 3 / 5</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Wrong five numbers</h2>
+<pre><span class="com"># wanted: 1 2 3 4 5</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(i)</pre>
+    <div class="debug-card">
+      <div class="err">No error. Just the wrong numbers.</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Start and stop: <code>range(1, 6)</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 11 · Carry bug 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 4 / 5</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>The same letter five times</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(<span class="str">"i"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Actual output</div>
+      <div style="opacity:1">i</div>
+      <div style="opacity:1">i &nbsp;<span class="com"># …five times</span></div>
+    </div>
+    <div class="debug-card">
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Drop the quotes: <code>print(i)</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 12 · Carry bug 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 BUG 5 / 5</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>One row missing</h2>
+<pre>number = <span class="num">7</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">12</span>):
+    <span class="fn">print</span>(f<span class="str">"{number} x {i}"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">Last row is 7 x 11. Where is 7 x 12?</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">The stop number never rides: <code>range(1, 13)</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 13 · Carry · fill blanks ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY 1</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(___, ___):
+    <span class="fn">print</span>(i)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Goal</div>
+      <div style="opacity:1">1 2 3 4 5 &nbsp;<span class="com"># one per line</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 14 · Carry · harder blanks ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY 2</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — three blanks</h2>
+<pre>number = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Which table? "</span>))
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, ___):
+    <span class="fn">print</span>(f<span class="str">"{number} x {___} = {number ___ i}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Goal — rows 1 to 9</div>
+      <div style="opacity:1">6 x 1 = 6 &nbsp;… &nbsp;6 x 9 = 54</div>
+    </div>
+  </div>
+
+  <!-- ============ 15 · Carry · 2 fast questions ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>range(3)</code> gives</div>
+      <div class="opts">
+        <details><summary>A. 1, 2, 3</summary><div class="ans">No — belts start at 0.</div></details>
+        <details><summary>B. 0, 1, 2</summary><div class="ans">✓ Three items from 0.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Passes in <code>range(2, 6)</code>?</div>
+      <div class="opts">
+        <details><summary>A. 4</summary><div class="ans">✓ i is 2, 3, 4, 5.</div></details>
+        <details><summary>B. 5</summary><div class="ans">No — 6 never rides.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 16 · Carry · say it out loud ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"This loop runs <span class="blank"></span> times, and on pass 3 <code>i</code> becomes <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 17 · Carry · build the quiz ============ -->
+  <div class="slide">
+    <span class="slot-badge">BUILD</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the times-table quiz ✖️</h2>
+    <ul class="check-list">
+      <li>New file <code>tables.py</code></li>
+      <li>Ask <code>"Which times table? "</code></li>
+      <li>Wrap it in <code>int()</code></li>
+      <li>Loop <code>i</code> from 1 to 12</li>
+      <li>Print one line each pass</li>
+    </ul>
+  </div>
+
+  <!-- ============ 18 · Carry · run the base program ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>Your base program</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">Which times table?</span> <span class="typed">8</span></div>
+      <div class="line"><span class="echo">8 x 1 = 8</span></div>
+      <div class="line"><span class="echo">8 x 2 = 16</span></div>
+      <div class="line"><span class="ok">…all the way to 8 x 12 = 96</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">It prints <b>every</b> row. It never chooses.</p>
+  </div>
+
+  <!-- ============ 19 · Predict hook ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>What will print?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>age = <span class="num">14</span>
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"teen"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"kid"</span>)</pre>
+      <details><summary>Reveal output</summary><div class="ans">teen — and only teen.</div></details>
+    </div>
+    <p class="center" style="margin-top:.4em">One line prints. Which one?</p>
+  </div>
+
+  <!-- ============ 20 · Vocab ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Vocab</div>
+    <h2>3 new words</h2>
+    <div class="vocab-table">
+      <span class="term">condition</span>
+      <span class="gloss">a question with only two answers</span>
+      <span class="ko">조건</span>
+
+      <span class="term">True / False</span>
+      <span class="gloss">the only two answers</span>
+      <span class="ko">참 / 거짓</span>
+
+      <span class="term">branch</span>
+      <span class="gloss">one road out of the fork</span>
+      <span class="ko">분기</span>
+    </div>
+  </div>
+
+  <!-- ============ 21 · The fork · picture only ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 1</span>
+    <div class="pill">Concept</div>
+    <h2>The fork in the path 🛤️</h2>
+    <div class="viz-stage">
+      <div class="vlabel">🚶 one traveller walks up to a signpost</div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">Are you 13 or older?</div>
+    </div>
+    <div class="opt-grid two" style="margin-top:.6em">
+      <div class="opt-card"><div class="ico">⬅️</div><div class="name">Left road</div><div class="ex">taken when the answer is yes</div></div>
+      <div class="opt-card"><div class="ico">➡️</div><div class="name">Right road</div><div class="ex">taken when the answer is no</div></div>
+    </div>
+    <p class="bilingual">질문 하나, 길 하나를 골라요</p>
+  </div>
+
+  <!-- ============ 22 · The signpost holds a question ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 2</span>
+    <div class="pill">Concept</div>
+    <h2>The signpost is the question</h2>
+    <div class="viz-stage">
+      <div class="vlabel">the signpost never says "left". It asks.</div>
+      <div class="viz-pill num">age &gt;= 13</div>
+      <div class="viz-arrow">↓ the traveller answers it</div>
+      <div class="viz-pill str">yes … or no</div>
+    </div>
+    <p class="center" style="margin-top:.5em">The <b>answer</b> picks the road. Not you.</p>
+  </div>
+
+  <!-- ============ 23 · Two doors ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 3</span>
+    <div class="pill">Concept</div>
+    <h2>Only two doors 🚪</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">✅</div><div class="name">True</div><div class="ex">yes · 참 · the door opens</div></div>
+      <div class="opt-card"><div class="ico">⛔</div><div class="name">False</div><div class="ex">no · 거짓 · the door stays shut</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Python has no "maybe" door.</p>
+    <p class="bilingual">답은 True 아니면 False예요</p>
+  </div>
+
+  <!-- ============ 24 · A question has two answers ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 4</span>
+    <div class="pill">Concept</div>
+    <h2>Every question, two answers</h2>
+    <div class="viz-stage">
+      <div class="vlabel">ask the same box three different questions</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">age</span><span class="val">14</span></div>
+      </div>
+    </div>
+    <div class="opt-grid three" style="margin-top:.5em">
+      <div class="opt-card"><div class="ico">✅</div><div class="name">age &gt; 10</div><div class="ex">True</div></div>
+      <div class="opt-card"><div class="ico">⛔</div><div class="name">age &gt; 20</div><div class="ex">False</div></div>
+      <div class="opt-card"><div class="ico">✅</div><div class="name">age == 14</div><div class="ex">True</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 25 · The gate ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 5</span>
+    <div class="pill">Concept</div>
+    <h2>A gate, not a road 🚧</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🔓</div><div class="name">True → open</div><div class="ex">walk through, run the inside lines</div></div>
+      <div class="opt-card"><div class="ico">🔒</div><div class="name">False → shut</div><div class="ex">walk past, skip the inside lines</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Shut is not an error. Shut is a skip.</p>
+    <p class="bilingual">닫히면 그냥 건너뛰어요</p>
+  </div>
+
+  <!-- ============ 26 · Three frames ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 6</span>
+    <div class="pill">Concept</div>
+    <h2>Three frames, every time</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">📦</div><div class="name">Frame 1</div><div class="ex">the value: age = 14</div></div>
+      <div class="opt-card"><div class="ico">❓</div><div class="name">Frame 2</div><div class="ex">the question: age &gt;= 13</div></div>
+      <div class="opt-card"><div class="ico">🛤️</div><div class="name">Frame 3</div><div class="ex">the road: print "teen"</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Value. Question. Road. Always that order.</p>
+  </div>
+
+  <!-- ============ 27 · never both roads ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 7</span>
+    <div class="pill">Concept</div>
+    <h2>Never both roads</h2>
+    <div class="match-flow">
+      <div class="row hit">left road<span class="verdict">walked</span></div>
+      <div class="row skip">right road<span class="verdict">skipped</span></div>
+    </div>
+    <p class="center" style="margin-top:.6em">One traveller cannot be on two roads.</p>
+    <p class="bilingual">길은 하나만 선택돼요</p>
+  </div>
+
+  <!-- ============ 28 · = puts in ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 8</span>
+    <div class="pill">One equals</div>
+    <h2><code>=</code> puts a value in</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <span class="input-pill">14</span>
+        <span class="arrow-icon">➡</span>
+        <div class="target-box"><span class="name">age</span><span class="val">14</span></div>
+      </div>
+      <div class="read-line">print(age) → <span class="out">14</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">One <code>=</code> is a delivery. It never answers.</p>
+  </div>
+
+  <!-- ============ 29 · == asks ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 9</span>
+    <div class="pill">Two equals</div>
+    <h2><code>==</code> asks a question</h2>
+    <div class="viz-stage">
+      <div class="vlabel">⚖️ put a box on each side and weigh them</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">age</span><span class="val">14</span></div>
+        <div class="varbox"><span class="name">==</span><span class="val">14</span></div>
+      </div>
+      <div class="viz-arrow">↓ the scale answers</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="bilingual">등호 두 개는 물어봐요</p>
+  </div>
+
+  <!-- ============ 30 · = vs == drawing 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 10</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>Delivery vs scale</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📦</div><div class="name">= &nbsp;delivery truck</div><div class="ex">age = 14 &nbsp;→ the box now holds 14</div></div>
+      <div class="opt-card"><div class="ico">⚖️</div><div class="name">== &nbsp;weighing scale</div><div class="ex">age == 14 &nbsp;→ True or False</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">A truck delivers. A scale answers.</p>
+  </div>
+
+  <!-- ============ 31 · = vs == drawing 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 11</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>Same picture, drawn again</h2>
+    <div class="viz-stage">
+      <div class="vlabel">one equals — the arrow goes IN</div>
+      <div class="viz-pill num">14 &nbsp;➡ &nbsp;[ age ]</div>
+    </div>
+    <div class="viz-stage" style="margin-top:.6em">
+      <div class="vlabel">two equals — the arrow comes OUT</div>
+      <div class="viz-pill str">[ age ] &nbsp;⚖ &nbsp;14 &nbsp;➡ &nbsp;True</div>
+    </div>
+    <p class="bilingual">넣기는 =, 묻기는 ==</p>
+  </div>
+
+  <!-- ============ 32 · > ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 12</span>
+    <div class="pill">Operator</div>
+    <h2><code>&gt;</code> — is the left one bigger?</h2>
+    <div class="viz-stage">
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">left</span><span class="val">14</span></div>
+        <div class="varbox"><span class="name">&gt;</span><span class="val">10</span></div>
+      </div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="center" style="margin-top:.4em">The wide end always points at the bigger side.</p>
+  </div>
+
+  <!-- ============ 33 · < ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 13</span>
+    <div class="pill">Operator</div>
+    <h2><code>&lt;</code> — is the left one smaller?</h2>
+    <div class="viz-stage">
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">left</span><span class="val">14</span></div>
+        <div class="varbox"><span class="name">&lt;</span><span class="val">10</span></div>
+      </div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">False</div>
+    </div>
+    <p class="center" style="margin-top:.4em">14 is not smaller than 10.</p>
+  </div>
+
+  <!-- ============ 34 · >= and <= ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 14</span>
+    <div class="pill">Operator</div>
+    <h2>The line under it means "or equal"</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🔼</div><div class="name">&gt;=</div><div class="ex">13 &gt;= 13 → True &nbsp;· &nbsp;12 &gt;= 13 → False</div></div>
+      <div class="opt-card"><div class="ico">🔽</div><div class="name">&lt;=</div><div class="ex">13 &lt;= 13 → True &nbsp;· &nbsp;14 &lt;= 13 → False</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">The equals sign is always second.</p>
+  </div>
+
+  <!-- ============ 35 · != ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 15</span>
+    <div class="pill">Operator</div>
+    <h2><code>!=</code> — not the same</h2>
+    <div class="viz-stage">
+      <div class="vlabel">the ! flips the scale's answer</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">age</span><span class="val">14</span></div>
+        <div class="varbox"><span class="name">!=</span><span class="val">10</span></div>
+      </div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Different → True. Same → False.</p>
+  </div>
+
+  <!-- ============ 36 · all six ============ -->
+  <div class="slide">
+    <span class="slot-badge">SUMMARY</span>
+    <div class="pill">⭐ The six</div>
+    <h2>All six questions</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">==</div><div class="edesc">same as</div></div>
+      <div class="edge-card"><div class="ehead">!=</div><div class="edesc">not the same as</div></div>
+      <div class="edge-card"><div class="ehead">&gt;</div><div class="edesc">bigger than</div></div>
+      <div class="edge-card"><div class="ehead">&lt;</div><div class="edesc">smaller than</div></div>
+      <div class="edge-card"><div class="ehead">&gt;=</div><div class="edesc">bigger or the same</div></div>
+      <div class="edge-card"><div class="ehead">&lt;=</div><div class="edesc">smaller or the same</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 37 · Python answers True/False ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN IT</span>
+    <div class="pill">Run it ▶</div>
+    <h2>Print the answer itself</h2>
+<pre><span class="fn">print</span>(<span class="num">7</span> &gt; <span class="num">3</span>)
+<span class="fn">print</span>(<span class="num">7</span> == <span class="num">3</span>)
+<span class="fn">print</span>(<span class="num">7</span> != <span class="num">3</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">True</div>
+      <div style="opacity:1">False</div>
+      <div style="opacity:1">True</div>
+    </div>
+    <p class="center" style="margin-top:.3em">A question is a value you can print.</p>
+  </div>
+
+  <!-- ============ 38 · True is not "True" ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>True</code> is not <code>"True"</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ text</span>
+<pre><span class="str">"True"</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Letters in quotes.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ answer</span>
+<pre><span class="kw">True</span></pre>
+        <p style="margin-top:.4em;font-size:.85em">Capital T. No quotes.</p>
+      </div>
+    </div>
+    <p class="bilingual">따옴표 없이 대문자로 써요</p>
+  </div>
+
+  <!-- ============ 39 · predict six ============ -->
+  <div class="slide">
+    <span class="slot-badge">PREDICT</span>
+    <div class="pill">Predict 🤔<span class="activity-tag">activity</span></div>
+    <h2>True or False? Say it first</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">question</div>
+      <div class="cell head"><code>5 &gt; 2</code></div>
+      <div class="cell head"><code>5 &lt; 2</code></div>
+      <div class="cell head"><code>5 == 5</code></div>
+
+      <div class="cell">answer</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell head">question</div>
+      <div class="cell head"><code>5 != 5</code></div>
+      <div class="cell head"><code>5 &gt;= 5</code></div>
+      <div class="cell head"><code>4 &lt;= 3</code></div>
+
+      <div class="cell">answer</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 40 · words compare too ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXTRA</span>
+    <div class="pill">Words too</div>
+    <h2>Words go on the scale as well</h2>
+    <div class="viz-stage">
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">name</span><span class="val">"ethan"</span></div>
+        <div class="varbox"><span class="name">==</span><span class="val">"ethan"</span></div>
+      </div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Same letters, same order, same case.</p>
+  </div>
+
+  <!-- ============ 41 · SOLO 1 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 1</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> print three answers: <code>10 &gt; 3</code>, <code>10 == 3</code>, <code>10 != 3</code>.<br>
+      <strong>Rule:</strong> three lines. No <code>if</code> yet.
+    </div>
+    <p class="practice-hint">You already know <code>print()</code>. Put a question inside it.</p>
+  </div>
+
+  <!-- ============ 42 · gate before code ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 16</span>
+    <div class="pill">Concept</div>
+    <h2>Before any code — the gate again</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">age = 14</span>
+        <span class="case case-b">age = 9</span>
+      </div>
+      <div class="if-cond">age &gt;= 13</div>
+      <div class="if-branches">
+        <div class="if-branch true">print("teen")</div>
+        <div class="if-branch false">nothing runs</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">teen</div>
+        <div class="out-line out-b">(blank)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 43 · new file ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SET UP</span>
+    <div class="pill">New file 📄</div>
+    <h2>Make <code>fork.py</code></h2>
+    <ul class="check-list" style="text-align:left">
+      <li>Click <b>New File</b> in the IDE</li>
+      <li>Name it <code>fork.py</code></li>
+      <li>Leave it empty</li>
+    </ul>
+    <p class="bilingual">새 파일 하나 만들어요</p>
+  </div>
+
+  <!-- ============ 44 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 1 / 29</span>
+    <div class="stage-bar"><div class="step current"></div><div class="step"></div><div class="step"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Type it</div>
+    <h2>v1 · The value</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">(empty file)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em">age = <span class="num">14</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> line 1, the empty file<br>
+      📍 <b>WHERE:</b> line 1 · 0 spaces<br>
+      🟣 <b>WHY:</b> the gate needs something to ask about<br>
+      ✅ <b>CHECK:</b> run — nothing prints. Correct.
+    </div>
+  </div>
+
+  <!-- ============ 45 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 2 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step current"></div><div class="step"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Type it</div>
+    <h2>v1 · The question</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">age = <span class="num">14</span></pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">age = 14</span><span class="hot">if age &gt;= 13:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>age = 14</code><br>
+      📍 <b>WHERE:</b> new line under it · 0 spaces · colon on the end<br>
+      🟣 <b>WHY:</b> this is the signpost<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 46 · the colon ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 17</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>The colon builds the fence</h2>
+    <div class="viz-stage">
+      <div class="vlabel">everything past the fence belongs to the gate</div>
+      <div class="viz-pill kw">if age &gt;= 13 :</div>
+      <div class="viz-arrow">↓ fence starts here</div>
+      <div class="viz-pill str">🚧 &nbsp;inside &nbsp;🚧</div>
+    </div>
+    <p class="bilingual">콜론 다음은 들여쓰기예요</p>
+  </div>
+
+  <!-- ============ 47 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 3 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Type it</div>
+    <h2>v1 · The road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">age = <span class="num">14</span>
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">age = 14</span><span class="dim">if age &gt;= 13:</span><span class="hot">    print("You are a teenager")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if age &gt;= 13:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> 4 spaces = inside the gate<br>
+      ✅ <b>CHECK:</b> run — it prints <code>You are a teenager</code>
+    </div>
+  </div>
+
+  <!-- ============ 48 · indent ruler ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces</div>
+    <h2>Where the three lines sit</h2>
+<pre style="font-size:clamp(12px,2vmin,20px)"><span class="com">|--4-|--8-|</span>
+age = <span class="num">14</span>              <span class="com"># 0</span>
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:          <span class="com"># 0</span>
+    <span class="fn">print</span>(<span class="str">"..."</span>)       <span class="com"># 4</span></pre>
+    <p class="center" style="margin-top:.5em">Only the <code>print</code> is indented. It is the only line inside.</p>
+  </div>
+
+  <!-- ============ 49 · run it ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v1 · the gate opened</h2>
+    <div class="terminal">
+      <div class="line"><span class="echo">You are a teenager</span></div>
+      <div class="line"><span class="ok">(program ends)</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">14 is bigger than 13, so the answer was True.</p>
+  </div>
+
+  <!-- ============ 50 · viz-if animated ============ -->
+  <div class="slide">
+    <span class="slot-badge">WATCH IT</span>
+    <div class="pill">Watch it! 👀</div>
+    <h2>The gate, both ways</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">age = 14</span>
+        <span class="case case-b">age = 9</span>
+      </div>
+      <div class="if-cond">age &gt;= 13</div>
+      <div class="if-branches">
+        <div class="if-branch true">print("You are a teenager")</div>
+        <div class="if-branch false">skip the block</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">You are a teenager</div>
+        <div class="out-line out-b">(nothing)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 51 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 4 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v1</span></div>
+    <div class="pill">Change it</div>
+    <h2>v1 · Shut the gate</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">age = <span class="num">14</span></pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em">age = <span class="num">9</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>age = 14</code><br>
+      📍 <b>WHERE:</b> line 1 · 0 spaces · change only the number<br>
+      🟣 <b>WHY:</b> to watch a shut gate<br>
+      ✅ <b>CHECK:</b> run — nothing prints
+    </div>
+  </div>
+
+  <!-- ============ 52 · run it, nothing ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v1 · empty screen</h2>
+    <div class="terminal">
+      <div class="line"><span class="ok">(program ends)</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">No error. No output. The gate was shut.</p>
+    <p class="bilingual">닫힌 문은 오류가 아니에요</p>
+  </div>
+
+  <!-- ============ 53 · the shut gate drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 18</span>
+    <div class="pill">Concept</div>
+    <h2>What the traveller did</h2>
+    <div class="match-flow">
+      <div class="row skip">9 &gt;= 13 ?<span class="verdict">False</span></div>
+      <div class="row skip">print("You are a teenager")<span class="verdict">skipped</span></div>
+      <div class="row hit">end of file<span class="verdict">arrived</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Walked past the gate. Kept going.</p>
+  </div>
+
+  <!-- ============ 54 · TRACE 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 1</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Two runs, one table</h2>
+<pre><span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"You are a teenager"</span>)</pre>
+    <div class="trace-grid cols-4">
+      <div class="cell head">run</div>
+      <div class="cell head"><code>age</code></div>
+      <div class="cell head">question</div>
+      <div class="cell head">printed</div>
+
+      <div class="cell">1</div>
+      <div class="cell"><code>14</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">You are a teenager</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell"><code>9</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 55 · SOLO 2 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 2</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> at the bottom of <code>fork.py</code>, add a gate that prints <code>"Big score!"</code> when <code>score</code> is over 50.<br>
+      <strong>Rule:</strong> two new lines. Set <code>score = 80</code> first.
+    </div>
+    <p class="practice-hint">Value. Question. Road.</p>
+  </div>
+
+  <!-- ============ 56 · two roads drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 19</span>
+    <div class="pill">Concept</div>
+    <h2>The road you take when it's False</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">🛤️</div><div class="name">if road</div><div class="ex">walked when the answer is True</div></div>
+      <div class="opt-card"><div class="ico">🛣️</div><div class="name">else road</div><div class="ex">walked when the answer is False</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">With <code>else</code>, the screen is never blank.</p>
+    <p class="bilingual">else는 나머지 길이에요</p>
+  </div>
+
+  <!-- ============ 57 · else asks nothing ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 20</span>
+    <div class="pill">⭐ The rule</div>
+    <h2><code>else</code> has no signpost</h2>
+    <div class="viz-stage">
+      <div class="vlabel">the if line carries the only question</div>
+      <div class="viz-pill kw">if age &gt;= 13 :</div>
+      <div class="viz-arrow">↓ if that was False ↓</div>
+      <div class="viz-pill str">else :</div>
+    </div>
+    <p class="center" style="margin-top:.5em">Nothing between <code>else</code> and the colon. Ever.</p>
+  </div>
+
+  <!-- ============ 58 · STEP 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 5 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step current"></div><div class="step"></div><div class="step"></div><span class="num">v2</span></div>
+    <div class="pill">Type it</div>
+    <h2>v2 · The second signpost</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">age = <span class="num">9</span>
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"You are a teenager"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">age = 9</span><span class="dim">if age &gt;= 13:</span><span class="dim">    print("You are a teenager")</span><span class="hot">else:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("You are a teenager")</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>0 spaces</b> · colon on the end<br>
+      🟣 <b>WHY:</b> <code>else</code> lines up with <code>if</code>, never indented<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 59 · STEP 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 6 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v2</span></div>
+    <div class="pill">Type it</div>
+    <h2>v2 · The second road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">else</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">else:</span><span class="hot">    print("You are a kid")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>else:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> 4 spaces = inside the else<br>
+      ✅ <b>CHECK:</b> run — it prints <code>You are a kid</code>
+    </div>
+  </div>
+
+  <!-- ============ 60 · run age 9 ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v2 · with <code>age = 9</code></h2>
+    <div class="terminal">
+      <div class="line"><span class="echo">You are a kid</span></div>
+      <div class="line"><span class="ok">(program ends)</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Never blank again.</p>
+  </div>
+
+  <!-- ============ 61 · run age 14 ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v2 · change 9 back to 14</h2>
+    <div class="terminal">
+      <div class="line"><span class="echo">You are a teenager</span></div>
+      <div class="line"><span class="ok">(program ends)</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Same file. One number changed. Other road.</p>
+  </div>
+
+  <!-- ============ 62 · viz-if both ============ -->
+  <div class="slide">
+    <span class="slot-badge">WATCH IT</span>
+    <div class="pill">Watch it! 👀</div>
+    <h2>Both roads, taking turns</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">age = 14</span>
+        <span class="case case-b">age = 9</span>
+      </div>
+      <div class="if-cond">age &gt;= 13</div>
+      <div class="if-branches">
+        <div class="if-branch true">print("You are a teenager")</div>
+        <div class="if-branch false">print("You are a kid")</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">You are a teenager</div>
+        <div class="out-line out-b">You are a kid</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 63 · exactly one road ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 21</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>Exactly one. Never two.</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">✅</div><div class="name">one road</div><div class="ex">always what happens</div></div>
+      <div class="opt-card"><div class="ico">🚫</div><div class="name">both roads</div><div class="ex">impossible with if / else</div></div>
+      <div class="opt-card"><div class="ico">🚫</div><div class="name">no road</div><div class="ex">impossible with else there</div></div>
+    </div>
+    <p class="bilingual">길은 정확히 하나만 지나가요</p>
+  </div>
+
+  <!-- ============ 64 · TRACE 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 2</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>if / else, three runs</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head"><code>age</code></div>
+      <div class="cell head"><code>13</code></div>
+      <div class="cell head"><code>12</code></div>
+      <div class="cell head"><code>40</code></div>
+
+      <div class="cell">age &gt;= 13</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell">road</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">if</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">else</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">if</span></details></div>
+
+      <div class="cell">printed</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">teenager</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">kid</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">teenager</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 65 · SOLO 3 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 3</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> give your <code>score</code> gate an <code>else</code> that prints <code>"Keep trying!"</code>.<br>
+      <strong>Rule:</strong> two new lines. <code>else</code> at 0 spaces.
+    </div>
+    <p class="practice-hint">Copy the shape you just used for <code>age</code>.</p>
+  </div>
+
+  <!-- ============ 66 · three roads drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 22</span>
+    <div class="pill">Concept</div>
+    <h2>Three roads out of one fork</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">🧑</div><div class="name">Road 1</div><div class="ex">age &gt;= 13 → teenager</div></div>
+      <div class="opt-card"><div class="ico">🧒</div><div class="name">Road 2</div><div class="ex">age &gt;= 8 → big kid</div></div>
+      <div class="opt-card"><div class="ico">👶</div><div class="name">Road 3</div><div class="ex">everything else → kid</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Still <b>one</b> traveller. Still <b>one</b> road.</p>
+  </div>
+
+  <!-- ============ 67 · traveller frame 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">FRAME 1 / 3</span>
+    <div class="pill">Walk it</div>
+    <h2><code>age = 20</code></h2>
+    <div class="match-flow">
+      <div class="row hit">age &gt;= 13 ?<span class="verdict">True → walk</span></div>
+      <div class="row skip">age &gt;= 8 ?<span class="verdict">never asked</span></div>
+      <div class="row skip">else<span class="verdict">never asked</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Stops at the first True. Reads nothing below.</p>
+  </div>
+
+  <!-- ============ 68 · traveller frame 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">FRAME 2 / 3</span>
+    <div class="pill">Walk it</div>
+    <h2><code>age = 9</code></h2>
+    <div class="match-flow">
+      <div class="row skip">age &gt;= 13 ?<span class="verdict">False</span></div>
+      <div class="row hit">age &gt;= 8 ?<span class="verdict">True → walk</span></div>
+      <div class="row skip">else<span class="verdict">never asked</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Falls one step down, then walks.</p>
+  </div>
+
+  <!-- ============ 69 · traveller frame 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">FRAME 3 / 3</span>
+    <div class="pill">Walk it</div>
+    <h2><code>age = 5</code></h2>
+    <div class="match-flow">
+      <div class="row skip">age &gt;= 13 ?<span class="verdict">False</span></div>
+      <div class="row skip">age &gt;= 8 ?<span class="verdict">False</span></div>
+      <div class="row hit">else<span class="verdict">walk</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Falls all the way. <code>else</code> catches everyone.</p>
+  </div>
+
+  <!-- ============ 70 · match-flow rule ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 23</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>Top to bottom, stop at the first ✓</h2>
+    <div class="viz-stage">
+      <div class="viz-pill kw">if &nbsp;→ &nbsp;asked first</div>
+      <div class="viz-arrow">↓ only if that was False</div>
+      <div class="viz-pill num">elif &nbsp;→ &nbsp;asked second</div>
+      <div class="viz-arrow">↓ only if that was False too</div>
+      <div class="viz-pill str">else &nbsp;→ &nbsp;the leftovers</div>
+    </div>
+    <p class="bilingual">elif는 위에서부터 확인해요</p>
+  </div>
+
+  <!-- ============ 71 · STEP 7 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 7 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v3</span></div>
+    <div class="pill">Type it</div>
+    <h2>v3 · The middle question</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="fn">print</span>(<span class="str">"You are a teenager"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"You are a kid"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    print("You are a teenager")</span><span class="hot">elif age &gt;= 8:</span><span class="dim">else:</span><span class="dim">    print("You are a kid")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("You are a teenager")</code><br>
+      📍 <b>WHERE:</b> new line under it · 0 spaces · colon on the end · <code>else:</code> slides down<br>
+      🟣 <b>WHY:</b> <code>elif</code> must sit between <code>if</code> and <code>else</code><br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 72 · STEP 8 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 8 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v3</span></div>
+    <div class="pill">Type it</div>
+    <h2>v3 · The middle road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">elif</span> age &gt;= <span class="num">8</span>:
+<span class="kw">else</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">elif age &gt;= 8:</span><span class="hot">    print("You are a big kid")</span><span class="dim">else:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>elif age &gt;= 8:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> 4 spaces = inside the elif<br>
+      ✅ <b>CHECK:</b> set <code>age = 9</code>, run — <code>You are a big kid</code>
+    </div>
+  </div>
+
+  <!-- ============ 73 · run three ways ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v3 · three numbers, three answers</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">age = 20 →</span> <span class="echo">You are a teenager</span></div>
+      <div class="line"><span class="prompt">age = 9 →</span> <span class="echo">You are a big kid</span></div>
+      <div class="line"><span class="prompt">age = 5 →</span> <span class="echo">You are a kid</span></div>
+      <div class="line"><span class="ok">one line each time, never two</span></div>
+    </div>
+  </div>
+
+  <!-- ============ 74 · order matters, drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 24</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>The wide gate must go last</h2>
+    <div class="viz-stage">
+      <div class="vlabel">age = 20 meets a badly ordered fork</div>
+      <div class="viz-pill num">if age &gt;= 8 &nbsp;→ &nbsp;True!</div>
+      <div class="viz-arrow">↓ stops here, wrongly</div>
+      <div class="viz-pill str">elif age &gt;= 13 &nbsp;→ &nbsp;never asked</div>
+    </div>
+    <p class="center" style="margin-top:.4em">A wide gate catches everyone before the narrow one.</p>
+  </div>
+
+  <!-- ============ 75 · wrong order demo ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Same lines, wrong order</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ wrong</span>
+<pre><span class="kw">if</span> age &gt;= <span class="num">8</span>:
+    <span class="fn">print</span>(<span class="str">"big kid"</span>)
+<span class="kw">elif</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"teenager"</span>)</pre>
+      </div>
+      <div class="col good"><span class="tag">✓ right</span>
+<pre><span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"teenager"</span>)
+<span class="kw">elif</span> age &gt;= <span class="num">8</span>:
+    <span class="fn">print</span>(<span class="str">"big kid"</span>)</pre>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">Narrow gate first. Wide gate last.</p>
+  </div>
+
+  <!-- ============ 76 · elif can repeat ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXTRA</span>
+    <div class="pill">More roads</div>
+    <h2>As many <code>elif</code> as you like</h2>
+    <div class="match-flow">
+      <div class="row skip">if score &gt;= 90<span class="verdict">A</span></div>
+      <div class="row skip">elif score &gt;= 80<span class="verdict">B</span></div>
+      <div class="row hit">elif score &gt;= 70<span class="verdict">C ← 75 lands here</span></div>
+      <div class="row skip">else<span class="verdict">F</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">One <code>if</code>. Many <code>elif</code>. One <code>else</code>.</p>
+  </div>
+
+  <!-- ============ 77 · TRACE 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 3</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Which road does each age take?</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head"><code>age</code></div>
+      <div class="cell head">&gt;= 13</div>
+      <div class="cell head">&gt;= 8</div>
+      <div class="cell head">road</div>
+      <div class="cell head">printed</div>
+
+      <div class="cell"><code>13</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">skipped</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">if</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">teenager</span></details></div>
+
+      <div class="cell"><code>8</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">elif</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">big kid</span></details></div>
+
+      <div class="cell"><code>7</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">else</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">kid</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 78 · SOLO 4 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 4</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> add one more road to the age fork: <code>age &gt;= 65</code> prints <code>"Grandparent"</code>.<br>
+      <strong>Rule:</strong> it must go <b>above</b> the 13 line.
+    </div>
+    <p class="practice-hint">Narrowest gate first. Why?</p>
+  </div>
+
+  <!-- ============ 79 · Bug A ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 1 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>One equals in the question</h2>
+<pre><span class="kw">if</span> age = <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"exactly 13"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">SyntaxError: invalid syntax</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">A gate asks, it never delivers: <code>age == 13</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 80 · Bug B ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 2 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>No fence</h2>
+<pre><span class="kw">if</span> age &gt;= <span class="num">13</span>
+    <span class="fn">print</span>(<span class="str">"teenager"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">SyntaxError: expected ':'</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Colon on the end of the <code>if</code> line.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 81 · Bug C ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 3 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Nothing behind the gate</h2>
+<pre><span class="kw">if</span> age &gt;= <span class="num">13</span>:
+<span class="fn">print</span>(<span class="str">"teenager"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">IndentationError: expected an indented block</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Push the print four spaces right.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 82 · Bug D ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 4 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2><code>elif</code> with no <code>if</code></h2>
+<pre><span class="kw">elif</span> age &gt;= <span class="num">8</span>:
+    <span class="fn">print</span>(<span class="str">"big kid"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">SyntaxError: invalid syntax</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">An <code>elif</code> is a second question. It needs a first one.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 83 · Bug E ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 5 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Two forks, both roads run</h2>
+<pre>age = <span class="num">20</span>
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"teenager"</span>)
+<span class="kw">if</span> age &gt;= <span class="num">8</span>:
+    <span class="fn">print</span>(<span class="str">"big kid"</span>)</pre>
+    <div class="match-flow" style="margin-top:.4em">
+      <div class="row hit">first fork<span class="verdict">printed</span></div>
+      <div class="row hit">second fork<span class="verdict">printed too</span></div>
+    </div>
+    <div class="debug-card">
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Two <code>if</code> = two separate forks. Change the second to <code>elif</code>.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 84 · Bug F ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 6 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Quotes on a number</h2>
+<pre>age = <span class="fn">input</span>(<span class="str">"Age? "</span>)
+<span class="kw">if</span> age &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"teenager"</span>)</pre>
+    <div class="debug-card">
+      <div class="err">TypeError: '&gt;=' not supported between 'str' and 'int'</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Wrap it: <code>int(input("Age? "))</code></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 85 · Bug G ============ -->
+  <div class="slide">
+    <span class="slot-badge">🐛 FORK BUG 7 / 7</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Small letter true</h2>
+<pre><span class="fn">print</span>(true)</pre>
+    <div class="debug-card">
+      <div class="err">NameError: name 'true' is not defined</div>
+      <details><summary>Reveal fix</summary>
+        <p style="margin-top:.4em">Capital T: <code>True</code>. Capital F: <code>False</code>.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ 86 · and · gates in series ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 25</span>
+    <div class="pill">Concept</div>
+    <h2><code>and</code> — two gates in a row</h2>
+    <div class="viz-stage">
+      <div class="vlabel">walk through gate 1, then gate 2</div>
+      <div class="viz-pill kw">🚧 age &gt;= 8</div>
+      <div class="viz-arrow">↓ then</div>
+      <div class="viz-pill num">🚧 age &lt; 13</div>
+      <div class="viz-arrow">↓ only if both opened</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="bilingual">and는 문 두 개를 줄지어 지나요</p>
+  </div>
+
+  <!-- ============ 87 · STEP 9 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 9 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Ask two things at once</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="fn">print</span>(<span class="str">"You are a kid"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    print("You are a kid")</span><span class="hot">print(age &gt;= 8 and age &lt; 13)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("You are a kid")</code><br>
+      📍 <b>WHERE:</b> new line directly under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> both gates must open for <code>and</code><br>
+      ✅ <b>CHECK:</b> with <code>age = 9</code> it prints <code>True</code>
+    </div>
+  </div>
+
+  <!-- ============ 88 · and truth table ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 26</span>
+    <div class="pill">⭐ The rule</div>
+    <h2><code>and</code> — every answer</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">left</div>
+      <div class="cell head"><code>True</code></div>
+      <div class="cell head"><code>True</code></div>
+      <div class="cell head"><code>False</code></div>
+
+      <div class="cell head">right</div>
+      <div class="cell head"><code>True</code></div>
+      <div class="cell head"><code>False</code></div>
+      <div class="cell head">anything</div>
+
+      <div class="cell"><code>and</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+    </div>
+    <p class="center" style="margin-top:.4em">One shut gate stops the whole walk.</p>
+  </div>
+
+  <!-- ============ 89 · or · gates in parallel ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 27</span>
+    <div class="pill">Concept</div>
+    <h2><code>or</code> — two gates side by side</h2>
+    <div class="viz-stage">
+      <div class="vlabel">pick either doorway</div>
+      <div class="opt-grid two">
+        <div class="opt-card"><div class="ico">🚪</div><div class="name">age &gt;= 13</div><div class="ex">this one</div></div>
+        <div class="opt-card"><div class="ico">🚪</div><div class="name">age == 9</div><div class="ex">…or this one</div></div>
+      </div>
+      <div class="viz-arrow">↓ one open door is enough</div>
+      <div class="viz-pill str">True</div>
+    </div>
+    <p class="bilingual">or는 문 하나만 열려도 돼요</p>
+  </div>
+
+  <!-- ============ 90 · STEP 10 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 10 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Either one will do</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="fn">print</span>(age &gt;= <span class="num">8</span> <span class="kw">and</span> age &lt; <span class="num">13</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">print(age &gt;= 8 and age &lt; 13)</span><span class="hot">print(age &gt;= 13 or age == 9)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>and age &lt; 13</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> <code>or</code> needs only one side to be True<br>
+      ✅ <b>CHECK:</b> with <code>age = 9</code> it prints <code>True</code>
+    </div>
+  </div>
+
+  <!-- ============ 91 · or truth table ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 28</span>
+    <div class="pill">⭐ The rule</div>
+    <h2><code>or</code> — every answer</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">left</div>
+      <div class="cell head"><code>True</code></div>
+      <div class="cell head"><code>False</code></div>
+      <div class="cell head"><code>False</code></div>
+
+      <div class="cell head">right</div>
+      <div class="cell head">anything</div>
+      <div class="cell head"><code>True</code></div>
+      <div class="cell head"><code>False</code></div>
+
+      <div class="cell"><code>or</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Only two shut doors give False.</p>
+  </div>
+
+  <!-- ============ 92 · not ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 29</span>
+    <div class="pill">Concept</div>
+    <h2><code>not</code> — the flipper 🔄</h2>
+    <div class="viz-stage">
+      <div class="vlabel">it turns the answer around</div>
+      <div class="viz-pill str">True</div>
+      <div class="viz-arrow">↓ not</div>
+      <div class="viz-pill num">False</div>
+    </div>
+    <p class="center" style="margin-top:.5em"><code>not True</code> is <code>False</code>. <code>not False</code> is <code>True</code>.</p>
+    <p class="bilingual">not은 답을 뒤집어요</p>
+  </div>
+
+  <!-- ============ 93 · STEP 11 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 11 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Flip an answer</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="fn">print</span>(age &gt;= <span class="num">13</span> <span class="kw">or</span> age == <span class="num">9</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">print(age &gt;= 13 or age == 9)</span><span class="hot">print(not age &gt;= 13)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>or age == 9</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> <code>not</code> flips whatever comes after it<br>
+      ✅ <b>CHECK:</b> with <code>age = 9</code> it prints <code>True</code>
+    </div>
+  </div>
+
+  <!-- ============ 94 · and inside a real if ============ -->
+  <div class="slide">
+    <span class="slot-badge">READ IT</span>
+    <div class="pill">Read it</div>
+    <h2>Now put <code>and</code> on a gate</h2>
+<pre><span class="kw">if</span> age &gt;= <span class="num">8</span> <span class="kw">and</span> age &lt; <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"You are a big kid"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ age = 9</div>
+      <div style="opacity:1">You are a big kid</div>
+    </div>
+    <p class="center" style="margin-top:.3em">One gate. Two questions. Still one road.</p>
+  </div>
+
+  <!-- ============ 95 · SOLO 5 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 5</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> print <code>True</code> when <code>score</code> is between 60 and 90.<br>
+      <strong>Rule:</strong> one line. Use <code>and</code>.
+    </div>
+    <p class="practice-hint">Two questions, one <code>and</code> between them.</p>
+  </div>
+
+  <!-- ============ 96 · sharing 7 ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 30</span>
+    <div class="pill">New idea</div>
+    <h2>Share 7 sweets into 2s 🍬</h2>
+    <div class="iter-row">
+      <div class="iter-item">🍬🍬</div>
+      <div class="iter-item">🍬🍬</div>
+      <div class="iter-item">🍬🍬</div>
+      <div class="iter-item">🍬</div>
+    </div>
+    <p class="center" style="margin-top:.5em">Three full pairs. <b>One left over.</b></p>
+    <p class="bilingual">두 개씩 나누면 하나가 남아요</p>
+  </div>
+
+  <!-- ============ 97 · sharing 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 31</span>
+    <div class="pill">New idea</div>
+    <h2>Now share 6 sweets into 2s 🍬</h2>
+    <div class="iter-row">
+      <div class="iter-item">🍬🍬</div>
+      <div class="iter-item">🍬🍬</div>
+      <div class="iter-item">🍬🍬</div>
+    </div>
+    <p class="center" style="margin-top:.5em">Three full pairs. <b>Nothing left over.</b></p>
+  </div>
+
+  <!-- ============ 98 · % gives the leftover ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 32</span>
+    <div class="pill">⭐ The rule</div>
+    <h2><code>%</code> hands back the leftover</h2>
+    <div class="viz-stage">
+      <div class="viz-pill num">7 % 2</div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">1</div>
+    </div>
+    <div class="viz-stage" style="margin-top:.5em">
+      <div class="viz-pill num">6 % 2</div>
+      <div class="viz-arrow">↓</div>
+      <div class="viz-pill str">0</div>
+    </div>
+    <p class="center" style="margin-top:.3em">Not the pairs. The leftover.</p>
+  </div>
+
+  <!-- ============ 99 · % 2 == 0 means even ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 33</span>
+    <div class="pill">⭐ The rule</div>
+    <h2>Leftover 0 = it divides evenly</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">✅</div><div class="name">i % 2 == 0</div><div class="ex">even · 2, 4, 6, 8</div></div>
+      <div class="opt-card"><div class="ico">⛔</div><div class="name">i % 2 == 1</div><div class="ex">odd · 1, 3, 5, 7</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">Change the 2 to a 3 and you ask about threes.</p>
+    <p class="bilingual">나머지가 0이면 딱 나눠져요</p>
+  </div>
+
+  <!-- ============ 100 · trace % ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 4</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the leftovers</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head"><code>i</code></div>
+      <div class="cell head"><code>1</code></div>
+      <div class="cell head"><code>2</code></div>
+      <div class="cell head"><code>3</code></div>
+      <div class="cell head"><code>4</code></div>
+
+      <div class="cell"><code>i % 3</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">== 0 ?</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 101 · the belt with a gate ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 34</span>
+    <div class="pill">🎯 The payoff</div>
+    <h2>A gate on the belt</h2>
+    <div class="viz-stage">
+      <div class="vlabel">every item on the belt meets the same gate</div>
+      <div class="iter-row">
+        <div class="iter-item">1 🔒</div>
+        <div class="iter-item">2 🔒</div>
+        <div class="iter-item">3 🔓</div>
+        <div class="iter-item">4 🔒</div>
+        <div class="iter-item">5 🔒</div>
+        <div class="iter-item">6 🔓</div>
+      </div>
+      <div class="viz-arrow">↓ question: i % 3 == 0</div>
+      <div class="viz-pill str">FIZZ only on 3 and 6</div>
+    </div>
+    <p class="bilingual">반복문 안에 조건문을 넣어요</p>
+  </div>
+
+  <!-- ============ 102 · new file ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SET UP</span>
+    <div class="pill">New file 📄</div>
+    <h2>Make <code>loopfork.py</code></h2>
+    <ul class="check-list" style="text-align:left">
+      <li>Click <b>New File</b></li>
+      <li>Name it <code>loopfork.py</code></li>
+      <li>Leave it empty</li>
+    </ul>
+  </div>
+
+  <!-- ============ 103 · STEP 12 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 12 / 29</span>
+    <div class="stage-bar"><div class="step current"></div><div class="step"></div><div class="step"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Type it</div>
+    <h2>v1 · The belt</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">(empty file)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> line 1, the empty file<br>
+      📍 <b>WHERE:</b> line 1 · 0 spaces · colon on the end<br>
+      🟣 <b>WHY:</b> ten passes, 1 to 10<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 104 · STEP 13 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 13 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step current"></div><div class="step"></div><div class="step"></div><span class="num">v1</span></div>
+    <div class="pill">Type it</div>
+    <h2>v1 · Print every pass</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">for i in range(1, 11):</span><span class="hot">    print(i)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>for i in range(1, 11):</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> 4 spaces = inside the loop<br>
+      ✅ <b>CHECK:</b> run — 1 to 10, one per line
+    </div>
+  </div>
+
+  <!-- ============ 105 · run v1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v1 · ten plain numbers</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">1</div>
+      <div style="opacity:1">2</div>
+      <div style="opacity:1">3 &nbsp;<span class="com"># …up to 10</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">No gate yet. Every pass looks the same.</p>
+  </div>
+
+  <!-- ============ 106 · STEP 14 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 14 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step current"></div><div class="step"></div><span class="num">v2</span></div>
+    <div class="pill">Type it</div>
+    <h2>v2 · The gate goes in</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="fn">print</span>(i)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">for i in range(1, 11):</span><span class="hot">    if i % 3 == 0:</span><span class="dim">    print(i)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>for i in range(1, 11):</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b> · colon on the end<br>
+      🟣 <b>WHY:</b> the gate sits inside the loop<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 107 · STEP 15 · re-indent ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 15 / 29</span>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v2</span></div>
+    <div class="pill">Move it →</div>
+    <h2>v2 · Push the print inside the gate</h2>
+    <div class="debug-box"><div class="debug-tag">OLD · 4 spaces</div>
+<pre style="margin-top:.4em">    <span class="fn">print</span>(i)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW · 8 spaces</div>
+<pre style="margin-top:.4em">        <span class="fn">print</span>(i)</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print(i)</code><br>
+      📍 <b>WHERE:</b> same line · press <b>Tab</b> once · 4 spaces → 8 spaces<br>
+      🟣 <b>WHY:</b> 8 spaces = behind the gate, not just in the loop<br>
+      ✅ <b>CHECK:</b> run — only 3, 6, 9 print
+    </div>
+  </div>
+
+  <!-- ============ 108 · indent ruler for the nest ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces</div>
+    <h2>Two fences, two steps in</h2>
+<pre style="font-size:clamp(12px,2vmin,20px)"><span class="com">|--4-|--8-|-12-|</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):   <span class="com"># 0</span>
+    <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:        <span class="com"># 4</span>
+        <span class="fn">print</span>(i)             <span class="com"># 8</span></pre>
+    <p class="center" style="margin-top:.5em">Each fence pushes the next line four more spaces right.</p>
+  </div>
+
+  <!-- ============ 109 · run v2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v2 · only the threes</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">3</div>
+      <div style="opacity:1">6</div>
+      <div style="opacity:1">9</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Ten passes ran. The gate opened three times.</p>
+  </div>
+
+  <!-- ============ 110 · STEP 16 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 16 / 29</span>
+    <div class="pill">Change it</div>
+    <h2>v3 · Say FIZZ instead</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">        <span class="fn">print</span>(i)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em">        <span class="fn">print</span>(<span class="str">"FIZZ"</span>)</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print(i)</code><br>
+      📍 <b>WHERE:</b> same line · 8 spaces · swap what is inside<br>
+      🟣 <b>WHY:</b> a word instead of the number<br>
+      ✅ <b>CHECK:</b> run — FIZZ three times
+    </div>
+  </div>
+
+  <!-- ============ 111 · STEP 17 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 17 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · The other road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">        <span class="fn">print</span>(<span class="str">"FIZZ"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">        print("FIZZ")</span><span class="hot">    else:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("FIZZ")</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b> · lines up with <code>if</code><br>
+      🟣 <b>WHY:</b> <code>else</code> always lines up with its own <code>if</code><br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 112 · STEP 18 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 18 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · The number road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="kw">else</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    else:</span><span class="hot">        print(i)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>else:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> when the gate is shut, print the plain number<br>
+      ✅ <b>CHECK:</b> run — 1 2 FIZZ 4 5 FIZZ 7 8 FIZZ 10
+    </div>
+  </div>
+
+  <!-- ============ 113 · run v4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>v4 · the whole thing</h2>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:
+        <span class="fn">print</span>(<span class="str">"FIZZ"</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(i)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">1 &nbsp;2 &nbsp;FIZZ &nbsp;4 &nbsp;5 &nbsp;FIZZ &nbsp;7 &nbsp;8 &nbsp;FIZZ &nbsp;10</div>
+    </div>
+    <p class="center" style="margin-top:.3em">Your loop. Your fork. Together.</p>
+  </div>
+
+  <!-- ============ 114 · TRACE 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 5</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>One row per pass</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">pass</div>
+      <div class="cell head">1</div>
+      <div class="cell head">2</div>
+      <div class="cell head">3</div>
+      <div class="cell head">4</div>
+
+      <div class="cell"><code>i</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell"><code>i % 3 == 0</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell">printed</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">FIZZ</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 115 · the ramp map ============ -->
+  <div class="slide">
+    <span class="slot-badge">MAP</span>
+    <div class="pill purple">Where you went</div>
+    <h2>v1 → v4 in four moves</h2>
+    <div class="stage-bar"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step current"></div><span class="num">v4</span></div>
+    <div class="edge-grid" style="margin-top:.6em">
+      <div class="edge-card"><div class="ehead">v1</div><div class="edesc">the loop alone</div></div>
+      <div class="edge-card"><div class="ehead">v2</div><div class="edesc">a gate inside it</div></div>
+      <div class="edge-card"><div class="ehead">v3</div><div class="edesc">FIZZ on the open road</div></div>
+      <div class="edge-card"><div class="ehead">v4</div><div class="edesc">a road for the shut gate</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 116 · the payoff lands on tables.py ============ -->
+  <div class="slide">
+    <span class="slot-badge">READ IT</span>
+    <div class="pill">🎯 The payoff</div>
+    <h2>Now put the gate in <code>tables.py</code></h2>
+<pre style="font-size:clamp(12px,2vmin,20px)">number = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Which times table? "</span>))
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">13</span>):
+    <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:
+        <span class="fn">print</span>(<span class="str">"FIZZ"</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(f<span class="str">"{number} x {i} = {number * i}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Which times table? 8</div>
+      <div style="opacity:1">8 x 1 = 8</div>
+      <div style="opacity:1">8 x 2 = 16</div>
+      <div style="opacity:1">FIZZ</div>
+      <div style="opacity:1">8 x 4 = 32 &nbsp;<span class="com"># …and on</span></div>
+    </div>
+    <p class="center" style="margin-top:.3em">Your own table. Now it chooses.</p>
+  </div>
+
+  <!-- ============ 117 · nested drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 35</span>
+    <div class="pill">New idea</div>
+    <h2>A gate behind a gate 🚧🚧</h2>
+    <div class="viz-stage">
+      <div class="vlabel">you only meet gate 2 after gate 1 lets you through</div>
+      <div class="viz-pill kw">🚧 &nbsp;i % 3 == 0 &nbsp;→ &nbsp;False</div>
+      <div class="viz-arrow">↓ so you are on the else road</div>
+      <div class="viz-pill num">🚧 &nbsp;i &gt; 5 &nbsp;→ &nbsp;asked here</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Inside a road, you can build another fork.</p>
+  </div>
+
+  <!-- ============ 117 · STEP 19 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 19 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>The inner gate</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="kw">else</span>:
+        <span class="fn">print</span>(i)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    else:</span><span class="dim">        print(i)</span><span class="hot">        if i &gt; 5:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print(i)</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>8 spaces</b> · colon on the end<br>
+      🟣 <b>WHY:</b> 8 spaces puts this fork inside the else road<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 118 · STEP 20 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 20 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>The inner road</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">        <span class="kw">if</span> i &gt; <span class="num">5</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">        if i &gt; 5:</span><span class="hot">            print("that one was big")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if i &gt; 5:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> three fences deep, so twelve spaces<br>
+      ✅ <b>CHECK:</b> run — the extra line shows after 7, 8 and 10
+    </div>
+  </div>
+
+  <!-- ============ 119 · nested indent ruler ============ -->
+  <div class="slide">
+    <span class="slot-badge">INDENT</span>
+    <div class="pill purple">Count the spaces</div>
+    <h2>Three fences deep</h2>
+<pre style="font-size:clamp(11px,1.8vmin,18px)"><span class="com">|--4-|--8-|-12-|</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):        <span class="com"># 0</span>
+    <span class="kw">if</span> i % <span class="num">3</span> == <span class="num">0</span>:             <span class="com"># 4</span>
+        <span class="fn">print</span>(<span class="str">"FIZZ"</span>)            <span class="com"># 8</span>
+    <span class="kw">else</span>:                     <span class="com"># 4</span>
+        <span class="fn">print</span>(i)                 <span class="com"># 8</span>
+        <span class="kw">if</span> i &gt; <span class="num">5</span>:              <span class="com"># 8</span>
+            <span class="fn">print</span>(<span class="str">"..."</span>)          <span class="com"># 12</span></pre>
+  </div>
+
+  <!-- ============ 120 · the secret box ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 36</span>
+    <div class="pill">🎯 Next build</div>
+    <h2>A number in a locked box 🔒</h2>
+    <div class="viz-stage">
+      <div class="vlabel">the computer knows it. You do not.</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">secret</span><span class="val">🔒</span></div>
+      </div>
+      <div class="viz-arrow">↓ you guess</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">guess</span><span class="val">4</span></div>
+      </div>
+    </div>
+    <p class="bilingual">숫자 맞히기 게임을 시작해요</p>
+  </div>
+
+  <!-- ============ 121 · new file ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SET UP</span>
+    <div class="pill">New file 📄</div>
+    <h2>Make <code>guess.py</code></h2>
+    <ul class="check-list" style="text-align:left">
+      <li>Click <b>New File</b></li>
+      <li>Name it <code>guess.py</code></li>
+      <li>Leave it empty</li>
+    </ul>
+  </div>
+
+  <!-- ============ 122 · STEP 21 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 21 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Borrow the dice box</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">(empty file)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="kw">import</span> random</pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> line 1, the empty file<br>
+      📍 <b>WHERE:</b> line 1 · 0 spaces<br>
+      🟣 <b>WHY:</b> <code>random</code> is a toolbox Python keeps on a shelf<br>
+      ✅ <b>CHECK:</b> run — nothing prints, no error
+    </div>
+  </div>
+
+  <!-- ============ 123 · randint drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 37</span>
+    <div class="pill">Concept</div>
+    <h2><code>randint(1, 10)</code> picks one 🎲</h2>
+    <div class="viz-stage">
+      <div class="iter-row">
+        <div class="iter-item">1</div>
+        <div class="iter-item">2</div>
+        <div class="iter-item">3</div>
+        <div class="iter-item">4</div>
+        <div class="iter-item">5</div>
+        <div class="iter-item">6</div>
+        <div class="iter-item">7</div>
+        <div class="iter-item">8</div>
+        <div class="iter-item">9</div>
+        <div class="iter-item">10</div>
+      </div>
+      <div class="viz-arrow">↓ one falls into the box</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">secret</span><span class="val">7</span></div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.3em">Here <b>both</b> numbers ride, 1 and 10.</p>
+  </div>
+
+  <!-- ============ 124 · STEP 22 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 22 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Fill the locked box</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">import</span> random</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">import random</span><span class="hot">secret = random.randint(1, 10)</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>import random</code><br>
+      📍 <b>WHERE:</b> new line under it · 0 spaces<br>
+      🟣 <b>WHY:</b> one hidden number between 1 and 10<br>
+      ✅ <b>CHECK:</b> run — still nothing prints. Correct.
+    </div>
+  </div>
+
+  <!-- ============ 125 · STEP 23 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 23 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Take one guess</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">secret = random.randint(<span class="num">1</span>, <span class="num">10</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">secret = random.randint(1, 10)</span><span class="hot">guess = int(input("Guess 1 to 10: "))</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>random.randint(1, 10)</code><br>
+      📍 <b>WHERE:</b> new line under it · 0 spaces<br>
+      🟣 <b>WHY:</b> <code>int()</code> makes it a number the scale can weigh<br>
+      ✅ <b>CHECK:</b> run — it waits for you to type
+    </div>
+  </div>
+
+  <!-- ============ 126 · three roads drawn ============ -->
+  <div class="slide">
+    <span class="slot-badge">PICTURE 38</span>
+    <div class="pill">Concept</div>
+    <h2>Three roads for one guess</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">⬆️</div><div class="name">guess &gt; secret</div><div class="ex">Too high!</div></div>
+      <div class="opt-card"><div class="ico">⬇️</div><div class="name">guess &lt; secret</div><div class="ex">Too low!</div></div>
+      <div class="opt-card"><div class="ico">🎯</div><div class="name">everything else</div><div class="ex">You got it!</div></div>
+    </div>
+    <p class="center" style="margin-top:.6em">You already know this shape: if · elif · else.</p>
+  </div>
+
+  <!-- ============ 127 · STEP 24 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 24 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 1 · the question</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">guess = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Guess 1 to 10: "</span>))</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">guess = int(input("Guess 1 to 10: "))</span><span class="hot">if guess &gt; secret:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>Guess 1 to 10</code><br>
+      📍 <b>WHERE:</b> new line under that line · 0 spaces · colon on the end<br>
+      🟣 <b>WHY:</b> weigh the guess against the secret<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 128 · STEP 25 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 25 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 1 · the message</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">if</span> guess &gt; secret:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">if guess &gt; secret:</span><span class="hot">    print("Too high!")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if guess &gt; secret:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> the first road's message<br>
+      ✅ <b>CHECK:</b> run and guess 10 a few times
+    </div>
+  </div>
+
+  <!-- ============ 129 · STEP 26 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 26 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 2 · the question</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="fn">print</span>(<span class="str">"Too high!"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    print("Too high!")</span><span class="hot">elif guess &lt; secret:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("Too high!")</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>0 spaces</b> · colon on the end<br>
+      🟣 <b>WHY:</b> only asked when the first was False<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 130 · STEP 27 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 27 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 2 · the message</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">elif</span> guess &lt; secret:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">elif guess &lt; secret:</span><span class="hot">    print("Too low!")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>elif guess &lt; secret:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> the second road's message<br>
+      ✅ <b>CHECK:</b> run and guess 1 a few times
+    </div>
+  </div>
+
+  <!-- ============ 131 · STEP 28 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 28 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 3 · the leftovers</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em">    <span class="fn">print</span>(<span class="str">"Too low!"</span>)</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">    print("Too low!")</span><span class="hot">else:</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>print("Too low!")</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>0 spaces</b> · colon on the end<br>
+      🟣 <b>WHY:</b> not higher and not lower means equal<br>
+      ✅ <b>CHECK:</b> do <b>not</b> run. IndentationError is expected.
+    </div>
+  </div>
+
+  <!-- ============ 132 · STEP 29 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 29 / 29</span>
+    <div class="pill">Type it</div>
+    <h2>Road 3 · the win</h2>
+    <div class="debug-box"><div class="debug-tag">OLD</div>
+<pre style="margin-top:.4em"><span class="kw">else</span>:</pre>
+    </div>
+    <div class="debug-box" style="margin-top:.6em"><div class="debug-tag fix">NEW</div>
+<pre style="margin-top:.4em"><span class="dim">else:</span><span class="hot">    print("You got it!")</span></pre>
+    </div>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>else:</code><br>
+      📍 <b>WHERE:</b> new line under it · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> the only road left<br>
+      ✅ <b>CHECK:</b> run and guess until you win
+    </div>
+  </div>
+
+  <!-- ============ 133 · run the game ============ -->
+  <div class="slide">
+    <span class="slot-badge">CHECK</span>
+    <div class="pill">Run it ▶</div>
+    <h2>One guess, one answer</h2>
+    <div class="terminal">
+      <div class="line"><span class="prompt">Guess 1 to 10:</span> <span class="typed">3</span></div>
+      <div class="line"><span class="echo">Too low!</span></div>
+      <div class="line"><span class="prompt">(run again) Guess 1 to 10:</span> <span class="typed">9</span></div>
+      <div class="line"><span class="ok">Too high!</span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">It answers once, then stops.</p>
+  </div>
+
+  <!-- ============ 134 · TRACE 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE 6</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>secret is 7. Three guesses.</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head"><code>guess</code></div>
+      <div class="cell head"><code>9</code></div>
+      <div class="cell head"><code>2</code></div>
+      <div class="cell head"><code>7</code></div>
+
+      <div class="cell">guess &gt; 7</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell">guess &lt; 7</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">skipped</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell">printed</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Too high!</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Too low!</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">You got it!</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 135 · stop here ============ -->
+  <div class="slide">
+    <span class="slot-badge">STOP</span>
+    <div class="pill purple">Park it here</div>
+    <h2>The game only asks once</h2>
+    <div class="match-flow">
+      <div class="row hit">ask one guess<span class="verdict">done today</span></div>
+      <div class="row hit">too high / too low<span class="verdict">done today</span></div>
+      <div class="row skip">ask again until you win<span class="verdict">next week</span></div>
+    </div>
+    <p class="bilingual">다음 시간에 계속 물어보게 만들어요</p>
+  </div>
+
+  <!-- ============ 136 · fill blanks 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY 3</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>temp = <span class="num">30</span>
+<span class="kw">if</span> temp ___ <span class="num">25</span>:
+    <span class="fn">print</span>(<span class="str">"Hot"</span>)
+___:
+    <span class="fn">print</span>(<span class="str">"Cool"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Goal</div>
+      <div style="opacity:1">Hot</div>
+    </div>
+  </div>
+
+  <!-- ============ 137 · fill blanks 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY 4</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Harder — four blanks</h2>
+<pre>score = <span class="num">75</span>
+<span class="kw">if</span> score ___ <span class="num">90</span>:
+    <span class="fn">print</span>(<span class="str">"A"</span>)
+___ score &gt;= <span class="num">70</span>___
+    <span class="fn">print</span>(<span class="str">"C"</span>)
+___:
+    <span class="fn">print</span>(<span class="str">"F"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Goal</div>
+      <div style="opacity:1">C</div>
+    </div>
+  </div>
+
+  <!-- ============ 138 · quiz A ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ A</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 fast questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Which one asks a question?</div>
+      <div class="opts">
+        <details><summary>A. <code>age = 13</code></summary><div class="ans">No — that is a delivery.</div></details>
+        <details><summary>B. <code>age == 13</code></summary><div class="ans">✓ Two equals asks.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>age = 13</code>. What prints?</div>
+      <div class="opts">
+        <details><summary>A. teenager</summary><div class="ans">✓ 13 &gt;= 13 is True.</div></details>
+        <details><summary>B. kid</summary><div class="ans">No — "or equal" counts.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 139 · quiz B ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ B</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>2 more</h2>
+    <div class="quiz-card">
+      <div class="q">1. How many roads run in one fork?</div>
+      <div class="opts">
+        <details><summary>A. Exactly one</summary><div class="ans">✓ Always exactly one.</div></details>
+        <details><summary>B. Every True one</summary><div class="ans">No — it stops at the first.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>9 % 3</code> gives</div>
+      <div class="opts">
+        <details><summary>A. 3</summary><div class="ans">No — that is the pairs.</div></details>
+        <details><summary>B. 0</summary><div class="ans">✓ Nothing left over.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 140 · code talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud 👯</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The question is <span class="blank"></span>. The answer is <span class="blank"></span>, so the road taken is <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ 141 · your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">YOUR TURN</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build the grader 📝</h2>
+    <ul class="check-list">
+      <li>New file <code>grader.py</code></li>
+      <li>Ask <code>"Your score? "</code> with <code>int(input(...))</code></li>
+      <li><code>if</code> 90 and over → <code>"A"</code></li>
+      <li><code>elif</code> 80 and over → <code>"B"</code></li>
+      <li><code>else</code> → <code>"Keep going"</code></li>
+    </ul>
+  </div>
+
+  <!-- ============ 142 · SOLO 6 ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SOLO 6</span>
+    <div class="pill purple">✋ Hands off, Kasim</div>
+    <h2>ETHAN WRITES THIS ONE ALONE</h2>
+    <div class="practice-task">
+      <strong>Goal:</strong> add one more grade to <code>grader.py</code>: 70 and over prints <code>"C"</code>.<br>
+      <strong>Rule:</strong> two lines, and they go above the <code>else</code>.
+    </div>
+    <p class="practice-hint">Which gate is narrower, 80 or 70?</p>
+  </div>
+
+  <!-- ============ 143 · stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">STRETCH</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">bonus</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>In <code>loopfork.py</code>, change the 3 to a 5.</div>
+      <div class="item"><span class="lvl">★★</span>Print <code>"BUZZ"</code> for fives, using an <code>elif</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Print <code>"FIZZBUZZ"</code> when it is both. Which gate goes first?</div>
+      <div class="item"><span class="lvl">★★★★</span>In <code>guess.py</code>, print how far off the guess was.</div>
+    </div>
+  </div>
+
+  <!-- ============ 144 · exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXIT TICKET</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">One sentence</div>
+      <p style="margin-top:.4em">Say the difference between <code>=</code> and <code>==</code>.</p>
+      <p class="bilingual" style="margin-top:.4em">한 문장으로 답해 보세요</p>
+    </div>
+  </div>
+
+  <!-- ============ 145 · close ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">CLOSE</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One question.<br>One road.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Next time: <code>while</code> — keep guessing until you win.</p>
+    <p class="bilingual">다음 시간에 맞힐 때까지 반복해요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 146</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
