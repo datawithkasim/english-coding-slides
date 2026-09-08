@@ -1,28 +1,29 @@
 """Build the DB001 Tech & AI Debate decks.
 
-The RS/WEB slot structure is built around code — worked example, trace,
-debug. A debate lesson has a different spine, so this track builds its own,
-in two shapes taken from CURRICULUM.md:
+The RS/WEB slot structure is built around code — worked example, trace, debug.
+A debate lesson has a different spine, so this track builds its own, in two
+shapes:
 
-  Skill Week (12 of 16) — 31 slides, in the six sections Kasim named on
-  2026-09-08: word practice, opinions, the skill, writing pieces, debate
-  practice, then the debate. Fewer things to run and far more to ask — the
-  silent brainstorm sprint and the third word game are gone, and ten prompts
-  from Q take their place.
+  Skill Week (12 of 16) — 21 slides in the order Kasim set on 2026-09-08:
+  introduce the new idea, ask questions, list, bounce ideas off each other,
+  practise the structure and how a debater thinks, write, then more questions
+  and a final prompt. Slide two is always the big idea, in the biggest type on
+  the deck.
 
-  Debate Day (weeks 4, 8, 12, 16) — 23 slides. No skill teach and no writing
-  sprints: roles, prep, openings, rebuttal, closing, vote, reflection.
+  Debate Day (weeks 4, 8, 12, 16) — 17 slides. The whole lesson is the round:
+  roles, both cases, the clash, prep, openings, rebuttal, closing, vote.
 
-Kasim rejected the earlier 12-slot skeleton on 2026-09-04 as too bare. Slides
-must carry the lesson, not label it: every activity states what to do and
-where. Clock minutes are NOT printed on slides (2026-09-08) — the schedule is
-the teacher's business. Speaking lengths that are part of a format (45-second
-openings, 30-second closings, the 15-second point of information) stay,
-because they are rules of the debate, and the debateTimer buttons stay too.
+Three standing rules, all set on 2026-09-08:
 
-Every week ships its own palette and backdrop from THEMES, so no two weeks
-look alike. The shared assets/style.css is never touched — the coding decks
-read the same file.
+  * Bright, not dark. Every deck ships LIGHT plus one of sixteen light
+    palettes. Accents are text colours here, so they are dark saturated
+    shades — neon on white disappears. Shared assets/style.css is never
+    touched; the coding decks read the same file.
+  * No clock times on a slide. Speaking lengths that are rules of a format
+    stay (45-second openings, 30-second closings, the 15-second point of
+    information), and the debateTimer buttons stay.
+  * Every slide that asks the students to do something says which kind of
+    doing it is, in the bottom-right corner: speaking, writing or thinking.
 
     python scripts/build-debate-decks.py
 
@@ -784,76 +785,127 @@ Q = {
 
 
 # ---------------------------------------------------------------- look
-# Kasim asked (2026-09-08) that no two weeks look alike, so every deck ships
-# its own palette on top of the shared stylesheet. Rules the palettes obey:
-#   * dark background always — the .mcq feedback greens and reds are hardcoded
-#     in style.css and only read on a dark panel
-#   * accent and accent-2 both bright enough to carry body text
-#   * bd paints .stage, so the backdrop geometry changes week to week too
-#   * FURN rotates the slide furniture on a cycle of four, so neighbouring
-#     weeks never share a badge shape or heading treatment
+# Bright and friendly, and no two weeks alike (Kasim, 2026-09-08). The shared
+# assets/style.css is dark-first and is never touched — the coding decks read
+# the same file — so every debate deck ships LIGHT, which flips the handful of
+# rules in that stylesheet that only work on a dark panel, and then one of the
+# sixteen palettes below on top of it.
+#
+# Accents are TEXT colours here (h2, .sub, card heads, the timer), so on a
+# light page they must be dark and saturated. Neon on white disappears.
+
+LIGHT = (
+    # page furniture
+    "body{color:var(--ink)}"
+    ".nav button{background:rgba(0,0,0,.06);color:var(--ink)}"
+    ".nav button:hover{background:var(--accent);color:#fff}"
+    ".counter{background:rgba(0,0,0,.06);color:var(--ink)}"
+    ".footer-tag{color:var(--ink);opacity:.4}"
+    # the badge used to sit top-left and collide with the pill on dense slides;
+    # bottom-left is empty and balances the activity mark opposite it
+    ".slot-badge{opacity:.85;background:var(--soft);color:var(--ink);top:auto;bottom:22px;left:28px}"
+    # cards that assumed a dark page behind them
+    ".model-box{background:var(--panel);box-shadow:0 4px 0 var(--soft)}"
+    ".predict-card details{background:rgba(0,0,0,.04)}"
+    ".check-list li::before{background:var(--accent);color:#fff}"
+    ".vocab-table .konglish{background:rgba(0,0,0,.05);color:var(--ink)}"
+    ".debug-card{background:var(--panel);box-shadow:0 4px 0 var(--soft)}"
+    ".edge-card{background:var(--panel);box-shadow:0 3px 0 var(--soft)}"
+    ".mcq .opt{background:var(--panel);color:var(--ink);border:2px solid var(--soft)}"
+    ".mcq .opt:hover:not(.disabled){border-color:var(--accent)}"
+    ".mcq .qfeedback.good{background:rgba(21,128,61,.10);color:#15803d;border:1px solid #15803d}"
+    ".mcq .qfeedback.bad{background:rgba(185,28,28,.08);color:#b91c1c;border:1px solid #b91c1c}"
+    ".dtimer button:hover{color:#fff}"
+    ".dtimer button.stop:hover{color:#fff}"
+    # the corner mark: is this slide speaking, writing or thinking?
+    ".act{position:absolute;bottom:20px;right:26px;display:flex;align-items:center;"
+    "gap:.45em;background:var(--panel);border:2px solid var(--soft);border-radius:999px;"
+    "padding:.3em .9em;font-size:clamp(11px,1.9vmin,15px);font-weight:800;"
+    "letter-spacing:.1em;color:var(--ink);z-index:5;box-shadow:0 3px 0 var(--soft)}"
+    ".act .ai{font-size:1.35em;line-height:1}"
+    # the one thing on the slide that must land: today's idea
+    ".bigidea{font-size:clamp(30px,min(7.4vmin,5.4vw),96px);font-weight:800;"
+    "line-height:1.08;color:var(--accent);margin:.1em 0 .25em}"
+    ".ribbon{display:inline-block;width:fit-content;align-self:flex-start;"
+    "background:var(--accent);color:#fff;font-weight:800;"
+    "letter-spacing:.14em;text-transform:uppercase;padding:.3em 1em;border-radius:999px;"
+    "font-size:clamp(12px,2.1vmin,17px)}"
+)
+
+# Four sets of slide furniture, rotated so neighbouring weeks never match.
 FURN = [
-    # 0 — rounded, plain headings (the house style)
-    "",
+    # 0 — soft and rounded (the friendly default)
+    ".frame-card,.predict-card,.recap-q{border-radius:22px}",
     # 1 — square badges, upper-case tracked headings
-    ".pill,.slot-badge{border-radius:4px}"
-    "h2{text-transform:uppercase;letter-spacing:.04em}"
+    ".pill,.slot-badge{border-radius:6px}"
+    "h2{text-transform:uppercase;letter-spacing:.03em}"
     ".slot-badge{letter-spacing:.16em}",
     # 2 — outlined furniture, ruled headings
-    ".pill{background:transparent;border:2px solid var(--accent);color:var(--accent)}"
+    ".pill{background:transparent;border:2px solid var(--accent);color:var(--accent);margin-bottom:.5em}"
     ".pill.purple{background:transparent;border:2px solid var(--accent-2);color:var(--accent-2)}"
-    "h2{border-bottom:3px solid var(--soft);padding-bottom:.18em}",
-    # 3 — heavy left rule, squared oversized badge
-    ".slide{border-left:8px solid var(--accent-2)}"
-    ".slot-badge{font-size:clamp(12px,2.1vmin,17px);padding:.4em .9em;border-radius:2px}"
+    "h2{border-bottom:4px solid var(--soft);padding-bottom:.1em;margin-bottom:.32em}",
+    # 3 — heavy left rule, squared badge
+    ".slide{border-left:10px solid var(--accent-2)}"
+    ".slot-badge{left:42px;border-radius:3px}"
     "h2{font-style:italic}",
 ]
 
-# (bg, panel, soft, accent, accent-2, backdrop painted onto .stage)
+# (bg, panel, soft, ink, accent, accent-2, backdrop painted onto .stage)
 THEMES = {
-1:  ("#0a0d13", "#141b27", "#232b3a", "#38d0e0", "#8b5cf6",
-     "radial-gradient(1200px 800px at 12% 8%, rgba(56,208,224,.16), transparent 60%)"),
-2:  ("#0f0b06", "#1d1710", "#33291b", "#f0b429", "#4fd1c5",
-     "linear-gradient(135deg, rgba(240,180,41,.14), transparent 45%), radial-gradient(900px 700px at 90% 90%, rgba(79,209,197,.14), transparent 65%)"),
-3:  ("#0c0813", "#1a1226", "#2c2140", "#ff6ec7", "#5ad1ff",
-     "repeating-linear-gradient(115deg, rgba(255,110,199,.07) 0 2px, transparent 2px 46px)"),
-4:  ("#120806", "#221110", "#3a1d1a", "#ffc247", "#ff5f56",
-     "radial-gradient(800px 800px at 50% 0%, rgba(255,194,71,.20), transparent 62%), radial-gradient(700px 700px at 50% 100%, rgba(255,95,86,.14), transparent 60%)"),
-5:  ("#0a0f0d", "#132019", "#1f3328", "#ff8a3d", "#57b8ff",
-     "linear-gradient(200deg, rgba(255,138,61,.13), transparent 50%)"),
-6:  ("#06110e", "#0f2019", "#1a3328", "#3ddc84", "#ffd166",
-     "radial-gradient(3px 3px at 24px 24px, rgba(61,220,132,.16) 50%, transparent 51%) 0 0/56px 56px"),
-7:  ("#120a10", "#211320", "#382034", "#ff8fab", "#ffd86b",
-     "conic-gradient(from 210deg at 78% 22%, rgba(255,143,171,.20), transparent 38%, rgba(255,216,107,.16), transparent 72%)"),
-8:  ("#0b0d12", "#161a22", "#252c38", "#dfe6ff", "#ffb020",
-     "repeating-linear-gradient(90deg, rgba(223,230,255,.06) 0 3px, transparent 3px 60px), radial-gradient(700px 700px at 50% 110%, rgba(255,176,32,.20), transparent 60%)"),
-9:  ("#0d0a0c", "#1b1417", "#2e2126", "#ff4d5e", "#9aa7b8",
-     "linear-gradient(180deg, rgba(255,77,94,.16), transparent 34%), repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 5px)"),
-10: ("#080b14", "#111a2b", "#1d2942", "#7cc4ff", "#b48bff",
-     "linear-gradient(90deg, rgba(124,196,255,.13), transparent 42%, rgba(180,139,255,.13))"),
-11: ("#06100f", "#0e1d1d", "#183030", "#2fe0d0", "#ffb443",
-     "repeating-linear-gradient(0deg, rgba(47,224,208,.07) 0 1px, transparent 1px 52px), repeating-linear-gradient(90deg, rgba(47,224,208,.07) 0 1px, transparent 1px 52px)"),
-12: ("#140a12", "#231524", "#3a2338", "#ff5fa2", "#ffd166",
-     "conic-gradient(from 0deg at 50% 50%, rgba(255,95,162,.15), transparent 25%, rgba(255,209,102,.13), transparent 55%, rgba(255,95,162,.15))"),
-13: ("#100a12", "#1d1322", "#2f2038", "#ff9ecb", "#8f7bff",
-     "radial-gradient(700px 700px at 18% 88%, rgba(255,158,203,.18), transparent 62%), radial-gradient(700px 700px at 84% 14%, rgba(143,123,255,.16), transparent 62%)"),
-14: ("#0a1008", "#141d10", "#213019", "#a6e22e", "#a78bfa",
-     "linear-gradient(160deg, rgba(166,226,46,.12), transparent 46%), radial-gradient(600px 600px at 92% 82%, rgba(167,139,250,.16), transparent 60%)"),
-15: ("#080a14", "#121629", "#1f2540", "#8ea2ff", "#5ce1e6",
-     "radial-gradient(900px 900px at 50% 50%, rgba(142,162,255,.15), transparent 58%)"),
-16: ("#0e0c08", "#1c1811", "#2f291c", "#ffd569", "#f2f5ff",
-     "radial-gradient(900px 900px at 50% -10%, rgba(255,213,105,.24), transparent 60%)"),
+1:  ("#f2f8ff", "#ffffff", "#d8e6f5", "#16202e", "#0369a1", "#6d28d9",
+     "radial-gradient(1100px 700px at 10% 5%, rgba(3,105,161,.10), transparent 62%)"),
+2:  ("#fffaf0", "#ffffff", "#f0e3cc", "#2b2113", "#b45309", "#0f766e",
+     "linear-gradient(135deg, rgba(180,83,9,.10), transparent 46%), radial-gradient(900px 700px at 92% 92%, rgba(15,118,110,.12), transparent 64%)"),
+3:  ("#fff5fa", "#ffffff", "#f6dbe8", "#2a1622", "#be185d", "#0e7490",
+     "repeating-linear-gradient(115deg, rgba(190,24,93,.05) 0 3px, transparent 3px 48px)"),
+4:  ("#fffaf2", "#ffffff", "#f3e0c8", "#2c1d10", "#b45309", "#c2410c",
+     "radial-gradient(800px 700px at 50% 0%, rgba(180,83,9,.14), transparent 64%), radial-gradient(700px 600px at 50% 100%, rgba(194,65,12,.10), transparent 62%)"),
+5:  ("#fff7f2", "#ffffff", "#f6ddcd", "#2b1a12", "#c2410c", "#1d4ed8",
+     "linear-gradient(200deg, rgba(194,65,12,.10), transparent 52%)"),
+6:  ("#f3fdf6", "#ffffff", "#cfe9d8", "#12241a", "#15803d", "#b45309",
+     "radial-gradient(3px 3px at 26px 26px, rgba(21,128,61,.12) 50%, transparent 51%) 0 0/58px 58px"),
+7:  ("#fff6f7", "#ffffff", "#f6d9dd", "#2b161a", "#be123c", "#a16207",
+     "conic-gradient(from 210deg at 80% 20%, rgba(190,18,60,.12), transparent 40%, rgba(161,98,7,.12), transparent 74%)"),
+8:  ("#f5f7fb", "#ffffff", "#dde3ee", "#1a1f2b", "#334155", "#b45309",
+     "repeating-linear-gradient(90deg, rgba(51,65,85,.05) 0 3px, transparent 3px 62px), radial-gradient(700px 600px at 50% 108%, rgba(180,83,9,.12), transparent 62%)"),
+9:  ("#fff6f6", "#ffffff", "#f3d9d9", "#2a1717", "#b91c1c", "#475569",
+     "linear-gradient(180deg, rgba(185,28,28,.10), transparent 36%), repeating-linear-gradient(0deg, rgba(0,0,0,.022) 0 1px, transparent 1px 6px)"),
+10: ("#f5f8ff", "#ffffff", "#dbe3f8", "#181d2c", "#1d4ed8", "#7e22ce",
+     "linear-gradient(90deg, rgba(29,78,216,.09), transparent 44%, rgba(126,34,206,.09))"),
+11: ("#f0fbfa", "#ffffff", "#cfe8e4", "#14241f", "#0f766e", "#b45309",
+     "repeating-linear-gradient(0deg, rgba(15,118,110,.05) 0 1px, transparent 1px 54px), repeating-linear-gradient(90deg, rgba(15,118,110,.05) 0 1px, transparent 1px 54px)"),
+12: ("#fff5fb", "#ffffff", "#f2d9ea", "#291623", "#a21caf", "#b45309",
+     "conic-gradient(from 0deg at 50% 50%, rgba(162,28,175,.10), transparent 26%, rgba(180,83,9,.10), transparent 56%, rgba(162,28,175,.10))"),
+13: ("#fdf5ff", "#ffffff", "#ecdaf5", "#241a2b", "#c026d3", "#4f46e5",
+     "radial-gradient(700px 600px at 16% 90%, rgba(192,38,211,.12), transparent 64%), radial-gradient(700px 600px at 86% 12%, rgba(79,70,229,.12), transparent 64%)"),
+14: ("#f7fdf0", "#ffffff", "#dcecc6", "#1e2712", "#4d7c0f", "#6d28d9",
+     "linear-gradient(160deg, rgba(77,124,15,.10), transparent 48%), radial-gradient(600px 500px at 92% 84%, rgba(109,40,217,.12), transparent 62%)"),
+15: ("#f4f6ff", "#ffffff", "#dcdff5", "#1b1c2e", "#4338ca", "#0e7490",
+     "radial-gradient(900px 800px at 50% 50%, rgba(67,56,202,.10), transparent 60%)"),
+16: ("#fffcf0", "#ffffff", "#efe3c2", "#282112", "#a16207", "#1e293b",
+     "radial-gradient(900px 800px at 50% -8%, rgba(161,98,7,.16), transparent 62%)"),
 }
 
 
 def look(n):
-    """Per-week override block. Shared style.css is left alone — the coding
-    decks read the same file and must keep the house palette."""
-    bg, panel, soft, acc, acc2, bd = THEMES[n]
-    return (f'<style>:root{{--bg:{bg};--panel:{panel};--soft:{soft};'
-            f'--accent:{acc};--accent-2:{acc2}}}'
+    """Per-week override block: the light repaint, this week's palette, and one
+    of the four furniture sets."""
+    bg, panel, soft, ink, acc, acc2, bd = THEMES[n]
+    return (f'<style>:root{{--bg:{bg};--panel:{panel};--soft:{soft};--ink:{ink};'
+            f'--accent:{acc};--accent-2:{acc2};--kw:{acc2}}}'
             f'.stage{{background-color:{bg};background-image:{bd}}}'
-            f'{FURN[(n - 1) % 4]}</style>')
+            f'{LIGHT}{FURN[(n - 1) % 4]}</style>')
+
+
+# Every slide that asks the students to DO something says which kind of doing
+# it is, in the bottom-right corner. Teaching slides carry no mark.
+ACTS = {"speak": ("🗣️", "SPEAKING"), "write": ("✍️", "WRITING"), "think": ("🧠", "THINKING")}
+
+
+def act(kind):
+    ico, lab = ACTS[kind]
+    return f'<div class="act"><span class="ai">{ico}</span>{lab}</div>'
+
 
 def vocab(n):
     """Read the canonical list from the debate repo so the decks cannot drift."""
@@ -925,7 +977,7 @@ def s_wordgame(ask, pool, badge, title, sub, ko):
         others = [x for x, _, _ in pool if x != w]
         d1 = others[(i * 3) % len(others)]
         d2 = others[(i * 3 + 4) % len(others)]
-        sep = "" if i == 0 else (' style="margin-top:.5em;padding-top:.4em;'
+        sep = "" if i == 0 else (' style="margin-top:.18em;padding-top:.18em;'
                                  'border-top:1px solid var(--soft)"')
         qs.append(f'<div class="mcq"{sep} data-correct="0" data-explain="{e(w)} = {e(g)}">'
                   f'<div class="q">{e(g)} &nbsp;<span style="opacity:.55;font-size:.85em">{e(k)}</span></div>'
@@ -936,81 +988,8 @@ def s_wordgame(ask, pool, badge, title, sub, ko):
                   f'</div><div class="qfeedback"></div></div>')
     return (f'<div class="slide"><span class="slot-badge">{badge}</span>'
             f'<div class="pill purple">Word game<span class="activity-tag">click one</span></div>'
-            f'<h2>{title}</h2>\n{"".join(qs)}\n'
-            f'<p class="sub center" style="margin-top:.35em;font-size:.8em">{sub}</p>'
-            f'<p class="bilingual">{ko}</p></div>')
-
-
-def s_build(n):
-    """The argument shape so far — one new part, everything before it kept."""
-    live = [b for b in BUILD if b[0] <= n]
-    newest = max(b[0] for b in live)
-    rows = []
-    for gate, lab, what, frag in live:
-        hot = gate == newest
-        style = "" if hot else "opacity:.42"
-        tag = '<span class="activity-tag">NEW</span>' if hot else ""
-        col = "var(--accent)" if hot else "var(--ink)"
-        rows.append(f'<div class="iter-item" style="{style}">'
-                    f'<div style="color:{col};font-weight:700;font-size:clamp(14px,2.3vmin,20px)">{lab}{tag}</div>'
-                    f'<div style="font-size:.85em;opacity:.8;margin:.15em 0">{what}</div>'
-                    f'<div class="frame" style="font-size:.8em;margin-top:.2em">{blanks(frag)}</div></div>')
-    return (f'<div class="slide"><span class="slot-badge">THE SHAPE · SO FAR</span>'
-            f'<div class="pill">Building it up</div><h2>Your argument, part by part</h2>'
-            f'<div class="iter-row" style="flex-direction:column;gap:.45em;align-items:stretch">{"".join(rows)}</div>'
-            f'<p class="sub center" style="margin-top:.5em">Dim parts are old. You still say them. '
-            f'The lit part is what is new today.</p>'
-            f'<p class="bilingual">지난주까지 배운 것 + 오늘 새로 더하는 것</p></div>')
-
-
-def s_poi(n, words):
-    """Points of information — ammunition that is not in the argument banks."""
-    def card(side, point, use):
-        col = "var(--accent)" if side == "FOR" else "var(--accent-2)"
-        cls = "" if side == "FOR" else " purple"
-        return (f'<div class="topic-chip{cls}" style="text-align:left">'
-                f'<div class="head" style="color:{col}">{side}</div>'
-                f'<div class="desc" style="opacity:1;margin-top:.15em">{hl(point, words)}</div>'
-                f'<div class="desc" style="margin-top:.3em;font-size:.88em"><b>Use it:</b> {e(use)}</div></div>')
-    cards = "".join(card(*p) for p in P[n])
-    return (f'<div class="slide"><span class="slot-badge">POINTS OF INFORMATION</span>'
-            f'<div class="pill">Extra ammo</div><h2>Four more things you can say</h2>'
-            f'<div class="topic-grid">{cards}</div>'
-            f'<p class="sub center" style="margin-top:.5em">None of these are in the two lists. Steal one.</p>'
-            f'<p class="bilingual">추가 근거 · 하나 골라서 쓰세요</p></div>')
-
-
-def s_poi_rule():
-    """The debating move of the same name — taught once, used all course."""
-    return ('<div class="slide"><span class="slot-badge">POI · THE MOVE</span>'
-            '<div class="pill purple">Interrupting, legally</div><h2>"Point of information!"</h2>'
-            '<div class="frame-card"><div class="label">How it works</div>'
-            '<div class="frame" style="font-size:.8em">'
-            '1 · They are speaking. Raise a hand and say <b>Point of information</b>.<br>'
-            '2 · The speaker answers <b>Accepted</b> or <b>Not now</b>. Both are allowed.<br>'
-            '3 · Accepted, and you get <b>15 seconds</b>. It must be a <b>question</b>, not a speech.<br>'
-            '4 · One per speech. Two is rude, and the judge notices.</div></div>'
-            '<div class="predict-card" style="margin-top:.5em">'
-            '<div class="label">The three that always work</div>'
-            '<p class="big" style="margin:.3em 0">"Says who?" &nbsp;·&nbsp; "So what?" &nbsp;·&nbsp; "Always?"</p></div>'
-            '<p class="bilingual">말하는 중에 손 들고 질문해요 · 15초</p></div>')
-
-
-def s_ladder():
-    """How to attack — the same three places, every week, in this order."""
-    return ('<div class="slide"><span class="slot-badge">ATTACK · HOW</span>'
-            '<div class="pill">Break it</div><h2>Three places to attack</h2>'
-            '<div class="edge-grid">'
-            '<div class="edge-card"><div class="ehead">1 · The reason</div>'
-            '<div class="edesc">Is that <b>actually</b> why? Ask whether something else explains the same thing.</div></div>'
-            '<div class="edge-card"><div class="ehead">2 · The example</div>'
-            '<div class="edesc">Is one example enough? Does it even show the thing they said?</div></div>'
-            '<div class="edge-card"><div class="ehead">3 · The link</div>'
-            '<div class="edesc">Strongest attack: <b>even if that is true</b>, it does not prove the motion.</div></div>'
-            '</div>'
-            '<div class="debug-card" style="position:relative;margin-top:.6em"><div class="debug-tag">Never</div>'
-            '<p class="big" style="margin:.4em 0">The person. "You do not understand" loses the round on its own.</p></div>'
-            '<p class="bilingual">이유 · 예시 · 연결 고리, 이 세 곳을 공격해요</p></div>')
+            f'<h2 style="margin-bottom:.3em">{title}</h2>\n{"".join(qs)}\n'
+            f'<p class="bilingual" style="margin-top:.3em">{ko}</p>{act("think")}</div>')
 
 
 def s_attack(n):
@@ -1038,7 +1017,7 @@ def s_attack(n):
             f'<button onclick="debateTimer(\'tatk\',30)">30s</button>'
             f'<button onclick="debateTimer(\'tatk\',45)">45s</button>'
             f'<button class="stop" onclick="debateTimer(\'tatk\',0)">stop</button>'
-            f'</div></div></div>')
+            f'</div></div>{act("speak")}</div>')
 
 
 
@@ -1080,22 +1059,7 @@ def s_hook(d):
     return f'''<div class="slide"><span class="slot-badge">HOOK</span><div class="pill">Hook 🤔</div><h2>Before we start</h2>
 <div class="predict-card"><div class="label">Everyone answers in one sentence</div>
 <p class="big" style="margin:.4em 0">{d["hook"]}</p></div>
-<p class="sub center" style="margin-top:.8em">No correcting yet. Just get every voice into the room.</p></div>'''
-
-
-def s_sort(x, words):
-    """Opens the talking. The old version was a silent three-minute list; Kasim
-    asked for prompts instead of activities, so the two boxes are argued out
-    loud straight away."""
-    b1, b1d, b2, b2d = x["bx"]
-    return f'''<div class="slide"><span class="slot-badge">OPINIONS · SORT IT</span><div class="pill">Talk</div><h2>{e(x["brain"])}</h2>
-<p class="big">Say one. We put it in a box together. Then say why it goes there.</p>
-<div class="compare-row" style="align-items:flex-start;margin-top:.8em">
-<div class="opt-card" style="text-align:left"><div class="ico">🧠</div><div class="name" style="color:var(--accent);font-size:clamp(16px,2.8vmin,24px)">{e(b1)}</div><p style="opacity:.7;font-size:.85em;margin-top:.3em">{e(b1d)}</p></div>
-<div class="opt-card" style="text-align:left"><div class="ico">🤖</div><div class="name" style="color:var(--accent-2);font-size:clamp(16px,2.8vmin,24px)">{e(b2)}</div><p style="opacity:.7;font-size:.85em;margin-top:.3em">{e(b2d)}</p></div>
-</div>
-<p class="sub center" style="margin-top:.5em">Nothing is written down yet. Nobody is corrected yet.</p>
-<p class="bilingual">두 칸으로 나눠 봐요</p></div>'''
+<p class="sub center" style="margin-top:.8em">No correcting yet. Just get every voice into the room.</p>{act("speak")}</div>'''
 
 
 def s_quick(q, words):
@@ -1110,53 +1074,17 @@ def s_quick(q, words):
             f'<h2>Four questions, fast</h2>'
             f'<div class="topic-grid">{cards}</div>'
             f'<p class="sub center" style="margin-top:.5em">No right answer. No correcting. Every voice in the room.</p>'
-            f'<p class="bilingual">한 문장씩 · 정답 없어요</p></div>')
+            f'<p class="bilingual">한 문장씩 · 정답 없어요</p>{act("speak")}</div>')
 
 
-def s_deep(q, words):
-    """Three that need a reason. The second line is what the teacher asks next
-    when the first answer stops too early."""
-    cards = "".join(
-        f'<div class="edge-card"><div class="ehead">{hl(ask, words)}</div>'
-        f'<div class="edesc"><b>Then ask:</b> {hl(push, words)}</div></div>'
-        for ask, push in q["deep"])
-    return (f'<div class="slide"><span class="slot-badge">OPINIONS · GO DEEPER</span>'
-            f'<div class="pill purple">Answer with a reason</div><h2>Now say why</h2>'
-            f'<div class="edge-grid">{cards}</div>'
-            f'<p class="sub center" style="margin-top:.5em">An answer with no <b>because</b> is not finished. '
-            f'The second line is the follow-up question.</p></div>')
-
-
-def s_side(q, words):
-    """Forced choices. Standing on one side is easier than starting an opinion
-    from nothing, and it makes them defend it."""
+def s_vocab(v):
+    """All ten words on one slide - they are one homework list, not two."""
     rows = "".join(
-        f'<div style="margin-top:{".7em" if i else ".2em"}">'
-        f'<div class="label" style="color:var(--accent);font-weight:700;'
-        f'font-size:clamp(14px,2.3vmin,20px)">{e(head)}</div>'
-        f'<div class="compare-row" style="margin-top:.25em;gap:.5em">'
-        f'<div class="opt-card"><div class="name" style="font-size:clamp(14px,2.3vmin,20px)">{hl(a, words)}</div></div>'
-        f'<div class="opt-card"><div class="name" style="color:var(--accent-2);'
-        f'font-size:clamp(14px,2.3vmin,20px)">{hl(b, words)}</div></div>'
-        f'</div></div>'
-        for i, (head, a, b) in enumerate(q["side"]))
-    return (f'<div class="slide"><span class="slot-badge">OPINIONS · PICK ONE</span>'
-            f'<div class="pill">Choose a side<span class="activity-tag">then defend it</span></div>'
-            f'<h2>You cannot say both</h2>{rows}'
-            f'<p class="sub center" style="margin-top:.6em">Point at one. Say the reason. '
-            f'Someone who picked the other one answers you.</p>'
-            f'<p class="bilingual">하나만 골라요 · 이유도 말해요</p></div>')
-
-
-def s_vocab(v, half, n_of):
-    rows = "".join(f'<span class="term">{e(w)}</span><span class="gloss">{e(g)}</span><span class="ko">{e(k)}</span>\n'
-                   for w, g, k in half)
-    tail = "Say each one out loud. Then use it in any sentence." if n_of == 1 \
-        else "These ten words are in your homework. Learn them tonight."
-    head = "Words for today" if n_of == 1 else "Five more"
-    return f'''<div class="slide"><span class="slot-badge">VOCAB · {n_of} of 2</span><div class="pill">Words</div><h2>{head}</h2>
-<div class="vocab-table">{rows}</div>
-<p class="sub center" style="margin-top:.6em">{tail}</p></div>'''
+        '<span class="term">%s</span><span class="gloss">%s</span><span class="ko">%s</span>'
+        % (e(w), e(g), e(k)) for w, g, k in v)
+    return f'''<div class="slide"><span class="slot-badge">WORDS</span><div class="pill">📚 Ten new words</div><h2>Words for today</h2>
+<div class="vocab-table" style="font-size:clamp(13px,2.2vmin,19px)">{rows}</div>
+<p class="sub center" style="margin-top:.5em">Say each one out loud. They are all in tonight's homework.</p></div>'''
 
 
 def s_game(pairs, n_of):
@@ -1165,7 +1093,7 @@ def s_game(pairs, n_of):
     for i, (sent, right, w1, w2) in enumerate(pairs):
         # two questions share the slide; without a rule between them the second
         # stem reads as a fourth option of the first
-        sep = "" if i == 0 else (' style="margin-top:1.1em;padding-top:.9em;'
+        sep = "" if i == 0 else (' style="margin-top:1em;padding-top:.8em;'
                                  'border-top:1px solid var(--soft)"')
         gap = e(sent).replace("___", '<b style="color:var(--accent)">_____</b>')
         full = e(sent).replace("___", f"<b>{e(right)}</b>")
@@ -1178,9 +1106,9 @@ def s_game(pairs, n_of):
 </div>
 <div class="qfeedback"></div></div>''')
     body = "\n".join(qs)
-    return f'''<div class="slide"><span class="slot-badge">GAME · {n_of} of 2</span><div class="pill purple">Word game<span class="activity-tag">click one</span></div><h2>Which word fits?</h2>
+    return f'''<div class="slide"><span class="slot-badge">WORD GAME · {n_of} of 2</span><div class="pill purple">🎮 Word game<span class="activity-tag">click one</span></div><h2>Which word fits?</h2>
 {body}
-<p class="bilingual">문장에 맞는 단어를 고르세요</p></div>'''
+<p class="bilingual">문장에 맞는 단어를 고르세요</p>{act('think')}</div>'''
 
 
 def s_skill(d, x):
@@ -1193,27 +1121,6 @@ def s_skill(d, x):
     return f'''<div class="slide"><span class="slot-badge">SKILL</span><div class="pill">Today's skill</div><h2>{e(d["skill"])}</h2>
 <div class="opt-grid{" two" if cols == 2 else ""}" style="grid-template-columns:repeat({min(cols, 4)},minmax(0,1fr))">{cards}</div>
 <p class="big center" style="margin-top:.8em">Every part, every time. Miss one and it is not an argument yet.</p></div>'''
-
-
-def s_frame(d):
-    return f'''<div class="slide"><span class="slot-badge">SKILL · FRAME</span><div class="pill purple">The frame</div><h2>Say it like this</h2>
-<div class="frame-card"><div class="label">Sentence frame</div>
-<div class="frame">{blanks(d["frame"])}</div>
-<div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div></div>
-<p class="sub center" style="margin-top:.6em">Copy this into your notes. You use it all lesson.</p></div>'''
-
-
-def s_model(d):
-    return f'''<div class="slide"><span class="slot-badge">SKILL · MODEL</span><div class="pill">Model</div><h2>Teacher goes first</h2>
-<div class="model-box">{d["model"]}</div>
-<p class="big" style="margin-top:.8em">Point at each part. Which words are doing the work?</p></div>'''
-
-
-def s_mistake(d):
-    return f'''<div class="slide"><span class="slot-badge">SKILL · WATCH</span><div class="pill">⚠️ Watch</div><h2>The usual mistake</h2>
-<div class="debug-card" style="position:relative;margin-top:1.2em"><div class="debug-tag">Not this</div>
-<p class="big" style="margin:.5em 0">{d["mistake"]}</p></div>
-<p style="margin-top:.9em">{d["mfix"]}</p></div>'''
 
 
 def s_write(tid, badge, title, label, lines, ko="", use=""):
@@ -1229,28 +1136,7 @@ def s_write(tid, badge, title, label, lines, ko="", use=""):
     <button onclick="debateTimer('{tid}',180)">3 min</button>
     <button class="stop" onclick="debateTimer('{tid}',0)">stop</button>
   </div>
-</div>{kop}</div>'''
-
-
-def s_motion(d):
-    return f'''<div class="slide center-all"><span class="slot-badge">MOTION</span><div class="emoji">⚖️</div>
-<h2 style="font-size:clamp(26px,5vmin,58px)">{e(d["motion"])}</h2>
-<p class="big" style="margin-top:.6em">Sides are drawn now. You do not pick.</p>
-<p class="sub" style="margin-top:.4em">Arguments coming for both sides. Take notes — you will need theirs as well as yours.</p>
-<p class="bilingual">지금 입장을 뽑아요</p></div>'''
-
-
-def s_bank(side, d, disc, words):
-    for_side = side == "FOR"
-    items = d["fo"] if for_side else d["ag"]
-    li = "".join(f"<li>{hl(x, words)}</li>" for x in items)
-    col = "var(--accent)" if for_side else "var(--accent-2)"
-    pill = '<div class="pill">For 찬성</div>' if for_side else '<div class="pill purple">Against 반대</div>'
-    head = "Reasons to say YES" if for_side else "Reasons to say NO"
-    return f'''<div class="slide"><span class="slot-badge">{side} · ARGUMENTS</span>{pill}<h2 style="color:{col}">{head}</h2>
-<ul class="check-list" style="font-size:.85em">{li}</ul>
-<div class="predict-card" style="margin-top:.4em"><div class="label">Discuss</div>
-<p class="big" style="margin:.3em 0">{e(disc)}</p></div></div>'''
+</div>{kop}{act("write")}</div>'''
 
 
 def s_clash(x, words):
@@ -1260,47 +1146,270 @@ def s_clash(x, words):
     return f'''<div class="slide"><span class="slot-badge">CLASH</span><div class="pill">Where they meet</div><h2>The two lines that decide it</h2>
 <div class="edge-grid">{cards}</div>
 <div class="predict-card" style="margin-top:.6em"><div class="label">Argue it</div>
-<p class="big" style="margin:.3em 0">Take one. Do you believe the answer, or can you beat it?</p></div></div>'''
+<p class="big" style="margin:.3em 0">Take one. Do you believe the answer, or can you beat it?</p></div>{act("think")}</div>'''
 
 
-def s_format(d, dd=False):
-    return f'''<div class="slide"><span class="slot-badge">{"DEBATE" if dd else "MINI-DEBATE"}</span><div class="pill">{"Debate Day" if dd else "Format"}</div><h2>{e(d["fmt"])}</h2>
-<p class="big" style="margin-top:.4em">{d["fmtdesc"]}</p>
-<div class="dtimer" id="ts1" style="margin-top:.4em">
+def s_bigidea(n, d):
+    """Slide two, every week. The one thing they should still know on the way
+    home, said once in the biggest type on the deck, with the parts learned so
+    far dimmed underneath it so today's addition is obvious."""
+    live = [b for b in BUILD if b[0] <= n]
+    newest = max(b[0] for b in live)
+    strip = "".join(
+        f'<div class="topic-chip{"" if g == newest else ""}" '
+        f'style="{"" if g == newest else "opacity:.45;"}text-align:left">'
+        f'<div class="head" style="color:{"var(--accent)" if g == newest else "var(--ink)"}">'
+        f'{lab}{" · NEW" if g == newest else ""}</div>'
+        f'<div class="desc" style="opacity:1">{blanks(frag)}</div></div>'
+        for g, lab, what, frag in live)
+    return f'''<div class="slide"><span class="slot-badge">TODAY'S BIG IDEA</span>
+<span class="ribbon">The one thing today</span>
+<div class="bigidea">{e(d["skill"])}</div>
+<div class="frame-card" style="margin-top:.2em"><div class="label">You will say it like this</div>
+<div class="frame">{blanks(d["frame"])}</div></div>
+<p class="sub" style="margin-top:.7em;font-size:.9em">Everything you already have, plus the new part:</p>
+<div class="topic-grid" style="margin-top:.3em">{strip}</div></div>'''
+
+
+def s_list(x):
+    """Write a list. Kasim cut the two-box sort slide on 2026-09-08; the
+    listing prompt behind it is the part worth keeping."""
+    return f'''<div class="slide"><span class="slot-badge">LIST IT</span><div class="pill">📝 Your turn</div>
+<h2>{e(x["brain"])}</h2>
+<div class="predict-card"><div class="label">How</div>
+<p class="big" style="margin:.3em 0">One short line per idea. Keep the pen moving. Do not stop to judge them.</p>
+<p style="margin-top:.4em;opacity:.75">English or Korean. Spelling does not matter. Nobody marks this.</p></div>
+<div class="dtimer" id="tl" style="margin-top:.3em">
+  <div class="dtime">120</div>
+  <div class="dbtns">
+    <button onclick="debateTimer('tl',120)">start</button>
+    <button class="stop" onclick="debateTimer('tl',0)">stop</button>
+  </div>
+</div>
+<p class="bilingual">떠오르는 것 다 적어 봐요</p>{act("write")}</div>'''
+
+
+def s_bounce(q, words):
+    """Bounce ideas off each other. Two students, two different sides, one
+    forced choice at a time — easier to start than an open opinion, and it
+    makes them answer a person instead of the teacher."""
+    rows = "".join(
+        f'<div style="margin-top:{".55em" if i else ".2em"}">'
+        f'<div style="color:var(--accent);font-weight:800;'
+        f'font-size:clamp(14px,2.3vmin,20px)">{e(head)}</div>'
+        f'<div class="compare-row" style="margin-top:.2em;gap:.5em">'
+        f'<div class="opt-card" style="padding:.6em"><div class="name" style="font-size:clamp(14px,2.3vmin,20px)">{hl(a, words)}</div></div>'
+        f'<div class="opt-card" style="padding:.6em"><div class="name" style="color:var(--accent-2);'
+        f'font-size:clamp(14px,2.3vmin,20px)">{hl(b, words)}</div></div>'
+        f'</div></div>'
+        for i, (head, a, b) in enumerate(q["side"]))
+    return (f'<div class="slide"><span class="slot-badge">BOUNCE IT</span>'
+            f'<div class="pill">💬 Two of you, two sides</div>'
+            f'<h2>Take different answers</h2>{rows}'
+            f'<div class="predict-card" style="margin-top:.6em"><div class="label">Say one of these</div>'
+            f'<p class="big" style="margin:.25em 0">"I agree, <b>and</b> …" &nbsp;·&nbsp; '
+            f'"That is true, <b>but</b> …" &nbsp;·&nbsp; "<b>What about</b> …?"</p></div>'
+            f'<p class="bilingual">서로 다른 편을 골라서 말해 봐요</p>{act("speak")}</div>')
+
+
+def s_frame_model(d):
+    """The frame, the teacher's model of it, and the mistake that kills it —
+    one slide, because they are one idea."""
+    return f'''<div class="slide"><span class="slot-badge">SAY IT LIKE THIS</span><div class="pill purple">Structure</div>
+<h2>{e(d["skill"])}</h2>
+<div class="frame-card" style="margin:.4em 0"><div class="label">The frame</div>
+<div class="frame">{blanks(d["frame"])}</div></div>
+<div class="model-box" style="font-size:.9em">{d["model"]}</div>
+<div class="debug-card" style="position:relative;margin-top:.9em"><div class="debug-tag">Not this</div>
+<p class="big" style="margin:.4em 0">{d["mistake"]}</p>
+<p style="margin-top:.3em;font-size:.85em;opacity:.85">{d["mfix"]}</p></div></div>'''
+
+
+def s_think():
+    """How a debater thinks: three places to aim, and the legal interruption."""
+    return ('<div class="slide"><span class="slot-badge">THINK LIKE A DEBATER</span>'
+            '<div class="pill">🧠 How to break an argument</div><h2>Three places to attack</h2>'
+            '<div class="edge-grid">'
+            '<div class="edge-card"><div class="ehead">1 · The reason</div>'
+            '<div class="edesc">Is that <b>actually</b> why? Could something else explain the same thing?</div></div>'
+            '<div class="edge-card"><div class="ehead">2 · The example</div>'
+            '<div class="edesc">Is one example enough? Does it even show the thing they said?</div></div>'
+            '<div class="edge-card"><div class="ehead">3 · The link</div>'
+            '<div class="edesc">Strongest: <b>even if that is true</b>, it does not prove the motion.</div></div>'
+            '</div>'
+            '<div class="frame-card" style="margin-top:.6em"><div class="label">Interrupting, legally</div>'
+            '<div class="frame" style="font-size:.78em">'
+            'Raise a hand: <b>Point of information</b>. They answer <b>Accepted</b> or <b>Not now</b>.<br>'
+            'Accepted gives you <b>15 seconds</b>, and it must be a <b>question</b>. One per speech.<br>'
+            'The three that always work: <b>"Says who?"</b> · <b>"So what?"</b> · <b>"Always?"</b></div></div>'
+            '<p class="sub center" style="margin-top:.4em">Never the person. '
+            '"You do not understand" loses the round on its own.</p></div>')
+
+
+# The banks were widened in 2026-09-05 by absorbing lines that are also points
+# of information. That was invisible while the two lived on separate slides;
+# now they share one, so a bank item that repeats a point is dropped and the
+# point is kept, because the point carries the line that uses it.
+_STOP = set("a an the of to in on at is are was were it its this that and or but for with "
+            "you your they their we our not no be been as by from than then so if do does "
+            "did can could would should have has had more most only every".split())
+
+
+def _words(t):
+    return {w for w in re.findall(r"[a-z]+", t.lower()) if w not in _STOP and len(w) > 2}
+
+
+def _fresh(items, points):
+    return [t for t in items if not any(len(_words(t) & _words(p)) >= 3 for p in points)]
+
+
+def s_sides(side, n, d, x, words):
+    """One side's whole case on one slide: the argument bank, the two points of
+    information that are not in it, and the question that starts the arguing."""
+    for_side = side == "FOR"
+    points = [p for s_, p, _ in P[n] if s_ == side]
+    items = _fresh(d["fo"] if for_side else d["ag"], points)
+    # Debate Day weeks carry no discussion questions of their own — on those
+    # the bank is read as a team, so the prompt is a planning one.
+    disc = (x.get("dfo", "Which of these will you open with? Decide as a team.") if for_side
+            else x.get("dag", "Which will they open with? Plan the answer now."))
+    col = "var(--accent)" if for_side else "var(--accent-2)"
+    pill = '<div class="pill">For 찬성</div>' if for_side else '<div class="pill purple">Against 반대</div>'
+    head = "Reasons to say YES" if for_side else "Reasons to say NO"
+    li = "".join(f"<li>{hl(t, words)}</li>" for t in items)
+    ammo = "".join(
+        f'<div class="edge-card" style="border-left-color:{col}"><div class="ehead" style="color:{col}">{hl(pt, words)}</div>'
+        f'<div class="edesc"><b>Use it:</b> {e(use)}</div></div>'
+        for s_, pt, use in P[n] if s_ == side)
+    return f'''<div class="slide"><span class="slot-badge">{side} · YOUR CASE</span>{pill}<h2 style="color:{col}">{head}</h2>
+<ul class="check-list" style="font-size:.8em">{li}</ul>
+<p class="sub" style="margin-top:.4em;font-size:.85em">Two more nobody expects:</p>
+<div class="edge-grid" style="margin-top:.2em">{ammo}</div>
+<div class="predict-card" style="margin-top:.5em"><div class="label">Now argue</div>
+<p class="big" style="margin:.25em 0">{e(disc)}</p></div>{act("speak")}</div>'''
+
+
+def s_debate(d):
+    """The debate itself, then the hardest thing in the course: swap sides."""
+    return f'''<div class="slide"><span class="slot-badge">THE DEBATE</span><div class="pill">⚖️ {e(d["fmt"])}</div>
+<h2>{e(d["motion"])}</h2>
+<p class="big" style="margin-top:.3em">{d["fmtdesc"]}</p>
+<div class="dtimer" id="ts1" style="margin-top:.3em">
   <div class="dtime">45</div>
   <div class="dbtns">
     <button onclick="debateTimer('ts1',30)">30s</button>
     <button onclick="debateTimer('ts1',45)">45s</button>
     <button onclick="debateTimer('ts1',60)">60s</button>
-    <button onclick="debateTimer('ts1',90)">90s</button>
     <button class="stop" onclick="debateTimer('ts1',0)">stop</button>
   </div>
 </div>
-<p class="bilingual">{e(d["fmtko"])}</p></div>'''
+<div class="predict-card" style="margin-top:.4em"><div class="label">Then swap</div>
+<p class="big" style="margin:.25em 0">Give me the <b>best</b> reason for the side you were <b>not</b> given.
+If you cannot say their best reason, you cannot beat it.</p></div>
+{act("speak")}</div>'''
 
 
-def s_flip(d):
-    return f'''<div class="slide"><span class="slot-badge">FLIP IT</span><div class="pill purple">Hardest part</div><h2>Now argue the other side</h2>
-<div class="predict-card"><div class="label">One at a time</div>
-<p class="big" style="margin:.3em 0">Give me the <b>best</b> reason for the side you were <b>not</b> given. The strongest one you can find.</p></div>
-<p class="big" style="margin-top:.8em">If you cannot say their best reason, you cannot beat it.</p>
-<p class="bilingual">반대편의 가장 좋은 이유를 말해 봐요</p></div>'''
+def s_final(n, q, d, nxt, words):
+    """Last questions, then the homework. The follow-up under each question is
+    what the teacher asks when the first answer stops too early."""
+    # Debate Day has no Q entry: the last questions there are about the round
+    # they just argued, not about the topic.
+    deep = q["deep"] if q else [
+        ("Which of their points did nobody answer?",
+         "Say what you would have said, now that you have had a minute."),
+        ("Which of your own arguments was the weakest?",
+         "What would you cut, and what would you put in its place?"),
+        ("What is the best thing the other side said today?",
+         "Say it as strongly as they did. Then beat it."),
+    ]
+    cards = "".join(
+        f'<div class="edge-card"><div class="ehead">{hl(ask, words)}</div>'
+        f'<div class="edesc"><b>Then ask:</b> {hl(push, words)}</div></div>'
+        for ask, push in deep)
+    bridge = (f'Next week: <b>{e(nxt["topic"])}</b>' if nxt
+              else "That is the course. Sixteen weeks, and you argued every side of it.")
+    return f'''<div class="slide"><span class="slot-badge">LAST QUESTIONS</span><div class="pill purple">Before you go</div>
+<h2>Answer with a reason</h2>
+<div class="edge-grid">{cards}</div>
+<div class="frame-card" style="margin-top:.5em"><div class="label">Homework — on KakaoTalk</div>
+<div class="frame" style="font-size:.68em">
+<b>A</b> · Write 8–10 sentences on <b>your assigned side</b>. &nbsp;
+<b>B</b> · Read the essay, answer the three questions.<br>
+<b>C</b> · Ten new words for next week. &nbsp;
+<b>D</b> · One question for the other side. Not a yes/no question.</div></div>
+<p class="sub center" style="margin-top:.4em;font-size:.85em">{bridge}</p>{act("speak")}</div>'''
 
 
-def s_close(n, d, nxt):
-    if nxt:
-        bridge = f'Next week: <b>{e(nxt["topic"])}</b> — {e(nxt["motion"])}'
-    else:
-        bridge = "That is the course. Sixteen weeks, and you argued every side of it."
-    return f'''<div class="slide center-all"><div class="emoji">{d["emoji"]}</div>
-<h1 style="font-size:clamp(30px,5.2vmin,50px)">{e(d["skill"])}</h1>
-<div class="frame-card" style="margin-top:.8em;text-align:left"><div class="label">Homework — on KakaoTalk</div>
-<div class="frame" style="font-size:.72em">
-<b>A</b> · Write 8–10 sentences on <b>your assigned side</b>.<br>
-<b>B</b> · Read the essay and answer the three questions.<br>
-<b>C</b> · Ten new words for next week.<br>
-<b>D</b> · One question for the other side. It cannot be a yes/no question.</div></div>
-<p class="big" style="margin-top:.6em;color:var(--accent-2)">{bridge}</p></div>'''
+def s_rules():
+    """Week one only — there is no last week to test."""
+    return '''<div class="slide"><span class="slot-badge">HOW THIS WORKS</span><div class="pill">Four rules</div><h2>Before we start</h2>
+<ul class="check-list">
+<li><b>Sides are drawn at random.</b> You may get one you disagree with.</li>
+<li>That is the point — you cannot beat an argument you do not understand.</li>
+<li>Turns are short. Nobody talks for five minutes.</li>
+<li>Attack the reason, never the person.</li>
+</ul>
+<p class="bilingual">입장은 선생님이 정해요 · 동의하지 않아도 그 편에서 말해요</p></div>'''
+
+
+def s_roles():
+    return f'''<div class="slide"><span class="slot-badge">TEAMS</span><div class="pill">🎯 Your job today</div><h2>Roles</h2>
+<div class="topic-grid">
+<div class="topic-chip"><div class="head">SPEAKER 1</div><div class="desc">Open for your team. Claim, reason, example. Do not attack yet.</div></div>
+<div class="topic-chip"><div class="head">SPEAKER 2</div><div class="desc">Add a new argument. Mention something your own Speaker 1 said.</div></div>
+<div class="topic-chip purple"><div class="head">RESEARCHER</div><div class="desc">Find the facts in prep. Give each speaker one, with a source.</div></div>
+<div class="topic-chip purple"><div class="head">TIMEKEEPER</div><div class="desc">Run the clock out loud. Cut people off — your own team especially.</div></div>
+</div>
+<p class="sub center" style="margin-top:.5em">Class of two: take Speaker 1 and Speaker 2. The teacher keeps time and researches.</p>
+<p class="bilingual">역할 카드 · 팀 나누기</p>{act("speak")}</div>'''
+
+
+def s_prep():
+    return f'''<div class="slide"><span class="slot-badge">PREP</span><div class="pill">🛠️ Build your case</div><h2>Four things, in this order</h2>
+<ul class="check-list">
+<li><b>Argument one</b> — claim, reason, example, and why it matters.</li>
+<li><b>Argument two</b> — a different reason. Not the same one again.</li>
+<li><b>Their best argument</b> — guess it, write it down, and plan the answer.</li>
+<li><b>Two points of information</b> — written as questions, ready to stand up with.</li>
+</ul>
+<div class="predict-card" style="margin-top:.4em"><div class="label">Timekeeper</div>
+<p class="big" style="margin:.3em 0">Call the halfway point out loud, then the last warning.</p></div>{act("write")}</div>'''
+
+
+def s_rebuttal():
+    return f'''<div class="slide"><span class="slot-badge">REBUTTAL</span><div class="pill">⚔️ Answer them</div><h2>Pick one point and kill it</h2>
+<div class="frame-card"><div class="label">Four steps, in order</div>
+<div class="frame">They say <span class="blank"></span>.<br>But <span class="blank"></span>.<br>Because <span class="blank"></span>.<br>Therefore <span class="blank"></span>.</div></div>
+<p class="big" style="margin-top:.6em">Aim at the <b>reason</b>, the <b>example</b> or the <b>link</b>. Never the person.</p>
+<p class="sub center">No new arguments. Stopping at <b>Because</b> is the commonest fault in this class.</p>{act("speak")}</div>'''
+
+
+def s_closing():
+    return f'''<div class="slide"><span class="slot-badge">CLOSING</span><div class="pill purple">🏁 Finish</div><h2>Remind · weigh · stop</h2>
+<div class="frame-card"><div class="label">Closing frame</div>
+<div class="frame">Today we showed <span class="blank"></span> and <span class="blank"></span>.<br>The most important is <span class="blank"></span>, because <span class="blank"></span>.<br>For that reason, you should vote for our side.</div></div>
+<div class="dtimer" id="ts2" style="margin-top:.2em">
+  <div class="dtime">30</div>
+  <div class="dbtns">
+    <button onclick="debateTimer('ts2',30)">30s</button>
+    <button onclick="debateTimer('ts2',45)">45s</button>
+    <button class="stop" onclick="debateTimer('ts2',0)">stop</button>
+  </div>
+</div>
+<p class="sub center">A closing has no new arguments in it.</p>{act("speak")}</div>'''
+
+
+def s_vote():
+    return f'''<div class="slide"><span class="slot-badge">VOTE</span><div class="pill">⚖️ Judging</div><h2>Vote on the arguments</h2>
+<ul class="check-list">
+<li>Not on the side you agree with. On who argued better.</li>
+<li>Which point was never answered?</li>
+<li>Who reached <b>Therefore</b>, and who stopped early?</li>
+<li>Whose point of information did the most damage?</li>
+</ul>
+<div class="exit" style="margin-top:.4em"><div class="label">Reflection</div>
+<p style="margin-top:.2em">One sentence: the best thing the other side said today.</p></div>
+<p class="bilingual">주장으로 투표해요 · 내 의견이 아니라</p>{act("think")}</div>'''
 
 
 # ---------------------------------------------------------------- deck shapes
@@ -1321,150 +1430,75 @@ def usewords(x):
     return ", ".join(f'<b class="kw">{e(c[1])}</b>' for c in x["cloze"][:3])
 
 
+def opener(n, prev, prev_v):
+    """Slide three: last week's words as a game, or the rules in week one."""
+    return warmup(prev_v) if prev_v else [s_rules()]
+
+
 def deck_skill(n, d, x, v, prev, prev_v, nxt):
-    """Shape A — five sections in the order Kasim asked for on 2026-09-08:
-    word practice, opinions, the skill, writing, debate practice, the debate.
-    Fewer things to run, many more questions to ask."""
+    """Shape A — twenty slides, in the order Kasim set on 2026-09-08: introduce
+    the idea, ask questions, list, bounce ideas off each other, practise the
+    structure and how a debater thinks, write, then more questions and a final
+    prompt. Vocabulary stays because it feeds the homework list."""
     words = [w for w, _, _ in v]
     q = Q[n]
-    s = [s_title(n, d)]
-    s.append(s_plan([
-        "<b>Words</b> — ten new ones, then two games to check them.",
-        "<b>Opinions</b> — ten questions. Everybody answers every one.",
-        f"<b>The skill</b> — {e(d['skill'])}, added on top of everything so far.",
-        "<b>Writing</b> — two short pieces, using today's words.",
-        "<b>Debate practice</b> — where to attack, and one bad argument to break.",
-        f"<b>The debate</b> — {e(d['fmt'])}, both sides, then swap sides.",
-    ], "오늘 순서"))
-    s.append(s_recap(n, prev, v))
-    s.extend(warmup(prev_v))
-
-    # 1 — word practice
-    s.append(s_vocab(v, v[:5], 1))
-    s.append(s_game(x["cloze"][:2], 1))
-    s.append(s_vocab(v, v[5:], 2))
-    s.append(s_game(x["cloze"][2:], 2))
-
-    # 2 — opinions: the hook, the sort, then ten prompts in three shapes
-    s.append(s_hook(d))
-    s.append(s_sort(x, words))
-    s.append(s_quick(q, words))
-    s.append(s_deep(q, words))
-    s.append(s_side(q, words))
-
-    # 3 — the skill
-    s.append(s_skill(d, x))
-    s.append(s_build(n))
-    s.append(s_frame(d))
-    s.append(s_model(d))
-    s.append(s_mistake(d))
-
-    # 4 — writing pieces
-    s.append(s_write("tw1", "WRITE 1", "Use the frame, easy topic",
-                     "Write one for each", "".join(
-                         f'{i}. {blanks(d["frame"])}'
-                         f' &nbsp;<i style="opacity:.6">({e(p)})</i><br>'
-                         for i, p in enumerate(x["easy"], 1)),
-                     "오늘 배운 문장 틀로 써 봐요"))
-    s.append(s_write("tw2", "WRITE 2", "Your strongest reason",
-                     f'On the motion: {e(d["motion"])}',
-                     blanks(d["frame"])
-                     + '<br><span style="opacity:.6;font-size:.85em">Either side. Pick the one idea you would fight for. Not all of them. One.</span>',
-                     use=usewords(x)))
-
-    # 5 — debate practice
-    s.append(s_ladder())
-    s.append(s_poi_rule())
-    s.append(s_attack(n))
-
-    # 6 — the debate
-    s.append(s_motion(d))
-    s.append(s_bank("FOR", d, x["dfo"], words))
-    s.append(s_bank("AGAINST", d, x["dag"], words))
-    s.append(s_poi(n, words))
-    s.append(s_clash(x, words))
-    s.append(s_format(d))
-    s.append(s_flip(d))
-    s.append(s_close(n, d, nxt))
-    return s
+    return [
+        s_title(n, d),
+        s_bigidea(n, d),
+        *opener(n, prev, prev_v),
+        s_vocab(v),
+        s_game(x["cloze"][:2], 1),
+        s_game(x["cloze"][2:], 2),
+        s_hook(d),
+        s_quick(q, words),
+        s_list(x),
+        s_bounce(q, words),
+        s_skill(d, x),
+        s_frame_model(d),
+        s_think(),
+        s_attack(n),
+        s_write("tw1", "WRITE 1", "Use the frame, easy topic",
+                "Write one for each", "".join(
+                    f'{i}. {blanks(d["frame"])}'
+                    f' &nbsp;<i style="opacity:.6">({e(p)})</i><br>'
+                    for i, p in enumerate(x["easy"], 1)),
+                "오늘 배운 문장 틀로 써 봐요"),
+        s_write("tw2", "WRITE 2", "Your strongest reason",
+                f'On the motion: {e(d["motion"])}',
+                blanks(d["frame"])
+                + '<br><span style="opacity:.6;font-size:.85em">Either side. Pick the one idea you would fight for. Not all of them. One.</span>',
+                use=usewords(x)),
+        s_sides("FOR", n, d, x, words),
+        s_sides("AGAINST", n, d, x, words),
+        s_clash(x, words),
+        s_debate(d),
+        s_final(n, q, d, nxt, words),
+    ]
 
 
 def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
-    """Shape B — full structured debate, no skill teach, no writing sprints."""
+    """Shape B — the whole lesson is the debate. No skill teach, no writing
+    sprints, and the roles are handed out instead of chosen."""
     words = [w for w, _, _ in v]
-    s = [s_title(n, d)]
-    s.append(s_plan([
-        "<b>Warm-up</b> — last week\'s words, as a game.",
-        "<b>Teams and roles</b> — you are given a side and a job.",
-        "<b>Ammo</b> — both banks, the clash, and four extra points.",
-        "<b>Prep</b> — two arguments, plus a guess at theirs.",
-        "<b>Openings</b> — 45 seconds each. Points of information allowed.",
-        "<b>Rebuttals</b> — answer one of their points. No new arguments.",
-        "<b>Closings</b> — 30 seconds. Remind, weigh, stop.",
-        "<b>Vote and feedback</b> — we vote on the arguments, not on who we agree with.",
-    ], "정식 토론 순서"))
-    s.append(s_recap(n, prev, v))
-    s.extend(warmup(prev_v))
-    s.append(s_hook(d))
-    s.append(s_vocab(v, v[:5], 1))
-    s.append(s_game(x["cloze"][:2], 1))
-    s.append(s_vocab(v, v[5:], 2))
-    s.append(s_game(x["cloze"][2:], 2))
-    s.append(s_motion(d))
-    s.append('''<div class="slide"><span class="slot-badge">ROLES</span><div class="pill">Teams</div><h2>Your job today</h2>
-<div class="topic-grid">
-<div class="topic-chip"><div class="head">SPEAKER 1</div><div class="desc">Open for your team. 45 seconds. Claim, reason, example. Do not attack yet.</div></div>
-<div class="topic-chip"><div class="head">SPEAKER 2</div><div class="desc">Add a new argument. Mention something your own Speaker 1 said.</div></div>
-<div class="topic-chip purple"><div class="head">RESEARCHER</div><div class="desc">Find the facts in prep. Give each speaker one, with a source.</div></div>
-<div class="topic-chip purple"><div class="head">TIMEKEEPER</div><div class="desc">Run the clock out loud. Cut people off — your own team especially.</div></div>
-</div>
-<p class="sub center" style="margin-top:.5em">Class of two: take Speaker 1 and Speaker 2. The teacher keeps time and researches.</p>
-<p class="bilingual">역할 카드 · 팀 나누기</p></div>''')
-    s.append(s_bank("FOR", d, "Which of these will you open with? Decide as a team.", words))
-    s.append(s_bank("AGAINST", d, "Which of these will they open with? Plan the answer now.", words))
-    s.append(s_poi(n, words))
-    s.append(s_clash(x, words))
-    s.append(s_ladder())
-    s.append(s_poi_rule())
-    s.append('''<div class="slide"><span class="slot-badge">PREP</span><div class="pill">Build your case</div><h2>Four things, in this order</h2>
-<ul class="check-list">
-<li><b>Argument one</b> — claim, reason, example, and why it matters.</li>
-<li><b>Argument two</b> — a different reason. Not the same one again.</li>
-<li><b>Their best argument</b> — guess it, write it down, and plan the answer.</li>
-<li><b>Two points of information</b> — written as questions, ready to stand up with.</li>
-</ul>
-<div class="predict-card" style="margin-top:.4em"><div class="label">Timekeeper</div>
-<p class="big" style="margin:.3em 0">Call the halfway point out loud, then the last warning.</p></div></div>''')
-    s.append(s_format(d, dd=True))
-    s.append('''<div class="slide"><span class="slot-badge">REBUTTAL</span><div class="pill">Answer them</div><h2>Pick one point and kill it</h2>
-<div class="frame-card"><div class="label">Four steps, in order</div>
-<div class="frame">They say <span class="blank"></span>.<br>But <span class="blank"></span>.<br>Because <span class="blank"></span>.<br>Therefore <span class="blank"></span>.</div></div>
-<p class="big" style="margin-top:.6em">Aim at the <b>reason</b>, the <b>example</b> or the <b>link</b>. Never the person.</p>
-<p class="sub center">No new arguments. Stopping at <b>Because</b> is the commonest fault in this class.</p></div>''')
-    s.append('''<div class="slide"><span class="slot-badge">CLOSING</span><div class="pill purple">Finish</div><h2>Remind · weigh · stop</h2>
-<div class="frame-card"><div class="label">Closing frame</div>
-<div class="frame">Today we showed <span class="blank"></span> and <span class="blank"></span>.<br>The most important is <span class="blank"></span>, because <span class="blank"></span>.<br>For that reason, you should vote for our side.</div></div>
-<div class="dtimer" id="ts2" style="margin-top:.2em">
-  <div class="dtime">30</div>
-  <div class="dbtns">
-    <button onclick="debateTimer('ts2',30)">30s</button>
-    <button onclick="debateTimer('ts2',45)">45s</button>
-    <button class="stop" onclick="debateTimer('ts2',0)">stop</button>
-  </div>
-</div>
-<p class="sub center">A closing has no new arguments in it.</p></div>''')
-    s.append('''<div class="slide"><span class="slot-badge">VOTE</span><div class="pill">Judging</div><h2>Vote on the arguments</h2>
-<ul class="check-list">
-<li>Not on the side you agree with. On who argued better.</li>
-<li>Which point was never answered?</li>
-<li>Who reached <b>Therefore</b>, and who stopped early?</li>
-<li>Whose point of information did the most damage?</li>
-</ul>
-<div class="exit" style="margin-top:.4em"><div class="label">Reflection</div>
-<p style="margin-top:.2em">One sentence: the best thing the other side said today.</p></div>
-<p class="bilingual">주장으로 투표해요 · 내 의견이 아니라</p></div>''')
-    s.append(s_close(n, d, nxt))
-    return s
+    return [
+        s_title(n, d),
+        s_bigidea(n, d),
+        *opener(n, prev, prev_v),
+        s_vocab(v),
+        s_game(x["cloze"][:2], 1),
+        s_game(x["cloze"][2:], 2),
+        s_roles(),
+        s_sides("FOR", n, d, x, words),
+        s_sides("AGAINST", n, d, x, words),
+        s_clash(x, words),
+        s_think(),
+        s_prep(),
+        s_debate(d),
+        s_rebuttal(),
+        s_closing(),
+        s_vote(),
+        s_final(n, None, d, nxt, words),
+    ]
 
 
 def deck(n):
