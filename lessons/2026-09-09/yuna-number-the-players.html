@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python — Number The Players (Yuna · 2026-09-09)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Python · Nested Loops + enumerate · Yuna · 9 Sep 2026</div>
+
+  <!-- ============ SLOT 1 · Title + Objective ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Menu Machine</div>
+    <div class="emoji">🔢</div>
+    <h1>Number<br>The Players</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">A loop <span class="sub">inside</span> a loop. Numbers for free.</p>
+    <div class="iter-row" style="margin-top:.8em">
+      <div class="iter-item">v3 .items()</div>
+      <div class="iter-item">v4 nested</div>
+      <div class="iter-item">v4b enumerate</div>
+      <div class="iter-item">v5 count</div>
+    </div>
+    <p class="bilingual">반복문 안에 반복문. 번호는 저절로</p>
+  </div>
+
+  <!-- ============ SLOT 2 · Warm-up — her own menu ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill">First 2 minutes</div>
+    <h2>Open <code>main.py</code> — your own menu</h2>
+<pre>mcdonalds_menu = {
+    <span class="str">"cheeseburger"</span>: <span class="str">"delicious"</span>,
+    <span class="str">"coke"</span>: <span class="str">"fizzy"</span>
+    <span class="str">"french fries"</span>: <span class="str">"salty"</span>
+    <span class="str">"chickenburger"</span>: <span class="str">"crunchy"</span>
+    <span class="str">"milkshakes"</span>: <span class="str">"sweet"</span>
+}</pre>
+    <p style="margin-top:.5em">You designed this yourself. Five foods, five tastes.</p>
+    <p class="bilingual">유나가 직접 만든 메뉴예요</p>
+  </div>
+
+  <!-- ============ SLOT 3 · STEP 1 — the three commas ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill">STEP 1 / 13</div>
+    <h2>Three commas</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="str">"coke"</span>: <span class="str">"fizzy"</span>
+    <span class="str">"french fries"</span>: <span class="str">"salty"</span>
+    <span class="str">"chickenburger"</span>: <span class="str">"crunchy"</span>
+    <span class="str">"milkshakes"</span>: <span class="str">"sweet"</span></pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>    <span class="str">"coke"</span>: <span class="str">"fizzy"</span><span class="sub">,</span>
+    <span class="str">"french fries"</span>: <span class="str">"salty"</span><span class="sub">,</span>
+    <span class="str">"chickenburger"</span>: <span class="str">"crunchy"</span><span class="sub">,</span>
+    <span class="str">"milkshakes"</span>: <span class="str">"sweet"</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>"coke": "fizzy"</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">End of three lines, after the last <code>"</code>. Indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A comma closes every pair but the last.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Red error gone. Homework done already? Just look.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 4 · Recap visual — one key, one value ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill purple">Recap</div>
+    <h2>One key → one taste</h2>
+    <div class="viz viz-dict">
+      <div class="d-table">
+        <div class="d-row"><span class="d-key">"cheeseburger"</span><span class="d-sep">:</span><span class="d-val">"delicious"</span></div>
+        <div class="d-row"><span class="d-key">"coke"</span><span class="d-sep">:</span><span class="d-val">"fizzy"</span></div>
+        <div class="d-row"><span class="d-key">"french fries"</span><span class="d-sep">:</span><span class="d-val">"salty"</span></div>
+      </div>
+      <div class="d-lookup">mcdonalds_menu[<span class="d-qs"><span class="d-q d-q1">"coke"</span><span class="d-q d-q2">"Coke"</span></span>]</div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line d-out d-out1">fizzy</div>
+        <div class="out-line d-out d-out2">KeyError: 'Coke'</div>
+      </div>
+    </div>
+    <p class="bilingual">키는 파일에 적힌 그대로</p>
+  </div>
+
+  <!-- ============ SLOT 5 · STEP 2 — pull one value out ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">STEP 2 / 13</div>
+    <h2>Pull one taste out</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="str">"milkshakes"</span>: <span class="str">"sweet"</span>
+}</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>    <span class="str">"milkshakes"</span>: <span class="str">"sweet"</span>
+}
+
+<span class="sub">print(mcdonalds_menu["coke"])</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>"milkshakes": "sweet"</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">2 lines <b>under</b> the closing <code>}</code>. Indent 0.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Proves your own dict runs.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>fizzy</code>. Already there from homework? Skip.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 6 · Bridge — switch to the Project tab ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Teacher: paste this 📋<span class="activity-tag">2 minutes</span></div>
+    <h2>Bring the hockey code back</h2>
+    <p style="margin-top:.4em">The menu homework replaced it in her file. Paste it under the menu, then carry on.</p>
+    <details open><summary>hockey — paste block</summary>
+<pre class="tiny">hockey = {
+    "HL GIMHAE":     {"country": "Korea", "players": ["조윤", "우형록", "김유나", "구예준"],                                  "team colors": "WHITE"},
+    "BUSAN BEARS":   {"country": "USA",   "players": ["LARS", "JOHN", "JAMES", "ROGER"],                                     "team colors": "GREEN"},
+    "SEOUL SHARKS":  {"country": "KOREA", "players": ["이하윤", "김하늘", "전태준", "이서준"],                                "team colors": "ORANGE"},
+    "RED EAGLES":    {"country": "JAPAN", "players": ["Miyazaki Momoto", "Ken Ryu", "Himashita Himaromo", "Sekiro Ninja"],   "team colors": "RED"},
+    "BLUE SPARROWS": {"country": "UK",    "players": ["Johnny Jefferson", "Andrew Alkaline", "Benjamin Birch", "Kevin Kline"], "team colors": "BLUE"},
+    # JOB 3: add YOUR OWN team here.
+}
+
+for team in hockey:
+    print(f"{team} plays for {hockey[team]['country']}")</pre></details>
+    <div class="chk">✅ Run it. Five teams and five countries print. Then STEP 3.</div>
+    <p class="bilingual">지난 시간 하키 코드를 다시 붙여 넣어요</p>
+  </div>
+
+  <!-- ============ SLOT 7 · Concept — .items() (NO CODE) ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Concept 💡</div>
+    <h2><code>.items()</code> hands you two things</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">team</span><span class="val">"RED EAGLES"</span></div>
+      <div class="varbox"><span class="name">info</span><span class="val">📇 that team's card</span></div>
+    </div>
+    <p class="big center" style="margin-top:.6em">Name in the left hand, card in the right hand. No <code>[ ]</code> needed to get the card.</p>
+    <p class="bilingual">이름과 카드를 한 번에 줘요</p>
+  </div>
+
+  <!-- ============ SLOT 8 · STEP 3 — v3 .items() ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">STEP 3 / 13</div>
+    <h2>v3 — shorter, same output</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre><span class="kw">for</span> team <span class="kw">in</span> hockey:
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} plays for {hockey[team]['country']}"</span>)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="sub">for team, info in hockey.items():</span>
+<span class="sub">    print(f"{team} plays for {info['country']}")</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>for team in hockey:</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Replace both lines. Indent 0, then indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>info</code> is already the card.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">The same 5 lines as before.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 9 · v3 visual — two variables ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Two variables, one pass</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">HL GIMHAE</div>
+        <div class="iter-item">BUSAN BEARS</div>
+        <div class="iter-item">SEOUL SHARKS</div>
+        <div class="iter-item">RED EAGLES</div>
+        <div class="iter-item">BLUE SPARROWS</div>
+      </div>
+      <div class="var-row"><span class="label">team = </span><span class="var-vals"><span class="var-val">"HL GIMHAE"</span><span class="var-val">"BUSAN BEARS"</span><span class="var-val">"SEOUL SHARKS"</span><span class="var-val">"RED EAGLES"</span><span class="var-val">"BLUE SPARROWS"</span></span></div>
+      <div class="var-row"><span class="label">info["country"] = </span><span class="var-vals"><span class="var-val">Korea</span><span class="var-val">USA</span><span class="var-val">KOREA</span><span class="var-val">JAPAN</span><span class="var-val">UK</span></span></div>
+    </div>
+    <p style="margin-top:.4em"><code>info</code> changes every pass too.</p>
+  </div>
+
+  <!-- ============ SLOT 10 · DEBUG 3 — .items() into one variable ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">🐛 Debug 3<span class="activity-tag">activity</span></div>
+    <h2>Bug — one hand, two things</h2>
+<pre><span class="kw">for</span> pair <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(pair[<span class="str">"country"</span>])</pre>
+    <div class="debug-card"><div class="err">TypeError: tuple indices must be integers or slices, not str</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>.items()</code> gives two things, so you need two names:</p>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():</pre>
+      <p class="bilingual">이름 두 개가 필요해요</p>
+    </details>
+  </div>
+
+  <!-- ============ SLOT 11 · MCQ 1 ============ -->
+  <div class="slide mcq" data-correct="0" data-explain="Looping a dict hands you the keys — plain strings.">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="qmeta">for team in hockey:</div>
+    <div class="q">On pass 1, what is <code>team</code>?</div>
+    <div class="opts">
+      <button class="opt">the string <code>"HL GIMHAE"</code></button>
+      <button class="opt">the whole card <code>{...}</code></button>
+      <button class="opt">the number <code>0</code></button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ SLOT 12 · Concept — the inner track ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Inside one box: 4 more boxes</h2>
+    <div class="viz viz-4">
+      <div class="iter-row">
+        <div class="iter-item">조윤</div>
+        <div class="iter-item">우형록</div>
+        <div class="iter-item">김유나</div>
+        <div class="iter-item">구예준</div>
+      </div>
+      <div class="var-row"><span class="label">player = </span><span class="var-vals"><span class="var-val">"조윤"</span><span class="var-val">"우형록"</span><span class="var-val">"김유나"</span><span class="var-val">"구예준"</span></span></div>
+    </div>
+    <p style="margin-top:.5em"><code>info["players"]</code> is a list. A second loop walks it.</p>
+    <p class="bilingual">상자 안에 또 상자 네 개</p>
+  </div>
+
+  <!-- ============ SLOT 13 · STEP 4 — v4a inner loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">STEP 4 / 13</div>
+    <h2>v4 — a loop inside a loop</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} plays for {info['country']}"</span>)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} plays for {info['country']}"</span>)
+<span class="sub">    for player in info["players"]:</span>
+<span class="sub">        print(player)</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>plays for {info['country']}</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">2 lines under it. <code>for</code> indent 4, <code>print</code> indent <b>8</b>.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Indent 8 = inside the inner loop.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">25 lines. Every team, then its 4 players.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 14 · v4a output ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">Run ▶</div>
+    <h2>The first two teams</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Output · first 10 of 25 lines</div>
+      <div style="opacity:1">HL GIMHAE plays for Korea<br>조윤<br>우형록<br>김유나<br>구예준<br>BUSAN BEARS plays for USA<br>LARS<br>JOHN<br>JAMES<br>ROGER</div>
+    </div>
+    <p style="margin-top:.5em">That is JOB 4 — for every team at once.</p>
+    <p class="bilingual">JOB 4를 전부 한 번에</p>
+  </div>
+
+  <!-- ============ SLOT 15 · Nested visual — two pointers ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>Two pointers, two tracks</h2>
+    <div class="viz viz-5">
+      <div class="var-row"><span class="label">outer · team = </span><span class="var-vals"><span class="var-val">"HL GIMHAE"</span><span class="var-val">"BUSAN BEARS"</span><span class="var-val">"SEOUL SHARKS"</span><span class="var-val">"RED EAGLES"</span><span class="var-val">"BLUE SPARROWS"</span></span></div>
+      <div class="iter-row">
+        <div class="iter-item">HL GIMHAE</div>
+        <div class="iter-item">BUSAN BEARS</div>
+        <div class="iter-item">SEOUL SHARKS</div>
+        <div class="iter-item">RED EAGLES</div>
+        <div class="iter-item">BLUE SPARROWS</div>
+      </div>
+    </div>
+    <div class="viz viz-4" style="margin-top:.5em">
+      <div class="iter-row">
+        <div class="iter-item">player 1</div>
+        <div class="iter-item">player 2</div>
+        <div class="iter-item">player 3</div>
+        <div class="iter-item">player 4</div>
+      </div>
+      <div class="var-row"><span class="label">inner · player = </span><span class="var-vals"><span class="var-val">1st name</span><span class="var-val">2nd name</span><span class="var-val">3rd name</span><span class="var-val">4th name</span></span></div>
+    </div>
+    <p style="margin-top:.4em">Top track moves once. Bottom track runs all 4 before it moves again.</p>
+  </div>
+
+  <!-- ============ SLOT 16 · Trace — how many lines? ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Count the passes</h2>
+    <div class="trace-grid">
+      <div class="cell head">outer pass</div><div class="cell head">team</div><div class="cell head">inner passes</div>
+
+      <div class="cell">1</div><div class="cell"><code>HL GIMHAE</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">2</div><div class="cell"><code>BUSAN BEARS</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">5</div><div class="cell"><code>BLUE SPARROWS</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">total</div><div class="cell">5 teams</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">20 players + 5 team lines = 25</span></details></div>
+    </div>
+    <p class="bilingual">5 × 4 = 20</p>
+  </div>
+
+  <!-- ============ SLOT 17 · DEBUG 4 — indent ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">🐛 Debug 4<span class="activity-tag">activity</span></div>
+    <h2>Bug — the inner loop slid left</h2>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} plays for {info['country']}"</span>)
+<span class="kw">for</span> player <span class="kw">in</span> info[<span class="str">"players"</span>]:
+    <span class="fn">print</span>(player)</pre>
+    <div class="debug-card"><div class="err">No error. 5 team lines, then only: Johnny Jefferson · Andrew Alkaline · Benjamin Birch · Kevin Kline</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">At indent 0 it waits until the first loop finishes, so <code>info</code> is stuck on the last team. Push both lines right: <code>for</code> to 4, <code>print</code> to 8.</p>
+      <p class="bilingual">들여쓰기가 곧 소속이에요</p>
+    </details>
+  </div>
+
+  <!-- ============ SLOT 18 · Concept — numbering ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Concept 💡</div>
+    <h2>A counter walks with the pointer</h2>
+    <div class="viz viz-index">
+      <div class="iter-row">
+        <div class="iter-item">LARS</div>
+        <div class="iter-item">JOHN</div>
+        <div class="iter-item">JAMES</div>
+        <div class="iter-item">ROGER</div>
+      </div>
+      <div class="idx-expr"><span class="idx-name">number</span> = <span class="idx-num"><span>1</span><span>2</span><span>3</span><span>4</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line">1. LARS</div>
+        <div class="out-line">2. JOHN</div>
+        <div class="out-line">3. JAMES</div>
+        <div class="out-line">4. ROGER</div>
+      </div>
+    </div>
+    <p class="bilingual">번호와 이름이 같이 움직여요</p>
+  </div>
+
+  <!-- ============ SLOT 19 · STEP 5 — enumerate ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">STEP 5 / 13</div>
+    <h2>v4b — number the players</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="kw">for</span> player <span class="kw">in</span> info[<span class="str">"players"</span>]:
+        <span class="fn">print</span>(player)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="sub">    for number, player in enumerate(info["players"], 1):</span>
+<span class="sub">        print(f"  {number}. {player}")</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>for player in info["players"]:</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Replace both lines. Keep indent 4 and indent 8.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>enumerate</code> adds the count. <code>, 1</code> starts at 1.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Players print as 1. 2. 3. 4.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 20 · v4b output ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Run ▶</div>
+    <h2>JOB 4 landed ✅</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Output · first 10 of 25 lines</div>
+      <div style="opacity:1">HL GIMHAE plays for Korea<br>&nbsp;&nbsp;1. 조윤<br>&nbsp;&nbsp;2. 우형록<br>&nbsp;&nbsp;3. 김유나<br>&nbsp;&nbsp;4. 구예준<br>BUSAN BEARS plays for USA<br>&nbsp;&nbsp;1. LARS<br>&nbsp;&nbsp;2. JOHN<br>&nbsp;&nbsp;3. JAMES<br>&nbsp;&nbsp;4. ROGER</div>
+    </div>
+    <p style="margin-top:.5em">The two spaces in the f-string make the indent you see.</p>
+    <p class="bilingual">공백 두 칸이 줄을 밀어줘요</p>
+  </div>
+
+  <!-- ============ SLOT 21 · NEW · Nested loop — one frame per inner pass ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One frame per player</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line"><span class="sub">HL GIMHAE</span> → 김유나</div>
+        <div class="ra-line"><span class="sub">HL GIMHAE</span> → 구예준</div>
+        <div class="ra-line"><span class="sub">BUSAN BEARS</span> → LARS</div>
+        <div class="ra-line"><span class="sub">BUSAN BEARS</span> → JOHN</div>
+      </div>
+      <div class="ra-box">
+        <div class="ra-name">number</div>
+        <div class="ra-vals"><span>3</span><span>4</span><span>1</span><span>2</span></div>
+      </div>
+    </div>
+    <p style="margin-top:.4em">The team changes only after player <b>4</b>. Then <code>number</code> starts at 1 again.</p>
+    <p class="bilingual">4번이 끝나야 팀이 바뀌어요</p>
+  </div>
+
+  <!-- ============ SLOT 22 · NEW · Nested loop filmstrip ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Frame by frame</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">frame</div><div class="cell head">team · outer</div><div class="cell head">number · inner</div><div class="cell head">line printed</div>
+
+      <div class="cell">1</div><div class="cell"><code>HL GIMHAE</code></div><div class="cell">1</div><div class="cell"><code>1. 조윤</code></div>
+      <div class="cell">2</div><div class="cell"><code>HL GIMHAE</code></div><div class="cell">2</div><div class="cell"><code>2. 우형록</code></div>
+      <div class="cell">3</div><div class="cell"><code>HL GIMHAE</code></div><div class="cell">3</div><div class="cell"><code>3. 김유나</code></div>
+      <div class="cell">4</div><div class="cell"><code>HL GIMHAE</code></div><div class="cell">4</div><div class="cell"><code>4. 구예준</code></div>
+
+      <div class="cell">5</div><div class="cell"><details><summary>?</summary><span class="reveal">BUSAN BEARS</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1. LARS</span></details></div>
+      <div class="cell">6</div><div class="cell"><details><summary>?</summary><span class="reveal">BUSAN BEARS</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">2. JOHN</span></details></div>
+    </div>
+    <p style="margin-top:.4em">Column 2 repeats 4 times, then moves. That is a nested loop.</p>
+  </div>
+
+  <!-- ============ SLOT 23 · The whole thing ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">Code ▶</div>
+    <h2>Your 4 lines, top to bottom</h2>
+<pre><span class="com"># goes above  # JOB 1</span>
+<span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} plays for {info['country']}"</span>)
+    <span class="kw">for</span> number, player <span class="kw">in</span> <span class="fn">enumerate</span>(info[<span class="str">"players"</span>], <span class="num">1</span>):
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"  {number}. {player}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">25 lines · 5 teams · 20 players</div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 24 · Code Talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The outer loop gives me <span class="blank"></span> and <span class="blank"></span>. The inner loop runs <span class="blank"></span> times for <b>each</b> team."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 25 · Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>You type it</h2>
+    <ul class="check-list">
+      <li>Find <code># JOB 1:</code> — put the cursor on the line above</li>
+      <li>Type <code>for team, info in hockey.items():</code> at indent 0</li>
+      <li>Type the team f-string at indent 4</li>
+      <li>Type the <code>enumerate</code> line at indent 4</li>
+      <li>Type the player f-string at indent 8, then RUN</li>
+    </ul>
+  </div>
+
+  <!-- ============ SLOT 26 · MCQ 2 ============ -->
+  <div class="slide mcq" data-correct="0" data-explain="team is a plain string. Use hockey[team]['country'] or .items().">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="qmeta">print(team["country"])</div>
+    <div class="q">Why does this crash?</div>
+    <div class="opts">
+      <button class="opt"><code>team</code> is a string, not a dictionary</button>
+      <button class="opt"><code>"country"</code> is spelled wrong</button>
+      <button class="opt">the dictionary is empty</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ SLOT 27 · Score ============ -->
+  <div class="slide mcq-score center-all">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Score</div>
+    <h2>How did you do?</h2>
+    <div class="score-val">0 / 2</div>
+    <div class="score-msg"></div>
+    <button class="quiz-reset">Try again</button>
+  </div>
+
+  <!-- ============ SLOT 28 · Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">In <code>for team in hockey:</code>, is <code>team</code> a name or a card? How do you get the card?</p>
+      <p class="bilingual" style="margin-top:.4em">이름일까요, 카드일까요?</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL OVERFLOW ================= -->
+
+  <!-- ============ SLOT 29 · OPTIONAL — JOB 3 payoff ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">JOB 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Add your team — the loop finds it free</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>        <span class="str">"team colors"</span>: <span class="str">"BLUE"</span>
+    }
+
+    <span class="com"># JOB 3: add YOUR OWN team here.  (comment block, leave it)</span>
+}</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>        <span class="str">"team colors"</span>: <span class="str">"BLUE"</span>
+    <span class="sub">},</span>
+
+    <span class="com"># JOB 3: add YOUR OWN team here.  (comment block, leave it)</span>
+<span class="sub">    "PINK PANTHERS": {</span>
+<span class="sub">        "country": "Korea",</span>
+<span class="sub">        "players": ["player one", "player two", "player three", "player four"],</span>
+<span class="sub">        "team colors": "PINK"</span>
+<span class="sub">    }</span>
+}</pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code># JOB 3: add YOUR OWN team here.</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Comma after BLUE SPARROWS' <code>}</code>. New team under the comment, indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The loop needs zero new code.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">30 lines now. PINK PANTHERS prints last.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 30 · OPTIONAL — len() ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>How many teams?</h2>
+<pre><span class="fn">print</span>(<span class="fn">len</span>(hockey))
+<span class="fn">print</span>(<span class="fn">len</span>(hockey[<span class="str">"RED EAGLES"</span>][<span class="str">"players"</span>]))</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">5<br>4</div>
+    </div>
+    <p style="margin-top:.4em"><code>len()</code> counts keys in a dict, items in a list.</p>
+    <p class="bilingual">len은 개수를 세요</p>
+  </div>
+
+  <!-- ============ SLOT 31 · OPTIONAL — if inside the loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Korean teams only</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <div class="case case-a">"Korea"</div>
+        <div class="case case-b">"USA"</div>
+      </div>
+      <div class="if-cond">info["country"].lower() == "korea"</div>
+      <div class="if-branches">
+        <div class="if-branch true">print(team)</div>
+        <div class="if-branch false">skip this team</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">HL GIMHAE</div>
+        <div class="out-line out-b">(nothing)</div>
+      </div>
+    </div>
+    <p class="bilingual">.lower() 덕분에 KOREA도 잡혀요</p>
+  </div>
+
+  <!-- ============ SLOT 32 · OPTIONAL — the filter code ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Code ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Write the filter</h2>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="kw">if</span> info[<span class="str">"country"</span>].<span class="fn">lower</span>() == <span class="str">"korea"</span>:
+        <span class="fn">print</span>(team)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">HL GIMHAE<br>SEOUL SHARKS</div>
+    </div>
+    <p style="margin-top:.4em">Your file has <code>Korea</code> and <code>KOREA</code>. Without <code>.lower()</code> you lose SEOUL SHARKS.</p>
+  </div>
+
+  <!-- ============ SLOT 33 · OPTIONAL — team colors ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The key with a space</h2>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{team} wear {info['team colors']}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">HL GIMHAE wear WHITE<br>BUSAN BEARS wear GREEN<br>SEOUL SHARKS wear ORANGE<br>RED EAGLES wear RED<br>BLUE SPARROWS wear BLUE</div>
+    </div>
+    <p style="margin-top:.4em"><code>"team colors"</code> — space, not <code>_</code>. Copy it exactly.</p>
+  </div>
+
+  <!-- ============ SLOT 34 · OPTIONAL — keys / values / items ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three ways to loop a dict</h2>
+    <div class="trace-grid">
+      <div class="cell head">you write</div><div class="cell head">you get</div><div class="cell head">example</div>
+
+      <div class="cell"><code>in hockey:</code></div>
+      <div class="cell">keys</div>
+      <div class="cell"><code>"RED EAGLES"</code></div>
+
+      <div class="cell"><code>in hockey.values():</code></div>
+      <div class="cell">cards</div>
+      <div class="cell"><code>{'country': 'JAPAN', ...}</code></div>
+
+      <div class="cell"><code>in hockey.items():</code></div>
+      <div class="cell">both</div>
+      <div class="cell"><code>team, info</code></div>
+    </div>
+    <p class="bilingual">키 · 카드 · 둘 다</p>
+  </div>
+
+  <!-- ============ SLOT 35 · OPTIONAL — search for a player ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Which team is LARS on?</h2>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="kw">if</span> <span class="str">"LARS"</span> <span class="kw">in</span> info[<span class="str">"players"</span>]:
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"LARS plays for {team}"</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">LARS plays for BUSAN BEARS</div>
+    </div>
+    <p style="margin-top:.4em"><code>in</code> searches a list. This is a search engine.</p>
+    <p class="bilingual">in은 리스트 안을 찾아줘요</p>
+  </div>
+
+  <!-- ============ SLOT 36 · OPTIONAL — count every player ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count all the players</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">count = 0</div>
+        <div class="ra-line">count = count + 4</div>
+        <div class="ra-line">count = count + 4</div>
+        <div class="ra-line">count = count + 4</div>
+      </div>
+      <div class="ra-box">
+        <div class="ra-name">count</div>
+        <div class="ra-vals"><span>0</span><span>4</span><span>8</span><span>12</span></div>
+      </div>
+    </div>
+<pre>count = <span class="num">0</span>
+<span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    count = count + <span class="fn">len</span>(info[<span class="str">"players"</span>])
+<span class="fn">print</span>(count)</pre>
+    <p style="margin-top:.4em">Answer: 20. <code>print</code> at indent 0 runs once, at the end.</p>
+  </div>
+
+  <!-- ============ SLOT 37 · OPTIONAL — JOB 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">JOB 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stop the old question crashing</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>team = <span class="fn">input</span>(<span class="str">'What team do you want to know more about??? '</span>)
+<span class="com">print(hockey[team])</span>
+
+more_info = <span class="fn">input</span>(<span class="str">'what do you want to know more about? '</span>)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>team = <span class="fn">input</span>(<span class="str">'What team do you want to know more about??? '</span>)<span class="sub">.strip().upper()</span>
+<span class="com">print(hockey[team])</span>
+
+more_info = <span class="fn">input</span>(<span class="str">'what do you want to know more about? '</span>)<span class="sub">.strip().lower()</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>What team do you want to know</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">End of each input line, after the <code>)</code>. Indent 0.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Team keys are CAPITALS, inner keys are small.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Type <code>red eagles</code> — it works now.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 38 · OPTIONAL — sorted ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A-Z order</h2>
+<pre><span class="kw">for</span> team <span class="kw">in</span> <span class="fn">sorted</span>(hockey):
+    <span class="fn">print</span>(team)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">BLUE SPARROWS<br>BUSAN BEARS<br>HL GIMHAE<br>RED EAGLES<br>SEOUL SHARKS</div>
+    </div>
+    <p style="margin-top:.4em">The dict does not change. Only this loop's order changes.</p>
+    <p class="bilingual">딕셔너리는 그대로예요</p>
+  </div>
+
+  <!-- ============ SLOT 39 · OPTIONAL — predict the filter ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill">Predict 🤔<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Careful — what prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">for</span> team, info <span class="kw">in</span> hockey.<span class="fn">items</span>():
+    <span class="kw">if</span> info[<span class="str">"country"</span>] == <span class="str">"Korea"</span>:
+        <span class="fn">print</span>(team)</pre>
+      <details><summary>Reveal output</summary><div class="ans">HL GIMHAE only. SEOUL SHARKS says "KOREA" — no match.</div></details>
+    </div>
+    <p style="margin-top:.4em">Add <code>.lower()</code> to catch both.</p>
+  </div>
+
+  <!-- ============ SLOT 40 · OPTIONAL — stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Print the team name in the player line too.</div>
+      <div class="item"><span class="lvl">★★</span>Print only teams whose colour is <code>"RED"</code> or <code>"BLUE"</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Ask for a player's name, then loop to find their team.</div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 41 · Close & Bridge ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">A loop reads<br>the whole dict.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: let the user choose, then loop.</p>
+    <p class="bilingual">다음 시간: 사용자가 고르고, 반복문이 찾아요</p>
+  </div>
+  <!-- ================= PART 2 · YOUR OWN MENU (new today) ================= -->
+
+  <!-- ============ SLOT 42 · Bridge back to her menu ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="pill">Part 2</div>
+    <div class="emoji">🍔</div>
+    <h1 style="font-size:clamp(34px,5.5vmin,52px)">Same trick,<br>your menu</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Hockey: team → players.<br>McDonald's: drawer → foods.</p>
+    <div class="iter-row" style="margin-top:.8em">
+      <div class="iter-item">BURGERS</div>
+      <div class="iter-item">DRINKS</div>
+      <div class="iter-item">SIDES</div>
+    </div>
+    <p class="bilingual">메뉴도 서랍으로 나눌 수 있어요</p>
+  </div>
+
+  <!-- ============ SLOT 43 · Concept — one word vs a list (NO CODE) ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">Concept 💡</div>
+    <h2>A key can hold a list</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">"cheeseburger"</span><span class="val">"delicious"</span></div>
+      <div class="varbox"><span class="name">"BURGERS"</span><span class="val">📋 2 foods</span></div>
+    </div>
+    <p class="big center" style="margin-top:.6em">Left: one key, one word. Right: one key, a whole <span class="sub">list</span>.</p>
+    <p class="bilingual">키 하나가 리스트를 담을 수 있어요</p>
+  </div>
+
+  <!-- ============ SLOT 44 · STEP 6 — the drawer menu ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">STEP 6 / 13</div>
+    <h2>v1 — sort your 5 foods into drawers</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre><span class="fn">print</span>(mcdonalds_menu[<span class="str">"coke"</span>])</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="fn">print</span>(mcdonalds_menu[<span class="str">"coke"</span>])
+
+<span class="sub">menu = {</span>
+<span class="sub">    "BURGERS": ["cheeseburger", "chickenburger"],</span>
+<span class="sub">    "DRINKS": ["coke", "milkshakes"],</span>
+<span class="sub">    "SIDES": ["french fries"]</span>
+<span class="sub">}</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(mcdonalds_menu["coke"])</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">2 lines under it. <code>menu = {</code> indent 0, the three drawers indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Your same 5 foods, now in 3 drawers.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">RUN. No red error. No new lines print.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 45 · v1 run ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">Run ▶</div>
+    <h2>Nothing new yet — that is correct</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">fizzy</div>
+    </div>
+    <p style="margin-top:.5em">A dictionary only <b>holds</b> things. A loop <b>shows</b> them.</p>
+    <p style="margin-top:.4em">Homework loops printing too? Fine — nothing <b>new</b> appeared.</p>
+    <p class="bilingual">딕셔너리는 담고, 반복문이 보여줘요</p>
+  </div>
+
+  <!-- ============ SLOT 46 · STEP 7 — outer loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="pill">STEP 7 / 13</div>
+    <h2>v2 — walk the drawer names</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="str">"SIDES"</span>: [<span class="str">"french fries"</span>]
+}</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>    <span class="str">"SIDES"</span>: [<span class="str">"french fries"</span>]
+}
+
+<span class="sub">for category in menu:</span>
+<span class="sub">    print(category)</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>"SIDES": ["french fries"]</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">2 lines under the closing <code>}</code>. <code>for</code> indent 0, <code>print</code> indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Looping a dict hands you the keys.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">3 new lines: BURGERS, DRINKS, SIDES.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 47 · v2 visual ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One pass, one drawer</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">BURGERS</div>
+        <div class="iter-item">DRINKS</div>
+        <div class="iter-item">SIDES</div>
+      </div>
+      <div class="var-row"><span class="label">category = </span><span class="var-vals"><span class="var-val">"BURGERS"</span><span class="var-val">"DRINKS"</span><span class="var-val">"SIDES"</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ print(category)</div>
+        <div class="out-line">BURGERS</div>
+        <div class="out-line">DRINKS</div>
+        <div class="out-line">SIDES</div>
+      </div>
+    </div>
+    <p class="bilingual">한 바퀴에 서랍 하나</p>
+  </div>
+
+  <!-- ============ SLOT 48 · Predict ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Guess before you run</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">for</span> category <span class="kw">in</span> menu:
+    <span class="fn">print</span>(menu[category])</pre>
+      <details><summary>Reveal output</summary><div class="ans">['cheeseburger', 'chickenburger']<br>['coke', 'milkshakes']<br>['french fries']</div></details>
+    </div>
+    <p style="margin-top:.4em">The whole list, brackets and all. Not one food.</p>
+    <p class="bilingual">리스트 통째로 나와요</p>
+  </div>
+
+  <!-- ============ SLOT 49 · Concept — the inner track (NO CODE) ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Inside one drawer: more boxes</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">cheeseburger</div>
+        <div class="iter-item">chickenburger</div>
+      </div>
+      <div class="var-row"><span class="label">food = </span><span class="var-vals"><span class="var-val">"cheeseburger"</span><span class="var-val">"chickenburger"</span></span></div>
+    </div>
+    <p style="margin-top:.5em"><code>menu["BURGERS"]</code> is a list of 2. A second loop walks it, then stops.</p>
+    <p class="bilingual">서랍 안을 또 한 바퀴</p>
+  </div>
+
+  <!-- ============ SLOT 50 · STEP 8 — the inner loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 50</span>
+    <div class="pill">STEP 8 / 13</div>
+    <h2>v3 — a loop inside a loop</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre><span class="kw">for</span> category <span class="kw">in</span> menu:
+    <span class="fn">print</span>(category)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="kw">for</span> category <span class="kw">in</span> menu:
+    <span class="fn">print</span>(category)
+<span class="sub">    for food in menu[category]:</span>
+<span class="sub">        print(food)</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>    print(category)</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">2 lines under it. <code>for</code> indent 4, <code>print</code> indent <b>8</b>.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Indent 8 = inside the inner loop.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">8 new lines. Drawer, then its foods.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 51 · MANDATORY nested visual — one frame per inner pass ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 51</span>
+    <div class="pill">Watch it! 🎬</div>
+    <h2>One frame per food</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line"><span class="sub">BURGERS</span> → cheeseburger</div>
+        <div class="ra-line"><span class="sub">BURGERS</span> → chickenburger</div>
+        <div class="ra-line"><span class="sub">DRINKS</span> → coke</div>
+        <div class="ra-line"><span class="sub">DRINKS</span> → milkshakes</div>
+      </div>
+      <div class="ra-box">
+        <div class="ra-name">number</div>
+        <div class="ra-vals"><span>1</span><span>2</span><span>1</span><span>2</span></div>
+      </div>
+    </div>
+    <p style="margin-top:.4em">The drawer holds still. It only changes when its list runs out.</p>
+    <p class="bilingual">리스트가 끝나야 서랍이 바뀌어요</p>
+  </div>
+
+  <!-- ============ SLOT 52 · MANDATORY nested visual — filmstrip ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 52</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>All five frames</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">frame</div><div class="cell head">category · outer</div><div class="cell head">number · inner</div><div class="cell head">food printed</div>
+
+      <div class="cell">1</div><div class="cell"><code>BURGERS</code></div><div class="cell">1</div><div class="cell"><code>cheeseburger</code></div>
+      <div class="cell">2</div><div class="cell"><code>BURGERS</code></div><div class="cell">2</div><div class="cell"><code>chickenburger</code></div>
+      <div class="cell">3</div><div class="cell"><details><summary>?</summary><span class="reveal">DRINKS</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">coke</span></details></div>
+      <div class="cell">4</div><div class="cell"><details><summary>?</summary><span class="reveal">DRINKS</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">milkshakes</span></details></div>
+      <div class="cell">5</div><div class="cell"><details><summary>?</summary><span class="reveal">SIDES</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">french fries</span></details></div>
+    </div>
+    <p style="margin-top:.4em">Column 2 holds, then moves. Column 3 restarts at 1 each time.</p>
+  </div>
+
+  <!-- ============ SLOT 53 · v3 run ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 53</span>
+    <div class="pill">Run ▶</div>
+    <h2>Exactly this, in this order</h2>
+    <div class="output-box">
+      <div class="out-label">▸ The new lines · 8</div>
+      <div style="opacity:1">BURGERS<br>cheeseburger<br>chickenburger<br>DRINKS<br>coke<br>milkshakes<br>SIDES<br>french fries</div>
+    </div>
+    <p style="margin-top:.5em">3 drawer lines + 5 food lines = 8.</p>
+    <p class="bilingual">3 + 5 = 8</p>
+  </div>
+
+  <!-- ============ SLOT 54 · DEBUG — the inner loop slid left ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 54</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the inner loop slid left</h2>
+<pre><span class="kw">for</span> category <span class="kw">in</span> menu:
+    <span class="fn">print</span>(category)
+<span class="kw">for</span> food <span class="kw">in</span> menu[category]:
+    <span class="fn">print</span>(food)</pre>
+    <div class="debug-card"><div class="err">No error. BURGERS DRINKS SIDES, then only: french fries</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">At indent 0 it waits for the first loop to end, so <code>category</code> is stuck on <code>"SIDES"</code>. Push both lines right: <code>for</code> to 4, <code>print</code> to 8.</p>
+      <p class="bilingual">들여쓰기가 곧 소속이에요</p>
+    </details>
+  </div>
+
+  <!-- ============ SLOT 55 · Trace — count the lines ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 55</span>
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>How many inner passes?</h2>
+    <div class="trace-grid">
+      <div class="cell head">outer pass</div><div class="cell head">category</div><div class="cell head">inner passes</div>
+
+      <div class="cell">1</div><div class="cell"><code>BURGERS</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">2</div><div class="cell"><code>DRINKS</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">3</div><div class="cell"><code>SIDES</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">total</div><div class="cell">3 drawers</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5 foods</span></details></div>
+    </div>
+    <p class="bilingual">서랍마다 개수가 달라요</p>
+  </div>
+
+  <!-- ============ SLOT 56 · Concept — by hand vs enumerate ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 56</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Who counts the foods?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ you count</span>
+<pre>number = 1
+for food in menu[category]:
+    print(number, food)
+    number = number + 1</pre>
+        <p style="margin-top:.4em">4 lines, and you must reset it</p>
+      </div>
+      <div class="col good"><span class="tag">✓ enumerate counts</span>
+<pre>for number, food in enumerate(menu[category], 1):
+    print(number, food)</pre>
+        <p style="margin-top:.4em">2 lines, resets by itself</p>
+      </div>
+    </div>
+    <p class="bilingual">번호는 enumerate가 세줘요</p>
+  </div>
+
+  <!-- ============ SLOT 57 · STEP 9 — enumerate ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 57</span>
+    <div class="pill">STEP 9 / 13</div>
+    <h2>v4 — number your foods</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="kw">for</span> food <span class="kw">in</span> menu[category]:
+        <span class="fn">print</span>(food)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="sub">    for number, food in enumerate(menu[category], 1):</span>
+<span class="sub">        print(f"  {number}. {food}")</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>for food in menu[category]:</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Replace both lines. Keep indent 4 and indent 8.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>, 1</code> makes the count start at 1.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Foods print as <code>1.</code> <code>2.</code></div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 58 · v4 run ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 58</span>
+    <div class="pill">Run ▶</div>
+    <h2>Numbered, and it restarts 🎉</h2>
+    <div class="output-box">
+      <div class="out-label">▸ The new lines · 8</div>
+      <div style="opacity:1">BURGERS<br>&nbsp;&nbsp;1. cheeseburger<br>&nbsp;&nbsp;2. chickenburger<br>DRINKS<br>&nbsp;&nbsp;1. coke<br>&nbsp;&nbsp;2. milkshakes<br>SIDES<br>&nbsp;&nbsp;1. french fries</div>
+    </div>
+    <p style="margin-top:.5em">Every drawer starts at 1 again. You wrote no counter.</p>
+    <p class="bilingual">서랍마다 1번부터 다시</p>
+  </div>
+
+  <!-- ============ SLOT 59 · Common mistake — the missing , 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 59</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The <code>, 1</code> is not optional</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ starts at 0</span>
+<pre><span class="fn">enumerate</span>(menu[category])</pre>
+        <p style="margin-top:.4em">0. cheeseburger<br>1. chickenburger</p>
+      </div>
+      <div class="col good"><span class="tag">✓ starts at 1</span>
+<pre><span class="fn">enumerate</span>(menu[category], <span class="num">1</span>)</pre>
+        <p style="margin-top:.4em">1. cheeseburger<br>2. chickenburger</p>
+      </div>
+    </div>
+    <p class="bilingual">사람은 1부터, 파이썬은 0부터</p>
+  </div>
+
+  <!-- ============ SLOT 60 · Concept — len() counts a list ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 60</span>
+    <div class="pill">Concept 💡</div>
+    <h2><code>len()</code> counts what is inside</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">BURGERS</div>
+        <div class="iter-item">DRINKS</div>
+        <div class="iter-item">SIDES</div>
+      </div>
+      <div class="var-row"><span class="label">len(menu[category]) = </span><span class="var-vals"><span class="var-val">2</span><span class="var-val">2</span><span class="var-val">1</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line">BURGERS (2)</div>
+        <div class="out-line">DRINKS (2)</div>
+        <div class="out-line">SIDES (1)</div>
+      </div>
+    </div>
+    <p class="bilingual">len은 개수를 세요</p>
+  </div>
+
+  <!-- ============ SLOT 61 · STEP 10 — count per drawer ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 61</span>
+    <div class="pill">STEP 10 / 13</div>
+    <h2>v5 — how many in each drawer</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="fn">print</span>(category)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="sub">    print(f"{category} ({len(menu[category])})")</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>    print(category)</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Replace that one line. Indent 4.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>len()</code> counts the list in that drawer.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">First drawer line reads <code>BURGERS (2)</code></div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 62 · v5 run ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 62</span>
+    <div class="pill">Run ▶</div>
+    <h2>Counts on every drawer</h2>
+    <div class="output-box">
+      <div class="out-label">▸ The new lines · 8</div>
+      <div style="opacity:1">BURGERS (2)<br>&nbsp;&nbsp;1. cheeseburger<br>&nbsp;&nbsp;2. chickenburger<br>DRINKS (2)<br>&nbsp;&nbsp;1. coke<br>&nbsp;&nbsp;2. milkshakes<br>SIDES (1)<br>&nbsp;&nbsp;1. french fries</div>
+    </div>
+    <p style="margin-top:.5em">The number in brackets is the size of that list.</p>
+    <p class="bilingual">괄호 안 숫자는 리스트 길이</p>
+  </div>
+
+  <!-- ============ SLOT 63 · Common mistake — len of what? ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 63</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Two different <code>len()</code>s</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ always 3</span>
+<pre><span class="fn">len</span>(menu)</pre>
+        <p style="margin-top:.4em">counts the drawers</p>
+      </div>
+      <div class="col good"><span class="tag">✓ 2, 2, 1</span>
+<pre><span class="fn">len</span>(menu[category])</pre>
+        <p style="margin-top:.4em">counts the foods inside one drawer</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">Same word, one extra <code>[ ]</code>, different answer.</p>
+    <p class="bilingual">대괄호 하나 = 한 층 더 안으로</p>
+  </div>
+
+  <!-- ============ SLOT 64 · Concept — a running total ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 64</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One box keeps the score</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">total = 0</div>
+        <div class="ra-line">total = total + 2 &nbsp;BURGERS</div>
+        <div class="ra-line">total = total + 2 &nbsp;DRINKS</div>
+        <div class="ra-line">total = total + 1 &nbsp;SIDES</div>
+      </div>
+      <div class="ra-box">
+        <div class="ra-name">total</div>
+        <div class="ra-vals"><span>0</span><span>2</span><span>4</span><span>5</span></div>
+      </div>
+    </div>
+    <p style="margin-top:.4em">The box remembers between passes. That is why it starts outside the loop.</p>
+    <p class="bilingual">상자는 바퀴마다 기억해요</p>
+  </div>
+
+  <!-- ============ SLOT 65 · STEP 11 — total = 0 ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 65</span>
+    <div class="pill">STEP 11 / 13</div>
+    <h2>v6a — make the box</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre><span class="kw">for</span> category <span class="kw">in</span> menu:</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre><span class="sub">total = 0</span>
+<span class="kw">for</span> category <span class="kw">in</span> menu:</pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>for category in menu:</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">1 new line <b>above</b> it. Indent 0.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Outside the loop = made once, not 3 times.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">RUN. Output is unchanged. No error.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 66 · STEP 12 — add to the box ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 66</span>
+    <div class="pill">STEP 12 / 13</div>
+    <h2>v6b — add each drawer in</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    <span class="kw">for</span> number, food <span class="kw">in</span> <span class="fn">enumerate</span>(menu[category], <span class="num">1</span>):
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"  {number}. {food}"</span>)</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>    <span class="kw">for</span> number, food <span class="kw">in</span> <span class="fn">enumerate</span>(menu[category], <span class="num">1</span>):
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"  {number}. {food}"</span>)
+<span class="sub">    total = total + len(menu[category])</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(f"  {number}. {food}")</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">1 new line under it, indent <b>4</b> — back out of the inner loop.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Indent 4 = once per drawer, not once per food.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">RUN. Still 8 new lines. Nothing visible yet.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 67 · STEP 13 — show the total ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 67</span>
+    <div class="pill">STEP 13 / 13</div>
+    <h2>v6c — show the total</h2>
+    <div class="viz">
+      <div class="debug-box"><span class="debug-tag">OLD</span>
+<pre>    total = total + <span class="fn">len</span>(menu[category])</pre>
+      </div>
+      <div class="debug-box"><span class="debug-tag fix">NEW</span>
+<pre>    total = total + <span class="fn">len</span>(menu[category])
+<span class="sub">print(f"{total} foods on the menu")</span></pre>
+      </div>
+    </div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>total = total + len(menu[category])</code></div></div>
+      <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">1 new line under it, indent <b>0</b> — all the way left.</div></div>
+      <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Indent 0 = runs once, after the loop ends.</div></div>
+      <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Last line reads <code>5 foods on the menu</code></div></div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 68 · Final run ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 68</span>
+    <div class="pill">Run ▶</div>
+    <h2>Your finished menu machine 🎉</h2>
+    <div class="output-box">
+      <div class="out-label">▸ The new lines · 9</div>
+      <div style="opacity:1">BURGERS (2)<br>&nbsp;&nbsp;1. cheeseburger<br>&nbsp;&nbsp;2. chickenburger<br>DRINKS (2)<br>&nbsp;&nbsp;1. coke<br>&nbsp;&nbsp;2. milkshakes<br>SIDES (1)<br>&nbsp;&nbsp;1. french fries<br>5 foods on the menu</div>
+    </div>
+    <p class="bilingual">유나가 만든 메뉴 기계 완성</p>
+  </div>
+
+  <!-- ============ SLOT 69 · The whole thing ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 69</span>
+    <div class="pill">Code ▶</div>
+    <h2>Your 7 lines, top to bottom</h2>
+<pre>total = <span class="num">0</span>
+<span class="kw">for</span> category <span class="kw">in</span> menu:
+    <span class="fn">print</span>(<span class="kw">f</span><span class="str">"{category} ({len(menu[category])})"</span>)
+    <span class="kw">for</span> number, food <span class="kw">in</span> <span class="fn">enumerate</span>(menu[category], <span class="num">1</span>):
+        <span class="fn">print</span>(<span class="kw">f</span><span class="str">"  {number}. {food}"</span>)
+    total = total + <span class="fn">len</span>(menu[category])
+<span class="fn">print</span>(<span class="kw">f</span><span class="str">"{total} foods on the menu"</span>)</pre>
+    <p style="margin-top:.5em">Indent 0, 4, 4, 8, 4, 0. The indent says who owns each line.</p>
+  </div>
+
+  <!-- ============ SLOT 70 · Code Talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 70</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The outer loop gives me <span class="blank"></span>. The inner loop runs <span class="blank"></span> times. <code>enumerate</code> gives me <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저 → 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 71 · Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 71</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>You type it</h2>
+    <ul class="check-list">
+      <li>Add a 4th drawer: <code>"DESSERTS": ["apple pie"]</code></li>
+      <li>RUN — the loops find it with no new code</li>
+      <li>Add one more food to <code>"SIDES"</code></li>
+      <li>RUN — check <code>SIDES (2)</code> and the total says 7</li>
+    </ul>
+    <p class="bilingual">서랍을 늘려도 코드는 그대로</p>
+  </div>
+
+  <!-- ============ SLOT 72 · Stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 72</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Number the drawers too, with a second <code>enumerate</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Print each food with its taste from <code>mcdonalds_menu</code>.</div>
+      <div class="item"><span class="lvl">★★★</span>Ask for a drawer name, then print only that drawer.</div>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 73 · Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 73</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">The inner loop runs 2 times. How many times does the <b>outer</b> loop run?</p>
+      <p class="bilingual" style="margin-top:.4em">바깥 반복문은 몇 번 돌까요?</p>
+    </div>
+  </div>
+
+  <!-- ============ SLOT 74 · Close & Bridge ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 74</span>
+    <div class="emoji">🔢</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">A loop inside<br>a loop.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: ask the user, then loop only what they picked.</p>
+    <p class="bilingual">다음 시간: 사용자가 고른 것만 반복해요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 74</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

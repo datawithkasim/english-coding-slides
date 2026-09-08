@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — A Box That Answers (Neo · 2026-09-09)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.8em, 2.5vmin, 1.6em); justify-content: center;
+          flex-wrap: wrap; margin-top: .6em; }
+  .rd { text-align: center; }
+  .rl { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent);
+        font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS003 · Pygame Turret Base · Neo · 9 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">return</div>
+    <div class="emoji">📦</div>
+    <h1>A Box<br>That Answers</h1>
+    <p class="line" style="margin-top:.4em">Last week your boxes <b>did</b> jobs.<br>Today they <b>hand a value back</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">def</span><span class="chip on">hp, max_hp</span><span class="chip">return</span>
+    </div>
+    <p class="bilingual">오늘은 return을 배워요</p>
+  </div>
+
+  <!-- 2 · homework check -->
+  <div class="slide">
+    <div class="pill">📓 Homework 6<span class="activity-tag">check</span></div>
+    <h2>Q1 — what is <code>b</code>?</h2>
+    <div class="predict-card">
+      <div class="label">Straight off your sheet</div>
+<pre class="tiny"><span class="kw">def</span> <span class="fn">half</span>(n):
+    <span class="kw">return</span> n / <span class="num">2</span>
+
+<span class="kw">def</span> <span class="fn">shout</span>(n):
+    <span class="fn">print</span>(n * <span class="num">2</span>)
+
+a = <span class="fn">half</span>(<span class="num">10</span>)
+b = <span class="fn">shout</span>(<span class="num">10</span>)</pre>
+      <details><summary>Show answer</summary><div class="ans">a is 5.0 · b is None</div></details>
+    </div>
+  </div>
+
+  <!-- 3 · do it or hand it back -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Do the job, or hand a value back</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="16" y="14" width="210" height="66" rx="8" fill="#141b27" stroke="#ff5555" stroke-width="3"/>
+      <text x="28" y="42" fill="#ff5555" font-size="15" font-family="monospace">def shout(n):</text>
+      <text x="40" y="66" fill="#e8eef6" font-size="15" font-family="monospace">print(n * 2)</text>
+      <text x="112" y="104" fill="#8a97b8" font-size="22">↓</text>
+      <rect x="60" y="116" width="120" height="34" rx="6" fill="#141b27" stroke="#3a4255" stroke-width="3"/>
+      <text x="98" y="140" fill="#8a97b8" font-size="17" font-family="monospace">None</text>
+      <text x="20" y="180" fill="#8a97b8" font-size="15">nothing comes out</text>
+      <rect x="272" y="14" width="212" height="66" rx="8" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="284" y="42" fill="#50fa7b" font-size="15" font-family="monospace">def half(n):</text>
+      <text x="296" y="66" fill="#e8eef6" font-size="15" font-family="monospace">return n / 2</text>
+      <text x="370" y="104" fill="#8a97b8" font-size="22">↓</text>
+      <rect x="318" y="116" width="120" height="34" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="358" y="140" fill="#50fa7b" font-size="17" font-family="monospace">5.0</text>
+      <text x="278" y="180" fill="#f1fa8c" font-size="15">a number comes out</text>
+    </svg>
+  </div>
+
+  <!-- 4 · the NoneType error from last week -->
+  <div class="slide">
+    <div class="pill">🐛 Last week's error</div>
+    <h2>You have already met None</h2>
+<pre class="tiny">def half(n):
+    print(n / 2)
+
+width = half(10) * 100</pre>
+    <div class="debug-card"><div class="err">TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'</div></div>
+    <div class="why">🟣 That red line means <b>a missing return</b>. Nothing came back.</div>
+    <p class="bilingual">return이 없으면 None이 나와요</p>
+  </div>
+
+  <!-- 5 · file check — health_percent -->
+  <div class="slide">
+    <div class="pill">📂 Check your file<span class="activity-tag">30 seconds</span></div>
+    <h2>Did the homework land?</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def health_percent(hp, max_hp):</code></div>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">✅ found</div><div class="edesc">Already yours. Tick, then go to STEP 3.</div></div>
+      <div class="edge-card"><div class="ehead">🚫 not found</div><div class="edesc">Type STEP 1 and STEP 2. Your real old line is <code>hp_percentage = player["hp"] / player["max_hp"]</code></div></div>
+    </div>
+    <div class="why">🟣 Slides write <code>health_percent</code>. Same box.</div>
+  </div>
+
+  <!-- 6 · file check — draw_boss_bar -->
+  <div class="slide">
+    <div class="pill">📂 Check your file<span class="activity-tag">30 seconds</span></div>
+    <h2>The boss bar already has a name</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def draw_boss_bar(boss):</code></div>
+    <div class="why">🟣 You wrote it last lesson. <b>STEP 5</b> and <b>STEP 6</b> are read-and-tick, not retype.</div>
+    <div class="chk">✅ One <code>def draw_boss_bar</code> line only. Two would be a bug.</div>
+  </div>
+
+  <!-- 6b · REAL BUG in his file — spelling of a returned-value call -->
+  <div class="slide">
+    <div class="pill">🐞 Real bug<span class="activity-tag">2 minutes</span></div>
+    <h2>The boss bar calls a name that does not exist</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>helath_percent</code></div>
+    <div class="was"><pre class="tiny"><span class="dim">def draw_boss_bar(boss):</span>
+    health_percentage = <span class="hot">helath_percent</span>(boss["hp"], boss["max_hp"])</pre></div>
+    <div class="now"><pre class="tiny"><span class="dim">def draw_boss_bar(boss):</span>
+    health_percentage = <span class="hot">health_percent</span>(boss["hp"], boss["max_hp"])</pre></div>
+    <div class="why">🟣 <code>helath</code> is a typo. Python looks for that box, finds nothing, stops.</div>
+    <div class="chk">✅ Spawn a boss. The bar draws instead of crashing.</div>
+    <p class="bilingual">철자 하나가 틀리면 파이썬은 그 상자를 못 찾아요</p>
+  </div>
+
+  <!-- 7 · today's road -->
+  <div class="slide">
+    <div class="pill">Today 🗺️</div>
+    <h2>Eighteen steps</h2>
+    <div class="road">
+      <div class="rd"><div class="rl">1–4</div><div class="rt">hand a value back</div></div>
+      <div class="rd"><div class="rl">5–6</div><div class="rt">boss bar</div></div>
+      <div class="rd"><div class="rl">7–9</div><div class="rt">slots with defaults</div></div>
+      <div class="rd"><div class="rl">10–12</div><div class="rt">a maker box</div></div>
+      <div class="rd"><div class="rl">13–15</div><div class="rt">an answer inside an if</div></div>
+      <div class="rd"><div class="rl">16–18</div><div class="rt">two values at once</div></div>
+    </div>
+    <p class="bilingual">오늘 열여덟 단계예요</p>
+  </div>
+  <!-- 8 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 18</div>
+    <h2>A box that answers</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def draw_health_bar(hp, max_hp):</code></div>
+    <div class="tag-new">NEW — 2 lines ABOVE that def</div>
+    <div class="now"><pre class="tiny"><span class="hot">def health_percent(hp, max_hp):</span>
+<span class="hot">    return hp / max_hp</span>
+
+<span class="dim">def draw_health_bar(hp, max_hp):</span></pre></div>
+    <div class="where">📍 <code>def</code> at indent <b>0</b> · <code>return</code> at <b>4</b></div>
+    <div class="why">🟣 Nothing calls it yet. It waits.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 9 · round trip -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>The round trip, frame by frame</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="20" y="14" width="150" height="40" rx="6" fill="#141b27" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="34" y="40" fill="#f1fa8c" font-size="16" font-family="monospace">health_percent(5, 8)</text>
+      <line x1="95" y1="56" x2="95" y2="88" stroke="#38d0e0" stroke-width="3"/>
+      <text x="106" y="78" fill="#38d0e0" font-size="15">1 · call</text>
+      <rect x="20" y="92" width="330" height="58" rx="6" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="34" y="114" fill="#bd93f9" font-size="15" font-family="monospace">hp = 5   max_hp = 8</text>
+      <text x="34" y="140" fill="#e8eef6" font-size="15" font-family="monospace">return 5 / 8</text>
+      <text x="360" y="122" fill="#8a97b8" font-size="15">2 · work</text>
+      <line x1="95" y1="152" x2="95" y2="182" stroke="#50fa7b" stroke-width="3"/>
+      <text x="106" y="174" fill="#50fa7b" font-size="15">3 · hand back</text>
+      <rect x="20" y="186" width="150" height="36" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="52" y="211" fill="#50fa7b" font-size="18" font-family="monospace">0.625</text>
+      <text x="196" y="211" fill="#8a97b8" font-size="15">the call becomes this number</text>
+    </svg>
+  </div>
+
+  <!-- 10 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 18</div>
+    <h2>Use the answer</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>    hp_percentage = hp / max_hp</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">    hp_percentage = hp / max_hp</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny"><span class="dim">def draw_health_bar(hp, max_hp):</span>
+<span class="hot">    hp_percentage = health_percent(hp, max_hp)</span>
+<span class="dim">    pygame.draw.rect(screen, BLOOD_RED, (10, 45, 100, 8))</span>
+<span class="dim">    pygame.draw.rect(screen, BRILLIANT_RED, (10, 45, int(100 * hp_percentage), 8))</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, first line inside <code>draw_health_bar</code></div>
+    <div class="why">🟣 One function can call another.</div>
+    <div class="chk">✅ Neo runs it — bar behaves exactly as before.</div>
+  </div>
+
+  <!-- 11 · v3 result -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <h2>v3 — two boxes now</h2>
+<pre class="tiny"><span class="hot">def health_percent(hp, max_hp):</span>
+<span class="hot">    return hp / max_hp</span>
+
+<span class="dim">def draw_health_bar(hp, max_hp):</span>
+<span class="hot">    hp_percentage = health_percent(hp, max_hp)</span>
+<span class="dim">    pygame.draw.rect(screen, BLOOD_RED, (10, 45, 100, 8))</span>
+<span class="dim">    pygame.draw.rect(screen, BRILLIANT_RED, (10, 45, int(100 * hp_percentage), 8))</span></pre>
+    <div class="why">🟣 One asks the question. One paints the answer.</div>
+  </div>
+
+  <!-- 12 · bug — empty return -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — return with nothing</h2>
+<pre class="tiny">def health_percent(hp, max_hp):
+    return</pre>
+    <div class="debug-card"><div class="err">TypeError: unsupported operand type(s) for *: 'int' and 'NoneType'</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A bare <code>return</code> hands back <b>None</b>. Put the sum after it: <code>return hp / max_hp</code>.</p>
+      <p class="bilingual">돌려줄 값을 써야 해요</p>
+    </details>
+  </div>
+
+  <!-- 13 · bug — print not return -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — print instead of return</h2>
+<pre class="tiny">def health_percent(hp, max_hp):
+    print(hp / max_hp)</pre>
+    <div class="debug-card"><div class="err">0.625 floods the terminal. The bar stays empty.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>print</code> shows a human. <code>return</code> hands the value to the code. Swap the word.</p>
+      <p class="bilingual">print는 사람에게, return은 코드에게</p>
+    </details>
+  </div>
+
+  <!-- 14 · bug — after return -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the line that never runs</h2>
+<pre class="tiny">def health_percent(hp, max_hp):
+    return hp / max_hp
+    print("checked")</pre>
+    <div class="debug-card"><div class="err">No error. "checked" never appears.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em"><code>return</code> shuts the box immediately. Put any extra line <b>above</b> it.</p>
+      <p class="bilingual">return 다음 줄은 실행 안 돼요</p>
+    </details>
+  </div>
+
+  <!-- 15 · your file already returns -->
+  <div class="slide">
+    <div class="pill">Your file 📂</div>
+    <h2>You already return things</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def make_enemy():</code></div>
+<pre class="tiny"><span class="dim">def make_enemy():</span>
+<span class="dim">    roll = random.random()</span>
+<span class="dim">    if roll &gt; .9:</span>
+<span class="hot">        return {"type": "scout", "hp": 1, ... }</span></pre>
+    <div class="why">🟣 <code>enemies.append(make_enemy())</code> stores what came back.</div>
+    <p class="bilingual">이미 return을 쓰고 있었어요</p>
+  </div>
+
+  <!-- 16 · call becomes value -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>The call becomes the value</h2>
+    <svg viewBox="0 0 500 190" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="20" y="42" fill="#e8eef6" font-size="18" font-family="monospace">enemies.append(</text>
+      <rect x="216" y="20" width="150" height="30" rx="5" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="226" y="42" fill="#38d0e0" font-size="17" font-family="monospace">make_enemy()</text>
+      <text x="370" y="42" fill="#e8eef6" font-size="18" font-family="monospace">)</text>
+      <text x="286" y="76" fill="#8a97b8" font-size="20">↓</text>
+      <text x="20" y="122" fill="#e8eef6" font-size="18" font-family="monospace">enemies.append(</text>
+      <rect x="216" y="100" width="180" height="30" rx="5" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="226" y="122" fill="#50fa7b" font-size="16" font-family="monospace">{"hp": 1, ...}</text>
+      <text x="400" y="122" fill="#e8eef6" font-size="18" font-family="monospace">)</text>
+      <text x="20" y="172" fill="#f1fa8c" font-size="17">Python runs the box first, then uses the answer.</text>
+    </svg>
+  </div>
+
+  <!-- 17 · true/false function -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A box that answers yes or no</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">is_dead(0)</span>
+        <span class="case case-b">is_dead(5)</span>
+      </div>
+      <div class="if-cond">return hp &lt;= 0</div>
+      <div class="if-branches">
+        <div class="if-branch true">game_over = True</div>
+        <div class="if-branch false">keep playing</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ what comes back</div>
+        <div class="out-line out-a">True</div>
+        <div class="out-line out-b">False</div>
+      </div>
+    </div>
+    <p class="bilingual">True 아니면 False를 돌려줘요</p>
+  </div>
+
+  <!-- 18 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 18</div>
+    <h2>Write is_dead</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def health_percent(hp, max_hp):</code></div>
+    <div class="tag-new">NEW — 2 lines ABOVE it</div>
+    <div class="now"><pre class="tiny"><span class="hot">def is_dead(hp):</span>
+<span class="hot">    return hp &lt;= 0</span>
+
+<span class="dim">def health_percent(hp, max_hp):</span></pre></div>
+    <div class="where">📍 <code>def</code> at indent <b>0</b> · <code>return</code> at <b>4</b>. One slot only.</div>
+    <div class="why">🟣 <code>hp &lt;= 0</code> is already True or False.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 19 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 18</div>
+    <h2>Ask it in the loop</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if player["hp"] &lt;= 0:</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">    if player["hp"] &lt;= 0:
+        game_over = True</pre></div>
+    <div class="tag-new">NEW — change the top line only</div>
+    <div class="now"><pre class="tiny"><span class="hot">    if is_dead(player["hp"]):</span>
+<span class="dim">        game_over = True</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>. Leave <code>game_over</code> alone.</div>
+    <div class="why">🟣 The question now has a name you can read.</div>
+    <div class="chk">✅ Neo runs it — take 8 hits, GAME OVER as before.</div>
+  </div>
+
+  <!-- 20 · quiz -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">What does <code>is_dead(3)</code> hand back?</div>
+      <div class="opts">
+        <details><summary>A. False</summary><div class="ans">✓ 3 &lt;= 0 is False.</div></details>
+        <details><summary>B. 3</summary><div class="ans">No. That is the value handed in.</div></details>
+        <details><summary>C. None</summary><div class="ans">No. That is what a bare return gives.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 21 · trace return -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill in what comes back</h2>
+    <div class="trace-grid">
+      <div class="cell head">call</div>
+      <div class="cell head">inside</div>
+      <div class="cell head">comes back</div>
+
+      <div class="cell"><code>health_percent(8, 8)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">8 / 8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1.0</span></details></div>
+
+      <div class="cell"><code>health_percent(2, 8)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2 / 8</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0.25</span></details></div>
+
+      <div class="cell"><code>is_dead(0)</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0 &lt;= 0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+    </div>
+  </div>
+
+  <!-- 22 · v4 intro -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="emoji">👾</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">The boss bar<br>gets a name too</h1>
+    <p class="line" style="margin-top:.5em">This time you hand in a whole <b>dictionary</b>.</p>
+    <p class="bilingual">딕셔너리 통째로 건네줘요</p>
+  </div>
+
+  <!-- 23 · the boss bar block -->
+  <div class="slide">
+    <div class="pill">Your file 📂</div>
+    <h2>Four lines, deep inside</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code># 3. Boss Health Bar UI</code></div>
+<pre class="tiny"><span class="dim">        health_percentage = boss["hp"] / boss["max_hp"]</span>
+<span class="dim">        health_bar_width = int(health_percentage * boss["w"])</span>
+<span class="dim">        pygame.draw.rect(screen, BLOOD_RED, (boss["x"], boss["y"] - 15, boss["w"], 6))</span>
+<span class="dim">        pygame.draw.rect(screen, BRILLIANT_RED, (boss["x"], boss["y"] - 15, health_bar_width, 6))</span></pre>
+    <div class="why">🟣 Indent <b>8</b>, buried inside <code>if boss:</code>. Hard to find, hard to change.</div>
+  </div>
+
+  <!-- 24 · hand in a dict -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>One slot, five values</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="20" y="14" width="180" height="150" rx="8" fill="#141b27" stroke="#4a235a" stroke-width="3"/>
+      <text x="32" y="36" fill="#bd93f9" font-size="15" font-family="monospace">boss</text>
+      <text x="40" y="62" fill="#e8eef6" font-size="14" font-family="monospace">"hp": 40</text>
+      <text x="40" y="86" fill="#e8eef6" font-size="14" font-family="monospace">"max_hp": 40</text>
+      <text x="40" y="110" fill="#e8eef6" font-size="14" font-family="monospace">"w": 50</text>
+      <text x="40" y="134" fill="#e8eef6" font-size="14" font-family="monospace">"x": 515</text>
+      <text x="40" y="158" fill="#e8eef6" font-size="14" font-family="monospace">"y": 40</text>
+      <line x1="204" y1="88" x2="280" y2="88" stroke="#38d0e0" stroke-width="3"/>
+      <text x="212" y="76" fill="#38d0e0" font-size="14">1 slot</text>
+      <rect x="286" y="60" width="196" height="56" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="296" y="94" fill="#38d0e0" font-size="15" font-family="monospace">draw_boss_bar(boss)</text>
+      <text x="20" y="196" fill="#f1fa8c" font-size="17">One name carries every number the bar needs.</text>
+    </svg>
+  </div>
+
+  <!-- 25 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 18</div>
+    <h2>Name the boss bar</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def is_dead(hp):</code></div>
+    <div class="tag-new">NEW — 5 lines ABOVE it, then one blank line</div>
+    <div class="now"><pre class="tiny"><span class="hot">def draw_boss_bar(boss):</span>
+<span class="hot">    health_percentage = health_percent(boss["hp"], boss["max_hp"])</span>
+<span class="hot">    health_bar_width = int(health_percentage * boss["w"])</span>
+<span class="hot">    pygame.draw.rect(screen, BLOOD_RED, (boss["x"], boss["y"] - 15, boss["w"], 6))</span>
+<span class="hot">    pygame.draw.rect(screen, BRILLIANT_RED, (boss["x"], boss["y"] - 15, health_bar_width, 6))</span>
+
+<span class="dim">def is_dead(hp):</span></pre></div>
+    <div class="where">📍 <code>def</code> at indent <b>0</b> · the 4 body lines at <b>4</b></div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 26 · the slot named boss -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The slot is also called boss</h2>
+    <svg viewBox="0 0 500 170" style="width:100%;max-height:40vh" aria-hidden="true">
+      <rect x="20" y="14" width="210" height="50" rx="6" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="32" y="45" fill="#bd93f9" font-size="15" font-family="monospace">def draw_boss_bar(boss):</text>
+      <text x="34" y="84" fill="#8a97b8" font-size="14">the slot name, your choice</text>
+      <rect x="270" y="14" width="210" height="50" rx="6" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="290" y="45" fill="#38d0e0" font-size="15" font-family="monospace">draw_boss_bar(boss)</text>
+      <text x="284" y="84" fill="#8a97b8" font-size="14">the real dict in the loop</text>
+      <text x="20" y="126" fill="#f1fa8c" font-size="17">Same word, two different places. Python is fine with it.</text>
+      <text x="20" y="154" fill="#50fa7b" font-size="17">You could name the slot anything.</text>
+    </svg>
+  </div>
+
+  <!-- 27 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 18</div>
+    <h2>Call it from the loop</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code># 3. Boss Health Bar UI</code></div>
+    <div class="tag-old">OLD — delete all 4 lines under that comment</div>
+    <div class="was"><pre class="tiny">        health_percentage = boss["hp"] / boss["max_hp"]
+        health_bar_width = int(health_percentage * boss["w"])
+        pygame.draw.rect(screen, BLOOD_RED, (boss["x"], boss["y"] - 15, boss["w"], 6))
+        pygame.draw.rect(screen, BRILLIANT_RED, (boss["x"], boss["y"] - 15, health_bar_width, 6))</pre></div>
+    <div class="tag-new">NEW — type 1 line</div>
+    <div class="now"><pre class="tiny"><span class="dim">        # 3. Boss Health Bar UI</span>
+<span class="hot">        draw_boss_bar(boss)</span></pre></div>
+    <div class="where">📍 Indent <b>8</b>, exactly where the 4 lines were</div>
+    <div class="chk">✅ Neo runs it — score 100, boss appears with its bar.</div>
+  </div>
+
+  <!-- 28 · v4 result -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <h2>v4 — four names, short loop</h2>
+<pre class="tiny"><span class="hot">def draw_boss_bar(boss):     # 4 lines</span>
+<span class="hot">def is_dead(hp):             # 1 line</span>
+<span class="hot">def health_percent(hp, max_hp):  # 1 line</span>
+<span class="hot">def draw_health_bar(hp, max_hp):  # 3 lines</span>
+
+<span class="dim">while running:</span>
+<span class="dim">    ...</span>
+<span class="hot">        draw_boss_bar(boss)</span>
+<span class="hot">    draw_health_bar(player["hp"], player["max_hp"])</span>
+<span class="hot">    if is_dead(player["hp"]):</span></pre>
+    <div class="why">🟣 The loop reads like a list of jobs.</div>
+  </div>
+
+  <!-- 29 · before/after -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>The loop got shorter</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:46vh" aria-hidden="true">
+      <text x="40" y="20" fill="#8a97b8" font-size="15">before</text>
+      <rect x="40" y="28" width="120" height="170" rx="6" fill="#141b27" stroke="#ff5555" stroke-width="3"/>
+      <rect x="50" y="38" width="100" height="60" fill="#ff0003"/>
+      <rect x="50" y="104" width="100" height="84" fill="#4a235a"/>
+      <text x="166" y="76" fill="#8a97b8" font-size="14">7 lines</text>
+      <text x="300" y="20" fill="#8a97b8" font-size="15">after</text>
+      <rect x="300" y="28" width="120" height="170" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="310" y="38" width="100" height="14" fill="#ff0003"/>
+      <rect x="310" y="60" width="100" height="14" fill="#4a235a"/>
+      <text x="426" y="52" fill="#8a97b8" font-size="14">2 lines</text>
+      <text x="230" y="118" fill="#38d0e0" font-size="30">→</text>
+      <text x="310" y="150" fill="#50fa7b" font-size="14">room</text>
+      <text x="310" y="172" fill="#50fa7b" font-size="14">to grow</text>
+    </svg>
+    <p class="bilingual">루프가 짧아졌어요</p>
+  </div>
+
+  <!-- 30 · bug — called before defined -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — called too early</h2>
+<pre class="tiny">draw_health_bar(8, 8)
+
+def draw_health_bar(hp, max_hp):
+    ...</pre>
+    <div class="debug-card"><div class="err">NameError: name 'draw_health_bar' is not defined</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Python reads top to bottom. The def must be above the first call. Yours sit above <code>while running:</code>, so you are safe.</p>
+      <p class="bilingual">def가 먼저 나와야 해요</p>
+    </details>
+  </div>
+
+  <!-- 31 · locals concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Names born inside stay inside</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="20" y="14" width="220" height="110" rx="8" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="32" y="38" fill="#bd93f9" font-size="15" font-family="monospace">def health_percent(hp, max_hp):</text>
+      <rect x="44" y="50" width="80" height="30" rx="4" fill="#22252e" stroke="#38d0e0" stroke-width="2"/>
+      <text x="58" y="70" fill="#38d0e0" font-size="15" font-family="monospace">hp</text>
+      <rect x="136" y="50" width="90" height="30" rx="4" fill="#22252e" stroke="#38d0e0" stroke-width="2"/>
+      <text x="146" y="70" fill="#38d0e0" font-size="15" font-family="monospace">max_hp</text>
+      <text x="44" y="106" fill="#8a97b8" font-size="14">these two live here only</text>
+      <rect x="272" y="14" width="208" height="110" rx="8" fill="#141b27" stroke="#3a4255" stroke-width="2"/>
+      <text x="284" y="38" fill="#8a97b8" font-size="15" font-family="monospace">while running:</text>
+      <text x="296" y="70" fill="#ff5555" font-size="15" font-family="monospace">print(hp)</text>
+      <text x="296" y="100" fill="#ff5555" font-size="14">NameError</text>
+      <text x="20" y="164" fill="#f1fa8c" font-size="17">When the box closes, its own names disappear.</text>
+      <text x="20" y="190" fill="#50fa7b" font-size="17">Only what you return survives.</text>
+    </svg>
+  </div>
+
+  <!-- 32 · disappears -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Open, work, close, gone</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">call health_percent(5, 8)</div>
+        <div class="ra-line">hp = 5, max_hp = 8</div>
+        <div class="ra-line">return 0.625</div>
+        <div class="ra-line">hp and max_hp gone</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">inside</span>
+        <span class="ra-vals">
+          <span>—</span><span>5, 8</span><span>0.625</span><span>—</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 33 · bug — UnboundLocalError -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the counter you cannot touch</h2>
+<pre class="tiny">def spawn_formation():
+    formation_timer += 1
+    formations.append(make_formation())</pre>
+    <div class="debug-card"><div class="err">UnboundLocalError: cannot access local variable 'formation_timer'</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">An <code>=</code> inside a box makes that name <b>local</b>. Leave <code>formation_timer += 1</code> in the loop.</p>
+      <p class="bilingual">함수 안에서 = 하면 새 이름이 돼요</p>
+    </details>
+  </div>
+
+  <!-- 34 · the lift rule -->
+  <div class="slide">
+    <div class="pill">The rule 📏</div>
+    <h2>What a box may touch</h2>
+    <div class="edge-grid">
+      <div class="edge-card"><div class="ehead">✅ read</div><div class="edesc"><code>player["hp"]</code>, <code>screen</code>, <code>BLOOD_RED</code></div></div>
+      <div class="edge-card"><div class="ehead">✅ change a dict</div><div class="edesc"><code>boss["hp"] -= 1</code></div></div>
+      <div class="edge-card"><div class="ehead">✅ add to a list</div><div class="edesc"><code>particles.append(...)</code></div></div>
+      <div class="edge-card"><div class="ehead">🚫 plain =</div><div class="edesc"><code>score = 0</code>, <code>boss = None</code></div></div>
+    </div>
+    <p class="bilingual">읽기와 append는 되고, = 는 안 돼요</p>
+  </div>
+
+  <!-- 35 · safe vs unsafe lift -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Safe lift, unsafe lift</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">✓ safe</span>
+<pre class="tiny">def draw_boss_bar(boss):
+    pygame.draw.rect(screen, ...)</pre>
+        <p style="margin-top:.4em">Only reads and draws.</p>
+      </div>
+      <div class="col bad"><span class="tag">✗ breaks</span>
+<pre class="tiny">def kill_boss():
+    boss = None
+    score += 30</pre>
+        <p style="margin-top:.4em">Two plain <code>=</code>. Both stay local.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 36 · quiz 3 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 3</h2>
+    <div class="quiz-card">
+      <div class="q">Which block is safe to lift into a function?</div>
+      <div class="opts">
+        <details><summary>A. particles.append(...)</summary><div class="ans">✓ Adding to a list works.</div></details>
+        <details><summary>B. spawn_timer = 0</summary><div class="ans">No. A plain = stays local.</div></details>
+        <details><summary>C. score += 10</summary><div class="ans">No. += is still an =.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 37 · defaults concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A slot with a value already in it</h2>
+    <svg viewBox="0 0 500 190" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="20" y="36" fill="#bd93f9" font-size="16" font-family="monospace">def draw_health_bar(hp, max_hp, x=10, y=45):</text>
+      <rect x="252" y="52" width="80" height="34" rx="5" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="266" y="76" fill="#50fa7b" font-size="16" font-family="monospace">x = 10</text>
+      <text x="252" y="106" fill="#8a97b8" font-size="14">already filled</text>
+      <text x="20" y="140" fill="#f1fa8c" font-size="17">draw_health_bar(8, 8)          → x is 10</text>
+      <text x="20" y="170" fill="#38d0e0" font-size="17">draw_health_bar(8, 8, 10, 690) → x is 10, y is 690</text>
+    </svg>
+    <p class="bilingual">기본값이 들어 있는 칸이에요</p>
+  </div>
+
+  <!-- 38 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 18</div>
+    <h2>Two slots with defaults</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def draw_health_bar(hp, max_hp):</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">def draw_health_bar(hp, max_hp):</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">def draw_health_bar(hp, max_hp, x=10, y=45):</pre></div>
+    <div class="where">📍 Same line, indent <b>0</b>. Defaults go last, always.</div>
+    <div class="why">🟣 Your old call still works. Nothing to change yet.</div>
+    <div class="chk">✅ Neo runs it — bar exactly as before, no red text.</div>
+  </div>
+
+  <!-- 39 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 18</div>
+    <h2>The body uses x and y</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>BLOOD_RED, (10, 45, 100, 8)</code></div>
+    <div class="tag-old">OLD — the 2 draw lines inside the function</div>
+    <div class="was"><pre class="tiny">    pygame.draw.rect(screen, BLOOD_RED, (10, 45, 100, 8))
+    pygame.draw.rect(screen, BRILLIANT_RED, (10, 45, int(100 * hp_percentage), 8))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny"><span class="hot">    pygame.draw.rect(screen, BLOOD_RED, (x, y, 100, 8))</span>
+<span class="hot">    pygame.draw.rect(screen, BRILLIANT_RED, (x, y, int(100 * hp_percentage), 8))</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>. Only the first two numbers change.</div>
+    <div class="chk">✅ Neo runs it — bar in the same corner, nothing moved.</div>
+  </div>
+
+  <!-- 40 · STEP 9 -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 18</div>
+    <h2>A second bar, one line</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>draw_health_bar(player</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    draw_health_bar(player["hp"], player["max_hp"])</span>
+<span class="hot">    draw_health_bar(player["hp"], player["max_hp"], 10, 690)</span></pre></div>
+    <div class="where">📍 Indent <b>4</b>, under the first call</div>
+    <div class="why">🟣 Same box, new corner.</div>
+    <div class="chk">✅ Neo runs it — two red bars, top and bottom.</div>
+  </div>
+
+  <!-- 41 · two bars drawn -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Same box, two places</h2>
+    <svg viewBox="0 0 500 220" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="60" y="14" width="380" height="190" rx="8" fill="#87ceeb" stroke="#e8eef6" stroke-width="2"/>
+      <rect x="76" y="30" width="100" height="10" fill="#660000"/>
+      <rect x="76" y="30" width="62" height="10" fill="#ff0003"/>
+      <text x="188" y="40" fill="#0a0d13" font-size="14">x=10  y=45</text>
+      <rect x="76" y="176" width="100" height="10" fill="#660000"/>
+      <rect x="76" y="176" width="62" height="10" fill="#ff0003"/>
+      <text x="188" y="186" fill="#0a0d13" font-size="14">x=10  y=690</text>
+      <rect x="230" y="150" width="60" height="40" fill="#4169e1"/>
+      <text x="236" y="146" fill="#0a0d13" font-size="13">your ship</text>
+    </svg>
+    <div class="why">🟣 Delete the second call when you have seen it work.</div>
+  </div>
+
+  <!-- 42 · repeated blocks -->
+  <div class="slide">
+    <div class="pill">The pain 😩</div>
+    <h2>You typed this dict six times</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>particles.append({</code></div>
+<pre class="tiny"><span class="dim">                    particles.append({</span>
+<span class="dim">                        "x": bullet["x"],</span>
+<span class="dim">                        "y": bullet["y"],</span>
+<span class="dim">                        "vx": random.uniform(-2, 2),</span>
+<span class="dim">                        "vy": random.uniform(-2, 2),</span>
+<span class="dim">                        "life": random.randint(20, 50),</span>
+<span class="dim">                        "color": BLACK,</span>
+<span class="dim">                        "radius": random.randint(6, 10)</span>
+<span class="dim">                    })</span></pre>
+    <div class="why">🟣 Six copies. Change the spark once and you change it six times.</div>
+  </div>
+
+  <!-- 43 · a maker function -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A box that builds and hands back</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">make_spark(<span class="arg">100, 200, BLACK</span>)</span>
+        <span class="fn-result"><span class="rv">{"x": 100, "y": 200, ...}</span></span>
+      </div>
+      <div class="fn-flow-down">↓ three values in</div>
+      <div class="fn-body">
+        <div class="fn-sig">def make_spark(<span class="param">x</span>, y, color):</div>
+        <div class="fn-line">return {"x": <span class="param-use">x</span>, "y": y, ...}</div>
+      </div>
+      <div class="fn-flow-up">↑ one dict out</div>
+    </div>
+    <p class="bilingual">make_enemy와 똑같은 모양이에요</p>
+  </div>
+
+  <!-- 44 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 18</div>
+    <h2>Write the spark maker</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def draw_boss_bar(boss):</code></div>
+    <div class="tag-new">NEW — 10 lines ABOVE it, then one blank line</div>
+    <div class="now"><pre class="tiny"><span class="hot">def make_spark(x, y, color):</span>
+<span class="hot">    return {</span>
+<span class="hot">        "x": x,</span>
+<span class="hot">        "y": y,</span>
+<span class="hot">        "vx": random.uniform(-3, 3),</span>
+<span class="hot">        "vy": random.uniform(-3, 3),</span>
+<span class="hot">        "life": random.randint(10, 40),</span>
+<span class="hot">        "color": color,</span>
+<span class="hot">        "radius": random.randint(4, 8)</span>
+<span class="hot">    }</span></pre></div>
+    <div class="where">📍 <code>def</code> at <b>0</b> · <code>return {</code> at <b>4</b> · the keys at <b>8</b> · <code>}</code> at <b>4</b></div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 45 · STEP 11 -->
+  <div class="slide">
+    <div class="steptag">STEP 11 / 18</div>
+    <h2>Boss hit sparks, one line</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>"color": BLACK,</code></div>
+    <div class="tag-old">OLD — the whole append, 9 lines</div>
+    <div class="was"><pre class="tiny">                for _ in range(3):
+                    particles.append({
+                        "x": bullet["x"],
+                        "y": bullet["y"],
+                        ...
+                        "color": BLACK,
+                        "radius": random.randint(6, 10)
+                    })</pre></div>
+    <div class="tag-new">NEW — 2 lines</div>
+    <div class="now"><pre class="tiny"><span class="dim">                for _ in range(3):</span>
+<span class="hot">                    particles.append(make_spark(bullet["x"], bullet["y"], BLACK))</span></pre></div>
+    <div class="where">📍 <code>for</code> stays at <b>16</b> · the append at <b>20</b></div>
+    <div class="chk">✅ Neo runs it — shoot the boss. Black sparks still burst.</div>
+  </div>
+
+  <!-- 46 · STEP 12 -->
+  <div class="slide">
+    <div class="steptag">STEP 12 / 18</div>
+    <h2>Boss bullet sparks too</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>for _ in range(8):</code></div>
+    <div class="tag-old">OLD — the whole append, 9 lines</div>
+    <div class="was"><pre class="tiny">            for _ in range(8):
+                particles.append({
+                    "x": b["x"],
+                    "y": b["y"],
+                    ...
+                    "color": BRILLIANT_RED,
+                    "radius": random.randint(3, 6)
+                })</pre></div>
+    <div class="tag-new">NEW — 2 lines</div>
+    <div class="now"><pre class="tiny"><span class="dim">            for _ in range(8):</span>
+<span class="hot">                particles.append(make_spark(b["x"], b["y"], BRILLIANT_RED))</span></pre></div>
+    <div class="where">📍 <code>for</code> stays at <b>12</b> · the append at <b>16</b></div>
+    <div class="chk">✅ Neo runs it — take a purple hit. Red sparks still burst.</div>
+  </div>
+
+  <!-- 47 · the win -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>18 lines became 2</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="30" y="14" width="170" height="160" rx="6" fill="#141b27" stroke="#ff5555" stroke-width="3"/>
+      <text x="42" y="34" fill="#ff5555" font-size="14">before</text>
+      <rect x="42" y="44" width="146" height="56" fill="#3a424a"/>
+      <rect x="42" y="110" width="146" height="56" fill="#3a424a"/>
+      <text x="88" y="78" fill="#e8eef6" font-size="14">9 lines</text>
+      <text x="88" y="144" fill="#e8eef6" font-size="14">9 lines</text>
+      <text x="222" y="100" fill="#38d0e0" font-size="28">→</text>
+      <rect x="280" y="14" width="180" height="160" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="292" y="34" fill="#50fa7b" font-size="14">after</text>
+      <rect x="292" y="44" width="156" height="14" fill="#50fa7b"/>
+      <rect x="292" y="66" width="156" height="14" fill="#50fa7b"/>
+      <text x="292" y="106" fill="#8a97b8" font-size="14">plus make_spark,</text>
+      <text x="292" y="128" fill="#8a97b8" font-size="14">written once</text>
+      <text x="292" y="158" fill="#f1fa8c" font-size="14">change the spark in one place</text>
+    </svg>
+  </div>
+
+  <!-- 48 · bug — maker with no return -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the maker that makes nothing</h2>
+<pre class="tiny">def make_spark(x, y, color):
+    {
+        "x": x,
+        "y": y,
+        ...
+    }</pre>
+    <div class="debug-card"><div class="err">TypeError: 'NoneType' object is not subscriptable</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The dict was built and thrown away. Put <code>return</code> in front of the <code>{</code>.</p>
+      <p class="bilingual">만들고 돌려줘야 해요</p>
+    </details>
+  </div>
+
+  <!-- 49 · chain -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Boxes calling boxes</h2>
+    <div class="viz viz-event">
+      <div class="ev-step ev-click">while running:</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-listen">draw_health_bar(8, 8)</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-run">health_percent(8, 8)</div>
+      <div class="viz-arrow">↓</div>
+      <div class="ev-step ev-dom">1.0 comes back ✓</div>
+    </div>
+    <p class="bilingual">함수가 함수를 불러요</p>
+  </div>
+
+  <!-- 50 · naming -->
+  <div class="slide">
+    <div class="pill">The rule 📏</div>
+    <h2>Name it after the job</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ tells you nothing</span>
+<pre class="tiny">def thing1(a, b):
+def stuff(x):
+def f(n):</pre></div>
+      <div class="col good"><span class="tag">✓ says the job</span>
+<pre class="tiny">def draw_health_bar(hp, max_hp):
+def is_dead(hp):
+def make_spark(x, y, color):</pre></div>
+    </div>
+    <div class="why">🟣 A verb plus a noun. Lower case, underscores between words.</div>
+  </div>
+
+  <!-- 51 · the same dict -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>A dict handed in is the same dict</h2>
+    <svg viewBox="0 0 500 190" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="30" y="20" width="150" height="60" rx="8" fill="#141b27" stroke="#4a235a" stroke-width="3"/>
+      <text x="44" y="46" fill="#bd93f9" font-size="15" font-family="monospace">boss</text>
+      <text x="44" y="70" fill="#e8eef6" font-size="15" font-family="monospace">"hp": 40</text>
+      <line x1="184" y1="50" x2="300" y2="50" stroke="#38d0e0" stroke-width="3"/>
+      <text x="200" y="40" fill="#38d0e0" font-size="14">same box, not a copy</text>
+      <rect x="304" y="20" width="170" height="60" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="316" y="46" fill="#38d0e0" font-size="14" font-family="monospace">def hurt(boss):</text>
+      <text x="316" y="70" fill="#e8eef6" font-size="14" font-family="monospace">boss["hp"] -= 1</text>
+      <text x="30" y="126" fill="#f1fa8c" font-size="17">Change a key inside, and the real boss changes.</text>
+      <text x="30" y="156" fill="#ff5555" font-size="17">A plain number does not work that way.</text>
+      <text x="30" y="182" fill="#8a97b8" font-size="15">hp = 5 inside a box changes nothing outside.</text>
+    </svg>
+  </div>
+
+  <!-- 52 · bug — typo -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — one letter</h2>
+<pre class="tiny">    draw_healthbar(player["hp"], player["max_hp"])</pre>
+    <div class="debug-card"><div class="err">NameError: name 'draw_healthbar' is not defined</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The underscore is missing. Copy the name straight off the <code>def</code> line.</p>
+      <p class="bilingual">이름은 글자 하나까지 똑같아야 해요</p>
+    </details>
+  </div>
+
+  <!-- 53 · bug — indent -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the line that fell out</h2>
+<pre class="tiny">def draw_health_bar(hp, max_hp, x=10, y=45):
+    hp_percentage = health_percent(hp, max_hp)
+pygame.draw.rect(screen, BLOOD_RED, (x, y, 100, 8))</pre>
+    <div class="debug-card"><div class="err">NameError: name 'screen' is not defined</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Indent 0 closed the box, so that line ran at once, before <code>screen</code> existed. Push it to 4.</p>
+      <p class="bilingual">들여쓰기 0이면 함수 밖이에요</p>
+    </details>
+  </div>
+
+  <!-- 54 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>def</code> makes a <span class="blank"></span>. The brackets hold the <span class="blank"></span>. <code>return</code> hands back the <span class="blank"></span>. Without <span class="blank"></span> nothing runs."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 55 · fill blanks harder -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill the four blanks</h2>
+<pre class="tiny">def make_spark(x, y, ___):
+    ___ {
+        "x": x,
+        "y": y,
+        "color": ___,
+        "radius": random.randint(4, 8)
+    }
+
+particles.append(___(b["x"], b["y"], BRILLIANT_RED))</pre>
+    <p class="quiet" style="margin-top:.4em">The third slot, the keyword, the slot used again, the name.</p>
+  </div>
+
+  <!-- 56 · Neo alone -->
+  <div class="slide">
+    <div class="pill">✍️ Neo writes this one alone</div>
+    <h2>Your own function</h2>
+    <div class="practice-task">Write <code>def is_full(hp, max_hp):</code> that hands back True when health is full.</div>
+    <div class="practice-hint">Two slots. One line inside. Use <code>==</code>, not <code>=</code>.</div>
+    <div class="chk">✅ <code>is_full(8, 8)</code> gives True. <code>is_full(3, 8)</code> gives False.</div>
+  </div>
+
+  <!-- 57 · Neo alone 2 -->
+  <div class="slide">
+    <div class="pill">✍️ Neo writes this one alone</div>
+    <h2>Call your own function</h2>
+    <div class="practice-task">Print a message in the terminal only when your health is full.</div>
+<pre class="tiny">    if ___(player["hp"], player["max_hp"]):
+        print("full health")</pre>
+    <div class="practice-hint">Indent 4 inside the loop. Delete it after you have seen it.</div>
+  </div>
+
+  <!-- 58 · 2 fast questions -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two fast questions</h2>
+    <div class="recap-q">
+      <div class="q">1. What does a bare <code>return</code> hand back?</div>
+      <details><summary>Show answer</summary><div class="ans">None.</div></details>
+      <div class="q" style="margin-top:.4em">2. Where do the slot names live?</div>
+      <details><summary>Show answer</summary><div class="ans">Inside the function only.</div></details>
+    </div>
+  </div>
+
+  <!-- 59 · checklist -->
+  <div class="slide">
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Run the checklist</h2>
+    <ul class="check-list">
+      <li>Bronze squares, no long bars</li>
+      <li>Boss dies at score 100</li>
+      <li>Red bar shrinks when you are hit</li>
+      <li>Boss bar shows above the boss</li>
+      <li>Black sparks on a boss hit</li>
+      <li>Five new <code>def</code> lines above <code>while running:</code></li>
+    </ul>
+  </div>
+
+  <!-- 60 · exit ticket -->
+  <div class="slide">
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">One line, no looking back</div>
+      <p style="margin-top:.4em">Why does a <code>def</code> on its own draw nothing?</p>
+      <p class="bilingual" style="margin-top:.4em">왜 def만 쓰면 아무 일도 없을까요?</p>
+    </div>
+  </div>
+
+  <!-- 61 · close & bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🌉</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">A name is<br>a command.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: the ship that cannot be hit twice.</p>
+    <p class="bilingual">다음 시간: 잠깐 무적이 되는 우주선</p>
+  </div>
+
+  <!-- ============ OPTIONAL OVERFLOW — Neo works fast ============ -->
+
+  <!-- 62 · bonus menu -->
+  <div class="slide">
+    <div class="pill">Level up<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four more upgrades</h2>
+    <div class="topic-grid three">
+      <div class="topic-chip"><div class="head">A · Shield</div><div class="desc">no double hits</div></div>
+      <div class="topic-chip"><div class="head">B · Aim</div><div class="desc">centre the bronze bullet</div></div>
+      <div class="topic-chip purple"><div class="head">C · Warning</div><div class="desc">gold bar when low</div></div>
+      <div class="topic-chip purple"><div class="head">D · Sparks</div><div class="desc">bronze burst on a hit</div></div>
+    </div>
+    <p class="quiet" style="margin-top:.5em">Pick one. Each is 1 to 4 lines.</p>
+  </div>
+
+  <!-- 63 · shield concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A shield, counted in frames</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="8" y="30" fill="#8a97b8" font-size="17">hit_cooldown</text>
+      <rect x="140" y="14" width="60" height="26" fill="#ff0003"/>
+      <text x="152" y="34" fill="#0a0d13" font-size="18">45</text>
+      <rect x="215" y="14" width="60" height="26" fill="#c29b41"/>
+      <text x="230" y="34" fill="#0a0d13" font-size="18">30</text>
+      <rect x="290" y="14" width="60" height="26" fill="#c29b41"/>
+      <text x="308" y="34" fill="#0a0d13" font-size="18">1</text>
+      <rect x="365" y="14" width="60" height="26" fill="#3a424a"/>
+      <text x="384" y="34" fill="#e8eef6" font-size="18">0</text>
+      <text x="8" y="92" fill="#8a97b8" font-size="17">can be hurt?</text>
+      <text x="152" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="230" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="305" y="92" fill="#8a97b8" font-size="19">no</text>
+      <text x="378" y="92" fill="#50fa7b" font-size="19">YES</text>
+      <text x="8" y="150" fill="#f1fa8c" font-size="19">The same counter your enemy guns use.</text>
+      <text x="8" y="182" fill="#38d0e0" font-size="19">Set it high, take 1 off every frame, wait for 0.</text>
+    </svg>
+    <p class="bilingual">적 쿨다운과 똑같은 방법이에요</p>
+  </div>
+
+  <!-- 64 · BONUS A1 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 1 / 4</div>
+    <h2>Make the counter</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>shoot_cooldown = 0</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">shoot_cooldown = 0</span>
+<span class="hot">hit_cooldown = 0</span></pre></div>
+    <div class="where">📍 Indent <b>0</b> — hard against the left edge</div>
+    <div class="why">🟣 0 means "you can be hurt right now".</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 65 · BONUS A2 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 2 / 4</div>
+    <h2>Count it down</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>shoot_cooldown = shoot_cooldown - 1</code></div>
+    <div class="tag-new">NEW — 2 lines under that block</div>
+    <div class="now"><pre class="tiny"><span class="dim">    if shoot_cooldown &gt; 0:</span>
+<span class="dim">        shoot_cooldown = shoot_cooldown - 1</span>
+<span class="hot">    if hit_cooldown &gt; 0:</span>
+<span class="hot">        hit_cooldown -= 1</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · <code>hit_cooldown -= 1</code> at <b>8</b></div>
+    <div class="why">🟣 One off every frame, exactly like your gun timer.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 66 · BONUS A3 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 3 / 4</div>
+    <h2>Only hurt with the shield down</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>b_rect = pygame.Rect(b["x"], b["y"], 8, 15)</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">        b_rect = pygame.Rect(b["x"], b["y"], 8, 15)
+        if b_rect.colliderect(player_rect):</pre></div>
+    <div class="tag-new">NEW — line 2 only</div>
+    <div class="now"><pre class="tiny"><span class="dim">        b_rect = pygame.Rect(b["x"], b["y"], 8, 15)</span>
+<span class="hot">        if b_rect.colliderect(player_rect) and hit_cooldown &lt;= 0:</span></pre></div>
+    <div class="where">📍 Indent <b>8</b>. Colon last.</div>
+    <div class="why">🟣 <code>and</code> = both must be true.</div>
+    <div class="chk">✅ Neo runs it — game unchanged. The shield is stuck at 0. Step 4 raises it.</div>
+  </div>
+
+  <!-- 67 · BONUS A4 -->
+  <div class="slide">
+    <div class="steptag">BONUS A · 4 / 4</div>
+    <h2>Raise the shield on a hit</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>and hit_cooldown &lt;= 0:</code></div>
+    <div class="tag-new">NEW — one line under <code>player["hp"] -= 1</code></div>
+    <div class="now"><pre class="tiny"><span class="dim">        if b_rect.colliderect(player_rect) and hit_cooldown &lt;= 0:</span>
+<span class="dim">            player["hp"] -= 1</span>
+<span class="hot">            hit_cooldown = 45</span></pre></div>
+    <div class="where">📍 Indent <b>12</b>, level with <code>player["hp"]</code></div>
+    <div class="why">🟣 45 frames is three quarters of a second.</div>
+    <div class="chk">✅ Neo runs it — sit in the stream. Health drops slowly.</div>
+  </div>
+
+  <!-- 68 · shield bug -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the shield that never drops</h2>
+<pre class="tiny">    if hit_cooldown &gt; 0:
+        hit_cooldown = hit_cooldown</pre>
+    <div class="debug-card"><div class="err">No error. Nothing can ever hurt you again.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">You met this line at the start of today. Write <code>hit_cooldown -= 1</code>.</p>
+      <p class="bilingual">오늘 아침에 본 그 버그예요</p>
+    </details>
+  </div>
+
+  <!-- 69 · aim concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The bullet sits off-centre</h2>
+    <svg viewBox="0 0 500 230" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="120" y="30" width="160" height="50" fill="#c29b41" stroke="#e8eef6" stroke-width="2"/>
+      <line x1="200" y1="24" x2="200" y2="130" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="206" y="22" fill="#ff79c6" font-size="16">enemy centre</text>
+      <rect x="200" y="82" width="22" height="22" fill="#cd7f32" stroke="#ff5555" stroke-width="3"/>
+      <text x="234" y="100" fill="#ff5555" font-size="18">left edge on the centre</text>
+      <rect x="120" y="150" width="160" height="50" fill="#c29b41" stroke="#e8eef6" stroke-width="2"/>
+      <rect x="189" y="200" width="22" height="22" fill="#cd7f32" stroke="#50fa7b" stroke-width="3"/>
+      <line x1="200" y1="146" x2="200" y2="226" stroke="#ff79c6" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="234" y="220" fill="#50fa7b" font-size="18">bullet centre on the centre</text>
+      <text x="14" y="60" fill="#8a97b8" font-size="18">now</text>
+      <text x="14" y="180" fill="#8a97b8" font-size="18">fixed</text>
+    </svg>
+    <div class="why">🟣 The bronze bullet is 8 wide. Take half of it back off.</div>
+  </div>
+
+  <!-- 70 · BONUS B -->
+  <div class="slide">
+    <div class="steptag">BONUS B · 1 / 1</div>
+    <h2>Centre the bronze bullet</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>"x": enemy["x"] + enemy["w"] // 2,</code></div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre class="tiny">                "x": enemy["x"] + enemy["w"] // 2,</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre class="tiny">                "x": enemy["x"] + (enemy["w"] // 2) - 4,</pre></div>
+    <div class="where">📍 Same line, indent <b>16</b>. Keep the comma.</div>
+    <div class="why">🟣 Half of 8 is 4.</div>
+    <div class="chk">✅ Neo runs it — bullets leave the middle of each enemy.</div>
+  </div>
+
+  <!-- 71 · gold bar concept -->
+  <div class="slide">
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Paint gold last, on top</h2>
+    <svg viewBox="0 0 500 190" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="20" y="26" fill="#8a97b8" font-size="15">hp_percentage 0.75</text>
+      <rect x="20" y="36" width="200" height="18" fill="#660000"/>
+      <rect x="20" y="36" width="150" height="18" fill="#ff0003"/>
+      <text x="240" y="50" fill="#8a97b8" font-size="15">red, nothing on top</text>
+      <text x="20" y="98" fill="#8a97b8" font-size="15">hp_percentage 0.25</text>
+      <rect x="20" y="108" width="200" height="18" fill="#660000"/>
+      <rect x="20" y="108" width="50" height="18" fill="#ff0003"/>
+      <rect x="20" y="108" width="50" height="18" fill="#c29b41"/>
+      <text x="240" y="122" fill="#c29b41" font-size="15">gold painted over the red</text>
+      <text x="20" y="170" fill="#f1fa8c" font-size="17">Last thing drawn wins. Order is the whole trick.</text>
+    </svg>
+  </div>
+
+  <!-- 72 · BONUS C -->
+  <div class="slide">
+    <div class="steptag">BONUS C · 1 / 1</div>
+    <h2>Gold bar when you are low</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>BRILLIANT_RED, (x, y, int(100</code></div>
+    <div class="tag-new">NEW — 2 lines under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">    pygame.draw.rect(screen, BRILLIANT_RED, (x, y, int(100 * hp_percentage), 8))</span>
+<span class="hot">    if hp_percentage &lt; 0.3:</span>
+<span class="hot">        pygame.draw.rect(screen, ANTIQUE_GOLD, (x, y, int(100 * hp_percentage), 8))</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · the draw line at <b>8</b></div>
+    <div class="why">🟣 One change fixes <b>both</b> bars.</div>
+    <div class="chk">✅ Neo runs it — take 6 hits. The bar turns gold.</div>
+  </div>
+
+  <!-- 73 · BONUS D -->
+  <div class="slide">
+    <div class="steptag">BONUS D · 1 / 1</div>
+    <h2>Bronze sparks when you are hit</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>b_rect = pygame.Rect(b["x"], b["y"], 8, 15)</code></div>
+    <div class="tag-new">NEW — 2 lines under <code>player["hp"] -= 1</code></div>
+    <div class="now"><pre class="tiny"><span class="dim">            player["hp"] -= 1</span>
+<span class="hot">            for _ in range(6):</span>
+<span class="hot">                particles.append(make_spark(b["x"], b["y"], BRONZE))</span></pre></div>
+    <div class="where">📍 <code>for</code> at indent <b>12</b> · the append at <b>16</b></div>
+    <div class="why">🟣 Your own maker, third call site.</div>
+    <div class="chk">✅ Neo runs it — bronze dots burst on the hit.</div>
+  </div>
+
+  <!-- 74 · ordering bug -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bug — the bar that lags</h2>
+<pre class="tiny">    draw_health_bar(player["hp"], player["max_hp"])
+    ...
+    # the hit happens 100 lines LOWER
+    player["hp"] -= 1</pre>
+    <div class="debug-card"><div class="err">No error. The bar shows the health you had one frame ago.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Python runs top to bottom. Call <code>draw_health_bar</code> <b>after</b> every hit is counted.</p>
+      <p class="bilingual">계산이 먼저, 그리기가 나중</p>
+    </details>
+  </div>
+
+  <!-- 75 · modify -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Make a tank hit hurt more</h2>
+<pre class="tiny"># in make_enemy(), the tank branch, add one key
+    "damage": ___,
+
+# then the bullet dict has to carry it too
+    "damage": enemy["___"],
+
+# then in your hit check
+    player["hp"] -= b["___"]</pre>
+    <p class="quiet" style="margin-top:.4em">Say where the number travels before you type it.</p>
+    <p class="bilingual">숫자가 지나가는 길을 말해 보세요</p>
+  </div>
+
+  <!-- 76 · stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Write <code>def draw_score(score):</code> and lift the two score lines into it.</div>
+      <div class="item"><span class="lvl">★★</span>Give <code>make_spark</code> a fourth slot <code>radius</code> with a default of 5.</div>
+      <div class="item"><span class="lvl">★★★</span>Write <code>def draw_enemy_bar(enemy):</code> so every enemy carries its own bar.</div>
+    </div>
+  </div>
+
+  <!-- 77 · homework close -->
+  <div class="slide center-all">
+    <div class="emoji">📓</div>
+    <h1 style="font-size:clamp(32px,5.6vmin,50px)">Save it.<br>Five new names.</h1>
+    <p class="line" style="margin-top:.5em">Search your file for <code>def </code>.<br>You should find seven.</p>
+    <p class="bilingual">def 일곱 개가 보이면 끝이에요</p>
+  </div>
+
+  <!-- ============ EXTENSION — two more things return can do ============ -->
+
+  <!-- 78 · extension header -->
+  <div class="slide center-all">
+    <div class="pill">Level 2</div>
+    <div class="emoji">🧩</div>
+    <h1 style="font-size:clamp(34px,6vmin,54px)">Two more things<br>return can do</h1>
+    <p class="line" style="margin-top:.5em">Answer a <b>question</b>.<br>Hand back <b>two</b> values at once.</p>
+    <p class="bilingual">질문에 답하고, 값 두 개를 줘요</p>
+  </div>
+
+  <!-- 79 · concept — the answer sits inside an if -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>The answer can sit inside an <code>if</code></h2>
+    <svg viewBox="0 0 500 220" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="20" y="12" width="440" height="42" rx="6" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="34" y="40" fill="#e8eef6" font-size="17" font-family="monospace">if</text>
+      <text x="62" y="40" fill="#38d0e0" font-size="17" font-family="monospace">take_damage(8, 10)</text>
+      <text x="270" y="40" fill="#e8eef6" font-size="17" font-family="monospace">&lt;= 0:</text>
+      <text x="234" y="76" fill="#8a97b8" font-size="20">↓</text>
+      <text x="256" y="74" fill="#8a97b8" font-size="15">the box runs first</text>
+      <rect x="20" y="86" width="440" height="42" rx="6" fill="#141b27" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="34" y="114" fill="#e8eef6" font-size="17" font-family="monospace">if</text>
+      <text x="62" y="114" fill="#f1fa8c" font-size="17" font-family="monospace">-2</text>
+      <text x="94" y="114" fill="#e8eef6" font-size="17" font-family="monospace">&lt;= 0:</text>
+      <text x="234" y="150" fill="#8a97b8" font-size="20">↓</text>
+      <text x="256" y="148" fill="#8a97b8" font-size="15">then Python compares</text>
+      <rect x="20" y="160" width="440" height="42" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="34" y="188" fill="#e8eef6" font-size="17" font-family="monospace">if</text>
+      <text x="62" y="188" fill="#50fa7b" font-size="17" font-family="monospace">True</text>
+      <text x="122" y="188" fill="#e8eef6" font-size="17" font-family="monospace">:</text>
+    </svg>
+  </div>
+
+  <!-- 80 · predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">def</span> <span class="fn">take_damage</span>(hp, amount):
+    <span class="kw">return</span> hp - amount
+
+<span class="fn">print</span>(<span class="fn">take_damage</span>(<span class="num">8</span>, <span class="num">3</span>))</pre>
+      <details><summary>Reveal output</summary><div class="ans">5</div></details>
+    </div>
+  </div>
+
+  <!-- 81 · STEP 13 -->
+  <div class="slide">
+    <div class="steptag">STEP 13 / 18</div>
+    <h2>A box that does the subtraction</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def draw_boss_bar(boss):</code></div>
+    <div class="tag-new">NEW — 2 lines ABOVE it, then one blank line</div>
+    <div class="now"><pre class="tiny"><span class="hot">def take_damage(hp, amount):</span>
+<span class="hot">    return hp - amount</span>
+
+<span class="dim">def draw_boss_bar(boss):</span></pre></div>
+    <div class="where">📍 <code>def</code> at indent <b>0</b> · <code>return</code> at <b>4</b></div>
+    <div class="why">🟣 It works out a number. It changes nothing.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 82 · concept — store it or ask it -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>One answer, two uses</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="150" y="12" width="200" height="40" rx="6" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="162" y="39" fill="#38d0e0" font-size="16" font-family="monospace">take_damage(8, 2)</text>
+      <line x1="250" y1="52" x2="250" y2="62" stroke="#8a97b8" stroke-width="3"/>
+      <text x="242" y="80" fill="#f1fa8c" font-size="18" font-family="monospace">6</text>
+      <line x1="120" y1="90" x2="380" y2="90" stroke="#8a97b8" stroke-width="3"/>
+      <line x1="120" y1="90" x2="120" y2="114" stroke="#8a97b8" stroke-width="3"/>
+      <line x1="380" y1="90" x2="380" y2="114" stroke="#8a97b8" stroke-width="3"/>
+      <rect x="20" y="114" width="200" height="46" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="32" y="143" fill="#50fa7b" font-size="14" font-family="monospace">player["hp"] = 6</text>
+      <text x="32" y="182" fill="#8a97b8" font-size="15">store it — STEP 14</text>
+      <rect x="280" y="114" width="200" height="46" rx="6" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="292" y="143" fill="#bd93f9" font-size="14" font-family="monospace">if 6 &lt;= 0:</text>
+      <text x="292" y="182" fill="#8a97b8" font-size="15">ask it — STEP 15</text>
+    </svg>
+  </div>
+
+  <!-- 83 · STEP 14 -->
+  <div class="slide">
+    <div class="steptag">STEP 14 / 18</div>
+    <h2>Store the answer</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>for b in boss_bullets:</code></div>
+    <div class="tag-old">OLD — the collide check and the line under it</div>
+    <div class="was"><pre class="tiny">        b_rect = pygame.Rect(b["x"], b["y"], BULLET_WIDTH, BULLET_HEIGHT)
+        if b_rect.colliderect(player_rect):
+            player["hp"] -= 1</pre></div>
+    <div class="tag-new">NEW — last line only</div>
+    <div class="now"><pre class="tiny"><span class="dim">        b_rect = pygame.Rect(b["x"], b["y"], BULLET_WIDTH, BULLET_HEIGHT)</span>
+<span class="dim">        if b_rect.colliderect(player_rect):</span>
+<span class="hot">            player["hp"] = take_damage(player["hp"], 2)</span></pre></div>
+    <div class="where">📍 Indent <b>12</b>. Boss bullets only.</div>
+    <div class="why">🟣 Boss bullets cost 2 now.</div>
+    <div class="chk">✅ Neo runs it — a purple hit costs 2 health.</div>
+  </div>
+
+  <!-- 84 · bug — answer thrown away -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the answer nobody caught</h2>
+<pre class="tiny">            take_damage(player["hp"], 2)</pre>
+    <div class="debug-card"><div class="err">No error. Health never drops.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The 6 came back and fell on the floor. Put <code>player["hp"] =</code> in front to catch it.</p>
+      <p class="bilingual">돌아온 값을 받아 줘야 해요</p>
+    </details>
+  </div>
+
+  <!-- 85 · the danger question -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>Would the next hit finish me?</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:46vh" aria-hidden="true">
+      <text x="10" y="32" fill="#8a97b8" font-size="16">hp now</text>
+      <rect x="130" y="12" width="72" height="28" fill="#3a424a"/><text x="158" y="33" fill="#e8eef6" font-size="17">5</text>
+      <rect x="216" y="12" width="72" height="28" fill="#3a424a"/><text x="244" y="33" fill="#e8eef6" font-size="17">3</text>
+      <rect x="302" y="12" width="72" height="28" fill="#3a424a"/><text x="330" y="33" fill="#e8eef6" font-size="17">2</text>
+      <rect x="388" y="12" width="72" height="28" fill="#3a424a"/><text x="416" y="33" fill="#e8eef6" font-size="17">1</text>
+      <text x="10" y="96" fill="#8a97b8" font-size="15">take_damage(hp, 2)</text>
+      <rect x="130" y="76" width="72" height="28" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/><text x="158" y="97" fill="#f1fa8c" font-size="17">3</text>
+      <rect x="216" y="76" width="72" height="28" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/><text x="244" y="97" fill="#f1fa8c" font-size="17">1</text>
+      <rect x="302" y="76" width="72" height="28" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/><text x="330" y="97" fill="#f1fa8c" font-size="17">0</text>
+      <rect x="388" y="76" width="72" height="28" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/><text x="412" y="97" fill="#f1fa8c" font-size="17">-1</text>
+      <text x="10" y="160" fill="#8a97b8" font-size="16">&lt;= 0 ?</text>
+      <text x="152" y="160" fill="#8a97b8" font-size="18">no</text>
+      <text x="238" y="160" fill="#8a97b8" font-size="18">no</text>
+      <text x="318" y="160" fill="#ff5555" font-size="18">YES</text>
+      <text x="404" y="160" fill="#ff5555" font-size="18">YES</text>
+      <text x="10" y="198" fill="#ff5555" font-size="17">DANGER shows while the next hit would end the run.</text>
+    </svg>
+  </div>
+
+  <!-- 86 · STEP 15 -->
+  <div class="slide">
+    <div class="steptag">STEP 15 / 18</div>
+    <h2>Ask it before it happens</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>if is_dead(player["hp"]):</code></div>
+    <div class="tag-new">NEW — 3 lines ABOVE it</div>
+    <div class="now"><pre class="tiny"><span class="hot">    if take_damage(player["hp"], 2) &lt;= 0:</span>
+<span class="hot">        danger_text = font.render("DANGER", True, BLOOD_RED)</span>
+<span class="hot">        screen.blit(danger_text, (10, 70))</span>
+
+<span class="dim">    if is_dead(player["hp"]):</span></pre></div>
+    <div class="where">📍 <code>if</code> at indent <b>4</b> · the other two at <b>8</b></div>
+    <div class="why">🟣 The call becomes a number.</div>
+    <div class="chk">✅ Neo runs it — drop to 2 health. Red DANGER under the bar.</div>
+  </div>
+
+  <!-- 87 · bug — no comparison -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — DANGER that never leaves</h2>
+<pre class="tiny">    if take_damage(player["hp"], 2):
+        screen.blit(danger_text, (10, 70))</pre>
+    <div class="debug-card"><div class="err">No error. DANGER shows at full health too.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Any number that is not 0 counts as True. Compare it: <code>&lt;= 0</code>.</p>
+      <p class="bilingual">숫자만 두면 항상 True예요</p>
+    </details>
+  </div>
+
+  <!-- 88 · quiz -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 4</h2>
+    <div class="quiz-card">
+      <div class="q"><code>if take_damage(4, 2) &lt;= 0:</code> — what runs first?</div>
+      <div class="opts">
+        <details><summary>A. The box runs and gives 2</summary><div class="ans">✓ Then it compares 2 with 0.</div></details>
+        <details><summary>B. Python compares the name</summary><div class="ans">No. The call is swapped first.</div></details>
+        <details><summary>C. Not allowed in an if</summary><div class="ans">No. Any value fits.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 89 · trace -->
+  <div class="slide">
+    <div class="pill">Trace it<span class="activity-tag">activity</span></div>
+    <h2>Fill the condition in</h2>
+    <div class="trace-grid">
+      <div class="cell head">hp</div>
+      <div class="cell head">take_damage(hp, 2)</div>
+      <div class="cell head">&lt;= 0 ?</div>
+
+      <div class="cell"><code>8</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell"><code>2</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell"><code>1</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">-1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+    </div>
+  </div>
+
+  <!-- 90 · concept — two values, one trip -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Two values, one trip</h2>
+    <svg viewBox="0 0 500 210" style="width:100%;max-height:46vh" aria-hidden="true">
+      <rect x="140" y="12" width="220" height="62" rx="8" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="152" y="36" fill="#bd93f9" font-size="15" font-family="monospace">def boss_start(n):</text>
+      <text x="164" y="62" fill="#e8eef6" font-size="15" font-family="monospace">return x, y</text>
+      <line x1="250" y1="76" x2="250" y2="98" stroke="#50fa7b" stroke-width="3"/>
+      <text x="262" y="94" fill="#50fa7b" font-size="15">one comma, two values</text>
+      <rect x="120" y="104" width="120" height="40" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="158" y="131" fill="#50fa7b" font-size="17" font-family="monospace">515</text>
+      <rect x="260" y="104" width="120" height="40" rx="6" fill="#141b27" stroke="#50fa7b" stroke-width="3"/>
+      <text x="292" y="131" fill="#50fa7b" font-size="17" font-family="monospace">-140</text>
+      <text x="152" y="164" fill="#8a97b8" font-size="15">goes into bx</text>
+      <text x="292" y="164" fill="#8a97b8" font-size="15">goes into by</text>
+      <text x="20" y="198" fill="#f1fa8c" font-size="17">One call. Two names filled at the same moment.</text>
+    </svg>
+    <p class="bilingual">한 번 불러서 값 두 개를 받아요</p>
+  </div>
+
+  <!-- 91 · predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>What prints?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre><span class="kw">def</span> <span class="fn">spawn_point</span>():
+    <span class="kw">return</span> <span class="num">100</span>, <span class="num">200</span>
+
+x, y = <span class="fn">spawn_point</span>()
+<span class="fn">print</span>(y)</pre>
+      <details><summary>Reveal output</summary><div class="ans">200</div></details>
+    </div>
+  </div>
+
+  <!-- 92 · STEP 16 -->
+  <div class="slide">
+    <div class="steptag">STEP 16 / 18</div>
+    <h2>Hand back a place</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>def take_damage(hp, amount):</code></div>
+    <div class="tag-new">NEW — 4 lines ABOVE it, then one blank line</div>
+    <div class="now"><pre class="tiny"><span class="hot">def boss_start(boss_number):</span>
+<span class="hot">    x = CENTER_X - 25</span>
+<span class="hot">    y = -100 - (boss_number * 40)</span>
+<span class="hot">    return x, y</span>
+
+<span class="dim">def take_damage(hp, amount):</span></pre></div>
+    <div class="where">📍 <code>def</code> at indent <b>0</b> · the other three at <b>4</b></div>
+    <div class="why">🟣 A place is two numbers.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 93 · unpacking visual -->
+  <div class="slide">
+    <div class="pill">Watch it 🎨</div>
+    <h2>The names line up left to right</h2>
+    <svg viewBox="0 0 500 200" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="40" y="40" fill="#38d0e0" font-size="19" font-family="monospace">bx</text>
+      <text x="80" y="40" fill="#e8eef6" font-size="19" font-family="monospace">,</text>
+      <text x="104" y="40" fill="#bd93f9" font-size="19" font-family="monospace">by</text>
+      <text x="150" y="40" fill="#e8eef6" font-size="19" font-family="monospace">=</text>
+      <text x="186" y="40" fill="#f1fa8c" font-size="18" font-family="monospace">boss_start(1)</text>
+      <text x="216" y="76" fill="#8a97b8" font-size="20">↓</text>
+      <text x="186" y="112" fill="#38d0e0" font-size="19" font-family="monospace">515</text>
+      <text x="240" y="112" fill="#e8eef6" font-size="19" font-family="monospace">,</text>
+      <text x="264" y="112" fill="#bd93f9" font-size="19" font-family="monospace">-140</text>
+      <path d="M198 124 L 70 150" stroke="#38d0e0" stroke-width="3" fill="none"/>
+      <path d="M282 124 L 134 150" stroke="#bd93f9" stroke-width="3" fill="none"/>
+      <rect x="34" y="150" width="60" height="34" rx="5" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+      <text x="46" y="174" fill="#38d0e0" font-size="16" font-family="monospace">bx</text>
+      <rect x="106" y="150" width="60" height="34" rx="5" fill="#141b27" stroke="#bd93f9" stroke-width="3"/>
+      <text x="118" y="174" fill="#bd93f9" font-size="16" font-family="monospace">by</text>
+      <text x="188" y="174" fill="#f1fa8c" font-size="16">first to first, second to second</text>
+    </svg>
+  </div>
+
+  <!-- 94 · STEP 17 -->
+  <div class="slide">
+    <div class="steptag">STEP 17 / 18</div>
+    <h2>Catch both values</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>boss_hp = 40 + (boss_number * 10)</code></div>
+    <div class="tag-new">NEW — one line under it</div>
+    <div class="now"><pre class="tiny"><span class="dim">            boss_hp = 40 + (boss_number * 10)</span>
+<span class="hot">            bx, by = boss_start(boss_number)</span></pre></div>
+    <div class="where">📍 Indent <b>12</b>, level with <code>boss_hp</code></div>
+    <div class="why">🟣 Two new names, one call.</div>
+    <div class="chk">✅ Neo runs it — game unchanged, no red text.</div>
+  </div>
+
+  <!-- 95 · STEP 18 -->
+  <div class="slide">
+    <div class="steptag">STEP 18 / 18</div>
+    <h2>Put the boss where the box said</h2>
+    <div class="find"><span class="fl">🔍 Find (Ctrl+F)</span><code>"x": CENTER_X - (boss_w // 2),</code></div>
+    <div class="tag-old">OLD — 2 lines</div>
+    <div class="was"><pre class="tiny">                "x": CENTER_X - (boss_w // 2),
+                "y": -100,</pre></div>
+    <div class="tag-new">NEW — 2 lines</div>
+    <div class="now"><pre class="tiny"><span class="hot">                "x": bx,</span>
+<span class="hot">                "y": by,</span></pre></div>
+    <div class="where">📍 Indent <b>16</b>. Keep both commas.</div>
+    <div class="why">🟣 The dict now asks the box where to start.</div>
+    <div class="chk">✅ Neo runs it — score 250, boss 1 drops in. Score 500, boss 2 starts higher.</div>
+  </div>
+
+  <!-- 96 · v5 result -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <h2>v5 — seven names</h2>
+<pre class="tiny"><span class="hot">def boss_start(boss_number):  # returns TWO values</span>
+<span class="hot">def take_damage(hp, amount):  # returns a number</span>
+<span class="dim">def make_spark(x, y, color):  # returns a dict</span>
+<span class="dim">def draw_boss_bar(boss):</span>
+<span class="dim">def is_dead(hp):              # returns True or False</span>
+<span class="dim">def health_percent(hp, max_hp):   # returns a number</span>
+<span class="dim">def draw_health_bar(hp, max_hp, x=10, y=45):</span></pre>
+    <div class="why">🟣 Five of the seven hand something back.</div>
+  </div>
+
+  <!-- 97 · bug — one name catches a pair -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — one name, two values</h2>
+<pre class="tiny">spot = boss_start(1)
+print(spot["x"])</pre>
+    <div class="debug-card"><div class="err">TypeError: tuple indices must be integers or slices, not str</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">A pair is not a dict. Use two names: <code>bx, by = boss_start(1)</code>.</p>
+      <p class="bilingual">이름 두 개로 받아야 해요</p>
+    </details>
+  </div>
+
+  <!-- 98 · bug — wrong count -->
+  <div class="slide">
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — three names, two values</h2>
+<pre class="tiny">bx, by, bz = boss_start(1)</pre>
+    <div class="debug-card"><div class="err">ValueError: not enough values to unpack (expected 3, got 2)</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Count the names on the left. Count the values after <code>return</code>. They must match.</p>
+      <p class="bilingual">이름 개수와 값 개수가 같아야 해요</p>
+    </details>
+  </div>
+
+  <!-- 99 · the rule -->
+  <div class="slide">
+    <div class="pill">The rule 📏</div>
+    <h2>One return, not two</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ only x comes back</span>
+<pre class="tiny">def boss_start(n):
+    return x
+    return y</pre>
+        <p style="margin-top:.4em">The first <code>return</code> shuts the box.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ both come back</span>
+<pre class="tiny">def boss_start(n):
+    return x, y</pre>
+        <p style="margin-top:.4em">The comma carries them together.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 100 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>take_damage</code> hands back a <span class="blank"></span>, so I can put the call inside an <span class="blank"></span>. <code>boss_start</code> hands back <span class="blank"></span> values, so I catch them with <span class="blank"></span> names."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 101 · fill the blanks -->
+  <div class="slide">
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill the four blanks</h2>
+<pre class="tiny">def boss_start(boss_number):
+    x = CENTER_X - 25
+    y = -100 - (boss_number * 40)
+    ___ x, ___
+
+bx, ___ = boss_start(boss_number)
+
+if ___(player["hp"], 2) &lt;= 0:
+    print("danger")</pre>
+    <p class="quiet" style="margin-top:.4em">The keyword, the second value, the second name, the box that subtracts.</p>
+  </div>
+
+  <!-- 102 · Neo alone -->
+  <div class="slide">
+    <div class="pill">✍️ Neo writes this one alone</div>
+    <h2>Your own two-value box</h2>
+    <div class="practice-task">Write <code>def spark_spot(b):</code> that hands back the middle of a bullet: <code>b["x"] + 4</code> and <code>b["y"] + 7</code>.</div>
+    <div class="practice-hint">One slot. One <code>return</code> with a comma in it.</div>
+    <div class="chk">✅ <code>sx, sy = spark_spot(b)</code> then <code>make_spark(sx, sy, BRONZE)</code>.</div>
+  </div>
+
+  <!-- 103 · two fast questions -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two fast questions</h2>
+    <div class="recap-q">
+      <div class="q">1. Why can <code>take_damage(...)</code> sit inside an <code>if</code>?</div>
+      <details><summary>Show answer</summary><div class="ans">Because the call turns into a number first.</div></details>
+      <div class="q" style="margin-top:.4em">2. What makes two values come back instead of one?</div>
+      <details><summary>Show answer</summary><div class="ans">The comma after <code>return</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- 104 · stretch -->
+  <div class="slide">
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Give <code>take_damage</code> a default: <code>amount=1</code>, then call it with one value.</div>
+      <div class="item"><span class="lvl">★★</span>Write <code>def player_centre(p):</code> returning two values, and aim your bullets from it.</div>
+      <div class="item"><span class="lvl">★★★</span>Write <code>def boss_stats(n):</code> returning <b>three</b> values: hp, width and speed.</div>
+    </div>
+  </div>
+
+  <!-- 105 · close & bridge -->
+  <div class="slide center-all">
+    <div class="emoji">🎁</div>
+    <h1 style="font-size:clamp(32px,5.6vmin,50px)">A return<br>is an answer.</h1>
+    <p class="line" style="margin-top:.5em">Store it. Compare it. Unpack it.</p>
+    <p class="big" style="margin-top:.4em;color:var(--accent-2);">Next time: the ship that cannot be hit twice.</p>
+    <p class="bilingual">다음 시간: 잠깐 무적이 되는 우주선</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 106</span><button id="next">&rsaquo;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
