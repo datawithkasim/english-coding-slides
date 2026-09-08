@@ -4,22 +4,30 @@ The RS/WEB slot structure is built around code — worked example, trace,
 debug. A debate lesson has a different spine, so this track builds its own,
 in two shapes taken from CURRICULUM.md:
 
-  Skill Week (12 of 16) — 23 slides. Brainstorm sprint, vocabulary with two
-  gap-fill games, the micro-skill broken into its parts, a model, the usual
-  mistake, two 3-minute writing sprints, both argument banks with a discussion
-  question each, the clash, the mini-format on the clock, and the flip.
+  Skill Week (12 of 16) — 31 slides, in the six sections Kasim named on
+  2026-09-08: word practice, opinions, the skill, writing pieces, debate
+  practice, then the debate. Fewer things to run and far more to ask — the
+  silent brainstorm sprint and the third word game are gone, and ten prompts
+  from Q take their place.
 
-  Debate Day (weeks 4, 8, 12, 16) — 19 slides. No skill teach and no writing
+  Debate Day (weeks 4, 8, 12, 16) — 23 slides. No skill teach and no writing
   sprints: roles, prep, openings, rebuttal, closing, vote, reflection.
 
 Kasim rejected the earlier 12-slot skeleton on 2026-09-04 as too bare. Slides
-must carry the lesson, not label it: every activity states what to do, where,
-and for how long, so the deck can be run by flicking through it.
+must carry the lesson, not label it: every activity states what to do and
+where. Clock minutes are NOT printed on slides (2026-09-08) — the schedule is
+the teacher's business. Speaking lengths that are part of a format (45-second
+openings, 30-second closings, the 15-second point of information) stay,
+because they are rules of the debate, and the debateTimer buttons stay too.
+
+Every week ships its own palette and backdrop from THEMES, so no two weeks
+look alike. The shared assets/style.css is never touched — the coding decks
+read the same file.
 
     python scripts/build-debate-decks.py
 
 Source of truth for motions, skills and vocabulary is
-Desktop/dev/tech_ai_debate — this file must not drift from it, so the
+Desktop/dev/courses/tech_ai_debate — this file must not drift from it, so the
 vocabulary is read from the lesson files rather than retyped.
 """
 import pathlib, re, html, sys
@@ -592,6 +600,261 @@ A = {
 }
 
 
+
+# ---------------------------------------------------------------- prompts
+# Q — the talking. Kasim asked for more questions and fewer activities
+# (2026-09-08), so every skill week gets ten prompts in three shapes:
+#   quick  four one-sentence questions, round the room, nobody is corrected
+#   deep   three that need a reason, each with the follow-up that pushes again
+#   side   three forced choices — two options, pick one, say why
+# Rules: never a yes/no question, never a made-up statistic, never a gendered
+# pronoun, and the week's own vocabulary wherever it fits so hl() lights it.
+# Debate Day weeks argue instead of discuss and have no Q entry.
+
+Q = {
+1: dict(
+    quick=["What did you do the last time homework was too hard?",
+           "Name one thing you learned by struggling, not by being told.",
+           "A dictionary, a calculator, a friend — where does help stop being help?",
+           "Who is homework actually for: you, or the teacher?"],
+    deep=[("If a tool does the boring part, is the rest still your work?",
+           "Name the boring part. Now name the part nobody can do for you."),
+          ("A classmate gets top marks with AI. Name the feeling, then name the reason for it.",
+           "Is that unfair, or only annoying? They are different arguments."),
+          ("No teacher can tell who used AI. Does that change whether it is wrong?",
+           "Does being caught make a thing wrong, or only make it risky?")],
+    side=[("Which is worse?", "Copying an answer", "Never trying at all"),
+          ("Which helps more?", "An answer tonight", "An explanation next week"),
+          ("Which would you keep?", "AI that checks your work", "AI that writes your work")]),
+2: dict(
+    quick=["Name one thing a teacher does that has nothing to do with information.",
+           "When did a teacher last notice something you never said out loud?",
+           "What question would you ask a machine but not a person?",
+           "What makes a lesson boring — the subject, or the teaching?"],
+    deep=[("A machine explains it the fifth time without sighing. Is patience enough?",
+           "Patient about what, exactly? Name the thing it is patient with."),
+          ("Take the other students out of the room. What is lost?",
+           "Name one thing you learned from a classmate and not from a teacher."),
+          ("An AI teacher is confidently wrong. Who finds out, and when?",
+           "How long could that mistake last before anybody noticed?")],
+    side=[("Which teacher?", "Never tired, never notices you", "Tired, and knows your name"),
+          ("Which is the bigger job?", "Explaining the idea", "Making you want to try"),
+          ("Which would you replace first?", "Marking your homework", "Teaching the lesson")]),
+3: dict(
+    quick=["What was the last video you watched, and who chose it?",
+           "How long did you mean to watch, and how long did you watch?",
+           "Name one thing a feed showed you that you now love.",
+           "What would you do tonight if every app was gone?"],
+    deep=[("Is a habit still a choice?",
+           "When did you last decide to open it, instead of just opening it?"),
+          ("The app earns money from time watched. Does knowing that change anything?",
+           "What would it do differently if it earned money another way?"),
+          ("New things, or more of the same thing — which does your feed give you?",
+           "Name the last thing on your feed that genuinely surprised you.")],
+    side=[("Which feed?", "Shows what you like", "Shows what you disagree with"),
+          ("Whose fault is a wasted evening?", "The app", "The person holding the phone"),
+          ("Which would you switch off?", "Autoplay", "Recommendations")]),
+5: dict(
+    quick=["Name a job you would never want to do.",
+           "Name a job you would be sad to see disappear.",
+           "Besides money, what does a person lose with a job?",
+           "Name a job someone in your family does. Could a machine do it?"],
+    deep=[("New jobs appear, people say. Appear for whom?",
+           "Name the person who lost the old one. What are they doing now?"),
+          ("A machine takes the work that damages backs and lungs. Good news for whom?",
+           "Good for the worker, or good for the owner? Say which, and how you know."),
+          ("A machine does your future job. What do you do instead?",
+           "How long does learning that take, and who pays the rent meanwhile?")],
+    side=[("Which is worse?", "Dangerous work", "No work at all"),
+          ("Who should decide?", "The company buying the robot", "The workers it replaces"),
+          ("Which would you protect?", "The job", "The wage")]),
+6: dict(
+    quick=["A car with no driver stops for you. Do you get in, and why?",
+           "Name something on a road a camera would not understand.",
+           "Who taught you what is dangerous?",
+           "What is the worst thing you have seen a human driver do?"],
+    deep=[("The car crashes. Who is responsible?",
+           "Name the person who stands in court. A company is not a person in the dock."),
+          ("Safer than a perfect driver, or safer than a real one?",
+           "Which comparison is fair, and which one is the sales pitch?"),
+          ("A machine has to be told what to do in the worst moment. Who writes that rule?",
+           "Would you show that rule to the passengers before they got in?")],
+    side=[("Which would you trust?", "A tired human", "A machine with no judgement"),
+          ("Who should the car protect?", "The passenger inside", "The person outside"),
+          ("Which is the bigger problem?", "The rare impossible case", "The everyday distracted driver")]),
+7: dict(
+    quick=["Name a song or picture you love. Would you love it less made by a machine?",
+           "How long should art take?",
+           "Name something you made and were proud of. What was hard about it?",
+           "A photograph takes a hundredth of a second. Is it art?"],
+    deep=[("It learned from artists' work and nobody asked them. Does that matter?",
+           "Is your objection about quality, or about permission? Only one of those is this debate."),
+          ("A person picked the idea, the words, and which version to keep. Is that making it?",
+           "How much choosing is enough before you can call it yours?"),
+          ("You cannot ask it why it chose that. Is anything being said?",
+           "Name what an artist adds that the tool cannot.")],
+    side=[("Which is more art?", "Ten seconds, beautiful", "Ten years, ugly"),
+          ("Which would you put on your wall?", "Made by a stranger", "Made by you in one minute"),
+          ("Which matters more?", "Who made it", "How it makes you feel")]),
+9: dict(
+    quick=["How do you know a video is real?",
+           "Where do you get your news? Name the actual place.",
+           "Has anyone ever said something about you that was not true?",
+           "Name one thing you believed and later found out was false."],
+    deep=[("The correction always arrives after the damage. Can a law fix that?",
+           "What does the law actually undo, and what does it leave behind?"),
+          ("Impressions and cartoons have copied real people for a century. What is new?",
+           "Say the new thing exactly. 'Computers' is not an answer."),
+          ("A law wide enough to catch fakes also catches a school project. Where is your line?",
+           "Write the line as one sentence a judge could actually use.")],
+    side=[("Which is worse?", "A fake video of a leader", "A fake video of a classmate"),
+          ("Who should decide what comes down?", "The app", "A court"),
+          ("Which would you rather live with?", "A slow correction", "A fast ban that catches the innocent")]),
+10: dict(
+    quick=["Tell us about a time you were treated unfairly.",
+           "Is fair the same as identical? Give one example.",
+           "Who has made a decision about you that you could not argue with?",
+           "Name a rule at school you think is unfair, and say who it lands on."],
+    deep=[("A rule cannot be charmed or tired. Is that fairness, or only consistency?",
+           "Name a case where the same rule for everyone gives the wrong answer."),
+          ("It learned from decisions people already made. What did it learn?",
+           "If those old decisions were unfair, what happens next, and to whom?"),
+          ("You are rejected and you want to argue. Who do you argue with?",
+           "What would you need to be shown before you could argue at all?")],
+    side=[("Which is worse?", "One unfair person", "One unfair rule used everywhere"),
+          ("Which would you rather have?", "A decision you can appeal", "A decision that is right more often"),
+          ("Which matters more?", "The same treatment for all", "The right treatment for each")]),
+11: dict(
+    quick=["Where do you go when you want nobody looking at you?",
+           "Name a place a camera should never be.",
+           "Do you behave differently when you are being recorded?",
+           "Who at school already knows what time you arrived?"],
+    deep=[('"If you did nothing wrong, why worry?" Answer it properly.',
+           "Name one private thing you do that is not wrong."),
+          ("A stranger is spotted in seconds. How often does that happen here?",
+           "Is the danger real, or is it a feeling? Say how you would check."),
+          ("You can change a password. What do you do when your face leaks?",
+           "Who is holding that data, and for how long?")],
+    side=[("Which would you accept?", "Cameras at the gate", "Cameras in the corridor"),
+          ("Who should be asked first?", "Parents", "Students"),
+          ("Which is the bigger cost?", "One stranger gets in", "Everyone watched every day")]),
+13: dict(
+    quick=["Finish the sentence: a friend is someone who ___.",
+           "Who would you phone at 3am, and why that person?",
+           "Name something a friend has done that a program could do too.",
+           "Name something a friend has done that a program could not."],
+    deep=[("It cannot leave you. Is that safety, or the reason it is not a friendship?",
+           "Does a friend have to be able to walk away for it to count?"),
+          ("A lonely child talks to it every night. Better than nothing?",
+           "Better than nothing, or instead of something? Which one is really happening?"),
+          ("The company can change it, charge for it, or switch it off. Whose friend is it?",
+           "What exactly would be lost, and who would you complain to?")],
+    side=[("Which is a friend?", "Always there, never chose you", "Sometimes busy, chose you"),
+          ("Which is worse?", "A friend who forgets everything", "A friend who can never forget"),
+          ("Who would you tell a secret to?", "An AI that never repeats it", "A person who might")]),
+14: dict(
+    quick=["Glasses, coffee, a hearing aid. Which of these changes a person?",
+           "Would you take something that meant you never forgot a word?",
+           "Name one thing about your body you would never change.",
+           "Name something people already do to their bodies that older people found shocking."],
+    deep=[("It is your body and your risk. Who else gets a vote?",
+           "Name one person your choice would land on."),
+          ("Once one person at work has one, is it still a choice?",
+           "How long until it is expected? Say the sentence the manager says."),
+          ("A decision made at fifteen is still in you at fifty. What should fifteen be allowed to decide?",
+           "Who signs for it, and can any of it be undone?")],
+    side=[("Where is the line?", "Fixing something broken", "Adding something new"),
+          ("Who should pay?", "The person who wants it", "Everyone, so it is not only the rich"),
+          ("Which worries you more?", "Better bodies for the rich", "Nobody allowed to choose")]),
+15: dict(
+    quick=["How do you know the person next to you feels pain?",
+           "Why do we protect animals?",
+           "Name something that has rights but cannot argue for them.",
+           'A machine says "please stop." What do you do in that moment?'],
+    deep=[('Saying "that hurts" is a sentence. What would count as proof?',
+           "Name the test. No test, no case — that is the whole debate."),
+          ("Two mistakes: rights for a thing that feels nothing, or none for a thing that suffers. Which is worse?",
+           "Say why. That is weighing, and weighing is what wins the round."),
+          ("Rights come with duties. Name one duty a machine could carry.",
+           "If it cannot carry a duty, does it still get the right?")],
+    side=[("Which test?", "It can suffer", "It can think"),
+          ("Which would you rather get wrong?", "Protecting a thing that feels nothing", "Ignoring a thing that suffers"),
+          ("Who decides?", "Scientists", "Everyone, by vote")]),
+}
+
+
+# ---------------------------------------------------------------- look
+# Kasim asked (2026-09-08) that no two weeks look alike, so every deck ships
+# its own palette on top of the shared stylesheet. Rules the palettes obey:
+#   * dark background always — the .mcq feedback greens and reds are hardcoded
+#     in style.css and only read on a dark panel
+#   * accent and accent-2 both bright enough to carry body text
+#   * bd paints .stage, so the backdrop geometry changes week to week too
+#   * FURN rotates the slide furniture on a cycle of four, so neighbouring
+#     weeks never share a badge shape or heading treatment
+FURN = [
+    # 0 — rounded, plain headings (the house style)
+    "",
+    # 1 — square badges, upper-case tracked headings
+    ".pill,.slot-badge{border-radius:4px}"
+    "h2{text-transform:uppercase;letter-spacing:.04em}"
+    ".slot-badge{letter-spacing:.16em}",
+    # 2 — outlined furniture, ruled headings
+    ".pill{background:transparent;border:2px solid var(--accent);color:var(--accent)}"
+    ".pill.purple{background:transparent;border:2px solid var(--accent-2);color:var(--accent-2)}"
+    "h2{border-bottom:3px solid var(--soft);padding-bottom:.18em}",
+    # 3 — heavy left rule, squared oversized badge
+    ".slide{border-left:8px solid var(--accent-2)}"
+    ".slot-badge{font-size:clamp(12px,2.1vmin,17px);padding:.4em .9em;border-radius:2px}"
+    "h2{font-style:italic}",
+]
+
+# (bg, panel, soft, accent, accent-2, backdrop painted onto .stage)
+THEMES = {
+1:  ("#0a0d13", "#141b27", "#232b3a", "#38d0e0", "#8b5cf6",
+     "radial-gradient(1200px 800px at 12% 8%, rgba(56,208,224,.16), transparent 60%)"),
+2:  ("#0f0b06", "#1d1710", "#33291b", "#f0b429", "#4fd1c5",
+     "linear-gradient(135deg, rgba(240,180,41,.14), transparent 45%), radial-gradient(900px 700px at 90% 90%, rgba(79,209,197,.14), transparent 65%)"),
+3:  ("#0c0813", "#1a1226", "#2c2140", "#ff6ec7", "#5ad1ff",
+     "repeating-linear-gradient(115deg, rgba(255,110,199,.07) 0 2px, transparent 2px 46px)"),
+4:  ("#120806", "#221110", "#3a1d1a", "#ffc247", "#ff5f56",
+     "radial-gradient(800px 800px at 50% 0%, rgba(255,194,71,.20), transparent 62%), radial-gradient(700px 700px at 50% 100%, rgba(255,95,86,.14), transparent 60%)"),
+5:  ("#0a0f0d", "#132019", "#1f3328", "#ff8a3d", "#57b8ff",
+     "linear-gradient(200deg, rgba(255,138,61,.13), transparent 50%)"),
+6:  ("#06110e", "#0f2019", "#1a3328", "#3ddc84", "#ffd166",
+     "radial-gradient(3px 3px at 24px 24px, rgba(61,220,132,.16) 50%, transparent 51%) 0 0/56px 56px"),
+7:  ("#120a10", "#211320", "#382034", "#ff8fab", "#ffd86b",
+     "conic-gradient(from 210deg at 78% 22%, rgba(255,143,171,.20), transparent 38%, rgba(255,216,107,.16), transparent 72%)"),
+8:  ("#0b0d12", "#161a22", "#252c38", "#dfe6ff", "#ffb020",
+     "repeating-linear-gradient(90deg, rgba(223,230,255,.06) 0 3px, transparent 3px 60px), radial-gradient(700px 700px at 50% 110%, rgba(255,176,32,.20), transparent 60%)"),
+9:  ("#0d0a0c", "#1b1417", "#2e2126", "#ff4d5e", "#9aa7b8",
+     "linear-gradient(180deg, rgba(255,77,94,.16), transparent 34%), repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 5px)"),
+10: ("#080b14", "#111a2b", "#1d2942", "#7cc4ff", "#b48bff",
+     "linear-gradient(90deg, rgba(124,196,255,.13), transparent 42%, rgba(180,139,255,.13))"),
+11: ("#06100f", "#0e1d1d", "#183030", "#2fe0d0", "#ffb443",
+     "repeating-linear-gradient(0deg, rgba(47,224,208,.07) 0 1px, transparent 1px 52px), repeating-linear-gradient(90deg, rgba(47,224,208,.07) 0 1px, transparent 1px 52px)"),
+12: ("#140a12", "#231524", "#3a2338", "#ff5fa2", "#ffd166",
+     "conic-gradient(from 0deg at 50% 50%, rgba(255,95,162,.15), transparent 25%, rgba(255,209,102,.13), transparent 55%, rgba(255,95,162,.15))"),
+13: ("#100a12", "#1d1322", "#2f2038", "#ff9ecb", "#8f7bff",
+     "radial-gradient(700px 700px at 18% 88%, rgba(255,158,203,.18), transparent 62%), radial-gradient(700px 700px at 84% 14%, rgba(143,123,255,.16), transparent 62%)"),
+14: ("#0a1008", "#141d10", "#213019", "#a6e22e", "#a78bfa",
+     "linear-gradient(160deg, rgba(166,226,46,.12), transparent 46%), radial-gradient(600px 600px at 92% 82%, rgba(167,139,250,.16), transparent 60%)"),
+15: ("#080a14", "#121629", "#1f2540", "#8ea2ff", "#5ce1e6",
+     "radial-gradient(900px 900px at 50% 50%, rgba(142,162,255,.15), transparent 58%)"),
+16: ("#0e0c08", "#1c1811", "#2f291c", "#ffd569", "#f2f5ff",
+     "radial-gradient(900px 900px at 50% -10%, rgba(255,213,105,.24), transparent 60%)"),
+}
+
+
+def look(n):
+    """Per-week override block. Shared style.css is left alone — the coding
+    decks read the same file and must keep the house palette."""
+    bg, panel, soft, acc, acc2, bd = THEMES[n]
+    return (f'<style>:root{{--bg:{bg};--panel:{panel};--soft:{soft};'
+            f'--accent:{acc};--accent-2:{acc2}}}'
+            f'.stage{{background-color:{bg};background-image:{bd}}}'
+            f'{FURN[(n - 1) % 4]}</style>')
+
 def vocab(n):
     """Read the canonical list from the debate repo so the decks cannot drift."""
     t = (DEBATE / "lessons" / f"week-{n:02d}.md").read_text(encoding="utf-8")
@@ -753,7 +1016,7 @@ def s_ladder():
 def s_attack(n):
     """Teacher argues badly on purpose. Students write it down, then break it."""
     script, flaw, turn = A[n]
-    return (f'<div class="slide"><span class="slot-badge">ATTACK ME · 6 MIN</span>'
+    return (f'<div class="slide"><span class="slot-badge">ATTACK ME</span>'
             f'<div class="pill purple">Teacher speaks<span class="activity-tag">take notes</span></div>'
             f'<h2>Beat my argument</h2>'
             f'<div class="model-box" style="font-size:.84em">{e(script)}</div>'
@@ -789,7 +1052,7 @@ def s_title(n, d):
 
 def s_plan(items, ko):
     li = "".join(f"<li>{x}</li>" for x in items)
-    return f'''<div class="slide"><span class="slot-badge">PLAN · 50 MIN</span><div class="pill">Today</div><h2>What we do</h2>
+    return f'''<div class="slide"><span class="slot-badge">PLAN</span><div class="pill">Today</div><h2>What we do</h2>
 <ul class="check-list" style="font-size:.9em">{li}</ul>
 <p class="bilingual">{ko}</p></div>'''
 
@@ -814,32 +1077,75 @@ def s_recap(n, prev, v):
 
 
 def s_hook(d):
-    return f'''<div class="slide"><span class="slot-badge">HOOK · 5 MIN</span><div class="pill">Hook 🤔</div><h2>Before we start</h2>
+    return f'''<div class="slide"><span class="slot-badge">HOOK</span><div class="pill">Hook 🤔</div><h2>Before we start</h2>
 <div class="predict-card"><div class="label">Everyone answers in one sentence</div>
 <p class="big" style="margin:.4em 0">{d["hook"]}</p></div>
 <p class="sub center" style="margin-top:.8em">No correcting yet. Just get every voice into the room.</p></div>'''
 
 
-def s_brainstorm(x):
+def s_sort(x, words):
+    """Opens the talking. The old version was a silent three-minute list; Kasim
+    asked for prompts instead of activities, so the two boxes are argued out
+    loud straight away."""
     b1, b1d, b2, b2d = x["bx"]
-    return f'''<div class="slide"><span class="slot-badge">BRAINSTORM · 3 MIN</span><div class="pill">✍️ Write</div><h2>{e(x["brain"])}</h2>
-<div class="predict-card"><div class="label">Your job</div>
-<p class="big" style="margin:.3em 0">Write a list. One short line per idea. Do not stop to think — keep writing.</p>
-<p style="margin-top:.4em;opacity:.75">English or Korean. Spelling does not matter. Nobody marks this.</p></div>
-<div class="dtimer" id="tb" style="margin-top:.5em">
-  <div class="dtime">180</div>
-  <div class="dbtns">
-    <button onclick="debateTimer('tb',180)">3 min</button>
-    <button onclick="debateTimer('tb',60)">1 min</button>
-    <button class="stop" onclick="debateTimer('tb',0)">stop</button>
-  </div>
-</div></div>''', f'''<div class="slide"><span class="slot-badge">BRAINSTORM · SORT</span><div class="pill">Read yours out</div><h2>Now sort them</h2>
-<p class="big">Read one idea. We decide together which box it goes in.</p>
+    return f'''<div class="slide"><span class="slot-badge">OPINIONS · SORT IT</span><div class="pill">Talk</div><h2>{e(x["brain"])}</h2>
+<p class="big">Say one. We put it in a box together. Then say why it goes there.</p>
 <div class="compare-row" style="align-items:flex-start;margin-top:.8em">
 <div class="opt-card" style="text-align:left"><div class="ico">🧠</div><div class="name" style="color:var(--accent);font-size:clamp(16px,2.8vmin,24px)">{e(b1)}</div><p style="opacity:.7;font-size:.85em;margin-top:.3em">{e(b1d)}</p></div>
 <div class="opt-card" style="text-align:left"><div class="ico">🤖</div><div class="name" style="color:var(--accent-2);font-size:clamp(16px,2.8vmin,24px)">{e(b2)}</div><p style="opacity:.7;font-size:.85em;margin-top:.3em">{e(b2d)}</p></div>
 </div>
+<p class="sub center" style="margin-top:.5em">Nothing is written down yet. Nobody is corrected yet.</p>
 <p class="bilingual">두 칸으로 나눠 봐요</p></div>'''
+
+
+def s_quick(q, words):
+    """Four fast questions, one sentence each, round the room."""
+    cards = "".join(
+        f'<div class="topic-chip{"" if i % 2 == 0 else " purple"}" style="text-align:left">'
+        f'<div class="head" style="color:var(--accent{"" if i % 2 == 0 else "-2"})">{i + 1}</div>'
+        f'<div class="desc" style="opacity:1;margin-top:.15em">{hl(t, words)}</div></div>'
+        for i, t in enumerate(q["quick"]))
+    return (f'<div class="slide"><span class="slot-badge">OPINIONS · QUICK</span>'
+            f'<div class="pill">Everyone answers<span class="activity-tag">one sentence</span></div>'
+            f'<h2>Four questions, fast</h2>'
+            f'<div class="topic-grid">{cards}</div>'
+            f'<p class="sub center" style="margin-top:.5em">No right answer. No correcting. Every voice in the room.</p>'
+            f'<p class="bilingual">한 문장씩 · 정답 없어요</p></div>')
+
+
+def s_deep(q, words):
+    """Three that need a reason. The second line is what the teacher asks next
+    when the first answer stops too early."""
+    cards = "".join(
+        f'<div class="edge-card"><div class="ehead">{hl(ask, words)}</div>'
+        f'<div class="edesc"><b>Then ask:</b> {hl(push, words)}</div></div>'
+        for ask, push in q["deep"])
+    return (f'<div class="slide"><span class="slot-badge">OPINIONS · GO DEEPER</span>'
+            f'<div class="pill purple">Answer with a reason</div><h2>Now say why</h2>'
+            f'<div class="edge-grid">{cards}</div>'
+            f'<p class="sub center" style="margin-top:.5em">An answer with no <b>because</b> is not finished. '
+            f'The second line is the follow-up question.</p></div>')
+
+
+def s_side(q, words):
+    """Forced choices. Standing on one side is easier than starting an opinion
+    from nothing, and it makes them defend it."""
+    rows = "".join(
+        f'<div style="margin-top:{".7em" if i else ".2em"}">'
+        f'<div class="label" style="color:var(--accent);font-weight:700;'
+        f'font-size:clamp(14px,2.3vmin,20px)">{e(head)}</div>'
+        f'<div class="compare-row" style="margin-top:.25em;gap:.5em">'
+        f'<div class="opt-card"><div class="name" style="font-size:clamp(14px,2.3vmin,20px)">{hl(a, words)}</div></div>'
+        f'<div class="opt-card"><div class="name" style="color:var(--accent-2);'
+        f'font-size:clamp(14px,2.3vmin,20px)">{hl(b, words)}</div></div>'
+        f'</div></div>'
+        for i, (head, a, b) in enumerate(q["side"]))
+    return (f'<div class="slide"><span class="slot-badge">OPINIONS · PICK ONE</span>'
+            f'<div class="pill">Choose a side<span class="activity-tag">then defend it</span></div>'
+            f'<h2>You cannot say both</h2>{rows}'
+            f'<p class="sub center" style="margin-top:.6em">Point at one. Say the reason. '
+            f'Someone who picked the other one answers you.</p>'
+            f'<p class="bilingual">하나만 골라요 · 이유도 말해요</p></div>')
 
 
 def s_vocab(v, half, n_of):
@@ -872,7 +1178,7 @@ def s_game(pairs, n_of):
 </div>
 <div class="qfeedback"></div></div>''')
     body = "\n".join(qs)
-    return f'''<div class="slide"><span class="slot-badge">GAME · {n_of} of 3</span><div class="pill purple">Word game<span class="activity-tag">click one</span></div><h2>Which word fits?</h2>
+    return f'''<div class="slide"><span class="slot-badge">GAME · {n_of} of 2</span><div class="pill purple">Word game<span class="activity-tag">click one</span></div><h2>Which word fits?</h2>
 {body}
 <p class="bilingual">문장에 맞는 단어를 고르세요</p></div>'''
 
@@ -884,7 +1190,7 @@ def s_skill(d, x):
 <p class="sub" style="margin-top:.3em;font-size:.8em">{e(ex)}</p></div>'''
         for i, (lab, what, ex) in enumerate(x["parts"]))
     cols = len(x["parts"])
-    return f'''<div class="slide"><span class="slot-badge">SKILL · 8 MIN</span><div class="pill">Today's skill</div><h2>{e(d["skill"])}</h2>
+    return f'''<div class="slide"><span class="slot-badge">SKILL</span><div class="pill">Today's skill</div><h2>{e(d["skill"])}</h2>
 <div class="opt-grid{" two" if cols == 2 else ""}" style="grid-template-columns:repeat({min(cols, 4)},minmax(0,1fr))">{cards}</div>
 <p class="big center" style="margin-top:.8em">Every part, every time. Miss one and it is not an argument yet.</p></div>'''
 
@@ -958,7 +1264,7 @@ def s_clash(x, words):
 
 
 def s_format(d, dd=False):
-    return f'''<div class="slide"><span class="slot-badge">{"DEBATE" if dd else "MINI-DEBATE · 16 MIN"}</span><div class="pill">{"Debate Day" if dd else "Format"}</div><h2>{e(d["fmt"])}</h2>
+    return f'''<div class="slide"><span class="slot-badge">{"DEBATE" if dd else "MINI-DEBATE"}</span><div class="pill">{"Debate Day" if dd else "Format"}</div><h2>{e(d["fmt"])}</h2>
 <p class="big" style="margin-top:.4em">{d["fmtdesc"]}</p>
 <div class="dtimer" id="ts1" style="margin-top:.4em">
   <div class="dtime">45</div>
@@ -1010,67 +1316,73 @@ def warmup(prev_v):
                        "지난주 단어 복습")]
 
 
-def freshgame(v, x):
-    """The six words this week\'s gap-fill never touched."""
-    used = {c[1].lower() for c in x["cloze"]}
-    rest = [r for r in v if r[0].lower() not in used]
-    return s_wordgame(rest[:3], v, "GAME · 3 of 3", "Meaning to word",
-                      "Same ten words, asked the other way round.",
-                      "뜻을 보고 단어를 고르세요")
-
-
 def usewords(x):
     """Name the words the writing sprint has to contain."""
     return ", ".join(f'<b class="kw">{e(c[1])}</b>' for c in x["cloze"][:3])
 
 
 def deck_skill(n, d, x, v, prev, prev_v, nxt):
-    """Shape A — teach one micro-skill, learn to attack it, argue the motion."""
+    """Shape A — five sections in the order Kasim asked for on 2026-09-08:
+    word practice, opinions, the skill, writing, debate practice, the debate.
+    Fewer things to run, many more questions to ask."""
     words = [w for w, _, _ in v]
+    q = Q[n]
     s = [s_title(n, d)]
     s.append(s_plan([
-        "<b>Warm-up</b> — last week\'s words, as a game.",
-        "<b>Brainstorm</b> — 3 minutes writing. Every idea you can think of.",
-        "<b>Words</b> — ten new words, then three games to check them.",
+        "<b>Words</b> — ten new ones, then two games to check them.",
+        "<b>Opinions</b> — ten questions. Everybody answers every one.",
         f"<b>The skill</b> — {e(d['skill'])}, added on top of everything so far.",
-        "<b>Attack me</b> — I argue badly on purpose. You take notes and break it.",
-        "<b>Both sides</b> — their arguments, yours, and four extra points.",
-        "<b>Write</b> — two 3-minute sprints, using today\'s words.",
-        f"<b>{e(d['fmt'])}</b> — speak it out loud, on the clock.",
+        "<b>Writing</b> — two short pieces, using today's words.",
+        "<b>Debate practice</b> — where to attack, and one bad argument to break.",
+        f"<b>The debate</b> — {e(d['fmt'])}, both sides, then swap sides.",
     ], "오늘 순서"))
     s.append(s_recap(n, prev, v))
     s.extend(warmup(prev_v))
-    s.append(s_hook(d))
-    s.extend(s_brainstorm(x))
+
+    # 1 — word practice
     s.append(s_vocab(v, v[:5], 1))
     s.append(s_game(x["cloze"][:2], 1))
     s.append(s_vocab(v, v[5:], 2))
     s.append(s_game(x["cloze"][2:], 2))
-    s.append(freshgame(v, x))
+
+    # 2 — opinions: the hook, the sort, then ten prompts in three shapes
+    s.append(s_hook(d))
+    s.append(s_sort(x, words))
+    s.append(s_quick(q, words))
+    s.append(s_deep(q, words))
+    s.append(s_side(q, words))
+
+    # 3 — the skill
     s.append(s_skill(d, x))
     s.append(s_build(n))
     s.append(s_frame(d))
     s.append(s_model(d))
     s.append(s_mistake(d))
-    s.append(s_ladder())
-    s.append(s_poi_rule())
-    s.append(s_attack(n))
-    s.append(s_write("tw1", "WRITE 1 · 3 MIN", "Use the frame, easy topic",
+
+    # 4 — writing pieces
+    s.append(s_write("tw1", "WRITE 1", "Use the frame, easy topic",
                      "Write one for each", "".join(
                          f'{i}. {blanks(d["frame"])}'
                          f' &nbsp;<i style="opacity:.6">({e(p)})</i><br>'
                          for i, p in enumerate(x["easy"], 1)),
-                     "180초 = 3분"))
+                     "오늘 배운 문장 틀로 써 봐요"))
+    s.append(s_write("tw2", "WRITE 2", "Your strongest reason",
+                     f'On the motion: {e(d["motion"])}',
+                     blanks(d["frame"])
+                     + '<br><span style="opacity:.6;font-size:.85em">Either side. Pick the one idea you would fight for. Not all of them. One.</span>',
+                     use=usewords(x)))
+
+    # 5 — debate practice
+    s.append(s_ladder())
+    s.append(s_poi_rule())
+    s.append(s_attack(n))
+
+    # 6 — the debate
     s.append(s_motion(d))
     s.append(s_bank("FOR", d, x["dfo"], words))
     s.append(s_bank("AGAINST", d, x["dag"], words))
     s.append(s_poi(n, words))
     s.append(s_clash(x, words))
-    s.append(s_write("tw2", "WRITE 2 · 3 MIN", "Your strongest reason",
-                     "On your assigned side",
-                     blanks(d["frame"])
-                     + '<br><span style="opacity:.6;font-size:.85em">Pick the one idea you would fight for. Not all of them. One.</span>',
-                     use=usewords(x)))
     s.append(s_format(d))
     s.append(s_flip(d))
     s.append(s_close(n, d, nxt))
@@ -1085,7 +1397,7 @@ def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
         "<b>Warm-up</b> — last week\'s words, as a game.",
         "<b>Teams and roles</b> — you are given a side and a job.",
         "<b>Ammo</b> — both banks, the clash, and four extra points.",
-        "<b>Prep</b> — 11 minutes. Two arguments, plus a guess at theirs.",
+        "<b>Prep</b> — two arguments, plus a guess at theirs.",
         "<b>Openings</b> — 45 seconds each. Points of information allowed.",
         "<b>Rebuttals</b> — answer one of their points. No new arguments.",
         "<b>Closings</b> — 30 seconds. Remind, weigh, stop.",
@@ -1098,9 +1410,8 @@ def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
     s.append(s_game(x["cloze"][:2], 1))
     s.append(s_vocab(v, v[5:], 2))
     s.append(s_game(x["cloze"][2:], 2))
-    s.append(freshgame(v, x))
     s.append(s_motion(d))
-    s.append('''<div class="slide"><span class="slot-badge">ROLES · 4 MIN</span><div class="pill">Teams</div><h2>Your job today</h2>
+    s.append('''<div class="slide"><span class="slot-badge">ROLES</span><div class="pill">Teams</div><h2>Your job today</h2>
 <div class="topic-grid">
 <div class="topic-chip"><div class="head">SPEAKER 1</div><div class="desc">Open for your team. 45 seconds. Claim, reason, example. Do not attack yet.</div></div>
 <div class="topic-chip"><div class="head">SPEAKER 2</div><div class="desc">Add a new argument. Mention something your own Speaker 1 said.</div></div>
@@ -1115,7 +1426,7 @@ def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
     s.append(s_clash(x, words))
     s.append(s_ladder())
     s.append(s_poi_rule())
-    s.append('''<div class="slide"><span class="slot-badge">PREP · 11 MIN</span><div class="pill">Build your case</div><h2>Four things, in this order</h2>
+    s.append('''<div class="slide"><span class="slot-badge">PREP</span><div class="pill">Build your case</div><h2>Four things, in this order</h2>
 <ul class="check-list">
 <li><b>Argument one</b> — claim, reason, example, and why it matters.</li>
 <li><b>Argument two</b> — a different reason. Not the same one again.</li>
@@ -1123,14 +1434,14 @@ def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
 <li><b>Two points of information</b> — written as questions, ready to stand up with.</li>
 </ul>
 <div class="predict-card" style="margin-top:.4em"><div class="label">Timekeeper</div>
-<p class="big" style="margin:.3em 0">Call out the time at 6 minutes and at 2 minutes left.</p></div></div>''')
+<p class="big" style="margin:.3em 0">Call the halfway point out loud, then the last warning.</p></div></div>''')
     s.append(s_format(d, dd=True))
     s.append('''<div class="slide"><span class="slot-badge">REBUTTAL</span><div class="pill">Answer them</div><h2>Pick one point and kill it</h2>
 <div class="frame-card"><div class="label">Four steps, in order</div>
 <div class="frame">They say <span class="blank"></span>.<br>But <span class="blank"></span>.<br>Because <span class="blank"></span>.<br>Therefore <span class="blank"></span>.</div></div>
 <p class="big" style="margin-top:.6em">Aim at the <b>reason</b>, the <b>example</b> or the <b>link</b>. Never the person.</p>
 <p class="sub center">No new arguments. Stopping at <b>Because</b> is the commonest fault in this class.</p></div>''')
-    s.append('''<div class="slide"><span class="slot-badge">CLOSING · 30s</span><div class="pill purple">Finish</div><h2>Remind · weigh · stop</h2>
+    s.append('''<div class="slide"><span class="slot-badge">CLOSING</span><div class="pill purple">Finish</div><h2>Remind · weigh · stop</h2>
 <div class="frame-card"><div class="label">Closing frame</div>
 <div class="frame">Today we showed <span class="blank"></span> and <span class="blank"></span>.<br>The most important is <span class="blank"></span>, because <span class="blank"></span>.<br>For that reason, you should vote for our side.</div></div>
 <div class="dtimer" id="ts2" style="margin-top:.2em">
@@ -1142,7 +1453,7 @@ def deck_debate_day(n, d, x, v, prev, prev_v, nxt):
   </div>
 </div>
 <p class="sub center">A closing has no new arguments in it.</p></div>''')
-    s.append('''<div class="slide"><span class="slot-badge">VOTE · 12 MIN</span><div class="pill">Judging</div><h2>Vote on the arguments</h2>
+    s.append('''<div class="slide"><span class="slot-badge">VOTE</span><div class="pill">Judging</div><h2>Vote on the arguments</h2>
 <ul class="check-list">
 <li>Not on the side you agree with. On who argued better.</li>
 <li>Which point was never answered?</li>
@@ -1166,7 +1477,8 @@ def deck(n):
     body = "\n\n".join(build(n, d, x, v, prev, prev_v, nxt))
     return f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DB001 W{n} — {e(d["topic"])}</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<title>DB001 W{n} — {e(d["topic"])}</title><link rel="stylesheet" href="../../assets/style.css">
+{look(n)}</head><body>
 <div class="stage"><div class="footer-tag">DB001 · Tech &amp; AI Debate · Week {n} · {e(unit_of(n))}</div>
 
 {body}
