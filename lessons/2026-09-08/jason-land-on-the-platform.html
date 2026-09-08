@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Land on the Platform · Jason</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: var(--com); font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #ffb86c;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: var(--fn);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  /* find box: what to Ctrl+F for */
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: var(--fn); }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #ff5555; }
+  .tag-new { color: var(--fn); }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #ffb86c; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px);
+               user-select: none; -webkit-user-select: none; }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: var(--com); margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: var(--com); }
+  .chip.on { border-color: var(--fn); color: var(--fn); }
+
+  .road { display: flex; gap: clamp(.6em, 2vmin, 1.4em); justify-content: center;
+          flex-wrap: wrap; margin-top: .5em; }
+  .road .rd { text-align: center; }
+  .road canvas { width: clamp(84px, 16vmin, 130px); height: auto; background: #0d1117;
+                 border: 2px solid var(--soft); border-radius: .4em; }
+  .road .rl { font-family: "JetBrains Mono", monospace; font-weight: 700;
+              color: var(--accent); font-size: clamp(13px, 2.1vmin, 19px); margin-top: .3em; }
+  .road .rt { color: var(--com); font-size: clamp(11px, 1.7vmin, 15px); }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: var(--com); border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  /* step progress badge */
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: center; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+  ul.tick.test li::before { content: "☐"; color: var(--fn); }
+  ol.mini { font-size: clamp(13px, 2vmin, 18px); padding-left: 1.4em; margin-top: .3em; }
+  ol.mini li { margin: .2em 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+
+  .states { display: flex; gap: 1em; justify-content: center; margin: .6em 0; flex-wrap: wrap; }
+  .st { border: 3px solid var(--soft); color: var(--com); border-radius: .6em;
+        padding: .5em 1.1em; font-family: "JetBrains Mono", monospace;
+        font-size: clamp(14px, 2.3vmin, 22px); font-weight: 700; }
+  .st.on { border-color: var(--fn); color: var(--fn); background: rgba(80,250,123,.08); }
+  .st.lose.on { border-color: #ff5555; color: #ff5555; background: rgba(255,85,85,.08); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Platformer · Land on the platform 🟩</div>
+
+  <!-- 1 title -->
+  <div class="slide active center-all">
+    <div class="emoji">🟩</div>
+    <h1>Land on the platform</h1>
+    <p class="line" style="margin-top:.3em">Three bugs first. Then the green thing becomes a <b>real ledge</b> you can stand on.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">3 bugs</span><span class="chip">the landing check</span><span class="chip">a list of platforms</span><span class="chip">a level</span>
+    </div>
+  </div>
+
+  <!-- 2 recap -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Last week you built the falling</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Why is <code>JUMP_POWER</code> a negative number?</div>
+      <details><summary>Show answer</summary><div class="ans">y = 0 is the top. Up the screen is a smaller y, so up is minus.</div></details>
+    </div>
+    <p class="bilingual">위로 가려면 y를 빼요</p>
+  </div>
+
+  <!-- 3 the unfinished promise -->
+  <div class="slide">
+    <div class="pill">Where we stopped</div>
+    <h2>The green platform is still wrong</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">It went in last week. It came out a <b>post</b>, not a floor.</p>
+        <p class="quiet" style="margin-top:.5em">Today we fix it, then you land on it.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="cNow" width="360" height="230"></canvas>
+        <div class="readout">your screen <b>right now</b></div>
+      </div>
+    </div>
+    <p class="bilingual">약속한 거 오늘 고쳐요</p>
+  </div>
+
+  <!-- 4 vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Four words today</h2>
+    <div class="vocab-table">
+      <span class="term">rect</span>
+      <span class="gloss">a rectangle drawn from four numbers: x, y, width, height</span>
+      <span class="ko">사각형</span>
+      <span class="term">overlap</span>
+      <span class="gloss">two rectangles share some space</span>
+      <span class="ko">겹침</span>
+      <span class="term">and</span>
+      <span class="gloss">every test must be true, not just one</span>
+      <span class="ko">그리고</span>
+      <span class="term">plat</span>
+      <span class="gloss">our name for one platform inside the loop</span>
+      <span class="ko">발판 하나</span>
+    </div>
+  </div>
+
+  <!-- 5 concept: four numbers -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2><code>draw.rect</code> takes four numbers</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">pygame.draw.rect(screen, GOLD,
+    (<span class="num">x</span>, <span class="num">y</span>, <span class="num">w</span>, <span class="num">h</span>))</pre>
+        <p class="quiet" style="margin-top:.5em">The order never changes. Corner first, then <b>width</b>, then <b>height</b>.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="cRect" width="360" height="230"></canvas>
+      </div>
+    </div>
+    <p class="bilingual">가로 먼저, 세로 나중에</p>
+  </div>
+
+  <!-- 6 predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Which shape comes out?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <pre>ground_platform = {"x": 250, "y": 300, "w": 140, "h": 16}
+
+pygame.draw.rect(screen, GREEN,
+    (ground_platform["x"], ground_platform["y"],
+     ground_platform["h"], ground_platform["w"]))</pre>
+      <div class="q">A wide ledge, or a tall thin post?</div>
+      <details><summary>Reveal</summary><div class="ans">A tall thin post. 16 wide, 140 tall. The last two numbers are the wrong way round.</div></details>
+    </div>
+  </div>
+
+  <!-- 7 the three bugs, in his real file -->
+  <div class="slide">
+    <div class="pill">The plan</div>
+    <h2>Three bugs are already in your file</h2>
+<pre class="tiny"><span class="dim">while running:</span>
+<span class="dim">    for event in pygame.event.get():</span>
+<span class="dim">        if event.type == pygame.QUIT:</span>
+<span class="dim">            running = False</span>
+<span class="hot">        keys = pygame.key.get_pressed()        <span class="com"># bug 2</span></span>
+<span class="dim">        if keys[pygame.K_LEFT]:</span>
+<span class="dim">            player["x"] -= player["speed"]</span>
+<span class="dim">        if keys[pygame.K_RIGHT]:</span>
+<span class="dim">            player["x"] += player["speed"]</span>
+<span class="hot">        player["vy"] += GRAVITY                <span class="com"># bug 1</span></span>
+<span class="dim">    player["vy"] += GRAVITY</span>
+<span class="dim">    player["y"] += player["vy"]</span>
+<span class="hot">    pygame.draw.rect(screen, GOLD,  ( ... player["h"], player["w"]))  <span class="com"># bug 3</span></span>
+<span class="hot">    pygame.draw.rect(screen, GREEN, ( ... ["h"], ["w"]))              <span class="com"># bug 3</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">Orange = broken. Top to bottom, one step each.</p>
+  </div>
+
+  <!-- 8 concept bug 1 -->
+  <div class="slide">
+    <div class="pill purple">Bug 1</div>
+    <h2>Gravity is added twice</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Your file adds <code>GRAVITY</code> to <code>vy</code> <b>twice</b> in one frame.</p>
+        <p class="quiet" style="margin-top:.5em">0.6 + 0.6 = 1.2 every frame. He drops like a stone.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="cGrav" width="360" height="230"></canvas>
+        <div class="readout"><b>1.2</b> per frame vs <b>0.6</b> per frame</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 STEP 1 -->
+  <div class="slide">
+    <div class="pill">v1 &middot; bug 1<span class="activity-tag">STEP 1 / 13</span></div>
+    <h2>Delete the second gravity line</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>player["x"] += player["speed"]</code></div>
+    <p class="where">📍 the line <b>directly under</b> it &middot; indent <b>8</b> &middot; delete it</p>
+    <div class="two">
+      <div><span class="tag-old">OLD</span>
+        <div class="was">
+<pre class="tiny">        <span class="kw">if</span> keys[pygame.K_RIGHT]:
+            player[<span class="str">"x"</span>] += player[<span class="str">"speed"</span>]
+<span class="hot">        player[<span class="str">"vy"</span>] += GRAVITY</span>
+
+        <span class="com">## CONTROLS ##</span></pre>
+        </div>
+      </div>
+      <div><span class="tag-new">NEW</span>
+        <div class="now">
+<pre class="tiny">        <span class="kw">if</span> keys[pygame.K_RIGHT]:
+            player[<span class="str">"x"</span>] += player[<span class="str">"speed"</span>]
+
+        <span class="com">## CONTROLS ##</span></pre>
+        </div>
+      </div>
+    </div>
+    <p class="why">🟣 One frame adds gravity once, not twice.</p>
+    <p class="chk">✅ Run it. He falls slower, the jump goes higher.</p>
+  </div>
+
+  <!-- 10 concept bug 2 -->
+  <div class="slide">
+    <div class="pill purple">Bug 2</div>
+    <h2>The arrow keys are trapped in the event loop</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line"><code>for event in ...</code> only runs when <b>something happens</b> &mdash; a key, a click, a mouse move.</p>
+        <p class="quiet" style="margin-top:.5em">Your key check sits inside it. Keep the mouse still and the arrows die.</p>
+      </div>
+      <div>
+<pre class="tiny">mouse moving  &#8594; events    &#8594; arrows work
+mouse still   &#8594; no events &#8594; arrows dead
+
+frame 1   frame 2   frame 3   frame 4
+   ✓         ✗         ✗         ✗</pre>
+      </div>
+    </div>
+    <p class="bilingual">이벤트 없으면 키가 안 먹어요</p>
+  </div>
+
+  <!-- 11 STEP 2 -->
+  <div class="slide">
+    <div class="pill">v1 &middot; bug 2<span class="activity-tag">STEP 2 / 13</span></div>
+    <h2>Cut those five lines</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>keys = pygame.key.get_pressed()</code></div>
+    <p class="where">📍 that line and the <b>four</b> under it &middot; indent <b>8</b> &middot; cut all five</p>
+    <div class="two">
+      <div><span class="tag-old">OLD</span>
+        <div class="was">
+<pre class="tiny">        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+
+<span class="hot">        keys = pygame.key.get_pressed()</span>
+<span class="hot">        <span class="kw">if</span> keys[pygame.K_LEFT]:</span>
+<span class="hot">            player[<span class="str">"x"</span>] -= player[<span class="str">"speed"</span>]</span>
+<span class="hot">        <span class="kw">if</span> keys[pygame.K_RIGHT]:</span>
+<span class="hot">            player[<span class="str">"x"</span>] += player[<span class="str">"speed"</span>]</span>
+
+        <span class="com">## CONTROLS ##</span></pre>
+        </div>
+      </div>
+      <div><span class="tag-new">NEW</span>
+        <div class="now">
+<pre class="tiny">        <span class="kw">if</span> event.type == pygame.QUIT:
+            running = <span class="kw">False</span>
+
+        <span class="com">## CONTROLS ##</span></pre>
+        </div>
+      </div>
+    </div>
+    <p class="why">🟣 Wrong loop. Back in next slide.</p>
+    <p class="chk">✅ Run it. The arrows do nothing. Correct for now.</p>
+  </div>
+
+  <!-- 12 STEP 3 -->
+  <div class="slide">
+    <div class="pill">v1 &middot; bug 2<span class="activity-tag">STEP 3 / 13</span></div>
+    <h2>Paste them back at indent 4</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>player["vy"] += GRAVITY</code></div>
+    <p class="where">📍 only one left after STEP 1 &middot; paste <b>above</b> it &middot; indent <b>4</b>, not 8</p>
+    <div class="two">
+      <div><span class="tag-old">OLD</span>
+        <div class="was">
+<pre class="tiny">    player[<span class="str">"vy"</span>] += GRAVITY
+    player[<span class="str">"y"</span>] += player[<span class="str">"vy"</span>]</pre>
+        </div>
+      </div>
+      <div><span class="tag-new">NEW</span>
+        <div class="now">
+<pre class="tiny"><span class="hot">    keys = pygame.key.get_pressed()</span>
+<span class="hot">    <span class="kw">if</span> keys[pygame.K_LEFT]:</span>
+<span class="hot">        player[<span class="str">"x"</span>] -= player[<span class="str">"speed"</span>]</span>
+<span class="hot">    <span class="kw">if</span> keys[pygame.K_RIGHT]:</span>
+<span class="hot">        player[<span class="str">"x"</span>] += player[<span class="str">"speed"</span>]</span>
+
+    player[<span class="str">"vy"</span>] += GRAVITY
+    player[<span class="str">"y"</span>] += player[<span class="str">"vy"</span>]</pre>
+        </div>
+      </div>
+    </div>
+    <p class="why">🟣 Now it runs every frame.</p>
+    <p class="chk">✅ Hold an arrow, mouse still. He slides.</p>
+  </div>
+
+  <!-- 13 watch out: indent -->
+  <div class="slide">
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Eight spaces or four?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ indent 8</span><pre>for event in pygame.event.get():
+        keys = pygame.key.get_pressed()</pre><p>inside the <code>for</code> &mdash; only on an event</p></div>
+      <div class="col good"><span class="tag">✓ indent 4</span><pre>for event in pygame.event.get():
+        ...
+
+    keys = pygame.key.get_pressed()</pre><p>inside <code>while</code> &mdash; every frame</p></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 Four spaces moved that line out of one loop and into the other.</p>
+  </div>
+
+  <!-- 14 THE platform slide -->
+  <div class="slide">
+    <div class="pill purple">Bug 3 &mdash; this is the one</div>
+    <h2>Why your platform looks like a post</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">The last two numbers are swapped, so width and height traded places.</p>
+<pre class="tiny">(x, y, <span class="str">h</span>, <span class="str">w</span>)  &#8594;   <span class="num">16</span> wide, <span class="num">140</span> tall
+(x, y, <span class="num">w</span>, <span class="num">h</span>)  &#8594;  <span class="num">140</span> wide, <span class="num">16</span> tall</pre>
+        <p class="quiet" style="margin-top:.4em">You stared at this for a week. That is the whole reason.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="cSwap" width="360" height="230"></canvas>
+      </div>
+    </div>
+    <p class="bilingual">가로랑 세로가 바뀌었어요</p>
+  </div>
+
+  <!-- 15 STEP 4 -->
+  <div class="slide">
+    <div class="pill">v1 &middot; bug 3<span class="activity-tag">STEP 4 / 13</span></div>
+    <h2>Fix the gold rectangle</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>pygame.draw.rect(screen, GOLD,</code></div>
+    <p class="where">📍 same line &middot; indent <b>4</b> &middot; keep it one line</p>
+    <span class="tag-old">OLD</span>
+    <div class="was">
+<pre class="tiny">    pygame.draw.rect(screen, GOLD, (player["x"], player["y"], <span class="str">player["h"], player["w"]</span>))</pre>
+    </div>
+    <span class="tag-new">NEW</span>
+    <div class="now">
+<pre class="tiny">    pygame.draw.rect(screen, GOLD, (player["x"], player["y"], <span class="num">player["w"], player["h"]</span>))</pre>
+    </div>
+    <p class="why">🟣 Width goes before height. Always.</p>
+    <p class="chk">✅ Run it. The gold block changes shape.</p>
+  </div>
+
+  <!-- 16 STEP 5 -->
+  <div class="slide">
+    <div class="pill">v1 &middot; bug 3<span class="activity-tag">STEP 5 / 13</span></div>
+    <h2>Fix the green rectangle</h2>
+    <div class="find"><span class="fl">🔍 Find</span><code>pygame.draw.rect(screen, GREEN,</code></div>
+    <p class="where">📍 same line &middot; indent <b>4</b> &middot; keep it one line</p>
+    <span class="tag-old">OLD</span>
+    <div class="was">
+<pre class="tiny">    pygame.draw.rect(screen, GREEN, (ground_platform["x"], ground_platform["y"], <span class="str">ground_platform["h"], ground_platform["w"]</span>))</pre>
+    </div>
+    <span class="tag-new">NEW</span>
+    <div class="now">
+<pre class="tiny">    pygame.draw.rect(screen, GREEN, (ground_platform["x"], ground_platform["y"], <span class="num">ground_platform["w"], ground_platform["h"]</span>))</pre>
+    </div>
+    <p class="why">🟣 16 wide 140 tall becomes 140 wide 16 tall.</p>
+    <p class="chk">✅ Run it. The green post is a flat platform.</p>
+  </div>
+
+  <!-- 17 run it -->
+  <div class="slide">
+    <div class="pill">✅ Run it</div>
+    <h2>All three gone</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <ul class="tick test">
+          <li>He falls at a normal speed.</li>
+          <li>Arrows work with the mouse still.</li>
+          <li>The green thing is a flat ledge.</li>
+        </ul>
+      </div>
+      <div>
+        <canvas class="sim" id="cFixed" width="360" height="230"></canvas>
+        <div class="readout">this is what you should see</div>
+      </div>
+    </div>
+    <p class="bilingual">이제 발판처럼 보여요</p>
+  </div>
+
+  <!-- 18 quick check: which number is which -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Which number is which?</h2>
+    <p class="quiet" style="margin-bottom:.3em">The call is <code>pygame.draw.rect(screen, GREEN, (250, 300, 140, 16))</code></p>
+    <div class="trace-grid" style="max-width:28em">
+      <div class="cell head">number</div><div class="cell head">what it means</div><div class="cell head">name</div>
+      <div class="cell"><code>250</code></div><div class="cell">left edge</div><div class="cell"><code>x</code></div>
+      <div class="cell"><code>300</code></div><div class="cell">top edge</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">y</span></details></div>
+      <div class="cell"><code>140</code></div><div class="cell">across</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">w</span></details></div>
+      <div class="cell"><code>16</code></div><div class="cell">down</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">h</span></details></div>
+    </div>
+  </div>
+
+  <!-- 19 MANDATORY: four arrows, player rect vs platform rect -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>Landing asks four questions at once</h2>
+    <div class="two wide-left" style="align-items:center">
+      <div>
+        <canvas class="sim" id="cFour" width="420" height="270"></canvas>
+      </div>
+      <div style="text-align:left">
+<pre class="tiny"><span class="num">1</span>  his right edge &gt; its left edge
+<span class="num">2</span>  his left edge  &lt; its right edge
+<span class="num">3</span>  his y &gt;= its y
+<span class="num">4</span>  his y &lt; its y + 20</pre>
+        <p class="quiet" style="margin-top:.4em">All four true, he stands. One false, he falls straight past.</p>
+      </div>
+    </div>
+    <p class="bilingual">네 개가 전부 맞아야 착지해요</p>
+  </div>
+
+  <!-- 20 test 1 -->
+  <div class="slide">
+    <div class="pill purple">Test 1 of 4</div>
+    <h2>Has he reached the left edge?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">player[<span class="str">"x"</span>] + player[<span class="str">"w"</span>] &gt; plat[<span class="str">"x"</span>]</pre>
+        <p class="quiet" style="margin-top:.5em">His <b>right</b> edge is his x plus his width. It must be past the platform's left edge.</p>
+      </div>
+      <div><canvas class="sim" id="cT1" width="360" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 21 test 2 -->
+  <div class="slide">
+    <div class="pill purple">Test 2 of 4</div>
+    <h2>Has he gone past the right edge?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">player[<span class="str">"x"</span>] &lt; plat[<span class="str">"x"</span>] + plat[<span class="str">"w"</span>]</pre>
+        <p class="quiet" style="margin-top:.5em">The platform's <b>right</b> edge is its x plus its width. His left edge must still be before it.</p>
+      </div>
+      <div><canvas class="sim" id="cT2" width="360" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 22 test 3 -->
+  <div class="slide">
+    <div class="pill purple">Test 3 of 4</div>
+    <h2>Has he dropped to the top of it?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">player[<span class="str">"y"</span>] &gt;= plat[<span class="str">"y"</span>]</pre>
+        <p class="quiet" style="margin-top:.5em">Same shape as your ground check, <code>player["y"] &gt;= GROUND_Y</code>. Only the number on the right changed.</p>
+      </div>
+      <div><canvas class="sim" id="cT3" width="360" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 23 test 4 -->
+  <div class="slide">
+    <div class="pill purple">Test 4 of 4</div>
+    <h2>Is he only just past it?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">player[<span class="str">"y"</span>] &lt; plat[<span class="str">"y"</span>] + <span class="num">20</span></pre>
+        <p class="quiet" style="margin-top:.5em">Without this, anyone below the platform gets yanked up onto it. 20 pixels is the catching window.</p>
+      </div>
+      <div><canvas class="sim" id="cT4" width="360" height="200"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 24 and = all of them -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2><code>and</code> means <b>all of them</b></h2>
+    <p class="line">You already use it: <code>K_SPACE and player["on_ground"]</code>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">1 ✓</span><span class="chip on">2 ✓</span><span class="chip on">3 ✓</span><span class="chip on">4 ✓</span><span class="chip on">he lands</span>
+    </div>
+    <div class="chips" style="margin-top:.5em">
+      <span class="chip on">1 ✓</span><span class="chip">2 ✗</span><span class="chip on">3 ✓</span><span class="chip on">4 ✓</span><span class="chip">he falls past</span>
+    </div>
+    <p class="quiet" style="margin-top:.6em">One false anywhere and the whole <code>if</code> is false.</p>
+    <p class="bilingual">하나라도 틀리면 전체가 거짓이에요</p>
+  </div>
+
+  <!-- 25 predict: does he land -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Does he land?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <pre>player = {"x": 120, "y": 240, "w": 30, "h": 40, "vy": 4}
+plat   = {"x": 260, "y": 240, "w": 140, "h": 16}</pre>
+      <div class="q">Test 1 asks: is 120 + 30 bigger than 260?</div>
+      <details><summary>Reveal</summary><div class="ans">150 &gt; 260 is False. Test 1 fails, so the whole <code>if</code> fails. He drops straight past it.</div></details>
+    </div>
+  </div>
+
+  <!-- 26 debug: && -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>Python has no <code>&amp;&amp;</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if a &gt; b &amp;&amp; c &lt; d:</pre><p><code>SyntaxError: invalid syntax</code></p></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if a &gt; b and c &lt; d:</pre><p>runs</p></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 <code>&amp;&amp;</code> is JavaScript. Python spells it <code>and</code>.</p>
+  </div>
+
+  <!-- 27 debug: = vs == -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>One equals, or two?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if player["vy"] = 0:</pre><p><code>SyntaxError</code></p></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if player["vy"] == 0:</pre><p>asks a question</p></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 One <code>=</code> puts a value in. Two <code>==</code> asks if they match. Inside an <code>if</code> you always ask.</p>
+  </div>
+
+  <!-- 28 test 5: vy > 0 -->
+  <div class="slide">
+    <div class="pill purple">One more test</div>
+    <h2>Only while he is falling</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+<pre class="tiny">player[<span class="str">"vy"</span>] &gt; <span class="num">0</span></pre>
+        <p class="quiet" style="margin-top:.5em">Rising, <code>vy</code> is negative, so he passes through. Falling, <code>vy</code> is positive, so he lands.</p>
+        <p class="quiet">Drop this test and he sticks to the underside on the way up.</p>
+      </div>
+      <div><canvas class="sim" id="cVy" width="360" height="220"></canvas></div>
+    </div>
+    <p class="bilingual">떨어질 때만 착지해요</p>
+  </div>
+
+  <!-- 29 code talk frame -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the landing rule</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"He lands if his <span class="blank"></span> is past the platform's <span class="blank"></span>, <b>and</b> his <span class="blank"></span> is inside the platform's <span class="blank"></span> to <span class="blank"></span>, <b>and</b> his <code>vy</code> is <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로.</div>
+    </div>
+  </div>
+
+  <!-- 16 STEP 6 one platform -->
+  <div class="slide">
+    <div class="pill">v6 &middot; something to land on<span class="activity-tag">STEP 6 / 13</span></div>
+    <h2>One platform</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> your floor check <code>if player["y"] &gt;= GROUND_Y:</code> &middot; 📍 <b>above</b> it &middot; indent <b>4</b></p>
+<pre class="tiny"><span class="com"># up with the constants</span>
+platform = {<span class="str">"x"</span>: <span class="num">260</span>, <span class="str">"y"</span>: <span class="num">240</span>, <span class="str">"w"</span>: <span class="num">140</span>, <span class="str">"h"</span>: <span class="num">16</span>}
+
+<span class="com"># inside the loop, before the floor check</span>
+<span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">if</span> (player[<span class="str">"vy"</span>] > <span class="num">0</span>
+            <span class="kw">and</span> player[<span class="str">"x"</span>] + player[<span class="str">"w"</span>] > platform[<span class="str">"x"</span>]
+            <span class="kw">and</span> player[<span class="str">"x"</span>] < platform[<span class="str">"x"</span>] + platform[<span class="str">"w"</span>]
+            <span class="kw">and</span> player[<span class="str">"y"</span>] >= platform[<span class="str">"y"</span>]
+            <span class="kw">and</span> player[<span class="str">"y"</span>] < platform[<span class="str">"y"</span>] + <span class="num">20</span>):
+        player[<span class="str">"y"</span>] = platform[<span class="str">"y"</span>]
+        player[<span class="str">"vy"</span>] = <span class="num">0</span>
+        player[<span class="str">"on_ground"</span>] = <span class="kw">True</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Same three landing lines as the floor. Only the test changed.<br>🟣 Draw it too: <code>pygame.draw.rect(screen, GREEN, (platform["x"], platform["y"], platform["w"], platform["h"]))</code><br>✅ Run it. Walk under it, jump, land on top.</p>
+  </div>
+
+  <!-- 17 debug: the platform grabs him -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>Why <code>player["vy"] &gt; 0</code>?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Take that first line out and jump up through the platform.</p>
+        <p class="quiet" style="margin-top:.5em">He sticks to it on the way <b>up</b>. You land on a platform you are still rising through.</p>
+        <p class="quiet"><code>vy &gt; 0</code> means "only while falling". That one test is the whole difference.</p>
+      </div>
+      <div>
+<pre class="tiny">vy &lt; 0   🡅  rising   &#8594; pass through
+vy &gt; 0   🡇  falling  &#8594; can land</pre>
+      </div>
+    </div>
+    <p class="bilingual">떨어질 때만 착지해요. 올라갈 때는 통과해요.</p>
+  </div>
+
+  <!-- 18 concept: one platform becomes a list -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>One platform &rarr; a list of them</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">You already did this shape. Many things, one <b>list of dicts</b>.</p>
+        <p class="quiet" style="margin-top:.5em">A level is the same shape. One dict per platform, all in a list, and a <code>for</code> loop checks every one.</p>
+        <p class="quiet">Write the check once. It works for 3 platforms or 30.</p>
+      </div>
+      <div>
+<pre class="tiny">platforms = [
+    {x: 260, y: 240, ...},   &#8594; check
+    {x: 440, y: 180, ...},   &#8594; check
+    {x:  60, y: 160, ...},   &#8594; check
+]
+       one loop, every platform</pre>
+      </div>
+    </div>
+    <p class="bilingual">발판 하나가 아니라 목록이에요. 반복문이 전부 확인해요.</p>
+  </div>
+
+  <!-- 19 STEP 7 platforms list -->
+  <div class="slide">
+    <div class="pill">v7 &middot; many platforms<span class="activity-tag">STEP 7 / 13</span></div>
+    <h2>Make it a list, loop the check</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>{"x": 260, "y": 240</code> &middot; 📍 replace that whole line &middot; indent <b>0</b></p>
+    <div class="two">
+      <div><span class="quiet">OLD</span>
+<pre class="tiny">platform = {<span class="str">"x"</span>: <span class="num">260</span>, <span class="str">"y"</span>: <span class="num">240</span>, <span class="str">"w"</span>: <span class="num">140</span>, <span class="str">"h"</span>: <span class="num">16</span>}</pre></div>
+      <div><span class="quiet">NEW</span>
+<pre class="tiny">platforms = [
+    {<span class="str">"x"</span>: <span class="num">260</span>, <span class="str">"y"</span>: <span class="num">240</span>, <span class="str">"w"</span>: <span class="num">140</span>, <span class="str">"h"</span>: <span class="num">16</span>},
+]</pre></div>
+    </div>
+    <p class="quiet" style="margin-top:.35em">Then wrap your landing check in a loop &mdash; 📍 indent everything inside it by <b>4</b> more:</p>
+<pre class="tiny">    <span class="kw">for</span> plat <span class="kw">in</span> platforms:
+        <span class="kw">if</span> (player[<span class="str">"vy"</span>] > <span class="num">0</span>
+                <span class="kw">and</span> player[<span class="str">"x"</span>] + player[<span class="str">"w"</span>] > plat[<span class="str">"x"</span>]
+                <span class="kw">and</span> player[<span class="str">"x"</span>] < plat[<span class="str">"x"</span>] + plat[<span class="str">"w"</span>]
+                <span class="kw">and</span> player[<span class="str">"y"</span>] >= plat[<span class="str">"y"</span>]
+                <span class="kw">and</span> player[<span class="str">"y"</span>] < plat[<span class="str">"y"</span>] + <span class="num">20</span>):
+            player[<span class="str">"y"</span>] = plat[<span class="str">"y"</span>]
+            player[<span class="str">"vy"</span>] = <span class="num">0</span>
+            player[<span class="str">"on_ground"</span>] = <span class="kw">True</span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 <code>platform</code> became <code>plat</code>, the loop variable. Change it everywhere inside.<br>✅ Run it. Exactly the same as before. One platform, still works. Nothing should look different yet.</p>
+  </div>
+
+  <!-- 20 STEP 8 a real level -->
+  <div class="slide">
+    <div class="pill">v8 &middot; a level<span class="activity-tag">STEP 8 / 13</span></div>
+    <h2>Three platforms and a gap</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>platforms = [</code> &middot; 📍 add two more dicts inside the brackets &middot; indent <b>4</b></p>
+<pre class="tiny">platforms = [
+    {<span class="str">"x"</span>: <span class="num">260</span>, <span class="str">"y"</span>: <span class="num">240</span>, <span class="str">"w"</span>: <span class="num">140</span>, <span class="str">"h"</span>: <span class="num">16</span>},
+<span style="display:block;background:rgba(56,208,224,.14)">    {<span class="str">"x"</span>: <span class="num">460</span>, <span class="str">"y"</span>: <span class="num">180</span>, <span class="str">"w"</span>: <span class="num">120</span>, <span class="str">"h"</span>: <span class="num">16</span>},
+    {<span class="str">"x"</span>: <span class="num">60</span>,  <span class="str">"y"</span>: <span class="num">160</span>, <span class="str">"w"</span>: <span class="num">120</span>, <span class="str">"h"</span>: <span class="num">16</span>},</span>]</pre>
+    <p class="quiet" style="margin-top:.3em">And draw them all &mdash; 📍 next to where you draw the player:</p>
+<pre class="tiny">    <span class="kw">for</span> plat <span class="kw">in</span> platforms:
+        pygame.draw.rect(screen, GREEN,
+            (plat[<span class="str">"x"</span>], plat[<span class="str">"y"</span>], plat[<span class="str">"w"</span>], plat[<span class="str">"h"</span>]))</pre>
+    <p class="quiet" style="margin-top:.35em">🟣 The gap between 400 and 460 is the level design. That is you deciding how hard it is.<br>✅ Run it. Three green ledges. Try to climb to the top one.</p>
+  </div>
+  <!-- NEW: mandatory iteration visual — one frame per platform -->
+  <div class="slide">
+    <div class="pill">The loop</div>
+    <h2>One pass per platform</h2>
+    <p class="quiet" style="margin-bottom:.3em">He is falling at <code>x = 300</code>. The loop asks all three.</p>
+    <div class="road">
+      <div class="rd">
+        <canvas id="cP1" width="150" height="130"></canvas>
+        <div class="rl">plat = A</div>
+        <div class="rt">260&ndash;400 ✓ catches him</div>
+      </div>
+      <div class="rd">
+        <canvas id="cP2" width="150" height="130"></canvas>
+        <div class="rl">plat = B</div>
+        <div class="rt">460&ndash;580 ✗ too far right</div>
+      </div>
+      <div class="rd">
+        <canvas id="cP3" width="150" height="130"></canvas>
+        <div class="rl">plat = C</div>
+        <div class="rt">60&ndash;180 ✗ too far left</div>
+      </div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Only A says yes.</p>
+    <p class="bilingual">반복문이 세 개 다 물어봐요</p>
+  </div>
+
+  <!-- NEW debug: the check fell out of the loop -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2>The check fell out of the loop</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>for plat in platforms:
+    pass
+
+if player["y"] &gt;= plat["y"]:
+    player["y"] = plat["y"]</pre><p>only the <b>last</b> platform ever works</p></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>for plat in platforms:
+
+    if player["y"] &gt;= plat["y"]:
+        player["y"] = plat["y"]</pre><p>every platform gets asked</p></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 The <code>if</code> must be indented <b>inside</b> the <code>for</code>. Four spaces decide it.</p>
+  </div>
+
+  <!-- NEW debug: range(platforms) -->
+  <div class="slide">
+    <div class="pill">🐛 Debug</div>
+    <h2><code>range</code> counts numbers, not dicts</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>for p in range(platforms):
+    print(p["x"])</pre><p><code>TypeError: 'list' object cannot be interpreted as an integer</code></p></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>for plat in platforms:
+    print(plat["x"])</pre><p>hands you each dict</p></div>
+    </div>
+    <p class="why" style="text-align:center">🟣 <code>for plat in platforms</code> gives you the dict itself. No <code>range</code>, no index number.</p>
+  </div>
+
+  <!-- 21 trace: which platform catches him -->
+  <div class="slide">
+    <div class="pill">Trace it</div>
+    <h2>Which one catches him?</h2>
+    <p class="quiet" style="margin-bottom:.3em">Player is at <code>x = 300</code>, falling. Platforms: A x260 w140, B x460 w120, C x60 w120.</p>
+    <div class="trace-grid" style="max-width:30em">
+      <div class="cell head">plat</div><div class="cell head">x range</div><div class="cell head">overlaps x=300?</div>
+      <div class="cell"><code>A</code></div><div class="cell"><code>260&ndash;400</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><code>B</code></div><div class="cell"><code>460&ndash;580</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><code>C</code></div><div class="cell"><code>60&ndash;180</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">The loop asks all three every frame. Only A can say yes. That is why the x test comes first.</p>
+  </div>
+
+  <!-- 22 concept: tap vs hold -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>Tap = small hop. Hold = big jump.</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Right now every jump is identical. Real platformers let you choose.</p>
+        <p class="quiet" style="margin-top:.5em">The trick: when you <b>let go</b> early and you are still rising, <b>cut vy</b>. The arc ends sooner.</p>
+        <p class="quiet">Nothing about gravity changes. You just interrupt the rise.</p>
+      </div>
+      <div>
+<pre class="tiny">hold  vy=-12  &#8594;    ___
+                  /     \
+                 /       \
+
+tap   vy=-12
+      release &#8594; vy=-4   _
+                       / \</pre>
+      </div>
+    </div>
+    <p class="bilingual">짧게 누르면 낮게, 길게 누르면 높게 뛰어요.</p>
+  </div>
+
+  <!-- 23 STEP 9 KEYUP cuts the jump -->
+  <div class="slide">
+    <div class="pill">v9 &middot; jump height<span class="activity-tag">STEP 9 / 13</span></div>
+    <h2>Let go early, jump lower</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>if event.type == pygame.KEYDOWN:</code> &middot; 📍 a new block <b>under</b> that whole if &middot; indent <b>8</b></p>
+<pre class="tiny">        <span class="kw">if</span> event.type == pygame.KEYDOWN:
+            <span class="com"># ... your jump code ...</span>
+<span style="display:block;background:rgba(56,208,224,.14)">
+        <span class="kw">if</span> event.type == pygame.KEYUP:
+            <span class="kw">if</span> event.key == pygame.K_SPACE <span class="kw">and</span> player[<span class="str">"vy"</span>] < <span class="num">-4</span>:
+                player[<span class="str">"vy"</span>] = <span class="num">-4</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 <code>vy &lt; -4</code> means "still going up fast". Only then is there anything to cut.<br>🟣 KEYUP is the moment your finger leaves the key. You have never used it before.<br>✅ Run it. Tap space for a hop. Hold it for the full jump.</p>
+  </div>
+
+  <!-- 24 concept: coyote time -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>Coyote time 🐺</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Run off a ledge, press jump a hair too late, nothing happens. Feels broken. It is not.</p>
+        <p class="quiet" style="margin-top:.5em">Real games keep letting you jump for about <b>6 frames</b> after you leave the ground. Players never notice. They just think the game feels good.</p>
+        <p class="quiet">A counter that ticks down, one every frame.</p>
+      </div>
+      <div>
+<pre class="tiny">on ledge   coyote = 6
+step off   coyote = 5  &#8594; jump OK
+           coyote = 4  &#8594; jump OK
+           coyote = 3  &#8594; jump OK
+           ...
+           coyote = 0  &#8594; too late</pre>
+      </div>
+    </div>
+    <p class="bilingual">발판에서 떨어진 직후 몇 프레임은 아직 점프할 수 있어요.</p>
+  </div>
+
+  <!-- 25 STEP 10 coyote -->
+  <div class="slide">
+    <div class="pill">v10 &middot; it feels good<span class="activity-tag">STEP 10 / 13</span></div>
+    <h2>Six frames of mercy</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> <code>player["on_ground"] = True</code> in the platform loop &middot; 📍 add a line under each one &middot; indent to match</p>
+<pre class="tiny"><span class="com"># with the constants</span>
+COYOTE = <span class="num">6</span>
+
+<span class="com"># wherever you set on_ground = True (floor AND platforms)</span>
+<span style="display:block;background:rgba(56,208,224,.14)">        player[<span class="str">"coyote"</span>] = COYOTE</span>
+
+<span class="com"># once per frame, after the platform loop</span>
+<span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">if</span> player[<span class="str">"coyote"</span>] > <span class="num">0</span>:
+        player[<span class="str">"coyote"</span>] -= <span class="num">1</span></span>
+
+<span class="com"># and the jump test uses coyote instead of on_ground</span>
+<span style="display:block;background:rgba(56,208,224,.14)">            <span class="kw">if</span> event.key == pygame.K_SPACE <span class="kw">and</span> player[<span class="str">"coyote"</span>] > <span class="num">0</span>:
+                player[<span class="str">"vy"</span>] = JUMP_POWER
+                player[<span class="str">"coyote"</span>] = <span class="num">0</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 Add <code>"coyote": 0</code> to the player dict.<br>🟣 Setting it to 0 on jump is what stops a double jump.<br>✅ Run it. Walk off a ledge and press space just after. It still jumps.</p>
+  </div>
+
+  <!-- 26 concept: moving platform patrols -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>A moving platform turns at the ends</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Give a ledge a <code>vx</code> and it walks. At its limits it turns round.</p>
+<pre class="tiny">plat[<span class="str">"x"</span>] += plat[<span class="str">"vx"</span>]
+<span class="kw">if</span> plat[<span class="str">"x"</span>] < plat[<span class="str">"x1"</span>] <span class="kw">or</span> plat[<span class="str">"x"</span>] > plat[<span class="str">"x2"</span>]:
+    plat[<span class="str">"vx"</span>] = -plat[<span class="str">"vx"</span>]</pre>
+        <p class="quiet">Two lines. A ledge that walks, and carries you.</p>
+      </div>
+      <div>
+<pre class="tiny">   &#8592; &#8212;&#8212;&#8212;&#8212;&#8212; &#8594;
+  |=============|
+   x1         x2
+  turn        turn
+
+  vx = +2  ... +2 ... then -2</pre>
+      </div>
+    </div>
+    <p class="bilingual">끝에 닿으면 방향만 바꿔요.</p>
+  </div>
+
+  <!-- 27 STEP 11 moving platform -->
+  <div class="slide">
+    <div class="pill">v11 &middot; it moves<span class="activity-tag">STEP 11 / 13</span></div>
+    <h2>Make platform B patrol</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> the second dict in <code>platforms</code> &middot; 📍 add three keys to it, and a move block in the loop</p>
+<pre class="tiny">    {<span class="str">"x"</span>: <span class="num">460</span>, <span class="str">"y"</span>: <span class="num">180</span>, <span class="str">"w"</span>: <span class="num">120</span>, <span class="str">"h"</span>: <span class="num">16</span><span style="background:rgba(56,208,224,.14)">, <span class="str">"vx"</span>: <span class="num">2</span>, <span class="str">"x1"</span>: <span class="num">380</span>, <span class="str">"x2"</span>: <span class="num">560</span></span>},
+
+<span class="com"># inside the loop, before the landing checks</span>
+<span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">for</span> plat <span class="kw">in</span> platforms:
+        <span class="kw">if</span> <span class="str">"vx"</span> <span class="kw">in</span> plat:
+            plat[<span class="str">"x"</span>] += plat[<span class="str">"vx"</span>]
+            <span class="kw">if</span> plat[<span class="str">"x"</span>] < plat[<span class="str">"x1"</span>] <span class="kw">or</span> plat[<span class="str">"x"</span>] > plat[<span class="str">"x2"</span>]:
+                plat[<span class="str">"vx"</span>] = -plat[<span class="str">"vx"</span>]</span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 <code>"vx" in plat</code> asks "does this dict have that key?" Only the moving one does.<br>🟣 <code>-plat["vx"]</code> flips the sign. Same turn-around at both ends.<br>✅ Run it. The middle ledge slides back and forth. Land on it.</p>
+  </div>
+
+  <!-- 28 debug: you slide off -->
+  <div class="slide">
+    <div class="pill">v12 &middot; ride it<span class="activity-tag">STEP 12 / 13</span></div>
+    <h2>The platform slides out from under you</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Stand on the moving ledge. It moves. <b>You do not.</b> You fall off the back.</p>
+        <p class="quiet" style="margin-top:.5em">You set the player's <b>y</b> when landing, never the <b>x</b>. Nothing carries him sideways.</p>
+      </div>
+      <div>
+<pre class="tiny"><span class="com"># in the landing block, after vy = 0</span>
+<span style="background:rgba(56,208,224,.14)"><span class="kw">if</span> <span class="str">"vx"</span> <span class="kw">in</span> plat:
+    player[<span class="str">"x"</span>] += plat[<span class="str">"vx"</span>]</span></pre>
+      </div>
+    </div>
+    <p class="quiet" style="margin-top:.3em">✅ Run it. Now you ride it. This is STEP 12.</p>
+    <p class="bilingual">발판만 움직이고 나는 안 움직였어요. 같이 움직이게 해줘요.</p>
+  </div>
+
+  <!-- 29 concept: falling out of the world -->
+  <div class="slide">
+    <div class="pill purple">Concept</div>
+    <h2>What if you miss?</h2>
+    <div class="two" style="align-items:center">
+      <div style="text-align:left">
+        <p class="line">Right now the floor catches everything, so you can never really lose.</p>
+        <p class="quiet" style="margin-top:.5em">Take the floor away under the gap and there has to be an answer to "he fell". Every platformer has one: <b>go back to the start</b>.</p>
+        <p class="quiet">Three lines: put x back, put y back, stop vy.</p>
+      </div>
+      <div>
+<pre class="tiny">y = 400   ground
+y = 500
+y = 600   &#8592; below the window
+          &#8594; respawn at the start</pre>
+      </div>
+    </div>
+    <p class="bilingual">떨어지면 처음 자리로 돌아가요.</p>
+  </div>
+
+  <!-- 30 STEP 13 respawn -->
+  <div class="slide">
+    <div class="pill">v13 &middot; you can lose<span class="activity-tag">STEP 13 / 13</span></div>
+    <h2>Fall off, start again</h2>
+    <p class="quiet" style="margin-bottom:.3em">🔍 <b>FIND</b> your floor check &middot; 📍 a new check <b>under</b> it &middot; indent <b>4</b></p>
+<pre class="tiny"><span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">if</span> player[<span class="str">"y"</span>] > HEIGHT:
+        player[<span class="str">"x"</span>]  = <span class="num">80</span>
+        player[<span class="str">"y"</span>]  = GROUND_Y
+        player[<span class="str">"vy"</span>] = <span class="num">0</span></span></pre>
+    <p class="quiet" style="margin-top:.35em">🟣 <code>80</code> and <code>GROUND_Y</code> are where he starts. Put him straight back.<br>🟣 <code>GROUND_Y</code> and <code>HEIGHT</code> are already at the top of your file.<br>✅ Run it. Miss the jump, land back at the start.</p>
+  </div>
+
+  <!-- 31 quiz on the new ideas -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Four questions</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">1 &middot; Why <code>"vx" in plat</code> and not just <code>plat["vx"]</code>?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">The still platforms have no <code>"vx"</code> key. Reading it would crash with a KeyError.</p></details>
+        <p class="line" style="margin-top:.5em">2 &middot; Set COYOTE to 60. What breaks?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">A whole second of mercy. You can jump in mid-air, halfway down. It stops feeling like a platformer.</p></details>
+      </div>
+      <div style="text-align:left">
+        <p class="line">3 &middot; Why does the jump set <code>coyote = 0</code>?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">Otherwise the counter is still above 0 next frame and you jump again in the air.</p></details>
+        <p class="line" style="margin-top:.5em">4 &middot; Move the respawn check <b>above</b> the floor check. Any difference?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">No. The floor stops him long before y passes HEIGHT. It only matters once you cut a hole in the floor.</p></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 32 stretch: where this goes next -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">If there is time</div>
+    <h2>Next rungs</h2>
+    <div class="stretch-list" style="max-width:36em">
+      <div class="item"><span class="lvl">★</span>A coin dict. Walk into it, it disappears, score goes up.</div>
+      <div class="item"><span class="lvl">★★</span>A platform that falls away one second after you land on it.</div>
+      <div class="item"><span class="lvl">★★</span>Wall jump: touching a wall while falling lets you jump off it.</div>
+      <div class="item"><span class="lvl">★★★</span>Scroll the camera so the level is wider than the window.</div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">All four are the same two moves you already know: a dict, and a check inside the loop.</p>
+  </div>
+
+  <!-- 33 check -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Three questions</h2>
+    <div class="two" style="align-items:start">
+      <div style="text-align:left">
+        <p class="line">1 &middot; Why is JUMP_POWER negative?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">Up is negative on screen. y = 0 is the top.</p></details>
+        <p class="line" style="margin-top:.5em">2 &middot; Delete <code>and player["on_ground"]</code>. What happens?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">He flies. Space works mid-air, forever.</p></details>
+      </div>
+      <div style="text-align:left">
+        <p class="line">3 &middot; GRAVITY = 3 instead of 0.6?</p>
+        <details><summary class="quiet">answer</summary><p class="quiet">A tiny hop. vy turns positive almost at once, so it barely leaves the floor.</p></details>
+        <p class="quiet" style="margin-top:.6em">Try all three. Put the numbers back after.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 34 code talk 2 -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the physics</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"Every frame vy goes <span class="blank"></span>, so y goes <span class="blank"></span>, until <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로. Say it twice, once before you code and once after.</div>
+    </div>
+  </div>
+
+  <!-- 35 make -->
+  <div class="slide">
+    <div class="pill">Your turn!</div>
+    <h2>Start it now 🚀</h2>
+    <ul class="tick test" style="max-width:30em">
+      <li>Keep working in <code>main.py</code>, the file already open.</li>
+      <li>The window, colours and player dict are already there.</li>
+      <li>Do STEP 1, run it. He falls at a normal speed.</li>
+      <li>Then STEP 2 onward. Run after every single step.</li>
+    </ul>
+  </div>
+
+  <!-- 36 OPTIONAL exit ticket -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One question</h2>
+    <div class="exit" style="max-width:36em">
+      <div class="label">You say it — no peeking</div>
+      <p class="line" style="margin-top:.3em">Why is <code>JUMP_POWER</code> negative, and what breaks if you drop <code>and player["on_ground"]</code>?</p>
+      <details><summary class="sub">Show answer</summary>
+        <p class="line">Up is negative because y = 0 is the top of the window. Without the on_ground check he can press space in mid-air and fly.</p>
+      </details>
+    </div>
+  </div>
+
+  <!-- 37 close -->
+  <div class="slide center-all">
+    <div class="emoji">🚀</div>
+    <p class="line big">One game shipped. <b>The next one is running.</b></p>
+    <p class="quiet" style="margin-top:.4em">Gravity, a floor, and a jump. Next: platforms to land on.</p>
+    <p class="bilingual">오늘 새로 배운 것: 중력과 점프. 다음: 발판 만들기</p>
+  </div>
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 54</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CY = '#38d0e0', GRN = '#50fa7b', OR = '#ffb86c', DIM = '#8a97b8',
+      GOLD = '#ffd166', PLAT = '#2f7d4f', RED = '#ff5555', BG = '#0d1117',
+      SCREEN = '#5b6472', FAINT = '#3a4657', DARKG = '#25452f', DARKY = '#7a6535';
+
+  function bg(ctx, W, H, col) { ctx.fillStyle = col || BG; ctx.fillRect(0, 0, W, H); }
+  function box(ctx, x, y, w, h, col) { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); }
+  function strokeBox(ctx, x, y, w, h, col) {
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(x, y, w, h);
+  }
+  function dot(ctx, x, y, col) {
+    ctx.beginPath(); ctx.arc(x, y, 5, 0, 6.3); ctx.fillStyle = col; ctx.fill();
+  }
+  function line(ctx, x1, y1, x2, y2, col, wid) {
+    ctx.strokeStyle = col; ctx.lineWidth = wid || 2;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function dash(ctx, x1, y1, x2, y2, col) {
+    ctx.setLineDash([4, 4]); line(ctx, x1, y1, x2, y2, col, 1.5); ctx.setLineDash([]);
+  }
+  function txt(ctx, s, x, y, col, size, align) {
+    ctx.font = (size || 11) + 'px monospace'; ctx.fillStyle = col;
+    ctx.textAlign = align || 'left'; ctx.fillText(s, x, y); ctx.textAlign = 'left';
+  }
+  function arrow(ctx, x1, y1, x2, y2, col) {
+    ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.beginPath(); ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 8 * Math.cos(a - 0.4), y2 - 8 * Math.sin(a - 0.4));
+    ctx.lineTo(x2 - 8 * Math.cos(a + 0.4), y2 - 8 * Math.sin(a + 0.4));
+    ctx.closePath(); ctx.fill();
+  }
+  function badge(ctx, n, x, y, col) {
+    ctx.beginPath(); ctx.arc(x, y, 9, 0, 6.3); ctx.fillStyle = col; ctx.fill();
+    txt(ctx, String(n), x, y + 4, '#0a0d13', 12, 'center');
+  }
+
+  /* --- slide 3: what is on his screen right now --- */
+  (function () {
+    var c = $('cNow'); if (!c) return; var x = c.getContext('2d');
+    bg(x, c.width, c.height, SCREEN);
+    box(x, 50, 166, 40, 30, GOLD);
+    txt(x, 'player', 70, 212, '#1a1d24', 12, 'center');
+    box(x, 244, 45, 16, 140, PLAT);
+    txt(x, '16 wide', 252, 36, '#e8ffef', 12, 'center');
+    txt(x, '140 tall', 268, 118, '#e8ffef', 12, 'left');
+    txt(x, 'meant to be the ground', 200, 212, '#1a1d24', 12, 'center');
+  })();
+
+  /* --- slide 5: rect takes four numbers --- */
+  (function () {
+    var c = $('cRect'); if (!c) return; var x = c.getContext('2d');
+    bg(x, c.width, c.height);
+    box(x, 95, 62, 175, 88, 'rgba(56,208,224,.20)');
+    strokeBox(x, 95, 62, 175, 88, CY);
+    dot(x, 95, 62, OR);
+    txt(x, '(x, y)', 88, 56, OR, 13, 'right');
+    arrow(x, 95, 172, 270, 172, CY);
+    txt(x, 'w  across', 182, 192, CY, 13, 'center');
+    arrow(x, 76, 62, 76, 150, GRN);
+    txt(x, 'h  down', 68, 110, GRN, 13, 'right');
+  })();
+
+  /* --- slide 8: gravity once vs twice --- */
+  (function () {
+    var c = $('cGrav'); if (!c) return; var x = c.getContext('2d');
+    var W = c.width, H = c.height;
+    bg(x, W, H);
+    box(x, 0, 200, W, 6, PLAT);
+    function arc(g, col) {
+      var px = 26, py = 200, vy = -12, first = true;
+      x.strokeStyle = col; x.lineWidth = 2.5; x.beginPath(); x.moveTo(px, py);
+      for (var i = 0; i < 300; i++) {
+        vy += g; py += vy; px += 2.4;
+        if (py > 200 || px > W - 8) break;
+        x.lineTo(px, py);
+      }
+      x.lineTo(px, 200); x.stroke();
+    }
+    arc(0.9, OR);
+    arc(0.45, CY);
+    txt(x, 'gravity twice = 1.2 a frame', 30, 194, OR, 12, 'left');
+    txt(x, 'gravity once = 0.6 a frame', 30, 34, CY, 12, 'left');
+    txt(x, 'ground', 6, 222, DIM, 11, 'left');
+  })();
+
+  /* --- slide 14: swapped w and h --- */
+  (function () {
+    var c = $('cSwap'); if (!c) return; var x = c.getContext('2d');
+    bg(x, c.width, c.height);
+    dash(x, 145, 18, 145, 196, '#2a3340');
+    box(x, 64, 40, 16, 140, PLAT);
+    txt(x, '(x, y, h, w)', 72, 200, RED, 12, 'center');
+    txt(x, '16 wide, 140 tall', 72, 216, DIM, 10, 'center');
+    txt(x, 'what you see', 72, 30, RED, 11, 'center');
+    box(x, 175, 118, 140, 16, PLAT);
+    txt(x, '(x, y, w, h)', 245, 200, GRN, 12, 'center');
+    txt(x, '140 wide, 16 tall', 245, 216, DIM, 10, 'center');
+    txt(x, 'what you wanted', 245, 104, GRN, 11, 'center');
+  })();
+
+  /* --- slide 17: what it should look like --- */
+  (function () {
+    var c = $('cFixed'); if (!c) return; var x = c.getContext('2d');
+    bg(x, c.width, c.height, SCREEN);
+    box(x, 110, 168, 140, 16, PLAT);
+    box(x, 160, 128, 30, 40, GOLD);
+    txt(x, '140 wide, 16 tall', 180, 204, '#1a1d24', 12, 'center');
+    txt(x, 'he stands on it', 175, 118, '#1a1d24', 12, 'center');
+  })();
+
+  /* --- the landing scene: lit = 0 shows all four, 1..4 lights one --- */
+  function landScene(c, lit) {
+    var x = c.getContext('2d'), W = c.width, H = c.height;
+    bg(x, W, H);
+    var gx = 108, gw = 190, gy = Math.round(H * 0.52), gh = 14;
+    var px = 166, pw = 44, py = gy - 2, ph = 50;
+    box(x, gx, gy, gw, gh, PLAT);
+    box(x, px, py, pw, ph, GOLD);
+    dash(x, 8, gy, W - 8, gy, '#44526a');
+    var base = gy + ph + 16;
+    function col(n, bright) { return (lit && lit !== n) ? FAINT : bright; }
+
+    var c1 = col(1, CY);
+    dash(x, px + pw, py, px + pw, base + 5, c1);
+    dash(x, gx, gy, gx, base + 5, c1);
+    arrow(x, gx, base, px + pw, base, c1);
+    badge(x, 1, (gx + px + pw) / 2, base, c1);
+
+    var c2 = col(2, GRN);
+    dash(x, px, py, px, base + 27, c2);
+    dash(x, gx + gw, gy, gx + gw, base + 27, c2);
+    arrow(x, gx + gw, base + 24, px, base + 24, c2);
+    badge(x, 2, (gx + gw + px) / 2, base + 24, c2);
+
+    var c3 = col(3, OR);
+    arrow(x, W - 52, gy - 36, W - 52, gy - 4, c3);
+    badge(x, 3, W - 52, gy - 46, c3);
+
+    var c4 = col(4, '#c792ea');
+    box(x, W - 30, gy, 13, 20, c4);
+    badge(x, 4, W - 24, gy + 36, c4);
+    txt(x, '+20', W - 24, gy + 54, c4, 10, 'center');
+  }
+
+  (function () { var c = $('cFour'); if (c) landScene(c, 0); })();
+  (function () { var c = $('cT1'); if (c) landScene(c, 1); })();
+  (function () { var c = $('cT2'); if (c) landScene(c, 2); })();
+  (function () { var c = $('cT3'); if (c) landScene(c, 3); })();
+  (function () { var c = $('cT4'); if (c) landScene(c, 4); })();
+
+  /* --- slide 28: vy > 0 only --- */
+  (function () {
+    var c = $('cVy'); if (!c) return; var x = c.getContext('2d'); var W = c.width;
+    bg(x, W, c.height);
+    dash(x, W / 2, 6, W / 2, 214, '#2a3340');
+    box(x, 20, 118, 130, 12, PLAT);
+    box(x, 72, 150, 28, 34, GOLD);
+    arrow(x, 86, 148, 86, 58, CY);
+    txt(x, 'vy = -8   rising', 86, 204, CY, 12, 'center');
+    txt(x, 'goes straight through', 86, 40, DIM, 11, 'center');
+    box(x, 208, 148, 130, 12, PLAT);
+    box(x, 258, 146, 28, 34, GOLD);
+    arrow(x, 272, 58, 272, 140, OR);
+    txt(x, 'vy = +4   falling', 272, 204, OR, 12, 'center');
+    txt(x, 'lands on top', 272, 40, GRN, 11, 'center');
+  })();
+
+  /* --- iteration visual: one frame per platform --- */
+  (function () {
+    var PL = [
+      { x: 260, y: 240, w: 140, id: 'A' },
+      { x: 460, y: 180, w: 120, id: 'B' },
+      { x: 60,  y: 160, w: 120, id: 'C' }
+    ];
+    var ids = ['cP1', 'cP2', 'cP3'];
+    for (var k = 0; k < 3; k++) {
+      (function (k) {
+        var c = $(ids[k]); if (!c) return;
+        var x = c.getContext('2d'), W = c.width, H = c.height;
+        var sx = W / 640, sy = (H - 30) / 400, top = 16;
+        bg(x, W, H);
+        box(x, 0, top + 380 * sy, W, 4, DARKG);
+        for (var i = 0; i < 3; i++) {
+          var on = (i === k);
+          box(x, PL[i].x * sx, top + PL[i].y * sy, PL[i].w * sx, 6, on ? GRN : DARKG);
+          txt(x, PL[i].id, PL[i].x * sx + PL[i].w * sx / 2, top + PL[i].y * sy - 4,
+              on ? GRN : FAINT, 10, 'center');
+        }
+        box(x, 300 * sx, top + 200 * sy, 30 * sx, 30 * sy, k === 0 ? GOLD : DARKY);
+        arrow(x, 307 * sx, top + 194 * sy, 307 * sx, top + 234 * sy,
+              k === 0 ? OR : '#4a5670');
+        txt(x, k === 0 ? 'lands' : 'no', W - 5, H - 5, k === 0 ? GRN : RED, 11, 'right');
+      })(k);
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>

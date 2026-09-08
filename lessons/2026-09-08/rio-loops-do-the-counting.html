@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS002 — Loops do the counting (RIO · 2026-09-08)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">MS002 &middot; Minecraft Python &middot; RIO &middot; 2026-09-08</div>
+
+  <!-- 1 · Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Minecraft Python &middot; new idea</div>
+    <div class="emoji">🔁</div>
+    <h1>Loops do<br>the counting</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Warm up: <span class="sub">pos(x, y, z)</span><br>New today: <span class="sub">a variable</span> + <span class="sub">a for loop</span></p>
+    <p class="bilingual">숫자 대신 변수. 반복은 컴퓨터가 해요.</p>
+  </div>
+
+  <!-- 2 · Recap & Retrieve -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap</div>
+    <h2>Last time &mdash; you counted alone</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Y goes 0&rarr;4. How tall?</div>
+      <details><summary>Show answer</summary><div class="ans">5 tall. 4 &minus; 0 = 4, add 1.</div></details>
+    </div>
+    <p style="margin-top:.4em">You found the height alone. You found X 2&rarr;3 alone. You spotted the missing <code>)</code> fast. 💪</p>
+  </div>
+
+  <!-- 3 · CARRIED VERBATIM from the 2026-09-01 deck -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Three slots, three jobs</h2>
+    <div class="quiz-card">
+      <div class="q">1 &middot; In <code>pos(3, 6, 4)</code>, which number means <b>forward</b>?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">3. The last one. X, then Y, then Z.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2 &middot; Z goes 2&rarr;6. How deep?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">5 deep. 6 &minus; 2 = 4, add 1. Same rule as X and Y.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · Axis rule — where each ruler starts -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill">Count</div>
+    <h2>Where each ruler starts</h2>
+    <div class="iter-row" style="margin-top:.3em">
+      <span class="code-chip">X across</span>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+    </div>
+    <div class="iter-row" style="margin-top:.3em">
+      <span class="code-chip">Y up</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+    </div>
+    <div class="iter-row" style="margin-top:.3em">
+      <span class="code-chip">Z forward</span>
+      <div class="iter-item">1</div>
+      <div class="iter-item">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+    </div>
+    <p style="margin-top:.5em"><b>X and Z start at 1. Y starts at 0.</b> Only Y.</p>
+    <p class="bilingual">X와 Z는 1부터, Y만 0부터 세요.</p>
+  </div>
+
+  <!-- 5 · Predict (Hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>One line. Five towers.</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>You type <span class="fn">blocks.fill</span> <span class="kw">once</span>.
+
+Five towers appear, spread out.
+
+How?  <span class="kw">??</span></pre>
+      <details><summary>Reveal</summary><div class="ans">A <b>loop</b> runs the line five times. A <b>variable</b> moves it each time.</div></details>
+    </div>
+  </div>
+
+  <!-- 6 · Vocab Preview -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill">Vocab</div>
+    <h2>Words for today</h2>
+    <div class="vocab-table">
+      <span class="term">variable</span>
+      <span class="gloss">a named box holding one number</span>
+      <span class="ko">변수</span>
+
+      <span class="term">loop</span>
+      <span class="gloss">run these lines again, many times</span>
+      <span class="ko">반복</span>
+
+      <span class="term">counter</span>
+      <span class="gloss">the box the loop changes each turn</span>
+      <span class="ko">카운터</span>
+
+      <span class="term">indent</span>
+      <span class="gloss">spaces that put a line inside the loop</span>
+      <span class="ko">들여쓰기</span>
+    </div>
+  </div>
+
+  <!-- 7 · Concept — a variable is a labelled box (NO code) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Concept</div>
+    <h2>A variable is a box 📦</h2>
+    <div class="var-fill">
+      <div class="step-row">
+        <span class="input-pill">2</span>
+        <span class="arrow-icon">➡️</span>
+        <span class="target-box"><span class="name">x</span><span class="val">2</span></span>
+      </div>
+      <div class="read-line">pos(<span class="out">2</span>, 0, 1)</div>
+    </div>
+    <p style="margin-top:.3em">The box has a <b>name</b> and holds <b>one number</b>.</p>
+    <p>Write the name. Python puts the number there.</p>
+    <p class="bilingual">이름 붙은 상자예요. 숫자 하나를 담아요.</p>
+  </div>
+
+  <!-- 8 · Concept — the box's number drops into the slot -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Concept</div>
+    <h2>The box sits in the slot</h2>
+    <div class="viz-stage">
+      <div class="vlabel">you write</div>
+      <div><span class="viz-pill">pos(</span> <span class="viz-pill kw">x</span> <span class="viz-pill">, 0, 1)</span></div>
+      <div class="viz-arrow">⬇ Python swaps the name for the number</div>
+      <div class="vlabel">Minecraft gets</div>
+      <div><span class="viz-pill">pos(</span> <span class="viz-pill num">2</span> <span class="viz-pill">, 0, 1)</span></div>
+    </div>
+    <p style="margin-top:.4em">Same square. You just named the number.</p>
+    <p class="bilingual">같은 자리예요. 숫자에 이름만 붙였어요.</p>
+  </div>
+
+  <!-- 9 · Concept — what a loop is (blocks you already know) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Concept</div>
+    <h2>You know this one 🧱</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">blocks</span>
+        <div class="mcb-c loops"><div class="hat">repeat <span class="val">5</span> times</div><div class="mcb-in"><div class="mcb blocks">fill QUARTZ</div></div></div>
+      </div>
+      <div class="col good"><span class="tag">Python</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.fill</span>(...)</pre>
+      </div>
+    </div>
+    <p style="margin-top:.4em">A loop means: <b>do the inside lines again, this many times</b>.</p>
+    <p class="bilingual">반복 블록과 똑같아요. 글자로 쓴 거예요.</p>
+  </div>
+
+  <!-- 10 · Concept — the counter i is a box that changes -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Watch it!</div>
+    <h2>The counter changes 🔢</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">turn 1</div>
+        <div class="iter-item">turn 2</div>
+        <div class="iter-item">turn 3</div>
+        <div class="iter-item">turn 4</div>
+        <div class="iter-item">turn 5</div>
+      </div>
+      <div class="var-row"><span class="label">i = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span><span class="var-val">4</span></span></div>
+      <div class="output-box">
+        <div class="out-label">▸ i each turn</div>
+        <div class="out-line">i is 0</div>
+        <div class="out-line">i is 1</div>
+        <div class="out-line">i is 2</div>
+        <div class="out-line">i is 3</div>
+        <div class="out-line">i is 4</div>
+      </div>
+    </div>
+    <p style="margin-top:.3em"><code>i</code> is a box too. The loop fills it for you.</p>
+  </div>
+
+  <!-- 11 · The ladder -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">The ladder</div>
+    <h2>18 steps, six rungs</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">📦</div><div class="name">v1 &middot; x exists</div><div class="ex">steps 2&ndash;3</div></div>
+      <div class="opt-card"><div class="ico">➡️</div><div class="name">v2 &middot; change x</div><div class="ex">steps 4&ndash;5</div></div>
+      <div class="opt-card"><div class="ico">🔁</div><div class="name">v3 &middot; the loop</div><div class="ex">steps 6&ndash;7</div></div>
+      <div class="opt-card"><div class="ico">🏙️</div><div class="name">v4 &middot; x + 3</div><div class="ex">step 8</div></div>
+      <div class="opt-card"><div class="ico">📏</div><div class="name">v5 &middot; spacing</div><div class="ex">steps 9&ndash;13</div></div>
+      <div class="opt-card"><div class="ico">🪜</div><div class="name">v6 &middot; i and z</div><div class="ex">steps 14&ndash;18</div></div>
+    </div>
+    <p style="margin-top:.5em">One change per step. Run after every step.</p>
+  </div>
+
+  <!-- 12 · STEP 1 / 18 — the starter file -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">v0 &middot; the starter<span class="activity-tag">STEP 1 / 18</span></div>
+    <h2>Type these five lines</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> nothing &mdash; <b>new empty file</b><br>📍 Line 1 indent <b>0</b> &middot; <code>blocks.fill</code> indent <b>4</b> &middot; blank line &middot; last line indent <b>0</b></p>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.7vmin,17px)"><span style="display:block;background:rgba(56,208,224,.14)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Our base. X 2&rarr;2, Y 0&rarr;4, Z 1.</span><br><span class="fn">✅ Chat <code>towers</code>: one white tower, 1 wide, 5 tall.</span></p>
+  </div>
+
+  <!-- 13 · Run the starter -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Code</div>
+    <h2>One tower, standing</h2>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ In the world</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">4</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">3</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">2</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">1</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">0</span> ⬛⬜⬛⬛⬛⬛
+  <span class="num">1 2 3 4 5 6 </span> <span class="num">X</span></pre>
+    </div>
+    <p style="margin-top:.4em">X 2&rarr;2 is one column. Y 0&rarr;4 is five blocks tall.</p>
+  </div>
+
+  <!-- 14 · STEP 2 / 18 — v1a: the variable exists -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill">v1 &middot; x exists<span class="activity-tag">STEP 2 / 18</span></div>
+    <h2>Make the box: <code>x = 2</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>def towers():</code><br>📍 New line goes <b>UNDER</b> <code>def towers():</code> &middot; indent <b>4</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():</span><span style="display:block;background:rgba(56,208,224,.14)">    x = <span class="num">2</span></span><span style="opacity:.38">    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 The box now exists. Nothing uses it yet.</span><br><span class="fn">✅ Run it: the same one tower. Nothing changed.</span></p>
+  </div>
+
+  <!-- 15 · STEP 3 / 18 — v1b: swap the 2s for x -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">v1 &middot; x exists<span class="activity-tag">STEP 3 / 18</span></div>
+    <h2>Swap both <code>2</code>s for <code>x</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(2, 0, 1)</code><br>📍 Same line &middot; indent <b>4</b> &middot; only the two X numbers</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</span><span style="opacity:.38">
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 The X slot now reads the box, not a typed number.</span><br><span class="fn">✅ Run it: same tower, same place.</span></p>
+  </div>
+
+  <!-- 16 · Concept — why nothing moved -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">Concept</div>
+    <h2>Why nothing moved</h2>
+    <div class="viz-stage">
+      <div class="vlabel">line 3 fills the box</div>
+      <div><span class="viz-pill">x</span> <span class="viz-arrow" style="display:inline">=</span> <span class="viz-pill num">2</span></div>
+      <div class="viz-arrow">⬇</div>
+      <div class="vlabel">line 4 reads the box</div>
+      <div><span class="viz-pill">pos(</span> <span class="viz-pill num">2</span> <span class="viz-pill">, 0, 1)</span></div>
+    </div>
+    <p style="margin-top:.4em">Same number, new name. The build cannot change.</p>
+    <p class="bilingual">숫자는 그대로, 이름만 생겼어요.</p>
+  </div>
+
+  <!-- 17 · Code Talk Frame 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Before every run</div>
+      <div class="frame">"<code>x</code> starts at <span class="blank"></span>. So the tower stands on X <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 18 · STEP 4 / 18 — v2: change the box, change the build -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">v2 &middot; change x<span class="activity-tag">STEP 4 / 18</span></div>
+    <h2>Change one number: <code>x = 5</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = 2</code><br>📍 Same line &middot; indent <b>4</b> &middot; touch nothing else</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():</span><span style="display:block;background:rgba(56,208,224,.14)">    x = <span class="num">5</span></span><span style="opacity:.38">    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 One edit at the top moves the whole build. This is the payoff.</span><br><span class="fn">✅ Run it: the tower jumps to X 5.</span></p>
+  </div>
+
+  <!-- 19 · Visual — one edit, whole tower moves -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">Watch it!</div>
+    <h2>One edit, whole tower</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">x = 2</span>
+<pre><span class="num">4</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">2</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">0</span> ⬛⬜⬛⬛⬛⬛
+  <span class="num">1 2 3 4 5 6</span></pre>
+      </div>
+      <div class="col good"><span class="tag">x = 5</span>
+<pre><span class="num">4</span> ⬛⬛⬛⬛⬜⬛
+<span class="num">2</span> ⬛⬛⬛⬛⬜⬛
+<span class="num">0</span> ⬛⬛⬛⬛⬜⬛
+  <span class="num">1 2 3 4 5 6</span></pre>
+      </div>
+    </div>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">5</div>
+      <div class="iter-item">6</div>
+    </div>
+    <p style="margin-top:.35em">You edited <b>one</b> line. The <code>blocks.fill</code> line never changed.</p>
+  </div>
+
+  <!-- 20 · STEP 5 / 18 — back to 2, ready for the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">v2 &middot; change x<span class="activity-tag">STEP 5 / 18</span></div>
+    <h2>Put it back: <code>x = 2</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = 5</code><br>📍 Change <b>that same line</b> &middot; keep indent <b>4</b></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">5</span>
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():</span><span style="display:block;background:rgba(56,208,224,.14)">    x = <span class="num">2</span></span><span style="opacity:.38">    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 The loop needs a small start number. 2 is our start.</span><br><span class="fn">✅ Run it: the tower is back on X 2.</span></p>
+  </div>
+
+  <!-- 21 · Concept — read the for line out loud -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">Concept</div>
+    <h2>Read the loop line</h2>
+<pre style="font-size:clamp(13px,2.4vmin,26px)"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</pre>
+    <div class="viz-stage" style="margin-top:.4em">
+      <div><span class="viz-pill kw">for</span> &rarr; start a loop</div>
+      <div><span class="viz-pill">i</span> &rarr; the counter box</div>
+      <div><span class="viz-pill num">range(5)</span> &rarr; five turns</div>
+      <div><span class="viz-pill str">:</span> &rarr; the inside starts here</div>
+    </div>
+    <p style="margin-top:.35em">Say it: "five turns, and <code>i</code> is the turn number."</p>
+  </div>
+
+  <!-- 22 · Visual — range(5) counts 0 to 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">Count</div>
+    <h2><code>range(5)</code> gives 0 1 2 3 4</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">0</div>
+        <div class="iter-item">1</div>
+        <div class="iter-item">2</div>
+        <div class="iter-item">3</div>
+        <div class="iter-item">4</div>
+      </div>
+      <div class="var-row"><span class="label">i = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span><span class="var-val">3</span><span class="var-val">4</span></span></div>
+    </div>
+    <p style="margin-top:.4em"><b>Five numbers. It stops before 5.</b> 5 never appears.</p>
+    <p class="bilingual">5개예요. 5는 나오지 않아요.</p>
+  </div>
+
+  <!-- 23 · STEP 6 / 18 — v3a: add the for line -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">v3 &middot; the loop<span class="activity-tag">STEP 6 / 18</span></div>
+    <h2>Add the <code>for</code> line</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = 2</code><br>📍 <b>UNDER</b> <code>x = 2</code> &middot; indent <b>4</b> spaces &middot; end with <code>:</code></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span style="opacity:.38">    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 The loop head is in. Nothing is inside it yet.</span><br><span class="fn">⛔ Do NOT run yet. Python says IndentationError until STEP 7.</span></p>
+  </div>
+
+  <!-- 24 · Concept — what indent means -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Concept</div>
+    <h2>Indent = inside 📥</h2>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="kw">def</span> <span class="fn">towers</span>():
+<span class="com">····</span>x = <span class="num">2</span>            <span class="com">&larr; 4 spaces: inside towers</span>
+<span class="com">····</span><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):  <span class="com">&larr; 4 spaces</span>
+<span class="com">········</span><span class="fn">blocks.fill</span>(...)  <span class="com">&larr; 8 spaces: inside the loop</span></pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">spaces</span>
+      <div class="iter-item">0</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent-2);color:#fff">8</div>
+    </div>
+    <p style="margin-top:.35em"><b>8 spaces = the loop repeats this line.</b> 4 spaces = it runs once.</p>
+    <p class="bilingual">8칸 들여쓰면 반복 안에 들어가요.</p>
+  </div>
+
+  <!-- 25 · STEP 7 / 18 — v3b: the re-indent, its own step -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">v3 &middot; the loop<span class="activity-tag">STEP 7 / 18</span></div>
+    <h2>Push the fill line in</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>blocks.fill</code><br>📍 Same line &middot; add <b>4 spaces</b> in front &middot; indent <b>4 &rarr; 8</b></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span style="display:block;background:rgba(56,208,224,.14)">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</span><span style="opacity:.38">
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Now inside the loop, so it runs five times.</span><br><span class="fn">✅ Run it, then look at the world.</span></p>
+  </div>
+
+  <!-- 26 · Predict — what did v3 build? -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">Predict 🤔</div>
+    <h2>Five fills. How many towers?</h2>
+    <div class="predict-card">
+      <div class="label">Predict before you look</div>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</pre>
+      <details><summary>Reveal</summary><div class="ans"><b>One.</b> It built five times in the same square, on top of itself.</div></details>
+    </div>
+  </div>
+
+  <!-- 27 · MANDATORY VISUAL — one frame per pass, x never moves -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">Watch it!</div>
+    <h2>Five passes, one spot</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div>
+      <div class="cell head">i</div>
+      <div class="cell head">x</div>
+      <div class="cell head">builds on X</div>
+
+      <div class="cell">1</div><div class="cell">0</div><div class="cell">2</div><div class="cell">2</div>
+      <div class="cell">2</div><div class="cell">1</div><div class="cell">2</div><div class="cell">2</div>
+      <div class="cell">3</div><div class="cell">2</div><div class="cell">2</div><div class="cell">2</div>
+      <div class="cell">4</div><div class="cell">3</div><div class="cell">2</div><div class="cell">2</div>
+      <div class="cell">5</div><div class="cell">4</div><div class="cell">2</div><div class="cell">2</div>
+    </div>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+    </div>
+    <p style="margin-top:.35em"><code>i</code> changes. <code>x</code> does not. So every tower lands on 2.</p>
+  </div>
+
+  <!-- 28 · Concept — refilling the box -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">Concept</div>
+    <h2>Refill the box 🔄</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">x = 2</div>
+        <div class="ra-line">x = x + 3</div>
+        <div class="ra-line">x = x + 3</div>
+        <div class="ra-line">x = x + 3</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">x</span>
+        <span class="ra-vals"><span>2</span><span>5</span><span>8</span><span>11</span></span>
+      </div>
+    </div>
+    <p style="margin-top:.4em"><code>x = x + 3</code> means: <b>look in the box, add 3, put it back</b>.</p>
+    <p class="bilingual">상자를 열고, 3을 더하고, 다시 넣어요.</p>
+  </div>
+
+  <!-- 29 · STEP 8 / 18 — v4: move x each pass -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">v4 &middot; x + 3<span class="activity-tag">STEP 8 / 18</span></div>
+    <h2>Add <code>x = x + 3</code> inside</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(x, 4, 1)</code><br>📍 <b>UNDER</b> the <code>blocks.fill</code> line &middot; indent <b>8</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(10px,1.6vmin,16px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</span><span style="display:block;background:rgba(56,208,224,.14)">        x = x + <span class="num">3</span></span><span style="opacity:.38">
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Every pass moves the box 3 right, so the next tower lands further along.</span><br><span class="fn">✅ Run it: five towers at X 2, 5, 8, 11, 14.</span></p>
+  </div>
+
+  <!-- 30 · MANDATORY VISUAL — one frame per pass -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">Watch it!</div>
+    <h2>One frame per pass</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">pass</div>
+      <div class="cell head">i</div>
+      <div class="cell head">x before</div>
+      <div class="cell head">builds on X</div>
+      <div class="cell head">x after +3</div>
+
+      <div class="cell">1</div><div class="cell">0</div><div class="cell">2</div><div class="cell">2</div><div class="cell">5</div>
+      <div class="cell">2</div><div class="cell">1</div><div class="cell">5</div><div class="cell">5</div><div class="cell">8</div>
+      <div class="cell">3</div><div class="cell">2</div><div class="cell">8</div><div class="cell">8</div><div class="cell">11</div>
+      <div class="cell">4</div><div class="cell">3</div><div class="cell">11</div><div class="cell">11</div><div class="cell">14</div>
+      <div class="cell">5</div><div class="cell">4</div><div class="cell">14</div><div class="cell">14</div><div class="cell">17</div>
+    </div>
+    <p style="margin-top:.35em">It builds <b>first</b>, then adds. The last +3 is never used.</p>
+  </div>
+
+  <!-- 31 · MANDATORY VISUAL — boxes on the number line -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">Count</div>
+    <h2>Jumps of 3 on the X ruler</h2>
+    <div class="viz viz-5">
+      <div class="iter-row">
+        <div class="iter-item">2</div>
+        <div class="iter-item">5</div>
+        <div class="iter-item">8</div>
+        <div class="iter-item">11</div>
+        <div class="iter-item">14</div>
+      </div>
+      <div class="var-row"><span class="label">x = </span><span class="var-vals"><span class="var-val">2</span><span class="var-val">5</span><span class="var-val">8</span><span class="var-val">11</span><span class="var-val">14</span></span></div>
+    </div>
+    <div class="iter-row" style="margin-top:.5em">
+      <span class="code-chip">X</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item">3</div>
+      <div class="iter-item">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+      <div class="iter-item">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">8</div>
+      <div class="iter-item">9</div>
+      <div class="iter-item">10</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">11</div>
+      <div class="iter-item">12</div>
+      <div class="iter-item">13</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">14</div>
+    </div>
+    <p style="margin-top:.35em">Two empty columns between every tower. That is the +3.</p>
+  </div>
+
+  <!-- 32 · Run v4 — the skyline -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Code</div>
+    <h2>Five towers, one fill line</h2>
+    <div class="output-box">
+      <div class="out-label">▸ In the world &middot; X 1 &rarr; 15</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">4</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛
+<span class="num">3</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛
+<span class="num">2</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛
+<span class="num">1</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛
+<span class="num">0</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛</pre>
+    </div>
+    <p style="margin-top:.4em">You typed <code>blocks.fill</code> <b>once</b>. The loop ran it five times.</p>
+    <p class="bilingual">한 줄로 다섯 개를 지었어요.</p>
+  </div>
+
+  <!-- 33 · Code Talk Frame 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Read it every build</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>x</code> starts at <span class="blank"></span>. Each time round the loop, <code>x</code> becomes <span class="blank"></span> plus <span class="blank"></span>. After <span class="blank"></span> turns <code>x</code> is <span class="blank"></span>."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로 / Korean first, then English.</div>
+    </div>
+  </div>
+
+  <!-- 34 · Debug 1 — update line outside the loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>All five in one spot</h2>
+<pre style="font-size:clamp(10px,1.8vmin,18px)">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+    x = x + <span class="num">3</span></pre>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ What he got</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">4</span> ⬛⬜⬛⬛⬛⬛
+<span class="num">0</span> ⬛⬜⬛⬛⬛⬛
+  <span class="num">1 2 3 4 5 6</span></pre>
+    </div>
+    <details class="debug-card">
+      <summary>Only one tower. Why?</summary>
+      <div class="err"><code>x = x + 3</code> is indented <b>4</b>, so it sits outside the loop.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">It runs once, after all five fills. Push it to indent <b>8</b>.</p>
+    </details>
+  </div>
+
+  <!-- 35 · Debug 2 — x = 3 resets every pass -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>The box keeps resetting</h2>
+<pre style="font-size:clamp(10px,1.8vmin,18px)">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = <span class="num">3</span></pre>
+    <div class="trace-grid cols-4" style="margin-top:.4em">
+      <div class="cell head">pass</div><div class="cell head">x before</div><div class="cell head">builds on</div><div class="cell head">x after</div>
+      <div class="cell">1</div><div class="cell">2</div><div class="cell">2</div><div class="cell">3</div>
+      <div class="cell">2</div><div class="cell">3</div><div class="cell">3</div><div class="cell">3</div>
+      <div class="cell">3</div><div class="cell">3</div><div class="cell">3</div><div class="cell">3</div>
+    </div>
+    <details class="debug-card">
+      <summary>Two towers only. Why?</summary>
+      <div class="err"><code>x = 3</code> throws the old number away every pass.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">Write <code>x = x + 3</code>. The box must read itself first.</p>
+    </details>
+  </div>
+
+  <!-- 36 · Debug 3 — range(5) counts 0 to 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Where is turn 5?</h2>
+<pre style="font-size:clamp(11px,2vmin,20px)"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</pre>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">i</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">0</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="opacity:.3">5</div>
+    </div>
+    <details class="debug-card">
+      <summary>He expected 1, 2, 3, 4, 5. What came out?</summary>
+      <div class="err">0, 1, 2, 3, 4 &mdash; still five numbers.</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)"><code>range(5)</code> counts <b>five turns</b> but starts at 0 and stops before 5.</p>
+    </details>
+    <p class="bilingual">개수는 5개, 시작은 0이에요.</p>
+  </div>
+
+  <!-- 37 · Debug 4 — missing colon -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Nothing ran at all</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)</pre>
+        <p>SyntaxError</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)<span class="str">:</span></pre>
+        <p>Runs</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">The <code>:</code> tells Python "the inside starts now". Same as <code>def towers():</code>.</p>
+    <p class="bilingual">콜론이 없으면 실행이 안 돼요.</p>
+  </div>
+
+  <!-- 38 · Debug 5 — pos in front of the brackets (his real 1 Sept bug) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Your own bug, again</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre><span class="fn">pos</span> (<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>)
+<span class="fn">pos</span><span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span></pre>
+        <p><code>pos</code> is not wrapping the numbers.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre><span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>)</pre>
+        <p>Brackets hug all three numbers.</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">Open bracket straight after <code>pos</code>. Close it after the third number.</p>
+  </div>
+
+  <!-- 39 · Trace Activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Fill in <code>x</code></h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">Start <code>x = 2</code>, add 3 each pass.</p>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div><div class="cell head">i</div><div class="cell head">x</div><div class="cell head">next x</div>
+      <div class="cell">1</div><div class="cell">0</div><div class="cell">2</div><div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell">2</div><div class="cell">1</div><div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div>
+      <div class="cell">3</div><div class="cell">2</div><div class="cell"><details><summary>?</summary><span class="reveal">8</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+      <div class="cell">4</div><div class="cell">3</div><div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">14</span></details></div>
+      <div class="cell">5</div><div class="cell">4</div><div class="cell"><details><summary>?</summary><span class="reveal">14</span></details></div><div class="cell"><details><summary>?</summary><span class="reveal">17</span></details></div>
+    </div>
+  </div>
+
+  <!-- 40 · Quick Quiz 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1 &middot; How many turns does <code>range(7)</code> give?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">7 turns. i is 0, 1, 2, 3, 4, 5, 6.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2 &middot; <code>x = 2</code>, then <code>x = x + 3</code> four times. What is <code>x</code>?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">14. 2, 5, 8, 11, 14.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 41 · Concept — the gap deserves a name -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="pill">Concept</div>
+    <h2>Name the gap 📏</h2>
+    <div class="viz-stage">
+      <div class="vlabel">buried in the loop</div>
+      <div><span class="viz-pill">x = x +</span> <span class="viz-pill num">3</span></div>
+      <div class="viz-arrow">⬇ give the 3 a name</div>
+      <div class="vlabel">now it lives at the top</div>
+      <div><span class="viz-pill">spacing =</span> <span class="viz-pill num">3</span></div>
+      <div><span class="viz-pill">x = x +</span> <span class="viz-pill kw">spacing</span></div>
+    </div>
+    <p style="margin-top:.4em">One place to change the gap. You never touch the loop again.</p>
+    <p class="bilingual">간격에 이름을 주면 바꾸기 쉬워요.</p>
+  </div>
+
+  <!-- 42 · STEP 9 / 18 — v5a -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="pill">v5 &middot; spacing<span class="activity-tag">STEP 9 / 18</span></div>
+    <h2>Add <code>spacing = 3</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = 2</code><br>📍 New line goes <b>UNDER</b> <code>x = 2</code> &middot; indent <b>4</b> spaces &middot; above the <code>for</code> line</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="num">3</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    spacing = <span class="num">3</span></span><span style="opacity:.38">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="num">3</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 A second box. Nothing reads it yet.</span><br><span class="fn">✅ Run it: the same five towers at 2, 5, 8, 11, 14.</span></p>
+  </div>
+
+  <!-- 43 · STEP 10 / 18 — v5b -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">v5 &middot; spacing<span class="activity-tag">STEP 10 / 18</span></div>
+    <h2>Use the box: <code>x + spacing</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = x + 3</code><br>📍 Change <b>that same line</b> &middot; keep indent <b>8</b> &middot; swap the <code>3</code> for <code>spacing</code></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="num">3</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</span><span style="display:block;background:rgba(56,208,224,.14)">        x = x + <span class="kw">spacing</span></span><span style="opacity:.38">
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 The loop now asks the spacing box how far to jump.</span><br><span class="fn">✅ Run it: still 2, 5, 8, 11, 14. Nothing moved.</span></p>
+  </div>
+
+  <!-- 44 · STEP 11 / 18 — spacing = 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">v5 &middot; spacing<span class="activity-tag">STEP 11 / 18</span></div>
+    <h2>Try <code>spacing = 1</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>spacing = 3</code><br>📍 Same line &middot; indent <b>4</b> &middot; touch nothing else</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    spacing = <span class="num">1</span></span><span style="opacity:.38">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 One line changed. The whole skyline changed.</span><br><span class="fn">✅ Run it: five towers touching &mdash; a wall at X 2, 3, 4, 5, 6.</span></p>
+  </div>
+
+  <!-- 45 · Visual — spacing 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">Count</div>
+    <h2>spacing 1 &rarr; a wall</h2>
+    <div class="output-box">
+      <div class="out-label">▸ In the world</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(11px,2vmin,20px)"><span class="num">4</span> ⬛⬜⬜⬜⬜⬜⬛⬛
+<span class="num">2</span> ⬛⬜⬜⬜⬜⬜⬛⬛
+<span class="num">0</span> ⬛⬜⬜⬜⬜⬜⬛⬛
+  <span class="num">1 2 3 4 5 6 7 8</span></pre>
+    </div>
+    <div class="iter-row" style="margin-top:.4em">
+      <span class="code-chip">x</span>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">6</div>
+    </div>
+    <p style="margin-top:.35em">Jumps of 1 leave no gap, so the towers become one wall.</p>
+  </div>
+
+  <!-- 46 · STEP 12 / 18 — spacing = 6 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="pill">v5 &middot; spacing<span class="activity-tag">STEP 12 / 18</span></div>
+    <h2>Try <code>spacing = 6</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>spacing = 1</code><br>📍 Change <b>that same line</b> &middot; keep indent <b>4</b></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    spacing = <span class="num">6</span></span><span style="opacity:.38">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Bigger jumps, wider gaps. Same loop, same fill line.</span><br><span class="fn">✅ Run it: towers at X 2, 8, 14, 20, 26 &mdash; far apart.</span></p>
+  </div>
+
+  <!-- 47 · Visual — spacing 6, and the three skylines side by side -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">Count</div>
+    <h2>One number, three skylines</h2>
+    <div class="output-box">
+      <div class="out-label">▸ spacing 1 &middot; spacing 3 &middot; spacing 6</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(10px,1.8vmin,18px)"><span class="num">1</span> ⬛⬜⬜⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛
+<span class="num">3</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜
+<span class="num">6</span> ⬛⬜⬛⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬜
+  <span class="num">1 2 3 4 5 6 7 8 9 . . . 14</span></pre>
+    </div>
+    <p style="margin-top:.4em">Row 3 leaves two gaps. Row 6 leaves five, and X 20 and 26 run off this picture.</p>
+    <p style="margin-top:.2em">Gap = <code>spacing</code> &minus; 1.</p>
+    <p class="bilingual">간격 숫자 하나가 모양을 바꿔요.</p>
+  </div>
+
+  <!-- 48 · STEP 13 / 18 — spacing back to 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">v5 &middot; spacing<span class="activity-tag">STEP 13 / 18</span></div>
+    <h2>Put it back: <code>spacing = 3</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>spacing = 6</code><br>📍 Change <b>that same line</b> &middot; keep indent <b>4</b></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">6</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span></span><span style="display:block;background:rgba(56,208,224,.14)">    spacing = <span class="num">3</span></span><span style="opacity:.38">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Back to the shape we want before the next idea.</span><br><span class="fn">✅ Run it: towers at 2, 5, 8, 11, 14 again.</span></p>
+  </div>
+
+  <!-- 49 · Concept — i can go inside pos() too -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="pill">Concept</div>
+    <h2><code>i</code> can go in <code>pos()</code></h2>
+    <div class="viz-stage">
+      <div class="vlabel">the counter is just a box</div>
+      <div><span class="viz-pill">pos(</span> <span class="viz-pill kw">x</span> <span class="viz-pill">, </span> <span class="viz-pill num">4</span> <span class="viz-pill">, 1)</span> <span class="vlabel">every tower 5 tall</span></div>
+      <div class="viz-arrow">⬇ put the counter in the Y slot</div>
+      <div><span class="viz-pill">pos(</span> <span class="viz-pill kw">x</span> <span class="viz-pill">, </span> <span class="viz-pill kw">i</span> <span class="viz-pill">, 1)</span> <span class="vlabel">each tower taller</span></div>
+    </div>
+    <p style="margin-top:.4em"><code>i</code> grows 0, 1, 2, 3, 4. So the height grows too.</p>
+    <p class="bilingual">카운터를 Y 자리에 넣으면 키가 자라요.</p>
+  </div>
+
+  <!-- 50 · STEP 14 / 18 — v6a -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 50</span>
+    <div class="pill">v6 &middot; i and z<span class="activity-tag">STEP 14 / 18</span></div>
+    <h2>Swap the <code>4</code> for <code>i</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(x, 4, 1)</code><br>📍 Same line &middot; indent <b>8</b> &middot; only the middle number of the <b>second</b> <code>pos</code></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span style="display:block;background:rgba(56,208,224,.14)">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)</span><span style="opacity:.38">        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Y ends at the turn number, so each tower grows.</span><br><span class="fn">✅ Run it: a staircase, 1 to 5 tall.</span></p>
+  </div>
+
+  <!-- 51 · MANDATORY VISUAL — the staircase, one frame per pass -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 51</span>
+    <div class="pill">Watch it!</div>
+    <h2>Taller every pass 🪜</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">pass</div><div class="cell head">i</div><div class="cell head">x</div><div class="cell head">Y 0 &rarr; i</div><div class="cell head">tall</div>
+      <div class="cell">1</div><div class="cell">0</div><div class="cell">2</div><div class="cell">0&rarr;0</div><div class="cell">1</div>
+      <div class="cell">2</div><div class="cell">1</div><div class="cell">5</div><div class="cell">0&rarr;1</div><div class="cell">2</div>
+      <div class="cell">3</div><div class="cell">2</div><div class="cell">8</div><div class="cell">0&rarr;2</div><div class="cell">3</div>
+      <div class="cell">4</div><div class="cell">3</div><div class="cell">11</div><div class="cell">0&rarr;3</div><div class="cell">4</div>
+      <div class="cell">5</div><div class="cell">4</div><div class="cell">14</div><div class="cell">0&rarr;4</div><div class="cell">5</div>
+    </div>
+    <div class="output-box" style="margin-top:.4em">
+      <div class="out-label">▸ In the world</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(10px,1.8vmin,18px)"><span class="num">4</span> ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜
+<span class="num">3</span> ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬜
+<span class="num">2</span> ⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬜⬛⬛⬜
+<span class="num">1</span> ⬛⬛⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜
+<span class="num">0</span> ⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜⬛⬛⬜</pre>
+    </div>
+  </div>
+
+  <!-- 52 · Concept — two boxes, two speeds -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 52</span>
+    <div class="pill">Concept</div>
+    <h2>Two boxes, two speeds</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div><div class="cell head">x (+3)</div><div class="cell head">z (+1)</div><div class="cell head">where</div>
+      <div class="cell">1</div><div class="cell">2</div><div class="cell">1</div><div class="cell">X2 Z1</div>
+      <div class="cell">2</div><div class="cell">5</div><div class="cell">2</div><div class="cell">X5 Z2</div>
+      <div class="cell">3</div><div class="cell">8</div><div class="cell">3</div><div class="cell">X8 Z3</div>
+      <div class="cell">4</div><div class="cell">11</div><div class="cell">4</div><div class="cell">X11 Z4</div>
+      <div class="cell">5</div><div class="cell">14</div><div class="cell">5</div><div class="cell">X14 Z5</div>
+    </div>
+    <p style="margin-top:.4em">Same loop. Two boxes changing at different speeds.</p>
+    <p style="margin-top:.2em">X across, Z forward &rarr; the towers walk away diagonally.</p>
+  </div>
+
+  <!-- 53 · STEP 15 / 18 — v6b: add z -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 53</span>
+    <div class="pill">v6 &middot; i and z<span class="activity-tag">STEP 15 / 18</span></div>
+    <h2>Add <code>z = 1</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>spacing = 3</code><br>📍 <b>UNDER</b> <code>spacing = 3</code> &middot; indent <b>4</b> spaces &middot; above <code>for</code></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span></span><span style="display:block;background:rgba(56,208,224,.14)">    z = <span class="num">1</span></span><span style="opacity:.38">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 A third box. Z starts at 1, the first free row ahead.</span><br><span class="fn">✅ Run it: same staircase. Nothing reads z yet.</span></p>
+  </div>
+
+  <!-- 54 · STEP 16 / 18 — use z in the third slot -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 54</span>
+    <div class="pill">v6 &middot; i and z<span class="activity-tag">STEP 16 / 18</span></div>
+    <h2>Put <code>z</code> in the third slot</h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>pos(x, 0, 1)</code><br>📍 Same line &middot; indent <b>8</b> &middot; the <b>last</b> number of <b>both</b> <code>pos</code> becomes <code>z</code></p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):</span><span style="display:block;background:rgba(56,208,224,.14)">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="kw">z</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="kw">z</span>), <span class="str">REPLACE</span>)</span><span style="opacity:.38">        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Z reads a box too. It holds 1, so nothing moves.</span><br><span class="fn">✅ Same staircase, same place.</span></p>
+  </div>
+
+  <!-- 55 · STEP 17 / 18 — z = z + 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 55</span>
+    <div class="pill">v6 &middot; i and z<span class="activity-tag">STEP 17 / 18</span></div>
+    <h2>Add <code>z = z + 1</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>x = x + spacing</code><br>📍 <b>UNDER</b> <code>x = x + spacing</code> &middot; indent <b>8</b> spaces</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="kw">z</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="kw">z</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="kw">z</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="kw">z</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span></span><span style="display:block;background:rgba(56,208,224,.14)">        z = z + <span class="num">1</span></span><span style="opacity:.38">
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Two boxes move each pass: x jumps 3, z steps 1.</span><br><span class="fn">✅ Run it: the staircase walks away, one row per tower.</span></p>
+  </div>
+
+  <!-- 56 · Visual — top-down diagonal -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 56</span>
+    <div class="pill">Watch it!</div>
+    <h2>Looking down from above</h2>
+    <div class="output-box">
+      <div class="out-label">▸ Top view &middot; Z forward, X across</div>
+<pre style="background:transparent;padding:0;margin:0;font-size:clamp(10px,1.8vmin,18px)"><span class="num">Z5</span> ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜
+<span class="num">Z4</span> ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬛
+<span class="num">Z3</span> ⬛⬛⬛⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬛
+<span class="num">Z2</span> ⬛⬛⬛⬛⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛
+<span class="num">Z1</span> ⬛⬜⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛
+   <span class="num">1 2 3 4 5 6 7 8 . . . 14</span> <span class="num">X</span></pre>
+    </div>
+    <p style="margin-top:.4em">X jumps 3 each row. Z steps 1. That makes the diagonal.</p>
+    <p class="bilingual">X는 3씩, Z는 1씩 움직여요.</p>
+  </div>
+
+  <!-- 57 · Concept — range(start, stop) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 57</span>
+    <div class="pill">Concept</div>
+    <h2>Two numbers in <code>range</code></h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">range(5)</span>
+<pre><span class="num">0 1 2 3 4</span></pre>
+        <p>Starts at 0.</p>
+      </div>
+      <div class="col good"><span class="tag">range(2, 7)</span>
+<pre><span class="num">2 3 4 5 6</span></pre>
+        <p>Starts at 2, stops before 7.</p>
+      </div>
+    </div>
+    <p style="margin-top:.4em">Both give <b>five</b> turns. You pick where <code>i</code> begins.</p>
+    <p class="bilingual">시작을 고를 수 있어요. 끝 숫자는 안 나와요.</p>
+  </div>
+
+  <!-- 58 · STEP 18 / 18 — range(2, 7) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 58</span>
+    <div class="pill">v6 &middot; i and z<span class="activity-tag">STEP 18 / 18</span></div>
+    <h2>Change to <code>range(2, 7)</code></h2>
+    <p class="practice-task" style="margin-bottom:.35em">🔍 <b>FIND</b> <code>range(5)</code><br>📍 Same line &middot; indent <b>4</b> &middot; keep the <code>:</code> at the end</p>
+    <div><span style="background:var(--soft);color:var(--com);font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">OLD</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="kw">z</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="kw">z</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+        z = z + <span class="num">1</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</pre>
+    <div style="margin-top:.3em"><span style="background:var(--accent);color:#0b0e14;font-weight:800;padding:.05em .5em;border-radius:6px;font-size:13px">NEW</span></div>
+<pre style="font-size:clamp(9px,1.4vmin,14px)"><span style="opacity:.38"><span class="com"># RIO towers</span>
+<span class="kw">def</span> <span class="fn">towers</span>():
+    x = <span class="num">2</span>
+    spacing = <span class="num">3</span>
+    z = <span class="num">1</span></span><span style="display:block;background:rgba(56,208,224,.14)">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>, <span class="num">7</span>):</span><span style="opacity:.38">        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="kw">z</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="kw">i</span>, <span class="kw">z</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">spacing</span>
+        z = z + <span class="num">1</span>
+
+<span class="fn">player.on_chat</span>(<span class="str">"towers"</span>, towers)</span></pre>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.35em"><span class="num">🟣 Still five turns, but i starts at 2, so no tower is 1 tall.</span><br><span class="fn">✅ Run it: towers 3, 4, 5, 6 and 7 tall.</span></p>
+  </div>
+
+  <!-- 59 · Visual — range(2, 7) on the number line -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 59</span>
+    <div class="pill">Count</div>
+    <h2><code>range(2, 7)</code> on the line</h2>
+    <div class="iter-row" style="margin-top:.3em">
+      <span class="code-chip">i</span>
+      <div class="iter-item" style="opacity:.3">0</div>
+      <div class="iter-item" style="opacity:.3">1</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">2</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">3</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">4</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">5</div>
+      <div class="iter-item" style="background:var(--accent);color:#08202a">6</div>
+      <div class="iter-item" style="opacity:.3">7</div>
+    </div>
+    <div class="trace-grid cols-4" style="margin-top:.5em">
+      <div class="cell head">pass</div><div class="cell head">i</div><div class="cell head">Y 0 &rarr; i</div><div class="cell head">tall</div>
+      <div class="cell">1</div><div class="cell">2</div><div class="cell">0&rarr;2</div><div class="cell">3</div>
+      <div class="cell">2</div><div class="cell">3</div><div class="cell">0&rarr;3</div><div class="cell">4</div>
+      <div class="cell">3</div><div class="cell">4</div><div class="cell">0&rarr;4</div><div class="cell">5</div>
+      <div class="cell">4</div><div class="cell">5</div><div class="cell">0&rarr;5</div><div class="cell">6</div>
+      <div class="cell">5</div><div class="cell">6</div><div class="cell">0&rarr;6</div><div class="cell">7</div>
+    </div>
+    <p style="margin-top:.3em">7 &minus; 2 = 5 turns. The stop number never runs.</p>
+  </div>
+
+  <!-- 60 · Modify (faded) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 60</span>
+    <div class="pill">Try it</div>
+    <h2>Fill in the blanks</h2>
+    <p class="practice-hint" style="font-style:normal;opacity:.9;margin-bottom:.3em">Goal: 4 towers, 5 apart, starting at X 1.</p>
+<pre style="font-size:clamp(11px,2vmin,20px)">    x = <span class="kw">___</span>
+    spacing = <span class="kw">___</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="kw">___</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">QUARTZ_BLOCK</span>, <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">0</span>, <span class="num">1</span>), <span class="fn">pos</span>(<span class="kw">x</span>, <span class="num">4</span>, <span class="num">1</span>), <span class="str">REPLACE</span>)
+        x = x + <span class="kw">___</span></pre>
+    <details class="debug-card" style="margin-top:.4em">
+      <summary>Check your answer</summary>
+      <div class="err">x = 1 &middot; spacing = 5 &middot; range(4) &middot; x = x + spacing</div>
+      <p style="font-size:clamp(14px,2.2vmin,18px)">Towers land on X 1, 6, 11, 16.</p>
+    </details>
+  </div>
+
+  <!-- 61 · Quick Quiz 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 61</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two more</h2>
+    <div class="quiz-card">
+      <div class="q">1 &middot; A line at indent <b>8</b> inside the loop runs how many times?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">Once per turn. <code>range(5)</code> means five times.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2 &middot; <code>range(3, 9)</code> gives how many turns?</div>
+      <div class="opts">
+        <details><summary>show answer</summary><div class="ans">6. 9 &minus; 3 = 6. i is 3, 4, 5, 6, 7, 8.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 62 · Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 62</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus rungs</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span> Make 10 towers. Which number changes?</div>
+      <div class="item"><span class="lvl">★★</span> Add <code>height = 4</code> and use it in the Y slot.</div>
+      <div class="item"><span class="lvl">★★★</span> Make <code>x = x - spacing</code>. Which way do they march?</div>
+      <div class="item"><span class="lvl">★★★</span> Swap <code>QUARTZ_BLOCK</code> for <code>GOLD_BLOCK</code> on every second tower.</div>
+    </div>
+  </div>
+
+  <!-- 63 · Exit Ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 63</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One last count</h2>
+    <div class="exit">
+      <div class="label">Before you go</div>
+      <p style="font-size:clamp(16px,2.7vmin,22px)"><code>x = 4</code>, <code>spacing = 2</code>, <code>range(4)</code>.<br>Say all four X values out loud.</p>
+    </div>
+    <div class="iter-row" style="margin-top:.5em">
+      <span class="code-chip">X</span>
+      <div class="iter-item">4</div>
+      <div class="iter-item">5</div>
+      <div class="iter-item">6</div>
+      <div class="iter-item">7</div>
+      <div class="iter-item">8</div>
+      <div class="iter-item">9</div>
+      <div class="iter-item">10</div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:.95;margin-top:.4em"><span class="fn">✅ 4, 6, 8, 10.</span></p>
+  </div>
+
+  <!-- 64 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 64</span>
+    <div class="emoji">🔁</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">The loop counts.<br>You name the numbers.</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">One fill line. Five towers. Three boxes: x, spacing, z.</p>
+    <p class="bilingual">오늘 배운 것: 변수와 반복. 다음 시간: 반복 안의 조건</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&#8249;</button><span class="counter" id="counter">1 / 64</span><button id="next">&#8250;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
