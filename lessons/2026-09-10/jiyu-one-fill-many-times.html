@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minecraft Python &mdash; One Fill, Many Times (JIYU)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">JIYU &middot; Minecraft Python &middot; 2026-09-10</div>
+
+  <!-- 1 · SLOT 1: Title + Objective -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pixel art &middot; for loop</div>
+    <div class="emoji">&#127849;</div>
+    <h1>One Fill,<br>Many Times</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">You will <span class="sub">copy</span> a fill, then <span class="sub">loop</span> it, then <span class="sub">move</span> it with <span class="sub">i</span></p>
+    <p class="bilingual">fill 한 줄을 반복문이 여러 번 그려요</p>
+  </div>
+
+  <!-- 2 · SLOT 2: Recap — her own first leg -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Recap &middot; 25 Aug</div>
+    <h2>Your creeper's first leg</h2>
+    <div class="recap-q">
+      <div class="label">You got this one straight away</div>
+      <div class="q">The leg ran x <code>5</code> to <code>7</code>, y <code>0</code> to <code>7</code>.<br>Write the fill line.</div>
+      <details><summary>Show answer</summary><div class="ans"><code>blocks.fill(PINK_CONCRETE, pos(5, 0, 0), pos(7, 7, 0))</code></div></details>
+    </div>
+  </div>
+
+  <!-- 3 · SLOT 3: Recap — counting backwards, her own win -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 3</span>
+    <div class="pill purple">Recap &middot; 25 Aug</div>
+    <h2>You counted this one alone</h2>
+    <div class="recap-q">
+      <div class="label">Second leg</div>
+      <div class="q">The creeper is 15 wide. You counted back for the second leg.<br>Which two x numbers?</div>
+      <details><summary>Show answer</summary><div class="ans">x <code>10</code> to <code>12</code>. Same y as the first leg.</div></details>
+    </div>
+    <p style="margin-top:.4em">You kept y the same. Most people forget that.</p>
+  </div>
+
+  <!-- 4 · SLOT 4: Recap — one rectangle for body + head -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 4</span>
+    <div class="pill purple">Recap &middot; 25 Aug</div>
+    <h2>One fill can be big</h2>
+    <div class="recap-q">
+      <div class="label">You did this in one try</div>
+      <div class="q">Body and head were <b>one</b> rectangle, not two.<br>How many fill lines was that?</div>
+      <details><summary>Show answer</summary><div class="ans">One line. One fill paints every block between two corners.</div></details>
+    </div>
+    <p class="bilingual">fill 하나가 사각형 하나를 통째로 칠해요</p>
+  </div>
+
+  <!-- 5 · SLOT 5: Ground rule — where the numbers start -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 5</span>
+    <div class="pill">&#128207; Ground rule</div>
+    <h2>y starts at 0. x and z start at 1.</h2>
+    <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="10" width="316" height="196" rx="10" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="172" y="36" font-family="sans-serif" font-size="19" font-weight="800" fill="#8b5cf6" text-anchor="middle">y &#8212; up the wall</text>
+<rect x="90" y="166" width="180" height="22" fill="#d1547e"/><text x="76" y="183" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6" text-anchor="end">0</text>
+<rect x="90" y="140" width="180" height="22" fill="#8f3a57"/><text x="76" y="157" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6" text-anchor="end">1</text>
+<rect x="90" y="114" width="180" height="22" fill="#8f3a57"/><text x="76" y="131" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6" text-anchor="end">2</text>
+<rect x="90" y="88" width="180" height="22" fill="#8f3a57"/><text x="76" y="105" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6" text-anchor="end">3</text>
+<text x="180" y="72" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">the floor row is y 0</text>
+<rect x="350" y="10" width="316" height="196" rx="10" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="508" y="36" font-family="sans-serif" font-size="19" font-weight="800" fill="#38d0e0" text-anchor="middle">x &#8212; along the floor</text>
+<rect x="378" y="104" width="36" height="36" rx="5" fill="#232b3a" stroke="#3a4256" stroke-width="3"/><text x="396" y="128" font-family="sans-serif" font-size="14" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="396" y="160" font-family="monospace" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">0</text>
+<rect x="418" y="104" width="36" height="36" rx="5" fill="#38d0e0"/><text x="436" y="129" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+<rect x="458" y="104" width="36" height="36" rx="5" fill="#2b93a1"/><text x="476" y="129" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+<rect x="498" y="104" width="36" height="36" rx="5" fill="#2b93a1"/><text x="516" y="129" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">3</text>
+<rect x="538" y="104" width="36" height="36" rx="5" fill="#2b93a1"/><text x="556" y="129" font-family="monospace" font-size="18" font-weight="800" fill="#0a0d13" text-anchor="middle">4</text>
+<text x="508" y="176" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">0 is YOU. The first free square is 1.</text>
+<rect x="14" y="216" width="652" height="26" rx="7" fill="#2a1520" stroke="#ff5555" stroke-width="2"/>
+<text x="340" y="235" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">z stays 0 all lesson &mdash; flat art, one layer</text>
+</svg>
+    <p class="bilingual">y는 0부터, x는 1부터, z는 계속 0</p>
+  </div>
+
+  <!-- 6 · SLOT 6: rule retrieval -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 6</span>
+    <div class="pill purple">Quick check</div>
+    <h2>Answer before you scroll</h2>
+    <div class="recap-q">
+      <div class="label">One</div>
+      <div class="q">Bottom row of your art. What is y?</div>
+      <details><summary>Show answer</summary><div class="ans">y = 0. Not 1.</div></details>
+    </div>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="label">Two</div>
+      <div class="q">First column beside you. What is x?</div>
+      <details><summary>Show answer</summary><div class="ans">x = 1. x 0 is where you stand.</div></details>
+    </div>
+  </div>
+
+  <!-- 7 · SLOT 7: Predict (hook) -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 7</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>How many lines do you type?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+      <p style="margin:.2em 0">You want <b>3</b> candy bars in a row.</p>
+      <p style="margin:.2em 0">Your way today: one <code>fill</code> line each.</p>
+      <p style="margin:.2em 0">The new way: one <code>fill</code> line, total.</p>
+      <details><summary>Reveal answer</summary><div class="ans">Your way = 3 lines. New way = 1 fill + 1 loop line. Same row.</div></details>
+    </div>
+    <p class="bilingual">줄 3개 대신 줄 1개</p>
+  </div>
+
+  <!-- 8 · SLOT 8: today's target picture -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 8</span>
+    <div class="pill">Today's build</div>
+    <h2>Three candy bars in a row</h2>
+    <svg viewBox="0 0 420 190" xmlns="http://www.w3.org/2000/svg" style="width:min(76vmin,860px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,20)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="130" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="234" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">x 1&#8211;3</text>
+<text x="169" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">x 5&#8211;7</text>
+<text x="273" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">x 9&#8211;11</text>
+<text x="-12" y="98" font-family="monospace" font-size="15" font-weight="800" fill="#8b5cf6" text-anchor="end">y 0</text>
+<text x="-12" y="20" font-family="monospace" font-size="15" font-weight="800" fill="#8b5cf6" text-anchor="end">y 3</text>
+<text x="169" y="150" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">3 wide, 4 tall, one empty column between</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 9 · SLOT 9: Vocab 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 9</span>
+    <div class="pill">Vocab</div>
+    <h2>Three new words</h2>
+    <div class="vocab-table">
+      <span class="term">for</span>
+      <span class="gloss">do the lines below again and again</span>
+      <span class="ko">반복문</span>
+
+      <span class="term">range(3)</span>
+      <span class="gloss">how many times: 3</span>
+      <span class="ko">횟수</span>
+
+      <span class="term">i</span>
+      <span class="gloss">a box that counts 0, 1, 2 for you</span>
+      <span class="ko">반복 변수</span>
+    </div>
+  </div>
+
+  <!-- 10 · SLOT 10: Vocab 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 10</span>
+    <div class="pill">Vocab</div>
+    <h2>Two more</h2>
+    <div class="vocab-table">
+      <span class="term">pass</span>
+      <span class="gloss">a placeholder line meaning "nothing here yet"</span>
+      <span class="ko">빈 자리</span>
+
+      <span class="term">indent</span>
+      <span class="gloss">4 spaces at the front &mdash; it means "inside"</span>
+      <span class="ko">들여쓰기</span>
+    </div>
+    <p style="margin-top:.5em">Python reads spaces. Spaces are not decoration.</p>
+  </div>
+
+  <!-- 11 · SLOT 11: Concept — one stamp, three presses -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 11</span>
+    <div class="pill">Concept</div>
+    <h2>One stamp, pressed three times</h2>
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="20" width="180" height="150" rx="12" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="104" y="52" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">your stamp</text>
+<rect x="70" y="66" width="68" height="80" rx="6" fill="#d1547e" stroke="#8f3a57" stroke-width="3"/>
+<text x="104" y="192" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">one fill line</text>
+<text x="222" y="104" font-family="sans-serif" font-size="34" font-weight="800" fill="#8a97b8" text-anchor="middle">&#8594;</text>
+<rect x="256" y="20" width="430" height="150" rx="12" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="471" y="52" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">the loop presses it</text>
+<rect x="292" y="66" width="68" height="80" rx="6" fill="#d1547e" stroke="#8f3a57" stroke-width="3"/>
+<text x="326" y="164" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">press 1</text>
+<rect x="428" y="66" width="68" height="80" rx="6" fill="#d1547e" stroke="#8f3a57" stroke-width="3"/>
+<text x="462" y="164" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">press 2</text>
+<rect x="564" y="66" width="68" height="80" rx="6" fill="#d1547e" stroke="#8f3a57" stroke-width="3"/>
+<text x="598" y="164" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">press 3</text>
+<text x="350" y="204" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8">You still only draw the stamp once.</text>
+</svg>
+    <p class="bilingual">도장은 하나, 찍는 건 세 번</p>
+  </div>
+
+  <!-- 12 · SLOT 12: Concept — the counter box i -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 12</span>
+    <div class="pill">Concept</div>
+    <h2><code>i</code> is a box the loop fills for you</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">pass 1</span><span class="val">i = 0</span></div>
+      <div class="varbox"><span class="name">pass 2</span><span class="val">i = 1</span></div>
+      <div class="varbox"><span class="name">pass 3</span><span class="val">i = 2</span></div>
+    </div>
+    <p style="margin-top:.4em">You never type <code>i = 0</code>. The loop does it.</p>
+    <p class="bilingual">i는 0, 1, 2로 저절로 바뀌어요</p>
+  </div>
+
+  <!-- 13 · SLOT 13: Concept — indent means inside -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 13</span>
+    <div class="pill">Concept</div>
+    <h2>Spaces say what is inside</h2>
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="330" height="176" rx="12" fill="#141b27" stroke="#28a745" stroke-width="3"/>
+<text x="179" y="42" font-family="sans-serif" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">&#10003; indented = inside the loop</text>
+<text x="36" y="82" font-family="monospace" font-size="18" font-weight="800" fill="#ff79c6">for i in range(3):</text>
+<rect x="60" y="96" width="264" height="36" rx="6" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="72" y="120" font-family="monospace" font-size="17" font-weight="800" fill="#50fa7b">&#9251;&#9251;&#9251;&#9251;blocks.fill(...)</text>
+<text x="179" y="164" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">runs 3 times</text>
+<rect x="358" y="14" width="330" height="176" rx="12" fill="#141b27" stroke="#dc3545" stroke-width="3"/>
+<text x="523" y="42" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">&#10007; not indented = outside</text>
+<text x="380" y="82" font-family="monospace" font-size="18" font-weight="800" fill="#ff79c6">for i in range(3):</text>
+<rect x="380" y="96" width="264" height="36" rx="6" fill="#33191d" stroke="#dc3545" stroke-width="2"/>
+<text x="392" y="120" font-family="monospace" font-size="17" font-weight="800" fill="#ff9a9a">blocks.fill(...)</text>
+<text x="523" y="164" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">red error &mdash; will not run</text>
+</svg>
+    <p class="bilingual">들여쓰기 = 반복 안에 있다는 뜻</p>
+  </div>
+
+  <!-- 14 · SLOT 14: the plan -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 14</span>
+    <div class="pill purple">The plan</div>
+    <h2>Four versions, one at a time</h2>
+    <ul class="check-list">
+      <li><b>v1</b> &mdash; one fill. One candy bar.</li>
+      <li><b>v2</b> &mdash; the same fill, typed three times.</li>
+      <li><b>v3</b> &mdash; a <code>for</code> loop around one fill.</li>
+      <li><b>v4</b> &mdash; <code>i</code> moves the fill. Three bars, one line.</li>
+    </ul>
+  </div>
+
+  <!-- 15 · SLOT 15: where you type -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 15</span>
+    <div class="pill">Set up</div>
+    <h2>Before STEP 1</h2>
+    <ul class="check-list">
+      <li>Open your Minecraft world and the code editor.</li>
+      <li>Switch the editor to <b>Python</b>, not Blocks.</li>
+      <li>Delete the creeper code. Start with an empty page.</li>
+      <li>Stand facing a flat wall of air with room on your right.</li>
+    </ul>
+    <p class="bilingual">빈 페이지에서 시작해요</p>
+  </div>
+
+  <!-- 16 · STEP 1 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 16</span>
+    <div class="pill">v1<span class="activity-tag">STEP 1 / 21</span></div>
+    <h2>Make the <code>r</code> command</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the empty page &mdash; nothing typed yet<br>&#128205; Type on <b>line 1</b>. <code>pass</code> is indented <b>4</b> spaces.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty page)</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">pass</span>
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> typing <code>r</code> in chat is what runs your code.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code> in chat. Nothing appears. Correct.</p>
+  </div>
+
+  <!-- 17 · STEP 2 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 17</span>
+    <div class="pill">v1<span class="activity-tag">STEP 2 / 21</span></div>
+    <h2>Your first candy bar</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pass</code><br>&#128205; Delete that word. Type the fill in its place &middot; indent <b>4</b> spaces.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">pass</span>
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> this is the shape the loop will repeat later.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. One pink bar, 3 wide and 4 tall, beside you.</p>
+  </div>
+
+  <!-- 18 · read the fill line -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 18</span>
+    <div class="pill">Read it</div>
+    <h2>A fill line has three parts</h2>
+    <svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" style="width:min(88vmin,1000px);height:auto;display:block;margin:.2em auto">
+<rect x="10" y="14" width="700" height="56" rx="10" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="20" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#50fa7b">blocks.fill(</text>
+<text x="150" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c">PINK_CONCRETE</text>
+<text x="320" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">,</text>
+<text x="340" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">pos(1, 0, 0)</text>
+<text x="492" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">,</text>
+<text x="512" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#8b5cf6">pos(3, 3, 0)</text>
+<text x="664" y="52" font-family="monospace" font-size="20" font-weight="800" fill="#50fa7b">)</text>
+<path d="M230 72V102" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="112" y="104" width="236" height="58" rx="8" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/>
+<text x="230" y="128" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">1. which block</text>
+<text x="230" y="150" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">spelling must be exact</text>
+<path d="M400 72V102" stroke="#38d0e0" stroke-width="3"/>
+<rect x="356" y="104" width="148" height="58" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="430" y="128" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">2. start corner</text>
+<text x="430" y="150" font-family="monospace" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">x, y, z</text>
+<path d="M572 72V102" stroke="#8b5cf6" stroke-width="3"/>
+<rect x="512" y="104" width="148" height="58" rx="8" fill="#141b27" stroke="#8b5cf6" stroke-width="2"/>
+<text x="586" y="128" font-family="sans-serif" font-size="16" font-weight="800" fill="#8b5cf6" text-anchor="middle">3. end corner</text>
+<text x="586" y="150" font-family="monospace" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">x, y, z</text>
+<rect x="10" y="180" width="700" height="40" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="360" y="206" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">Two corners. Minecraft paints every block between them.</text>
+</svg>
+  </div>
+
+  <!-- 19 · v1 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 19</span>
+    <div class="pill">v1 &middot; Run it &#128293;</div>
+    <h2>One bar</h2>
+    <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" style="width:min(70vmin,800px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">x 1&#8211;3</text>
+<text x="240" y="58" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">the rest is still air</text>
+<text x="169" y="148" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">1 fill line = 1 bar</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 20 · predict before v2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 20</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>Copy the line. What happens?</h2>
+    <div class="predict-card">
+      <div class="label">Predict first</div>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+      <details><summary>Reveal answer</summary><div class="ans">Still ONE bar. Both lines paint the same squares.</div></details>
+    </div>
+    <p style="margin-top:.4em">A copy only helps once you change its numbers.</p>
+  </div>
+
+  <!-- 21 · STEP 3 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 21</span>
+    <div class="pill">v2<span class="activity-tag">STEP 3 / 21</span></div>
+    <h2>Copy the fill line</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(1, 0, 0), pos(3, 3, 0)</code><br>&#128205; End of that line &middot; <b>Enter</b> &middot; paste &middot; indent <b>4</b></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> a second bar needs a second line.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Still one bar. Both lines paint the same place.</p>
+  </div>
+
+  <!-- 22 · STEP 4 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 22</span>
+    <div class="pill">v2<span class="activity-tag">STEP 4 / 21</span></div>
+    <h2>Move the <b>lower</b> bar's start</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the <b>lower</b> fill line &mdash; the one you just pasted<br>&#128205; In that line only: first <code>pos(1, 0, 0)</code> &#8594; change the <code>1</code> to <code>5</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> the second bar starts 4 squares further right.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Editor only. Do <b>not</b> run yet &mdash; STEP 5 finishes this line.</p>
+  </div>
+
+  <!-- 23 · STEP 5 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 23</span>
+    <div class="pill">v2<span class="activity-tag">STEP 5 / 21</span></div>
+    <h2>Move the <b>lower</b> bar's end</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the same lower line, the second <code>pos(3, 3, 0)</code><br>&#128205; Change the <b>first</b> <code>3</code> inside it to <code>7</code>. Leave the other numbers.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 5 to 7 is 3 wide &mdash; the same width as bar one.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Two bars, one empty column between them.</p>
+  </div>
+
+  <!-- 24 · two bars run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 24</span>
+    <div class="pill">Run it &#128293;</div>
+    <h2>Two bars, two lines</h2>
+    <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" style="width:min(70vmin,800px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="130" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">1&#8211;3</text>
+<text x="117" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#ff9a9a" text-anchor="middle">4</text>
+<text x="169" y="124" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">5&#8211;7</text>
+<text x="169" y="150" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8" text-anchor="middle">column 4 stays air &mdash; that is the gap</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 25 · why 5, not 4 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 25</span>
+    <div class="pill">&#128207; Counting</div>
+    <h2>Why 5, and not 4?</h2>
+    <svg viewBox="0 0 680 190" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="180" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="203" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+<rect x="230" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="253" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+<rect x="280" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="303" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">3</text>
+<rect x="330" y="30" width="46" height="46" rx="6" fill="#232b3a" stroke="#8a97b8" stroke-width="2" stroke-dasharray="5 4"/><text x="353" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8" text-anchor="middle">4</text>
+<rect x="380" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="403" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">5</text>
+<rect x="430" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="453" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">6</text>
+<rect x="480" y="30" width="46" height="46" rx="6" fill="#d1547e"/><text x="503" y="61" font-family="monospace" font-size="19" font-weight="800" fill="#0a0d13" text-anchor="middle">7</text>
+<text x="253" y="22" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">bar 1</text>
+<text x="353" y="22" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8" text-anchor="middle">gap</text>
+<text x="453" y="22" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">bar 2</text>
+<rect x="20" y="94" width="640" height="34" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="340" y="118" font-family="monospace" font-size="19" font-weight="800" fill="#f1fa8c" text-anchor="middle">3 wide + 1 gap = jump of 4</text>
+<rect x="20" y="140" width="640" height="34" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="340" y="164" font-family="monospace" font-size="19" font-weight="800" fill="#7ee0b0" text-anchor="middle">1 &#8594; 5 &#8594; 9 &#8594; 13</text>
+</svg>
+    <p class="bilingual">3칸 + 빈칸 1 = 4씩 이동</p>
+  </div>
+
+  <!-- 26 · STEP 6 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 26</span>
+    <div class="pill">v2<span class="activity-tag">STEP 6 / 21</span></div>
+    <h2>Copy the lower line again</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(5, 0, 0), pos(7, 3, 0)</code><br>&#128205; End of that line &middot; <b>Enter</b> &middot; paste a copy &middot; indent <b>4</b></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> bar three needs its own line too.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Still two bars. The new line paints on top of bar two.</p>
+  </div>
+
+  <!-- 27 · STEP 7 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 27</span>
+    <div class="pill">v2<span class="activity-tag">STEP 7 / 21</span></div>
+    <h2>Move the <b>last</b> bar's start</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the <b>last</b> fill line &mdash; the bottom one of the three<br>&#128205; In that line only: first <code>pos(5, 0, 0)</code> &#8594; change the <code>5</code> to <code>9</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">9</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 5 + 4 = 9. The same jump again.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Editor only. Do <b>not</b> run yet &mdash; STEP 8 finishes this line.</p>
+  </div>
+
+  <!-- 28 · STEP 8 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 28</span>
+    <div class="pill">v2<span class="activity-tag">STEP 8 / 21</span></div>
+    <h2>Move the <b>last</b> bar's end</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the same last line, the second <code>pos(7, 3, 0)</code><br>&#128205; Change the <code>7</code> inside it to <code>11</code>. Leave the rest.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">9</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">9</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">11</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 9 to 11 is 3 wide, like the other two.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Three bars in a row. v2 done.</p>
+  </div>
+
+  <!-- 29 · v2 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 29</span>
+    <div class="pill">v2 &middot; Run it &#128293;</div>
+    <h2>Three bars, three lines</h2>
+    <svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,820px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="130" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="234" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">1&#8211;3</text>
+<text x="169" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">5&#8211;7</text>
+<text x="273" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">9&#8211;11</text>
+<text x="169" y="150" font-family="sans-serif" font-size="17" font-weight="800" fill="#f1fa8c" text-anchor="middle">It works. But it cost 3 lines.</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 30 · the cost of copying -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 30</span>
+    <div class="pill">Think</div>
+    <h2>What if you wanted 20 bars?</h2>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="330" height="172" rx="12" fill="#141b27" stroke="#dc3545" stroke-width="3"/>
+<text x="179" y="44" font-family="sans-serif" font-size="18" font-weight="800" fill="#ff9a9a" text-anchor="middle">copy and paste</text>
+<text x="179" y="94" font-family="monospace" font-size="44" font-weight="800" fill="#ff9a9a" text-anchor="middle">20</text>
+<text x="179" y="122" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">lines to type</text>
+<text x="179" y="150" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">40 numbers to get right</text>
+<text x="179" y="174" font-family="sans-serif" font-size="16" font-weight="700" fill="#ff9a9a" text-anchor="middle">40 chances for a comma slip</text>
+<rect x="358" y="14" width="330" height="172" rx="12" fill="#141b27" stroke="#28a745" stroke-width="3"/>
+<text x="523" y="44" font-family="sans-serif" font-size="18" font-weight="800" fill="#7ee0b0" text-anchor="middle">a for loop</text>
+<text x="523" y="94" font-family="monospace" font-size="44" font-weight="800" fill="#7ee0b0" text-anchor="middle">2</text>
+<text x="523" y="122" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">lines to type</text>
+<text x="523" y="150" font-family="sans-serif" font-size="17" font-weight="700" fill="#8a97b8" text-anchor="middle">20 or 100 &#8212; still 2 lines</text>
+<text x="523" y="174" font-family="sans-serif" font-size="16" font-weight="700" fill="#7ee0b0" text-anchor="middle">one place to fix a mistake</text>
+</svg>
+    <p class="bilingual">복사는 늘어나고, 반복문은 그대로예요</p>
+  </div>
+
+  <!-- 31 · the pattern in the numbers -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 31</span>
+    <div class="pill">Spot it</div>
+    <h2>Your three lines hide a pattern</h2>
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="42" rx="8" fill="#1e1e2e"/>
+<text x="26" y="42" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE, pos(</text>
+<text x="352" y="42" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">1</text>
+<text x="365" y="42" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 0, 0), pos(</text>
+<text x="500" y="42" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">3</text>
+<text x="513" y="42" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 3, 0))</text>
+<rect x="14" y="62" width="672" height="42" rx="8" fill="#1e1e2e"/>
+<text x="26" y="90" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE, pos(</text>
+<text x="352" y="90" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">5</text>
+<text x="365" y="90" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 0, 0), pos(</text>
+<text x="500" y="90" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">7</text>
+<text x="513" y="90" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 3, 0))</text>
+<rect x="14" y="110" width="672" height="42" rx="8" fill="#1e1e2e"/>
+<text x="26" y="138" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE, pos(</text>
+<text x="352" y="138" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">9</text>
+<text x="365" y="138" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 0, 0), pos(</text>
+<text x="494" y="138" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">11</text>
+<text x="513" y="138" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 3, 0))</text>
+<rect x="14" y="164" width="672" height="44" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="192" font-family="sans-serif" font-size="18" font-weight="800" fill="#7ee0b0" text-anchor="middle">Only two numbers move. Everything else is identical.</text>
+</svg>
+  </div>
+
+  <!-- 32 · Concept: for -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 32</span>
+    <div class="pill">Watch it! &#128064;</div>
+    <h2>A loop counts for you</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">pass 1</div>
+        <div class="iter-item">pass 2</div>
+        <div class="iter-item">pass 3</div>
+      </div>
+      <div class="var-row"><span class="label">i = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span></span></div>
+      <div class="output-box">
+        <div class="out-label">&#9656; what gets drawn</div>
+        <div class="out-line">bar at x 1</div>
+        <div class="out-line">bar at x 5</div>
+        <div class="out-line">bar at x 9</div>
+      </div>
+    </div>
+    <p class="bilingual">i가 0, 1, 2로 바뀌며 세 번 그려요</p>
+  </div>
+
+  <!-- 33 · what range(3) counts -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 33</span>
+    <div class="pill">&#128207; Counting</div>
+    <h2><code>range(3)</code> gives 0, 1, 2</h2>
+    <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<text x="340" y="34" font-family="monospace" font-size="24" font-weight="800" fill="#f1fa8c" text-anchor="middle">range(3)</text>
+<rect x="180" y="52" width="64" height="64" rx="8" fill="#38d0e0"/><text x="212" y="96" font-family="monospace" font-size="28" font-weight="800" fill="#0a0d13" text-anchor="middle">0</text>
+<rect x="256" y="52" width="64" height="64" rx="8" fill="#38d0e0"/><text x="288" y="96" font-family="monospace" font-size="28" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+<rect x="332" y="52" width="64" height="64" rx="8" fill="#38d0e0"/><text x="364" y="96" font-family="monospace" font-size="28" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+<rect x="408" y="52" width="64" height="64" rx="8" fill="#33191d" stroke="#dc3545" stroke-width="3"/><text x="440" y="96" font-family="monospace" font-size="28" font-weight="800" fill="#ff9a9a" text-anchor="middle">3</text>
+<text x="440" y="138" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">never</text>
+<text x="288" y="138" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">3 passes</text>
+<rect x="60" y="156" width="560" height="36" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="340" y="181" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">Start at 0. Stop <tspan fill="#f1fa8c">before</tspan> the number in the brackets.</text>
+</svg>
+    <p class="bilingual">0부터 시작해서 3 직전까지</p>
+  </div>
+
+  <!-- 34 · quick check range -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 34</span>
+    <div class="pill purple">Quick check</div>
+    <h2>Say it out loud</h2>
+    <div class="recap-q">
+      <div class="label">One</div>
+      <div class="q"><code>range(5)</code> &mdash; which numbers does <code>i</code> take?</div>
+      <details><summary>Show answer</summary><div class="ans">0, 1, 2, 3, 4. Five passes. Never 5.</div></details>
+    </div>
+    <div class="recap-q" style="margin-top:.5em">
+      <div class="label">Two</div>
+      <div class="q">You want 3 bars. What goes inside <code>range( )</code>?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>3</code>. The number is how many passes.</div></details>
+    </div>
+  </div>
+
+  <!-- 35 · anatomy of the for line -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 35</span>
+    <div class="pill">Read it</div>
+    <h2>Every part of the loop line</h2>
+    <svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" style="width:min(88vmin,1000px);height:auto;display:block;margin:.2em auto">
+<rect x="10" y="14" width="700" height="52" rx="10" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="40" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#ff79c6">for</text>
+<text x="98" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#38d0e0">i</text>
+<text x="128" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#ff79c6">in</text>
+<text x="178" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#50fa7b">range(</text>
+<text x="278" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#bd93f9">3</text>
+<text x="294" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#50fa7b">)</text>
+<text x="312" y="50" font-family="monospace" font-size="24" font-weight="800" fill="#ff5555">:</text>
+<path d="M48 68V92" stroke="#ff79c6" stroke-width="3"/><text x="48" y="112" font-family="sans-serif" font-size="15" font-weight="800" fill="#ff79c6" text-anchor="middle">repeat</text>
+<path d="M101 68V122" stroke="#38d0e0" stroke-width="3"/><text x="112" y="142" font-family="sans-serif" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">counter box</text>
+<path d="M282 68V92" stroke="#bd93f9" stroke-width="3"/><text x="282" y="112" font-family="sans-serif" font-size="15" font-weight="800" fill="#bd93f9" text-anchor="middle">how many</text>
+<path d="M316 68V122" stroke="#ff5555" stroke-width="3"/><text x="392" y="142" font-family="sans-serif" font-size="15" font-weight="800" fill="#ff5555" text-anchor="middle">colon &mdash; never forget it</text>
+<rect x="10" y="162" width="700" height="78" rx="10" fill="#141b27" stroke="#28a745" stroke-width="2"/>
+<text x="34" y="194" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">for i in range(3):</text>
+<text x="34" y="224" font-family="monospace" font-size="20" font-weight="800" fill="#50fa7b">&#9251;&#9251;&#9251;&#9251;blocks.fill(...)</text>
+<text x="500" y="212" font-family="sans-serif" font-size="16" font-weight="800" fill="#7ee0b0" text-anchor="middle">colon, then 4 spaces</text>
+</svg>
+    <p class="bilingual">콜론 하나, 들여쓰기 네 칸</p>
+  </div>
+
+  <!-- 36 · bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 36</span>
+    <div class="pill purple">Bridge</div>
+    <h1 style="font-size:clamp(30px,5.6vmin,60px)">Now throw two lines away</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Back to one fill. The loop will make the copies.</p>
+    <p class="bilingual">복사본은 지우고, 반복문에게 맡겨요</p>
+  </div>
+
+  <!-- 37 · STEP 9 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 37</span>
+    <div class="pill">v3<span class="activity-tag">STEP 9 / 21</span></div>
+    <h2>Delete the last fill line</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(9, 0, 0), pos(11, 3, 0)</code><br>&#128205; Select that whole line and delete it. Delete the empty line too.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">9</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">11</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> the loop is going to write these copies for you.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Two fill lines left in the editor.</p>
+  </div>
+
+  <!-- 38 · STEP 10 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 38</span>
+    <div class="pill">v3<span class="activity-tag">STEP 10 / 21</span></div>
+    <h2>Delete the second fill line</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(5, 0, 0), pos(7, 3, 0)</code><br>&#128205; Select that whole line and delete it. One fill line left.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> you are back at v1 &mdash; exactly one shape.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. One bar again. Old bars stay until you rebuild.</p>
+  </div>
+
+  <!-- 39 · STEP 11 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 39</span>
+    <div class="pill">v3<span class="activity-tag">STEP 11 / 21</span></div>
+    <h2>Add the loop line</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>blocks.fill(PINK_CONCRETE, pos(1, 0, 0)</code><br>&#128205; Start of that line &middot; <b>Enter</b> &middot; arrow up &middot; type it &middot; indent <b>4</b></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+<span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> it repeats the indented lines below it, 3 times.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Red mark in the editor. Expected. STEP 12 fixes it.</p>
+  </div>
+
+  <!-- 40 · STEP 12 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 40</span>
+    <div class="pill">v3<span class="activity-tag">STEP 12 / 21</span></div>
+    <h2>Push the fill line in</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>blocks.fill(PINK_CONCRETE, pos(1, 0, 0)</code><br>&#128205; Click at the very start of that line &middot; press <b>Tab</b> once &middot; it now has <b>8</b> spaces</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 8 spaces puts the fill <b>inside</b> the loop.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; The red mark is gone. v3 is ready to run.</p>
+  </div>
+
+  <!-- 41 · predict v3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 41</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>Three passes. How many bars?</h2>
+    <div class="predict-card">
+      <div class="label">Predict before you run</div>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+      <details><summary>Reveal answer</summary><div class="ans">ONE bar. It runs 3 times, but always at x 1 to 3.</div></details>
+    </div>
+    <p style="margin-top:.4em">Type <code>r</code> and check your guess.</p>
+  </div>
+
+  <!-- 42 · v3 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 42</span>
+    <div class="pill">v3 &middot; Run it &#128293;</div>
+    <h2>Three passes, one bar</h2>
+    <svg viewBox="0 0 420 176" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,820px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#f1fa8c" text-anchor="middle">painted 3&#215;</text>
+<text x="240" y="58" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">still air out here</text>
+<text x="169" y="152" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">Same squares, painted pink three times.</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 43 · why only one -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 43</span>
+    <div class="pill">&#128161; The reason</div>
+    <h2>The fill line never mentions <code>i</code></h2>
+    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="46" rx="8" fill="#1e1e2e" stroke="#38d0e0" stroke-width="2"/>
+<text x="34" y="45" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">for </text>
+<text x="82" y="45" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">i</text>
+<text x="98" y="45" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8"> in range(3):</text>
+<text x="420" y="45" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0">i is here &#10003;</text>
+<rect x="14" y="70" width="672" height="46" rx="8" fill="#1e1e2e" stroke="#dc3545" stroke-width="2"/>
+<text x="60" y="101" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE, pos(1, 0, 0), ...)</text>
+<text x="530" y="101" font-family="sans-serif" font-size="16" font-weight="800" fill="#ff9a9a">no i &#10007;</text>
+<rect x="14" y="128" width="672" height="34" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="350" y="152" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">The counter changes. The fill never looks at it.</text>
+<rect x="14" y="170" width="672" height="40" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="196" font-family="sans-serif" font-size="18" font-weight="800" fill="#7ee0b0" text-anchor="middle">Fix: put i inside the fill line.</text>
+</svg>
+    <p class="bilingual">fill 안에 i가 없어서 안 움직여요</p>
+  </div>
+
+  <!-- 44 · where can i go -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 44</span>
+    <div class="pill">Concept</div>
+    <h2><code>i</code> can sit in any number slot</h2>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="20" width="672" height="50" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="26" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE, pos(</text>
+<text x="352" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">1</text>
+<text x="365" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, </text>
+<text x="391" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6">0</text>
+<text x="404" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 0), pos(</text>
+<text x="521" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#f1fa8c">3</text>
+<text x="534" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, </text>
+<text x="560" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8b5cf6">3</text>
+<text x="573" y="53" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">, 0))</text>
+<path d="M356 74V104" stroke="#f1fa8c" stroke-width="3"/><path d="M525 74V104" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="300" y="106" width="280" height="42" rx="8" fill="#141b27" stroke="#f1fa8c" stroke-width="2"/>
+<text x="440" y="133" font-family="sans-serif" font-size="17" font-weight="800" fill="#f1fa8c" text-anchor="middle">the two x slots &#8212; today</text>
+<path d="M395 74V162" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5 4"/><path d="M564 74V162" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="480" y="182" font-family="sans-serif" font-size="16" font-weight="800" fill="#8b5cf6" text-anchor="middle">the two y slots &#8212; later, for floors</text>
+</svg>
+    <p class="bilingual">i는 어떤 숫자 자리에도 들어갈 수 있어요</p>
+  </div>
+
+  <!-- 45 · the maths -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 45</span>
+    <div class="pill">&#129518; Maths</div>
+    <h2><code>1 + i * 4</code> gives 1, 5, 9</h2>
+    <svg viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="12" width="672" height="40" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="350" y="39" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">times first, then plus &#8212; same as in maths class</text>
+<rect x="14" y="60" width="672" height="46" rx="8" fill="#1e1e2e"/>
+<text x="40" y="90" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">i = 0</text>
+<text x="200" y="90" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">1 + 0 &#215; 4</text>
+<text x="400" y="90" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">= 1 + 0</text>
+<text x="580" y="90" font-family="monospace" font-size="22" font-weight="800" fill="#f1fa8c">= 1</text>
+<rect x="14" y="112" width="672" height="46" rx="8" fill="#1e1e2e"/>
+<text x="40" y="142" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">i = 1</text>
+<text x="200" y="142" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">1 + 1 &#215; 4</text>
+<text x="400" y="142" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">= 1 + 4</text>
+<text x="580" y="142" font-family="monospace" font-size="22" font-weight="800" fill="#f1fa8c">= 5</text>
+<rect x="14" y="164" width="672" height="46" rx="8" fill="#1e1e2e"/>
+<text x="40" y="194" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">i = 2</text>
+<text x="200" y="194" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">1 + 2 &#215; 4</text>
+<text x="400" y="194" font-family="monospace" font-size="20" font-weight="800" fill="#8a97b8">= 1 + 8</text>
+<text x="580" y="194" font-family="monospace" font-size="22" font-weight="800" fill="#f1fa8c">= 9</text>
+</svg>
+    <p class="bilingual">곱하기 먼저, 그다음 더하기</p>
+  </div>
+
+  <!-- 46 · STEP 13 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 46</span>
+    <div class="pill">v4<span class="activity-tag">STEP 13 / 21</span></div>
+    <h2>Put <code>i</code> in the start corner</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(1, 0, 0)</code> &mdash; first pos on the fill line<br>&#128205; Same line &middot; indent <b>8</b> &middot; replace the <code>1</code> only</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> the left edge now moves 4 squares every pass.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Editor only. Do <b>not</b> run yet.</p>
+  </div>
+
+  <!-- 47 · STEP 14 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 47</span>
+    <div class="pill">v4<span class="activity-tag">STEP 14 / 21</span></div>
+    <h2>Put <code>i</code> in the end corner</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(3, 3, 0)</code> on the same line<br>&#128205; Replace the <b>first</b> <code>3</code> only. The second one is the height.</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> both edges must move together, or the bar stretches.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Three bars &mdash; from one fill line.</p>
+  </div>
+
+  <!-- 48 · MANDATORY loop visual -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 48</span>
+    <div class="pill">Watch it! &#128064;</div>
+    <h2>One pass, one bar</h2>
+    <svg viewBox="0 0 690 244" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1100px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="220" height="230" rx="12" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="110" y="28" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8" text-anchor="middle">pass 1</text>
+<text x="110" y="62" font-family="monospace" font-size="26" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<text x="110" y="90" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">1 + 0 &#215; 4 = 1</text>
+<text x="110" y="112" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">3 + 0 &#215; 4 = 3</text>
+<rect x="26" y="126" width="168" height="56" fill="#1e2430"/>
+<rect x="40" y="126" width="42" height="56" fill="#d1547e" stroke="#f1fa8c" stroke-width="2"/>
+<text x="110" y="208" font-family="monospace" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">draws x 1 to 3</text>
+</g>
+<g transform="translate(235,0)">
+<rect x="0" y="0" width="220" height="230" rx="12" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="110" y="28" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8" text-anchor="middle">pass 2</text>
+<text x="110" y="62" font-family="monospace" font-size="26" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<text x="110" y="90" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">1 + 1 &#215; 4 = 5</text>
+<text x="110" y="112" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">3 + 1 &#215; 4 = 7</text>
+<rect x="26" y="126" width="168" height="56" fill="#1e2430"/>
+<rect x="40" y="126" width="42" height="56" fill="#6b3044"/>
+<rect x="96" y="126" width="42" height="56" fill="#d1547e" stroke="#f1fa8c" stroke-width="2"/>
+<text x="110" y="208" font-family="monospace" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">draws x 5 to 7</text>
+</g>
+<g transform="translate(470,0)">
+<rect x="0" y="0" width="220" height="230" rx="12" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="110" y="28" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8" text-anchor="middle">pass 3</text>
+<text x="110" y="62" font-family="monospace" font-size="26" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="110" y="90" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">1 + 2 &#215; 4 = 9</text>
+<text x="110" y="112" font-family="monospace" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">3 + 2 &#215; 4 = 11</text>
+<rect x="26" y="126" width="168" height="56" fill="#1e2430"/>
+<rect x="40" y="126" width="42" height="56" fill="#6b3044"/>
+<rect x="96" y="126" width="42" height="56" fill="#6b3044"/>
+<rect x="152" y="126" width="42" height="56" fill="#d1547e" stroke="#f1fa8c" stroke-width="2"/>
+<text x="110" y="208" font-family="monospace" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">draws x 9 to 11</text>
+</g>
+</svg>
+    <p>Bright = this pass. Dark = already built.</p>
+    <p class="bilingual">한 바퀴에 막대 하나씩</p>
+  </div>
+
+  <!-- 49 · v4 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 49</span>
+    <div class="pill">v4 &middot; Run it &#128293;</div>
+    <h2>Three bars &mdash; one fill line</h2>
+    <svg viewBox="0 0 420 176" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,820px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="130" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="234" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<text x="169" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<text x="273" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="169" y="152" font-family="sans-serif" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">Same picture as v2. Two lines shorter.</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 50 · whole v4 program -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 50</span>
+    <div class="pill">v4 &middot; The whole thing</div>
+    <h2>Read it top to bottom</h2>
+<pre style="font-size:clamp(12px,2.3vmin,26px)"><span class="dim"><span class="kw">def</span> <span class="fn">on_chat</span>():</span><span class="hot">    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</span><span class="hot">        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.6em">
+      <div class="out-label">&#9656; In the world</div>
+      <div style="opacity:1">3 pink bars at x 1&#8211;3, 5&#8211;7, 9&#8211;11</div>
+    </div>
+  </div>
+
+  <!-- 51 · trace activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 51</span>
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Fill in the table</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">pass</div>
+      <div class="cell head">i</div>
+      <div class="cell head">1 + i &#215; 4</div>
+      <div class="cell head">3 + i &#215; 4</div>
+
+      <div class="cell">1st</div>
+      <div class="cell"><code>0</code></div>
+      <div class="cell"><code>1</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">2nd</div>
+      <div class="cell"><code>1</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">7</span></details></div>
+
+      <div class="cell">3rd</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">11</span></details></div>
+    </div>
+    <p style="margin-top:.4em">Say each sum out loud before you tap.</p>
+  </div>
+
+  <!-- 52 · why times 4 -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 52</span>
+    <div class="pill">Concept</div>
+    <h2>The <code>4</code> is the spacing</h2>
+    <svg viewBox="0 0 700 216" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<text x="26" y="34" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">i * </text>
+<text x="76" y="34" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c">4</text>
+<g transform="translate(120,14)">
+<rect x="0" y="0" width="26" height="26" fill="#d1547e"/><rect x="26" y="0" width="26" height="26" fill="#d1547e"/><rect x="52" y="0" width="26" height="26" fill="#d1547e"/>
+<rect x="78" y="0" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="1"/>
+<rect x="104" y="0" width="26" height="26" fill="#d1547e"/><rect x="130" y="0" width="26" height="26" fill="#d1547e"/><rect x="156" y="0" width="26" height="26" fill="#d1547e"/>
+<rect x="182" y="0" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="1"/>
+<rect x="208" y="0" width="26" height="26" fill="#d1547e"/><rect x="234" y="0" width="26" height="26" fill="#d1547e"/><rect x="260" y="0" width="26" height="26" fill="#d1547e"/>
+<text x="330" y="20" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8">gap of 1</text>
+</g>
+<text x="26" y="94" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">i * </text>
+<text x="76" y="94" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c">6</text>
+<g transform="translate(120,74)">
+<rect x="0" y="0" width="26" height="26" fill="#d1547e"/><rect x="26" y="0" width="26" height="26" fill="#d1547e"/><rect x="52" y="0" width="26" height="26" fill="#d1547e"/>
+<rect x="78" y="0" width="78" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="1"/>
+<rect x="156" y="0" width="26" height="26" fill="#d1547e"/><rect x="182" y="0" width="26" height="26" fill="#d1547e"/><rect x="208" y="0" width="26" height="26" fill="#d1547e"/>
+<text x="330" y="20" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8">gap of 3</text>
+</g>
+<text x="26" y="154" font-family="monospace" font-size="18" font-weight="800" fill="#8a97b8">i * </text>
+<text x="76" y="154" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c">3</text>
+<g transform="translate(120,134)">
+<rect x="0" y="0" width="26" height="26" fill="#d1547e"/><rect x="26" y="0" width="26" height="26" fill="#d1547e"/><rect x="52" y="0" width="26" height="26" fill="#d1547e"/>
+<rect x="78" y="0" width="26" height="26" fill="#d1547e"/><rect x="104" y="0" width="26" height="26" fill="#d1547e"/><rect x="130" y="0" width="26" height="26" fill="#d1547e"/>
+<rect x="156" y="0" width="26" height="26" fill="#d1547e"/><rect x="182" y="0" width="26" height="26" fill="#d1547e"/><rect x="208" y="0" width="26" height="26" fill="#d1547e"/>
+<text x="330" y="20" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8">no gap &#8212; one long wall</text>
+</g>
+<rect x="14" y="176" width="672" height="34" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="199" font-family="sans-serif" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">Bar is 3 wide. Multiply by 3 and they touch.</text>
+</svg>
+  </div>
+
+  <!-- 53 · modify: change the spacing -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 53</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Change one number twice</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> both copies of <code>i * 4</code> on the fill line<br>&#128205; Change both <code>4</code>s to <code>6</code> &middot; run &middot; then change both back to <code>4</code></p>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">6</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">6</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Bars spread out. Gap of 3 instead of 1.</p>
+  </div>
+
+  <!-- 54 · Common mistake 1: the comma slip -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 54</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>The missing commas</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre><span class="fn">pos</span>(<span class="num">770</span>)</pre>
+        <p>Three numbers glued into one number.</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre><span class="fn">pos</span>(<span class="num">7</span>, <span class="num">1</span>, <span class="num">0</span>)</pre>
+        <p>Comma, space. Comma, space.</p>
+      </div>
+    </div>
+    <details class="debug-card"><summary>What the editor says</summary>
+      <div class="err">TypeError: pos() missing 2 required positional arguments: 'y' and 'z'</div>
+      <div class="debug-reveal">Nothing gets built. <code>pos</code> always needs three numbers.</div>
+    </details>
+  </div>
+
+  <!-- 55 · comma slip inside a loop -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 55</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Inside a loop it costs more</h2>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="330" height="172" rx="12" fill="#141b27" stroke="#8a97b8" stroke-width="2"/>
+<text x="179" y="44" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">before &#8212; 3 typed lines</text>
+<text x="179" y="92" font-family="monospace" font-size="40" font-weight="800" fill="#8a97b8" text-anchor="middle">1 of 3</text>
+<text x="179" y="126" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">one bar missing</text>
+<text x="179" y="160" font-family="sans-serif" font-size="16" font-weight="700" fill="#8a97b8" text-anchor="middle">the bars before it still appear</text>
+<rect x="358" y="14" width="330" height="172" rx="12" fill="#141b27" stroke="#dc3545" stroke-width="3"/>
+<text x="523" y="44" font-family="sans-serif" font-size="18" font-weight="800" fill="#ff9a9a" text-anchor="middle">now &#8212; 1 line in a loop</text>
+<text x="523" y="92" font-family="monospace" font-size="40" font-weight="800" fill="#ff9a9a" text-anchor="middle">3 of 3</text>
+<text x="523" y="126" font-family="sans-serif" font-size="16" font-weight="700" fill="#ff9a9a" text-anchor="middle">every pass breaks</text>
+<text x="523" y="160" font-family="sans-serif" font-size="16" font-weight="700" fill="#ff9a9a" text-anchor="middle">nothing appears at all</text>
+</svg>
+    <p class="bilingual">반복 안 실수는 매번 반복돼요</p>
+  </div>
+
+  <!-- 56 · count the commas -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 56</span>
+    <div class="pill">&#128207; Habit</div>
+    <h2>Count the commas before you run</h2>
+    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="52" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="30" y="48" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8">blocks.fill(PINK_CONCRETE</text>
+<text x="304" y="48" font-family="monospace" font-size="26" font-weight="800" fill="#f1fa8c">,</text>
+<text x="320" y="48" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8"> pos(1</text>
+<text x="390" y="48" font-family="monospace" font-size="26" font-weight="800" fill="#f1fa8c">,</text>
+<text x="404" y="48" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8"> 0</text>
+<text x="428" y="48" font-family="monospace" font-size="26" font-weight="800" fill="#f1fa8c">,</text>
+<text x="442" y="48" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8"> 0)</text>
+<text x="476" y="48" font-family="monospace" font-size="26" font-weight="800" fill="#f1fa8c">,</text>
+<text x="490" y="48" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8"> pos(3, 3, 0))</text>
+<rect x="14" y="80" width="326" height="44" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="177" y="108" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">2 commas inside each pos( )</text>
+<rect x="360" y="80" width="326" height="44" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="523" y="108" font-family="sans-serif" font-size="17" font-weight="800" fill="#38d0e0" text-anchor="middle">2 commas between the 3 parts</text>
+<rect x="14" y="136" width="672" height="44" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="164" font-family="sans-serif" font-size="18" font-weight="800" fill="#7ee0b0" text-anchor="middle">Point at each comma. Say the number after it.</text>
+</svg>
+  </div>
+
+  <!-- 57 · Common mistake 2: overwrite vs add -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 57</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Change the old line, or add a new one?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">overwrite</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>One line. You get 1 bar.</p>
+      </div>
+      <div class="col good"><span class="tag">add a line</span>
+<pre>    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">0</span>))
+    <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">7</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>Two lines. You get 2 bars.</p>
+      </div>
+    </div>
+    <p style="margin-top:.3em"><b>Move</b> a shape? Change numbers. <b>Another</b> shape? Add a line.</p>
+  </div>
+
+  <!-- 58 · overwrite vs add inside a loop -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 58</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>The same choice, inside a loop</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">changed the name</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">LIME_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>Still 3 bars. All of them turn green.</p>
+      </div>
+      <div class="col good"><span class="tag">added a line</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))
+        <span class="fn">blocks.fill</span>(<span class="str">LIME_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">4</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">5</span>, <span class="num">0</span>))</pre>
+        <p>6 shapes. Every pass now draws twice.</p>
+      </div>
+    </div>
+    <p style="margin-top:.3em">One extra line inside a loop is <b>three</b> extra shapes.</p>
+  </div>
+
+  <!-- 59 · Common mistake 3: spelling -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 59</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Block names are spelt exactly</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre><span class="str">PINK_CONRETE</span>
+<span class="str">pink_concrete</span>
+<span class="str">PINK CONCRETE</span></pre>
+        <p>Missing letter. Small letters. A space.</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre><span class="str">PINK_CONCRETE</span></pre>
+        <p>All capitals. Underscore between the words.</p>
+      </div>
+    </div>
+    <details class="debug-card"><summary>What the editor says</summary>
+      <div class="err">NameError: name 'PINK_CONRETE' is not defined</div>
+      <div class="debug-reveal">The name in quotes is <b>your typing</b>. Read it letter by letter.</div>
+    </details>
+  </div>
+
+  <!-- 60 · read the error -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 60</span>
+    <div class="pill">&#128269; Habit</div>
+    <h2>When nothing appears, read the red line</h2>
+    <svg viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="52" rx="8" fill="#33191d" stroke="#dc3545" stroke-width="2"/>
+<text x="34" y="46" font-family="monospace" font-size="19" font-weight="800" fill="#ff9a9a">NameError: name 'PINK_CONRETE' is not defined</text>
+<rect x="14" y="80" width="216" height="66" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="122" y="106" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">1. What kind?</text>
+<text x="122" y="130" font-family="monospace" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">NameError = spelling</text>
+<rect x="242" y="80" width="216" height="66" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="350" y="106" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">2. Which word?</text>
+<text x="350" y="130" font-family="monospace" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">the one in quotes</text>
+<rect x="470" y="80" width="216" height="66" rx="8" fill="#141b27" stroke="#38d0e0" stroke-width="2"/>
+<text x="578" y="106" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">3. Compare</text>
+<text x="578" y="130" font-family="monospace" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">letter by letter</text>
+<rect x="14" y="160" width="672" height="60" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="186" font-family="monospace" font-size="19" font-weight="800" fill="#ff9a9a" text-anchor="middle">PINK_CON&#8212;RETE</text>
+<text x="350" y="210" font-family="monospace" font-size="19" font-weight="800" fill="#7ee0b0" text-anchor="middle">PINK_CON C RETE</text>
+</svg>
+  </div>
+
+  <!-- 61 · Quiz 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 61</span>
+    <div class="pill purple">Quiz<span class="activity-tag">1 of 3</span></div>
+    <h2>How many passes?</h2>
+    <div class="quiz-card">
+      <div class="q"><code>for i in range(4):</code> &mdash; how many times does the fill run?</div>
+      <div class="opts">
+        <details><summary>3 times</summary><div class="ans">No. That would be <code>range(3)</code>.</div></details>
+        <details><summary>4 times</summary><div class="ans">Yes. i takes 0, 1, 2, 3.</div></details>
+        <details><summary>5 times</summary><div class="ans">No. 4 is where it stops, not an extra pass.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 62 · Quiz 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 62</span>
+    <div class="pill purple">Quiz<span class="activity-tag">2 of 3</span></div>
+    <h2>Where does the third bar start?</h2>
+    <div class="quiz-card">
+      <div class="q"><code>pos(1 + i * 4, 0, 0)</code> on the third pass. What is the x?</div>
+      <div class="opts">
+        <details><summary>x = 9</summary><div class="ans">Yes. Third pass means i is 2. 1 + 2 &#215; 4 = 9.</div></details>
+        <details><summary>x = 13</summary><div class="ans">No. That is i = 3, a fourth pass.</div></details>
+        <details><summary>x = 12</summary><div class="ans">No. Multiply first, then add the 1.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 63 · Quiz 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 63</span>
+    <div class="pill purple">Quiz<span class="activity-tag">3 of 3</span></div>
+    <h2>Only the start corner uses <code>i</code></h2>
+    <div class="quiz-card">
+      <div class="q"><code>pos(1 + i * 4, 0, 0), pos(3, 3, 0)</code> &mdash; what happens on pass 3?</div>
+      <div class="opts">
+        <details><summary>The bar stretches from 3 to 9</summary><div class="ans">Yes. One corner moved, one stayed.</div></details>
+        <details><summary>Nothing is drawn</summary><div class="ans">No. Backwards corners still fill.</div></details>
+        <details><summary>A 3-wide bar at x 9</summary><div class="ans">No. The end corner is stuck at 3.</div></details>
+      </div>
+    </div>
+    <p style="margin-top:.3em">Both corners move, or neither.</p>
+  </div>
+
+  <!-- 64 · new idea: a list of block names -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 64</span>
+    <div class="pill">New idea</div>
+    <h2>A list is a shelf of block names</h2>
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="46" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="30" y="45" font-family="monospace" font-size="19" font-weight="800" fill="#38d0e0">candy</text>
+<text x="112" y="45" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8">= [</text>
+<text x="158" y="45" font-family="monospace" font-size="19" font-weight="800" fill="#f1fa8c">PINK_CONCRETE, LIME_CONCRETE, YELLOW_CONCRETE</text>
+<text x="642" y="45" font-family="monospace" font-size="19" font-weight="800" fill="#8a97b8">]</text>
+<rect x="70" y="86" width="170" height="80" rx="10" fill="#d1547e" stroke="#8f3a57" stroke-width="3"/>
+<text x="155" y="122" font-family="monospace" font-size="30" font-weight="800" fill="#0a0d13" text-anchor="middle">0</text>
+<text x="155" y="150" font-family="sans-serif" font-size="15" font-weight="800" fill="#3a1420" text-anchor="middle">PINK</text>
+<rect x="256" y="86" width="170" height="80" rx="10" fill="#7fb238" stroke="#4f7020" stroke-width="3"/>
+<text x="341" y="122" font-family="monospace" font-size="30" font-weight="800" fill="#0a0d13" text-anchor="middle">1</text>
+<text x="341" y="150" font-family="sans-serif" font-size="15" font-weight="800" fill="#1e2c0c" text-anchor="middle">LIME</text>
+<rect x="442" y="86" width="170" height="80" rx="10" fill="#f1af15" stroke="#a3760a" stroke-width="3"/>
+<text x="527" y="122" font-family="monospace" font-size="30" font-weight="800" fill="#0a0d13" text-anchor="middle">2</text>
+<text x="527" y="150" font-family="sans-serif" font-size="15" font-weight="800" fill="#3a2b02" text-anchor="middle">YELLOW</text>
+<text x="350" y="196" font-family="sans-serif" font-size="18" font-weight="800" fill="#8a97b8" text-anchor="middle">Slot numbers start at 0 &#8212; the same numbers <tspan fill="#38d0e0">i</tspan> already counts.</text>
+</svg>
+    <p class="bilingual">리스트는 블록 이름 선반이에요</p>
+  </div>
+
+  <!-- 65 · STEP 15 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 65</span>
+    <div class="pill">v5<span class="activity-tag">STEP 15 / 21</span></div>
+    <h2>Make the shelf</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>for i in range(3):</code><br>&#128205; Click the <b>start</b> of that line &middot; <b>Enter</b> &middot; arrow up &middot; type the list &middot; indent <b>4</b></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre><span class="kw">def</span> <span class="fn">on_chat</span>():
+    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>, <span class="str">YELLOW_CONCRETE</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> three block names, kept in order, ready to pick from.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Still three pink bars. The shelf is not used yet.</p>
+  </div>
+
+  <!-- 66 · candy[i] visual -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 66</span>
+    <div class="pill">Watch it! &#128064;</div>
+    <h2><code>candy[i]</code> picks a different name each pass</h2>
+    <div class="viz viz-3">
+      <div class="iter-row">
+        <div class="iter-item">PINK</div>
+        <div class="iter-item">LIME</div>
+        <div class="iter-item">YELLOW</div>
+      </div>
+      <div class="var-row"><span class="label">candy[ i ] &nbsp; i = </span><span class="var-vals"><span class="var-val">0</span><span class="var-val">1</span><span class="var-val">2</span></span></div>
+      <div class="output-box">
+        <div class="out-label">&#9656; block the fill uses</div>
+        <div class="out-line">PINK_CONCRETE</div>
+        <div class="out-line">LIME_CONCRETE</div>
+        <div class="out-line">YELLOW_CONCRETE</div>
+      </div>
+    </div>
+    <p class="bilingual">i가 선반 칸 번호가 돼요</p>
+  </div>
+
+  <!-- 67 · STEP 16 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 67</span>
+    <div class="pill">v5<span class="activity-tag">STEP 16 / 21</span></div>
+    <h2>Take the name off the shelf</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>blocks.fill(PINK_CONCRETE, pos(1 + i * 4</code><br>&#128205; Same line, indent <b>8</b> &middot; replace <code>PINK_CONCRETE</code> with <code>candy[i]</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> the same counter that moves the bar now chooses its colour.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. Pink, then green, then yellow.</p>
+  </div>
+
+  <!-- 68 · v5 run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 68</span>
+    <div class="pill">v5 &middot; Run it &#128293;</div>
+    <h2>One counter, two jobs</h2>
+    <svg viewBox="0 0 420 176" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,820px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#8f3a57" stroke-width="2"/>
+<rect x="130" y="0" width="78" height="104" fill="#7fb238" stroke="#4f7020" stroke-width="2"/>
+<rect x="234" y="0" width="78" height="104" fill="#f1af15" stroke="#a3760a" stroke-width="2"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="65" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<text x="169" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<text x="273" y="124" font-family="monospace" font-size="15" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="169" y="152" font-family="sans-serif" font-size="17" font-weight="800" fill="#7ee0b0" text-anchor="middle">i sets the place AND the colour.</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 69 · list length must match -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 69</span>
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>The shelf must be long enough</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</pre>
+        <p>2 names, 3 passes. Pass 3 asks for slot 2, which does not exist.</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>, <span class="str">YELLOW_CONCRETE</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</pre>
+        <p>3 names, 3 passes. Every slot exists.</p>
+      </div>
+    </div>
+    <p style="margin-top:.3em">Names in the list = number in <code>range( )</code>.</p>
+  </div>
+
+  <!-- 70 · Quiz 4 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 70</span>
+    <div class="pill purple">Quiz<span class="activity-tag">4</span></div>
+    <h2>Which slot?</h2>
+    <div class="quiz-card">
+      <div class="q"><code>candy = [PINK_CONCRETE, LIME_CONCRETE, YELLOW_CONCRETE]</code><br>What is <code>candy[1]</code>?</div>
+      <div class="opts">
+        <details><summary>LIME_CONCRETE</summary><div class="ans">Yes. Slot 0 is pink, so slot 1 is lime.</div></details>
+        <details><summary>PINK_CONCRETE</summary><div class="ans">No. That is <code>candy[0]</code>.</div></details>
+        <details><summary>YELLOW_CONCRETE</summary><div class="ans">No. That is <code>candy[2]</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 71 · new idea: a loop inside a loop -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 71</span>
+    <div class="pill">New idea</div>
+    <h2>A loop inside a loop</h2>
+    <svg viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="200" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+<text x="40" y="48" font-family="monospace" font-size="20" font-weight="800" fill="#8b5cf6">for j in range(3):</text>
+<text x="480" y="48" font-family="sans-serif" font-size="16" font-weight="800" fill="#8b5cf6">outer &#8212; the floors</text>
+<rect x="60" y="62" width="612" height="140" rx="10" fill="#1a2230" stroke="#38d0e0" stroke-width="3"/>
+<text x="86" y="96" font-family="monospace" font-size="20" font-weight="800" fill="#38d0e0">for i in range(3):</text>
+<text x="520" y="96" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0">inner &#8212; the bars</text>
+<rect x="110" y="112" width="546" height="76" rx="8" fill="#1e1e2e" stroke="#50fa7b" stroke-width="2"/>
+<text x="132" y="146" font-family="monospace" font-size="18" font-weight="800" fill="#50fa7b">blocks.fill( ... )</text>
+<text x="132" y="174" font-family="sans-serif" font-size="16" font-weight="800" fill="#8a97b8">runs 3 &#215; 3 = 9 times</text>
+</svg>
+    <p class="bilingual">바깥 반복 한 번에 안쪽 반복 세 번</p>
+  </div>
+
+  <!-- 72 · nested counters visual -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 72</span>
+    <div class="pill">Watch it! &#128064;</div>
+    <h2>The inner counter restarts every time</h2>
+    <svg viewBox="0 0 700 236" xmlns="http://www.w3.org/2000/svg" style="width:min(90vmin,1040px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="220" height="220" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+<text x="110" y="34" font-family="monospace" font-size="22" font-weight="800" fill="#8b5cf6" text-anchor="middle">j = 0</text>
+<text x="110" y="58" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">floor at y 0</text>
+<rect x="24" y="72" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="96" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<rect x="24" y="112" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="136" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<rect x="24" y="152" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="176" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="110" y="208" font-family="sans-serif" font-size="15" font-weight="800" fill="#7ee0b0" text-anchor="middle">3 bars drawn</text>
+</g>
+<g transform="translate(240,0)">
+<rect x="0" y="0" width="220" height="220" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+<text x="110" y="34" font-family="monospace" font-size="22" font-weight="800" fill="#8b5cf6" text-anchor="middle">j = 1</text>
+<text x="110" y="58" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">floor at y 5</text>
+<rect x="24" y="72" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="96" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<rect x="24" y="112" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="136" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<rect x="24" y="152" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="176" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="110" y="208" font-family="sans-serif" font-size="15" font-weight="800" fill="#7ee0b0" text-anchor="middle">3 more bars</text>
+</g>
+<g transform="translate(480,0)">
+<rect x="0" y="0" width="220" height="220" rx="12" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+<text x="110" y="34" font-family="monospace" font-size="22" font-weight="800" fill="#8b5cf6" text-anchor="middle">j = 2</text>
+<text x="110" y="58" font-family="sans-serif" font-size="15" font-weight="700" fill="#8a97b8" text-anchor="middle">floor at y 10</text>
+<rect x="24" y="72" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="96" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 0</text>
+<rect x="24" y="112" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="136" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 1</text>
+<rect x="24" y="152" width="172" height="34" rx="7" fill="#1e2430"/><text x="110" y="176" font-family="monospace" font-size="18" font-weight="800" fill="#38d0e0" text-anchor="middle">i = 2</text>
+<text x="110" y="208" font-family="sans-serif" font-size="15" font-weight="800" fill="#7ee0b0" text-anchor="middle">3 more bars</text>
+</g>
+</svg>
+    <p class="bilingual">j가 한 칸 오를 때 i는 0부터 다시 세요</p>
+  </div>
+
+  <!-- 73 · STEP 17 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 73</span>
+    <div class="pill">v6<span class="activity-tag">STEP 17 / 21</span></div>
+    <h2>Add the outer loop line</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>for i in range(3):</code><br>&#128205; Click its <b>start</b> &middot; <b>Enter</b> &middot; arrow up &middot; type the new line &middot; indent <b>4</b></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>, <span class="str">YELLOW_CONCRETE</span>]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>, <span class="str">YELLOW_CONCRETE</span>]
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> <code>j</code> will count the floors. A second counter needs a second name.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Red mark in the editor. Expected. STEPS 18 and 19 fix it.</p>
+  </div>
+
+  <!-- 74 · STEP 18 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 74</span>
+    <div class="pill">v6<span class="activity-tag">STEP 18 / 21</span></div>
+    <h2>Push the inner loop in</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>for i in range(3):</code><br>&#128205; Click the very start of that line &middot; press <b>Tab</b> once &middot; now <b>8</b> spaces</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> the inner loop must sit inside the outer one.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Still a red mark. One more indent to go.</p>
+  </div>
+
+  <!-- 75 · STEP 19 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 75</span>
+    <div class="pill">v6<span class="activity-tag">STEP 19 / 21</span></div>
+    <h2>Push the fill line in</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>blocks.fill(candy[i]</code><br>&#128205; Click the very start of that line &middot; press <b>Tab</b> once &middot; now <b>12</b> spaces</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 12 spaces puts the fill inside <b>both</b> loops.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Red mark gone. Ready to run.</p>
+  </div>
+
+  <!-- 76 · predict v6 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 76</span>
+    <div class="pill">Predict &#129300;</div>
+    <h2>Nine fills. How many bars?</h2>
+    <div class="predict-card">
+      <div class="label">Predict before you run</div>
+<pre style="font-size:clamp(12px,2.1vmin,20px)">    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+      <details><summary>Reveal answer</summary><div class="ans">Still 3 bars. The y numbers never change, so all 3 floors land on top of each other.</div></details>
+    </div>
+  </div>
+
+  <!-- 77 · v6 broken run -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 77</span>
+    <div class="pill">v6 &middot; Run it &#128293;</div>
+    <h2>Nine fills, three bars</h2>
+    <svg viewBox="0 0 420 176" xmlns="http://www.w3.org/2000/svg" style="width:min(72vmin,820px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(56,16)">
+<rect x="0" y="0" width="338" height="104" fill="#141b27"/>
+<path d="M0 0V104M26 0V104M52 0V104M78 0V104M104 0V104M130 0V104M156 0V104M182 0V104M208 0V104M234 0V104M260 0V104M286 0V104M312 0V104M338 0V104M0 0H338M0 26H338M0 52H338M0 78H338M0 104H338" stroke="#2b3446" stroke-width="1.2" fill="none"/>
+<rect x="26" y="0" width="78" height="104" fill="#d1547e" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="130" y="0" width="78" height="104" fill="#7fb238" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="234" y="0" width="78" height="104" fill="#f1af15" stroke="#f1fa8c" stroke-width="3"/>
+<rect x="0" y="78" width="26" height="26" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="13" y="96" font-family="sans-serif" font-size="11" font-weight="800" fill="#8a97b8" text-anchor="middle">you</text>
+<text x="169" y="126" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1fa8c" text-anchor="middle">each bar painted 3 times</text>
+<text x="169" y="152" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">Same problem as v3 &mdash; j is not in the fill.</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 78 · why: j not used -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 78</span>
+    <div class="pill">&#128161; The reason</div>
+    <h2>The y numbers never move</h2>
+    <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="20" width="672" height="50" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="26" y="53" font-family="monospace" font-size="17" font-weight="800" fill="#8a97b8">blocks.fill(candy[i], pos(1 + i * 4, </text>
+<text x="418" y="53" font-family="monospace" font-size="20" font-weight="800" fill="#ff9a9a">0</text>
+<text x="432" y="53" font-family="monospace" font-size="17" font-weight="800" fill="#8a97b8">, 0), pos(3 + i * 4, </text>
+<text x="654" y="53" font-family="monospace" font-size="20" font-weight="800" fill="#ff9a9a">3</text>
+<text x="668" y="53" font-family="monospace" font-size="17" font-weight="800" fill="#8a97b8">...</text>
+<path d="M422 74V102" stroke="#ff9a9a" stroke-width="3"/><path d="M658 74V102" stroke="#ff9a9a" stroke-width="3"/>
+<rect x="300" y="104" width="386" height="42" rx="8" fill="#33191d" stroke="#dc3545" stroke-width="2"/>
+<text x="493" y="131" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">the two y slots &#8212; frozen at 0 and 3</text>
+<rect x="14" y="156" width="672" height="40" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="182" font-family="monospace" font-size="19" font-weight="800" fill="#7ee0b0" text-anchor="middle">Fix: 0 + j * 5 and 3 + j * 5</text>
+</svg>
+    <p class="bilingual">y에 j를 넣어야 층이 올라가요</p>
+  </div>
+
+  <!-- 79 · STEP 20 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 79</span>
+    <div class="pill">v7<span class="activity-tag">STEP 20 / 21</span></div>
+    <h2>Lift the floor's bottom</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(1 + i * 4, 0, 0)</code><br>&#128205; Same fill line, indent <b>12</b> &middot; change the <b>middle</b> number <code>0</code> to <code>0 + j * 5</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> 4 tall + 1 gap = each floor sits 5 higher.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Editor only. Do <b>not</b> run yet &mdash; STEP 21 finishes it.</p>
+  </div>
+
+  <!-- 80 · STEP 21 / 21 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 80</span>
+    <div class="pill">v7<span class="activity-tag">STEP 21 / 21</span></div>
+    <h2>Lift the floor's top</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> <code>pos(3 + i * 4, 3, 0)</code><br>&#128205; Same line &middot; change the <b>middle</b> number <code>3</code> to <code>3 + j * 5</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>))</pre></div>
+    </div>
+    <p style="margin-top:.3em">&#128995; <b>Why:</b> both y edges rise together, so every floor stays 4 tall.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Type <code>r</code>. A wall of 9 candy bars, 3 floors high.</p>
+  </div>
+
+  <!-- 81 · v7 run: the wall -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 81</span>
+    <div class="pill">v7 &middot; Run it &#128293;</div>
+    <h2>Nine bars from one fill line</h2>
+    <svg viewBox="0 0 340 350" xmlns="http://www.w3.org/2000/svg" style="width:min(48vmin,420px);height:auto;display:block;margin:.2em auto">
+<g transform="translate(50,16)">
+<rect x="0" y="0" width="260" height="280" fill="#141b27"/>
+<path d="M0 0V280M20 0V280M40 0V280M60 0V280M80 0V280M100 0V280M120 0V280M140 0V280M160 0V280M180 0V280M200 0V280M220 0V280M240 0V280M260 0V280M0 0H260M0 20H260M0 40H260M0 60H260M0 80H260M0 100H260M0 120H260M0 140H260M0 160H260M0 180H260M0 200H260M0 220H260M0 240H260M0 260H260M0 280H260" stroke="#2b3446" stroke-width="1" fill="none"/>
+<rect x="20" y="200" width="60" height="80" fill="#d1547e"/><rect x="100" y="200" width="60" height="80" fill="#7fb238"/><rect x="180" y="200" width="60" height="80" fill="#f1af15"/>
+<rect x="20" y="100" width="60" height="80" fill="#d1547e"/><rect x="100" y="100" width="60" height="80" fill="#7fb238"/><rect x="180" y="100" width="60" height="80" fill="#f1af15"/>
+<rect x="20" y="0" width="60" height="80" fill="#d1547e"/><rect x="100" y="0" width="60" height="80" fill="#7fb238"/><rect x="180" y="0" width="60" height="80" fill="#f1af15"/>
+<rect x="0" y="260" width="20" height="20" fill="#232b3a" stroke="#3a4256" stroke-width="2"/>
+<text x="-8" y="248" font-family="monospace" font-size="14" font-weight="800" fill="#8b5cf6" text-anchor="end">j 0</text>
+<text x="-8" y="148" font-family="monospace" font-size="14" font-weight="800" fill="#8b5cf6" text-anchor="end">j 1</text>
+<text x="-8" y="48" font-family="monospace" font-size="14" font-weight="800" fill="#8b5cf6" text-anchor="end">j 2</text>
+<text x="50" y="300" font-family="monospace" font-size="14" font-weight="800" fill="#38d0e0" text-anchor="middle">i 0</text>
+<text x="130" y="300" font-family="monospace" font-size="14" font-weight="800" fill="#38d0e0" text-anchor="middle">i 1</text>
+<text x="210" y="300" font-family="monospace" font-size="14" font-weight="800" fill="#38d0e0" text-anchor="middle">i 2</text>
+<text x="130" y="326" font-family="sans-serif" font-size="16" font-weight="800" fill="#7ee0b0" text-anchor="middle">3 &#215; 3 = 9 bars</text>
+</g>
+</svg>
+  </div>
+
+  <!-- 82 · the whole finished program -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 82</span>
+    <div class="pill">Finished</div>
+    <h2>Your whole program</h2>
+<pre style="font-size:clamp(10px,1.85vmin,18px)"><span class="dim"><span class="kw">def</span> <span class="fn">on_chat</span>():</span><span class="dim">    candy = [<span class="str">PINK_CONCRETE</span>, <span class="str">LIME_CONCRETE</span>, <span class="str">YELLOW_CONCRETE</span>]</span><span class="dim">    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</span><span class="dim">        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</span><span class="hot">            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>))</span><span class="dim"><span class="fn">player.on_chat</span>(<span class="str">"r"</span>, on_chat)</span></pre>
+    <div class="output-box" style="margin-top:.6em">
+      <div class="out-label">&#9656; In the world</div>
+      <div style="opacity:1">9 candy bars &mdash; 3 colours across, 3 floors up</div>
+    </div>
+  </div>
+
+  <!-- 83 · nested trace activity -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 83</span>
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Fill in the table</h2>
+    <div class="trace-grid cols-5">
+      <div class="cell head">fill number</div>
+      <div class="cell head">j</div>
+      <div class="cell head">i</div>
+      <div class="cell head">x start</div>
+      <div class="cell head">y start</div>
+
+      <div class="cell">1st</div>
+      <div class="cell"><code>0</code></div>
+      <div class="cell"><code>0</code></div>
+      <div class="cell"><code>1</code></div>
+      <div class="cell"><code>0</code></div>
+
+      <div class="cell">2nd</div>
+      <div class="cell"><code>0</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+
+      <div class="cell">4th</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+
+      <div class="cell">9th</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">10</span></details></div>
+    </div>
+  </div>
+
+  <!-- 84 · count the fills -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 84</span>
+    <div class="pill">&#129518; Maths</div>
+    <h2>Outer &#215; inner = total</h2>
+    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" style="width:min(84vmin,960px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="200" height="80" rx="10" fill="#141b27" stroke="#8b5cf6" stroke-width="3"/>
+<text x="114" y="48" font-family="sans-serif" font-size="16" font-weight="800" fill="#8b5cf6" text-anchor="middle">outer j</text>
+<text x="114" y="80" font-family="monospace" font-size="28" font-weight="800" fill="#8b5cf6" text-anchor="middle">3</text>
+<text x="240" y="64" font-family="monospace" font-size="30" font-weight="800" fill="#8a97b8" text-anchor="middle">&#215;</text>
+<rect x="266" y="14" width="200" height="80" rx="10" fill="#141b27" stroke="#38d0e0" stroke-width="3"/>
+<text x="366" y="48" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">inner i</text>
+<text x="366" y="80" font-family="monospace" font-size="28" font-weight="800" fill="#38d0e0" text-anchor="middle">3</text>
+<text x="492" y="64" font-family="monospace" font-size="30" font-weight="800" fill="#8a97b8" text-anchor="middle">=</text>
+<rect x="518" y="14" width="168" height="80" rx="10" fill="#1d3325" stroke="#28a745" stroke-width="3"/>
+<text x="602" y="48" font-family="sans-serif" font-size="16" font-weight="800" fill="#7ee0b0" text-anchor="middle">fills</text>
+<text x="602" y="80" font-family="monospace" font-size="28" font-weight="800" fill="#7ee0b0" text-anchor="middle">9</text>
+<rect x="14" y="108" width="672" height="34" rx="8" fill="#141b27" stroke="#232b3a" stroke-width="2"/>
+<text x="350" y="132" font-family="sans-serif" font-size="17" font-weight="800" fill="#8a97b8" text-anchor="middle">range(5) outside and range(4) inside would be 20 fills.</text>
+<rect x="14" y="148" width="672" height="34" rx="8" fill="#33191d" stroke="#dc3545" stroke-width="2"/>
+<text x="350" y="172" font-family="sans-serif" font-size="17" font-weight="800" fill="#ff9a9a" text-anchor="middle">Big numbers build slowly. Keep them under 10 in class.</text>
+</svg>
+  </div>
+
+  <!-- 85 · OPTIONAL range with three numbers -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 85</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>range</code> can take three numbers</h2>
+    <svg viewBox="0 0 700 210" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="52" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="150" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#50fa7b">range(</text>
+<text x="250" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#38d0e0">1</text>
+<text x="266" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#8a97b8">, </text>
+<text x="298" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#ff79c6">10</text>
+<text x="330" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#8a97b8">, </text>
+<text x="362" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#f1af15">2</text>
+<text x="378" y="49" font-family="monospace" font-size="24" font-weight="800" fill="#50fa7b">)</text>
+<path d="M254 68V96" stroke="#38d0e0" stroke-width="3"/><text x="200" y="118" font-family="sans-serif" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="middle">start here</text>
+<path d="M310 68V126" stroke="#ff79c6" stroke-width="3"/><text x="380" y="148" font-family="sans-serif" font-size="16" font-weight="800" fill="#ff79c6" text-anchor="middle">stop before this</text>
+<path d="M366 68V96" stroke="#f1af15" stroke-width="3"/><text x="530" y="118" font-family="sans-serif" font-size="16" font-weight="800" fill="#f1af15" text-anchor="middle">jump size</text>
+<rect x="14" y="160" width="672" height="42" rx="8" fill="#1d3325" stroke="#28a745" stroke-width="2"/>
+<text x="350" y="187" font-family="monospace" font-size="20" font-weight="800" fill="#7ee0b0" text-anchor="middle">i takes 1, 3, 5, 7, 9</text>
+</svg>
+    <p class="bilingual">시작, 끝, 뛰는 크기</p>
+  </div>
+
+  <!-- 86 · OPTIONAL range step worked out -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 86</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The same row without the maths</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">the way you know</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>i is 0, 1, 2. You do the sum.</p>
+      </div>
+      <div class="col good"><span class="tag">the short way</span>
+<pre>    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">13</span>, <span class="num">4</span>):
+        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(i, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(i <span class="kw">+</span> <span class="num">2</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>i is already 1, 5, 9. No multiplying.</p>
+      </div>
+    </div>
+    <p style="margin-top:.3em">Same three bars. Two ways to say it.</p>
+  </div>
+
+  <!-- 87 · OPTIONAL: i in z -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 87</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Move <code>i</code> to the z slot</h2>
+    <p class="practice-task">&#128269; <b>FIND</b> the fill line<br>&#128205; Move the maths to the <b>third</b> number of each pos</p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">i in x</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">3</span>, <span class="num">0</span>))</pre>
+        <p>Runs across, left to right.</p>
+      </div>
+      <div class="col good"><span class="tag">i in z</span>
+<pre>        <span class="fn">blocks.fill</span>(<span class="str">PINK_CONCRETE</span>, <span class="fn">pos</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>), <span class="fn">pos</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>))</pre>
+        <p>Runs away from you.</p>
+      </div>
+    </div>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; The bars march away instead of sideways.</p>
+  </div>
+
+  <!-- 88 · OPTIONAL: minus instead of plus -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 88</span>
+    <div class="pill">New idea<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A minus makes it shrink</h2>
+    <svg viewBox="0 0 700 214" xmlns="http://www.w3.org/2000/svg" style="width:min(86vmin,980px);height:auto;display:block;margin:.2em auto">
+<rect x="14" y="14" width="672" height="44" rx="8" fill="#1e1e2e" stroke="#3a4256" stroke-width="2"/>
+<text x="350" y="44" font-family="monospace" font-size="20" font-weight="800" fill="#f1fa8c" text-anchor="middle">pos(1, 0, 0), pos(9 &#8722; i * 3, 3, 0)</text>
+<g transform="translate(60,72)">
+<text x="-16" y="22" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="end">i 0</text>
+<rect x="0" y="4" width="234" height="24" fill="#d1547e"/><text x="256" y="24" font-family="monospace" font-size="15" font-weight="800" fill="#8a97b8">ends at 9</text>
+<text x="-16" y="60" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="end">i 1</text>
+<rect x="0" y="42" width="156" height="24" fill="#d1547e"/><text x="256" y="62" font-family="monospace" font-size="15" font-weight="800" fill="#8a97b8">ends at 6</text>
+<text x="-16" y="98" font-family="monospace" font-size="16" font-weight="800" fill="#38d0e0" text-anchor="end">i 2</text>
+<rect x="0" y="80" width="78" height="24" fill="#d1547e"/><text x="256" y="100" font-family="monospace" font-size="15" font-weight="800" fill="#8a97b8">ends at 3</text>
+</g>
+<rect x="14" y="186" width="672" height="24" rx="6" fill="#141b27"/>
+<text x="350" y="204" font-family="sans-serif" font-size="16" font-weight="800" fill="#7ee0b0" text-anchor="middle">Plus grows to the right. Minus shrinks back.</text>
+</svg>
+    <p class="bilingual">더하기는 늘고, 빼기는 줄어요</p>
+  </div>
+
+  <!-- 89 · Modify 1 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 89</span>
+    <div class="pill">Try it</div>
+    <h2>Fill in the blanks</h2>
+    <p style="margin:0">Pick any three block names you like.</p>
+<pre>    candy = [<span class="str">___________</span>, <span class="str">___________</span>, <span class="str">___________</span>]</pre>
+    <p style="margin-top:.5em">Ideas: <code>RED_CONCRETE</code> &middot; <code>BLUE_CONCRETE</code> &middot; <code>PURPLE_CONCRETE</code> &middot; <code>GOLD_BLOCK</code></p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Three names, two commas, capitals and underscores.</p>
+  </div>
+
+  <!-- 90 · Modify 2 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 90</span>
+    <div class="pill">Try it</div>
+    <h2>Make the bars taller</h2>
+    <p style="margin:0">&#128269; FIND the two <code>3</code>s that are the <b>height</b>, not the x maths.</p>
+<pre>            <span class="fn">blocks.fill</span>(candy[i], <span class="fn">pos</span>(<span class="num">1</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num">0</span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>), <span class="fn">pos</span>(<span class="num">3</span> <span class="kw">+</span> i <span class="kw">*</span> <span class="num">4</span>, <span class="num"><span class="sub">3</span></span> <span class="kw">+</span> j <span class="kw">*</span> <span class="num">5</span>, <span class="num">0</span>))</pre>
+    <p style="margin-top:.5em">Change the highlighted <code>3</code> to <code>5</code>. Then change <code>j * 5</code> to <code>j * 7</code> in both places, or the floors will overlap.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; Taller bars, floors still separate.</p>
+  </div>
+
+  <!-- 91 · Modify 3 -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 91</span>
+    <div class="pill">Try it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Four floors instead of three</h2>
+    <p style="margin:0">&#128269; FIND <code>for j in range(3):</code></p>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">OLD</span>
+<pre>    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):</pre></div>
+      <div class="col good"><span class="tag">NEW</span>
+<pre>    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):</pre></div>
+    </div>
+    <p style="margin-top:.3em">The inner loop and the list do not change. Only the floors.</p>
+    <p class="practice-hint" style="font-style:normal;opacity:1;color:#15803d;font-weight:700">&#9989; 12 bars now. 4 &#215; 3 = 12.</p>
+  </div>
+
+  <!-- 92 · Code Talk Frame -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 92</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it to Kasim</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>for i in range(3)</code> runs the fill <span class="blank"></span> times, and <code>1 + i * 4</code> moves it <span class="blank"></span> squares each pass."</div>
+      <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+    </div>
+  </div>
+
+  <!-- 93 · Make / Your Turn -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 93</span>
+    <div class="pill">Your turn!</div>
+    <h2>Build a fence &#128293;</h2>
+    <ul class="check-list">
+      <li>Start from your finished program.</li>
+      <li>Change the list to one block name repeated three times.</li>
+      <li>Change <code>i * 4</code> to <code>i * 3</code> in both places.</li>
+      <li>Run it. The bars touch and become one long wall.</li>
+    </ul>
+    <p class="bilingual">간격을 3으로 하면 벽이 돼요</p>
+  </div>
+
+  <!-- 94 · Stretch -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 94</span>
+    <div class="pill">Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>If you finish early</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">&#9733;</span>Add a fourth colour and change <code>range(3)</code> to <code>range(4)</code> on the inner loop.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;</span>Use <code>candy[j]</code> instead of <code>candy[i]</code>. Which way do the colours run now?</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;&#9733;</span>Make the wall a staircase: change the x maths to <code>1 + i * 4 + j</code>.</div>
+    </div>
+  </div>
+
+  <!-- 95 · Exit ticket -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 95</span>
+    <div class="pill">Exit ticket</div>
+    <h2>One question before you go</h2>
+    <div class="exit">
+      <div class="label">Answer out loud</div>
+      <p style="margin-top:.3em">Your loop draws one bar instead of three. What is missing?</p>
+      <details><summary>Show answer</summary><div class="ans"><code>i</code> is not in the fill line. Put it in both x numbers.</div></details>
+    </div>
+  </div>
+
+  <!-- 96 · Close & Bridge -->
+  <div class="slide center-all">
+    <span class="slot-badge">SLOT 96</span>
+    <div class="emoji">&#127881;</div>
+    <h1 style="font-size:clamp(30px,5.6vmin,58px)">One fill line<br>drew nine bars</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">Next time: a loop that builds your creeper, row by row.</p>
+    <p class="bilingual">다음엔 반복문으로 크리퍼를 그려요</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&#8249;</button><span class="counter" id="counter">1 / 96</span><button id="next">&#8250;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
