@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MANIM — ANDY Sets The Clock (Andy · 2026-09-12)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: #6b7280; font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  .where { font-family: "JetBrains Mono", monospace; color: #b45309;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(180,83,9,.10); color: #b45309; }
+  .why { font-family: "JetBrains Mono", monospace; color: var(--accent-2);
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk { font-family: "JetBrains Mono", monospace; color: #15803d;
+         font-size: clamp(12px, 1.9vmin, 17px); margin-top: .25em; }
+  .chk code, .why code { background: rgba(80,250,123,.1); color: inherit; }
+
+  .find { border-left: 4px solid var(--accent); background: rgba(56,208,224,.06);
+          border-radius: 0 .5em .5em 0; padding: .35em .7em; margin: .3em 0;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .find .fl { color: var(--accent); font-weight: 700; font-size: clamp(10px, 1.5vmin, 14px);
+              letter-spacing: .08em; text-transform: uppercase; display: block; }
+  .find code { background: rgba(56,208,224,.1); color: var(--ink); }
+
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: #15803d; }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #c2261c; }
+  .tag-new { color: #15803d; }
+
+  .steptag { font-family: "JetBrains Mono", monospace; font-weight: 700;
+             color: #0a0d13; background: #ffb86c; border-radius: 2em;
+             padding: .18em .9em; font-size: clamp(12px, 2vmin, 18px);
+             letter-spacing: .06em; margin-bottom: .5em; align-self: flex-start; }
+  .slide.center-all > .steptag { align-self: center; }
+
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: #6b7280; border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: #6b7280; }
+  .chip.on { border-color: #15803d; color: #15803d; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">Manim &middot; Andy &middot; 12 Sep 2026</div>
+
+  <!-- 1 · Title -->
+  <div class="slide active center-all">
+    <div class="pill">Manim &middot; Lesson 3</div>
+    <div class="emoji">&#9201;&#65039;</div>
+    <h1>ANDY Sets<br>The Clock</h1>
+    <p class="line" style="margin-top:.4em">Your homework runs. Today it gets a <b>bag</b>, a <b>pause</b> and a <b>clock</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v3 done at home</span><span class="chip">v4 VGroup</span>
+      <span class="chip">v5 timing</span><span class="chip">v6 spin</span><span class="chip">v7 ending</span>
+    </div>
+  </div>
+
+  <!-- 2 · Homework — run it first -->
+  <div class="slide">
+    <div class="pill purple">Homework &#9989;</div>
+    <h2>Press Run before anything else</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">ANDY opens <code>main.py</code></div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s2">ANDY presses Run</div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s3">Watch both seconds</div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s4">ANDY says what it does</div>
+    </div>
+    <p class="quiet center" style="margin-top:.5em">You finished this on Sunday. Nothing in it is broken.</p>
+  </div>
+
+  <!-- 3 · Homework — the file itself -->
+  <div class="slide">
+    <div class="pill purple">Your file</div>
+    <h2>What you wrote</h2>
+<pre class="tiny"><span class="kw">class</span> <span class="fn">MotionScene</span>(Scene):
+    <span class="kw">def</span> <span class="fn">construct</span>(self):
+        circle = <span class="fn">Circle</span>(color=ICE)
+        square = <span class="fn">Square</span>(color=WHITE)
+        title = <span class="fn">Text</span>(<span class="str">"Shapes"</span>)
+
+        self.<span class="fn">play</span>(<span class="fn">Create</span>(circle), <span class="fn">Create</span>(square), <span class="fn">Write</span>(title))
+
+        self.<span class="fn">play</span>(
+            circle.animate.<span class="fn">shift</span>(LEFT*<span class="num">3</span>),
+            square.animate.<span class="fn">shift</span>(RIGHT*<span class="num">3</span>),
+            title.animate.<span class="fn">shift</span>(UP*<span class="num">3</span>)
+            )</pre>
+    <div class="chk">&#9989; Three animations in one <code>self.play</code>. That was the hard part, and you got it.</div>
+  </div>
+
+  <!-- 4 · Homework — its clock -->
+  <div class="slide">
+    <div class="pill">Read the clock</div>
+    <h2>Your video is 2 seconds long</h2>
+    <svg viewBox="0 0 600 190" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="10" y="10" width="580" height="130" rx="8" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <line x1="40" y1="118" x2="560" y2="118" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="40" y1="108" x2="40" y2="128" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="300" y1="108" x2="300" y2="128" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="560" y1="108" x2="560" y2="128" stroke="#8a97b8" stroke-width="2"/>
+      <text x="32" y="136" fill="#8a97b8" font-size="14">0s</text>
+      <text x="292" y="136" fill="#8a97b8" font-size="14">1s</text>
+      <text x="552" y="136" fill="#8a97b8" font-size="14">2s</text>
+      <rect x="40" y="30" width="260" height="30" rx="6" fill="rgba(56,208,224,.22)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="52" y="51" fill="#38d0e0" font-size="15">Create + Create + Write</text>
+      <rect x="300" y="68" width="260" height="30" rx="6" fill="rgba(80,250,123,.2)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="312" y="89" fill="#50fa7b" font-size="15">three shifts, together</text>
+      <text x="40" y="172" fill="#ffb86c" font-size="16">Two self.play lines. Two seconds. Then it cuts.</text>
+    </svg>
+    <div class="why">&#128995; Today that 2 becomes <b>15</b>, and ANDY chooses every second of it.</div>
+  </div>
+
+  <!-- 5 · Recap 1 -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>Last time</h2>
+    <div class="recap-q">
+      <div class="label">Quick check</div>
+      <div class="q">Which line makes the circle <b>slide</b>, not jump?</div>
+      <details><summary>Show answer</summary><div class="ans"><code>self.play(circle.animate.shift(LEFT*3))</code><br>The word <code>animate</code> is the slider.</div></details>
+    </div>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip">circle.shift(...)</span><span class="chip on">circle.animate.shift(...)</span>
+    </div>
+  </div>
+
+  <!-- 6 · Recap 2 — the comma -->
+  <div class="slide">
+    <div class="pill purple">Recap</div>
+    <h2>What the comma did</h2>
+    <svg viewBox="0 0 600 150" style="width:100%;max-height:36vh" aria-hidden="true">
+      <rect x="10" y="10" width="580" height="94" rx="8" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <rect x="40" y="26" width="200" height="20" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="40" y="52" width="200" height="20" rx="5" fill="rgba(241,250,140,.2)" stroke="#f1fa8c" stroke-width="2"/>
+      <rect x="40" y="78" width="200" height="20" rx="5" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="262" y="62" fill="#50fa7b" font-size="17">&#9664; all three start at 0s</text>
+      <text x="40" y="132" fill="#8a97b8" font-size="15">circle, square and title, inside one self.play</text>
+    </svg>
+    <div class="recap-q" style="margin-top:.4em">
+      <div class="label">Quick check</div>
+      <div class="q">How long does <code>self.play(a, b, c)</code> last?</div>
+      <details><summary>Show answer</summary><div class="ans">One second. Commas do not add time.</div></details>
+    </div>
+  </div>
+
+  <!-- 7 · House rule — ANDY types -->
+  <div class="slide">
+    <div class="pill">House rule</div>
+    <h2>ANDY types. Every line.</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">ANDY reads the step</div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s2">ANDY types it</div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s3">ANDY presses Run</div>
+      <div class="arrow">&#9660;</div>
+      <div class="cc-step s4">ANDY reads the &#9989;</div>
+    </div>
+    <p class="quiet center" style="margin-top:.5em">Use autocomplete. Let it finish the method names for you.</p>
+  </div>
+
+  <!-- 8 · Roadmap -->
+  <div class="slide">
+    <div class="pill">The plan</div>
+    <h2>10 steps, 4 versions</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">&#127873;</div><div class="name">v4 &middot; VGroup</div><div class="ex">steps 1&ndash;2</div></div>
+      <div class="opt-card"><div class="ico">&#9201;&#65039;</div><div class="name">v5 &middot; the clock</div><div class="ex">steps 3&ndash;6</div></div>
+      <div class="opt-card"><div class="ico">&#128260;</div><div class="name">v6 &middot; the spin</div><div class="ex">steps 7&ndash;8</div></div>
+      <div class="opt-card"><div class="ico">&#127916;</div><div class="name">v7 &middot; the ending</div><div class="ex">steps 9&ndash;10</div></div>
+    </div>
+    <p class="quiet center" style="margin-top:.4em">Press Run after every step. Never two steps at once.</p>
+  </div>
+
+  <!-- 9 · Why .animate -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; The big one</div>
+    <h2>Why <code>.animate</code>?</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; jumps</span>
+<pre>self.play(square.shift(RIGHT))</pre></div>
+      <div class="col good"><span class="tag">&#10003; slides</span>
+<pre>self.play(square.animate.shift(RIGHT))</pre></div>
+    </div>
+    <svg viewBox="0 0 600 232" style="width:100%;max-height:38vh" aria-hidden="true">
+      <text x="26" y="16" fill="#ff5555" font-size="15">no .animate &mdash; it is simply there</text>
+      <rect x="26" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="34" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="138" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="212" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="250" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="324" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="362" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="436" y="50" width="18" height="18" fill="#ff5555"/>
+      <rect x="474" y="26" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="548" y="50" width="18" height="18" fill="#ff5555"/>
+      <text x="150" y="114" fill="#8a97b8" font-size="16">same end &middot; different journey</text>
+      <text x="382" y="114" fill="#8a97b8" font-size="18">&#9660;</text>
+      <text x="26" y="136" fill="#50fa7b" font-size="15">.animate &mdash; 15 drawn frames in between</text>
+      <rect x="26" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="34" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="138" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="164" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="250" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="296" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="362" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="428" y="170" width="18" height="18" fill="#50fa7b"/>
+      <rect x="474" y="146" width="100" height="64" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <rect x="548" y="170" width="18" height="18" fill="#50fa7b"/>
+      <text x="26" y="228" fill="#8a97b8" font-size="14">frame 1</text>
+      <text x="524" y="228" fill="#8a97b8" font-size="14">frame 15</text>
+    </svg>
+  </div>
+
+  <!-- 10 · Mistake — shift inside play -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Mistake &mdash; <code>.shift</code> inside <code>self.play</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>self.play(square.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>self.play(square.animate.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; it slides</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>.shift()</code> hands back a <b>square</b>. <code>.animate.shift()</code> hands back an <b>animation</b>.</p>
+  </div>
+
+  <!-- 11 · Reading .animate in three pieces -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>Read it in three pieces</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <rect x="20" y="30" width="150" height="52" rx="9" fill="rgba(56,208,224,.16)" stroke="#38d0e0" stroke-width="3"/>
+      <text x="56" y="63" fill="#38d0e0" font-size="21">square</text>
+      <text x="180" y="63" fill="#8a97b8" font-size="26">.</text>
+      <rect x="200" y="30" width="150" height="52" rx="9" fill="rgba(139,92,246,.18)" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="234" y="63" fill="#c4a8ff" font-size="21">animate</text>
+      <text x="360" y="63" fill="#8a97b8" font-size="26">.</text>
+      <rect x="380" y="30" width="200" height="52" rx="9" fill="rgba(80,250,123,.14)" stroke="#50fa7b" stroke-width="3"/>
+      <text x="398" y="63" fill="#50fa7b" font-size="21">shift(RIGHT * 2)</text>
+      <text x="42" y="112" fill="#8a97b8" font-size="17">&#9660;</text>
+      <text x="20" y="140" fill="#e8eef6" font-size="17">which object</text>
+      <text x="252" y="112" fill="#8a97b8" font-size="17">&#9660;</text>
+      <text x="196" y="140" fill="#e8eef6" font-size="17">make it an animation</text>
+      <text x="452" y="112" fill="#8a97b8" font-size="17">&#9660;</text>
+      <text x="398" y="140" fill="#e8eef6" font-size="17">what changes</text>
+      <text x="20" y="182" fill="#ffb86c" font-size="17">Drop the middle box and Manim has nothing to play.</text>
+    </svg>
+  </div>
+
+  <!-- 12 · Units not pixels -->
+  <div class="slide">
+    <div class="pill">&#128208; Units</div>
+    <h2>Manim units, never pixels</h2>
+    <svg viewBox="0 0 640 386" style="width:100%;max-height:52vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="74" y1="172" x2="74" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="185.5" y1="172" x2="185.5" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="445.4" y1="172" x2="445.4" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="594" y1="172" x2="594" y2="185" stroke="#8a97b8" stroke-width="2"/>
+      <text x="64" y="203" fill="#8a97b8" font-size="15">-7</text>
+      <text x="176" y="203" fill="#8a97b8" font-size="15">-4</text>
+      <text x="441" y="203" fill="#8a97b8" font-size="15">3</text>
+      <text x="588" y="203" fill="#8a97b8" font-size="15">7</text>
+      <line x1="328" y1="30" x2="341" y2="30" stroke="#8a97b8" stroke-width="2"/>
+      <line x1="328" y1="327" x2="341" y2="327" stroke="#8a97b8" stroke-width="2"/>
+      <text x="344" y="46" fill="#8a97b8" font-size="15">4</text>
+      <text x="344" y="322" fill="#8a97b8" font-size="15">-4</text>
+      <circle cx="334" cy="178.5" r="7" fill="#38d0e0"/>
+      <text x="286" y="222" fill="#38d0e0" font-size="17">centre 0, 0</text>
+      <circle cx="445.4" cy="178.5" r="9" fill="#50fa7b"/>
+      <text x="374" y="152" fill="#50fa7b" font-size="17">move_to([3, 0, 0])</text>
+      <line x1="46" y1="30" x2="46" y2="327" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="40" y1="30" x2="52" y2="30" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="40" y1="327" x2="52" y2="327" stroke="#ffb86c" stroke-width="2"/>
+      <text x="2" y="172" fill="#ffb86c" font-size="15">8</text>
+      <text x="2" y="192" fill="#ffb86c" font-size="15">units</text>
+      <line x1="70" y1="352" x2="598" y2="352" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="70" y1="346" x2="70" y2="358" stroke="#ffb86c" stroke-width="2"/>
+      <line x1="598" y1="346" x2="598" y2="358" stroke="#ffb86c" stroke-width="2"/>
+      <text x="252" y="378" fill="#ffb86c" font-size="16">14.2 units wide</text>
+    </svg>
+    <div class="why">&#128995; Three numbers: x, y, z. Flat drawings always end in <code>0</code>.</div>
+  </div>
+
+  <!-- 13 · Units 2 — where ANDY's shapes are now -->
+  <div class="slide">
+    <div class="pill">&#128208; Units</div>
+    <h2>Where your shapes sit right now</h2>
+    <svg viewBox="0 0 640 360" style="width:100%;max-height:52vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#4a5670" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#4a5670" stroke-width="2"/>
+      <circle cx="222" cy="178.5" r="37" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="172" y="240" fill="#38d0e0" font-size="16">circle &middot; LEFT*3</text>
+      <rect x="409" y="141.5" width="74" height="74" fill="none" stroke="#e8eef6" stroke-width="4"/>
+      <text x="392" y="240" fill="#e8eef6" font-size="16">square &middot; RIGHT*3</text>
+      <text x="286" y="75" fill="#bd93f9" font-size="26">Shapes</text>
+      <text x="272" y="102" fill="#bd93f9" font-size="16">title &middot; UP*3</text>
+      <line x1="334" y1="140" x2="334" y2="88" stroke="#bd93f9" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="86" y="314" fill="#8a97b8" font-size="15">top edge is y = 4, and the title is already at y = 3</text>
+    </svg>
+    <div class="why">&#128995; Only <b>1 unit</b> of room is left above the title. Remember that.</div>
+  </div>
+
+  <!-- 14 · Predict — the clipping trap -->
+  <div class="slide">
+    <div class="pill">Predict &#129300;</div>
+    <h2>Move all three up by 2?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        self.play(group.animate.shift(UP * 2))</pre>
+      <details><summary>Reveal output</summary><div class="ans">The title is at y = 3. Add 2 and it is at y = <b>5</b>. The top edge is 4, so the word leaves the screen.</div></details>
+    </div>
+    <div class="why">&#128995; So today the group moves <b>DOWN</b>, where there is room.</div>
+  </div>
+
+  <!-- 15 · Vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table" style="grid-template-columns:auto 1fr">
+      <span class="term">VGroup</span>
+      <span class="gloss">a bag that ties objects into one object</span>
+
+      <span class="term">self.wait</span>
+      <span class="gloss">holds the picture still for n seconds</span>
+
+      <span class="term">run_time</span>
+      <span class="gloss">how many seconds one play takes</span>
+
+      <span class="term">PI</span>
+      <span class="gloss">a half turn, written as a number</span>
+    </div>
+    <div class="chips" style="margin-top:.5em">
+      <span class="chip on">&#127873;</span><span class="chip on">&#9208;&#65039;</span>
+      <span class="chip on">&#9201;&#65039;</span><span class="chip on">&#128260;</span>
+    </div>
+  </div>
+
+  <!-- 16 · v4 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span><span>v5</span></div>
+    <h2>v4 &mdash; three shapes, one object</h2>
+    <div class="icon-row"><span>&#9898;</span><span>&#11036;</span><span>&#128288;</span><span>&#10145;&#65039;</span><span>&#127873;</span></div>
+    <p class="line center" style="margin-top:.5em">Right now moving all three costs three animations. <code>VGroup</code> makes it one.</p>
+  </div>
+
+  <!-- 17 · VGroup concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>VGroup is a bag</h2>
+    <svg viewBox="0 0 600 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="30" y="70" width="270" height="110" rx="14" fill="none" stroke="#8b5cf6" stroke-width="4" stroke-dasharray="9 6"/>
+      <text x="34" y="60" fill="#8b5cf6" font-size="18">group</text>
+      <circle cx="82" cy="125" r="26" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="140" y="99" width="52" height="52" fill="none" stroke="#e8eef6" stroke-width="4"/>
+      <text x="212" y="134" fill="#bd93f9" font-size="20">Shapes</text>
+      <text x="318" y="132" fill="#50fa7b" font-size="30">&#9654;</text>
+      <rect x="360" y="40" width="220" height="110" rx="14" fill="rgba(139,92,246,.14)" stroke="#8b5cf6" stroke-width="4"/>
+      <circle cx="404" cy="95" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="450" y="73" width="44" height="44" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="508" y="103" fill="#bd93f9" font-size="17">Shapes</text>
+      <text x="366" y="180" fill="#50fa7b" font-size="17">one .animate moves all three</text>
+      <line x1="470" y1="168" x2="470" y2="196" stroke="#50fa7b" stroke-width="3"/>
+    </svg>
+    <div class="why">&#128995; The shapes stay themselves. <code>group</code> is a new handle on all three.</div>
+  </div>
+
+  <!-- 18 · STEP 1 -->
+  <div class="slide">
+    <div class="steptag">STEP 1 / 10</div>
+    <h2>Tie them together</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>title.animate.shift(UP*3)</code></div>
+    <div class="where">&#128205; The next line is the <code>)</code> that closes that play. Type on the line <b>under</b> that <code>)</code>. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">            title.animate.shift(UP*3)</span>
+<span class="dim">            )</span>
+<span class="hot">        group = VGroup(circle, square, title)</span></pre>
+    <div class="why">&#128995; Capital <code>V</code>, capital <code>G</code>. The bag is called <code>group</code>.</div>
+    <div class="chk">&#9989; Run &mdash; the video looks exactly the same. Making a bag shows nothing.</div>
+  </div>
+
+  <!-- 19 · Concept — a handle, not a cage -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>A handle, not a cage</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="20" y="30" width="250" height="120" rx="14" fill="none" stroke="#8b5cf6" stroke-width="4" stroke-dasharray="9 6"/>
+      <text x="24" y="22" fill="#8b5cf6" font-size="17">group</text>
+      <circle cx="72" cy="90" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="128" y="66" width="48" height="48" fill="none" stroke="#e8eef6" stroke-width="4"/>
+      <text x="196" y="98" fill="#bd93f9" font-size="17">Shapes</text>
+      <text x="24" y="180" fill="#50fa7b" font-size="16">group.animate.shift(...) &rarr; all three move</text>
+      <text x="310" y="22" fill="#ffb86c" font-size="17">still on their own</text>
+      <circle cx="360" cy="90" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="400" y="84" fill="#ffb86c" font-size="26">&#10230;</text>
+      <circle cx="480" cy="90" r="24" fill="none" stroke="#38d0e0" stroke-width="4" opacity=".55"/>
+      <text x="310" y="180" fill="#ffb86c" font-size="16">circle.animate.shift(...) &rarr; only the circle moves</text>
+    </svg>
+    <div class="why">&#128995; Putting a shape in a bag does not take the shape away from you.</div>
+  </div>
+
+  <!-- 20 · Predict — does the old name still work? -->
+  <div class="slide">
+    <div class="pill">Predict &#129300;</div>
+    <h2>Is <code>circle</code> still usable?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        group = VGroup(circle, square, title)
+        self.play(circle.animate.shift(DOWN))</pre>
+      <details><summary>Reveal output</summary><div class="ans">Yes. Only the circle drops. The square and the title do not move.</div></details>
+    </div>
+    <div class="why">&#128995; One object can have two names at the same time.</div>
+  </div>
+
+  <!-- 21 · STEP 2 -->
+  <div class="slide">
+    <div class="steptag">STEP 2 / 10</div>
+    <h2>Move all three as one</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>group = VGroup(circle, square, title)</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        group = VGroup(circle, square, title)</span>
+<span class="hot">        self.play(group.animate.shift(DOWN * 2))</span></pre>
+    <div class="why">&#128995; One <code>.animate</code>, three shapes. They keep their spacing.</div>
+    <div class="chk">&#9989; v4 done. Run &mdash; the whole row slides down together.</div>
+  </div>
+
+  <!-- 22 · Frames — the group move -->
+  <div class="slide">
+    <div class="pill">Watch it!</div>
+    <h2>Spacing never changes</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:44vh" aria-hidden="true">
+      <rect x="10" y="20" width="185" height="160" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="42" cy="112" r="15" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="142" y="97" width="30" height="30" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="78" y="72" fill="#bd93f9" font-size="13">Shapes</text>
+      <text x="14" y="196" fill="#8a97b8" font-size="13">frame 1</text>
+      <rect x="207" y="20" width="185" height="160" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="239" cy="132" r="15" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="339" y="117" width="30" height="30" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="275" y="92" fill="#bd93f9" font-size="13">Shapes</text>
+      <text x="211" y="196" fill="#8a97b8" font-size="13">frame 8</text>
+      <rect x="404" y="20" width="185" height="160" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="436" cy="152" r="15" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="536" y="137" width="30" height="30" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="472" y="112" fill="#bd93f9" font-size="13">Shapes</text>
+      <text x="408" y="196" fill="#8a97b8" font-size="13">frame 15</text>
+      <line x1="57" y1="112" x2="142" y2="112" stroke="#ffb86c" stroke-width="2" stroke-dasharray="4 4"/>
+      <line x1="451" y1="152" x2="536" y2="152" stroke="#ffb86c" stroke-width="2" stroke-dasharray="4 4"/>
+    </svg>
+    <div class="why">&#128995; The orange gap is the same in frame 1 and frame 15.</div>
+  </div>
+
+  <!-- 23 · Mistake — group made too early -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Mistake &mdash; the group made too early</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>        group = VGroup(circle, square, title)
+        circle = Circle(color=ICE)</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; <code>NameError: name 'circle' is not defined</code></p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>        circle = Circle(color=ICE)
+        group = VGroup(circle, square, title)</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the shapes exist first</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Python reads top to bottom. A bag cannot hold a shape that does not exist yet.</p>
+  </div>
+
+  <!-- 24 · Mistake — group without animate -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>The same <code>.animate</code> rule</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>self.play(group.shift(DOWN * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; <code>TypeError: ... cannot be converted to an animation</code></p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>self.play(group.animate.shift(DOWN * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the row slides down</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">A <code>VGroup</code> obeys the same rule as one shape. <code>.animate</code> or nothing plays.</p>
+  </div>
+
+  <!-- 25 · Trace activity -->
+  <div class="slide">
+    <div class="pill">Trace<span class="activity-tag">activity</span></div>
+    <h2>Where does each one land?</h2>
+    <div class="trace-grid">
+      <div class="cell head">name</div><div class="cell head">before</div><div class="cell head">after DOWN * 2</div>
+      <div class="cell">circle</div><div class="cell">x -3, y 0</div><div class="cell">x -3, y <b>___</b></div>
+      <div class="cell">square</div><div class="cell">x 3, y 0</div><div class="cell">x 3, y <b>___</b></div>
+      <div class="cell">title</div><div class="cell">x 0, y 3</div><div class="cell">x 0, y <b>___</b></div>
+    </div>
+    <details style="margin-top:.5em"><summary>Show answer</summary><div class="ans">-2, -2, 1. Every y loses 2. No x changes at all.</div></details>
+  </div>
+
+  <!-- 26 · Code talk — VGroup -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>VGroup</code> puts <span class="blank"></span> shapes into <span class="blank"></span> object."</div>
+      <div class="frame" style="margin-top:.4em">"I move the group with <span class="blank"></span> line instead of <span class="blank"></span> lines."</div>
+      <div class="pair-prompt">Read the whole sentence, do not just say the number.</div>
+    </div>
+  </div>
+
+  <!-- 27 · v5 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span>v4</span><span class="on">v5</span></div>
+    <h2>v5 &mdash; ANDY sets the clock</h2>
+    <div class="icon-row"><span>&#9201;&#65039;</span><span>&#127916;</span><span>&#128034;</span></div>
+    <p class="line center" style="margin-top:.5em">Timing stops being something that happens. It becomes something ANDY chooses.</p>
+  </div>
+
+  <!-- 28 · wait concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2><code>self.wait(1)</code> = 15 still frames</h2>
+    <svg viewBox="0 0 600 160" style="width:100%;max-height:38vh" aria-hidden="true">
+      <rect x="10" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="34" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".4"/>
+      <rect x="104" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="128" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".8"/>
+      <rect x="198" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="222" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <text x="10" y="100" fill="#38d0e0" font-size="15">self.play &mdash; it changes</text>
+      <rect x="300" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="324" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="394" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="418" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="488" y="20" width="86" height="60" rx="4" fill="#141b27" stroke="#ffb86c" stroke-width="2"/>
+      <circle cx="512" cy="52" r="10" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <text x="300" y="100" fill="#ffb86c" font-size="15">self.wait(1) &mdash; nothing changes</text>
+      <text x="10" y="140" fill="#8a97b8" font-size="15">Manim still draws every frame. They are simply identical.</text>
+    </svg>
+  </div>
+
+  <!-- 29 · STEP 3 -->
+  <div class="slide">
+    <div class="steptag">STEP 3 / 10</div>
+    <h2>Hold the picture</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>group = VGroup(circle, square, title)</code></div>
+    <div class="where">&#128205; A new line <b>above</b> it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">            )</span>
+<span class="hot">        self.wait(1)</span>
+<span class="dim">        group = VGroup(circle, square, title)</span></pre>
+    <div class="why">&#128995; One second of stillness so the eye catches up before the row moves.</div>
+    <div class="chk">&#9989; Run &mdash; the three shapes spread out, pause, then slide down.</div>
+  </div>
+
+  <!-- 30 · Predict — how long now? -->
+  <div class="slide">
+    <div class="pill">Predict &#129300;</div>
+    <h2>How long is the video now?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        self.play(Create(circle), Create(square), Write(title))
+        self.play(circle..., square..., title...)
+        self.wait(1)
+        self.play(group.animate.shift(DOWN * 2))</pre>
+      <details><summary>Reveal output</summary><div class="ans">4 seconds. 1 + 1 + 1 + 1. A wait costs time just like a play does.</div></details>
+    </div>
+  </div>
+
+  <!-- 31 · STEP 4 -->
+  <div class="slide">
+    <div class="steptag">STEP 4 / 10</div>
+    <h2>Stretch one play</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.shift(DOWN * 2))</code></div>
+    <div class="where">&#128205; Same line. Type <code>, run_time=2</code> before the <b>last</b> bracket. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(group.animate.shift(DOWN * 2))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(group.animate.shift(DOWN * 2), run_time=2)</pre></div>
+    <div class="why">&#128995; <code>run_time</code> belongs to <code>self.play</code>, so it sits outside <code>shift</code>'s brackets.</div>
+    <div class="chk">&#9989; Run &mdash; the row now takes two slow seconds to fall.</div>
+  </div>
+
+  <!-- 32 · run_time concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2><code>run_time</code> stretches the frames</h2>
+    <svg viewBox="0 0 600 180" style="width:100%;max-height:40vh" aria-hidden="true">
+      <text x="10" y="20" fill="#38d0e0" font-size="16">run_time=1  &rarr;  15 frames</text>
+      <rect x="10" y="30" width="280" height="30" rx="6" fill="rgba(56,208,224,.22)" stroke="#38d0e0" stroke-width="2"/>
+      <line x1="66" y1="30" x2="66" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="122" y1="30" x2="122" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="178" y1="30" x2="178" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <line x1="234" y1="30" x2="234" y2="60" stroke="#38d0e0" stroke-width="1"/>
+      <text x="10" y="96" fill="#50fa7b" font-size="16">run_time=2  &rarr;  30 frames</text>
+      <rect x="10" y="106" width="560" height="30" rx="6" fill="rgba(80,250,123,.18)" stroke="#50fa7b" stroke-width="2"/>
+      <line x1="122" y1="106" x2="122" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="234" y1="106" x2="234" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="346" y1="106" x2="346" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <line x1="458" y1="106" x2="458" y2="136" stroke="#50fa7b" stroke-width="1"/>
+      <text x="10" y="166" fill="#8a97b8" font-size="15">Same start, same end. More frames in between = slower.</text>
+    </svg>
+  </div>
+
+  <!-- 33 · Frames maths -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Count the frames</h2>
+    <div class="trace-grid">
+      <div class="cell head">run_time</div><div class="cell head">seconds</div><div class="cell head">frames drawn</div>
+      <div class="cell">1</div><div class="cell">1</div><div class="cell">15</div>
+      <div class="cell">2</div><div class="cell">2</div><div class="cell">30</div>
+      <div class="cell">3</div><div class="cell">3</div><div class="cell"><b>___</b></div>
+      <div class="cell">0.5</div><div class="cell">0.5</div><div class="cell"><b>___</b></div>
+    </div>
+    <details style="margin-top:.5em"><summary>Show answer</summary><div class="ans">45 and 7.5 &rarr; Manim rounds to 8. The IDE plays 15 frames every second.</div></details>
+  </div>
+
+  <!-- 34 · STEP 5 -->
+  <div class="slide">
+    <div class="steptag">STEP 5 / 10</div>
+    <h2>Land the ending</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.shift(DOWN * 2), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it &mdash; the very last line of the file. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.shift(DOWN * 2), run_time=2)</span>
+<span class="hot">        self.wait(1)</span></pre>
+    <div class="why">&#128995; Without it the video cuts the instant the row stops.</div>
+    <div class="chk">&#9989; Run &mdash; spread, pause, fall slowly, hold. &#127881;</div>
+  </div>
+
+  <!-- 35 · Concept — run_time in the tall form -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>Which brackets own <code>run_time</code>?</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="20" y="20" width="560" height="120" rx="10" fill="#101622" stroke="#50fa7b" stroke-width="3"/>
+      <text x="34" y="14" fill="#50fa7b" font-size="16">self.play( ... )  &mdash; the outer brackets</text>
+      <rect x="44" y="38" width="330" height="26" rx="6" fill="rgba(56,208,224,.2)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="54" y="57" fill="#38d0e0" font-size="14">circle.animate.shift(LEFT*3),</text>
+      <rect x="44" y="70" width="330" height="26" rx="6" fill="rgba(56,208,224,.2)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="54" y="89" fill="#38d0e0" font-size="14">square.animate.shift(RIGHT*3),</text>
+      <rect x="44" y="102" width="330" height="26" rx="6" fill="rgba(56,208,224,.2)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="54" y="121" fill="#38d0e0" font-size="14">title.animate.shift(UP*3),</text>
+      <rect x="392" y="70" width="170" height="26" rx="6" fill="rgba(255,184,108,.22)" stroke="#ffb86c" stroke-width="2"/>
+      <text x="404" y="89" fill="#ffb86c" font-size="14">run_time=2</text>
+      <text x="392" y="120" fill="#ffb86c" font-size="14">same level as the</text>
+      <text x="392" y="136" fill="#ffb86c" font-size="14">three animations</text>
+      <text x="20" y="176" fill="#8a97b8" font-size="15">Every item inside self.play needs a comma after it, except the last one.</text>
+    </svg>
+  </div>
+
+  <!-- 36 · STEP 6 -->
+  <div class="slide">
+    <div class="steptag">STEP 6 / 10</div>
+    <h2>Stretch the spread too</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>title.animate.shift(UP*3)</code></div>
+    <div class="where">&#128205; Put a comma at the end of that line. New line under it. Indent <b>12 spaces</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(
+            circle.animate.shift(LEFT*3),
+            square.animate.shift(RIGHT*3),
+            title.animate.shift(UP*3)
+            )</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(
+            circle.animate.shift(LEFT*3),
+            square.animate.shift(RIGHT*3),
+            title.animate.shift(UP*3),
+            run_time=2
+            )</pre></div>
+    <div class="why">&#128995; Same rule in the tall form.</div>
+    <div class="chk">&#9989; v5 done. Run &mdash; the spread now takes two seconds.</div>
+  </div>
+
+  <!-- 37 · Mistake — missing comma -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Mistake &mdash; the forgotten comma</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>    title.animate.shift(UP*3)
+    run_time=2</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; <code>SyntaxError: invalid syntax</code></p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>    title.animate.shift(UP*3),
+    run_time=2</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; it runs</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">The comma is the only difference. Python cannot guess where one item ends.</p>
+  </div>
+
+  <!-- 38 · Code talk — run_time -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the clock out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>self.wait(1)</code> holds the picture for <span class="blank"></span> second."</div>
+      <div class="frame" style="margin-top:.4em">"<code>run_time=2</code> makes the same move take <span class="blank"></span> seconds instead of <span class="blank"></span>."</div>
+      <div class="pair-prompt">Full sentence. Do not just say the number.</div>
+    </div>
+  </div>
+
+  <!-- 39 · v6 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v3</span><span>v4</span><span>v5</span><span class="on">v6</span><span>v7</span></div>
+    <h2>v6 &mdash; the whole bag turns</h2>
+    <div class="icon-row"><span>&#127873;</span><span>&#128260;</span><span>&#10024;</span></div>
+    <p class="line center" style="margin-top:.5em">The bag can do more than slide. It can shrink and it can spin &mdash; still as one thing.</p>
+  </div>
+
+  <!-- 40 · PI concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2><code>PI</code> is a half turn</h2>
+    <svg viewBox="0 0 600 220" style="width:100%;max-height:44vh" aria-hidden="true">
+      <circle cx="110" cy="110" r="70" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="110" y1="110" x2="180" y2="110" stroke="#4a5670" stroke-width="3"/>
+      <line x1="110" y1="110" x2="40" y2="110" stroke="#ff5555" stroke-width="4"/>
+      <path d="M 160 110 A 50 50 0 0 0 60 110" fill="none" stroke="#ff5555" stroke-width="3"/>
+      <text x="72" y="204" fill="#ff5555" font-size="17">PI &middot; 180&deg;</text>
+      <circle cx="300" cy="110" r="70" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="300" y1="110" x2="370" y2="110" stroke="#4a5670" stroke-width="3"/>
+      <line x1="300" y1="110" x2="300" y2="40" stroke="#f1fa8c" stroke-width="4"/>
+      <path d="M 350 110 A 50 50 0 0 0 300 60" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+      <text x="252" y="204" fill="#f1fa8c" font-size="17">PI / 2 &middot; 90&deg;</text>
+      <circle cx="490" cy="110" r="70" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="490" y1="110" x2="560" y2="110" stroke="#4a5670" stroke-width="3"/>
+      <line x1="490" y1="110" x2="539" y2="61" stroke="#50fa7b" stroke-width="4"/>
+      <path d="M 540 110 A 50 50 0 0 0 525 75" fill="none" stroke="#50fa7b" stroke-width="3"/>
+      <text x="442" y="204" fill="#50fa7b" font-size="17">PI / 4 &middot; 45&deg;</text>
+    </svg>
+    <div class="why">&#128995; <code>PI</code> comes free with <code>from manim import *</code>. Never type 3.14.</div>
+  </div>
+
+  <!-- 41 · Predict — PI / 4 -->
+  <div class="slide">
+    <div class="pill">Predict &#129300;</div>
+    <h2>How far does this turn?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>        self.play(group.animate.rotate(PI / 4))</pre>
+      <details><summary>Reveal output</summary><div class="ans">45 degrees. <code>PI</code> is 180, so half of it is 90 and a quarter of it is 45.</div></details>
+    </div>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip">PI = 180&deg;</span><span class="chip">PI/2 = 90&deg;</span><span class="chip on">PI/4 = 45&deg;</span>
+    </div>
+  </div>
+
+  <!-- 42 · sign of the angle -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>Plus and minus pick the direction</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:42vh" aria-hidden="true">
+      <circle cx="160" cy="100" r="72" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <rect x="140" y="30" width="40" height="40" fill="none" stroke="#50fa7b" stroke-width="4" transform="rotate(-45 160 50)"/>
+      <path d="M 232 100 A 72 72 0 0 0 205 38" fill="none" stroke="#50fa7b" stroke-width="4"/>
+      <text x="238" y="42" fill="#50fa7b" font-size="22">&#8598;</text>
+      <text x="70" y="192" fill="#50fa7b" font-size="17">rotate(PI / 4) &mdash; left</text>
+      <circle cx="430" cy="100" r="72" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <rect x="410" y="130" width="40" height="40" fill="none" stroke="#ffb86c" stroke-width="4" transform="rotate(45 430 150)"/>
+      <path d="M 502 100 A 72 72 0 0 1 475 162" fill="none" stroke="#ffb86c" stroke-width="4"/>
+      <text x="508" y="172" fill="#ffb86c" font-size="22">&#8600;</text>
+      <text x="330" y="192" fill="#ffb86c" font-size="17">rotate(-PI / 4) &mdash; right</text>
+    </svg>
+    <div class="why">&#128995; A plus angle turns anticlockwise. A minus angle turns the other way.</div>
+  </div>
+
+  <!-- 43 · scale concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2>Scale keeps the shape of the bag</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="10" y="20" width="270" height="160" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="60" cy="130" r="26" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="200" y="104" width="52" height="52" fill="none" stroke="#e8eef6" stroke-width="4"/>
+      <text x="108" y="70" fill="#bd93f9" font-size="19">Shapes</text>
+      <line x1="86" y1="130" x2="200" y2="130" stroke="#ffb86c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="106" y="122" fill="#ffb86c" font-size="14">gap</text>
+      <text x="16" y="198" fill="#8a97b8" font-size="14">before &middot; scale 1</text>
+      <text x="300" y="110" fill="#50fa7b" font-size="28">&#9654;</text>
+      <rect x="340" y="20" width="250" height="160" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="410" cy="130" r="13" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="480" y="117" width="26" height="26" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="432" y="98" fill="#bd93f9" font-size="12">Shapes</text>
+      <line x1="423" y1="130" x2="480" y2="130" stroke="#ffb86c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="346" y="198" fill="#8a97b8" font-size="14">after &middot; scale 0.5 &mdash; gap halves too</text>
+    </svg>
+    <div class="why">&#128995; Everything in the bag shrinks, and so does the space between them.</div>
+  </div>
+
+  <!-- 44 · STEP 7 -->
+  <div class="slide">
+    <div class="steptag">STEP 7 / 10</div>
+    <h2>Shrink the whole bag</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.shift(DOWN * 2), run_time=2)</code></div>
+    <div class="where">&#128205; Under it sits <code>self.wait(1)</code>, the last line in the file. Type <b>under that</b>. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.shift(DOWN * 2), run_time=2)</span>
+<span class="dim">        self.wait(1)</span>
+<span class="hot">        self.play(group.animate.scale(0.5), run_time=2)</span></pre>
+    <div class="why">&#128995; Half size. The bag shrinks toward its own middle.</div>
+    <div class="chk">&#9989; Run &mdash; all three shapes shrink together over two seconds.</div>
+  </div>
+
+  <!-- 45 · STEP 8 -->
+  <div class="slide">
+    <div class="steptag">STEP 8 / 10</div>
+    <h2>Spin the whole bag</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.scale(0.5), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.scale(0.5), run_time=2)</span>
+<span class="hot">        self.play(group.animate.rotate(PI / 4), run_time=2)</span></pre>
+    <div class="why">&#128995; The bag turns 45 degrees, and the three shapes ride round with it.</div>
+    <div class="chk">&#9989; v6 done. Run &mdash; the small row tilts like a clock hand.</div>
+  </div>
+
+  <!-- 46 · Frames of the spin -->
+  <div class="slide">
+    <div class="pill">Watch it!</div>
+    <h2>One turn, three passengers</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="10" y="20" width="185" height="150" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="55" cy="95" r="12" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="138" y="83" width="24" height="24" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <line x1="55" y1="95" x2="150" y2="95" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="14" y="188" fill="#8a97b8" font-size="13">frame 1 &middot; 0&deg;</text>
+      <rect x="207" y="20" width="185" height="150" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="258" cy="115" r="12" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="336" y="65" width="24" height="24" fill="none" stroke="#e8eef6" stroke-width="3" transform="rotate(22 348 77)"/>
+      <line x1="258" y1="115" x2="348" y2="77" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="211" y="188" fill="#8a97b8" font-size="13">frame 15 &middot; 22&deg;</text>
+      <rect x="404" y="20" width="185" height="150" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="462" cy="130" r="12" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="528" y="52" width="24" height="24" fill="none" stroke="#e8eef6" stroke-width="3" transform="rotate(45 540 64)"/>
+      <line x1="462" y1="130" x2="540" y2="64" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="408" y="188" fill="#8a97b8" font-size="13">frame 30 &middot; 45&deg;</text>
+    </svg>
+    <div class="why">&#128995; The purple line is the bag. Every shape keeps its seat on it.</div>
+  </div>
+
+  <!-- 47 · two spellings -->
+  <div class="slide">
+    <div class="pill">Reference</div>
+    <h2>Two ways to write a turn</h2>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">&#128260;</div><div class="name">Rotate(group, PI / 4)</div><div class="ex">already an animation, like Create</div></div>
+      <div class="opt-card"><div class="ico">&#9654;</div><div class="name">group.animate.rotate(PI / 4)</div><div class="ex">.animate makes it one</div></div>
+    </div>
+    <div class="why">&#128995; Small turns: either. Big turns: <code>Rotate</code>.</div>
+    <div class="chk">&#9989; A half turn with <code>.animate</code> can look like a squash.</div>
+  </div>
+
+  <!-- 48 · Mistake — one by one -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out</div>
+    <h2>Mistake &mdash; turning them one by one</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; not the same</span>
+<pre>self.play(
+    circle.animate.rotate(PI / 4),
+    square.animate.rotate(PI / 4),
+    title.animate.rotate(PI / 4))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; each shape spins where it stands</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; the bag turns</span>
+<pre>self.play(group.animate.rotate(PI / 4))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the row itself swings round</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Both run. Only the group version moves the shapes to new places.</p>
+  </div>
+
+  <!-- 49 · v7 intro -->
+  <div class="slide">
+    <div class="vstep"><span>v3</span><span>v4</span><span>v5</span><span>v6</span><span class="on">v7</span></div>
+    <h2>v7 &mdash; land the ending</h2>
+    <div class="icon-row"><span>&#127916;</span><span>&#128168;</span><span>&#9209;&#65039;</span></div>
+    <p class="line center" style="margin-top:.5em">Two more lines and the video stops being a test clip. It becomes a finished 15 seconds.</p>
+  </div>
+
+  <!-- 50 · FadeOut concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;</div>
+    <h2><code>FadeOut</code> takes the whole bag</h2>
+    <svg viewBox="0 0 600 180" style="width:100%;max-height:40vh" aria-hidden="true">
+      <rect x="10" y="20" width="140" height="110" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="45" cy="86" r="14" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="100" y="72" width="28" height="28" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="52" y="52" fill="#bd93f9" font-size="14">Shapes</text>
+      <rect x="160" y="20" width="140" height="110" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="195" cy="86" r="14" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".6"/>
+      <rect x="250" y="72" width="28" height="28" fill="none" stroke="#e8eef6" stroke-width="3" opacity=".6"/>
+      <text x="202" y="52" fill="#bd93f9" font-size="14" opacity=".6">Shapes</text>
+      <rect x="310" y="20" width="140" height="110" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <circle cx="345" cy="86" r="14" fill="none" stroke="#38d0e0" stroke-width="3" opacity=".25"/>
+      <rect x="400" y="72" width="28" height="28" fill="none" stroke="#e8eef6" stroke-width="3" opacity=".25"/>
+      <text x="352" y="52" fill="#bd93f9" font-size="14" opacity=".25">Shapes</text>
+      <rect x="460" y="20" width="130" height="110" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <text x="482" y="92" fill="#8a97b8" font-size="16">empty stage</text>
+      <text x="10" y="162" fill="#50fa7b" font-size="16">FadeOut(group) &mdash; one name, three shapes gone. No .animate needed.</text>
+    </svg>
+  </div>
+
+  <!-- 51 · STEP 9 -->
+  <div class="slide">
+    <div class="steptag">STEP 9 / 10</div>
+    <h2>Fade the bag out</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.rotate(PI / 4), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.rotate(PI / 4), run_time=2)</span>
+<span class="hot">        self.play(FadeOut(group), run_time=2)</span></pre>
+    <div class="why">&#128995; <code>FadeOut</code> is already an animation, so there is no <code>.animate</code> here.</div>
+    <div class="chk">&#9989; Run &mdash; all three shapes dissolve together over two seconds.</div>
+  </div>
+
+  <!-- 52 · STEP 10 -->
+  <div class="slide">
+    <div class="steptag">STEP 10 / 10</div>
+    <h2>Hold the last frame</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(FadeOut(group), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it &mdash; the very last line of the file. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(FadeOut(group), run_time=2)</span>
+<span class="hot">        self.wait(2)</span></pre>
+    <div class="why">&#128995; Two seconds of empty stage. Endings need silence, not a hard cut.</div>
+    <div class="chk">&#9989; v7 done. The scene is finished. &#127881;</div>
+  </div>
+
+  <!-- 53 · The whole scene -->
+  <div class="slide">
+    <div class="pill">Read back</div>
+    <h2>Your finished scene</h2>
+<pre class="tiny"><span class="kw">class</span> <span class="fn">MotionScene</span>(Scene):
+    <span class="kw">def</span> <span class="fn">construct</span>(self):
+        circle = <span class="fn">Circle</span>(color=ICE)
+        square = <span class="fn">Square</span>(color=WHITE)
+        title = <span class="fn">Text</span>(<span class="str">"Shapes"</span>)
+
+        self.<span class="fn">play</span>(<span class="fn">Create</span>(circle), <span class="fn">Create</span>(square), <span class="fn">Write</span>(title))
+
+        self.<span class="fn">play</span>(
+            circle.animate.<span class="fn">shift</span>(LEFT*<span class="num">3</span>),
+            square.animate.<span class="fn">shift</span>(RIGHT*<span class="num">3</span>),
+            title.animate.<span class="fn">shift</span>(UP*<span class="num">3</span>),
+            run_time=<span class="num">2</span>
+            )
+        self.<span class="fn">wait</span>(<span class="num">1</span>)
+        group = <span class="fn">VGroup</span>(circle, square, title)
+        self.<span class="fn">play</span>(group.animate.<span class="fn">shift</span>(DOWN * <span class="num">2</span>), run_time=<span class="num">2</span>)
+        self.<span class="fn">wait</span>(<span class="num">1</span>)
+        self.<span class="fn">play</span>(group.animate.<span class="fn">scale</span>(<span class="num">0.5</span>), run_time=<span class="num">2</span>)
+        self.<span class="fn">play</span>(group.animate.<span class="fn">rotate</span>(PI / <span class="num">4</span>), run_time=<span class="num">2</span>)
+        self.<span class="fn">play</span>(<span class="fn">FadeOut</span>(group), run_time=<span class="num">2</span>)
+        self.<span class="fn">wait</span>(<span class="num">2</span>)</pre>
+    <div class="chk">&#9989; Six plays, three waits, one bag. ANDY typed every line.</div>
+  </div>
+
+  <!-- 54 · The 15-second timeline -->
+  <div class="slide">
+    <div class="pill">Read the clock</div>
+    <h2>15 seconds, second by second</h2>
+    <svg viewBox="0 0 620 300" style="width:100%;max-height:52vh" aria-hidden="true">
+      <rect x="10" y="10" width="600" height="240" rx="8" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <rect x="150" y="24" width="30" height="20" rx="4" fill="rgba(56,208,224,.3)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="20" y="40" fill="#38d0e0" font-size="14">Create &times;2 + Write</text>
+      <text x="190" y="40" fill="#8a97b8" font-size="13">1s</text>
+      <rect x="180" y="50" width="60" height="20" rx="4" fill="rgba(56,208,224,.3)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="20" y="66" fill="#38d0e0" font-size="14">spread out</text>
+      <text x="250" y="66" fill="#8a97b8" font-size="13">2s</text>
+      <rect x="240" y="76" width="30" height="20" rx="4" fill="rgba(255,184,108,.25)" stroke="#ffb86c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="20" y="92" fill="#ffb86c" font-size="14">wait</text>
+      <text x="280" y="92" fill="#8a97b8" font-size="13">1s</text>
+      <rect x="270" y="102" width="60" height="20" rx="4" fill="rgba(80,250,123,.25)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="20" y="118" fill="#50fa7b" font-size="14">group falls</text>
+      <text x="340" y="118" fill="#8a97b8" font-size="13">2s</text>
+      <rect x="330" y="128" width="30" height="20" rx="4" fill="rgba(255,184,108,.25)" stroke="#ffb86c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="20" y="144" fill="#ffb86c" font-size="14">wait</text>
+      <text x="370" y="144" fill="#8a97b8" font-size="13">1s</text>
+      <rect x="360" y="154" width="60" height="20" rx="4" fill="rgba(80,250,123,.25)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="20" y="170" fill="#50fa7b" font-size="14">group shrinks</text>
+      <text x="430" y="170" fill="#8a97b8" font-size="13">2s</text>
+      <rect x="420" y="180" width="60" height="20" rx="4" fill="rgba(80,250,123,.25)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="20" y="196" fill="#50fa7b" font-size="14">group spins</text>
+      <text x="490" y="196" fill="#8a97b8" font-size="13">2s</text>
+      <rect x="480" y="206" width="60" height="20" rx="4" fill="rgba(189,147,249,.3)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="20" y="222" fill="#bd93f9" font-size="14">fade out</text>
+      <text x="550" y="222" fill="#8a97b8" font-size="13">2s</text>
+      <rect x="540" y="232" width="60" height="14" rx="4" fill="rgba(255,184,108,.25)" stroke="#ffb86c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="20" y="244" fill="#ffb86c" font-size="14">wait</text>
+      <line x1="150" y1="262" x2="600" y2="262" stroke="#8a97b8" stroke-width="2"/>
+      <text x="140" y="284" fill="#8a97b8" font-size="14">0s</text>
+      <text x="360" y="284" fill="#8a97b8" font-size="14">7s</text>
+      <text x="580" y="284" fill="#ffb86c" font-size="16">15s</text>
+    </svg>
+  </div>
+
+  <!-- 55 · Predict — the scrubber -->
+  <div class="slide">
+    <div class="pill">Predict &#129300;</div>
+    <h2>What is on screen at 10 seconds?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+<pre>0-1 create   1-3 spread   3-4 wait   4-6 fall
+6-7 wait     7-9 shrink   9-11 spin  11-13 fade</pre>
+      <details><summary>Reveal output</summary><div class="ans">Second 10 is halfway through the spin, so the small row is tilted about 22 degrees.</div></details>
+    </div>
+    <div class="why">&#128995; ANDY can now name any second of the video by reading the code.</div>
+  </div>
+
+  <!-- 56 · Quick check — make it slower -->
+  <div class="slide">
+    <div class="pill purple">Quick check</div>
+    <h2>Make the fall slower</h2>
+    <div class="recap-q">
+      <div class="label">Which line do you change?</div>
+      <div class="q">You want the row to take <b>5</b> seconds to fall instead of 2.</div>
+      <details><summary>Show answer</summary><div class="ans"><code>self.play(group.animate.shift(DOWN * 2), run_time=5)</code><br>Change the number after <code>run_time=</code>. Nothing else moves.</div></details>
+    </div>
+    <div class="chips" style="margin-top:.6em">
+      <span class="chip">self.wait(5)</span><span class="chip on">run_time=5</span><span class="chip">DOWN * 5</span>
+    </div>
+  </div>
+
+  <!-- 57 · Code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it out loud</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>VGroup</code> lets me move <span class="blank"></span> shapes with <span class="blank"></span> line."</div>
+      <div class="frame" style="margin-top:.4em">"I make a move slower by changing <span class="blank"></span>, not by adding <span class="blank"></span>."</div>
+      <div class="frame" style="margin-top:.4em">"My scene lasts <span class="blank"></span> seconds because I chose every one of them."</div>
+    </div>
+  </div>
+
+  <!-- 58 · Quiz 1 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 1</h2>
+    <div class="quiz-card">
+      <div class="q">Why does <code>self.play(group.shift(DOWN))</code> fail?</div>
+      <div class="opts">
+        <details><summary>A. <code>group</code> is spelled wrong</summary><div class="ans">No. The name is fine.</div></details>
+        <details><summary>B. <code>.shift()</code> hands back a group, not an animation</summary><div class="ans">&#10003; Correct. <code>self.play</code> only takes animations.</div></details>
+        <details><summary>C. A VGroup cannot move</summary><div class="ans">No. It moves perfectly, with <code>.animate</code>.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 59 · Quiz 2 -->
+  <div class="slide">
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Question 2</h2>
+    <div class="quiz-card">
+      <div class="q">How long does <code>self.play(A, B, C, run_time=2)</code> last?</div>
+      <div class="opts">
+        <details><summary>A. 6 seconds</summary><div class="ans">No. Commas do not add time.</div></details>
+        <details><summary>B. 2 seconds</summary><div class="ans">&#10003; Correct. One play, one clock, three animations sharing it.</div></details>
+        <details><summary>C. 1 second</summary><div class="ans">No. <code>run_time=2</code> doubled it.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 60 · Your turn -->
+  <div class="slide">
+    <div class="pill">Your turn! &#128640;</div>
+    <h2>ANDY drives &#128663;</h2>
+    <ul class="check-list">
+      <li>v4 &mdash; <code>group = VGroup(...)</code>, then one <code>.animate.shift</code></li>
+      <li>v5 &mdash; <code>self.wait(1)</code>, <code>run_time=2</code>, <code>self.wait(1)</code></li>
+      <li>v5 &mdash; <code>run_time=2</code> inside the tall <code>self.play</code> too</li>
+      <li>v6 &mdash; <code>.scale(0.5)</code>, then <code>.rotate(PI / 4)</code></li>
+      <li>v7 &mdash; <code>FadeOut(group)</code>, then <code>self.wait(2)</code></li>
+      <li>Run after every step. Never two steps at once.</li>
+    </ul>
+  </div>
+
+  <!-- 61 · Exit ticket -->
+  <div class="slide">
+    <div class="pill">&#127903;&#65039; Exit ticket</div>
+    <h2>Before you go&hellip;</h2>
+    <div class="exit">
+      <div class="label">Answer in one line</div>
+      <p style="margin-top:.4em">The row moves too fast. Do you add <code>self.wait(2)</code>, or change <code>run_time</code>?</p>
+      <p class="quiet" style="margin-top:.4em">Say why, not just which.</p>
+    </div>
+  </div>
+
+  <!-- 62 · Close & bridge -->
+  <div class="slide center-all">
+    <div class="emoji">&#9201;&#65039;</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">One bag.<br>One clock.<br>Fifteen seconds.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Everything after this slide is a bonus.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">VGroup</span><span class="chip on">self.wait</span>
+      <span class="chip on">run_time</span><span class="chip on">PI</span><span class="chip on">FadeOut</span>
+    </div>
+  </div>
+
+  <!-- 63 · Bonus rules -->
+  <div class="slide">
+    <div class="pill">&#128161; How the bonuses work<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every bonus line goes here</h2>
+<pre><span class="dim">        self.play(group.animate.rotate(PI / 4), run_time=2)</span>
+<span class="hot">        &lt;-- bonus lines go on these lines</span>
+<span class="dim">        self.play(FadeOut(group), run_time=2)</span>
+<span class="dim">        self.wait(2)</span></pre>
+    <div class="why">&#128995; Above the fade, the shapes are still on stage. Below it, the stage is empty.</div>
+    <div class="chk">&#9989; Do the bonuses in order &mdash; each Find is the line the bonus before it added.</div>
+  </div>
+
+  <!-- 64 · LaggedStart concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Together, or one after another?</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="10" y="20" fill="#38d0e0" font-size="16">self.play(a, b, c)  &mdash;  all start at 0s</text>
+      <rect x="10" y="30" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="58" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="86" width="180" height="22" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="136" fill="#50fa7b" font-size="16">LaggedStart(a, b, c, lag_ratio=0.5)  &mdash;  staggered</text>
+      <rect x="10" y="146" width="180" height="16" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="100" y="166" width="180" height="16" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="190" y="186" width="180" height="12" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="300" y="70" fill="#8a97b8" font-size="15">same three animations</text>
+      <text x="400" y="160" fill="#8a97b8" font-size="15">each waits half a beat</text>
+    </svg>
+  </div>
+
+  <!-- 65 · BONUS 1 — LaggedStart -->
+  <div class="slide">
+    <div class="steptag">BONUS 1<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stagger the entrance</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(Create(circle), Create(square), Write(title))</code></div>
+    <div class="where">&#128205; Same line. Wrap the three animations in <code>LaggedStart(...)</code>. Indent stays <b>8</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(Create(circle), Create(square), Write(title))</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(LaggedStart(Create(circle), Create(square), Write(title), lag_ratio=0.5))</pre></div>
+    <div class="why">&#128995; <code>lag_ratio=0.5</code> starts each one halfway through the one before.</div>
+    <div class="chk">&#9989; Run &mdash; circle, then square, then text, overlapping.</div>
+  </div>
+
+  <!-- 66 · Rotate as its own animation -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>Rotate</code> sweeps the real arc</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:42vh" aria-hidden="true">
+      <circle cx="150" cy="100" r="72" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <path d="M 222 100 A 72 72 0 0 0 79 100" fill="none" stroke="#50fa7b" stroke-width="4"/>
+      <rect x="210" y="88" width="24" height="24" fill="none" stroke="#50fa7b" stroke-width="3"/>
+      <rect x="138" y="16" width="24" height="24" fill="none" stroke="#50fa7b" stroke-width="3" opacity=".5"/>
+      <rect x="67" y="88" width="24" height="24" fill="none" stroke="#50fa7b" stroke-width="3" opacity=".8"/>
+      <text x="74" y="192" fill="#50fa7b" font-size="16">Rotate(group, PI)</text>
+      <circle cx="430" cy="100" r="72" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <rect x="490" y="88" width="24" height="24" fill="none" stroke="#ffb86c" stroke-width="3"/>
+      <rect x="420" y="92" width="16" height="16" fill="none" stroke="#ffb86c" stroke-width="3" opacity=".5"/>
+      <rect x="347" y="88" width="24" height="24" fill="none" stroke="#ffb86c" stroke-width="3" opacity=".8"/>
+      <line x1="514" y1="100" x2="347" y2="100" stroke="#ffb86c" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="330" y="192" fill="#ffb86c" font-size="16">group.animate.rotate(PI) &mdash; squashes through the middle</text>
+    </svg>
+    <div class="why">&#128995; <code>.animate</code> blends two pictures. <code>Rotate</code> actually turns.</div>
+  </div>
+
+  <!-- 67 · BONUS 2 — Rotate back -->
+  <div class="slide">
+    <div class="steptag">BONUS 2<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Spin it back the other way</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.rotate(PI / 4), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it, <b>above</b> the fade line. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.rotate(PI / 4), run_time=2)</span>
+<span class="hot">        self.play(Rotate(group, -PI / 4), run_time=2)</span>
+<span class="dim">        self.play(FadeOut(group), run_time=2)</span></pre>
+    <div class="why">&#128995; Capital <code>R</code>. No <code>.animate</code> &mdash; <code>Rotate</code> is already an animation.</div>
+    <div class="chk">&#9989; Run &mdash; the row tilts, then straightens back up.</div>
+  </div>
+
+  <!-- 68 · move_to concept -->
+  <div class="slide">
+    <div class="pill">&#128208; Units<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>move_to</code> is an address</h2>
+    <svg viewBox="0 0 640 356" style="width:100%;max-height:50vh" aria-hidden="true">
+      <rect x="70" y="30" width="528" height="297" rx="6" fill="#101622" stroke="#3a4560" stroke-width="3"/>
+      <line x1="70" y1="178.5" x2="598" y2="178.5" stroke="#4a5670" stroke-width="2"/>
+      <line x1="334" y1="30" x2="334" y2="327" stroke="#4a5670" stroke-width="2"/>
+      <rect x="297" y="67" width="74" height="74" fill="none" stroke="#4a5670" stroke-width="3" stroke-dasharray="6 5"/>
+      <text x="256" y="58" fill="#8a97b8" font-size="15">square is here now</text>
+      <rect x="408" y="141.5" width="74" height="74" fill="none" stroke="#50fa7b" stroke-width="4"/>
+      <circle cx="445.4" cy="178.5" r="6" fill="#50fa7b"/>
+      <text x="396" y="240" fill="#50fa7b" font-size="17">[3, 0, 0]</text>
+      <line x1="334" y1="104" x2="440" y2="170" stroke="#50fa7b" stroke-width="3" stroke-dasharray="7 5"/>
+      <text x="86" y="312" fill="#8a97b8" font-size="15">x = 3, y = 0, z = 0 &mdash; the centre of the square lands on the dot</text>
+    </svg>
+    <div class="why">&#128995; <code>shift</code> says how far. <code>move_to</code> says exactly where.</div>
+  </div>
+
+  <!-- 69 · BONUS 3 — move_to -->
+  <div class="slide">
+    <div class="steptag">BONUS 3<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Send the square to an address</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(Rotate(group, -PI / 4), run_time=2)</code></div>
+    <div class="where">&#128205; The line under it, still <b>above</b> the fade line. Indent <b>8</b>.</div>
+<pre><span class="dim">        self.play(Rotate(group, -PI / 4), run_time=2)</span>
+<span class="hot">        self.play(square.animate.move_to([3, 0, 0]))</span></pre>
+    <div class="why">&#128995; Three numbers in square brackets. Flat art always ends in <code>0</code>.</div>
+    <div class="chk">&#9989; Run &mdash; the square parks right of centre.</div>
+  </div>
+
+  <!-- 70 · BONUS 4 — two different animations at once -->
+  <div class="slide">
+    <div class="steptag">BONUS 4<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two different changes, one second</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(square.animate.move_to([3, 0, 0]))</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(square.animate.move_to([3, 0, 0]))</span>
+<span class="hot">        self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</span></pre>
+    <div class="why">&#128995; The comma does not care that the two changes are different.</div>
+    <div class="chk">&#9989; Run &mdash; the circle fills in while the square spins. Same second.</div>
+  </div>
+
+  <!-- 71 · next_to concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Placing without numbers</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <circle cx="180" cy="130" r="38" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <text x="150" y="186" fill="#38d0e0" font-size="16">circle</text>
+      <text x="126" y="66" fill="#bd93f9" font-size="24">Shapes</text>
+      <line x1="180" y1="80" x2="180" y2="88" stroke="#8a97b8" stroke-width="2"/>
+      <text x="240" y="70" fill="#8a97b8" font-size="16">title.animate.next_to(circle, UP)</text>
+      <text x="240" y="104" fill="#8a97b8" font-size="15">no coordinates typed at all</text>
+      <text x="240" y="140" fill="#50fa7b" font-size="15">move the circle later and</text>
+      <text x="240" y="164" fill="#50fa7b" font-size="15">the text does not follow &mdash; it is a one-off placement</text>
+    </svg>
+  </div>
+
+  <!-- 72 · BONUS 5 — next_to -->
+  <div class="slide">
+    <div class="steptag">BONUS 5<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Park the text above the circle</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(circle.animate.set_fill(BLUE, opacity=0.7), square.animate.rotate(PI / 4))</span>
+<span class="hot">        self.play(title.animate.next_to(circle, UP))</span></pre>
+    <div class="why">&#128995; Two things in the brackets: which object, which side.</div>
+    <div class="chk">&#9989; Run &mdash; the text slides over and sits on top of the circle.</div>
+  </div>
+
+  <!-- 73 · arrange concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>.arrange()</code> tidies the bag</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="10" y="20" fill="#ff5555" font-size="16">scattered</text>
+      <circle cx="60" cy="66" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="180" y="30" width="40" height="40" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="94" y="96" fill="#bd93f9" font-size="17">Shapes</text>
+      <text x="290" y="66" fill="#50fa7b" font-size="26">&#9654;</text>
+      <text x="350" y="20" fill="#50fa7b" font-size="16">group.animate.arrange(RIGHT, buff=1)</text>
+      <circle cx="380" cy="66" r="22" fill="none" stroke="#38d0e0" stroke-width="3"/>
+      <rect x="428" y="46" width="40" height="40" fill="none" stroke="#e8eef6" stroke-width="3"/>
+      <text x="486" y="74" fill="#bd93f9" font-size="17">Shapes</text>
+      <line x1="402" y1="110" x2="428" y2="110" stroke="#ffb86c" stroke-width="3"/>
+      <text x="382" y="134" fill="#ffb86c" font-size="15">buff = the gap</text>
+      <text x="10" y="180" fill="#8a97b8" font-size="15">One line puts every member of the group in a neat row.</text>
+    </svg>
+  </div>
+
+  <!-- 74 · BONUS 6 — arrange -->
+  <div class="slide">
+    <div class="steptag">BONUS 6<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Line the group back up</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(title.animate.next_to(circle, UP))</code></div>
+    <div class="where">&#128205; The line under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(title.animate.next_to(circle, UP))</span>
+<span class="hot">        self.play(group.animate.arrange(RIGHT, buff=1))</span></pre>
+    <div class="why">&#128995; <code>RIGHT</code> = lay them left to right. <code>buff=1</code> = one unit of gap.</div>
+    <div class="chk">&#9989; Run &mdash; the three shapes snap into an even row.</div>
+  </div>
+
+  <!-- 75 · always_redraw concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A shape that keeps up</h2>
+    <svg viewBox="0 0 600 200" style="width:100%;max-height:40vh" aria-hidden="true">
+      <circle cx="120" cy="60" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <rect x="420" y="36" width="48" height="48" fill="none" stroke="#e8eef6" stroke-width="4"/>
+      <line x1="144" y1="60" x2="420" y2="60" stroke="#50fa7b" stroke-width="3"/>
+      <circle cx="120" cy="150" r="24" fill="none" stroke="#38d0e0" stroke-width="4" opacity=".45"/>
+      <circle cx="250" cy="150" r="24" fill="none" stroke="#38d0e0" stroke-width="4"/>
+      <line x1="274" y1="142" x2="420" y2="76" stroke="#50fa7b" stroke-width="3"/>
+      <text x="150" y="112" fill="#8a97b8" font-size="15">the circle moves&hellip;</text>
+      <text x="300" y="186" fill="#50fa7b" font-size="15">&hellip;and the green line redraws itself every frame</text>
+    </svg>
+    <div class="why">&#128995; A normal line is drawn once. <code>always_redraw</code> rebuilds it 15 times a second.</div>
+  </div>
+
+  <!-- 76 · BONUS 7 — always_redraw -->
+  <div class="slide">
+    <div class="steptag">BONUS 7<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A rubber band between two shapes</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(group.animate.arrange(RIGHT, buff=1))</code></div>
+    <div class="where">&#128205; Three new lines under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(group.animate.arrange(RIGHT, buff=1))</span>
+<span class="hot">        band = always_redraw(lambda: Line(circle.get_center(), square.get_center(), color=GREEN))</span>
+<span class="hot">        self.add(band)</span>
+<span class="hot">        self.play(circle.animate.shift(DOWN * 2))</span></pre>
+    <div class="why">&#128995; <code>self.add</code> shows it with no animation. The band then follows on its own.</div>
+    <div class="chk">&#9989; Run &mdash; the green line stays glued to both shapes.</div>
+  </div>
+
+  <!-- 77 · BONUS 8 — remove the band -->
+  <div class="slide">
+    <div class="steptag">BONUS 8<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Clear the stage</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(circle.animate.shift(DOWN * 2))</code></div>
+    <div class="where">&#128205; New line under it, <b>above</b> the fade line. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(circle.animate.shift(DOWN * 2))</span>
+<span class="hot">        self.remove(band)</span>
+<span class="dim">        self.play(FadeOut(group), run_time=2)</span></pre>
+    <div class="why">&#128995; The band must go first &mdash; it redraws itself and would ignore a fade.</div>
+    <div class="chk">&#9989; Run &mdash; the line vanishes, then the shapes fade out. &#127881;</div>
+  </div>
+
+  <!-- 78 · AnimationGroup concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>AnimationGroup</code> is the engine</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <text x="10" y="20" fill="#8a97b8" font-size="15">lag_ratio = 0  &mdash;  the plain comma behaviour</text>
+      <rect x="10" y="30" width="200" height="18" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="52" width="200" height="18" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="10" y="74" width="200" height="18" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="124" fill="#50fa7b" font-size="15">lag_ratio = 0.5  &mdash;  each one starts halfway in</text>
+      <rect x="10" y="134" width="200" height="18" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="110" y="156" width="200" height="18" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <rect x="210" y="178" width="200" height="18" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="330" y="64" fill="#ffb86c" font-size="15">LaggedStart is just</text>
+      <text x="330" y="86" fill="#ffb86c" font-size="15">AnimationGroup with</text>
+      <text x="330" y="108" fill="#ffb86c" font-size="15">a lag_ratio already set</text>
+    </svg>
+    <div class="why">&#128995; One dial, from 0 to 1. Turn it up and the animations spread out in time.</div>
+  </div>
+
+  <!-- 79 · BONUS 9 — lag_ratio on the ending -->
+  <div class="slide">
+    <div class="steptag">BONUS 9<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Stagger the ending too</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(FadeOut(group), run_time=2)</code></div>
+    <div class="where">&#128205; Replace that one line. Indent stays <b>8 spaces</b>.</div>
+    <div class="tag-old">OLD</div>
+    <div class="was"><pre>        self.play(FadeOut(group), run_time=2)</pre></div>
+    <div class="tag-new">NEW</div>
+    <div class="now"><pre>        self.play(AnimationGroup(FadeOut(circle), FadeOut(square), FadeOut(title), lag_ratio=0.5))</pre></div>
+    <div class="why">&#128995; Now they leave one at a time instead of all at once.</div>
+    <div class="chk">&#9989; Run &mdash; circle goes, then square, then the word.</div>
+  </div>
+
+  <!-- 80 · Mistake — lag_ratio in the wrong brackets -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake &mdash; <code>lag_ratio</code> outside the group</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>self.play(AnimationGroup(FadeOut(circle)), lag_ratio=0.5)</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the dial is handed to <code>self.play</code>, which ignores it</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>self.play(AnimationGroup(FadeOut(circle), lag_ratio=0.5))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the dial belongs to the group</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>run_time</code> belongs to <code>self.play</code>. <code>lag_ratio</code> belongs to <code>AnimationGroup</code>.</p>
+  </div>
+
+  <!-- 81 · animations that are not .animate -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Animations that need no <code>.animate</code></h2>
+    <div class="vocab-table" style="grid-template-columns:auto 1fr">
+      <span class="term">Create</span>
+      <span class="gloss">draws a shape line by line</span>
+
+      <span class="term">Write</span>
+      <span class="gloss">draws Text like a pen</span>
+
+      <span class="term">FadeIn</span>
+      <span class="gloss">anything appears softly</span>
+
+      <span class="term">FadeOut</span>
+      <span class="gloss">anything leaves softly</span>
+
+      <span class="term">Rotate</span>
+      <span class="gloss">turns anything through a real arc</span>
+    </div>
+    <p class="quiet" style="margin-top:.4em">These five are already animations.</p>
+  </div>
+
+  <!-- 82 · timing toolkit -->
+  <div class="slide">
+    <div class="pill">Reference<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The whole timing toolkit</h2>
+    <svg viewBox="0 0 600 220" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="10" y="24" fill="#38d0e0" font-size="16">self.play(a)</text>
+      <rect x="230" y="8" width="120" height="20" rx="5" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="66" fill="#38d0e0" font-size="16">self.play(a, b, c)</text>
+      <rect x="230" y="38" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="230" y="50" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <rect x="230" y="62" width="120" height="9" rx="4" fill="rgba(56,208,224,.25)" stroke="#38d0e0" stroke-width="2"/>
+      <text x="10" y="110" fill="#50fa7b" font-size="16">run_time=2</text>
+      <rect x="230" y="94" width="240" height="20" rx="5" fill="rgba(80,250,123,.22)" stroke="#50fa7b" stroke-width="2"/>
+      <text x="10" y="152" fill="#ffb86c" font-size="16">self.wait(1)</text>
+      <rect x="230" y="136" width="120" height="20" rx="5" fill="rgba(255,184,108,.2)" stroke="#ffb86c" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="10" y="194" fill="#bd93f9" font-size="16">lag_ratio=0.5</text>
+      <rect x="230" y="172" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <rect x="290" y="184" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <rect x="350" y="196" width="120" height="9" rx="4" fill="rgba(189,147,249,.25)" stroke="#bd93f9" stroke-width="2"/>
+      <text x="490" y="24" fill="#8a97b8" font-size="14">1 second</text>
+      <text x="490" y="110" fill="#8a97b8" font-size="14">2 seconds</text>
+    </svg>
+  </div>
+
+  <!-- 83 · Mistake — run_time in the wrong brackets -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake &mdash; <code>run_time</code> in the wrong brackets</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; broken</span>
+<pre>self.play(group.animate.shift(DOWN * 2, run_time=2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; <code>TypeError: shift() got an unexpected keyword argument 'run_time'</code></p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; fixed</span>
+<pre>self.play(group.animate.shift(DOWN * 2), run_time=2)</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; two slow seconds</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em"><code>shift</code> owns the inner brackets. <code>self.play</code> owns the outer ones. <code>run_time</code> belongs to the play.</p>
+  </div>
+
+  <!-- 84 · Transform concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Why the old shape stays behind</h2>
+    <svg viewBox="0 0 600 230" style="width:100%;max-height:44vh" aria-hidden="true">
+      <text x="10" y="18" fill="#ff5555" font-size="15">Transform(triangle, star) &mdash; triangle wears the star costume</text>
+      <rect x="10" y="28" width="270" height="76" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <text x="40" y="76" fill="#ff5555" font-size="26">&#9733;</text>
+      <text x="70" y="72" fill="#8a97b8" font-size="14">this is still called triangle</text>
+      <text x="300" y="76" fill="#8a97b8" font-size="15">star was never put on stage</text>
+      <text x="300" y="98" fill="#ff5555" font-size="15">move star later &rarr; a second one appears</text>
+      <text x="10" y="140" fill="#50fa7b" font-size="15">ReplacementTransform(triangle, star) &mdash; they swap places</text>
+      <rect x="10" y="150" width="270" height="76" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <text x="40" y="198" fill="#50fa7b" font-size="26">&#9733;</text>
+      <text x="70" y="194" fill="#8a97b8" font-size="14">this really is star now</text>
+      <text x="300" y="198" fill="#50fa7b" font-size="15">triangle is gone. One shape on stage.</text>
+    </svg>
+    <div class="why">&#128995; ANDY used <code>Transform</code> in week 1. This is the trap it sets.</div>
+  </div>
+
+  <!-- 85 · BONUS 10 — draw a triangle -->
+  <div class="slide">
+    <div class="steptag">BONUS 10<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Draw a triangle</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.wait(2)</code></div>
+    <div class="where">&#128205; Two new lines under it, at the bottom. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.wait(2)</span>
+<span class="hot">        triangle = Triangle(color=CYAN)</span>
+<span class="hot">        self.play(Create(triangle))</span></pre>
+    <div class="why">&#128995; <code>CYAN</code> has sat unused since week 1. Give it a job.</div>
+    <div class="chk">&#9989; Run &mdash; a cyan triangle draws itself after the fade.</div>
+  </div>
+
+  <!-- 86 · BONUS 11 — ReplacementTransform -->
+  <div class="slide">
+    <div class="steptag">BONUS 11<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Turn the triangle into a star</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(Create(triangle))</code></div>
+    <div class="where">&#128205; Two new lines under it. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.play(Create(triangle))</span>
+<span class="hot">        star = Star(color=BLUE)</span>
+<span class="hot">        self.play(ReplacementTransform(triangle, star))</span></pre>
+    <div class="why">&#128995; Two new names. The four old names stay exactly as they are.</div>
+    <div class="chk">&#9989; Run &mdash; the triangle melts into a blue star.</div>
+  </div>
+
+  <!-- 87 · Mistake — Transform vs ReplacementTransform -->
+  <div class="slide">
+    <div class="pill">&#9888;&#65039; Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Mistake &mdash; the shape that duplicates</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">&#10007; two stars</span>
+<pre>self.play(Transform(triangle, star))
+self.play(star.animate.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; one star stays put, a second star slides away</p>
+      </div>
+      <div class="col good"><span class="tag">&#10003; one star</span>
+<pre>self.play(ReplacementTransform(triangle, star))
+self.play(star.animate.shift(RIGHT * 2))</pre>
+        <p style="margin-top:.4em;font-size:.85em">&rarr; the star slides, nothing left behind</p>
+      </div>
+    </div>
+    <p style="margin-top:.5em">Use <code>Transform</code> only when you never touch the target again.</p>
+  </div>
+
+  <!-- 88 · ValueTracker concept -->
+  <div class="slide">
+    <div class="pill">Concept &#128161;<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A dial the scene can read</h2>
+    <svg viewBox="0 0 600 210" style="width:100%;max-height:42vh" aria-hidden="true">
+      <rect x="20" y="40" width="170" height="70" rx="10" fill="rgba(139,92,246,.16)" stroke="#8b5cf6" stroke-width="3"/>
+      <text x="30" y="32" fill="#8b5cf6" font-size="16">count</text>
+      <text x="72" y="90" fill="#c4a8ff" font-size="34">4.3</text>
+      <text x="28" y="134" fill="#8a97b8" font-size="14">a number, not a shape</text>
+      <text x="212" y="84" fill="#50fa7b" font-size="26">&#10230;</text>
+      <rect x="270" y="20" width="150" height="110" rx="6" fill="#101622" stroke="#3a4560" stroke-width="2"/>
+      <text x="330" y="60" fill="#f1fa8c" font-size="30">4</text>
+      <text x="276" y="150" fill="#8a97b8" font-size="14">always_redraw rebuilds</text>
+      <text x="276" y="170" fill="#8a97b8" font-size="14">the Text every frame</text>
+      <text x="444" y="70" fill="#ffb86c" font-size="15">turn the dial and</text>
+      <text x="444" y="92" fill="#ffb86c" font-size="15">the number on screen</text>
+      <text x="444" y="114" fill="#ffb86c" font-size="15">follows by itself</text>
+    </svg>
+    <div class="why">&#128995; <code>ValueTracker</code> holds a number. <code>always_redraw</code> keeps the picture of it fresh.</div>
+  </div>
+
+  <!-- 89 · BONUS 12 — put the number on stage -->
+  <div class="slide">
+    <div class="steptag">BONUS 12<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Put a live number on the stage</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.play(ReplacementTransform(triangle, star))</code></div>
+    <div class="where">&#128205; Three new lines under it. Indent <b>8 spaces</b>.</div>
+<pre class="tiny"><span class="dim">        self.play(ReplacementTransform(triangle, star))</span>
+<span class="hot">        count = ValueTracker(0)</span>
+<span class="hot">        number = always_redraw(lambda: Text(str(int(count.get_value()))).to_edge(UP))</span>
+<span class="hot">        self.add(number)</span></pre>
+    <div class="why">&#128995; <code>to_edge(UP)</code> parks it at the top. <code>self.add</code> shows it with no animation.</div>
+    <div class="chk">&#9989; Run &mdash; a <code>0</code> appears at the top of the screen and sits there.</div>
+  </div>
+
+  <!-- 90 · BONUS 13 — slide the dial -->
+  <div class="slide">
+    <div class="steptag">BONUS 13<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Count up on screen</h2>
+    <div class="find"><span class="fl">&#128269; Find</span><code>self.add(number)</code></div>
+    <div class="where">&#128205; The line under it &mdash; the very last line. Indent <b>8 spaces</b>.</div>
+<pre><span class="dim">        self.add(number)</span>
+<span class="hot">        self.play(count.animate.set_value(10), run_time=3)</span></pre>
+    <div class="why">&#128995; The dial slides from 0 to 10 over three seconds. The text follows every frame.</div>
+    <div class="chk">&#9989; Run &mdash; the number climbs 0, 1, 2 &hellip; 10 while the star sits below it. &#127881;</div>
+  </div>
+
+  <!-- 91 · Stretch -->
+  <div class="slide">
+    <div class="pill">&#128640; Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">&#9733;</span>Change <code>run_time=2</code> to <code>run_time=5</code> on the fall. Watch the same move crawl.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;</span>Add <code>Triangle(color=CYAN)</code> to the <code>VGroup</code> as a fourth shape.</div>
+      <div class="item"><span class="lvl">&#9733;&#9733;&#9733;</span>Make the scene last exactly 20 seconds by changing only <code>run_time</code> numbers.</div>
+    </div>
+  </div>
+
+  <!-- 92 · Next up -->
+  <div class="slide center-all">
+    <div class="pill">Next up<span class="activity-tag">OPTIONAL</span></div>
+    <p class="line big">What lesson 4 adds</p>
+    <div class="opt-grid two">
+      <div class="opt-card"><div class="ico">&#128200;</div><div class="name">Plot a curve</div><div class="ex">axes.plot(...)</div></div>
+      <div class="opt-card"><div class="ico">&#127991;&#65039;</div><div class="name">Labels that follow</div><div class="ex">always_redraw</div></div>
+      <div class="opt-card"><div class="ico">&#127916;</div><div class="name">Camera moves</div><div class="ex">MovingCameraScene</div></div>
+      <div class="opt-card"><div class="ico">&#128101;</div><div class="name">Groups inside groups</div><div class="ex">VGroup of VGroups</div></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 92</span><button id="next">&rsaquo;</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
