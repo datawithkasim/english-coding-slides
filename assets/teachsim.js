@@ -19,11 +19,11 @@
     'canvas.tsim{width:min(860px,94%);aspect-ratio:16/9;display:block;background:#0b111a;' +
     'border:1px solid #2a3444;border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.45)}' +
     '.tsim-ctl{display:flex;gap:1.3rem;align-items:center;flex-wrap:wrap;justify-content:center;' +
-    'font-family:"JetBrains Mono",monospace;font-size:clamp(13px,1.5vw,18px);color:#93a1b5}' +
-    '.tsim-ctl label{display:flex;gap:.5em;align-items:center;color:#e8eef6}' +
-    '.tsim-ctl output{color:#38d0e0;min-width:2em;display:inline-block;text-align:right}' +
-    '.tsim-ctl input[type=range]{accent-color:#38d0e0;width:clamp(120px,18vw,220px)}' +
-    '.tsim-note{color:#93a1b5;font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.4vw,16px)}';
+    'font-family:"JetBrains Mono",monospace;font-size:clamp(13px,1.5vw,18px);color:#5c6478}' +
+    '.tsim-ctl label{display:flex;gap:.5em;align-items:center;color:#1f2233}' +
+    '.tsim-ctl output{color:#d9480f;min-width:2em;display:inline-block;text-align:right}' +
+    '.tsim-ctl input[type=range]{accent-color:#d9480f;width:clamp(120px,18vw,220px)}' +
+    '.tsim-note{color:#5c6478;font-family:"JetBrains Mono",monospace;font-size:clamp(12px,1.4vw,16px)}';
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
 
   // ---- engine ----
