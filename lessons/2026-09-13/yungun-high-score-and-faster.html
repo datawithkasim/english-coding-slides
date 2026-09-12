@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snake — High Score, and a Faster Snake (Yungun · 2026-09-13)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">RS001 · Pygame Snake · Yungun · 13 Sep 2026</div>
+
+  <!-- ============ 1 · Title ============ -->
+  <div class="slide active center-all">
+    <span class="slot-badge">SLOT 1</span>
+    <div class="pill">Pygame Snake</div>
+    <div class="emoji">🏆</div>
+    <h1>High Score —<br>and a Faster Snake</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Today you kill <span class="sub">two bugs</span>, keep your <span class="sub">best score</span>, and make the snake <span class="sub">speed up</span>.</p>
+  </div>
+
+  <!-- ============ 2 · Your file right now ============ -->
+  <div class="slide">
+    <span class="slot-badge">SLOT 2</span>
+    <div class="pill purple">Your file</div>
+    <h2><code>main.py</code> is already a finished game</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">eat 🍋 · grow · score goes up</div>
+      <div class="cc-step s2">hit a wall or yourself → frozen</div>
+      <div class="cc-step s3">GAME OVER · Score · Press R to restart</div>
+      <div class="cc-step s4">✓ press R → brand new game</div>
+    </div>
+  </div>
+
+  <!-- ============ 3 · Recap · your own sentence ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Yesterday · your win</div>
+    <h2>You said the whole rule out loud</h2>
+    <div class="frame-card">
+      <div class="label">Your sentence, yesterday</div>
+      <div class="frame">"If game over <b>and</b> when we press the R, you're restarting."</div>
+      <div class="pair-prompt">That is exactly what the code says. Say it again now.</div>
+    </div>
+  </div>
+
+  <!-- ============ 4 · Recap · plusing the score ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Recap</div>
+    <h2>"Plusing the score" — your words</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">score = 0</div>
+        <div class="ra-line">ate 🍋 → score = score + 1</div>
+        <div class="ra-line">ate 🍋 → score = score + 1</div>
+        <div class="ra-line">ate 🍋 → score = score + 1</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">score</span>
+        <span class="ra-vals"><span>0</span><span>1</span><span>2</span><span>3</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 5 · Recap · render and blit ============ -->
+  <div class="slide">
+    <span class="slot-badge">RECAP</span>
+    <div class="pill purple">Recap · the trap you hit</div>
+    <h2>Render and blit are two jobs</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ render only</span>
+<pre>game_over_text = big_font.<span class="fn">render</span>(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre>
+        <p>A picture gets made. Nobody puts it on screen. "Nothing happens."</p>
+      </div>
+      <div class="col good"><span class="tag">✓ render, then blit</span>
+<pre>game_over_text = big_font.<span class="fn">render</span>(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)
+screen.<span class="fn">blit</span>(game_over_text, (<span class="num">170</span>, <span class="num">250</span>))</pre>
+        <p>Made, then stuck down.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 6 · Recap trace · before and after R ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Fill in the after column</h2>
+    <div class="trace-grid">
+      <div class="cell head">box</div>
+      <div class="cell head">before R</div>
+      <div class="cell head">after R</div>
+
+      <div class="cell">snake_body</div>
+      <div class="cell">9 squares</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1 square</span></details></div>
+
+      <div class="cell">direction</div>
+      <div class="cell">(-1, 0)</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">(1, 0)</span></details></div>
+
+      <div class="cell">score</div>
+      <div class="cell">8</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+
+      <div class="cell">game_over</div>
+      <div class="cell">True</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell">time_since_last_move</div>
+      <div class="cell">4820</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 7 · Recap quiz ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Which line lets the snake move again after R?</div>
+      <div class="opts">
+        <details><summary>A. score = 0</summary><div class="ans">No — that only clears the counter.</div></details>
+        <details><summary>B. game_over = False</summary><div class="ans">✓ The guard reads that flag every frame.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. You spotted a colour bug yesterday. Which one?</div>
+      <div class="opts">
+        <details><summary>A. the score text was hard to read</summary><div class="ans">✓ Your words: "the score is still white." Good eyes.</div></details>
+        <details><summary>B. the snake was the wrong colour</summary><div class="ans">No — the snake was fine.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 8 · Hook · two bugs still live ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">The problem 🤔</div>
+    <h2>Two bugs are still in your file</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">🐛 bug 1</span>
+        <p>🍋 Sometimes the food never shows up. You can never reach it.</p>
+      </div>
+      <div class="col bad"><span class="tag">🐛 bug 2</span>
+        <p>💥 Die, then move the mouse — red error, game dead.</p>
+      </div>
+    </div>
+    <div class="debug-card"><div class="err">AttributeError: 'Event' object has no attribute 'key'</div></div>
+  </div>
+
+  <!-- ============ 9 · Hook · what the game still cannot do ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">And then 🚀</div>
+    <h2>Three things it still cannot do</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">🏆</div><div class="name">remember your best</div><div class="ex">R wipes everything</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">get harder</div><div class="ex">same speed forever</div></div>
+      <div class="opt-card"><div class="ico">⏸️</div><div class="name">pause</div><div class="ex">no way to stop</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 10 · Today's plan ============ -->
+  <div class="slide">
+    <span class="slot-badge">PLAN</span>
+    <div class="pill">Today's plan 🗺️</div>
+    <h2>Four tiny versions</h2>
+    <div class="opt-grid">
+      <div class="opt-card"><div class="ico">🍋</div><div class="name">v1 · reach the food</div><div class="ex">the -1 bug</div></div>
+      <div class="opt-card"><div class="ico">💥</div><div class="name">v2 · stop the crash</div><div class="ex">one indent level</div></div>
+      <div class="opt-card"><div class="ico">🏆</div><div class="name">v3 · high score</div><div class="ex">survives R</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">v4 · speed up</div><div class="ex">every bite</div></div>
+      <div class="opt-card"><div class="ico">🎁</div><div class="name">bonus</div><div class="ex">pause · countdown · quit</div></div>
+      <div class="opt-card"><div class="ico">🔭</div><div class="name">more bonus</div><div class="ex">points · colour · two foods</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 11 · Vocab ============ -->
+  <div class="slide">
+    <span class="slot-badge">VOCAB</span>
+    <div class="pill">Vocab</div>
+    <h2>4 new words</h2>
+    <div class="vocab-table">
+      <span class="term">high score</span>
+      <span class="gloss">your best score ever, kept between games</span>
+      <span class="term">floor</span>
+      <span class="gloss">the smallest a number is allowed to get</span>
+      <span class="term">indent level</span>
+      <span class="gloss">how far right a line starts — it picks which block owns the line</span>
+      <span class="term">AttributeError</span>
+      <span class="gloss">you asked a thing for something it does not have</span>
+    </div>
+  </div>
+
+  <!-- ============ 12 · Warm-up · run it and play it ============ -->
+  <div class="slide">
+    <span class="slot-badge">WARM-UP</span>
+    <div class="pill">Run ▶</div>
+    <h2>Play three games first</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">press ▶ Run</div>
+      <div class="cc-step s2">eat until you die</div>
+      <div class="cc-step s3">press R, play again, twice more</div>
+      <div class="cc-step s4">👀 did the food ever fail to appear?</div>
+    </div>
+  </div>
+
+  <!-- ============ 13 · Warm-up · what spawn_food hands back ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Your own code 📄</div>
+    <h2><code>spawn_food</code> hands back one square</h2>
+    <div class="viz viz-func">
+      <div class="fn-caller">
+        <span class="fn-callcode">food = <span class="arg">spawn_food</span>()</span>
+        <span class="fn-result">→ <span class="rv">(12, 8)</span></span>
+      </div>
+      <div class="fn-flow-down">↓ call</div>
+      <div class="fn-body">
+        <div class="fn-sig">def spawn_food():</div>
+        <div class="fn-line">roll an <span class="param-use">across</span> number and a <span class="param-use">down</span> number</div>
+        <div class="fn-line">free square? return pos</div>
+      </div>
+      <div class="fn-flow-up">↑ hands the square back</div>
+    </div>
+  </div>
+
+  <!-- ============ 14 · Warm-up · the symptom ============ -->
+  <div class="slide">
+    <span class="slot-badge">WARM-UP</span>
+    <div class="pill">🐛 The symptom</div>
+    <h2>Food you can never reach</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">the across row · squares -1 … 3</div>
+      <div class="iter-row">
+        <div class="iter-item">-1 🍋</div>
+        <div class="iter-item">0</div>
+        <div class="iter-item">1</div>
+        <div class="iter-item">2</div>
+        <div class="iter-item">3</div>
+      </div>
+      <div class="viz-arrow">⬅ square -1 is drawn off the left edge</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Sometimes the yellow square never appears. Now you know why.</p>
+  </div>
+
+  <!-- ============ 15 · Warm-up · read the line in halves ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Read your line in two halves</h2>
+    <div class="varbox-row">
+      <div class="varbox"><span class="name">across half</span><span class="val">(randint(0, GRID_WIDTH) - 1)</span></div>
+      <div class="varbox"><span class="name">down half</span><span class="val">randint(0, GRID_HEIGHT-1)</span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">The two halves are <b>not</b> the same shape. The <code>- 1</code> moved.</p>
+  </div>
+
+  <!-- ============ 16 · Warm-up · where the bracket sits ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Inside the brackets, or outside</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ outside</span>
+<pre>(random.<span class="fn">randint</span>(<span class="num">0</span>, <span class="num">30</span>) - <span class="num">1</span>)</pre>
+        <p>Roll 0 to 30, <b>then</b> take 1 off. Lowest answer: <b>-1</b>.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ inside</span>
+<pre>random.<span class="fn">randint</span>(<span class="num">0</span>, <span class="num">30</span> - <span class="num">1</span>)</pre>
+        <p>Roll 0 to 29. Lowest answer: <b>0</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 17 · Warm-up · trace ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>What can come out?</h2>
+    <div class="trace-grid">
+      <div class="cell head">roll</div>
+      <div class="cell head">randint(0, 30) - 1</div>
+      <div class="cell head">on the board?</div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">-1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+
+      <div class="cell">1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">30</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">29</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 18 · STEP 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 1 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v1 · Move the <code>- 1</code> inside</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        pos = ((random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH) - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT-<span class="num">1</span>))<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        pos = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pos = ((random.randint(0, GRID_WIDTH) - 1), random.randint(0, GRID_HEIGHT-1))</code><br>
+      📍 <b>WHERE:</b> replace that whole line · <b>8 spaces</b>, inside <code>spawn_food</code><br>
+      🟣 <b>WHY:</b> the roll must never hand back -1<br>
+      ✅ <b>CHECK:</b> run ten times — the yellow square is on screen every single time
+    </div>
+  </div>
+
+  <!-- ============ 19 · Run v1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>v1 — the fixed function</h2>
+<pre><span class="kw">def</span> <span class="fn">spawn_food</span>():
+    <span class="kw">while</span> <span class="kw">True</span>:
+        pos = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+        <span class="kw">if</span> pos <span class="kw">not</span> <span class="kw">in</span> snake_body:
+            <span class="kw">return</span> pos</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">A yellow square, always inside the mint window.</div>
+    </div>
+  </div>
+
+  <!-- ============ 20 · Common mistake · the other bracket ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Do not delete a bracket</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>pos = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>, random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))</pre>
+        <p>One closing bracket is missing.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>pos = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))</pre>
+        <p>Every <code>(</code> has its own <code>)</code>.</p>
+      </div>
+    </div>
+    <div class="debug-card"><div class="err">TypeError: randint() takes 3 positional arguments but 4 were given</div></div>
+  </div>
+
+  <!-- ============ 21 · Common mistake · the missing () ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>"Where is the parenthesis?"</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ no brackets</span>
+<pre>food = <span class="fn">spawn_food</span></pre>
+        <p>You handed over the <b>recipe</b>. Nobody cooked it. <code>food</code> is not a square.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ brackets</span>
+<pre>food = <span class="fn">spawn_food</span>()</pre>
+        <p><code>()</code> means <b>do it now</b>. <code>food</code> becomes two numbers.</p>
+      </div>
+    </div>
+    <div class="debug-card"><div class="err">TypeError: 'function' object is not subscriptable</div></div>
+  </div>
+
+  <!-- ============ 22 · Common mistake · the colour outside ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>The colour lives <i>inside</i> render</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ closed too early</span>
+<pre>big_font.<span class="fn">render</span>(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>), RED)</pre>
+        <p>The bracket shuts after <code>True</code>, so <code>RED</code> falls outside.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ three things inside</span>
+<pre>big_font.<span class="fn">render</span>(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre>
+        <p>Words, then <code>True</code>, then the colour. One bracket holds all three.</p>
+      </div>
+    </div>
+    <div class="debug-card"><div class="err">SyntaxError: unmatched ')'</div></div>
+  </div>
+
+  <!-- ============ 23 · Quiz 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>randint(0, 5) - 1</code> — what is the smallest answer?</div>
+      <div class="opts">
+        <details><summary>A. 0</summary><div class="ans">No — the roll itself can be 0, and 0 - 1 is -1.</div></details>
+        <details><summary>B. -1</summary><div class="ans">✓ That square is off the board.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. <code>randint(0, 5 - 1)</code> — what is the biggest answer?</div>
+      <div class="opts">
+        <details><summary>A. 4</summary><div class="ans">✓ It rolls 0, 1, 2, 3 or 4.</div></details>
+        <details><summary>B. 5</summary><div class="ans">No — the 5 became a 4 before the roll.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 24 · Hook · the crash after you die ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">The problem 🤔</div>
+    <h2>Die, then move the mouse</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">you crash into the wall</div>
+      <div class="cc-step s2">GAME OVER shows up</div>
+      <div class="cc-step s3">you wiggle the mouse</div>
+      <div class="cc-step s4">💥 red error, game gone</div>
+    </div>
+    <div class="debug-card"><div class="err">AttributeError: 'Event' object has no attribute 'key'</div></div>
+  </div>
+
+  <!-- ============ 25 · Concept · the event box ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Every kind of event goes in one queue</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">what <code>pygame.event.get()</code> hands you</div>
+      <div class="iter-row">
+        <div class="iter-item">QUIT ✖</div>
+        <div class="iter-item">KEYDOWN ⌨️</div>
+        <div class="iter-item">MOUSEMOTION 🖱️</div>
+        <div class="iter-item">MOUSEBUTTONDOWN 👆</div>
+      </div>
+      <div class="viz-arrow">⬇ your <code>for event</code> loop sees all four</div>
+    </div>
+  </div>
+
+  <!-- ============ 26 · Zoom in · which events have a key ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Which ones own a <code>.key</code>?</h2>
+    <div class="trace-grid">
+      <div class="cell head">event</div>
+      <div class="cell head">event.key works?</div>
+      <div class="cell head">why</div>
+
+      <div class="cell">KEYDOWN</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell">a key was pressed</div>
+
+      <div class="cell">MOUSEMOTION</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell">it carries a position</div>
+
+      <div class="cell">QUIT</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell">it carries nothing</div>
+    </div>
+  </div>
+
+  <!-- ============ 27 · Concept · two boxes ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Your loop has two boxes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">outer box · 8 spaces</span>
+        <p><b>ANY event</b><br>mouse, quit, key — everything.<br>Asking for <code>.key</code> here is a gamble.</p>
+      </div>
+      <div class="col good"><span class="tag">inner box · 12 spaces</span>
+        <p><b>KEY events only</b><br>inside <code>elif event.type == pygame.KEYDOWN:</code><br><code>.key</code> is always safe here.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.4em">Your R block is in the wrong box.</p>
+  </div>
+
+  <!-- ============ 28 · Zoom in · your file right now ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Your file 📄</div>
+    <h2>Count the spaces</h2>
+<pre><span style="display:block;opacity:.35">        <span class="kw">elif</span> event.type == pygame.KEYDOWN:</span><span style="display:block;opacity:.35">            <span class="kw">if</span> event.key == pygame.K_RIGHT <span class="kw">and</span> direction != (-<span class="num">1</span>, <span class="num">0</span>):</span><span style="display:block;opacity:.35">                direction = (<span class="num">1</span>, <span class="num">0</span>)</span><span style="display:block;background:rgba(220,53,69,.12)">        <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:<span class="activity-tag" style="background:#dc3545">8 SPACES</span></span></pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ What that means</div>
+      <div style="opacity:1">8 spaces makes it a <b>sister</b> of the KEYDOWN test, not a child. Every event runs it.</div>
+    </div>
+  </div>
+
+  <!-- ============ 29 · Zoom in · why it was fine while alive ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2><code>and</code> stops reading when it can</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">game_over is True</span>
+        <span class="case case-b">game_over is False</span>
+      </div>
+      <div class="if-cond">game_over and event.key == pygame.K_r</div>
+      <div class="if-branches">
+        <div class="if-branch true">carry on — reads event.key</div>
+        <div class="if-branch false">stop — never reads event.key</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ A mouse move arrives</div>
+        <div class="out-line out-a">💥 AttributeError</div>
+        <div class="out-line out-b">safe, no crash</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 30 · STEP 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 2 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v2 · Push all seven lines right</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+            snake_body = [(start_x, start_y)]
+            direction = (<span class="num">1</span>, <span class="num">0</span>)
+            food = <span class="fn">spawn_food</span>()
+            score = <span class="num">0</span>
+            game_over = <span class="kw">False</span>
+            time_since_last_move = <span class="num">0</span><span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+                snake_body = [(start_x, start_y)]
+                direction = (<span class="num">1</span>, <span class="num">0</span>)
+                food = <span class="fn">spawn_food</span>()
+                score = <span class="num">0</span>
+                game_over = <span class="kw">False</span>
+                time_since_last_move = <span class="num">0</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if game_over and event.key == pygame.K_r:</code><br>
+      📍 <b>WHERE:</b> select that line and the <b>six</b> under it, press <b>Tab</b> once · the <code>if</code> goes 8 → <b>12 spaces</b>, the six go 12 → <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> 12 spaces puts it inside the KEYDOWN block, so only key presses reach it<br>
+      ✅ <b>CHECK:</b> die, wiggle the mouse — no red error. Press R — new game.
+    </div>
+  </div>
+
+  <!-- ============ 31 · Run v2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>v2 — the crash is gone</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">crash into the wall</div>
+      <div class="cc-step s2">wiggle the mouse · click · nothing breaks</div>
+      <div class="cc-step s3">press R</div>
+      <div class="cc-step s4">✓ new game, every time</div>
+    </div>
+  </div>
+
+  <!-- ============ 32 · Indent ladder ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>The ladder in your event loop</h2>
+    <div class="trace-grid">
+      <div class="cell head">spaces</div>
+      <div class="cell head">the line</div>
+      <div class="cell head">runs when</div>
+
+      <div class="cell">4</div>
+      <div class="cell">for event in pygame.event.get():</div>
+      <div class="cell">every frame</div>
+
+      <div class="cell">8</div>
+      <div class="cell">elif event.type == pygame.KEYDOWN:</div>
+      <div class="cell">any event</div>
+
+      <div class="cell">12</div>
+      <div class="cell">if game_over and event.key == ...</div>
+      <div class="cell">key events only</div>
+
+      <div class="cell">16</div>
+      <div class="cell">score = 0</div>
+      <div class="cell">R after a crash</div>
+    </div>
+  </div>
+
+  <!-- ============ 33 · Read the indent ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Who owns this line?</h2>
+    <div class="trace-grid">
+      <div class="cell head">spaces</div>
+      <div class="cell head">owner</div>
+      <div class="cell head">how often</div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nobody — the file</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">once</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">while running:</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">every frame</span></details></div>
+
+      <div class="cell">8</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">for event:</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">once per event</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 34 · Common mistake · half a move ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Move the <code>if</code>, move the six too</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ only the if moved</span>
+<pre>            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+            snake_body = [(start_x, start_y)]</pre>
+        <p>The <code>if</code> now owns nothing.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ all seven moved</span>
+<pre>            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+                snake_body = [(start_x, start_y)]</pre>
+        <p>The six lines are 4 spaces further in than the <code>if</code>.</p>
+      </div>
+    </div>
+    <div class="debug-card"><div class="err">IndentationError: expected an indented block</div></div>
+  </div>
+
+  <!-- ============ 35 · Debug 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — the resets run all the time</h2>
+<pre>            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+                snake_body = [(start_x, start_y)]
+            score = <span class="num">0</span>
+            game_over = <span class="kw">False</span></pre>
+    <div class="debug-card"><div class="err">No crash. The score is stuck on 0 and the snake never dies.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The last two lines sit at 12 spaces, so every key press runs them. Push both to <b>16 spaces</b>.</p>
+    </details>
+  </div>
+
+  <!-- ============ 36 · Debug 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — R works while you are playing</h2>
+<pre>            <span class="kw">if</span> event.key == pygame.K_r:
+                snake_body = [(start_x, start_y)]
+                score = <span class="num">0</span></pre>
+    <div class="debug-card"><div class="err">No crash. A stray R in the middle of a good run wipes your score.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">Add the first half back: <code>if game_over and event.key == pygame.K_r:</code>. Both parts must be True.</p>
+    </details>
+  </div>
+
+  <!-- ============ 37 · Common mistake · elif ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>if</code>, not <code>elif</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ elif</span>
+<pre>            <span class="kw">elif</span> event.key == pygame.K_DOWN <span class="kw">and</span> ...:
+                direction = (<span class="num">0</span>, <span class="num">1</span>)
+            <span class="kw">elif</span> game_over <span class="kw">and</span> event.key == pygame.K_r:</pre>
+        <p>It joins the arrow-key chain. If an arrow already matched, R is skipped.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ if</span>
+<pre>            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:</pre>
+        <p>A fresh question. Python always asks it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 38 · Quiz 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why reset <code>time_since_last_move</code>?</div>
+      <div class="opts">
+        <details><summary>A. it looks tidy</summary><div class="ans">No — it changes what happens.</div></details>
+        <details><summary>B. it filled up while the game was frozen</summary><div class="ans">✓ Otherwise the new snake sprints on the first frame.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. What if you reset <code>food</code> before <code>snake_body</code>?</div>
+      <div class="opts">
+        <details><summary>A. no difference at all</summary><div class="ans">Not quite — read the other option.</div></details>
+        <details><summary>B. the food dodges the OLD long snake</summary><div class="ans">✓ It can land on a square the new short snake never uses.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 39 · Modify 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>            <span class="kw">if</span> game_over ___ event.key == pygame.___:
+                snake_body = [(start_x, start_y)]
+                direction = (___, ___)
+                score = ___
+                game_over = ___</pre>
+    <p style="margin-top:.5em"><b>Hint:</b> both halves must be true, the snake starts moving right, and the flag comes down.</p>
+  </div>
+
+  <!-- ============ 40 · Code talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell Kasim in one sentence</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"The R block crashed because it was at <span class="blank"></span> spaces, so <span class="blank"></span> events reached it."</div>
+      <div class="frame" style="margin-top:.4em">"A mouse event has no <span class="blank"></span>, so Python raised <span class="blank"></span>."</div>
+      <div class="pair-prompt">Full sentences, out loud.</div>
+    </div>
+  </div>
+
+  <!-- ============ 41 · Hook · your best run disappears ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">The problem 🤔</div>
+    <h2>Your best game vanishes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ now</span>
+        <p>You score <b>14</b>.<br>You press R.<br>Next game you score 2.<br>The 14 is gone forever.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ by the end</span>
+        <p>🏆 <b>Best: 14</b> stays on the game over screen.<br>Only a better run can beat it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 42 · Concept · a score that survives ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>One box you never reset</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">game 1 ends on 4 → best = 4</div>
+        <div class="ra-line">game 2 ends on 2 → best stays</div>
+        <div class="ra-line">game 3 ends on 9 → best = 9</div>
+        <div class="ra-line">game 4 ends on 7 → best stays</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">high_score</span>
+        <span class="ra-vals"><span>4</span><span>4</span><span>9</span><span>9</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 43 · Concept · two boxes, one arrow ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>What R can reach — and what it cannot</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">the R block is a broom. It only sweeps its own room.</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">🔁 inside the R block</span><span class="val">snake_body · direction · food · score · game_over · timer</span></div>
+        <div class="varbox"><span class="name">🏆 outside the R block</span><span class="val">high_score</span></div>
+      </div>
+      <div class="viz-arrow">⬅ R empties the left box only</div>
+    </div>
+  </div>
+
+  <!-- ============ 44 · Concept · three homes ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Three places you could put it</h2>
+    <div class="trace-grid">
+      <div class="cell head">where <code>high_score = 0</code> goes</div>
+      <div class="cell head">what happens</div>
+      <div class="cell head">good?</div>
+
+      <div class="cell">inside the R block</div>
+      <div class="cell">wiped on every restart</div>
+      <div class="cell">✗ always 0</div>
+
+      <div class="cell">inside <code>while running:</code></div>
+      <div class="cell">rebuilt 60 times a second</div>
+      <div class="cell">✗ always 0</div>
+
+      <div class="cell">above <code>while running:</code></div>
+      <div class="cell">made once, then left alone</div>
+      <div class="cell">✓ it survives</div>
+    </div>
+  </div>
+
+  <!-- ============ 45 · Common mistake · inside the loop ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Above the loop, not inside it</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ inside</span>
+<pre><span class="kw">while</span> running:
+    high_score = <span class="num">0</span>
+    dt = clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
+        <p>Reset every frame. It can never hold a record.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ above</span>
+<pre>high_score = <span class="num">0</span>
+
+<span class="kw">while</span> running:
+    dt = clock.<span class="fn">tick</span>(<span class="num">60</span>)</pre>
+        <p>Made once, before the game starts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 46 · STEP 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 3 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · A box for the best 🏆</h2>
+<pre><span style="display:block;opacity:.35">MOVE_INTERVAL = <span class="num">150</span></span><span style="display:block;background:rgba(56,208,224,.13)">high_score = <span class="num">0</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>MOVE_INTERVAL = 150</code><br>
+      📍 <b>WHERE:</b> the line under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> made once, at the top, so R never touches it<br>
+      ✅ <b>CHECK:</b> run — no red error. Nothing looks different yet.
+    </div>
+  </div>
+
+  <!-- ============ 47 · STEP 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 4 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Keep the bigger number</h2>
+<pre><span style="display:block;opacity:.35">            game_over = <span class="kw">True</span></span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> score &gt; high_score:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                high_score = score<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>game_over = True</code><br>
+      📍 <b>WHERE:</b> the two lines under it · <code>if</code> = <b>12 spaces</b>, <code>high_score =</code> = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> only a better run should replace the record<br>
+      ✅ <b>CHECK:</b> run — no red error. Nothing visible yet.
+    </div>
+  </div>
+
+  <!-- ============ 48 · Zoom in · why the > ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>The <code>&gt;</code> is the whole idea</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">score 9 · high_score 4</span>
+        <span class="case case-b">score 2 · high_score 4</span>
+      </div>
+      <div class="if-cond">score &gt; high_score</div>
+      <div class="if-branches">
+        <div class="if-branch true">high_score = score</div>
+        <div class="if-branch false">skip the line</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ high_score after</div>
+        <div class="out-line out-a">9 — a new record</div>
+        <div class="out-line out-b">4 — the record holds</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 49 · Zoom in · where the fourth line goes ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎</div>
+    <h2>Your game over screen, by height</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">600 pixels tall · bigger number = further down</div>
+      <div class="iter-row">
+        <div class="iter-item">GAME OVER · 250</div>
+        <div class="iter-item">Score: 3 · 350</div>
+        <div class="iter-item">Press R · 400</div>
+        <div class="iter-item">Best: 9 · 450</div>
+      </div>
+      <div class="viz-arrow">⬇ 450 is the first empty row under your prompt</div>
+    </div>
+  </div>
+
+  <!-- ============ 50 · STEP 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 5 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v3 · Show the best 🏆</h2>
+<pre><span style="display:block;opacity:.35">        screen.<span class="fn">blit</span>(restart_prompt, (<span class="num">230</span>, <span class="num">400</span>))</span><span style="display:block;background:rgba(56,208,224,.13)">        best_text = big_font.<span class="fn">render</span>(f<span class="str">"Best: {high_score}"</span>, <span class="kw">True</span>, (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        screen.<span class="fn">blit</span>(best_text, (<span class="num">210</span>, <span class="num">450</span>))<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>screen.blit(restart_prompt, (230, 400))</code><br>
+      📍 <b>WHERE:</b> the two lines under it · both <b>8 spaces</b>, inside <code>if game_over:</code><br>
+      🟣 <b>WHY:</b> 450 is under 400, so it makes a fourth line of text<br>
+      ✅ <b>CHECK:</b> play twice — <b>Best:</b> keeps the higher number
+    </div>
+  </div>
+
+  <!-- ============ 51 · Run · four lines ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>Four lines of text now</h2>
+    <div class="output-box">
+      <div class="out-label">▸ On screen after you crash</div>
+      <div style="opacity:1">GAME OVER<br>Score: 3<br>Press 'R' to restart...<br>Best: 9</div>
+    </div>
+    <p class="center" style="margin-top:.5em">Play again and score 11 — the bottom line changes to <b>Best: 11</b>.</p>
+  </div>
+
+  <!-- ============ 52 · Common mistake · words not number ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>A name inside quotes is just words</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ plain string</span>
+<pre>big_font.<span class="fn">render</span>(<span class="str">"Best: high_score"</span>, ...)</pre>
+        <p>The screen shows the letters <b>Best: high_score</b>. No number anywhere.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ f-string</span>
+<pre>big_font.<span class="fn">render</span>(f<span class="str">"Best: {high_score}"</span>, ...)</pre>
+        <p>The <code>f</code> plus <code>{ }</code> swaps the name for the number: <b>Best: 9</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 53 · Common mistake · font size 200 ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>200 is far too big</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">window is 600 across · how wide "GAME OVER" comes out</div>
+      <div class="iter-row">
+        <div class="iter-item">size 60 → 260 wide ✓</div>
+        <div class="iter-item">size 200 → 870 wide ✗</div>
+      </div>
+      <div class="viz-arrow">⬅ at 200 the words run off both edges</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Your <code>big_font</code> is 60. Leave it there.</p>
+  </div>
+
+  <!-- ============ 54 · Trace · high_score ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">activity</span></div>
+    <h2>Four games in a row</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">game</div>
+      <div class="cell head">score</div>
+      <div class="cell head">score &gt; high_score?</div>
+      <div class="cell head">high_score after</div>
+
+      <div class="cell">1</div>
+      <div class="cell">4</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">2</div>
+      <div class="cell">2</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">4</span></details></div>
+
+      <div class="cell">3</div>
+      <div class="cell">9</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+
+      <div class="cell">4</div>
+      <div class="cell">7</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">9</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 55 · Common mistake · resetting the best ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Do not reset the record</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ broken</span>
+<pre>                score = <span class="num">0</span>
+                high_score = <span class="num">0</span></pre>
+        <p>Press R and the record is gone. It can never grow past one game.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ fixed</span>
+<pre>                score = <span class="num">0</span></pre>
+        <p><code>high_score</code> is the one box R leaves alone.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 56 · Debug 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">DEBUG</span>
+    <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+    <h2>Bug — Best shows a bad game</h2>
+<pre>            game_over = <span class="kw">True</span>
+            high_score = score</pre>
+    <div class="debug-card"><div class="err">No crash. Score 14, then score 1 — Best drops to 1.</div></div>
+    <details class="debug-card">
+      <summary>Reveal fix</summary>
+      <p style="margin-top:.4em">The <code>if score &gt; high_score:</code> line is missing. Add it above, then push <code>high_score = score</code> to <b>16 spaces</b>.</p>
+    </details>
+  </div>
+
+  <!-- ============ 57 · Quiz 3 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why does <code>high_score = 0</code> sit at 0 spaces?</div>
+      <div class="opts">
+        <details><summary>A. 0 spaces looks neater</summary><div class="ans">No — the indent decides who can wipe it.</div></details>
+        <details><summary>B. so nothing inside the loop can reset it</summary><div class="ans">✓ Made once, before the game starts.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. You score 5, then 5 again. What does Best show?</div>
+      <div class="opts">
+        <details><summary>A. 10</summary><div class="ans">No — scores are never added together.</div></details>
+        <details><summary>B. 5</summary><div class="ans">✓ 5 is not greater than 5, so the line is skipped.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 58 · Modify 2 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MODIFY</span>
+    <div class="pill">Try it<span class="activity-tag">activity</span></div>
+    <h2>Fill in the blanks</h2>
+<pre>            game_over = <span class="kw">True</span>
+            <span class="kw">if</span> score ___ high_score:
+                ___ = score
+
+        best_text = big_font.<span class="fn">render</span>(___<span class="str">"Best: {___}"</span>, <span class="kw">True</span>, (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))</pre>
+    <p style="margin-top:.5em"><b>Hint:</b> the record only changes when the new score is bigger, and the text needs an <code>f</code>.</p>
+  </div>
+
+  <!-- ============ 59 · Code talk ============ -->
+  <div class="slide">
+    <span class="slot-badge">CODE TALK</span>
+    <div class="pill purple">Code Talk</div>
+    <h2>Tell Kasim in one sentence</h2>
+    <div class="frame-card">
+      <div class="label">Sentence frame</div>
+      <div class="frame">"<code>high_score</code> lives at <span class="blank"></span> spaces, so pressing R <span class="blank"></span> it."</div>
+      <div class="frame" style="margin-top:.4em">"It only changes when <span class="blank"></span> is greater than <span class="blank"></span>."</div>
+      <div class="pair-prompt">Full sentences, out loud.</div>
+    </div>
+  </div>
+
+  <!-- ============ 60 · Hook · the game never gets harder ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">The problem 🤔</div>
+    <h2>Bite 1 feels the same as bite 30</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ now</span>
+        <p>The snake crawls at one speed forever. A long game gets <b>boring</b>, not hard.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ by the end</span>
+        <p>⚡ Every bite makes the snake quicker — until it hits a safety floor.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 61 · Concept · MOVE_INTERVAL is a wait ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2><code>MOVE_INTERVAL</code> is a wait, not a speed</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">milliseconds between steps</div>
+      <div class="iter-row">
+        <div class="iter-item">150 · slow</div>
+        <div class="iter-item">120</div>
+        <div class="iter-item">90</div>
+        <div class="iter-item">60 · fast</div>
+      </div>
+      <div class="viz-arrow">⬇ smaller wait = faster snake</div>
+    </div>
+    <p class="center" style="margin-top:.4em">A smaller number means a faster snake.</p>
+  </div>
+
+  <!-- ============ 62 · Concept · the number line ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Watch it! 👀</div>
+    <h2>The same snake, four waits</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">one step of the snake · the wait shrinks each time</div>
+        <div class="cg-track"><div class="cg-sprite">🐍</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">MOVE_INTERVAL</span> = <span class="cg-val"><span>150</span><span>120</span><span>90</span><span>60</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.4em">Same code. Only the number in the box changed.</p>
+  </div>
+
+  <!-- ============ 63 · Maths · five off every bite ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Count it 🔢<span class="activity-tag">activity</span></div>
+    <h2>Five off, every bite</h2>
+    <div class="trace-grid">
+      <div class="cell head">bites</div>
+      <div class="cell head">MOVE_INTERVAL</div>
+      <div class="cell head">still above 60?</div>
+
+      <div class="cell">0</div>
+      <div class="cell">150</div>
+      <div class="cell">yes</div>
+
+      <div class="cell">6</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">120</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">17</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">65</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes</span></details></div>
+
+      <div class="cell">18</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">60</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no — the floor takes over</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 64 · Concept · with no floor ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>With no floor the number keeps falling</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">18 bites → 60</div>
+        <div class="ra-line">30 bites → 0</div>
+        <div class="ra-line">31 bites → -5</div>
+        <div class="ra-line">a wait below 0 is no wait</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">MOVE_INTERVAL</span>
+        <span class="ra-vals"><span>60</span><span>0</span><span>-5</span><span>💥</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 65 · Concept · what a wait of 0 feels like ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Why the floor is not optional</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">how long the snake takes to cross the 30-square board</div>
+      <div class="iter-row">
+        <div class="iter-item">wait 150 → 4.5 s</div>
+        <div class="iter-item">wait 60 → 1.8 s</div>
+        <div class="iter-item">wait 0 → 0.5 s</div>
+      </div>
+      <div class="viz-arrow">⬅ at 0 you cannot press a key in time</div>
+    </div>
+  </div>
+
+  <!-- ============ 66 · STEP 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 6 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Faster on every bite ⚡</h2>
+<pre><span style="display:block;opacity:.35">            score = score + <span class="num">1</span></span><span style="display:block;background:rgba(56,208,224,.13)">            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>score = score + 1</code><br>
+      📍 <b>WHERE:</b> the line under it · <b>12 spaces</b>, inside <code>if new_head == food:</code><br>
+      🟣 <b>WHY:</b> eating takes 5 milliseconds off the wait, so the snake speeds up<br>
+      ✅ <b>CHECK:</b> eat five — the snake is clearly quicker. Keep eating and it becomes unplayable.
+    </div>
+  </div>
+
+  <!-- ============ 67 · STEP 7 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 7 / 23</span>
+    <div class="pill">Type it</div>
+    <h2>v4 · Stop at 60 🛑</h2>
+<pre><span style="display:block;opacity:.35">            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span></span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                MOVE_INTERVAL = <span class="num">60</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>MOVE_INTERVAL = MOVE_INTERVAL - 5</code><br>
+      📍 <b>WHERE:</b> the two lines under it · <code>if</code> = <b>12 spaces</b>, <code>MOVE_INTERVAL = 60</code> = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> 60 is the fastest a person can still steer<br>
+      ✅ <b>CHECK:</b> eat twenty — the snake stops getting faster and stays playable
+    </div>
+  </div>
+
+  <!-- ============ 68 · Run v4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶</div>
+    <h2>v4 — the game gets harder</h2>
+<pre>        <span class="kw">if</span> new_head == food:
+            food = <span class="fn">spawn_food</span>()
+            score = score + <span class="num">1</span>
+            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span>
+            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span>
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()</pre>
+    <div class="output-box" style="margin-top:.5em">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">Every 🍋 makes the snake quicker. After 18 it holds steady.</div>
+    </div>
+  </div>
+
+  <!-- ============ 69 · Common mistake · floor first ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2>Take 5 off first, then check</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ check first</span>
+<pre>            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span>
+            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span></pre>
+        <p>The check happens, <b>then</b> 5 comes off. The wait ends up at 55.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ check last</span>
+<pre>            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span>
+            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span></pre>
+        <p>Subtract, then pull it back up. It never sits under 60.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 70 · Common mistake · the wrong way round ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out</div>
+    <h2><code>&lt;</code> not <code>&gt;</code></h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ greater than</span>
+<pre>            <span class="kw">if</span> MOVE_INTERVAL &gt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span></pre>
+        <p>145 is greater than 60, so the first bite snaps you straight to top speed.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ less than</span>
+<pre>            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span></pre>
+        <p>Only a wait that fell <b>too far</b> gets pulled back to 60.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 71 · Quiz 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">activity</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. <code>MOVE_INTERVAL = MOVE_INTERVAL - 5</code>. What does the snake do?</div>
+      <div class="opts">
+        <details><summary>A. speeds up</summary><div class="ans">✓ A smaller wait means more steps per second.</div></details>
+        <details><summary>B. slows down</summary><div class="ans">No — the number is a wait, not a speed.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Why put the speed line inside <code>if new_head == food:</code>?</div>
+      <div class="opts">
+        <details><summary>A. so it runs once per bite</summary><div class="ans">✓ Outside it, the wait would drop 60 times a second.</div></details>
+        <details><summary>B. so it runs every frame</summary><div class="ans">No — that hits 0 in under three seconds.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 72 · Concept · three numbers you keep ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡</div>
+    <h2>Three numbers, three different lives</h2>
+    <div class="opt-grid three">
+      <div class="opt-card"><div class="ico">🔢</div><div class="name">score</div><div class="ex">R puts it back to 0</div></div>
+      <div class="opt-card"><div class="ico">🏆</div><div class="name">high_score</div><div class="ex">R never touches it</div></div>
+      <div class="opt-card"><div class="ico">⚡</div><div class="name">MOVE_INTERVAL</div><div class="ex">falls as you eat — and R forgets to fix it</div></div>
+    </div>
+    <p class="center" style="margin-top:.4em">That last one is a bug. It is waiting for you in the bonus.</p>
+  </div>
+
+  <!-- ============ 73 · Your turn ============ -->
+  <div class="slide">
+    <span class="slot-badge">YOUR TURN</span>
+    <div class="pill">Your turn! 🚀</div>
+    <h2>Seven changes in <code>main.py</code></h2>
+    <ul class="check-list">
+      <li>Move the <code>- 1</code> inside <code>randint</code> in <code>spawn_food</code></li>
+      <li>Tab the R block and its six lines in one level</li>
+      <li><code>high_score = 0</code> under <code>MOVE_INTERVAL = 150</code></li>
+      <li><code>if score &gt; high_score:</code> then <code>high_score = score</code></li>
+      <li>render and blit <code>best_text</code> at <code>(210, 450)</code></li>
+      <li><code>MOVE_INTERVAL = MOVE_INTERVAL - 5</code> after the score line</li>
+      <li><code>if MOVE_INTERVAL &lt; 60:</code> then <code>MOVE_INTERVAL = 60</code></li>
+      <li>Play. Die. Wiggle the mouse. Press R.</li>
+    </ul>
+  </div>
+
+  <!-- ============ 74 · Exit ticket ============ -->
+  <div class="slide">
+    <span class="slot-badge">EXIT</span>
+    <div class="pill">🎟️ Exit ticket</div>
+    <h2>Before you go…</h2>
+    <div class="exit">
+      <div class="label">Answer in one full sentence</div>
+      <p style="margin-top:.4em">Point at <code>high_score = 0</code> and say what would go wrong if you moved it inside the R block.</p>
+    </div>
+  </div>
+
+  <!-- ================= OPTIONAL: PUSH PAST IT ================= -->
+
+  <!-- ============ 75 · Optional intro ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">BONUS</span>
+    <div class="pill">Push past it<span class="activity-tag">OPTIONAL</span></div>
+    <div class="emoji">🎁</div>
+    <h1 style="font-size:clamp(32px,5.5vmin,48px)">Seven more ideas</h1>
+    <p class="big" style="margin-top:.5em;color:var(--accent-2);">pause · countdown · quit key · fair restart · wrap-around walls · bigger points · a second food</p>
+  </div>
+
+  <!-- ============ 76 · Concept · pause is the same shape ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pause is the same idea, new name</h2>
+    <div class="compare-row">
+      <div class="col good"><span class="tag">game_over</span>
+        <p>Set by a crash.<br>Cleared by R.<br>Blocks the moving block.</p>
+      </div>
+      <div class="col good"><span class="tag">paused</span>
+        <p>Set by space.<br>Cleared by space.<br>Blocks the moving block.</p>
+      </div>
+    </div>
+    <p class="center" style="margin-top:.4em">Two flags. One guard line reads both.</p>
+  </div>
+
+  <!-- ============ 77 · STEP 8 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 8 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · A second flag ⏸️</h2>
+<pre><span style="display:block;opacity:.35">high_score = <span class="num">0</span></span><span style="display:block;background:rgba(56,208,224,.13)">paused = <span class="kw">False</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>high_score = 0</code><br>
+      📍 <b>WHERE:</b> the line under it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> a flag must exist before anything reads it<br>
+      ✅ <b>CHECK:</b> run — no red error.
+    </div>
+  </div>
+
+  <!-- ============ 78 · Concept · not paused flips ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>paused = not paused</code> is a light switch</h2>
+    <div class="trace-grid">
+      <div class="cell head">press</div>
+      <div class="cell head">paused before</div>
+      <div class="cell head">paused after</div>
+
+      <div class="cell">1st space</div>
+      <div class="cell">False</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+
+      <div class="cell">2nd space</div>
+      <div class="cell">True</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">False</span></details></div>
+
+      <div class="cell">3rd space</div>
+      <div class="cell">False</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">True</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 79 · STEP 9 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 9 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Space flips the switch ⏸️</h2>
+<pre><span style="display:block;opacity:.35">                time_since_last_move = <span class="num">0</span></span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> event.key == pygame.K_SPACE <span class="kw">and</span> <span class="kw">not</span> game_over:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                paused = <span class="kw">not</span> paused<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                time_since_last_move = <span class="num">0</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if game_over and event.key == pygame.K_r:</code><br>
+      📍 <b>WHERE:</b> under the last line of that block, <code>time_since_last_move = 0</code> · <code>if</code> = <b>12 spaces</b>, the two inside = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> <code>not game_over</code> stops a pause getting stuck on the game over screen<br>
+      ✅ <b>CHECK:</b> run — no red error. Space does nothing yet.
+    </div>
+  </div>
+
+  <!-- ============ 80 · STEP 10 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 10 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Teach the guard about pause</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">    <span class="kw">if</span> <span class="kw">not</span> game_over <span class="kw">and</span> time_since_last_move &gt;= MOVE_INTERVAL:<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> <span class="kw">not</span> game_over <span class="kw">and</span> <span class="kw">not</span> paused <span class="kw">and</span> time_since_last_move &gt;= MOVE_INTERVAL:<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if not game_over and time_since_last_move &gt;= MOVE_INTERVAL:</code><br>
+      📍 <b>WHERE:</b> replace that whole line · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> three things must all be true before the snake may move<br>
+      ✅ <b>CHECK:</b> press space — the snake stops. Press space again — it goes on.
+    </div>
+  </div>
+
+  <!-- ============ 81 · Concept · three tests ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three gates, one door</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">the snake moves only if all three are True</div>
+      <div class="iter-row">
+        <div class="iter-item">not game_over</div>
+        <div class="iter-item">not paused</div>
+        <div class="iter-item">timer full</div>
+      </div>
+      <div class="viz-arrow">⬇ one False anywhere and the whole block is skipped</div>
+    </div>
+  </div>
+
+  <!-- ============ 82 · Quiz 5 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why <code>not game_over</code> in the space line?</div>
+      <div class="opts">
+        <details><summary>A. to look neat</summary><div class="ans">No — it prevents a real trap.</div></details>
+        <details><summary>B. so you cannot pause while GAME OVER is up</summary><div class="ans">✓ A stuck pause would freeze the snake after R.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Why reset the timer when you unpause?</div>
+      <div class="opts">
+        <details><summary>A. the timer kept filling while paused</summary><div class="ans">✓ Without the reset the snake jumps forward the moment you unpause.</div></details>
+        <details><summary>B. pygame needs it</summary><div class="ans">No — this is your own counter.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 83 · Concept · a countdown ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A countdown is a number falling</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">press R → countdown = 3000</div>
+        <div class="ra-line">one second later</div>
+        <div class="ra-line">one second later</div>
+        <div class="ra-line">one second later → snake starts</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">on screen</span>
+        <span class="ra-vals"><span>3</span><span>2</span><span>1</span><span>go</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 84 · STEP 11 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 11 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · A box of milliseconds ⏳</h2>
+<pre><span style="display:block;opacity:.35">MOVE_INTERVAL = <span class="num">150</span></span><span style="display:block;background:rgba(56,208,224,.13)">countdown = <span class="num">0</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>MOVE_INTERVAL = 150</code><br>
+      📍 <b>WHERE:</b> the line under it · <b>0 spaces</b> (it lands above <code>high_score = 0</code>)<br>
+      🟣 <b>WHY:</b> 0 means no countdown, so the first game starts straight away<br>
+      ✅ <b>CHECK:</b> run — no red error, nothing changed yet
+    </div>
+  </div>
+
+  <!-- ============ 85 · STEP 12 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 12 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Take the clock down ⏳</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> countdown &gt; <span class="num">0</span>:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        countdown = countdown - dt<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        time_since_last_move = <span class="num">0</span><span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">    <span class="kw">if</span> <span class="kw">not</span> game_over <span class="kw">and</span> <span class="kw">not</span> paused <span class="kw">and</span> time_since_last_move &gt;= MOVE_INTERVAL:</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if not game_over and not paused and time_since_last_move &gt;= MOVE_INTERVAL:</code><br>
+      📍 <b>WHERE:</b> the three lines <b>above</b> it · <code>if</code> = <b>4 spaces</b>, the two inside = <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> <code>dt</code> is the milliseconds this frame took — the countdown drops by the same amount<br>
+      ✅ <b>CHECK:</b> run — no red error
+    </div>
+  </div>
+
+  <!-- ============ 86 · STEP 13 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 13 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · A fourth gate on the guard</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">    <span class="kw">if</span> <span class="kw">not</span> game_over <span class="kw">and</span> <span class="kw">not</span> paused <span class="kw">and</span> time_since_last_move &gt;= MOVE_INTERVAL:<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> <span class="kw">not</span> game_over <span class="kw">and</span> <span class="kw">not</span> paused <span class="kw">and</span> countdown &lt;= <span class="num">0</span> <span class="kw">and</span> time_since_last_move &gt;= MOVE_INTERVAL:<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if not game_over and not paused and time_since_last_move &gt;= MOVE_INTERVAL:</code><br>
+      📍 <b>WHERE:</b> replace that whole line · <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> the snake waits while the countdown is still running<br>
+      ✅ <b>CHECK:</b> run — the first game still starts instantly, because <code>countdown</code> is 0
+    </div>
+  </div>
+
+  <!-- ============ 87 · STEP 14 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 14 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Draw the big number 3️⃣</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">    <span class="kw">if</span> countdown &gt; <span class="num">0</span>:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        count_text = big_font.<span class="fn">render</span>(<span class="fn">str</span>(countdown // <span class="num">1000</span> + <span class="num">1</span>), <span class="kw">True</span>, (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">        screen.<span class="fn">blit</span>(count_text, (<span class="num">285</span>, <span class="num">270</span>))<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">    pygame.display.<span class="fn">flip</span>()</span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.display.flip()</code><br>
+      📍 <b>WHERE:</b> the three lines <b>above</b> it · <code>if</code> = <b>4 spaces</b>, the two inside = <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> <code>//</code> throws away the leftover, so 2984 becomes 2, then + 1 makes 3<br>
+      ✅ <b>CHECK:</b> run — no red error. Still nothing, because <code>countdown</code> is 0.
+    </div>
+  </div>
+
+  <!-- ============ 88 · Indent · back to 4 ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>4 spaces, not 8</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ 8 spaces</span>
+<pre>    <span class="kw">if</span> game_over:
+        screen.<span class="fn">blit</span>(best_text, (<span class="num">210</span>, <span class="num">450</span>))
+        <span class="kw">if</span> countdown &gt; <span class="num">0</span>:</pre>
+        <p>Trapped inside <code>if game_over:</code>. It can never run.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ 4 spaces</span>
+<pre>    <span class="kw">if</span> game_over:
+        screen.<span class="fn">blit</span>(best_text, (<span class="num">210</span>, <span class="num">450</span>))
+    <span class="kw">if</span> countdown &gt; <span class="num">0</span>:</pre>
+        <p>Its own block. Runs every frame.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 89 · STEP 15 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 15 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Start the countdown on R ⏳</h2>
+<pre><span style="display:block;opacity:.35">                game_over = <span class="kw">False</span></span><span style="display:block;opacity:.35">                time_since_last_move = <span class="num">0</span></span><span style="display:block;background:rgba(56,208,224,.13)">                countdown = <span class="num">3000</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if game_over and event.key == pygame.K_r:</code><br>
+      📍 <b>WHERE:</b> the seventh line inside it, under <code>time_since_last_move = 0</code> · <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> 3000 milliseconds is 3 seconds<br>
+      ✅ <b>CHECK:</b> crash, press <b>R</b> — a big <b>3 2 1</b> counts down, then the snake starts
+    </div>
+  </div>
+
+  <!-- ============ 90 · Run · countdown ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>What the restart looks like now</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">crash → GAME OVER · Score · Best</div>
+      <div class="arrow">⬇ press R</div>
+      <div class="cc-step s2">3 · 2 · 1 in the middle</div>
+      <div class="arrow">⬇ countdown reaches 0</div>
+      <div class="cc-step s3">snake moves right</div>
+      <div class="cc-step s4">✓ a fair start, every time</div>
+    </div>
+  </div>
+
+  <!-- ============ 91 · Trace · the countdown number ============ -->
+  <div class="slide">
+    <span class="slot-badge">TRACE</span>
+    <div class="pill">Trace it ✏️<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Milliseconds to a big number</h2>
+    <div class="trace-grid">
+      <div class="cell head">countdown</div>
+      <div class="cell head">countdown // 1000</div>
+      <div class="cell head">shown</div>
+
+      <div class="cell">2500</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">1500</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">500</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">0</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">nothing — the block is skipped</span></details></div>
+    </div>
+  </div>
+
+  <!-- ============ 92 · Concept · running is still the off switch ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Three switches now</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">what each flag turns off</div>
+      <div class="iter-row">
+        <div class="iter-item">paused · moving</div>
+        <div class="iter-item">game_over · moving</div>
+        <div class="iter-item">running · everything</div>
+      </div>
+      <div class="viz-arrow">⬇ only <code>running</code> closes the window</div>
+    </div>
+  </div>
+
+  <!-- ============ 93 · STEP 16 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 16 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Press Q to quit 🚪</h2>
+<pre><span style="display:block;opacity:.35">                paused = <span class="kw">not</span> paused</span><span style="display:block;opacity:.35">                time_since_last_move = <span class="num">0</span></span><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> event.key == pygame.K_q:<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">                running = <span class="kw">False</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if event.key == pygame.K_SPACE and not game_over:</code><br>
+      📍 <b>WHERE:</b> under the last line of that block, <code>time_since_last_move = 0</code> · <code>if</code> = <b>12 spaces</b>, <code>running</code> = <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> now <code>running = False</code> means what it says — you chose to leave<br>
+      ✅ <b>CHECK:</b> press <b>Q</b> — the window closes, on purpose this time
+    </div>
+  </div>
+
+  <!-- ============ 94 · Quiz 6 ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Quick check<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Match the switch to the job</h2>
+    <div class="quiz-card">
+      <div class="q">1. Which flag closes the window?</div>
+      <div class="opts">
+        <details><summary>A. game_over</summary><div class="ans">No — it only freezes the snake.</div></details>
+        <details><summary>B. running</summary><div class="ans">✓ <code>while running:</code> is the outer loop.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which one can the player undo with a key?</div>
+      <div class="opts">
+        <details><summary>A. game_over and paused</summary><div class="ans">✓ R lowers one, space flips the other.</div></details>
+        <details><summary>B. running</summary><div class="ans">No — once it is False the program is over.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 95 · Hook · the speed that never resets ============ -->
+  <div class="slide">
+    <span class="slot-badge">HOOK</span>
+    <div class="pill">🐛 A bug you just made<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The new game starts at top speed</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">game 1 · 18 bites → wait 60</div>
+        <div class="ra-line">you die</div>
+        <div class="ra-line">press R · snake is 1 square</div>
+        <div class="ra-line">wait is still 60 🐛</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">MOVE_INTERVAL</span>
+        <span class="ra-vals"><span>60</span><span>60</span><span>60</span><span>60</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 96 · Concept · what R must put back ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two boxes, opposite rules</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">both changed while you played — only one should be put back</div>
+      <div class="varbox-row">
+        <div class="varbox"><span class="name">🏆 high_score</span><span class="val">R must LEAVE it</span></div>
+        <div class="varbox"><span class="name">⚡ MOVE_INTERVAL</span><span class="val">R must RESET it</span></div>
+      </div>
+      <div class="viz-arrow">⬇ ask of every box: is it about this game, or all games?</div>
+    </div>
+  </div>
+
+  <!-- ============ 97 · STEP 17 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 17 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · A fair restart ⚡</h2>
+<pre><span style="display:block;opacity:.35">                time_since_last_move = <span class="num">0</span></span><span style="display:block;background:rgba(56,208,224,.13)">                MOVE_INTERVAL = <span class="num">150</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>if game_over and event.key == pygame.K_r:</code><br>
+      📍 <b>WHERE:</b> the <b>last</b> line inside that block · <b>16 spaces</b><br>
+      🟣 <b>WHY:</b> a fresh game must start slow again, the same as the very first one<br>
+      ✅ <b>CHECK:</b> eat ten, die, press R — the snake crawls again
+    </div>
+  </div>
+
+  <!-- ============ 98 · Run · a fair restart ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every game starts the same way</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">game 1 · slow → fast → crash</div>
+      <div class="arrow">⬇ press R</div>
+      <div class="cc-step s2">score 0 · wait 150 · Best kept</div>
+      <div class="cc-step s3">game 2 · slow → fast → crash</div>
+      <div class="cc-step s4">✓ a fair race every time</div>
+    </div>
+  </div>
+
+  <!-- ============ 99 · Concept · the wall ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>What happens at square 30?</h2>
+    <div class="viz viz-coord">
+      <div class="cg-grid">
+        <div class="cg-axis">across · 0 → 29 → off the edge</div>
+        <div class="cg-track"><div class="cg-sprite">🐍</div></div>
+      </div>
+      <div class="cg-readout"><span class="cg-name">head_x</span> = <span class="cg-val"><span>27</span><span>28</span><span>29</span><span>30 ⚠️</span></span></div>
+    </div>
+    <p class="center" style="margin-top:.5em">Square 30 is drawn outside the window. The snake vanishes.</p>
+  </div>
+
+  <!-- ============ 100 · Maths · the % clock ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Count it 🔢<span class="activity-tag">OPTIONAL</span></div>
+    <h2><code>%</code> wraps the number round</h2>
+    <div class="trace-grid">
+      <div class="cell head">head_x</div>
+      <div class="cell head">head_x % 30</div>
+      <div class="cell head">on screen?</div>
+
+      <div class="cell">28</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">28</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">29</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">29</span></details></div>
+      <div class="cell">yes</div>
+
+      <div class="cell">30</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell">yes — left edge</div>
+
+      <div class="cell">31</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell">yes</div>
+    </div>
+    <p class="center" style="margin-top:.4em">Past 29, the number comes back round to 0.</p>
+  </div>
+
+  <!-- ============ 101 · STEP 18 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 18 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Walk through the wall 🌀</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        new_head = (head_x + direction[<span class="num">0</span>], head_y + direction[<span class="num">1</span>])<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        new_head = ((head_x + direction[<span class="num">0</span>]) % GRID_WIDTH, (head_y + direction[<span class="num">1</span>]) % GRID_HEIGHT)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>new_head = (head_x + direction[0], head_y + direction[1])</code><br>
+      📍 <b>WHERE:</b> replace that whole line · <b>8 spaces</b><br>
+      🟣 <b>WHY:</b> <code>%</code> sends 30 back to 0<br>
+      ✅ <b>CHECK:</b> drive off the right edge — the snake comes back on the left. Walls no longer kill.
+    </div>
+  </div>
+
+  <!-- ============ 102 · Concept · a long snake earns more ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>A long snake should earn more</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel"><code>len(snake_body)</code> counts the squares in the list</div>
+      <div class="iter-row">
+        <div class="iter-item">3 squares → 1 point</div>
+        <div class="iter-item">7 squares → 2 points</div>
+        <div class="iter-item">12 squares → 3 points</div>
+        <div class="iter-item">26 squares → 6 points</div>
+      </div>
+      <div class="viz-arrow">⬇ one extra point for every 5 squares of snake</div>
+    </div>
+  </div>
+
+  <!-- ============ 103 · Maths · len // 5 + 1 ============ -->
+  <div class="slide">
+    <span class="slot-badge">MATHS</span>
+    <div class="pill">Count it 🔢<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Read it left to right</h2>
+    <div class="trace-grid cols-4">
+      <div class="cell head">squares</div>
+      <div class="cell head">len // 5</div>
+      <div class="cell head">+ 1</div>
+      <div class="cell head">points</div>
+
+      <div class="cell">3</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">0</span></details></div>
+      <div class="cell">+1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+
+      <div class="cell">7</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">1</span></details></div>
+      <div class="cell">+1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+
+      <div class="cell">12</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">2</span></details></div>
+      <div class="cell">+1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">3</span></details></div>
+
+      <div class="cell">26</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">5</span></details></div>
+      <div class="cell">+1</div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">6</span></details></div>
+    </div>
+    <p class="center" style="margin-top:.4em">The <code>+ 1</code> keeps a short snake worth something.</p>
+  </div>
+
+  <!-- ============ 104 · STEP 19 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 19 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Bigger points for a longer snake 💎</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">            score = score + <span class="num">1</span><span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">            score = score + <span class="fn">len</span>(snake_body) // <span class="num">5</span> + <span class="num">1</span><span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>score = score + 1</code><br>
+      📍 <b>WHERE:</b> replace that whole line · <b>12 spaces</b>, inside <code>if new_head == food:</code><br>
+      🟣 <b>WHY:</b> <code>len</code> counts the snake squares, <code>// 5</code> turns 12 squares into 2<br>
+      ✅ <b>CHECK:</b> get long — the score starts jumping by 2, then 3
+    </div>
+  </div>
+
+  <!-- ============ 105 · Run · bigger points ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The score climbs faster and faster</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">bite at 3 squares → +1</div>
+        <div class="ra-line">bite at 7 squares → +2</div>
+        <div class="ra-line">bite at 12 squares → +3</div>
+        <div class="ra-line">bite at 26 squares → +6</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">score</span>
+        <span class="ra-vals"><span>1</span><span>3</span><span>6</span><span>12</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 106 · Concept · a colour that warns ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Let the colour warn you</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">score 12</span>
+        <span class="case case-b">score 4</span>
+      </div>
+      <div class="if-cond">score &gt;= 10</div>
+      <div class="if-branches">
+        <div class="if-branch true">draw PASTEL_SALMON</div>
+        <div class="if-branch false">draw PASTEL_LAVENDER</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ The snake looks</div>
+        <div class="out-line out-a">danger salmon</div>
+        <div class="out-line out-b">calm purple</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 107 · STEP 20 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 20 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · The snake changes colour 🎨</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">        pygame.draw.<span class="fn">rect</span>(screen, PASTEL_LAVENDER, rect)<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">        <span class="kw">if</span> score &gt;= <span class="num">10</span>:
+            pygame.draw.<span class="fn">rect</span>(screen, PASTEL_SALMON, rect)
+        <span class="kw">else</span>:
+            pygame.draw.<span class="fn">rect</span>(screen, PASTEL_LAVENDER, rect)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.draw.rect(screen, PASTEL_LAVENDER, rect)</code><br>
+      📍 <b>WHERE:</b> replace that one line with these four · <code>if</code> and <code>else</code> = <b>8 spaces</b>, the two draw lines = <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> <code>PASTEL_SALMON</code> is already in your colour list up top<br>
+      ✅ <b>CHECK:</b> reach 10 — the whole snake turns salmon
+    </div>
+  </div>
+
+  <!-- ============ 108 · Run · the colour flips ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>One test, every square</h2>
+    <div class="viz viz-stage">
+      <div class="vlabel">the draw loop runs once per snake square, every frame</div>
+      <div class="iter-row">
+        <div class="iter-item">score 9 · 🟪🟪🟪🟪</div>
+        <div class="iter-item">score 10 · 🟥🟥🟥🟥</div>
+      </div>
+      <div class="viz-arrow">⬇ the test is inside the loop, so all squares agree</div>
+    </div>
+  </div>
+
+  <!-- ============ 109 · Common mistake · no else ============ -->
+  <div class="slide">
+    <span class="slot-badge">⚠️</span>
+    <div class="pill">⚠️ Watch out<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Drop the <code>else</code> and the snake vanishes</h2>
+    <div class="compare-row">
+      <div class="col bad"><span class="tag">✗ no else</span>
+<pre>        <span class="kw">if</span> score &gt;= <span class="num">10</span>:
+            pygame.draw.<span class="fn">rect</span>(screen, PASTEL_SALMON, rect)</pre>
+        <p>Under 10 points nothing draws the snake. You steer an invisible snake.</p>
+      </div>
+      <div class="col good"><span class="tag">✓ with else</span>
+<pre>        <span class="kw">if</span> score &gt;= <span class="num">10</span>:
+            pygame.draw.<span class="fn">rect</span>(screen, PASTEL_SALMON, rect)
+        <span class="kw">else</span>:
+            pygame.draw.<span class="fn">rect</span>(screen, PASTEL_LAVENDER, rect)</pre>
+        <p>One of the two always runs.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 110 · Concept · two squares of food ============ -->
+  <div class="slide">
+    <span class="slot-badge">CONCEPT</span>
+    <div class="pill">Concept 💡<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two foods = a second box, three times</h2>
+    <div class="clean-chain">
+      <div class="cc-step s1">make it · food2 = spawn_food()</div>
+      <div class="cc-step s2">draw it · a second yellow square</div>
+      <div class="cc-step s3">test it · did the head land on food2?</div>
+      <div class="cc-step s4">✓ every food needs all three</div>
+    </div>
+  </div>
+
+  <!-- ============ 111 · STEP 21 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 21 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · A second food box 🍋🍋</h2>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">food2 = <span class="fn">spawn_food</span>()<span class="activity-tag">NEW</span></span><span style="display:block;opacity:.35">running = <span class="kw">True</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>running = True</code><br>
+      📍 <b>WHERE:</b> the line <b>above</b> it · <b>0 spaces</b><br>
+      🟣 <b>WHY:</b> the box must hold a square before the loop tries to draw it<br>
+      ✅ <b>CHECK:</b> run — no red error. Still only one food on screen.
+    </div>
+  </div>
+
+  <!-- ============ 112 · STEP 22 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 22 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Draw the second food 🍋</h2>
+<pre><span style="display:block;opacity:.35">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_YELLOW, food_rect)</span><span style="display:block;background:rgba(56,208,224,.13)">    food2_rect = (food2[<span class="num">0</span>] * CELL_SIZE, food2[<span class="num">1</span>] * CELL_SIZE, CELL_SIZE, CELL_SIZE)<span class="activity-tag">NEW</span></span><span style="display:block;background:rgba(56,208,224,.13)">    pygame.draw.<span class="fn">rect</span>(screen, PASTEL_YELLOW, food2_rect)<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>pygame.draw.rect(screen, PASTEL_YELLOW, food_rect)</code><br>
+      📍 <b>WHERE:</b> the two lines under it · both <b>4 spaces</b><br>
+      🟣 <b>WHY:</b> the same four numbers as <code>food_rect</code>, read out of <code>food2</code> instead<br>
+      ✅ <b>CHECK:</b> run — <b>two</b> yellow squares. Eating the second one does nothing yet.
+    </div>
+  </div>
+
+  <!-- ============ 113 · Zoom in · the eat test ============ -->
+  <div class="slide">
+    <span class="slot-badge">ZOOM IN</span>
+    <div class="pill">Zoom in 🔎<span class="activity-tag">OPTIONAL</span></div>
+    <h2>The eat test asks two questions now</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">head landed on food2</span>
+        <span class="case case-b">head landed on grass</span>
+      </div>
+      <div class="if-cond">if food … elif food2 … else pop</div>
+      <div class="if-branches">
+        <div class="if-branch true">respawn food2 · score up · no pop</div>
+        <div class="if-branch false">pop the tail</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ The snake</div>
+        <div class="out-line out-a">grows</div>
+        <div class="out-line out-b">stays the same length</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 114 · STEP 23 ============ -->
+  <div class="slide">
+    <span class="slot-badge">STEP 23 / 23</span>
+    <div class="pill">Type it<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Bonus · Eat either one 🍽️</h2>
+<pre><span style="display:block;background:rgba(220,53,69,.12)">            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span>
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()<span class="activity-tag" style="background:#dc3545">OLD</span></span></pre>
+<pre><span style="display:block;background:rgba(56,208,224,.13)">            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span>
+        <span class="kw">elif</span> new_head == food2:
+            food2 = <span class="fn">spawn_food</span>()
+            score = score + <span class="fn">len</span>(snake_body) // <span class="num">5</span> + <span class="num">1</span>
+        <span class="kw">else</span>:
+            snake_body.<span class="fn">pop</span>()<span class="activity-tag">NEW</span></span></pre>
+    <div class="model-box">
+      🔍 <b>FIND:</b> <code>snake_body.pop()</code><br>
+      📍 <b>WHERE:</b> the three new lines go <b>above</b> the <code>else:</code> that owns it · <code>elif</code> = <b>8 spaces</b>, the two inside = <b>12 spaces</b><br>
+      🟣 <b>WHY:</b> <code>elif</code> means "or this one", and no <code>pop</code> means the snake grows<br>
+      ✅ <b>CHECK:</b> eat the second yellow square — score up, snake longer
+    </div>
+  </div>
+
+  <!-- ============ 115 · Run · two foods ============ -->
+  <div class="slide">
+    <span class="slot-badge">RUN</span>
+    <div class="pill">Run ▶<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two targets, twice the choices</h2>
+    <div class="output-box">
+      <div class="out-label">▸ On screen</div>
+      <div style="opacity:1">Two yellow squares. Either one feeds the snake. Eating one respawns only that one.</div>
+    </div>
+    <details class="debug-card">
+      <summary>One rough edge — can you spot it?</summary>
+      <p style="margin-top:.4em">Both foods can roll the same square, so one hides the other. Fix: <code>while food2 == food: food2 = spawn_food()</code>.</p>
+    </details>
+  </div>
+
+  <!-- ============ 116 · Quiz · final round ============ -->
+  <div class="slide">
+    <span class="slot-badge">QUIZ</span>
+    <div class="pill purple">Final round<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Two questions</h2>
+    <div class="quiz-card">
+      <div class="q">1. Why does <code>elif</code> beat a second <code>if</code> for food2?</div>
+      <div class="opts">
+        <details><summary>A. it is shorter to type</summary><div class="ans">No — it changes what runs.</div></details>
+        <details><summary>B. it shares the one else, so the pop is skipped</summary><div class="ans">✓ A separate <code>if</code> would let the tail drop as well.</div></details>
+      </div>
+    </div>
+    <div class="quiz-card">
+      <div class="q">2. Which box did R have to start resetting today?</div>
+      <div class="opts">
+        <details><summary>A. high_score</summary><div class="ans">No — that one must survive R forever.</div></details>
+        <details><summary>B. MOVE_INTERVAL</summary><div class="ans">✓ The speed belongs to one game, not to all of them.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 117 · Stretch ============ -->
+  <div class="slide">
+    <span class="slot-badge">STRETCH</span>
+    <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Pick a bonus</h2>
+    <div class="stretch-list">
+      <div class="item"><span class="lvl">★</span>Change <code>Best:</code> to <code>Record:</code> and move it to <code>(190, 450)</code>.</div>
+      <div class="item"><span class="lvl">★★</span>Make the floor 40 instead of 60. Play it. Is 40 still fair?</div>
+      <div class="item"><span class="lvl">★★★</span>Show the wait on screen while you play: render <code>f"Speed: {MOVE_INTERVAL}"</code> with <code>font</code> and blit it at <code>(10, 40)</code>.</div>
+    </div>
+  </div>
+
+  <!-- ============ 118 · Reference ============ -->
+  <div class="slide">
+    <span class="slot-badge">REFERENCE</span>
+    <div class="pill">Reference 📄<span class="activity-tag">OPTIONAL</span></div>
+    <h2>Every line you changed today</h2>
+<pre>        pos = (random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_WIDTH - <span class="num">1</span>), random.<span class="fn">randint</span>(<span class="num">0</span>, GRID_HEIGHT - <span class="num">1</span>))
+high_score = <span class="num">0</span>
+            <span class="kw">if</span> game_over <span class="kw">and</span> event.key == pygame.K_r:
+                snake_body = [(start_x, start_y)]
+                direction = (<span class="num">1</span>, <span class="num">0</span>)
+                food = <span class="fn">spawn_food</span>()
+                score = <span class="num">0</span>
+                game_over = <span class="kw">False</span>
+                time_since_last_move = <span class="num">0</span>
+            game_over = <span class="kw">True</span>
+            <span class="kw">if</span> score &gt; high_score:
+                high_score = score
+            score = score + <span class="num">1</span>
+            MOVE_INTERVAL = MOVE_INTERVAL - <span class="num">5</span>
+            <span class="kw">if</span> MOVE_INTERVAL &lt; <span class="num">60</span>:
+                MOVE_INTERVAL = <span class="num">60</span>
+        best_text = big_font.<span class="fn">render</span>(f<span class="str">"Best: {high_score}"</span>, <span class="kw">True</span>, (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>))
+        screen.<span class="fn">blit</span>(best_text, (<span class="num">210</span>, <span class="num">450</span>))</pre>
+  </div>
+
+  <!-- ============ 119 · Close & Bridge ============ -->
+  <div class="slide center-all">
+    <span class="slot-badge">CLOSE</span>
+    <div class="emoji">🏆</div>
+    <h1 style="font-size:clamp(36px,6vmin,56px)">A record is the one box<br>R cannot reach.</h1>
+    <p class="big" style="margin-top:.6em;color:var(--accent-2);">Still on the table: pause, the 3 · 2 · 1 countdown, and two foods at once.</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 119</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>
