@@ -1,0 +1,2825 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RS003 — A Table That Answers (Neo · 2026-09-14)</title><link rel="stylesheet" href="../../assets/style.css"></head><body>
+<div class="stage"><div class="footer-tag">RS003 · pandas + numpy · Neo · 14 Sep 2026</div>
+
+<!-- 1 · SLOT 1 Title -->
+<div class="slide active center-all">
+  <span class="slot-badge">SLOT 1</span>
+  <div class="pill">New track · data</div>
+  <div class="emoji">📊</div>
+  <h1>A Table<br>That Answers</h1>
+  <p class="big" style="margin-top:.5em;color:var(--accent-2);">Ask the table. <span class="sub">Read the number.</span></p>
+  <div class="iter-row" style="margin-top:.8em">
+    <div class="iter-item">rows</div><div class="iter-item">columns</div>
+    <div class="iter-item">pandas</div><div class="iter-item">numpy</div>
+  </div>
+  <p class="bilingual">표에게 질문하고 답을 읽어요</p>
+</div>
+
+<!-- 2 · SLOT 2 Recap · the bridge from last week -->
+<div class="slide">
+  <span class="slot-badge">SLOT 2</span>
+  <div class="pill purple">Recap · 9 Sep</div>
+  <h2>You already do this</h2>
+  <div class="recap-q">
+    <div class="label">The turret game</div>
+    <div class="q">What did <code>member_pos</code> do?</div>
+    <details><summary>Answer</summary><div class="ans">Took values in. Handed values back.</div></details>
+    <div class="q" style="margin-top:.5em">How many members at a time?</div>
+    <details><summary>Answer</summary><div class="ans">One.</div></details>
+  </div>
+  <p style="margin-top:.5em">pandas does that to a <b>whole table at once</b>.</p>
+</div>
+
+<!-- 3 · return is parked -->
+<div class="slide">
+  <div class="pill">📌 Parked</div>
+  <h2><code>return</code> waits for another day</h2>
+  <p>You used it inside <code>member_pos</code>. The full <code>return</code> deck is saved, not lost.</p>
+  <div class="model-box">Today is <b>data</b>. Nothing here needs that deck.</div>
+  <p class="bilingual">return 수업은 저장해 뒀어요</p>
+</div>
+
+<!-- 4 · CONCEPT · what a table is -->
+<div class="slide">
+  <div class="pill">Concept 💡<span class="activity-tag">no code</span></div>
+  <h2>A table is rows and columns</h2>
+  <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="230" rx="10" fill="#1e2430"/>
+    <rect x="60" y="24" width="440" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="90" y="47" fill="#38d0e0" font-size="17" font-family="monospace">name</text>
+    <text x="240" y="47" fill="#38d0e0" font-size="17" font-family="monospace">maths</text>
+    <text x="390" y="47" fill="#38d0e0" font-size="17" font-family="monospace">coding</text>
+    <rect x="60" y="62" width="440" height="34" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="90" y="85" fill="#e8eef6" font-size="17" font-family="monospace">Neo</text>
+    <text x="240" y="85" fill="#e8eef6" font-size="17" font-family="monospace">92</text>
+    <text x="390" y="85" fill="#e8eef6" font-size="17" font-family="monospace">88</text>
+    <rect x="60" y="100" width="440" height="34" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="90" y="123" fill="#e8eef6" font-size="17" font-family="monospace">Amy</text>
+    <text x="240" y="123" fill="#e8eef6" font-size="17" font-family="monospace">78</text>
+    <text x="390" y="123" fill="#e8eef6" font-size="17" font-family="monospace">95</text>
+    <rect x="60" y="138" width="440" height="34" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="90" y="161" fill="#e8eef6" font-size="17" font-family="monospace">Ethan</text>
+    <text x="240" y="161" fill="#e8eef6" font-size="17" font-family="monospace">85</text>
+    <text x="390" y="161" fill="#e8eef6" font-size="17" font-family="monospace">71</text>
+    <text x="60" y="200" fill="#f1fa8c" font-size="18" font-family="sans-serif">→ a ROW is one person</text>
+    <text x="330" y="200" fill="#ff7849" font-size="18" font-family="sans-serif">↓ a COLUMN is one thing</text>
+  </svg>
+  <p class="bilingual">가로줄은 사람, 세로줄은 항목</p>
+</div>
+
+<!-- 5 · CONCEPT · row across, column down -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Row across. Column down.</h2>
+  <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="200" rx="10" fill="#1e2430"/>
+    <text x="40" y="34" fill="#8a97b8" font-size="15" font-family="sans-serif">ROW 0 — everything about one person</text>
+    <rect x="40" y="48" width="480" height="36" rx="6" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="62" y="72" fill="#f1fa8c" font-size="17" font-family="monospace">Neo</text>
+    <text x="222" y="72" fill="#f1fa8c" font-size="17" font-family="monospace">92</text>
+    <text x="382" y="72" fill="#f1fa8c" font-size="17" font-family="monospace">88</text>
+    <rect x="200" y="100" width="110" height="80" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="230" y="124" fill="#50fa7b" font-size="17" font-family="monospace">92</text>
+    <text x="230" y="148" fill="#50fa7b" font-size="17" font-family="monospace">78</text>
+    <text x="230" y="172" fill="#50fa7b" font-size="17" font-family="monospace">85</text>
+    <text x="330" y="146" fill="#50fa7b" font-size="16" font-family="sans-serif">COLUMN maths — one thing, everybody</text>
+  </svg>
+  <p style="margin-top:.4em">Today you mostly ask for <b>columns</b>.</p>
+</div>
+
+<!-- 6 · SLOT 4 Vocab -->
+<div class="slide">
+  <span class="slot-badge">SLOT 4</span>
+  <div class="pill">Vocab</div>
+  <h2>Three new words</h2>
+  <div class="vocab-table">
+    <span class="term">library</span><span class="gloss">code someone else already wrote</span><span class="ko">라이브러리</span>
+    <span class="term">DataFrame</span><span class="gloss">the whole table</span><span class="ko">표 전체</span>
+    <span class="term">Series</span><span class="gloss">one column on its own</span><span class="ko">한 열</span>
+  </div>
+</div>
+
+<!-- 7 · Today's map -->
+<div class="slide">
+  <div class="pill">Today 🗺️</div>
+  <h2>Two halves, 59 steps</h2>
+  <div class="topic-grid">
+    <div class="topic-chip"><div class="head">1 – 27 · pandas</div><div class="desc">build a table, ask it questions</div></div>
+    <div class="topic-chip purple"><div class="head">28 – 46 · numpy</div><div class="desc">maths on every number at once</div></div>
+    <div class="topic-chip"><div class="head">47 – 57 · extras</div><div class="desc">groups, holes, 100 rows</div></div>
+    <div class="topic-chip purple"><div class="head">58 – 59 · optional</div><div class="desc">files and charts</div></div>
+  </div>
+  <p class="bilingual">오늘은 두 부분으로 나눠요</p>
+</div>
+
+<!-- 8 · no file needed -->
+<div class="slide">
+  <div class="pill">⚠️ Before we start</div>
+  <h2>No file to download</h2>
+  <p>Every table today is <b>typed by Neo</b>, inside the code.</p>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ not today</span>
+<pre>open a spreadsheet file</pre>
+      <p style="margin-top:.4em">Needs a file next to the code. We have none.</p>
+    </div>
+    <div class="col good"><span class="tag">✓ today</span>
+<pre>pd.DataFrame({...})</pre>
+      <p style="margin-top:.4em">The data is in the line you type.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 9 · STEP 1 -->
+<div class="slide">
+  <div class="pill">STEP 1 / 59 · table.py</div>
+  <h2>Open the toolbox</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty file)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">import pandas as pd</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">New file. Name it <code>table.py</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Line 1. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">pandas is not built in. You ask for it.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing prints, no red text.</div></div>
+  </div>
+</div>
+
+<!-- 10 · why "as pd" -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2><code>as pd</code> is a nickname</h2>
+  <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="160" rx="10" fill="#1e2430"/>
+    <rect x="30" y="24" width="230" height="44" rx="8" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="44" y="52" fill="#8a97b8" font-size="15" font-family="monospace">pandas.DataFrame(...)</text>
+    <text x="272" y="54" fill="#8a97b8" font-size="22">→</text>
+    <rect x="300" y="24" width="230" height="44" rx="8" fill="#242c3d" stroke="#50fa7b" stroke-width="3"/>
+    <text x="334" y="52" fill="#50fa7b" font-size="15" font-family="monospace">pd.DataFrame(...)</text>
+    <text x="30" y="104" fill="#f1fa8c" font-size="17" font-family="sans-serif">Same tool. Four letters shorter.</text>
+    <text x="30" y="136" fill="#e8eef6" font-size="16" font-family="sans-serif">Every pandas book writes pd. Copy them.</text>
+  </svg>
+</div>
+
+<!-- 11 · debug · no module -->
+<div class="slide">
+  <div class="pill">🐛 If this happens<span class="activity-tag">read it</span></div>
+  <h2>pandas is missing</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd</pre>
+  <div class="debug-card"><div class="err">ModuleNotFoundError: No module named 'pandas'</div></div>
+  <details class="debug-card">
+    <summary>Reveal fix</summary>
+    <p style="margin-top:.4em">The toolbox is not installed. Tell Kasim, then jump to <b>STEP 28</b>. The numpy half still runs.</p>
+    <p class="bilingual">없으면 numpy 부분부터 해요</p>
+  </details>
+</div>
+
+<!-- 12 · SLOT 3 Predict · v1 -->
+<div class="slide">
+  <span class="slot-badge">SLOT 3</span>
+  <div class="pill">Predict 🤔</div>
+  <h2>What will print?</h2>
+  <div class="predict-card">
+    <div class="label">Four names, nothing else</div>
+<pre>scores = pd.DataFrame({
+    <span class="str">"name"</span>: [<span class="str">"Neo"</span>, <span class="str">"Amy"</span>, <span class="str">"Ethan"</span>, <span class="str">"Yunho"</span>],
+})
+<span class="fn">print</span>(scores)</pre>
+    <details><summary>Reveal output</summary><div class="ans">One column — and a number beside each name.</div></details>
+  </div>
+</div>
+
+<!-- 13 · STEP 2 -->
+<div class="slide">
+  <div class="pill">STEP 2 / 59 · table.py</div>
+  <h2>One column becomes a table</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>import pandas as pd</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">import pandas as pd</span>
+
+<span class="hot">scores = pd.DataFrame({</span>
+<span class="hot">    "name": ["Neo", "Amy", "Ethan", "Yunho"],</span>
+<span class="hot">})</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>import pandas as pd</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under that line, blank line between. <code>scores</code> at indent <b>0</b>, <code>"name"</code> at <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A dict key becomes a column heading.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Still nothing prints.</div></div>
+  </div>
+</div>
+
+<!-- 14 · STEP 3 -->
+<div class="slide">
+  <div class="pill">STEP 3 / 59 · table.py</div>
+  <h2>Look at it</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>})</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">})</span>
+
+<span class="hot">print(scores)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>})</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last line of the file. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Building is silent. Printing is loud.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Four names appear, numbered 0 to 3.</div></div>
+  </div>
+</div>
+
+<!-- 15 · v1 whole file -->
+<div class="slide">
+  <div class="pill">v1 ✅ · table.py</div>
+  <h2>v1 — the whole file</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+scores = pd.DataFrame({
+    <span class="str">"name"</span>: [<span class="str">"Neo"</span>, <span class="str">"Amy"</span>, <span class="str">"Ethan"</span>, <span class="str">"Yunho"</span>],
+})
+
+<span class="fn">print</span>(scores)</pre>
+  <div class="output-box" style="margin-top:.5em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan</div>
+    <div class="out-line">3&nbsp;&nbsp;Yunho</div>
+  </div>
+</div>
+
+<!-- 16 · the index -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>You did not type 0 1 2 3</h2>
+  <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="180" rx="10" fill="#1e2430"/>
+    <rect x="40" y="26" width="60" height="126" rx="8" fill="#2d2140" stroke="#bd93f9" stroke-width="3"/>
+    <text x="64" y="54" fill="#bd93f9" font-size="17" font-family="monospace">0</text>
+    <text x="64" y="84" fill="#bd93f9" font-size="17" font-family="monospace">1</text>
+    <text x="64" y="114" fill="#bd93f9" font-size="17" font-family="monospace">2</text>
+    <text x="64" y="144" fill="#bd93f9" font-size="17" font-family="monospace">3</text>
+    <rect x="112" y="26" width="180" height="126" rx="8" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="132" y="54" fill="#e8eef6" font-size="17" font-family="monospace">Neo</text>
+    <text x="132" y="84" fill="#e8eef6" font-size="17" font-family="monospace">Amy</text>
+    <text x="132" y="114" fill="#e8eef6" font-size="17" font-family="monospace">Ethan</text>
+    <text x="132" y="144" fill="#e8eef6" font-size="17" font-family="monospace">Yunho</text>
+    <text x="312" y="74" fill="#bd93f9" font-size="18" font-family="sans-serif">pandas numbers every</text>
+    <text x="312" y="102" fill="#bd93f9" font-size="18" font-family="sans-serif">row for free.</text>
+    <text x="312" y="136" fill="#8a97b8" font-size="16" font-family="sans-serif">It is called the index.</text>
+  </svg>
+  <p class="bilingual">줄 번호는 pandas가 붙여요</p>
+</div>
+
+<!-- 17 · Predict · maths joins -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Add a second key</h2>
+  <div class="predict-card">
+    <div class="label">One more line inside the braces</div>
+<pre>    <span class="str">"maths"</span>: [<span class="num">92</span>, <span class="num">78</span>, <span class="num">85</span>, <span class="num">64</span>],</pre>
+    <details><summary>Reveal output</summary><div class="ans">A second column, <code>maths</code>, beside <code>name</code>.</div></details>
+  </div>
+</div>
+
+<!-- 18 · STEP 4 -->
+<div class="slide">
+  <div class="pill">STEP 4 / 59 · table.py</div>
+  <h2>The maths column</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>scores = pd.DataFrame({
+    "name": ["Neo", "Amy", "Ethan", "Yunho"],
+})</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">scores = pd.DataFrame({</span>
+<span class="dim">    "name": ["Neo", "Amy", "Ethan", "Yunho"],</span>
+<span class="hot">    "maths": [92, 78, 85, 64],</span>
+<span class="dim">})</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>"name": ["Neo"</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under that line, above <code>})</code>. Indent <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Four names need four marks.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Two columns print.</div></div>
+  </div>
+</div>
+
+<!-- 19 · v2 -->
+<div class="slide">
+  <div class="pill">v2 ✅ · table.py</div>
+  <h2>v2 — two columns</h2>
+<pre><span class="dim">import pandas as pd</span>
+
+<span class="dim">scores = pd.DataFrame({</span>
+<span class="dim">    "name": ["Neo", "Amy", "Ethan", "Yunho"],</span>
+<span class="hot">    "maths": [92, 78, 85, 64],</span>
+<span class="dim">})</span>
+
+<span class="dim">print(scores)</span></pre>
+  <div class="output-box" style="margin-top:.5em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85</div>
+    <div class="out-line">3&nbsp;&nbsp;Yunho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64</div>
+  </div>
+</div>
+
+<!-- 20 · STEP 5 -->
+<div class="slide">
+  <div class="pill">STEP 5 / 59 · table.py</div>
+  <h2>The coding column</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>    "maths": [92, 78, 85, 64],
+})</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">    "maths": [92, 78, 85, 64],</span>
+<span class="hot">    "coding": [88, 95, 71, 90],</span>
+<span class="dim">})</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>"maths": [92</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under that line, above <code>})</code>. Indent <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Two marks each. Now you can compare them.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Three columns print.</div></div>
+  </div>
+</div>
+
+<!-- 21 · v3 -->
+<div class="slide">
+  <div class="pill">v3 ✅ · table.py</div>
+  <h2>v3 — your data is in</h2>
+<pre><span class="dim">import pandas as pd</span>
+
+<span class="dim">scores = pd.DataFrame({</span>
+<span class="dim">    "name": ["Neo", "Amy", "Ethan", "Yunho"],</span>
+<span class="dim">    "maths": [92, 78, 85, 64],</span>
+<span class="hot">    "coding": [88, 95, 71, 90],</span>
+<span class="dim">})</span>
+
+<span class="dim">print(scores)</span></pre>
+  <div class="output-box" style="margin-top:.5em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths&nbsp;&nbsp;coding</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;88</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;95</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;71</div>
+    <div class="out-line">3&nbsp;&nbsp;Yunho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90</div>
+  </div>
+</div>
+
+<!-- 22 · dict turned on its side -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>A dict, turned on its side</h2>
+  <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="210" rx="10" fill="#1e2430"/>
+    <text x="24" y="32" fill="#8a97b8" font-size="15" font-family="sans-serif">what you typed</text>
+    <rect x="24" y="44" width="256" height="42" rx="6" fill="#242c3d" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="38" y="70" fill="#f1fa8c" font-size="14" font-family="monospace">"maths": [92, 78, 85, 64]</text>
+    <text x="24" y="110" fill="#8a97b8" font-size="15" font-family="sans-serif">the key</text>
+    <text x="150" y="110" fill="#8a97b8" font-size="15" font-family="sans-serif">the four values</text>
+    <text x="300" y="72" fill="#8a97b8" font-size="24">⟹</text>
+    <rect x="350" y="30" width="180" height="30" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="404" y="51" fill="#f1fa8c" font-size="15" font-family="monospace">maths</text>
+    <rect x="350" y="62" width="180" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="430" y="83" fill="#e8eef6" font-size="15" font-family="monospace">92</text>
+    <rect x="350" y="94" width="180" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="430" y="115" fill="#e8eef6" font-size="15" font-family="monospace">78</text>
+    <rect x="350" y="126" width="180" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="430" y="147" fill="#e8eef6" font-size="15" font-family="monospace">85</text>
+    <rect x="350" y="158" width="180" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="430" y="179" fill="#e8eef6" font-size="15" font-family="monospace">64</text>
+    <text x="24" y="158" fill="#50fa7b" font-size="17" font-family="sans-serif">key → heading</text>
+    <text x="24" y="186" fill="#50fa7b" font-size="17" font-family="sans-serif">list → the column</text>
+  </svg>
+</div>
+
+<!-- 23 · debug · unequal lists -->
+<div class="slide">
+  <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+  <h2>Bug — one list is short</h2>
+<pre>scores = pd.DataFrame({
+    <span class="str">"name"</span>: [<span class="str">"Neo"</span>, <span class="str">"Amy"</span>, <span class="str">"Ethan"</span>, <span class="str">"Yunho"</span>],
+    <span class="str">"maths"</span>: [<span class="num">92</span>, <span class="num">78</span>, <span class="num">85</span>],
+})</pre>
+  <div class="debug-card"><div class="err">ValueError: All arrays must be of the same length</div></div>
+  <details class="debug-card">
+    <summary>Reveal fix</summary>
+    <p style="margin-top:.4em">Four names, three marks. Every list in the dict must be the same length.</p>
+    <p class="bilingual">리스트 길이가 모두 같아야 해요</p>
+  </details>
+</div>
+
+<!-- 24 · quiz 1 -->
+<div class="slide mcq" data-correct="0" data-explain="A key in the dict becomes a column heading.">
+  <div class="pill purple">Quiz 1</div>
+  <h2>What did <code>"coding"</code> become?</h2>
+  <div class="opts">
+    <button class="opt">A column heading</button>
+    <button class="opt">A row</button>
+    <button class="opt">The index</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 25 · look before you leap -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Three ways to look first</h2>
+  <div class="opt-grid three">
+    <div class="opt-card"><div class="ico">👀</div><div class="name">.head(2)</div><div class="ex">the first rows</div></div>
+    <div class="opt-card"><div class="ico">📐</div><div class="name">.shape</div><div class="ex">how big is it</div></div>
+    <div class="opt-card"><div class="ico">🏷️</div><div class="name">.columns</div><div class="ex">what is in it</div></div>
+  </div>
+  <p style="margin-top:.5em">With 100 rows you cannot read them all. You <b>look first</b>.</p>
+</div>
+
+<!-- 26 · Predict head -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>What will print?</h2>
+  <div class="predict-card">
+    <div class="label">Two, not four</div>
+<pre><span class="fn">print</span>(scores.head(<span class="num">2</span>))</pre>
+    <details><summary>Reveal output</summary><div class="ans">Neo and Amy only — rows 0 and 1.</div></details>
+  </div>
+</div>
+
+<!-- 27 · STEP 6 -->
+<div class="slide">
+  <div class="pill">STEP 6 / 59 · table.py</div>
+  <h2>Peek at the top</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores)</span>
+<span class="hot">print(scores.head(2))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(scores)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A big table never fits the screen.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Two extra rows print: Neo, Amy.</div></div>
+  </div>
+</div>
+
+<!-- 28 · STEP 7 -->
+<div class="slide">
+  <div class="pill">STEP 7 / 59 · table.py</div>
+  <h2>How big is it</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.head(2))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores.head(2))</span>
+<span class="hot">print(scores.shape)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores.head(2)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">No brackets after <code>shape</code>. It is not a job.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>(4, 3)</code></div></div>
+  </div>
+</div>
+
+<!-- 29 · shape visual -->
+<div class="slide">
+  <div class="pill">Watch it 🎨</div>
+  <h2><code>(4, 3)</code> — rows first</h2>
+  <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="200" rx="10" fill="#1e2430"/>
+    <rect x="130" y="30" width="300" height="26" rx="4" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <rect x="130" y="60" width="300" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <rect x="130" y="90" width="300" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <rect x="130" y="120" width="300" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <rect x="130" y="150" width="300" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="30" y="80" fill="#f1fa8c" font-size="17" font-family="monospace">4</text>
+    <text x="30" y="110" fill="#f1fa8c" font-size="15" font-family="sans-serif">rows</text>
+    <text x="46" y="80" fill="#8a97b8" font-size="15" font-family="sans-serif">↕</text>
+    <line x1="230" y1="26" x2="230" y2="180" stroke="#ff7849" stroke-width="2" stroke-dasharray="5 4"/>
+    <line x1="330" y1="26" x2="330" y2="180" stroke="#ff7849" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="450" y="80" fill="#ff7849" font-size="17" font-family="monospace">3</text>
+    <text x="450" y="110" fill="#ff7849" font-size="15" font-family="sans-serif">columns</text>
+    <text x="130" y="196" fill="#8a97b8" font-size="15" font-family="sans-serif">the heading row is not counted</text>
+  </svg>
+</div>
+
+<!-- 30 · STEP 8 -->
+<div class="slide">
+  <div class="pill">STEP 8 / 59 · table.py</div>
+  <h2>What are the headings</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.shape)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores.shape)</span>
+<span class="hot">print(list(scores.columns))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores.shape</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>list()</code> makes it print plainly.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>['name', 'maths', 'coding']</code></div></div>
+  </div>
+</div>
+
+<!-- 31 · BIG VISUAL · the column lifted out -->
+<div class="slide">
+  <div class="pill">Watch it 🎨<span class="activity-tag">the big idea</span></div>
+  <h2>One column, lifted out</h2>
+  <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="250" rx="10" fill="#1e2430"/>
+    <text x="24" y="28" fill="#8a97b8" font-size="15" font-family="sans-serif">the whole table</text>
+    <rect x="24" y="38" width="270" height="28" rx="4" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="40" y="58" fill="#38d0e0" font-size="14" font-family="monospace">name</text>
+    <text x="140" y="58" fill="#38d0e0" font-size="14" font-family="monospace">maths</text>
+    <text x="225" y="58" fill="#38d0e0" font-size="14" font-family="monospace">coding</text>
+    <rect x="24" y="70" width="270" height="28" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="90" fill="#e8eef6" font-size="14" font-family="monospace">Neo</text>
+    <text x="145" y="90" fill="#f1fa8c" font-size="14" font-family="monospace">92</text>
+    <text x="232" y="90" fill="#e8eef6" font-size="14" font-family="monospace">88</text>
+    <rect x="24" y="102" width="270" height="28" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="122" fill="#e8eef6" font-size="14" font-family="monospace">Amy</text>
+    <text x="145" y="122" fill="#f1fa8c" font-size="14" font-family="monospace">78</text>
+    <text x="232" y="122" fill="#e8eef6" font-size="14" font-family="monospace">95</text>
+    <rect x="24" y="134" width="270" height="28" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="154" fill="#e8eef6" font-size="14" font-family="monospace">Ethan</text>
+    <text x="145" y="154" fill="#f1fa8c" font-size="14" font-family="monospace">85</text>
+    <text x="232" y="154" fill="#e8eef6" font-size="14" font-family="monospace">71</text>
+    <rect x="24" y="166" width="270" height="28" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="186" fill="#e8eef6" font-size="14" font-family="monospace">Yunho</text>
+    <text x="145" y="186" fill="#f1fa8c" font-size="14" font-family="monospace">64</text>
+    <text x="232" y="186" fill="#e8eef6" font-size="14" font-family="monospace">90</text>
+    <rect x="130" y="38" width="62" height="156" rx="6" fill="none" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="308" y="120" fill="#f1fa8c" font-size="28">⟹</text>
+    <rect x="360" y="38" width="120" height="156" rx="8" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="392" y="58" fill="#f1fa8c" font-size="14" font-family="monospace">maths</text>
+    <text x="400" y="90" fill="#f1fa8c" font-size="15" font-family="monospace">92</text>
+    <text x="400" y="122" fill="#f1fa8c" font-size="15" font-family="monospace">78</text>
+    <text x="400" y="154" fill="#f1fa8c" font-size="15" font-family="monospace">85</text>
+    <text x="400" y="186" fill="#f1fa8c" font-size="15" font-family="monospace">64</text>
+    <text x="360" y="222" fill="#50fa7b" font-size="16" font-family="monospace">scores["maths"]</text>
+    <text x="24" y="222" fill="#8a97b8" font-size="15" font-family="sans-serif">square brackets, quotes inside</text>
+  </svg>
+</div>
+
+<!-- 32 · Predict a column -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>What will print?</h2>
+  <div class="predict-card">
+    <div class="label">One column on its own</div>
+<pre><span class="fn">print</span>(scores[<span class="str">"maths"</span>])</pre>
+    <details><summary>Reveal output</summary><div class="ans">Four numbers going down, with the index beside them.</div></details>
+  </div>
+</div>
+
+<!-- 33 · STEP 9 -->
+<div class="slide">
+  <div class="pill">STEP 9 / 59 · table.py</div>
+  <h2>Ask for one column</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(list(scores.columns))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(list(scores.columns))</span>
+<span class="hot">print(scores["maths"])</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>list(scores.columns)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">One column on its own is a <b>Series</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">92, 78, 85, 64 print going down.</div></div>
+  </div>
+</div>
+
+<!-- 34 · read the Series output -->
+<div class="slide">
+  <div class="pill">Read it 📖</div>
+  <h2>Three things in that output</h2>
+  <div class="output-box">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;92</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;78</div>
+    <div class="out-line">2&nbsp;&nbsp;&nbsp;&nbsp;85</div>
+    <div class="out-line">3&nbsp;&nbsp;&nbsp;&nbsp;64</div>
+    <div class="out-line">Name: maths, dtype: int64</div>
+  </div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">left</div><div class="edesc">the index — 0 to 3</div></div>
+    <div class="edge-card"><div class="ehead">right</div><div class="edesc">the values</div></div>
+    <div class="edge-card"><div class="ehead">bottom</div><div class="edesc">the name, and <code>int64</code> = whole numbers</div></div>
+    <div class="edge-card"><div class="ehead">missing</div><div class="edesc">no headings row — a Series has only one</div></div>
+  </div>
+</div>
+
+<!-- 35 · debug KeyError -->
+<div class="slide">
+  <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+  <h2>Bug — a capital letter</h2>
+<pre><span class="fn">print</span>(scores[<span class="str">"Maths"</span>])</pre>
+  <div class="debug-card"><div class="err">KeyError: 'Maths'</div></div>
+  <details class="debug-card">
+    <summary>Reveal fix</summary>
+    <p style="margin-top:.4em">You typed the heading as <code>"maths"</code>, small m. pandas matches it letter for letter.</p>
+    <p class="bilingual">대소문자까지 똑같아야 해요</p>
+  </details>
+</div>
+
+<!-- 36 · quiz 2 -->
+<div class="slide mcq" data-correct="0" data-explain="Square brackets with the heading in quotes. Exactly like a dict.">
+  <div class="pill purple">Quiz 2</div>
+  <h2>Which one asks for the coding column?</h2>
+  <div class="opts">
+    <button class="opt"><code>scores["coding"]</code></button>
+    <button class="opt"><code>scores(coding)</code></button>
+    <button class="opt"><code>scores.coding()</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 37 · a column becomes one number -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Four numbers in, one number out</h2>
+  <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="220" rx="10" fill="#1e2430"/>
+    <rect x="60" y="24" width="90" height="26" rx="4" fill="#242c3d" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="92" y="43" fill="#f1fa8c" font-size="14" font-family="monospace">92</text>
+    <rect x="60" y="54" width="90" height="26" rx="4" fill="#242c3d" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="92" y="73" fill="#f1fa8c" font-size="14" font-family="monospace">78</text>
+    <rect x="60" y="84" width="90" height="26" rx="4" fill="#242c3d" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="92" y="103" fill="#f1fa8c" font-size="14" font-family="monospace">85</text>
+    <rect x="60" y="114" width="90" height="26" rx="4" fill="#242c3d" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="92" y="133" fill="#f1fa8c" font-size="14" font-family="monospace">64</text>
+    <path d="M 160 82 L 250 62 L 250 102 Z" fill="#38d0e0"/>
+    <rect x="256" y="56" width="150" height="52" rx="8" fill="#242c3d" stroke="#38d0e0" stroke-width="3"/>
+    <text x="276" y="88" fill="#38d0e0" font-size="16" font-family="monospace">.mean()</text>
+    <text x="416" y="88" fill="#8a97b8" font-size="22">→</text>
+    <rect x="446" y="56" width="90" height="52" rx="8" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="460" y="88" fill="#50fa7b" font-size="17" font-family="monospace">79.75</text>
+    <text x="60" y="172" fill="#e8eef6" font-size="16" font-family="monospace">.mean()  .max()  .min()  .sum()</text>
+    <text x="60" y="200" fill="#8a97b8" font-size="16" font-family="sans-serif">All four do the same shape of thing: column in, one number out.</text>
+  </svg>
+</div>
+
+<!-- 38 · predict mean -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>92, 78, 85, 64 — average?</h2>
+  <div class="predict-card">
+    <div class="label">Say the number before you run it</div>
+<pre><span class="fn">print</span>(scores[<span class="str">"maths"</span>].mean())</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>79.75</code> — 319 shared by 4.</div></details>
+  </div>
+</div>
+
+<!-- 39 · STEP 10 -->
+<div class="slide">
+  <div class="pill">STEP 10 / 59 · table.py</div>
+  <h2>The average</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores["maths"])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores["maths"])</span>
+<span class="hot">print(scores["maths"].mean())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(scores["maths"])</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">You never wrote a loop. The column did it.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>79.75</code></div></div>
+  </div>
+</div>
+
+<!-- 40 · STEP 11 -->
+<div class="slide">
+  <div class="pill">STEP 11 / 59 · table.py</div>
+  <h2>The highest mark</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores["maths"].mean())</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores["maths"].mean())</span>
+<span class="hot">print(scores["maths"].max())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>.mean())</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Same shape, different question.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>92</code></div></div>
+  </div>
+</div>
+
+<!-- 41 · STEP 12 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 12 / 59</span></div>
+  <h2>The lowest mark</h2>
+  <div class="practice-task">Add one line under <code>.max()</code> that prints the <b>smallest</b> maths mark.</div>
+  <div class="practice-hint">Same shape as <code>.max()</code>. Change three letters.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>.max()</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>64</code></div></div>
+  </div>
+</div>
+
+<!-- 42 · STEP 13 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 13 / 59</span></div>
+  <h2>All four added up</h2>
+  <div class="practice-task">Add one line that prints the <b>sum</b> of the maths column.</div>
+  <div class="practice-hint">92 + 78 + 85 + 64. Say the answer first.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>.min()</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>319</code></div></div>
+  </div>
+</div>
+
+<!-- 43 · STEP 14 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 14 / 59</span></div>
+  <h2>Now the other column</h2>
+  <div class="practice-task">Print the <b>average</b> of the <code>coding</code> column.</div>
+  <div class="practice-hint">Change the word in the quotes. Nothing else.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>.sum()</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>86.0</code> — note the <code>.0</code></div></div>
+  </div>
+</div>
+
+<!-- 44 · trace grid -->
+<div class="slide">
+  <div class="pill">Your turn 🧠<span class="activity-tag">predict first</span></div>
+  <h2>Fill the answers, then run</h2>
+  <div class="trace-grid cols-4">
+    <div class="cell head">column</div><div class="cell head">.mean()</div><div class="cell head">.max()</div><div class="cell head">.sum()</div>
+    <div class="cell"><code>maths</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">79.75</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">92</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">319</span></details></div>
+    <div class="cell"><code>coding</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">86.0</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">95</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">344</span></details></div>
+  </div>
+</div>
+
+<!-- 45 · BIG VISUAL · two columns add row by row -->
+<div class="slide">
+  <div class="pill">Watch it 🎨<span class="activity-tag">frame by frame</span></div>
+  <h2>Adding, one row at a time</h2>
+  <svg viewBox="0 0 560 250" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="250" rx="10" fill="#1e2430"/>
+    <text x="60" y="28" fill="#38d0e0" font-size="14" font-family="monospace">maths</text>
+    <text x="180" y="28" fill="#38d0e0" font-size="14" font-family="monospace">coding</text>
+    <text x="360" y="28" fill="#50fa7b" font-size="14" font-family="monospace">total</text>
+    <rect x="40" y="40" width="90" height="40" rx="6" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="74" y="66" fill="#f1fa8c" font-size="16" font-family="monospace">92</text>
+    <text x="140" y="66" fill="#e8eef6" font-size="18" font-family="monospace">+</text>
+    <rect x="165" y="40" width="90" height="40" rx="6" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="199" y="66" fill="#f1fa8c" font-size="16" font-family="monospace">88</text>
+    <text x="272" y="66" fill="#8a97b8" font-size="18" font-family="monospace">=</text>
+    <rect x="300" y="40" width="110" height="40" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="338" y="66" fill="#50fa7b" font-size="16" font-family="monospace">180</text>
+    <text x="428" y="66" fill="#8a97b8" font-size="14" font-family="sans-serif">row 0 · Neo</text>
+    <rect x="40" y="88" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="74" y="114" fill="#e8eef6" font-size="16" font-family="monospace">78</text>
+    <text x="140" y="114" fill="#8a97b8" font-size="18" font-family="monospace">+</text>
+    <rect x="165" y="88" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="199" y="114" fill="#e8eef6" font-size="16" font-family="monospace">95</text>
+    <text x="272" y="114" fill="#8a97b8" font-size="18" font-family="monospace">=</text>
+    <rect x="300" y="88" width="110" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="338" y="114" fill="#e8eef6" font-size="16" font-family="monospace">173</text>
+    <text x="428" y="114" fill="#8a97b8" font-size="14" font-family="sans-serif">row 1 · Amy</text>
+    <rect x="40" y="136" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="74" y="162" fill="#e8eef6" font-size="16" font-family="monospace">85</text>
+    <text x="140" y="162" fill="#8a97b8" font-size="18" font-family="monospace">+</text>
+    <rect x="165" y="136" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="199" y="162" fill="#e8eef6" font-size="16" font-family="monospace">71</text>
+    <text x="272" y="162" fill="#8a97b8" font-size="18" font-family="monospace">=</text>
+    <rect x="300" y="136" width="110" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="338" y="162" fill="#e8eef6" font-size="16" font-family="monospace">156</text>
+    <text x="428" y="162" fill="#8a97b8" font-size="14" font-family="sans-serif">row 2 · Ethan</text>
+    <rect x="40" y="184" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="74" y="210" fill="#e8eef6" font-size="16" font-family="monospace">64</text>
+    <text x="140" y="210" fill="#8a97b8" font-size="18" font-family="monospace">+</text>
+    <rect x="165" y="184" width="90" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="199" y="210" fill="#e8eef6" font-size="16" font-family="monospace">90</text>
+    <text x="272" y="210" fill="#8a97b8" font-size="18" font-family="monospace">=</text>
+    <rect x="300" y="184" width="110" height="40" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="338" y="210" fill="#e8eef6" font-size="16" font-family="monospace">154</text>
+    <text x="428" y="210" fill="#8a97b8" font-size="14" font-family="sans-serif">row 3 · Yunho</text>
+    <text x="40" y="244" fill="#50fa7b" font-size="16" font-family="sans-serif">Row 0 pairs with row 0. Never with row 1.</text>
+  </svg>
+</div>
+
+<!-- 46 · predict total -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>One line, four sums</h2>
+  <div class="predict-card">
+    <div class="label">What lands in the new column?</div>
+<pre>scores[<span class="str">"total"</span>] = scores[<span class="str">"maths"</span>] + scores[<span class="str">"coding"</span>]</pre>
+    <details><summary>Reveal output</summary><div class="ans">180, 173, 156, 154 — one per row.</div></details>
+  </div>
+</div>
+
+<!-- 47 · STEP 15 -->
+<div class="slide">
+  <div class="pill">STEP 15 / 59 · table.py</div>
+  <h2>A new column from two old ones</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores["coding"].mean())</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores["coding"].mean())</span>
+
+<span class="hot">scores["total"] = scores["maths"] + scores["coding"]</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores["coding"].mean()</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A name in brackets that does not exist yet gets <b>made</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing new prints — yet.</div></div>
+  </div>
+</div>
+
+<!-- 48 · STEP 16 -->
+<div class="slide">
+  <div class="pill">STEP 16 / 59 · table.py</div>
+  <h2>Show the new column</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>scores["total"] = scores["maths"] + scores["coding"]</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">scores["total"] = scores["maths"] + scores["coding"]</span>
+<span class="hot">print(scores)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores["total"] =</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Proof the column is really there.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Four columns now. <code>total</code> is last.</div></div>
+  </div>
+</div>
+
+<!-- 49 · v4 -->
+<div class="slide">
+  <div class="pill">v4 ✅ · table.py</div>
+  <h2>v4 — a column you made</h2>
+<pre><span class="dim">scores = pd.DataFrame({</span>
+<span class="dim">    "name": ["Neo", "Amy", "Ethan", "Yunho"],</span>
+<span class="dim">    "maths": [92, 78, 85, 64],</span>
+<span class="dim">    "coding": [88, 95, 71, 90],</span>
+<span class="dim">})</span>
+
+<span class="hot">scores["total"] = scores["maths"] + scores["coding"]</span>
+<span class="hot">print(scores)</span></pre>
+  <div class="output-box" style="margin-top:.5em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths&nbsp;&nbsp;coding&nbsp;&nbsp;total</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;88&nbsp;&nbsp;&nbsp;&nbsp;180</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;95&nbsp;&nbsp;&nbsp;&nbsp;173</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;71&nbsp;&nbsp;&nbsp;&nbsp;156</div>
+    <div class="out-line">3&nbsp;&nbsp;Yunho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90&nbsp;&nbsp;&nbsp;&nbsp;154</div>
+  </div>
+</div>
+
+<!-- 50 · the loop you did not write -->
+<div class="slide">
+  <div class="pill">⚠️ Compare</div>
+  <h2>The loop you did not write</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ the long way</span>
+<pre>totals = []
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):
+    m = scores[<span class="str">"maths"</span>][i]
+    c = scores[<span class="str">"coding"</span>][i]
+    totals.append(m + c)
+scores[<span class="str">"total"</span>] = totals</pre>
+    </div>
+    <div class="col good"><span class="tag">✓ the pandas way</span>
+<pre>scores[<span class="str">"total"</span>] = scores[<span class="str">"maths"</span>] + scores[<span class="str">"coding"</span>]</pre>
+      <p style="margin-top:.4em">Six lines become one. Same answer.</p>
+    </div>
+  </div>
+  <p class="bilingual">여섯 줄이 한 줄이 돼요</p>
+</div>
+
+<!-- 51 · quiz 3 -->
+<div class="slide mcq" data-correct="0" data-explain="A name in brackets that does not exist yet is created.">
+  <div class="pill purple">Quiz 3</div>
+  <h2>What does <code>scores["total"] = ...</code> do?</h2>
+  <div class="opts">
+    <button class="opt">Makes a new column called total</button>
+    <button class="opt">Makes a new row called total</button>
+    <button class="opt">Crashes — total does not exist</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 52 · BIG VISUAL · the True/False column -->
+<div class="slide">
+  <div class="pill">Watch it 🎨<span class="activity-tag">the big idea</span></div>
+  <h2>A question makes a new column</h2>
+  <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="230" rx="10" fill="#1e2430"/>
+    <text x="30" y="30" fill="#38d0e0" font-size="14" font-family="monospace">maths</text>
+    <text x="150" y="30" fill="#8a97b8" font-size="14" font-family="sans-serif">is it &gt; 80 ?</text>
+    <text x="330" y="30" fill="#50fa7b" font-size="14" font-family="monospace">answer</text>
+    <rect x="30" y="42" width="80" height="36" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="66" fill="#e8eef6" font-size="16" font-family="monospace">92</text>
+    <text x="125" y="66" fill="#8a97b8" font-size="18">→</text>
+    <text x="160" y="66" fill="#8a97b8" font-size="15" font-family="monospace">92 &gt; 80</text>
+    <text x="290" y="66" fill="#8a97b8" font-size="18">→</text>
+    <rect x="325" y="42" width="120" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="352" y="66" fill="#50fa7b" font-size="16" font-family="monospace">True</text>
+    <rect x="30" y="86" width="80" height="36" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="110" fill="#e8eef6" font-size="16" font-family="monospace">78</text>
+    <text x="125" y="110" fill="#8a97b8" font-size="18">→</text>
+    <text x="160" y="110" fill="#8a97b8" font-size="15" font-family="monospace">78 &gt; 80</text>
+    <text x="290" y="110" fill="#8a97b8" font-size="18">→</text>
+    <rect x="325" y="86" width="120" height="36" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="3"/>
+    <text x="348" y="110" fill="#ff5555" font-size="16" font-family="monospace">False</text>
+    <rect x="30" y="130" width="80" height="36" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="154" fill="#e8eef6" font-size="16" font-family="monospace">85</text>
+    <text x="125" y="154" fill="#8a97b8" font-size="18">→</text>
+    <text x="160" y="154" fill="#8a97b8" font-size="15" font-family="monospace">85 &gt; 80</text>
+    <text x="290" y="154" fill="#8a97b8" font-size="18">→</text>
+    <rect x="325" y="130" width="120" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="352" y="154" fill="#50fa7b" font-size="16" font-family="monospace">True</text>
+    <rect x="30" y="174" width="80" height="36" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="198" fill="#e8eef6" font-size="16" font-family="monospace">64</text>
+    <text x="125" y="198" fill="#8a97b8" font-size="18">→</text>
+    <text x="160" y="198" fill="#8a97b8" font-size="15" font-family="monospace">64 &gt; 80</text>
+    <text x="290" y="198" fill="#8a97b8" font-size="18">→</text>
+    <rect x="325" y="174" width="120" height="36" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="3"/>
+    <text x="348" y="198" fill="#ff5555" font-size="16" font-family="monospace">False</text>
+    <text x="462" y="120" fill="#f1fa8c" font-size="15" font-family="sans-serif">four rows in,</text>
+    <text x="462" y="144" fill="#f1fa8c" font-size="15" font-family="sans-serif">four answers out</text>
+  </svg>
+</div>
+
+<!-- 53 · predict the boolean column -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>What will print?</h2>
+  <div class="predict-card">
+    <div class="label">No filtering yet — just the question</div>
+<pre><span class="fn">print</span>(scores[<span class="str">"maths"</span>] &gt; <span class="num">80</span>)</pre>
+    <details><summary>Reveal output</summary><div class="ans">True, False, True, False — one per row.</div></details>
+  </div>
+</div>
+
+<!-- 54 · STEP 17 -->
+<div class="slide">
+  <div class="pill">STEP 17 / 59 · table.py</div>
+  <h2>Ask the whole column a question</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores)</span>
+<span class="hot">print(scores["maths"] &gt; 80)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(scores)</code> — the <b>second</b> one, after the total line</div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">One question, asked of every row at once.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">True, False, True, False</div></div>
+  </div>
+</div>
+
+<!-- 55 · which rows survive -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>The True rows come through</h2>
+  <div class="match-flow">
+    <div class="row hit">Neo · 92 <span class="verdict">✓ True — keep</span></div>
+    <div class="row skip">Amy · 78 <span class="verdict">✗ False — drop</span></div>
+    <div class="row hit">Ethan · 85 <span class="verdict">✓ True — keep</span></div>
+    <div class="row skip">Yunho · 64 <span class="verdict">✗ False — drop</span></div>
+  </div>
+  <p style="margin-top:.5em">Two rows survive. The other two are not deleted — just not shown.</p>
+  <p class="bilingual">True인 줄만 남아요</p>
+</div>
+
+<!-- 56 · predict the filter -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>How many rows come back?</h2>
+  <div class="predict-card">
+    <div class="label">Brackets inside brackets</div>
+<pre><span class="fn">print</span>(scores[scores[<span class="str">"maths"</span>] &gt; <span class="num">80</span>])</pre>
+    <details><summary>Reveal output</summary><div class="ans">Two — Neo and Ethan. Watch the numbers on the left.</div></details>
+  </div>
+</div>
+
+<!-- 57 · STEP 18 -->
+<div class="slide">
+  <div class="pill">STEP 18 / 59 · table.py</div>
+  <h2>Filter the table</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores["maths"] &gt; 80)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores["maths"] &gt; 80)</span>
+<span class="hot">print(scores[scores["maths"] &gt; 80])</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(scores["maths"] &gt; 80)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Put the True/False column <b>inside</b> the table's brackets.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Two rows: Neo and Ethan.</div></div>
+  </div>
+</div>
+
+<!-- 58 · the index jumps -->
+<div class="slide">
+  <div class="pill">⚠️ Look closely</div>
+  <h2>The index jumps 0 → 2</h2>
+  <div class="output-box">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths&nbsp;&nbsp;coding&nbsp;&nbsp;total</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;88&nbsp;&nbsp;&nbsp;&nbsp;180</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;71&nbsp;&nbsp;&nbsp;&nbsp;156</div>
+  </div>
+  <p style="margin-top:.5em">Not 0 and 1. Each row <b>keeps</b> its old number, so you can still find it.</p>
+  <p class="bilingual">줄 번호는 그대로 따라와요</p>
+</div>
+
+<!-- 59 · debug and vs & -->
+<div class="slide">
+  <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+  <h2>Bug — two questions with <code>and</code></h2>
+<pre><span class="fn">print</span>(scores[scores[<span class="str">"maths"</span>] &gt; <span class="num">70</span> <span class="kw">and</span> scores[<span class="str">"coding"</span>] &gt; <span class="num">85</span>])</pre>
+  <div class="debug-card"><div class="err">ValueError: The truth value of a Series is ambiguous.</div></div>
+  <details class="debug-card">
+    <summary>Reveal fix</summary>
+<pre>print(scores[(scores["maths"] &gt; 70) <span class="hot">&amp;</span> (scores["coding"] &gt; 85)])</pre>
+    <p style="margin-top:.4em">Use <code>&amp;</code>, and wrap each question in round brackets. Answer: Neo and Amy.</p>
+    <p class="bilingual">and 대신 &amp; 를 쓰고 괄호로 감싸요</p>
+  </details>
+</div>
+
+<!-- 60 · quiz 4 -->
+<div class="slide mcq" data-correct="0" data-explain="It keeps the rows where the answer was True: Neo and Ethan.">
+  <div class="pill purple">Quiz 4</div>
+  <h2><code>scores[scores["maths"] &gt; 80]</code> gives?</h2>
+  <div class="opts">
+    <button class="opt">Two rows</button>
+    <button class="opt">Four True/False values</button>
+    <button class="opt">One number</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 61 · sorting concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Sorting moves whole rows</h2>
+  <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="200" rx="10" fill="#1e2430"/>
+    <text x="24" y="28" fill="#8a97b8" font-size="15" font-family="sans-serif">before</text>
+    <rect x="24" y="38" width="200" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="59" fill="#e8eef6" font-size="14" font-family="monospace">Neo      180</text>
+    <rect x="24" y="72" width="200" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="93" fill="#e8eef6" font-size="14" font-family="monospace">Amy      173</text>
+    <rect x="24" y="106" width="200" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="127" fill="#e8eef6" font-size="14" font-family="monospace">Ethan    156</text>
+    <rect x="24" y="140" width="200" height="30" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="161" fill="#e8eef6" font-size="14" font-family="monospace">Yunho    154</text>
+    <text x="248" y="108" fill="#f1fa8c" font-size="24">⟹</text>
+    <text x="300" y="28" fill="#f1fa8c" font-size="15" font-family="sans-serif">sort_values("total")</text>
+    <rect x="300" y="38" width="200" height="30" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="316" y="59" fill="#f1fa8c" font-size="14" font-family="monospace">Yunho    154</text>
+    <rect x="300" y="72" width="200" height="30" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="316" y="93" fill="#f1fa8c" font-size="14" font-family="monospace">Ethan    156</text>
+    <rect x="300" y="106" width="200" height="30" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="316" y="127" fill="#f1fa8c" font-size="14" font-family="monospace">Amy      173</text>
+    <rect x="300" y="140" width="200" height="30" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="316" y="161" fill="#f1fa8c" font-size="14" font-family="monospace">Neo      180</text>
+    <text x="24" y="192" fill="#50fa7b" font-size="16" font-family="sans-serif">The name travels with its number. Rows never split.</text>
+  </svg>
+</div>
+
+<!-- 62 · predict sort -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Who is on top?</h2>
+  <div class="predict-card">
+    <div class="label">Smallest first, unless you say otherwise</div>
+<pre><span class="fn">print</span>(scores.sort_values(<span class="str">"total"</span>))</pre>
+    <details><summary>Reveal output</summary><div class="ans">Yunho 154, Ethan 156, Amy 173, Neo 180.</div></details>
+  </div>
+</div>
+
+<!-- 63 · STEP 19 -->
+<div class="slide">
+  <div class="pill">STEP 19 / 59 · table.py</div>
+  <h2>Sort by total</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores[scores["maths"] &gt; 80])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores[scores["maths"] &gt; 80])</span>
+<span class="hot">print(scores.sort_values("total"))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores["maths"] &gt; 80])</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Name the column you want it ordered by.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Yunho is now the top row.</div></div>
+  </div>
+</div>
+
+<!-- 64 · STEP 20 -->
+<div class="slide">
+  <div class="pill">STEP 20 / 59 · table.py</div>
+  <h2>Biggest first</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.sort_values("total"))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">print(scores.sort_values("total", ascending=False))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>sort_values("total")</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Change that one line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A leaderboard wants the winner first.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Neo 180 on top, Yunho 154 at the bottom.</div></div>
+  </div>
+</div>
+
+<!-- 65 · sorting does not change scores -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2>Sorting hands back a <b>copy</b></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">✗ scores is unchanged</span>
+<pre>scores.sort_values(<span class="str">"total"</span>)
+<span class="fn">print</span>(scores)</pre>
+      <p style="margin-top:.4em">Still Neo, Amy, Ethan, Yunho.</p>
+    </div>
+    <div class="col good"><span class="tag">✓ keep the copy</span>
+<pre>ranked = scores.sort_values(<span class="str">"total"</span>)
+<span class="fn">print</span>(ranked)</pre>
+      <p style="margin-top:.4em">Catch it in a name, like a returned value.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 66 · predict describe -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>One line, every number</h2>
+  <div class="predict-card">
+    <div class="label">How many rows will come back?</div>
+<pre><span class="fn">print</span>(scores.describe())</pre>
+    <details><summary>Reveal output</summary><div class="ans">Eight rows — count, mean, std, min, 25%, 50%, 75%, max.</div></details>
+  </div>
+</div>
+
+<!-- 67 · STEP 21 -->
+<div class="slide">
+  <div class="pill">STEP 21 / 59 · table.py</div>
+  <h2>Everything at once</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.sort_values("total", ascending=False))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores.sort_values("total", ascending=False))</span>
+<span class="hot">print(scores.describe())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>ascending=False))</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">It skips <code>name</code> — you cannot average words.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Three columns, eight rows of numbers.</div></div>
+  </div>
+</div>
+
+<!-- 68 · read describe -->
+<div class="slide">
+  <div class="pill">Read it 📖</div>
+  <h2>What those eight rows mean</h2>
+  <div class="output-box">
+    <div class="out-label">▸ Output (maths column)</div>
+    <div class="out-line">count&nbsp;&nbsp;&nbsp;&nbsp;4.000000</div>
+    <div class="out-line">mean&nbsp;&nbsp;&nbsp;&nbsp;79.750000</div>
+    <div class="out-line">std&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11.954776</div>
+    <div class="out-line">min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64.000000</div>
+    <div class="out-line">50%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;81.500000</div>
+    <div class="out-line">max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92.000000</div>
+  </div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">count</div><div class="edesc">how many numbers</div></div>
+    <div class="edge-card"><div class="ehead">std</div><div class="edesc">how spread out they are</div></div>
+    <div class="edge-card"><div class="ehead">50%</div><div class="edesc">the middle one — the median</div></div>
+    <div class="edge-card"><div class="ehead">25% / 75%</div><div class="edesc">a quarter of the way, three quarters</div></div>
+  </div>
+</div>
+
+<!-- 69 · STEP 22 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 22 / 59</span></div>
+  <h2>An average column</h2>
+  <div class="practice-task">Make a column called <code>average</code> that is <code>total</code> shared by <b>2</b>. Then print the table.</div>
+  <div class="practice-hint">Copy the <code>total</code> line. Change the name, change the maths.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>describe()</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">90.0 · 86.5 · 78.0 · 77.0</div></div>
+  </div>
+</div>
+
+<!-- 70 · idxmax concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>The biggest is a number. Who is it?</h2>
+  <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="180" rx="10" fill="#1e2430"/>
+    <rect x="24" y="26" width="180" height="44" rx="8" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="54" fill="#8a97b8" font-size="15" font-family="monospace">.max()  →  92</text>
+    <text x="216" y="54" fill="#ff5555" font-size="15" font-family="sans-serif">but who scored it?</text>
+    <rect x="24" y="86" width="180" height="44" rx="8" fill="#242c3d" stroke="#50fa7b" stroke-width="3"/>
+    <text x="40" y="114" fill="#50fa7b" font-size="15" font-family="monospace">.idxmax()  →  0</text>
+    <text x="216" y="114" fill="#50fa7b" font-size="15" font-family="sans-serif">row 0 — then read its name</text>
+    <text x="24" y="162" fill="#f1fa8c" font-size="16" font-family="sans-serif">idx = index. Not the value — the row number.</text>
+  </svg>
+</div>
+
+<!-- 71 · STEP 23 -->
+<div class="slide">
+  <div class="pill">STEP 23 / 59 · table.py</div>
+  <h2>Name the winner</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>scores["average"] = scores["total"] / 2
+print(scores)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">scores["average"] = scores["total"] / 2</span>
+<span class="dim">print(scores)</span>
+<span class="hot">print(scores.loc[scores["maths"].idxmax(), "name"])</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>scores["average"]</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last line of the file. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>.loc[row, column]</code> reads one box.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>Neo</code></div></div>
+  </div>
+</div>
+
+<!-- 72 · STEP 24 -->
+<div class="slide">
+  <div class="pill">STEP 24 / 59 · table.py</div>
+  <h2>The top two</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.loc[scores["maths"].idxmax(), "name"])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores.loc[scores["maths"].idxmax(), "name"])</span>
+<span class="hot">print(scores.nlargest(2, "total"))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>idxmax(), "name"</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Sort and cut, in one word.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Two rows: Neo 180, Amy 173.</div></div>
+  </div>
+</div>
+
+<!-- 73 · apply concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Your own box, run on every row</h2>
+  <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="210" rx="10" fill="#1e2430"/>
+    <rect x="200" y="18" width="170" height="56" rx="8" fill="#2d2140" stroke="#bd93f9" stroke-width="3"/>
+    <text x="216" y="42" fill="#bd93f9" font-size="14" font-family="monospace">def grade(m):</text>
+    <text x="216" y="64" fill="#bd93f9" font-size="14" font-family="monospace">  85+ → "A"</text>
+    <rect x="30" y="100" width="70" height="32" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="56" y="122" fill="#e8eef6" font-size="14" font-family="monospace">92</text>
+    <rect x="120" y="100" width="70" height="32" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="146" y="122" fill="#e8eef6" font-size="14" font-family="monospace">78</text>
+    <rect x="210" y="100" width="70" height="32" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="236" y="122" fill="#e8eef6" font-size="14" font-family="monospace">85</text>
+    <rect x="300" y="100" width="70" height="32" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="326" y="122" fill="#e8eef6" font-size="14" font-family="monospace">64</text>
+    <text x="392" y="122" fill="#8a97b8" font-size="14" font-family="sans-serif">the maths column</text>
+    <text x="56" y="152" fill="#bd93f9" font-size="16">↓</text>
+    <text x="146" y="152" fill="#bd93f9" font-size="16">↓</text>
+    <text x="236" y="152" fill="#bd93f9" font-size="16">↓</text>
+    <text x="326" y="152" fill="#bd93f9" font-size="16">↓</text>
+    <rect x="30" y="160" width="70" height="32" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="58" y="182" fill="#50fa7b" font-size="14" font-family="monospace">A</text>
+    <rect x="120" y="160" width="70" height="32" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="3"/>
+    <text x="148" y="182" fill="#ff5555" font-size="14" font-family="monospace">B</text>
+    <rect x="210" y="160" width="70" height="32" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="238" y="182" fill="#50fa7b" font-size="14" font-family="monospace">A</text>
+    <rect x="300" y="160" width="70" height="32" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="3"/>
+    <text x="328" y="182" fill="#ff5555" font-size="14" font-family="monospace">B</text>
+    <text x="392" y="182" fill="#8a97b8" font-size="14" font-family="sans-serif">the grade column</text>
+  </svg>
+</div>
+
+<!-- 74 · STEP 25 -->
+<div class="slide">
+  <div class="pill">STEP 25 / 59 · table.py</div>
+  <h2>Write the box</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(scores.nlargest(2, "total"))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(scores.nlargest(2, "total"))</span>
+
+<span class="hot">def grade(m):</span>
+<span class="hot">    if m &gt;= 85:</span>
+<span class="hot">        return "A"</span>
+<span class="hot">    return "B"</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>nlargest(2, "total")</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. <code>def</code> at <b>0</b>, <code>if</code> at <b>4</b>, <code>return "A"</code> at <b>8</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">One mark in, one letter out.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing new prints yet.</div></div>
+  </div>
+</div>
+
+<!-- 75 · predict apply -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Four marks, four letters</h2>
+  <div class="predict-card">
+    <div class="label">92, 78, 85, 64 — call them out</div>
+<pre>scores[<span class="str">"grade"</span>] = scores[<span class="str">"maths"</span>].apply(grade)</pre>
+    <details><summary>Reveal output</summary><div class="ans">A, B, A, B. 85 counts as A — the gate is <code>&gt;=</code>.</div></details>
+  </div>
+</div>
+
+<!-- 76 · STEP 26 -->
+<div class="slide">
+  <div class="pill">STEP 26 / 59 · table.py</div>
+  <h2>Run it on the whole column</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>    return "B"</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">    return "B"</span>
+
+<span class="hot">scores["grade"] = scores["maths"].apply(grade)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>return "B"</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">No brackets after <code>grade</code> — you hand over the box, not a call.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing new prints yet.</div></div>
+  </div>
+</div>
+
+<!-- 77 · STEP 27 -->
+<div class="slide">
+  <div class="pill">STEP 27 / 59 · table.py</div>
+  <h2>See the grades</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>scores["grade"] = scores["maths"].apply(grade)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">scores["grade"] = scores["maths"].apply(grade)</span>
+<span class="hot">print(scores)</span></pre></div>
+  </div>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths&nbsp;&nbsp;coding&nbsp;&nbsp;total&nbsp;&nbsp;average grade</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;92&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;88&nbsp;&nbsp;&nbsp;&nbsp;180&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;95&nbsp;&nbsp;&nbsp;&nbsp;173&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;86.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;71&nbsp;&nbsp;&nbsp;&nbsp;156&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;78.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A</div>
+    <div class="out-line">3&nbsp;&nbsp;Yunho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90&nbsp;&nbsp;&nbsp;&nbsp;154&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;77.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B</div>
+  </div>
+</div>
+
+<!-- 78 · pandas half done -->
+<div class="slide center-all">
+  <div class="pill">Half done ✅</div>
+  <div class="emoji">🐼</div>
+  <h2>Eight questions you can now ask</h2>
+  <div class="topic-grid three">
+    <div class="topic-chip"><div class="head">.head()</div><div class="desc">look</div></div>
+    <div class="topic-chip"><div class="head">.shape</div><div class="desc">how big</div></div>
+    <div class="topic-chip"><div class="head">["maths"]</div><div class="desc">one column</div></div>
+    <div class="topic-chip purple"><div class="head">.mean()</div><div class="desc">one number</div></div>
+    <div class="topic-chip purple"><div class="head">a + b</div><div class="desc">a new column</div></div>
+    <div class="topic-chip purple"><div class="head">[ &gt; 80 ]</div><div class="desc">filter</div></div>
+    <div class="topic-chip"><div class="head">.sort_values()</div><div class="desc">order</div></div>
+    <div class="topic-chip"><div class="head">.describe()</div><div class="desc">everything</div></div>
+    <div class="topic-chip"><div class="head">.apply()</div><div class="desc">your own box</div></div>
+  </div>
+</div>
+
+<!-- 79 · code talk -->
+<div class="slide">
+  <div class="pill purple">Code Talk</div>
+  <h2>Say it out loud</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame">"<code>scores["maths"]</code> gives me a <span class="blank"></span>. Adding <code>.mean()</code> turns it into <span class="blank"></span>. Putting a question inside the brackets keeps the rows that are <span class="blank"></span>."</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+  </div>
+</div>
+
+<!-- 80 · quiz 5 -->
+<div class="slide mcq" data-correct="0" data-explain="describe() skips text columns — you cannot average a word.">
+  <div class="pill purple">Quiz 5</div>
+  <h2>Why is <code>name</code> missing from <code>.describe()</code>?</h2>
+  <div class="opts">
+    <button class="opt">It holds words, not numbers</button>
+    <button class="opt">It was deleted</button>
+    <button class="opt">It is the index</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 81 · NUMPY divider -->
+<div class="slide center-all">
+  <div class="pill purple">Part 2</div>
+  <div class="emoji">⚡</div>
+  <h1>numpy</h1>
+  <p class="big" style="margin-top:.4em;color:var(--accent-2);">Maths on <span class="sub">every number at once</span></p>
+  <p style="margin-top:.4em">New file. pandas is not needed from here.</p>
+  <p class="bilingual">이제 numpy — 한 줄로 전부 계산해요</p>
+</div>
+
+<!-- 82 · what numpy is for -->
+<div class="slide">
+  <div class="pill">Concept 💡<span class="activity-tag">no code</span></div>
+  <h2>A list that does maths</h2>
+  <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="190" rx="10" fill="#1e2430"/>
+    <rect x="24" y="26" width="240" height="60" rx="8" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="50" fill="#8a97b8" font-size="15" font-family="monospace">a Python list</text>
+    <text x="40" y="74" fill="#8a97b8" font-size="15" font-family="monospace">[1, 2, 3] * 2</text>
+    <text x="40" y="110" fill="#ff5555" font-size="15" font-family="monospace">[1, 2, 3, 1, 2, 3]</text>
+    <text x="40" y="136" fill="#ff5555" font-size="14" font-family="sans-serif">repeated, not doubled</text>
+    <rect x="296" y="26" width="240" height="60" rx="8" fill="#242c3d" stroke="#50fa7b" stroke-width="3"/>
+    <text x="312" y="50" fill="#50fa7b" font-size="15" font-family="monospace">a numpy array</text>
+    <text x="312" y="74" fill="#50fa7b" font-size="15" font-family="monospace">np.array([1, 2, 3]) * 2</text>
+    <text x="312" y="110" fill="#50fa7b" font-size="15" font-family="monospace">[2 4 6]</text>
+    <text x="312" y="136" fill="#50fa7b" font-size="14" font-family="sans-serif">every number doubled</text>
+    <text x="24" y="176" fill="#f1fa8c" font-size="16" font-family="sans-serif">Same brackets. Completely different meaning.</text>
+  </svg>
+</div>
+
+<!-- 83 · STEP 28 -->
+<div class="slide">
+  <div class="pill">STEP 28 / 59 · speed.py</div>
+  <h2>A new file</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty file)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">import numpy as np</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">New file. Name it <code>speed.py</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Line 1. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Everyone writes <code>np</code>. Same habit as <code>pd</code>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing prints, no red text.</div></div>
+  </div>
+</div>
+
+<!-- 84 · the loop Neo would write -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Double five numbers — the old way</h2>
+  <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="210" rx="10" fill="#1e2430"/>
+    <rect x="24" y="22" width="100" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="60" y="45" fill="#38d0e0" font-size="15" font-family="monospace">n = 1</text>
+    <text x="140" y="45" fill="#8a97b8" font-size="15">→ append 2</text>
+    <rect x="24" y="60" width="100" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="60" y="83" fill="#38d0e0" font-size="15" font-family="monospace">n = 2</text>
+    <text x="140" y="83" fill="#8a97b8" font-size="15">→ append 4</text>
+    <rect x="24" y="98" width="100" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="60" y="121" fill="#38d0e0" font-size="15" font-family="monospace">n = 3</text>
+    <text x="140" y="121" fill="#8a97b8" font-size="15">→ append 6</text>
+    <rect x="24" y="136" width="100" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="60" y="159" fill="#38d0e0" font-size="15" font-family="monospace">n = 4</text>
+    <text x="140" y="159" fill="#8a97b8" font-size="15">→ append 8</text>
+    <rect x="24" y="174" width="100" height="34" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="60" y="197" fill="#38d0e0" font-size="15" font-family="monospace">n = 5</text>
+    <text x="140" y="197" fill="#8a97b8" font-size="15">→ append 10</text>
+    <text x="300" y="90" fill="#f1fa8c" font-size="17" font-family="sans-serif">Five passes.</text>
+    <text x="300" y="120" fill="#f1fa8c" font-size="17" font-family="sans-serif">Five appends.</text>
+    <text x="300" y="156" fill="#8a97b8" font-size="16" font-family="sans-serif">With 1,000,000 numbers?</text>
+  </svg>
+</div>
+
+<!-- 85 · STEP 29 -->
+<div class="slide">
+  <div class="pill">STEP 29 / 59 · speed.py</div>
+  <h2>Write the loop first</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>import numpy as np</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">import numpy as np</span>
+
+<span class="hot">nums = [1, 2, 3, 4, 5]</span>
+<span class="hot">doubled = []</span>
+<span class="hot">for n in nums:</span>
+<span class="hot">    doubled.append(n * 2)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>import numpy as np</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it. <code>for</code> at indent <b>0</b>, <code>doubled.append</code> at <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">See the long way first.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Nothing prints yet.</div></div>
+  </div>
+</div>
+
+<!-- 86 · STEP 30 -->
+<div class="slide">
+  <div class="pill">STEP 30 / 59 · speed.py</div>
+  <h2>Show the loop's answer</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>    doubled.append(n * 2)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">    doubled.append(n * 2)</span>
+
+<span class="hot">print(doubled)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>doubled.append(n * 2)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b> — <b>outside</b> the loop.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Indent 4 would print it five times.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[2, 4, 6, 8, 10]</code></div></div>
+  </div>
+</div>
+
+<!-- 87 · predict arr * 2 -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Same answer, no loop?</h2>
+  <div class="predict-card">
+    <div class="label">One line instead of four</div>
+<pre>arr = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+<span class="fn">print</span>(arr * <span class="num">2</span>)</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>[ 2  4  6  8 10]</code> — spaces, no commas. That is how arrays print.</div></details>
+  </div>
+</div>
+
+<!-- 88 · STEP 31 -->
+<div class="slide">
+  <div class="pill">STEP 31 / 59 · speed.py</div>
+  <h2>The same five numbers, as an array</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(doubled)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(doubled)</span>
+
+<span class="hot">arr = np.array([1, 2, 3, 4, 5])</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(doubled)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">A list goes <b>in</b>. An array comes out.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing new prints.</div></div>
+  </div>
+</div>
+
+<!-- 89 · ★★★ THE BIGGEST VISUAL -->
+<div class="slide dense">
+  <div class="pill">Watch it 🎨<span class="activity-tag">the idea of the whole lesson</span></div>
+  <h2>Four lines, or one</h2>
+  <svg viewBox="0 0 600 330" xmlns="http://www.w3.org/2000/svg" style="width:min(96vmin,1180px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="600" height="330" rx="10" fill="#1e2430"/>
+
+    <text x="20" y="26" fill="#ff5555" font-size="16" font-family="sans-serif">THE LOOP — one number per pass</text>
+    <rect x="20" y="36" width="270" height="96" rx="8" fill="#2a1a1a" stroke="#ff5555" stroke-width="2"/>
+    <text x="34" y="58" fill="#ff5555" font-size="13" font-family="monospace">doubled = []</text>
+    <text x="34" y="78" fill="#ff5555" font-size="13" font-family="monospace">for n in nums:</text>
+    <text x="34" y="98" fill="#ff5555" font-size="13" font-family="monospace">    doubled.append(n * 2)</text>
+    <text x="34" y="122" fill="#8a97b8" font-size="13" font-family="monospace">print(doubled)</text>
+
+    <rect x="20" y="146" width="48" height="30" rx="5" fill="#242c3d" stroke="#ff5555" stroke-width="2"/>
+    <text x="38" y="167" fill="#ff5555" font-size="13" font-family="monospace">1</text>
+    <text x="74" y="167" fill="#8a97b8" font-size="13">→ 2</text>
+    <text x="112" y="167" fill="#4a5670" font-size="12">pass 1</text>
+    <rect x="20" y="180" width="48" height="30" rx="5" fill="#242c3d" stroke="#ff5555" stroke-width="2"/>
+    <text x="38" y="201" fill="#ff5555" font-size="13" font-family="monospace">2</text>
+    <text x="74" y="201" fill="#8a97b8" font-size="13">→ 4</text>
+    <text x="112" y="201" fill="#4a5670" font-size="12">pass 2</text>
+    <rect x="20" y="214" width="48" height="30" rx="5" fill="#242c3d" stroke="#ff5555" stroke-width="2"/>
+    <text x="38" y="235" fill="#ff5555" font-size="13" font-family="monospace">3</text>
+    <text x="74" y="235" fill="#8a97b8" font-size="13">→ 6</text>
+    <text x="112" y="235" fill="#4a5670" font-size="12">pass 3</text>
+    <rect x="20" y="248" width="48" height="30" rx="5" fill="#242c3d" stroke="#ff5555" stroke-width="2"/>
+    <text x="38" y="269" fill="#ff5555" font-size="13" font-family="monospace">4</text>
+    <text x="74" y="269" fill="#8a97b8" font-size="13">→ 8</text>
+    <text x="112" y="269" fill="#4a5670" font-size="12">pass 4</text>
+    <rect x="20" y="282" width="48" height="30" rx="5" fill="#242c3d" stroke="#ff5555" stroke-width="2"/>
+    <text x="38" y="303" fill="#ff5555" font-size="13" font-family="monospace">5</text>
+    <text x="74" y="303" fill="#8a97b8" font-size="13">→ 10</text>
+    <text x="112" y="303" fill="#4a5670" font-size="12">pass 5</text>
+
+    <line x1="310" y1="20" x2="310" y2="318" stroke="#4a5670" stroke-width="2" stroke-dasharray="6 5"/>
+
+    <text x="330" y="26" fill="#50fa7b" font-size="16" font-family="sans-serif">VECTORISED — all five together</text>
+    <rect x="330" y="36" width="250" height="60" rx="8" fill="#16302a" stroke="#50fa7b" stroke-width="3"/>
+    <text x="344" y="60" fill="#50fa7b" font-size="13" font-family="monospace">arr = np.array([1,2,3,4,5])</text>
+    <text x="344" y="84" fill="#50fa7b" font-size="14" font-family="monospace">print(arr * 2)</text>
+
+    <rect x="330" y="120" width="42" height="34" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="346" y="143" fill="#50fa7b" font-size="13" font-family="monospace">1</text>
+    <rect x="378" y="120" width="42" height="34" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="394" y="143" fill="#50fa7b" font-size="13" font-family="monospace">2</text>
+    <rect x="426" y="120" width="42" height="34" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="442" y="143" fill="#50fa7b" font-size="13" font-family="monospace">3</text>
+    <rect x="474" y="120" width="42" height="34" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="490" y="143" fill="#50fa7b" font-size="13" font-family="monospace">4</text>
+    <rect x="522" y="120" width="42" height="34" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="538" y="143" fill="#50fa7b" font-size="13" font-family="monospace">5</text>
+
+    <text x="346" y="176" fill="#f1fa8c" font-size="15">↓</text>
+    <text x="394" y="176" fill="#f1fa8c" font-size="15">↓</text>
+    <text x="442" y="176" fill="#f1fa8c" font-size="15">↓</text>
+    <text x="490" y="176" fill="#f1fa8c" font-size="15">↓</text>
+    <text x="538" y="176" fill="#f1fa8c" font-size="15">↓</text>
+    <text x="330" y="176" fill="#f1fa8c" font-size="14" font-family="monospace">×2</text>
+
+    <rect x="330" y="186" width="42" height="34" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="346" y="209" fill="#f1fa8c" font-size="13" font-family="monospace">2</text>
+    <rect x="378" y="186" width="42" height="34" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="394" y="209" fill="#f1fa8c" font-size="13" font-family="monospace">4</text>
+    <rect x="426" y="186" width="42" height="34" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="442" y="209" fill="#f1fa8c" font-size="13" font-family="monospace">6</text>
+    <rect x="474" y="186" width="42" height="34" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="490" y="209" fill="#f1fa8c" font-size="13" font-family="monospace">8</text>
+    <rect x="522" y="186" width="42" height="34" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="534" y="209" fill="#f1fa8c" font-size="13" font-family="monospace">10</text>
+
+    <text x="330" y="250" fill="#50fa7b" font-size="16" font-family="sans-serif">ONE pass. No counter.</text>
+    <text x="330" y="276" fill="#50fa7b" font-size="16" font-family="sans-serif">No append. No i.</text>
+    <text x="330" y="308" fill="#f1fa8c" font-size="15" font-family="sans-serif">This is called vectorised maths.</text>
+  </svg>
+</div>
+
+<!-- 90 · STEP 32 -->
+<div class="slide">
+  <div class="pill">STEP 32 / 59 · speed.py</div>
+  <h2>One line replaces the loop</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>arr = np.array([1, 2, 3, 4, 5])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="hot">print(arr * 2)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>arr = np.array(</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The <code>* 2</code> reaches every number by itself.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[ 2  4  6  8 10]</code></div></div>
+  </div>
+</div>
+
+<!-- 91 · the two answers side by side -->
+<div class="slide">
+  <div class="pill">Compare ⚖️</div>
+  <h2>Same numbers. Different printing.</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">list — 4 lines of code</span>
+<pre>[2, 4, 6, 8, 10]</pre>
+      <p style="margin-top:.4em">Commas. It is a Python list.</p>
+    </div>
+    <div class="col good"><span class="tag">array — 1 line of code</span>
+<pre>[ 2  4  6  8 10]</pre>
+      <p style="margin-top:.4em">Spaces, lined up. It is a numpy array.</p>
+    </div>
+  </div>
+  <p class="bilingual">쉼표가 없으면 numpy 배열이에요</p>
+</div>
+
+<!-- 92 · the speed -->
+<div class="slide">
+  <div class="pill">Why it matters ⚡<span class="activity-tag">measured</span></div>
+  <h2>One million numbers, doubled</h2>
+  <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="190" rx="10" fill="#1e2430"/>
+    <text x="24" y="34" fill="#ff5555" font-size="15" font-family="sans-serif">Python loop</text>
+    <rect x="24" y="44" width="450" height="30" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="2"/>
+    <text x="486" y="66" fill="#ff5555" font-size="15" font-family="monospace">0.083 s</text>
+    <text x="24" y="106" fill="#50fa7b" font-size="15" font-family="sans-serif">numpy, one line</text>
+    <rect x="24" y="116" width="9" height="30" rx="3" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="486" y="138" fill="#50fa7b" font-size="15" font-family="monospace">0.0016 s</text>
+    <text x="24" y="176" fill="#f1fa8c" font-size="16" font-family="sans-serif">About 50 times faster. Same answer.</text>
+  </svg>
+  <p class="bilingual">같은 답, 50배 빨라요</p>
+</div>
+
+<!-- 93 · debug list vs array -->
+<div class="slide">
+  <div class="pill">🐛 Debug<span class="activity-tag">activity</span></div>
+  <h2>Bug — the square brackets lied</h2>
+<pre>nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+<span class="fn">print</span>(nums * <span class="num">2</span>)</pre>
+  <div class="debug-card"><div class="err">[1, 2, 3, 4, 5, 1, 2, 3, 4, 5] — no error, wrong answer</div></div>
+  <details class="debug-card">
+    <summary>Reveal fix</summary>
+    <p style="margin-top:.4em">A list repeats. Wrap it first: <code>np.array(nums) * 2</code>.</p>
+    <p class="bilingual">리스트는 반복, 배열은 곱셈</p>
+  </details>
+</div>
+
+<!-- 94 · quiz 6 -->
+<div class="slide mcq" data-correct="0" data-explain="A list repeats. Only a numpy array multiplies each number.">
+  <div class="pill purple">Quiz 6</div>
+  <h2>What is <code>[1, 2, 3] * 2</code>?</h2>
+  <div class="opts">
+    <button class="opt"><code>[1, 2, 3, 1, 2, 3]</code></button>
+    <button class="opt"><code>[2, 4, 6]</code></button>
+    <button class="opt">An error</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 95 · STEP 33 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 33 / 59</span></div>
+  <h2>Add ten to every number</h2>
+  <div class="practice-task">Print <code>arr</code> with <b>10 added</b> to every number.</div>
+  <div class="practice-hint">Copy the <code>* 2</code> line. Swap the sign and the number.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under <code>print(arr * 2)</code>. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[11 12 13 14 15]</code></div></div>
+  </div>
+</div>
+
+<!-- 96 · STEP 34 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 34 / 59</span></div>
+  <h2>Square every number</h2>
+  <div class="practice-task">Print every number in <code>arr</code> <b>times itself</b>.</div>
+  <div class="practice-hint">Python's power sign is two stars: <code>**</code></div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>+ 10</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[ 1  4  9 16 25]</code></div></div>
+  </div>
+</div>
+
+<!-- 97 · three operations one picture -->
+<div class="slide">
+  <div class="pill">Watch it 🎨</div>
+  <h2>Any sign works. Every number moves.</h2>
+  <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="220" rx="10" fill="#1e2430"/>
+    <text x="24" y="30" fill="#8a97b8" font-size="15" font-family="monospace">arr</text>
+    <rect x="90" y="14" width="52" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="110" y="33" fill="#e8eef6" font-size="13" font-family="monospace">1</text>
+    <rect x="148" y="14" width="52" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="168" y="33" fill="#e8eef6" font-size="13" font-family="monospace">2</text>
+    <rect x="206" y="14" width="52" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="226" y="33" fill="#e8eef6" font-size="13" font-family="monospace">3</text>
+    <rect x="264" y="14" width="52" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="284" y="33" fill="#e8eef6" font-size="13" font-family="monospace">4</text>
+    <rect x="322" y="14" width="52" height="26" rx="4" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="342" y="33" fill="#e8eef6" font-size="13" font-family="monospace">5</text>
+
+    <text x="24" y="88" fill="#38d0e0" font-size="15" font-family="monospace">arr * 2</text>
+    <rect x="90" y="70" width="52" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="110" y="89" fill="#38d0e0" font-size="13" font-family="monospace">2</text>
+    <rect x="148" y="70" width="52" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="168" y="89" fill="#38d0e0" font-size="13" font-family="monospace">4</text>
+    <rect x="206" y="70" width="52" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="226" y="89" fill="#38d0e0" font-size="13" font-family="monospace">6</text>
+    <rect x="264" y="70" width="52" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="284" y="89" fill="#38d0e0" font-size="13" font-family="monospace">8</text>
+    <rect x="322" y="70" width="52" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="338" y="89" fill="#38d0e0" font-size="13" font-family="monospace">10</text>
+
+    <text x="24" y="144" fill="#f1fa8c" font-size="15" font-family="monospace">arr + 10</text>
+    <rect x="90" y="126" width="52" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="106" y="145" fill="#f1fa8c" font-size="13" font-family="monospace">11</text>
+    <rect x="148" y="126" width="52" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="164" y="145" fill="#f1fa8c" font-size="13" font-family="monospace">12</text>
+    <rect x="206" y="126" width="52" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="222" y="145" fill="#f1fa8c" font-size="13" font-family="monospace">13</text>
+    <rect x="264" y="126" width="52" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="280" y="145" fill="#f1fa8c" font-size="13" font-family="monospace">14</text>
+    <rect x="322" y="126" width="52" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="338" y="145" fill="#f1fa8c" font-size="13" font-family="monospace">15</text>
+
+    <text x="24" y="200" fill="#50fa7b" font-size="15" font-family="monospace">arr ** 2</text>
+    <rect x="90" y="182" width="52" height="26" rx="4" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="110" y="201" fill="#50fa7b" font-size="13" font-family="monospace">1</text>
+    <rect x="148" y="182" width="52" height="26" rx="4" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="168" y="201" fill="#50fa7b" font-size="13" font-family="monospace">4</text>
+    <rect x="206" y="182" width="52" height="26" rx="4" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="226" y="201" fill="#50fa7b" font-size="13" font-family="monospace">9</text>
+    <rect x="264" y="182" width="52" height="26" rx="4" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="280" y="201" fill="#50fa7b" font-size="13" font-family="monospace">16</text>
+    <rect x="322" y="182" width="52" height="26" rx="4" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="338" y="201" fill="#50fa7b" font-size="13" font-family="monospace">25</text>
+
+    <text x="400" y="112" fill="#8a97b8" font-size="15" font-family="sans-serif">Five in,</text>
+    <text x="400" y="138" fill="#8a97b8" font-size="15" font-family="sans-serif">five out.</text>
+    <text x="400" y="168" fill="#8a97b8" font-size="15" font-family="sans-serif">Always.</text>
+  </svg>
+</div>
+
+<!-- 98 · STEP 35 -->
+<div class="slide">
+  <div class="pill">STEP 35 / 59 · speed.py</div>
+  <h2>Real marks this time</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(arr ** 2)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(arr ** 2)</span>
+
+<span class="hot">marks = np.array([92, 78, 85, 64])</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(arr ** 2)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">The same four numbers from your table.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Run it. Nothing new prints.</div></div>
+  </div>
+</div>
+
+<!-- 99 · predict np.mean -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>You have seen this number before</h2>
+  <div class="predict-card">
+    <div class="label">Same four marks as table.py</div>
+<pre><span class="fn">print</span>(np.mean(marks))</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>79.75</code> — identical to <code>scores["maths"].mean()</code>.</div></details>
+  </div>
+</div>
+
+<!-- 100 · STEP 36 -->
+<div class="slide">
+  <div class="pill">STEP 36 / 59 · speed.py</div>
+  <h2>numpy's average</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>marks = np.array([92, 78, 85, 64])</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">marks = np.array([92, 78, 85, 64])</span>
+<span class="hot">print(np.mean(marks))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>marks = np.array</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">numpy puts the array <b>inside</b> the brackets. pandas puts the dot after.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>79.75</code></div></div>
+  </div>
+</div>
+
+<!-- 101 · STEP 37 -->
+<div class="slide">
+  <div class="pill">STEP 37 / 59 · speed.py</div>
+  <h2>How spread out are they</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.mean(marks))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.mean(marks))</span>
+<span class="hot">print(np.std(marks))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>np.mean(marks)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Big number = marks far apart. Small = close together.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>10.353139620424328</code></div></div>
+  </div>
+</div>
+
+<!-- 102 · the std trap -->
+<div class="slide">
+  <div class="pill">⚠️ Exam trap</div>
+  <h2>Two different <code>std</code></h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">numpy</span>
+<pre>np.std(marks)
+<span class="com"># 10.3531...</span></pre>
+      <p style="margin-top:.4em">Treats the four marks as <b>everybody</b>.</p>
+    </div>
+    <div class="col good"><span class="tag">pandas</span>
+<pre>scores[<span class="str">"maths"</span>].std()
+<span class="com"># 11.9547...</span></pre>
+      <p style="margin-top:.4em">Treats them as a <b>sample</b> of a bigger group.</p>
+    </div>
+  </div>
+  <p style="margin-top:.4em">Different tools, different default. Always say which one you used.</p>
+</div>
+
+<!-- 103 · STEP 38 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 38 / 59</span></div>
+  <h2>The biggest mark, numpy style</h2>
+  <div class="practice-task">Print the <b>largest</b> number in <code>marks</code> using numpy.</div>
+  <div class="practice-hint">Same shape as <code>np.mean(marks)</code>. Change four letters.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under the <code>np.std</code> line. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>92</code></div></div>
+  </div>
+</div>
+
+<!-- 104 · arange concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>A number line, made for you</h2>
+  <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="180" rx="10" fill="#1e2430"/>
+    <text x="24" y="34" fill="#8a97b8" font-size="15" font-family="monospace">np.arange(5)</text>
+    <rect x="24" y="48" width="60" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="48" y="72" fill="#50fa7b" font-size="15" font-family="monospace">0</text>
+    <rect x="92" y="48" width="60" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="116" y="72" fill="#50fa7b" font-size="15" font-family="monospace">1</text>
+    <rect x="160" y="48" width="60" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="184" y="72" fill="#50fa7b" font-size="15" font-family="monospace">2</text>
+    <rect x="228" y="48" width="60" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="252" y="72" fill="#50fa7b" font-size="15" font-family="monospace">3</text>
+    <rect x="296" y="48" width="60" height="36" rx="6" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="320" y="72" fill="#50fa7b" font-size="15" font-family="monospace">4</text>
+    <rect x="364" y="48" width="60" height="36" rx="6" fill="#3a1c1c" stroke="#ff5555" stroke-width="3" stroke-dasharray="5 4"/>
+    <text x="388" y="72" fill="#ff5555" font-size="15" font-family="monospace">5</text>
+    <text x="434" y="72" fill="#ff5555" font-size="15" font-family="sans-serif">stop — NOT included</text>
+    <text x="24" y="126" fill="#f1fa8c" font-size="16" font-family="sans-serif">Exactly like range() in a for loop.</text>
+    <text x="24" y="156" fill="#e8eef6" font-size="16" font-family="sans-serif">Five boxes: 0, 1, 2, 3, 4.</text>
+  </svg>
+</div>
+
+<!-- 105 · predict arange -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>How many numbers?</h2>
+  <div class="predict-card">
+    <div class="label">Say the list out loud first</div>
+<pre><span class="fn">print</span>(np.arange(<span class="num">5</span>))</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>[0 1 2 3 4]</code> — five numbers, and 5 is not one of them.</div></details>
+  </div>
+</div>
+
+<!-- 106 · STEP 39 -->
+<div class="slide">
+  <div class="pill">STEP 39 / 59 · speed.py</div>
+  <h2>Make numbers without typing them</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.max(marks))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.max(marks))</span>
+
+<span class="hot">print(np.arange(5))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>np.max(marks)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Typing 1000 numbers by hand is not an option.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[0 1 2 3 4]</code></div></div>
+  </div>
+</div>
+
+<!-- 107 · STEP 40 -->
+<div class="slide">
+  <div class="pill">STEP 40 / 59 · speed.py</div>
+  <h2>Start, stop, step</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.arange(5))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.arange(5))</span>
+<span class="hot">print(np.arange(0, 10, 2))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>np.arange(5)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Three numbers: where to start, where to stop, how big a jump.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[0 2 4 6 8]</code></div></div>
+  </div>
+</div>
+
+<!-- 108 · the stop is not included -->
+<div class="slide">
+  <div class="pill">⚠️ Watch out</div>
+  <h2>10 never arrives</h2>
+  <svg viewBox="0 0 560 150" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="150" rx="10" fill="#1e2430"/>
+    <line x1="30" y1="80" x2="530" y2="80" stroke="#4a5670" stroke-width="3"/>
+    <circle cx="60" cy="80" r="12" fill="#50fa7b"/><text x="52" y="118" fill="#50fa7b" font-size="15" font-family="monospace">0</text>
+    <circle cx="150" cy="80" r="12" fill="#50fa7b"/><text x="142" y="118" fill="#50fa7b" font-size="15" font-family="monospace">2</text>
+    <circle cx="240" cy="80" r="12" fill="#50fa7b"/><text x="232" y="118" fill="#50fa7b" font-size="15" font-family="monospace">4</text>
+    <circle cx="330" cy="80" r="12" fill="#50fa7b"/><text x="322" y="118" fill="#50fa7b" font-size="15" font-family="monospace">6</text>
+    <circle cx="420" cy="80" r="12" fill="#50fa7b"/><text x="412" y="118" fill="#50fa7b" font-size="15" font-family="monospace">8</text>
+    <circle cx="510" cy="80" r="12" fill="none" stroke="#ff5555" stroke-width="3" stroke-dasharray="4 3"/>
+    <text x="498" y="118" fill="#ff5555" font-size="15" font-family="monospace">10</text>
+    <text x="30" y="40" fill="#f1fa8c" font-size="16" font-family="monospace">np.arange(0, 10, 2)</text>
+    <text x="30" y="142" fill="#ff5555" font-size="15" font-family="sans-serif">The stop is a wall, not a stepping stone.</text>
+  </svg>
+</div>
+
+<!-- 109 · linspace concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Cut a distance into equal pieces</h2>
+  <svg viewBox="0 0 560 160" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="160" rx="10" fill="#1e2430"/>
+    <text x="30" y="36" fill="#f1fa8c" font-size="16" font-family="monospace">np.linspace(0, 1, 5)</text>
+    <line x1="60" y1="86" x2="500" y2="86" stroke="#4a5670" stroke-width="3"/>
+    <circle cx="60" cy="86" r="11" fill="#bd93f9"/><text x="46" y="124" fill="#bd93f9" font-size="14" font-family="monospace">0.0</text>
+    <circle cx="170" cy="86" r="11" fill="#bd93f9"/><text x="150" y="124" fill="#bd93f9" font-size="14" font-family="monospace">0.25</text>
+    <circle cx="280" cy="86" r="11" fill="#bd93f9"/><text x="264" y="124" fill="#bd93f9" font-size="14" font-family="monospace">0.5</text>
+    <circle cx="390" cy="86" r="11" fill="#bd93f9"/><text x="370" y="124" fill="#bd93f9" font-size="14" font-family="monospace">0.75</text>
+    <circle cx="500" cy="86" r="11" fill="#bd93f9"/><text x="488" y="124" fill="#bd93f9" font-size="14" font-family="monospace">1.0</text>
+    <text x="30" y="152" fill="#50fa7b" font-size="15" font-family="sans-serif">Both ends included. You choose HOW MANY, not the jump.</text>
+  </svg>
+</div>
+
+<!-- 110 · STEP 41 -->
+<div class="slide">
+  <div class="pill">STEP 41 / 59 · speed.py</div>
+  <h2>Five points, nought to one</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.arange(0, 10, 2))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.arange(0, 10, 2))</span>
+<span class="hot">print(np.linspace(0, 1, 5))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>np.arange(0, 10, 2)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Graphs need even points, not even jumps.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[0.&nbsp;&nbsp; 0.25 0.5&nbsp; 0.75 1.&nbsp; ]</code></div></div>
+  </div>
+</div>
+
+<!-- 111 · arange vs linspace -->
+<div class="slide">
+  <div class="pill">⚖️ Two tools</div>
+  <h2>Which one do you want?</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">arange — you pick the jump</span>
+<pre>np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)
+<span class="com"># [0 2 4 6 8]</span></pre>
+      <p style="margin-top:.4em">Stop is <b>out</b>. Count is a surprise.</p>
+    </div>
+    <div class="col good"><span class="tag">linspace — you pick the count</span>
+<pre>np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)
+<span class="com"># [0. 0.25 0.5 0.75 1.]</span></pre>
+      <p style="margin-top:.4em">Stop is <b>in</b>. Count is exact.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 112 · np.where concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>An <code>if</code> for the whole array</h2>
+  <div class="viz viz-if">
+    <div class="if-input"><span class="case case-a">92</span><span class="case case-b">78</span></div>
+    <div class="if-cond">marks &gt; 80 ?</div>
+    <div class="if-branches">
+      <div class="if-branch true">"pass"</div>
+      <div class="if-branch false">"try again"</div>
+    </div>
+    <div class="if-output">
+      <div class="out-label">▸ one answer per number</div>
+      <div class="out-line out-a">pass</div>
+      <div class="out-line out-b">try again</div>
+    </div>
+  </div>
+</div>
+
+<!-- 113 · predict np.where -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Four marks, four words</h2>
+  <div class="predict-card">
+    <div class="label">92, 78, 85, 64</div>
+<pre><span class="fn">print</span>(np.where(marks &gt; <span class="num">80</span>, <span class="str">"pass"</span>, <span class="str">"try again"</span>))</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>['pass' 'try again' 'pass' 'try again']</code></div></details>
+  </div>
+</div>
+
+<!-- 114 · STEP 42 -->
+<div class="slide">
+  <div class="pill">STEP 42 / 59 · speed.py</div>
+  <h2>A decision for every number</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.linspace(0, 1, 5))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.linspace(0, 1, 5))</span>
+
+<span class="hot">print(np.where(marks &gt; 80, "pass", "try again"))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>np.linspace(0, 1, 5)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Under it, blank line between. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Three slots: the question, the yes, the no.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Four words print, in order.</div></div>
+  </div>
+</div>
+
+<!-- 115 · 2D concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Arrays can be grids</h2>
+  <svg viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="190" rx="10" fill="#1e2430"/>
+    <text x="24" y="34" fill="#8a97b8" font-size="15" font-family="monospace">np.array([[1, 2, 3], [4, 5, 6]])</text>
+    <rect x="60" y="54" width="70" height="42" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="90" y="82" fill="#38d0e0" font-size="16" font-family="monospace">1</text>
+    <rect x="136" y="54" width="70" height="42" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="166" y="82" fill="#38d0e0" font-size="16" font-family="monospace">2</text>
+    <rect x="212" y="54" width="70" height="42" rx="6" fill="#242c3d" stroke="#38d0e0" stroke-width="2"/>
+    <text x="242" y="82" fill="#38d0e0" font-size="16" font-family="monospace">3</text>
+    <rect x="60" y="102" width="70" height="42" rx="6" fill="#242c3d" stroke="#ff7849" stroke-width="2"/>
+    <text x="90" y="130" fill="#ff7849" font-size="16" font-family="monospace">4</text>
+    <rect x="136" y="102" width="70" height="42" rx="6" fill="#242c3d" stroke="#ff7849" stroke-width="2"/>
+    <text x="166" y="130" fill="#ff7849" font-size="16" font-family="monospace">5</text>
+    <rect x="212" y="102" width="70" height="42" rx="6" fill="#242c3d" stroke="#ff7849" stroke-width="2"/>
+    <text x="242" y="130" fill="#ff7849" font-size="16" font-family="monospace">6</text>
+    <text x="310" y="82" fill="#38d0e0" font-size="15" font-family="sans-serif">inner list 1 = row 0</text>
+    <text x="310" y="130" fill="#ff7849" font-size="15" font-family="sans-serif">inner list 2 = row 1</text>
+    <text x="24" y="176" fill="#f1fa8c" font-size="16" font-family="sans-serif">Two rows, three columns — a table without headings.</text>
+  </svg>
+</div>
+
+<!-- 116 · STEP 43 -->
+<div class="slide">
+  <div class="pill">STEP 43 / 59 · speed.py</div>
+  <h2>Build the grid</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(np.where(marks &gt; 80, "pass", "try again"))</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(np.where(marks &gt; 80, "pass", "try again"))</span>
+
+<span class="hot">grid = np.array([[1, 2, 3], [4, 5, 6]])</span>
+<span class="hot">print(grid)</span></pre></div>
+  </div>
+  <div class="output-box" style="margin-top:.4em">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">[[1 2 3]</div>
+    <div class="out-line">&nbsp;[4 5 6]]</div>
+  </div>
+</div>
+
+<!-- 117 · STEP 44 -->
+<div class="slide">
+  <div class="pill">STEP 44 / 59 · speed.py</div>
+  <h2>Shape, again</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(grid)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(grid)</span>
+<span class="hot">print(grid.shape)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(grid)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Same word as pandas. Rows first, again.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>(2, 3)</code></div></div>
+  </div>
+</div>
+
+<!-- 118 · axis visual -->
+<div class="slide">
+  <div class="pill">Watch it 🎨</div>
+  <h2><code>axis=0</code> squashes down</h2>
+  <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="220" rx="10" fill="#1e2430"/>
+    <text x="24" y="30" fill="#f1fa8c" font-size="15" font-family="monospace">grid.sum(axis=0)</text>
+    <rect x="40" y="44" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="64" y="68" fill="#e8eef6" font-size="15" font-family="monospace">1</text>
+    <rect x="106" y="44" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="130" y="68" fill="#e8eef6" font-size="15" font-family="monospace">2</text>
+    <rect x="172" y="44" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="196" y="68" fill="#e8eef6" font-size="15" font-family="monospace">3</text>
+    <rect x="40" y="86" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="64" y="110" fill="#e8eef6" font-size="15" font-family="monospace">4</text>
+    <rect x="106" y="86" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="130" y="110" fill="#e8eef6" font-size="15" font-family="monospace">5</text>
+    <rect x="172" y="86" width="60" height="36" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="196" y="110" fill="#e8eef6" font-size="15" font-family="monospace">6</text>
+    <text x="64" y="142" fill="#f1fa8c" font-size="16">↓</text>
+    <text x="130" y="142" fill="#f1fa8c" font-size="16">↓</text>
+    <text x="196" y="142" fill="#f1fa8c" font-size="16">↓</text>
+    <rect x="40" y="152" width="60" height="36" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="64" y="176" fill="#f1fa8c" font-size="15" font-family="monospace">5</text>
+    <rect x="106" y="152" width="60" height="36" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="130" y="176" fill="#f1fa8c" font-size="15" font-family="monospace">7</text>
+    <rect x="172" y="152" width="60" height="36" rx="5" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="196" y="176" fill="#f1fa8c" font-size="15" font-family="monospace">9</text>
+    <text x="270" y="70" fill="#50fa7b" font-size="15" font-family="monospace">axis=1 → across</text>
+    <rect x="270" y="86" width="120" height="36" rx="5" fill="#16302a" stroke="#50fa7b" stroke-width="2"/>
+    <text x="290" y="110" fill="#50fa7b" font-size="15" font-family="monospace">[ 6 15]</text>
+    <text x="270" y="152" fill="#8a97b8" font-size="15" font-family="sans-serif">axis=0 = collapse the rows</text>
+    <text x="270" y="178" fill="#8a97b8" font-size="15" font-family="sans-serif">axis=1 = collapse the columns</text>
+  </svg>
+</div>
+
+<!-- 119 · STEP 45 -->
+<div class="slide">
+  <div class="pill">STEP 45 / 59 · speed.py</div>
+  <h2>Add down the columns</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(grid.shape)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(grid.shape)</span>
+<span class="hot">print(grid.sum(axis=0))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>grid.shape</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">1+4, 2+5, 3+6 — three answers, not one.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[5 7 9]</code></div></div>
+  </div>
+</div>
+
+<!-- 120 · quiz 7 -->
+<div class="slide mcq" data-correct="0" data-explain="axis=1 collapses each row: 1+2+3 and 4+5+6.">
+  <div class="pill purple">Quiz 7</div>
+  <h2>What is <code>grid.sum(axis=1)</code>?</h2>
+  <div class="opts">
+    <button class="opt"><code>[ 6 15]</code></button>
+    <button class="opt"><code>[5 7 9]</code></button>
+    <button class="opt"><code>21</code></button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 121 · the bridge -->
+<div class="slide center-all">
+  <div class="pill">The join 🔗</div>
+  <div class="emoji">🐼⚡</div>
+  <h2>A pandas column <b>is</b> a numpy array</h2>
+  <p style="margin-top:.4em">Underneath, pandas is numpy wearing headings.</p>
+  <p class="bilingual">pandas 속에 numpy가 들어 있어요</p>
+</div>
+
+<!-- 122 · STEP 46 -->
+<div class="slide">
+  <div class="pill">STEP 46 / 59 · <b>table.py</b> again</div>
+  <h2>Look underneath</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>scores["grade"] = scores["maths"].apply(grade)
+print(scores)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">scores["grade"] = scores["maths"].apply(grade)</span>
+<span class="dim">print(scores)</span>
+<span class="hot">print(scores["maths"].values)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">Open <code>table.py</code>, find <code>.apply(grade)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last line of <code>table.py</code>. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">No index, no name. Just the numbers.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>[92 78 85 64]</code> — spaces, no commas.</div></div>
+  </div>
+</div>
+
+<!-- 123 · the two worlds -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Same numbers, two coats</h2>
+  <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="200" rx="10" fill="#1e2430"/>
+    <rect x="30" y="30" width="220" height="132" rx="8" fill="#242c3d" stroke="#38d0e0" stroke-width="3"/>
+    <text x="48" y="54" fill="#38d0e0" font-size="14" font-family="monospace">scores["maths"]</text>
+    <text x="48" y="82" fill="#e8eef6" font-size="14" font-family="monospace">0    92</text>
+    <text x="48" y="104" fill="#e8eef6" font-size="14" font-family="monospace">1    78</text>
+    <text x="48" y="126" fill="#e8eef6" font-size="14" font-family="monospace">2    85</text>
+    <text x="48" y="148" fill="#e8eef6" font-size="14" font-family="monospace">3    64</text>
+    <text x="266" y="100" fill="#8a97b8" font-size="22">→</text>
+    <text x="258" y="130" fill="#8a97b8" font-size="13" font-family="monospace">.values</text>
+    <rect x="310" y="30" width="220" height="132" rx="8" fill="#242c3d" stroke="#50fa7b" stroke-width="3"/>
+    <text x="328" y="54" fill="#50fa7b" font-size="14" font-family="monospace">a numpy array</text>
+    <text x="328" y="100" fill="#50fa7b" font-size="16" font-family="monospace">[92 78 85 64]</text>
+    <text x="328" y="136" fill="#8a97b8" font-size="13" font-family="sans-serif">no index, no name</text>
+    <text x="30" y="188" fill="#f1fa8c" font-size="16" font-family="sans-serif">pandas = numpy + headings + an index.</text>
+  </svg>
+</div>
+
+<!-- 124 · overshoot divider -->
+<div class="slide center-all">
+  <div class="pill purple">Part 3</div>
+  <div class="emoji">🧰</div>
+  <h1>Three more<br>questions</h1>
+  <p class="big" style="margin-top:.4em;color:var(--accent-2);">groups · holes · a hundred rows</p>
+  <p class="bilingual">그룹, 빈칸, 그리고 100줄</p>
+</div>
+
+<!-- 125 · groupby concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Same word repeated? Make buckets.</h2>
+  <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="220" rx="10" fill="#1e2430"/>
+    <text x="24" y="28" fill="#8a97b8" font-size="14" font-family="sans-serif">six rows, two subjects</text>
+    <rect x="24" y="40" width="180" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="38" y="58" fill="#f1fa8c" font-size="13" font-family="monospace">maths    92</text>
+    <rect x="24" y="70" width="180" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="38" y="88" fill="#38d0e0" font-size="13" font-family="monospace">coding   88</text>
+    <rect x="24" y="100" width="180" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="38" y="118" fill="#f1fa8c" font-size="13" font-family="monospace">maths    78</text>
+    <rect x="24" y="130" width="180" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="38" y="148" fill="#38d0e0" font-size="13" font-family="monospace">coding   95</text>
+    <rect x="24" y="160" width="180" height="26" rx="4" fill="#3a2a16" stroke="#f1fa8c" stroke-width="2"/>
+    <text x="38" y="178" fill="#f1fa8c" font-size="13" font-family="monospace">maths    85</text>
+    <rect x="24" y="190" width="180" height="26" rx="4" fill="#14313a" stroke="#38d0e0" stroke-width="2"/>
+    <text x="38" y="208" fill="#38d0e0" font-size="13" font-family="monospace">coding   71</text>
+    <text x="222" y="120" fill="#8a97b8" font-size="24">⟹</text>
+    <rect x="280" y="50" width="250" height="62" rx="8" fill="#3a2a16" stroke="#f1fa8c" stroke-width="3"/>
+    <text x="296" y="74" fill="#f1fa8c" font-size="14" font-family="monospace">maths  bucket: 92, 78, 85</text>
+    <text x="296" y="98" fill="#f1fa8c" font-size="14" font-family="monospace">mean → 85.0</text>
+    <rect x="280" y="126" width="250" height="62" rx="8" fill="#14313a" stroke="#38d0e0" stroke-width="3"/>
+    <text x="296" y="150" fill="#38d0e0" font-size="14" font-family="monospace">coding bucket: 88, 95, 71</text>
+    <text x="296" y="174" fill="#38d0e0" font-size="14" font-family="monospace">mean → 84.67</text>
+  </svg>
+</div>
+
+<!-- 126 · STEP 47 -->
+<div class="slide">
+  <div class="pill">STEP 47 / 59 · groups.py</div>
+  <h2>A table with a repeated word</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty file)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">import pandas as pd</span>
+<span class="hot"></span>
+<span class="hot">marks = pd.DataFrame({</span>
+<span class="hot">    "name": ["Neo","Neo","Amy","Amy","Ethan","Ethan"],</span>
+<span class="hot">    "subject": ["maths","coding","maths","coding","maths","coding"],</span>
+<span class="hot">    "mark": [92, 88, 78, 95, 85, 71],</span>
+<span class="hot">})</span>
+<span class="hot">print(marks)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">New file. Name it <code>groups.py</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Whole file. Keys at indent <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Each person now has <b>two rows</b>, one per subject.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Six rows, numbered 0 to 5.</div></div>
+  </div>
+</div>
+
+<!-- 127 · predict groupby -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>How many rows come back?</h2>
+  <div class="predict-card">
+    <div class="label">Six rows go in</div>
+<pre><span class="fn">print</span>(marks.groupby(<span class="str">"subject"</span>)[<span class="str">"mark"</span>].mean())</pre>
+    <details><summary>Reveal output</summary><div class="ans">Two — one per subject. coding 84.666667, maths 85.0</div></details>
+  </div>
+</div>
+
+<!-- 128 · STEP 48 -->
+<div class="slide">
+  <div class="pill">STEP 48 / 59 · groups.py</div>
+  <h2>Average per subject</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(marks)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(marks)</span>
+<span class="hot">print(marks.groupby("subject")["mark"].mean())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(marks)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Read it left to right: group by this, take that column, do this sum.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc"><code>coding 84.666667</code> · <code>maths 85.000000</code></div></div>
+  </div>
+</div>
+
+<!-- 129 · read the three parts -->
+<div class="slide">
+  <div class="pill">Read it 📖</div>
+  <h2>Three parts, one line</h2>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead"><code>.groupby("subject")</code></div><div class="edesc">make one bucket per different word</div></div>
+    <div class="edge-card"><div class="ehead"><code>["mark"]</code></div><div class="edesc">which column goes in the bucket</div></div>
+    <div class="edge-card"><div class="ehead"><code>.mean()</code></div><div class="edesc">what to do to each bucket</div></div>
+    <div class="edge-card"><div class="ehead">swap it</div><div class="edesc"><code>.sum()</code> · <code>.max()</code> · <code>.count()</code> all fit</div></div>
+  </div>
+  <p class="bilingual">묶고, 고르고, 계산해요</p>
+</div>
+
+<!-- 130 · STEP 49 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 49 / 59</span></div>
+  <h2>Total per person</h2>
+  <div class="practice-task">Group by <code>name</code>, then add the marks.</div>
+  <div class="practice-hint">Copy the groupby line. Change two words.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last line of <code>groups.py</code>. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Amy 173 · Ethan 156 · Neo 180</div></div>
+  </div>
+</div>
+
+<!-- 131 · hole concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>Real data has holes</h2>
+  <svg viewBox="0 0 560 170" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="170" rx="10" fill="#1e2430"/>
+    <rect x="40" y="30" width="220" height="32" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="52" fill="#e8eef6" font-size="15" font-family="monospace">Neo      92.0</text>
+    <rect x="40" y="66" width="220" height="32" rx="5" fill="#3a1c1c" stroke="#ff5555" stroke-width="3" stroke-dasharray="5 4"/>
+    <text x="58" y="88" fill="#ff5555" font-size="15" font-family="monospace">Amy      NaN</text>
+    <rect x="40" y="102" width="220" height="32" rx="5" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="58" y="124" fill="#e8eef6" font-size="15" font-family="monospace">Ethan    85.0</text>
+    <text x="290" y="52" fill="#8a97b8" font-size="15" font-family="sans-serif">Amy was away that day.</text>
+    <text x="290" y="82" fill="#f1fa8c" font-size="15" font-family="sans-serif">You typed None.</text>
+    <text x="290" y="112" fill="#f1fa8c" font-size="15" font-family="sans-serif">pandas shows NaN.</text>
+    <text x="40" y="158" fill="#50fa7b" font-size="15" font-family="sans-serif">NaN = Not a Number. A marked empty box, not a zero.</text>
+  </svg>
+</div>
+
+<!-- 132 · STEP 50 -->
+<div class="slide">
+  <div class="pill">STEP 50 / 59 · gaps.py</div>
+  <h2>A table with a missing mark</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty file)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">import pandas as pd</span>
+<span class="hot"></span>
+<span class="hot">part = pd.DataFrame({</span>
+<span class="hot">    "name": ["Neo", "Amy", "Ethan"],</span>
+<span class="hot">    "maths": [92, None, 85],</span>
+<span class="hot">})</span>
+<span class="hot">print(part)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">New file. Name it <code>gaps.py</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Whole file. <code>None</code> — capital N, no quotes.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Real registers have gaps.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Amy's mark shows as <code>NaN</code></div></div>
+  </div>
+</div>
+
+<!-- 133 · the ints became floats -->
+<div class="slide">
+  <div class="pill">⚠️ Look closely</div>
+  <h2>92 became 92.0</h2>
+  <div class="output-box">
+    <div class="out-label">▸ Output</div>
+    <div class="out-line">&nbsp;&nbsp;&nbsp;&nbsp;name&nbsp;&nbsp;maths</div>
+    <div class="out-line">0&nbsp;&nbsp;&nbsp;&nbsp;Neo&nbsp;&nbsp;&nbsp;92.0</div>
+    <div class="out-line">1&nbsp;&nbsp;&nbsp;&nbsp;Amy&nbsp;&nbsp;&nbsp;&nbsp;NaN</div>
+    <div class="out-line">2&nbsp;&nbsp;Ethan&nbsp;&nbsp;&nbsp;85.0</div>
+  </div>
+  <p style="margin-top:.5em">One hole turns the <b>whole column</b> into decimals. NaN is a decimal thing.</p>
+  <p class="bilingual">빈칸 하나가 열 전체를 소수로 만들어요</p>
+</div>
+
+<!-- 134 · STEP 51 -->
+<div class="slide">
+  <div class="pill">STEP 51 / 59 · gaps.py</div>
+  <h2>Where are the holes?</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(part)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(part)</span>
+<span class="hot">print(part["maths"].isna())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>print(part)</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Another True/False column — same idea as the filter.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">False, True, False</div></div>
+  </div>
+</div>
+
+<!-- 135 · STEP 52 -->
+<div class="slide">
+  <div class="pill">STEP 52 / 59 · gaps.py</div>
+  <h2>Does the hole break the sum?</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(part["maths"].isna())</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(part["maths"].isna())</span>
+<span class="hot">print(part["maths"].sum())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>.isna())</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">No crash. pandas quietly <b>skips</b> the hole.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>177.0</code> — 92 + 85</div></div>
+  </div>
+</div>
+
+<!-- 136 · STEP 53 -->
+<div class="slide">
+  <div class="pill">STEP 53 / 59 · gaps.py</div>
+  <h2>Fill the hole</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(part["maths"].sum())</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(part["maths"].sum())</span>
+<span class="hot">print(part.fillna(0))</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>.sum())</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Every NaN becomes 0.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Amy's mark now reads <code>0.0</code></div></div>
+  </div>
+</div>
+
+<!-- 137 · fillna changes the answer -->
+<div class="slide">
+  <div class="pill">⚠️ Think first</div>
+  <h2>Filling with 0 is a decision</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">after fillna(0)</span>
+<pre>mean = <span class="num">59.0</span></pre>
+      <p style="margin-top:.4em">177 shared by <b>3</b>. Amy counts as zero.</p>
+    </div>
+    <div class="col good"><span class="tag">leaving NaN</span>
+<pre>mean = <span class="num">88.5</span></pre>
+      <p style="margin-top:.4em">177 shared by <b>2</b>. Amy is not counted.</p>
+    </div>
+  </div>
+  <p style="margin-top:.4em">Neither is wrong. You must say which one you chose.</p>
+</div>
+
+<!-- 138 · 100 rows concept -->
+<div class="slide">
+  <div class="pill">Concept 💡</div>
+  <h2>You cannot read a hundred rows</h2>
+  <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:min(92vmin,1040px);height:auto;display:block;margin:.2em auto">
+    <rect x="0" y="0" width="560" height="180" rx="10" fill="#1e2430"/>
+    <rect x="24" y="24" width="200" height="130" rx="6" fill="#242c3d" stroke="#4a5670" stroke-width="2"/>
+    <text x="40" y="46" fill="#4a5670" font-size="11" font-family="monospace">97  54  75  53  69  82  61</text>
+    <text x="40" y="64" fill="#4a5670" font-size="11" font-family="monospace">88  73  50  91  66  79  57</text>
+    <text x="40" y="82" fill="#4a5670" font-size="11" font-family="monospace">94  62  85  71  58  99  64</text>
+    <text x="40" y="100" fill="#4a5670" font-size="11" font-family="monospace">77  68  55  86  93  60  72</text>
+    <text x="40" y="118" fill="#4a5670" font-size="11" font-family="monospace">81  59  96  67  74  52  89</text>
+    <text x="40" y="140" fill="#8a97b8" font-size="12" font-family="sans-serif">...and 65 more</text>
+    <text x="252" y="60" fill="#ff5555" font-size="16" font-family="sans-serif">Reading them: useless.</text>
+    <text x="252" y="100" fill="#50fa7b" font-size="16" font-family="sans-serif">Asking them: one line.</text>
+    <text x="252" y="132" fill="#f1fa8c" font-size="15" font-family="monospace">.mean()   .max()   [ &gt; 90 ]</text>
+  </svg>
+</div>
+
+<!-- 139 · STEP 54 -->
+<div class="slide">
+  <div class="pill">STEP 54 / 59 · hundred.py</div>
+  <h2>Make a hundred marks</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>(empty file)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="hot">import pandas as pd</span>
+<span class="hot">import numpy as np</span>
+<span class="hot"></span>
+<span class="hot">np.random.seed(7)</span>
+<span class="hot">big = pd.DataFrame({</span>
+<span class="hot">    "mark": np.random.randint(50, 100, 100),</span>
+<span class="hot">})</span>
+<span class="hot">print(big.head())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc">New file. Name it <code>hundred.py</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Whole file. <code>"mark"</code> at indent <b>4</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>seed(7)</code> makes the random numbers the <b>same</b> every run.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">First five: 97, 54, 75, 53, 69</div></div>
+  </div>
+</div>
+
+<!-- 140 · STEP 55 -->
+<div class="slide">
+  <div class="pill">STEP 55 / 59 · hundred.py</div>
+  <h2>How big is it really</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(big.head())</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(big.head())</span>
+<span class="hot">print(big.shape)</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>big.head()</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>.head()</code> showed five. Check there really are a hundred.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>(100, 1)</code></div></div>
+  </div>
+</div>
+
+<!-- 141 · predict big mean -->
+<div class="slide">
+  <div class="pill">Predict 🤔</div>
+  <h2>Guess before you look</h2>
+  <div class="predict-card">
+    <div class="label">Marks between 50 and 99, picked at random</div>
+<pre><span class="fn">print</span>(big[<span class="str">"mark"</span>].mean())</pre>
+    <details><summary>Reveal output</summary><div class="ans"><code>72.69</code> — close to the middle of 50 and 99.</div></details>
+  </div>
+</div>
+
+<!-- 142 · STEP 56 -->
+<div class="slide">
+  <div class="pill">STEP 56 / 59 · hundred.py</div>
+  <h2>Ask the hundred rows one question</h2>
+  <div class="compare-row">
+    <div class="col bad"><span class="tag">OLD</span>
+<pre>print(big.shape)</pre></div>
+    <div class="col good"><span class="tag">NEW</span>
+<pre><span class="dim">print(big.shape)</span>
+<span class="hot">print(big["mark"].mean())</span></pre></div>
+  </div>
+  <div class="edge-grid">
+    <div class="edge-card"><div class="ehead">🔍 FIND</div><div class="edesc"><code>big.shape</code></div></div>
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Directly under it. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc">Four rows or a hundred — the line is identical.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>72.69</code></div></div>
+  </div>
+</div>
+
+<!-- 143 · STEP 57 · ALONE -->
+<div class="slide">
+  <div class="pill">✍️ NEO WRITES THIS ONE ALONE<span class="activity-tag">STEP 57 / 59</span></div>
+  <h2>How many beat 90?</h2>
+  <div class="practice-task">Print the <b>shape</b> of the rows where <code>mark</code> is over 90.</div>
+  <div class="practice-hint">Filter first, then <code>.shape</code> on the end. Guess the count first.</div>
+  <div class="edge-grid" style="margin-top:.5em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last line of <code>hundred.py</code>. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Prints <code>(16, 1)</code> — sixteen rows</div></div>
+  </div>
+</div>
+
+<!-- 144 · optional divider -->
+<div class="slide center-all">
+  <div class="pill purple">Optional</div>
+  <div class="emoji">🧪</div>
+  <h2>Two things that need more than code</h2>
+  <p style="margin-top:.4em">A file on disk, and a drawing library. Skip both if they fail.</p>
+  <p class="bilingual">안 되면 그냥 넘어가요</p>
+</div>
+
+<!-- 145 · STEP 58 -->
+<div class="slide">
+  <div class="pill">STEP 58 / 59 · table.py<span class="activity-tag">OPTIONAL</span></div>
+  <h2>Reading a real file</h2>
+<pre><span class="com"># first MAKE the file — this writes it next to your code</span>
+scores.to_csv(<span class="str">"scores.csv"</span>, index=<span class="kw">False</span>)
+
+<span class="com"># now it exists, so this can read it back</span>
+again = pd.read_csv(<span class="str">"scores.csv"</span>)
+<span class="fn">print</span>(again)</pre>
+  <div class="debug-card"><div class="err">If you skip the first line: FileNotFoundError: 'scores.csv'</div></div>
+  <div class="edge-grid" style="margin-top:.4em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc">Last lines of <code>table.py</code>. Indent <b>0</b>.</div></div>
+    <div class="edge-card"><div class="ehead">🟣 WHY</div><div class="edesc"><code>read_csv</code> needs a file <b>sitting next to the code</b>. It cannot invent one.</div></div>
+  </div>
+</div>
+
+<!-- 146 · STEP 59 -->
+<div class="slide">
+  <div class="pill">STEP 59 / 59 · table.py<span class="activity-tag">OPTIONAL</span></div>
+  <h2>A bar chart</h2>
+<pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+plt.bar(scores[<span class="str">"name"</span>], scores[<span class="str">"total"</span>])
+plt.show()</pre>
+  <div class="debug-card"><div class="err">ModuleNotFoundError: No module named 'matplotlib' — then skip this step.</div></div>
+  <div class="edge-grid" style="margin-top:.4em">
+    <div class="edge-card"><div class="ehead">📍 WHERE</div><div class="edesc"><code>import</code> at the <b>top</b> of the file. The other two at the bottom.</div></div>
+    <div class="edge-card"><div class="ehead">✅ CHECK</div><div class="edesc">Four bars — Neo tallest, Yunho shortest.</div></div>
+  </div>
+</div>
+
+<!-- 147 · fill the blanks -->
+<div class="slide">
+  <div class="pill">Try it<span class="activity-tag">activity</span></div>
+  <h2>Fill the five blanks</h2>
+<pre><span class="kw">import</span> pandas <span class="kw">as</span> ___
+<span class="kw">import</span> numpy <span class="kw">as</span> ___
+
+scores[<span class="str">"total"</span>] = scores[<span class="str">"maths"</span>] ___ scores[<span class="str">"coding"</span>]
+
+<span class="fn">print</span>(scores[scores[<span class="str">"total"</span>] ___ <span class="num">170</span>])
+
+<span class="fn">print</span>(np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]) ___ <span class="num">2</span>)</pre>
+  <p style="margin-top:.4em">Two nicknames, one sign to join, one sign to compare, one sign to double.</p>
+</div>
+
+<!-- 148 · final trace grid -->
+<div class="slide">
+  <div class="pill">Your turn 🧠<span class="activity-tag">predict</span></div>
+  <h2>Say the output, then check</h2>
+  <div class="trace-grid">
+    <div class="cell head">the line</div><div class="cell head">what prints</div><div class="cell head">why</div>
+    <div class="cell"><code>np.arange(4)</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">[0 1 2 3]</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">stop is out</span></details></div>
+    <div class="cell"><code>np.array([2,4]) * 3</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">[ 6 12]</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">every element</span></details></div>
+    <div class="cell"><code>[2,4] * 3</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">[2, 4, 2, 4, 2, 4]</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">a list repeats</span></details></div>
+    <div class="cell"><code>scores["maths"].max()</code></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">92</span></details></div>
+    <div class="cell"><details><summary>?</summary><span class="reveal">column in, number out</span></details></div>
+  </div>
+</div>
+
+<!-- 149 · code talk numpy -->
+<div class="slide">
+  <div class="pill purple">Code Talk</div>
+  <h2>Say it out loud</h2>
+  <div class="frame-card">
+    <div class="label">Sentence frame</div>
+    <div class="frame">"A loop does one number per <span class="blank"></span>. numpy does <span class="blank"></span> at once. That is called <span class="blank"></span> maths, and it is about <span class="blank"></span> times faster."</div>
+    <div class="pair-prompt">한국어로 먼저, 그다음 영어로</div>
+  </div>
+</div>
+
+<!-- 150 · quiz 8 -->
+<div class="slide mcq" data-correct="0" data-explain="No loop, no counter. One line touches every element.">
+  <div class="pill purple">Quiz 8</div>
+  <h2>Why is <code>arr * 2</code> faster than the loop?</h2>
+  <div class="opts">
+    <button class="opt">It handles every number in one go</button>
+    <button class="opt">It uses a shorter variable name</button>
+    <button class="opt">It skips some of the numbers</button>
+  </div>
+  <div class="qfeedback"></div>
+</div>
+
+<!-- 151 · quiz score -->
+<div class="slide center-all mcq-score">
+  <div class="pill purple">Quiz done</div>
+  <div class="emoji">🏆</div>
+  <h2>Your score</h2>
+  <div class="score-val">0 / 8</div>
+  <p class="score-msg big" style="margin-top:.3em"></p>
+  <button class="quiz-reset">Reset quiz</button>
+</div>
+
+<!-- 152 · exit ticket -->
+<div class="slide">
+  <div class="pill">Exit ticket 🎫</div>
+  <h2>One sentence before you go</h2>
+  <div class="exit">
+    <div class="label">Answer out loud</div>
+    <p>Name <b>one question</b> you could only ask a table, and <b>one sum</b> numpy did without a loop.</p>
+  </div>
+  <p class="bilingual">표에게 물은 질문 하나, numpy가 한 계산 하나</p>
+</div>
+
+<!-- 153 · stretch -->
+<div class="slide">
+  <div class="pill">🚀 Stretch<span class="activity-tag">OPTIONAL</span></div>
+  <h2>Pick a bonus</h2>
+  <div class="stretch-list">
+    <div class="item"><span class="lvl">★</span>Add a <code>science</code> column, then put it into <code>total</code>.</div>
+    <div class="item"><span class="lvl">★★</span>In <code>hundred.py</code>, print the mean of only the marks under 60.</div>
+    <div class="item"><span class="lvl">★★★</span>Make a 1000-row table. Add a <code>pass</code> column with <code>np.where</code>, then group by it.</div>
+  </div>
+</div>
+
+<!-- 154 · close & bridge -->
+<div class="slide center-all">
+  <div class="emoji">📈</div>
+  <h1 style="font-size:clamp(32px,5.6vmin,50px)">A table<br>answers questions.</h1>
+  <p class="big" style="margin-top:.5em">Build it. Ask it. Read the number.</p>
+  <p class="big" style="margin-top:.4em;color:var(--accent-2);">Next time: a chart that shows the answer.</p>
+  <p class="bilingual">다음 시간: 답을 그림으로 그려요</p>
+</div>
+
+<div class="nav">
+  <button id="prev">&lsaquo;</button><span class="counter" id="counter">1 / 154</span><button id="next">&rsaquo;</button>
+</div>
+</div><script src="../../assets/deck.js"></script></body></html>
