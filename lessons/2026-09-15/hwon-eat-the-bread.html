@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eat the Bread · Hwon</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* Reused verbatim from 2026-08-25 hwon-drive-super-dario.html — same deck series,
+     same visual language. No new components. */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: center; }
+  .two.wide-left { grid-template-columns: 1.25fr 1fr; }
+  .two.wide-right { grid-template-columns: 1fr 1.25fr; }
+  .two > * { min-width: 0; }
+  @media (max-width: 950px) { .two, .two.wide-left, .two.wide-right { grid-template-columns: 1fr; } }
+
+  .line { font-size: clamp(17px, 3vmin, 30px); line-height: 1.35; }
+  .line b { color: var(--accent); }
+  .line.big { font-size: clamp(21px, 3.8vmin, 40px); }
+  .quiet { color: #6b7280; font-size: clamp(13px, 1.9vmin, 18px); }
+
+  pre { background: var(--code-bg); border-radius: .5em; padding: .7em .9em; margin: .3em 0;
+        font-family: "JetBrains Mono", monospace; font-size: clamp(11px, 1.7vmin, 16px);
+        line-height: 1.55; overflow-x: auto; color: var(--code-ink); text-align: left; }
+  pre.tiny { font-size: clamp(10px, 1.45vmin, 14px); }
+  pre .hot { display: block; background: rgba(255,184,108,.16); }
+  pre .dim { display: block; color: #4a5670; }
+
+  /* placement line under a code block: exactly where the new lines go */
+  .where { font-family: "JetBrains Mono", monospace; color: #b45309;
+           font-size: clamp(12px, 1.9vmin, 17px); margin-top: .45em; }
+  .where code { background: rgba(180,83,9,.10); color: #b45309; }
+
+  /* before / after pair for a changed line */
+  .was, .now { border-left: 4px solid #ff5555; margin: .4em 0; }
+  .now { border-left-color: #15803d; }
+  .was pre, .now pre { margin: 0; border-radius: 0 .5em .5em 0; }
+  .was pre { color: #8a97b8; }
+  .tag-old, .tag-new { font-family: "JetBrains Mono", monospace; font-weight: 700;
+           font-size: clamp(11px, 1.7vmin, 15px); letter-spacing: .08em; }
+  .tag-old { color: #c2261c; }
+  .tag-new { color: #15803d; }
+
+  .skel { border: 2px dashed var(--accent-2); border-radius: .6em; background: rgba(139,92,246,.06);
+          padding: .5em .8em; margin: .5em 0; }
+  .skel pre { background: transparent; padding: 0; overflow: hidden; max-width: none; }
+  .blank { color: #b45309; background: rgba(255,184,108,.15); border-radius: .25em; padding: 0 .35em; }
+
+  canvas.sim { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto;
+               background: #0d1117; border: 2px solid var(--soft); border-radius: .4em; }
+
+  .slid { display: flex; align-items: center; gap: .7em; margin: .45em auto 0; max-width: 380px;
+          font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px); }
+  .slid input[type=range] { flex: 1; accent-color: var(--accent); }
+  .slid .out { color: var(--accent); min-width: 2.6em; text-align: right; }
+
+  button.btn { cursor: pointer; border: 2px solid var(--accent); background: transparent;
+               color: var(--accent); border-radius: 2em; padding: .3em 1.1em; margin: .3em .3em 0 0;
+               font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.8vmin, 16px);
+               user-select: none; -webkit-user-select: none; touch-action: none; }
+  button.btn:hover { background: rgba(56,208,224,.15); }
+  button.btn.alt { border-color: var(--accent-2); color: var(--accent-2); }
+
+  .readout { font-family: "JetBrains Mono", monospace; text-align: center;
+             font-size: clamp(13px, 2vmin, 19px); color: #6b7280; margin-top: .4em; }
+  .readout b { color: var(--accent); }
+
+  table.vt { border-collapse: collapse; margin: .5em auto 0;
+             font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 2vmin, 19px); }
+  table.vt th, table.vt td { border: 1px solid var(--soft); padding: .18em .6em; text-align: center; }
+  table.vt th { color: #6b7280; font-size: .8em; }
+  table.vt td { color: var(--accent); }
+
+  .chips { display: flex; gap: .35em; justify-content: center; flex-wrap: wrap; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: clamp(14px, 2.4vmin, 24px);
+          border: 2px solid var(--soft); border-radius: .35em; padding: .05em .45em; color: #6b7280; }
+  .chip.on { border-color: #15803d; color: #15803d; }
+
+  /* version badge on section slides */
+  .vstep { display: flex; gap: .4em; justify-content: center; margin-bottom: .6em;
+           font-family: "JetBrains Mono", monospace; font-size: clamp(12px, 1.9vmin, 17px); }
+  .vstep span { border: 2px solid var(--soft); color: #6b7280; border-radius: 2em; padding: .1em .7em; }
+  .vstep span.on { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  ul.tick { list-style: none; padding-left: 0; font-size: clamp(15px, 2.4vmin, 24px); }
+  ul.tick li { font-size: inherit; margin: .35em 0; padding-left: 1.4em; position: relative; }
+  ul.tick li::before { content: "→"; color: var(--accent); position: absolute; left: 0; }
+
+  .slide > .activity-tag { align-self: flex-start; }
+  .slide.center-all > .activity-tag { align-self: center; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="footer-tag">English Coding · Super Dario · Eat the Bread 🍞🥇 · 15 Sept</div>
+
+  <!-- 1 · title -->
+  <div class="slide active center-all">
+    <div class="emoji">🍞</div>
+    <h1>Eat<br>the Bread</h1>
+    <p class="line" style="margin-top:.3em">Dario touches the bread.<br>The bread <b>moves</b>. The score <b>climbs</b>.</p>
+    <div class="chips" style="margin-top:.7em">
+      <span class="chip on">v3 yum</span><span class="chip">v4 score</span>
+      <span class="chip">v6 three breads</span><span class="chip">v9 gold bread</span>
+    </div>
+  </div>
+
+  <!-- 2 · recap -->
+  <div class="slide">
+    <div class="pill purple">Last lesson · 8 Sept</div>
+    <h2>You built four walls</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="recap-q">
+          <div class="label">Say it out loud</div>
+          <div class="q">Screen is 800 tall. Dario is 40 tall. Biggest <code>'y'</code>?</div>
+          <details><summary>Show answer</summary><div class="ans">760 — <code>HEIGHT - super_dario['h']</code>. And <code>y = 0</code> is the TOP.</div></details>
+        </div>
+        <p class="quiet" style="margin-top:.4em">No worksheet went out. We rebuild anything missing.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>wall</th><th>check</th><th>put back to</th></tr>
+          <tr><td>left</td><td>x &lt; 0</td><td>0</td></tr>
+          <tr><td>right</td><td>x &gt; 760</td><td>760</td></tr>
+          <tr><td>up</td><td>y &lt; 0</td><td>0</td></tr>
+          <tr><td>down</td><td>y &gt; 760</td><td>760</td></tr>
+        </table>
+        <div class="readout">too far → <b>put back</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Park on the bread</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="predict-card">
+          <div class="label">Predict</div>
+          <div class="q">Drive Dario onto the bread. What happens?</div>
+          <details><summary>Reveal</summary><div class="ans">Nothing. Nobody asks the question yet. Today the game starts asking.</div></details>
+        </div>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th></th><th>x</th><th>y</th></tr>
+          <tr><th>Dario</th><td>590</td><td>610</td></tr>
+          <tr><th>bread</th><td>600</td><td>600</td></tr>
+          <tr><th>touching?</th><td colspan="2">nobody asks</td></tr>
+        </table>
+        <div class="readout">same spot · <b>no reaction</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words today</h2>
+    <div class="vocab-table">
+      <span class="term">Rect</span>
+      <span class="gloss">an invisible box: across, down, wide, tall</span>
+      <span class="ko">four numbers</span>
+      <span class="term">colliderect</span>
+      <span class="gloss">asks two boxes: are you touching?</span>
+      <span class="ko">True or False</span>
+      <span class="term">points</span>
+      <span class="gloss">what one bread adds to the score</span>
+      <span class="ko">1 or 5</span>
+    </div>
+    <div class="readout">two boxes · <b>one question</b></div>
+  </div>
+
+  <!-- 5 · concept: two boxes, one question -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Two boxes, one question</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">Dario 590, 610</span>
+        <span class="case case-b">Dario 100, 100</span>
+      </div>
+      <div class="if-cond">dario_rect.colliderect(bread_rect)</div>
+      <div class="if-branches">
+        <div class="if-branch true">the score goes up</div>
+        <div class="if-branch false">nothing happens</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line out-a">yum 1</div>
+        <div class="out-line out-b">(silence)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · file check: the bread block -->
+  <div class="slide">
+    <div class="pill">File check 📋 · before STEP 1</div>
+    <h2>Your bread block</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-new">THIS MUST BE IN YOUR FILE</div>
+        <div class="now"><pre>bread = {
+    <span class="str">'x'</span>: <span class="num">600</span>,  <span class="str">'y'</span>: <span class="num">600</span>,
+    <span class="str">'h'</span>: <span class="num">30</span>,   <span class="str">'w'</span>: <span class="num">30</span>,
+}</pre></div>
+        <p class="where">🔍 FIND <code>bread = {</code></p>
+        <p class="where">📍 Above <code>running = True</code> · indent <b>0</b> spaces</p>
+        <p class="where">🟣 Every number today is read out of this block.</p>
+        <p class="where">✅ Four numbers: 600, 600, 30, 30. Change any that differ.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>key</th><th>means</th><th>value</th></tr>
+          <tr><td>'x'</td><td>across</td><td>600</td></tr>
+          <tr><td>'y'</td><td>down</td><td>600</td></tr>
+          <tr><td>'w'</td><td>wide</td><td>30</td></tr>
+          <tr><td>'h'</td><td>tall</td><td>30</td></tr>
+        </table>
+        <div class="readout">bottom right · <b>30 × 30</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · STEP 1 Dario's box -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v3 yum</span><span>v4 score</span><span>v6 many</span><span>v9 gold</span></div>
+    <div class="pill">STEP 1 / 40 · Dario's box</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-new">THE WHOLE REGION — grey is already yours</div>
+      <div class="now"><pre class="tiny"><span class="dim">    if super_dario['x'] &lt; 0:
+        super_dario['x'] = 0
+    if super_dario['x'] &gt; WIDTH - super_dario['w']:
+        super_dario['x'] = WIDTH - super_dario['w']
+    if super_dario['y'] &lt; 0:
+        super_dario['y'] = 0
+    if super_dario['y'] &gt; HEIGHT - super_dario['h']:
+        super_dario['y'] = HEIGHT - super_dario['h']</span><span class="dim"> </span><span class="hot">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])</span><span class="dim"> </span><span class="dim">    # -------- 3. RENDERING LAYER --------</span></pre></div>
+    </div>
+    <p class="where">🔍 FIND <code># -------- 3. RENDERING LAYER --------</code></p>
+    <p class="where">📍 The orange line goes <b>above</b> it, one blank line apart · indent <b>4</b> spaces</p>
+    <p class="where">🟣 One box, rebuilt every frame, wrapped around Dario.</p>
+    <p class="where">✅ Run — the game looks exactly the same, no error.</p>
+  </div>
+
+  <!-- 8 · STEP 2 the bread's box -->
+  <div class="slide center-all">
+    <div class="vstep"><span class="on">v3 yum</span><span>v4 score</span><span>v6 many</span><span>v9 gold</span></div>
+    <div class="pill">STEP 2 / 40 · the bread's box</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>dario_rect = pygame.Rect(</code></p>
+    <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 Same shape, the bread's numbers. Now there are two boxes.</p>
+    <p class="where">✅ Run — still no change, still no error.</p>
+  </div>
+
+  <!-- 9 · STEP 3 colliderect -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span class="on">v3</span><span>v4</span></div>
+    <div class="pill">STEP 3 / 40 · are they touching?</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>bread_rect = pygame.Rect(</code></p>
+    <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 The two boxes overlap → the <code>if</code> is true.</p>
+    <p class="where">✅ Drive onto the bread — <code>yum</code> floods the terminal. <b>v3 done.</b></p>
+  </div>
+
+  <!-- 10 · debug 3 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 3</div>
+    <h2>yum before you move</h2>
+    <div class="debug-card">
+      <div class="err">if dario_rect.colliderect:</div>
+      <details><summary>What is missing? 🔍</summary>
+        <p class="line" style="margin-top:.3em">The <code>()</code> and the other box. Without them Python never <b>asks</b> the question — it just sees the tool, which is always true. <code>yum</code> prints from frame 1.</p>
+      </details>
+    </div>
+    <div class="compare-row" style="margin-top:.5em">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>if dario_rect.colliderect:</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>if dario_rect.colliderect(bread_rect):</pre></div>
+    </div>
+  </div>
+
+  <!-- 11 · v4 concept: respawn -->
+  <div class="slide">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Eaten bread does not die.</p>
+        <p class="line" style="margin-top:.4em">It <b>moves</b>. New x, new y, picked at random.</p>
+        <p class="line" style="margin-top:.4em">Score goes up by <b>1</b> each time.</p>
+        <p class="quiet" style="margin-top:.4em">Press the button. Same bread, new home.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="rndC" width="260" height="260" style="max-width:260px"></canvas>
+        <div style="text-align:center"><button class="btn" id="rndB">eat it 🍞</button></div>
+        <div class="readout">score = <b id="rndS">0</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 · STEP 4 import random -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 4 / 40 · get the dice</div>
+    <div style="max-width:34em;width:100%;text-align:left">
+      <div class="tag-old">OLD — line 1 of your file</div>
+      <div class="was"><pre><span class="kw">import</span> pygame</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre><span class="kw">import</span> pygame
+<span class="kw">import</span> random</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>import pygame</code></p>
+    <p class="where">📍 Under it, very top of the file · indent <b>0</b> spaces</p>
+    <p class="where">🟣 <code>random</code> is the tool that picks the new spot.</p>
+    <p class="where">✅ Run — no error.</p>
+  </div>
+
+  <!-- 13 · STEP 5 score = 0 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 5 / 40 · start the score</div>
+    <div style="max-width:34em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre>running = <span class="kw">True</span>
+<span class="kw">while</span> running:</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre>score = <span class="num">0</span>
+
+running = <span class="kw">True</span>
+<span class="kw">while</span> running:</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>running = True</code></p>
+    <p class="where">📍 Above that line · indent <b>0</b> spaces</p>
+    <p class="where">🟣 Outside the loop, so it is not reset every frame.</p>
+    <p class="where">✅ Run — nothing new yet, no error.</p>
+  </div>
+
+  <!-- 14 · STEP 6 respawn -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 6 / 40 · move the bread</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>print("yum")</code></p>
+    <p class="where">📍 Under it, inside the <code>if</code> · indent <b>8</b> spaces</p>
+    <p class="where">🟣 Same limit as the walls: <code>WIDTH - w</code> keeps it on screen.</p>
+    <p class="where">✅ Eat it — the bread jumps somewhere new.</p>
+  </div>
+
+  <!-- 15 · STEP 7 score -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v1</span><span>v2</span><span>v3</span><span class="on">v4</span></div>
+    <div class="pill">STEP 7 / 40 · count it</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        <span class="fn">print</span>(<span class="str">"yum"</span>)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>print("yum")</code></p>
+    <p class="where">📍 Replace that one line with these two · indent <b>8</b> spaces</p>
+    <p class="where">🟣 One bite, one point.</p>
+    <p class="where">✅ Terminal shows <code>yum 1</code>, <code>yum 2</code>, <code>yum 3</code>. <b>v4 done.</b></p>
+  </div>
+
+  <!-- 16 · debug 4 OPTIONAL -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Bug hunt 🐛 · 4</div>
+    <h2>The bread will not sit still</h2>
+    <div class="debug-card">
+      <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;if dario_rect.colliderect(bread_rect):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;score = score + 1<br>&nbsp;&nbsp;&nbsp;&nbsp;bread['x'] = random.randint(0, WIDTH - bread['w'])</div>
+      <details><summary>Look at the indent 🔍</summary>
+        <p class="line" style="margin-top:.3em">That line sits at <b>4</b> spaces — outside the <code>if</code>. It runs every frame.</p>
+      </details>
+    </div>
+    <p class="where">✅ Fix: indent it to <b>8</b> spaces.</p>
+  </div>
+
+  <!-- 17 · full loop OPTIONAL -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Check your loop</div>
+<pre class="tiny">    keys = pygame.key.get_pressed()
+    <span class="com"># ... your four key blocks stay exactly as they are ...</span>
+
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'x'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'x'</span>] &gt; WIDTH - super_dario[<span class="str">'w'</span>]:
+        super_dario[<span class="str">'x'</span>] = WIDTH - super_dario[<span class="str">'w'</span>]
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &lt; <span class="num">0</span>:
+        super_dario[<span class="str">'y'</span>] = <span class="num">0</span>
+    <span class="kw">if</span> super_dario[<span class="str">'y'</span>] &gt; HEIGHT - super_dario[<span class="str">'h'</span>]:
+        super_dario[<span class="str">'y'</span>] = HEIGHT - super_dario[<span class="str">'h'</span>]
+
+    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre>
+    <p class="quiet" style="margin-top:.3em">Line by line. Every wall <code>if</code> at 4 spaces.</p>
+  </div>
+
+  <!-- 18 · quiz 1 OPTIONAL -->
+  <div class="slide mcq" data-correct="0" data-explain="x is his left edge. 800 − 40 = 760 keeps all of him on screen.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">Screen is 800. Dario is 40 wide. Biggest allowed <code>'x'</code>?</div>
+    <div class="opts">
+      <button class="opt">760</button>
+      <button class="opt">800</button>
+      <button class="opt">840</button>
+      <button class="opt">400</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 19 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say both, out loud</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"<code>y = 0</code> is the <span class="blank"></span> of the screen, so bigger <code>y</code> means <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"<code>x</code> is the <span class="blank"></span> edge, so the right edge is <code>x</code> plus <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at the line in your file while you say it.</div>
+    </div>
+  </div>
+
+  <!-- 20 · stretch OPTIONAL -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch ★ · fill the blanks</div>
+    <p class="line big" style="margin-bottom:.3em">Draw the score on screen.</p>
+    <div class="skel" style="max-width:40em">
+<pre class="tiny">    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(<span class="blank">???</span>), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="blank">???</span>))</pre></div>
+    <p class="where">📍 Under <code>pygame.draw.rect(screen, PINK, (bread[</code> · indent <b>4</b> spaces</p>
+    <p class="quiet">Which variable holds the number? Which y puts it at the top?</p>
+  </div>
+
+  <!-- 21 · close -->
+  <div class="slide center-all">
+    <div class="emoji">🍞</div>
+    <p class="line big">Four walls. One hungry Dario.</p>
+    <p class="line" style="margin-top:.4em">Next: <b>a timer</b>, and bread that is worth points.</p>
+  </div>
+
+  <!-- ============ PART 2 · v5 — the score on the screen ============ -->
+
+  <!-- 22 · act break -->
+  <div class="slide">
+    <div class="vstep"><span>v1–v4 done</span><span class="on">v5 score</span><span>v6 many</span><span>v7 clock</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">The score is hiding.</p>
+        <p class="line" style="margin-top:.4em"><code>print</code> writes to the <b>terminal</b>.<br>A player never looks there.</p>
+        <p class="line" style="margin-top:.4em">Now put it <b>on the screen</b>.</p>
+      </div>
+      <div><canvas class="sim" id="n31" width="330" height="250"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 23 · vocab -->
+  <div class="slide">
+    <div class="pill">Vocab</div>
+    <h2>Three words</h2>
+    <div class="vocab-table">
+      <span class="term">Font</span>
+      <span class="gloss">letter shapes at one size</span>
+      <span class="ko">one fixed size</span>
+      <span class="term">render</span>
+      <span class="gloss">turn text into a picture</span>
+      <span class="ko">text → picture</span>
+      <span class="term">blit</span>
+      <span class="gloss">paste that picture on the screen</span>
+      <span class="ko">picture → screen</span>
+    </div>
+  </div>
+
+  <!-- 24 · predict -->
+  <div class="slide">
+    <div class="pill">Predict 🤔</div>
+    <h2>Where is the score?</h2>
+    <div class="predict-card">
+      <div class="label">Predict</div>
+      <div class="q">Eat three breads. Does the <b>game window</b> show the score?</div>
+      <details><summary>Reveal</summary><div class="ans">No. Only the terminal knows. The window has no text on it at all.</div></details>
+    </div>
+  </div>
+
+  <!-- 25 · STEP 8 -->
+  <div class="slide">
+    <div class="vstep"><span>v1–v4</span><span class="on">v5</span><span>v6</span><span>v7</span></div>
+    <div class="pill">STEP 8 / 40 · make the font</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>score = <span class="num">0</span>
+
+running = <span class="kw">True</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)
+
+running = <span class="kw">True</span></pre></div>
+        <p class="where">🔍 FIND <code>score = 0</code></p>
+        <p class="where">📍 Under that line · indent <b>0</b> spaces</p>
+        <p class="where">🟣 Built <b>once</b>, before the loop. <code>48</code> is the size.</p>
+        <p class="where">✅ Run — game looks the same, no error.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>where</th><th>built</th></tr>
+          <tr><td>before the loop</td><td>1 time</td></tr>
+          <tr><td>inside the loop</td><td>3600 times</td></tr>
+        </table>
+        <div class="readout">outside = <b>fast</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 26 · concept: render -->
+  <div class="slide">
+    <div class="vstep"><span>v1–v4</span><span class="on">v5</span><span>v6</span><span>v7</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Text is not a picture.</p>
+        <p class="line" style="margin-top:.4em"><b>render</b> makes the picture.<br><b>blit</b> pastes it down.</p>
+        <p class="line" style="margin-top:.4em">Two jobs, two lines.</p>
+      </div>
+      <div><canvas class="sim" id="n35" width="330" height="230"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 27 · STEP 9 -->
+  <div class="slide">
+    <div class="vstep"><span>v1–v4</span><span class="on">v5</span><span>v6</span><span>v7</span></div>
+    <div class="pill">STEP 9 / 40 · make the picture</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    pygame.draw.rect(screen, PINK, (bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>]))</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    pygame.draw.rect(screen, PINK, (bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>]))
+    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)</pre></div>
+        <p class="where">🔍 FIND <code>pygame.draw.rect(screen, PINK, (bread[</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 <code>str(score)</code> turns the number into letters so it can join the words.</p>
+        <p class="where">✅ Run — still no text on screen. No error.</p>
+      </div>
+      <div><canvas class="sim" id="n36" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">picture made · <b>not pasted</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 28 · STEP 10 -->
+  <div class="slide">
+    <div class="vstep"><span>v1–v4</span><span class="on">v5</span><span>v6</span><span>v7</span></div>
+    <div class="pill">STEP 10 / 40 · paste it</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))</pre></div>
+        <p class="where">🔍 FIND <code>label = font.render(</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 <code>(10, 10)</code> is where the picture's top-left corner lands.</p>
+        <p class="where">✅ <code>Score: 0</code> in the top-left. Eat one — it says <code>Score: 1</code>.</p>
+      </div>
+      <div><canvas class="sim" id="n37" width="200" height="200" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 29 · blit coords on the y axis -->
+  <div class="slide">
+    <div class="pill">The screen 📐 again</div>
+    <div class="two">
+      <div>
+        <h2 style="margin-bottom:.3em">(10, 10) is the top</h2>
+        <p class="line"><code>blit</code> uses the <b>same</b> two numbers as Dario.</p>
+        <p class="line" style="margin-top:.3em">Across, then <b>down</b>. Bigger y = lower.</p>
+        <p class="quiet" style="margin-top:.4em">Drag. Watch the score slide down.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="n38" width="330" height="330"></canvas>
+        <div class="slid"><span>y</span><input type="range" id="n38s" min="0" max="740" value="10"><span class="out" id="n38o">10</span></div>
+        <div class="readout">screen.blit(label, (10, <b id="n38b">10</b>))</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 30 · debug 5 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 5</div>
+    <h2>The game crawls</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">while running:<br>&nbsp;&nbsp;&nbsp;&nbsp;font = pygame.font.Font(None, 48)</div>
+          <details><summary>Why so slow? 🔍</summary>
+            <p class="line" style="margin-top:.3em">The font is rebuilt <b>every frame</b> — 60 times a second. Building a font is slow work.</p>
+          </details>
+        </div>
+        <div class="tag-new">FIX</div>
+        <div class="now"><pre>score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)
+
+running = <span class="kw">True</span></pre></div>
+        <p class="where">🟣 Made once. Used forever.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th></th><th>fonts built</th></tr>
+          <tr><td>outside</td><td>1</td></tr>
+          <tr><td>inside</td><td>60 / second</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 31 · debug 6 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 6</div>
+    <h2>The score vanished</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">screen.blit(label, (10, 10))<br>screen.fill(SKY)</div>
+          <details><summary>Where did it go? 🔍</summary>
+            <p class="line" style="margin-top:.3em"><code>fill</code> paints over the whole screen. Anything drawn <b>before</b> it is buried.</p>
+          </details>
+        </div>
+        <p class="where" style="margin-top:.4em">🟣 Last thing drawn sits on top.</p>
+        <p class="where">✅ Fix: <code>blit</code> goes <b>after</b> <code>screen.fill</code>, at the bottom.</p>
+      </div>
+      <div><canvas class="sim" id="n40" width="220" height="220" style="max-width:230px"></canvas>
+        <div style="text-align:center"><button class="btn alt" id="n40b">order: WRONG</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 32 · quiz -->
+  <div class="slide mcq" data-correct="0" data-explain="render builds the picture. Without blit nothing is pasted on the screen.">
+    <div class="pill">Quiz</div>
+    <div class="q">You wrote <code>font.render(...)</code> but no <code>blit</code>. What shows?</div>
+    <div class="opts">
+      <button class="opt">Nothing</button>
+      <button class="opt">The score at (0, 0)</button>
+      <button class="opt">An error</button>
+      <button class="opt">The score in the terminal</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 33 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say it, point at it</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"<code>render</code> makes a <span class="blank"></span>, and <code>blit</code> <span class="blank"></span> it."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"The font is built <span class="blank"></span> the loop because <span class="blank"></span>."</div>
+      <div class="pair-prompt">Say it twice, out loud.</div>
+    </div>
+  </div>
+
+  <!-- ============ PART 3 · v6 — many breads, one list ============ -->
+
+  <!-- 34 · act break -->
+  <div class="slide">
+    <div class="vstep"><span>v5 done</span><span class="on">v6 many</span><span>v7 clock</span><span>v8 over</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">One bread is lonely.</p>
+        <p class="line" style="margin-top:.4em">Three breads. <b>One name</b> for all of them.</p>
+        <p class="line" style="margin-top:.4em">That name is a <b>list</b>.</p>
+      </div>
+      <div><canvas class="sim" id="n43" width="250" height="250" style="max-width:250px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 35 · concept: list -->
+  <div class="slide">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">A list is a numbered shelf.</p>
+        <p class="line" style="margin-top:.4em">Counting starts at <b>0</b>.</p>
+        <p class="line" style="margin-top:.4em"><code>breads[0]</code> is the first one.<br><code>breads[2]</code> is the last one.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="n44" width="300" height="150" style="max-width:310px"></canvas>
+        <table class="vt" style="margin-top:.4em">
+          <tr><th>slot</th><td>0</td><td>1</td><td>2</td></tr>
+          <tr><th>x</th><td>600</td><td>120</td><td>400</td></tr>
+          <tr><th>y</th><td>600</td><td>400</td><td>100</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 36 · STEP 11 -->
+  <div class="slide">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="pill">STEP 11 / 40 · the list</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>breads = [
+    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+]
+
+score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)</pre></div>
+        <p class="where">🔍 FIND <code>score = 0</code></p>
+        <p class="where">📍 <b>Above</b> that line · <code>breads = [</code> at indent <b>0</b>, the three breads at <b>4</b></p>
+        <p class="where">🟣 Square brackets hold the list. Each bread keeps its own dictionary.</p>
+        <p class="where">✅ Run — nothing new on screen yet. No error.</p>
+      </div>
+      <div><canvas class="sim" id="n45" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">3 in the list · <b>0 drawn</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 37 · STEP 12 -->
+  <div class="slide">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="pill">STEP 12 / 40 · draw all three</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    pygame.draw.rect(screen, PINK, (bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>]))
+    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        pygame.draw.rect(screen, PINK, (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))
+    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))</pre></div>
+        <p class="where">🔍 FIND <code>pygame.draw.rect(screen, PINK, (bread[</code></p>
+        <p class="where">📍 Replace that <b>one</b> line with two · <code>for</code> at <b>4</b>, the draw at <b>8</b></p>
+        <p class="where">🟣 <code>b</code> is one bread at a time. Three passes, three rectangles.</p>
+        <p class="where">✅ Three breads on screen. Only the bottom-right one feeds him, once. STEP 15 fixes that.</p>
+      </div>
+      <div><canvas class="sim" id="n46" width="200" height="200" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 38 · ITERATION VISUAL — one frame per bread -->
+  <div class="slide">
+    <div class="pill">Watch the loop 🔁</div>
+    <h2>One pass, one bread</h2>
+    <p class="line">The <code>if</code> runs <b>three times</b>. Each time <code>b</code> is a different bread.</p>
+    <div class="two" style="grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-top:.5em">
+      <div>
+        <div class="readout" style="margin:0 0 .2em">pass 1 · <b>b = breads[0]</b></div>
+        <canvas class="sim" id="it0" width="180" height="180" style="max-width:100%"></canvas>
+        <div class="readout" id="it0m">checking…</div>
+      </div>
+      <div>
+        <div class="readout" style="margin:0 0 .2em">pass 2 · <b>b = breads[1]</b></div>
+        <canvas class="sim" id="it1" width="180" height="180" style="max-width:100%"></canvas>
+        <div class="readout" id="it1m">checking…</div>
+      </div>
+      <div>
+        <div class="readout" style="margin:0 0 .2em">pass 3 · <b>b = breads[2]</b></div>
+        <canvas class="sim" id="it2" width="180" height="180" style="max-width:100%"></canvas>
+        <div class="readout" id="it2m">checking…</div>
+      </div>
+    </div>
+    <div style="text-align:center"><button class="btn" id="itB">move Dario 🔴</button></div>
+  </div>
+
+  <!-- 39 · STEP 13 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="pill">STEP 13 / 40 · the loop header</div>
+    <div style="max-width:46em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>bread_rect = pygame.Rect(bread[</code></p>
+    <p class="where">📍 <b>Above</b> that line · indent <b>4</b> spaces</p>
+    <p class="where">🟣 Header first. The indent is its own step.</p>
+    <div class="output-box" style="margin-top:.4em;max-width:46em;width:100%">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">IndentationError: expected an indented block</div>
+    </div>
+    <p class="where">✅ That red error is <b>correct</b>. STEP 14 fixes it.</p>
+  </div>
+
+  <!-- 40 · STEP 14 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="pill">STEP 14 / 40 · push them in</div>
+    <div style="max-width:46em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+    bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+    <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+        score = score + <span class="num">1</span>
+        <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+        bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+        bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+        <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+            score = score + <span class="num">1</span>
+            <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+            bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+            bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>for b in breads:</code> — the one under <code>dario_rect</code></p>
+    <p class="where">📍 Select the <b>six</b> lines under it, press <b>Tab</b> once</p>
+    <p class="where">🟣 <code>bread_rect</code> and <code>if</code> land at <b>8</b>. The three inside the <code>if</code> land at <b>12</b>.</p>
+    <p class="where">✅ No error. Still only one bread feeds him.</p>
+  </div>
+
+  <!-- 41 · STEP 15 -->
+  <div class="slide">
+    <div class="vstep"><span>v5</span><span class="on">v6</span><span>v7</span><span>v8</span></div>
+    <div class="pill">STEP 15 / 40 · use b, not bread</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        bread_rect = pygame.Rect(bread[<span class="str">'x'</span>], bread[<span class="str">'y'</span>], bread[<span class="str">'w'</span>], bread[<span class="str">'h'</span>])
+        <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+            score = score + <span class="num">1</span>
+            <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+            bread[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - bread[<span class="str">'w'</span>])
+            bread[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - bread[<span class="str">'h'</span>])</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        bread_rect = pygame.Rect(b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>])
+        <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+            score = score + <span class="num">1</span>
+            <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+            b[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - b[<span class="str">'w'</span>])
+            b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])</pre></div>
+        <p class="where">🔍 FIND <code>bread_rect = pygame.Rect(bread[</code></p>
+        <p class="where">📍 Every <code>bread[</code> inside the loop becomes <code>b[</code> — <b>3 lines, 8 spots</b></p>
+        <p class="where">🟣 <code>bread_rect</code> keeps its name. Only <code>bread[</code> changes.</p>
+        <p class="where">✅ All three breads feed him. <b>v6 done.</b></p>
+      </div>
+      <div><canvas class="sim" id="n50" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">3 breads · <b>all edible</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 42 · trace -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Trace it ✍️</div>
+    <h2>Dario is at x 590, y 610</h2>
+    <div class="trace-grid cols-4" style="max-width:42em">
+      <div class="cell head">pass</div><div class="cell head">b is</div><div class="cell head">b['x'], b['y']</div><div class="cell head">touching?</div>
+      <div class="cell">1</div><div class="cell"><code>breads[0]</code></div><div class="cell"><code>600, 600</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">yes 🍞</span></details></div>
+      <div class="cell">2</div><div class="cell"><code>breads[1]</code></div><div class="cell"><code>120, 400</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+      <div class="cell">3</div><div class="cell"><code>breads[2]</code></div><div class="cell"><code>400, 100</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">no</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">Score goes up by 1, not 3.</p>
+  </div>
+
+  <!-- 43 · debug 7 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 7</div>
+    <h2>Only the last one works</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;for b in breads:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bread_rect = pygame.Rect(...)<br>&nbsp;&nbsp;&nbsp;&nbsp;if dario_rect.colliderect(...):</div>
+          <details><summary>Count the spaces 🔍</summary>
+            <p class="line" style="margin-top:.3em">The <code>if</code> sits at <b>4</b> — outside the loop. It runs once, on the <b>last</b> bread only.</p>
+          </details>
+        </div>
+        <p class="where" style="margin-top:.4em">✅ Fix: indent the <code>if</code> to <b>8</b> spaces.</p>
+      </div>
+      <div><canvas class="sim" id="n52" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">only <b>breads[2]</b> is checked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 44 · debug 8 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 8</div>
+    <h2>He eats the invisible bread</h2>
+    <div class="debug-card">
+      <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;for b in breads:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bread_rect = pygame.Rect(bread['x'], bread['y'], bread['w'], bread['h'])</div>
+      <details><summary>Spot the word 🔍</summary>
+        <p class="line" style="margin-top:.3em">It says <code>bread</code>, not <code>b</code>. Three passes, all checking the <b>same old</b> bread that nobody draws.</p>
+      </details>
+    </div>
+    <div class="compare-row" style="margin-top:.5em">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>pygame.Rect(bread['x'], ...)</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>pygame.Rect(b['x'], ...)</pre></div>
+    </div>
+  </div>
+
+  <!-- 45 · quiz -->
+  <div class="slide mcq" data-correct="2" data-explain="Lists count from 0, so the third bread is breads[2].">
+    <div class="pill">Quiz</div>
+    <div class="q"><code>breads</code> holds three breads. How do you name the <b>third</b> one?</div>
+    <div class="opts">
+      <button class="opt">breads[3]</button>
+      <button class="opt">breads[1]</button>
+      <button class="opt">breads[2]</button>
+      <button class="opt">breads(3)</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 46 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the loop</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"The loop runs <span class="blank"></span> times, and each time <code>b</code> is <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"<code>breads[0]</code> is the <span class="blank"></span> bread, because lists start at <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at your list while you say it.</div>
+    </div>
+  </div>
+
+  <!-- ============ PART 4 · v7 — the clock ============ -->
+
+  <!-- 47 · act break -->
+  <div class="slide">
+    <div class="vstep"><span>v6 done</span><span class="on">v7 clock</span><span>v8 over</span><span>★</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Now add pressure.</p>
+        <p class="line" style="margin-top:.4em">A number that only goes <b>down</b>.</p>
+        <p class="line" style="margin-top:.4em">Same trick as the score — one variable, drawn every frame.</p>
+      </div>
+      <div><canvas class="sim" id="n56" width="250" height="250" style="max-width:250px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 48 · concept: frames -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">The loop is the clock.</p>
+        <p class="line" style="margin-top:.4em">Around the loop <b>60 times</b> ≈ 1 second.</p>
+        <p class="line" style="margin-top:.4em"><code>//</code> divides and throws the leftovers away.<br><code>1800 // 60</code> is <b>30</b>.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="n57" width="300" height="140" style="max-width:310px"></canvas>
+        <table class="vt" style="margin-top:.4em">
+          <tr><th>frames left</th><th>// 60</th></tr>
+          <tr><td>1800</td><td>30</td></tr>
+          <tr><td>900</td><td>15</td></tr>
+          <tr><td>59</td><td>0</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 49 · STEP 16 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="pill">STEP 16 / 40 · start the clock</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)
+
+running = <span class="kw">True</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>score = <span class="num">0</span>
+font = pygame.font.Font(<span class="kw">None</span>, <span class="num">48</span>)
+time_left = <span class="num">30</span> * <span class="num">60</span>
+
+running = <span class="kw">True</span></pre></div>
+        <p class="where">🔍 FIND <code>font = pygame.font.Font(None, 48)</code></p>
+        <p class="where">📍 Under that line · indent <b>0</b> spaces</p>
+        <p class="where">🟣 Outside the loop, or it resets every frame. 30 seconds' worth of frames.</p>
+        <p class="where">✅ Run — no error. Nothing visible yet.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>30 * 60</th><td>1800</td></tr>
+          <tr><th>frames</th><td>1800</td></tr>
+          <tr><th>seconds</th><td>30</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 50 · STEP 17 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="pill">STEP 17 / 40 · count it down</div>
+    <div style="max-width:46em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">            b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">            b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])
+
+    time_left = time_left - <span class="num">1</span>
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span></pre></div>
+    </div>
+    <p class="where">🔍 FIND <code># -------- 3. RENDERING LAYER --------</code></p>
+    <p class="where">📍 <b>Above</b> that line · indent <b>4</b> — not 8. It must sit <b>outside</b> the <code>for</code> loop.</p>
+    <p class="where">🟣 One frame gone, once per turn of the loop.</p>
+    <p class="where">✅ Run — no error. Still nothing to see.</p>
+  </div>
+
+  <!-- 51 · countdown visual -->
+  <div class="slide">
+    <div class="pill">Watch it drop ⏱</div>
+    <div class="two">
+      <div>
+        <h2 style="margin-bottom:.3em">Every frame, minus 1</h2>
+        <p class="line">The number never jumps. It <b>steps</b>.</p>
+        <p class="line" style="margin-top:.3em">Only <code>// 60</code> makes it look like seconds.</p>
+        <p class="quiet" style="margin-top:.4em">Hold the button.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="n60" width="260" height="200" style="max-width:270px"></canvas>
+        <div style="text-align:center"><button class="btn" id="n60b">run 60 frames ▶</button></div>
+        <div class="readout">time_left = <b id="n60r">1800</b> · Time: <b id="n60s">30</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 52 · STEP 18 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="pill">STEP 18 / 40 · make the clock picture</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))
+    timer_label = font.render(<span class="str">"Time: "</span> + <span class="fn">str</span>(time_left // <span class="num">60</span>), <span class="kw">True</span>, RED)</pre></div>
+        <p class="where">🔍 FIND <code>screen.blit(label, (10, 10))</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 Same two-step as the score. This line only builds the picture.</p>
+        <p class="where">✅ Run — no error. Still not pasted.</p>
+      </div>
+      <div>
+        <div class="output-box">
+          <div class="out-label">▸ the picture says</div>
+          <div style="opacity:1">Time: 30</div>
+        </div>
+        <div class="readout">made · <b>not pasted</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 53 · STEP 19 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="pill">STEP 19 / 40 · paste the clock</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    timer_label = font.render(<span class="str">"Time: "</span> + <span class="fn">str</span>(time_left // <span class="num">60</span>), <span class="kw">True</span>, RED)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    timer_label = font.render(<span class="str">"Time: "</span> + <span class="fn">str</span>(time_left // <span class="num">60</span>), <span class="kw">True</span>, RED)
+    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))</pre></div>
+        <p class="where">🔍 FIND <code>timer_label = font.render(</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 <code>y = 60</code> puts it under the score, not on top of it.</p>
+        <p class="where">✅ The Time number falls while you play. <b>v7 done.</b></p>
+      </div>
+      <div><canvas class="sim" id="n62" width="200" height="200" style="max-width:210px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 54 · STEP 20 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v6</span><span class="on">v7</span><span>v8</span><span>★</span></div>
+    <div class="pill">STEP 20 / 40 · stop at zero</div>
+    <div style="max-width:44em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    time_left = time_left - <span class="num">1</span></pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    time_left = time_left - <span class="num">1</span>
+    <span class="kw">if</span> time_left &lt; <span class="num">0</span>:
+        time_left = <span class="num">0</span></pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>time_left = time_left - 1</code></p>
+    <p class="where">📍 Under that line · <code>if</code> at <b>4</b>, the fix at <b>8</b></p>
+    <p class="where">🟣 The <b>same wall trick</b> as v1: too far → put it back.</p>
+    <p class="where">✅ Wait it out — Time stops at 0, never goes negative.</p>
+  </div>
+
+  <!-- 55 · debug 9 -->
+  <div class="slide">
+    <div class="pill">Bug hunt 🐛 · 9</div>
+    <h2>The clock never moves</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">while running:<br>&nbsp;&nbsp;&nbsp;&nbsp;time_left = 30 * 60<br>&nbsp;&nbsp;&nbsp;&nbsp;time_left = time_left - 1</div>
+          <details><summary>Why stuck on 29? 🔍</summary>
+            <p class="line" style="margin-top:.3em">Line 2 is <b>inside</b> the loop. Every frame it goes back to 1800, then drops by one. Forever.</p>
+          </details>
+        </div>
+        <p class="where" style="margin-top:.4em">✅ Fix: <code>time_left = 30 * 60</code> lives <b>above</b> <code>running = True</code>, at indent 0.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>frame</th><th>broken</th><th>fixed</th></tr>
+          <tr><td>1</td><td>1799</td><td>1799</td></tr>
+          <tr><td>2</td><td>1799</td><td>1798</td></tr>
+          <tr><td>3</td><td>1799</td><td>1797</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 56 · trace -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Trace it ✍️</div>
+    <h2>What does the screen say?</h2>
+    <div class="trace-grid cols-4" style="max-width:42em">
+      <div class="cell head">frame</div><div class="cell head">time_left</div><div class="cell head">// 60</div><div class="cell head">screen shows</div>
+      <div class="cell">0</div><div class="cell"><code>1800</code></div><div class="cell"><code>30</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Time: 30</span></details></div>
+      <div class="cell">600</div><div class="cell"><code>1200</code></div><div class="cell"><code>20</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Time: 20</span></details></div>
+      <div class="cell">1770</div><div class="cell"><code>30</code></div><div class="cell"><code>0</code></div>
+      <div class="cell"><details><summary>?</summary><span class="reveal">Time: 0</span></details></div>
+    </div>
+    <p class="quiet" style="margin-top:.4em">It says 0 before it really is 0. That is what <code>//</code> does.</p>
+  </div>
+
+  <!-- 57 · quiz -->
+  <div class="slide mcq" data-correct="1" data-explain="Outside the loop it is set once. Inside, it resets every single frame.">
+    <div class="pill">Quiz</div>
+    <div class="q">Why does <code>time_left = 30 * 60</code> go <b>above</b> <code>while running:</code>?</div>
+    <div class="opts">
+      <button class="opt">It runs faster there</button>
+      <button class="opt">So it is set once, not every frame</button>
+      <button class="opt">Python needs it on line 1</button>
+      <button class="opt">So it can be drawn</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ PART 5 · v8 — GAME OVER ============ -->
+
+  <!-- 58 · concept: layering -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8 over</span><span>★</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Last drawn wins.</p>
+        <p class="line" style="margin-top:.4em">The screen is paint. Each line paints <b>on top</b> of the one before.</p>
+        <p class="line" style="margin-top:.4em">GAME OVER goes <b>last</b>.</p>
+      </div>
+      <div>
+        <canvas class="sim" id="n67" width="250" height="250" style="max-width:250px"></canvas>
+        <div style="text-align:center"><button class="btn" id="n67b">paint next layer 🎨</button></div>
+        <div class="readout" id="n67m">1. screen.fill</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 59 · STEP 21 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8</span><span>★</span></div>
+    <div class="pill">STEP 21 / 40 · a bigger font</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>time_left = <span class="num">30</span> * <span class="num">60</span>
+
+running = <span class="kw">True</span></pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>time_left = <span class="num">30</span> * <span class="num">60</span>
+big_font = pygame.font.Font(<span class="kw">None</span>, <span class="num">90</span>)
+
+running = <span class="kw">True</span></pre></div>
+        <p class="where">🔍 FIND <code>time_left = 30 * 60</code></p>
+        <p class="where">📍 Under that line · indent <b>0</b> spaces</p>
+        <p class="where">🟣 A font has one fixed size. Big words need a second font.</p>
+        <p class="where">✅ Run — no error, nothing new.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>font</th><th>size</th><th>used for</th></tr>
+          <tr><td>font</td><td>48</td><td>score, time</td></tr>
+          <tr><td>big_font</td><td>90</td><td>GAME OVER</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 60 · STEP 22 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8</span><span>★</span></div>
+    <div class="pill">STEP 22 / 40 · when time runs out</div>
+    <div style="max-width:46em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))
+    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>screen.blit(timer_label, (10, 60))</code></p>
+    <p class="where">📍 Under that line · <code>if</code> at <b>4</b>, <code>over =</code> at <b>8</b></p>
+    <p class="where">🟣 The picture is only built when the clock is done.</p>
+    <p class="where">✅ Run — no error. Still nothing pasted.</p>
+  </div>
+
+  <!-- 61 · STEP 23 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8</span><span>★</span></div>
+    <div class="pill">STEP 23 / 40 · paste GAME OVER</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)
+        screen.blit(over, (<span class="num">180</span>, <span class="num">340</span>))</pre></div>
+        <p class="where">🔍 FIND <code>over = big_font.render(</code></p>
+        <p class="where">📍 Under that line · indent <b>8</b> spaces, inside the <code>if</code></p>
+        <p class="where">🟣 <code>(180, 340)</code> is roughly the middle of an 800 × 800 screen.</p>
+        <p class="where">✅ Wait for 0 — big red GAME OVER appears.</p>
+      </div>
+      <div><canvas class="sim" id="n70" width="210" height="210" style="max-width:220px"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 62 · STEP 24 -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8</span><span>★</span></div>
+    <div class="pill">STEP 24 / 40 · freeze the score</div>
+    <div style="max-width:46em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    <span class="kw">for</span> b <span class="kw">in</span> breads:</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    <span class="kw">if</span> time_left &gt; <span class="num">0</span>:
+    <span class="kw">for</span> b <span class="kw">in</span> breads:</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>dario_rect = pygame.Rect(</code></p>
+    <p class="where">📍 Between it and the <code>for</code> under it · indent <b>4</b> spaces</p>
+    <p class="where">🟣 Header first, exactly like STEP 13.</p>
+    <div class="output-box" style="margin-top:.4em;max-width:46em;width:100%">
+      <div class="out-label">▸ Output</div>
+      <div style="opacity:1">IndentationError: expected an indented block</div>
+    </div>
+    <p class="where">✅ Expected. STEP 25 fixes it.</p>
+  </div>
+
+  <!-- 63 · STEP 25 -->
+  <div class="slide">
+    <div class="vstep"><span>v6</span><span>v7</span><span class="on">v8</span><span>★</span></div>
+    <div class="pill">STEP 25 / 40 · push the loop in</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">if</span> time_left &gt; <span class="num">0</span>:
+    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        bread_rect = pygame.Rect(b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>])
+        <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+            score = score + <span class="num">1</span>
+            <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+            b[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - b[<span class="str">'w'</span>])
+            b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">if</span> time_left &gt; <span class="num">0</span>:
+        <span class="kw">for</span> b <span class="kw">in</span> breads:
+            bread_rect = pygame.Rect(b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>])
+            <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+                score = score + <span class="num">1</span>
+                <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+                b[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - b[<span class="str">'w'</span>])
+                b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])</pre></div>
+        <p class="where">🔍 FIND <code>if time_left &gt; 0:</code></p>
+        <p class="where">📍 Select the <b>seven</b> lines under it, press <b>Tab</b> once</p>
+        <p class="where">🟣 <code>time_left = time_left - 1</code> stays at <b>4</b>. Do not move it.</p>
+        <p class="where">✅ At 0 the score stops. <b>v8 done — the game is finished.</b></p>
+      </div>
+      <div><canvas class="sim" id="n72" width="200" height="200" style="max-width:210px"></canvas>
+        <div class="readout">score <b>frozen</b> at GAME OVER</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 64 · full loop -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Check your loop</div>
+<pre class="tiny">    dario_rect = pygame.Rect(super_dario[<span class="str">'x'</span>], super_dario[<span class="str">'y'</span>], super_dario[<span class="str">'w'</span>], super_dario[<span class="str">'h'</span>])
+    <span class="kw">if</span> time_left &gt; <span class="num">0</span>:
+        <span class="kw">for</span> b <span class="kw">in</span> breads:
+            bread_rect = pygame.Rect(b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>])
+            <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+                score = score + <span class="num">1</span>
+                <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+                b[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - b[<span class="str">'w'</span>])
+                b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])
+
+    time_left = time_left - <span class="num">1</span>
+    <span class="kw">if</span> time_left &lt; <span class="num">0</span>:
+        time_left = <span class="num">0</span>
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span>
+    <span class="com"># ... your screen.fill and Dario's rect stay as they are ...</span>
+    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        pygame.draw.rect(screen, PINK, (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))
+    label = font.render(<span class="str">"Score: "</span> + <span class="fn">str</span>(score), <span class="kw">True</span>, RED)
+    screen.blit(label, (<span class="num">10</span>, <span class="num">10</span>))
+    timer_label = font.render(<span class="str">"Time: "</span> + <span class="fn">str</span>(time_left // <span class="num">60</span>), <span class="kw">True</span>, RED)
+    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))
+    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)
+        screen.blit(over, (<span class="num">180</span>, <span class="num">340</span>))</pre>
+    <p class="quiet" style="margin-top:.3em">Count the spaces on every line against this.</p>
+  </div>
+
+  <!-- 65 · code talk -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>The whole game, out loud</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"<code>y = 0</code> is the <span class="blank"></span> of the screen, so bigger <code>y</code> means <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.4em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"The loop checks <span class="blank"></span> breads, and <code>b</code> changes every <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.4em">
+      <div class="label">Frame 3</div>
+      <div class="frame">"<code>time_left</code> goes down by <span class="blank"></span> each frame, so 1800 lasts <span class="blank"></span> seconds."</div>
+      <div class="pair-prompt">Say it twice, out loud.</div>
+    </div>
+  </div>
+
+  <!-- 66 · stretch -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch · pick one</div>
+    <div class="stretch-list" style="max-width:42em">
+      <div class="item"><span class="lvl">★</span> Change <code>30 * 60</code> to <code>10 * 60</code>. Ten-second game.</div>
+      <div class="item"><span class="lvl">★★</span> Add a <b>fourth</b> bread to the list. One new line, nothing else.</div>
+      <div class="item"><span class="lvl">★★★</span> Fill the blanks — bread worth 5 points:</div>
+    </div>
+    <div class="skel" style="max-width:42em">
+<pre class="tiny">            score = score + <span class="blank">???</span>
+            <span class="fn">print</span>(<span class="str">"yum"</span>, <span class="blank">???</span>)</pre></div>
+    <p class="where">📍 Inside the <code>if dario_rect.colliderect(bread_rect):</code> · indent <b>16</b> spaces</p>
+  </div>
+
+  <!-- 67 · exit ticket -->
+  <div class="slide center-all">
+    <div class="pill">Exit ticket 🎟</div>
+    <div class="exit" style="max-width:40em">
+      <div class="label">Answer without looking</div>
+      <p class="line">Screen is 800 tall. Dario is 40 tall.<br>What is his <b>biggest</b> <code>'y'</code>?</p>
+      <details style="margin-top:.4em"><summary>Show answer</summary>
+        <div class="ans">760. <code>HEIGHT - super_dario['h']</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- 68 · close -->
+  <div class="slide center-all">
+    <div class="emoji">⏱</div>
+    <p class="line big">Four walls. Three breads. One clock.</p>
+    <p class="line" style="margin-top:.4em">Next: bread that <b>runs away</b> from you.</p>
+  </div>
+
+  <!-- ============ PART 6 · v9 — one bread is worth more ============ -->
+
+  <!-- 69 · act break -->
+  <div class="slide">
+    <div class="vstep"><span>v8 done</span><span class="on">v9 gold</span><span>v10 count</span><span>v11 runaway</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Three breads. Same price.</p>
+        <p class="line" style="margin-top:.4em">One of them should be worth <b>more</b>.</p>
+        <p class="line" style="margin-top:.4em">Each bread carries its own <b>points</b>.</p>
+      </div>
+      <div>
+        <div class="pair-up p3">
+          <div class="pair-row a">
+            <div class="pcell">breads[0]</div><div class="pcell">breads[1]</div><div class="pcell">breads[2]</div>
+          </div>
+          <div class="connector">↕</div>
+          <div class="pair-row b">
+            <div class="pcell">1 pt</div><div class="pcell">1 pt</div><div class="pcell">5 pts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 70 · concept: the bread carries its own price -->
+  <div class="slide">
+    <div class="pill">Concept 💡</div>
+    <h2>Ask the bread, not the code</h2>
+    <div class="viz viz-dict">
+      <div class="d-table">
+        <div class="d-row"><span class="d-key">'x'</span><span class="d-sep">:</span><span class="d-val">400</span></div>
+        <div class="d-row"><span class="d-key">'h'</span><span class="d-sep">:</span><span class="d-val">30</span></div>
+        <div class="d-row"><span class="d-key">'points'</span><span class="d-sep">:</span><span class="d-val">5</span></div>
+      </div>
+      <div class="d-lookup">b[<span class="d-q d-q1">'x'</span><span class="d-q d-q2">'points'</span>]</div>
+      <div class="output-box">
+        <div class="out-label">▸ Output</div>
+        <div class="out-line d-out d-out1">400</div>
+        <div class="out-line d-out d-out2">5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 71 · STEP 26 GOLD -->
+  <div class="slide">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 26 / 40 · a gold colour</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre>breads = [</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre>GOLD = (<span class="num">255</span>, <span class="num">200</span>, <span class="num">0</span>)
+
+breads = [</pre></div>
+        <p class="where">🔍 FIND <code>breads = [</code></p>
+        <p class="where">📍 <b>Above</b> that line · indent <b>0</b> spaces</p>
+        <p class="where">🟣 A colour is three numbers: red, green, blue.</p>
+        <p class="where">✅ Run — no error, nothing new on screen.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>colour</th><th>red</th><th>green</th><th>blue</th></tr>
+          <tr><td>GOLD</td><td>255</td><td>200</td><td>0</td></tr>
+          <tr><td>RED</td><td>255</td><td>0</td><td>0</td></tr>
+        </table>
+        <div class="readout">no blue = <b>warm</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 72 · STEP 27 points key -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 27 / 40 · every bread gets a price</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">breads = [
+    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>},
+]</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">breads = [
+    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},
+]</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>breads = [</code></p>
+    <p class="where">📍 All three bread lines · add <code>, 'points': 1</code> before each <code>}</code> · indent <b>4</b></p>
+    <p class="where">🟣 Same key on every bread. All worth 1 for now.</p>
+    <p class="where">✅ Run — no error. Score still climbs by 1.</p>
+  </div>
+
+  <!-- 73 · STEP 28 score reads the bread -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 28 / 40 · read the price</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">                score = score + <span class="num">1</span>
+                <span class="fn">print</span>(<span class="str">"yum"</span>, score)</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">                score = score + b[<span class="str">'points'</span>]
+                <span class="fn">print</span>(<span class="str">"yum"</span>, score)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>score = score + 1</code></p>
+    <p class="where">📍 That one line, inside the <code>colliderect</code> <code>if</code> · indent <b>16</b> spaces</p>
+    <p class="where">🟣 The number now comes from the bread, not from the code.</p>
+    <p class="where">✅ Run — still +1 a bite, because every bread says 1.</p>
+  </div>
+
+  <!-- 74 · STEP 29 the gold one is worth 5 -->
+  <div class="slide">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 29 / 40 · one bread is worth 5</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>},</pre></div>
+        <p class="where">🔍 FIND <code>'x': 400</code></p>
+        <p class="where">📍 That line only — change the <code>1</code> to a <code>5</code> · indent <b>4</b></p>
+        <p class="where">🟣 One line changes one bread. The other two are untouched.</p>
+        <p class="where">✅ Eat the top bread — the score jumps by <b>5</b>.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>bread</th><th>x, y</th><th>points</th></tr>
+          <tr><td>[0]</td><td>600, 600</td><td>1</td></tr>
+          <tr><td>[1]</td><td>120, 400</td><td>1</td></tr>
+          <tr><td>[2]</td><td>400, 100</td><td>5</td></tr>
+        </table>
+        <div class="readout">top bread = <b>the prize</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 75 · watch it: score steps -->
+  <div class="slide">
+    <div class="pill">Watch the score 👀</div>
+    <h2>Eat all three</h2>
+    <div class="viz viz-reassign">
+      <div class="ra-code">
+        <div class="ra-line">score = 0</div>
+        <div class="ra-line">score = score + b['points']</div>
+        <div class="ra-line">score = score + b['points']</div>
+        <div class="ra-line">score = score + b['points']</div>
+      </div>
+      <div class="ra-box">
+        <span class="ra-name">score</span>
+        <span class="ra-vals"><span>0</span><span>1</span><span>2</span><span>7</span></span>
+      </div>
+    </div>
+    <p class="where">🟣 Pass 3 adds 5, not 1. Same line, different bread.</p>
+  </div>
+
+  <!-- 76 · STEP 30 colour key -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 30 / 40 · every bread gets a colour</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>},</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>, <span class="str">'colour'</span>: GOLD},</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>breads = [</code></p>
+    <p class="where">📍 All three lines · <code>, 'colour': PINK</code> twice, then <code>, 'colour': GOLD</code> · indent <b>4</b></p>
+    <p class="where">🟣 No quotes on PINK and GOLD — they are variables, not words.</p>
+    <p class="where">✅ Run — no error. Still all pink, nobody reads the key yet.</p>
+  </div>
+
+  <!-- 77 · STEP 31 draw uses the key -->
+  <div class="slide">
+    <div class="vstep"><span>v8</span><span class="on">v9</span><span>v10</span><span>v11</span></div>
+    <div class="pill">STEP 31 / 40 · paint each bread its colour</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        pygame.draw.rect(screen, PINK, (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        pygame.draw.rect(screen, b[<span class="str">'colour'</span>], (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))</pre></div>
+        <p class="where">🔍 FIND <code>pygame.draw.rect(screen, PINK, (b[</code></p>
+        <p class="where">📍 Swap <code>PINK</code> for <code>b['colour']</code> on that line · indent <b>8</b></p>
+        <p class="where">🟣 One draw line, three different colours.</p>
+        <p class="where">✅ Two pink breads, one gold. <b>v9 done.</b></p>
+      </div>
+      <div>
+        <div class="viz viz-3">
+          <div class="iter-row">
+            <div class="iter-item">PINK</div>
+            <div class="iter-item">PINK</div>
+            <div class="iter-item">GOLD</div>
+          </div>
+          <div class="var-row"><span class="label">b['colour'] = </span><span class="var-vals"><span class="var-val">PINK</span><span class="var-val">PINK</span><span class="var-val">GOLD</span></span></div>
+          <div class="output-box">
+            <div class="out-label">▸ painted</div>
+            <div class="out-line">▪ pink at 600, 600</div>
+            <div class="out-line">▪ pink at 120, 400</div>
+            <div class="out-line">▪ gold at 400, 100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 78 · debug: missing points key -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Bug hunt 🐛 · 10</div>
+    <h2>One bread has no price</h2>
+    <div class="two wide-left">
+      <div>
+        <div class="debug-card">
+          <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;{'x': 120, 'y': 400, 'w': 30, 'h': 30},</div>
+          <details><summary>What is missing? 🔍</summary>
+            <p class="line" style="margin-top:.3em">No <code>'points'</code> key. <code>b['points']</code> works only if <b>every</b> bread has one.</p>
+          </details>
+        </div>
+        <p class="where" style="margin-top:.4em">✅ Fix: add <code>, 'points': 1</code> to that line.</p>
+      </div>
+      <div>
+        <div class="output-box">
+          <div class="out-label">▸ Output</div>
+          <div style="opacity:1">KeyError: 'points'</div>
+        </div>
+        <div class="readout">crashes on bread <b>[1]</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 79 · debug: forgot the b -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Bug hunt 🐛 · 11</div>
+    <h2>points on its own</h2>
+    <div class="debug-card">
+      <div class="err">score = score + points</div>
+      <details><summary>Spot the missing part 🔍</summary>
+        <p class="line" style="margin-top:.3em">The price lives <b>inside</b> the bread. Without <code>b[</code> and <code>]</code> Python looks for a variable that was never made.</p>
+      </details>
+    </div>
+    <div class="compare-row" style="margin-top:.5em">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>score = score + points</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>score = score + b['points']</pre></div>
+    </div>
+  </div>
+
+  <!-- 80 · quiz points -->
+  <div class="slide mcq" data-correct="2" data-explain="breads[2] is the third bread, and its 'points' key holds 5.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">What is <code>breads[2]['points']</code>?</div>
+    <div class="opts">
+      <button class="opt">1</button>
+      <button class="opt">2</button>
+      <button class="opt">5</button>
+      <button class="opt">An error</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- 81 · code talk points -->
+  <div class="slide">
+    <div class="pill purple">Code Talk</div>
+    <h2>Say the price</h2>
+    <div class="frame-card">
+      <div class="label">Frame 1</div>
+      <div class="frame">"<code>b['points']</code> asks the <span class="blank"></span> how much it is <span class="blank"></span>."</div>
+    </div>
+    <div class="frame-card" style="margin-top:.5em">
+      <div class="label">Frame 2</div>
+      <div class="frame">"The gold bread adds <span class="blank"></span>, because its key says <span class="blank"></span>."</div>
+      <div class="pair-prompt">Point at the line in your file while you say it.</div>
+    </div>
+  </div>
+
+  <!-- ============ PART 7 · v10 — how many breads are left ============ -->
+
+  <!-- 82 · concept: len -->
+  <div class="slide">
+    <div class="vstep"><span>v9 done</span><span class="on">v10 count</span><span>v11 runaway</span><span>v12 win</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">A list knows its own size.</p>
+        <p class="line" style="margin-top:.4em"><code>len(breads)</code> hands back <b>3</b>.</p>
+        <p class="line" style="margin-top:.4em">You never count by hand again.</p>
+      </div>
+      <div>
+        <div class="var-fill">
+          <div class="step-row">
+            <span class="input-pill">breads</span>
+            <span class="arrow-icon">→ len() →</span>
+            <span class="target-box"><span class="name">how many</span><span class="val">3</span></span>
+          </div>
+          <div class="read-line">"Breads: " + str(len(breads)) &nbsp;→&nbsp; <span class="out">Breads: 3</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 83 · STEP 32 count label -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v9</span><span class="on">v10</span><span>v11</span><span>v12</span></div>
+    <div class="pill">STEP 32 / 40 · make the count picture</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))
+    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    screen.blit(timer_label, (<span class="num">10</span>, <span class="num">60</span>))
+    count_label = font.render(<span class="str">"Breads: "</span> + <span class="fn">str</span>(<span class="fn">len</span>(breads)), <span class="kw">True</span>, RED)
+    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>screen.blit(timer_label, (10, 60))</code></p>
+    <p class="where">📍 Under that line, above the <code>if</code> · indent <b>4</b> spaces</p>
+    <p class="where">🟣 Same two-step as the score: build the picture first.</p>
+    <p class="where">✅ Run — no error. Nothing new on screen.</p>
+  </div>
+
+  <!-- 84 · STEP 33 blit count -->
+  <div class="slide">
+    <div class="vstep"><span>v9</span><span class="on">v10</span><span>v11</span><span>v12</span></div>
+    <div class="pill">STEP 33 / 40 · paste the count</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    count_label = font.render(<span class="str">"Breads: "</span> + <span class="fn">str</span>(<span class="fn">len</span>(breads)), <span class="kw">True</span>, RED)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    count_label = font.render(<span class="str">"Breads: "</span> + <span class="fn">str</span>(<span class="fn">len</span>(breads)), <span class="kw">True</span>, RED)
+    screen.blit(count_label, (<span class="num">10</span>, <span class="num">110</span>))</pre></div>
+        <p class="where">🔍 FIND <code>count_label = font.render(</code></p>
+        <p class="where">📍 Under that line · indent <b>4</b> spaces</p>
+        <p class="where">🟣 <code>y = 110</code> sits under the clock, not on it.</p>
+        <p class="where">✅ <code>Breads: 3</code> in the top-left corner. <b>v10 done.</b></p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>label</th><th>x</th><th>y</th></tr>
+          <tr><td>Score</td><td>10</td><td>10</td></tr>
+          <tr><td>Time</td><td>10</td><td>60</td></tr>
+          <tr><td>Breads</td><td>10</td><td>110</td></tr>
+        </table>
+        <div class="readout">50 apart · <b>no overlap</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 85 · quiz len -->
+  <div class="slide mcq" data-correct="1" data-explain="len() counts the items. A fourth bread makes it 4, with no other change.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q">You add a <b>fourth</b> bread to the list. What does the screen say?</div>
+    <div class="opts">
+      <button class="opt">Breads: 3</button>
+      <button class="opt">Breads: 4</button>
+      <button class="opt">Breads: 0</button>
+      <button class="opt">An error</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ PART 8 · v11 — bread that runs away ============ -->
+
+  <!-- 86 · act break -->
+  <div class="slide">
+    <div class="vstep"><span>v10 done</span><span class="on">v11 runaway</span><span>v12 win</span><span>★</span></div>
+    <div class="two">
+      <div>
+        <p class="line big">Standing still is easy.</p>
+        <p class="line" style="margin-top:.4em">Give every bread its own <b>speed</b>.</p>
+        <p class="line" style="margin-top:.4em">Every frame, <code>b['x']</code> slides across.</p>
+      </div>
+      <div>
+        <div class="viz viz-coord">
+          <div class="cg-grid">
+            <div class="cg-axis">x →</div>
+            <div class="cg-track"><div class="cg-sprite">🍞</div></div>
+          </div>
+          <div class="cg-readout"><span class="cg-name">b['x']</span> = <span class="cg-val"><span>600</span><span>602</span><span>604</span><span>606</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 87 · STEP 34 speed key -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v10</span><span class="on">v11</span><span>v12</span><span>★</span></div>
+    <div class="pill">STEP 34 / 40 · every bread gets a speed</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>, <span class="str">'colour'</span>: GOLD},</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">600</span>, <span class="str">'y'</span>: <span class="num">600</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK, <span class="str">'speed'</span>: <span class="num">2</span>},
+    {<span class="str">'x'</span>: <span class="num">120</span>, <span class="str">'y'</span>: <span class="num">400</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">1</span>, <span class="str">'colour'</span>: PINK, <span class="str">'speed'</span>: <span class="num">2</span>},
+    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>, <span class="str">'colour'</span>: GOLD, <span class="str">'speed'</span>: <span class="num">2</span>},</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>breads = [</code></p>
+    <p class="where">📍 All <b>three</b> bread lines · add <code>, 'speed': 2</code> before each <code>}</code> · indent <b>4</b></p>
+    <p class="where">🟣 Speed is a number of pixels per frame.</p>
+    <p class="where">✅ Run — no error. Nothing moves yet.</p>
+  </div>
+
+  <!-- 88 · STEP 35 move it -->
+  <div class="slide">
+    <div class="vstep"><span>v10</span><span class="on">v11</span><span>v12</span><span>★</span></div>
+    <div class="pill">STEP 35 / 40 · slide it across</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        pygame.draw.rect(screen, b[<span class="str">'colour'</span>], (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        b[<span class="str">'x'</span>] = b[<span class="str">'x'</span>] + b[<span class="str">'speed'</span>]
+        pygame.draw.rect(screen, b[<span class="str">'colour'</span>], (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))</pre></div>
+        <p class="where">🔍 FIND <code>pygame.draw.rect(screen, b['colour'], (b[</code></p>
+        <p class="where">📍 <b>Above</b> that line · indent <b>8</b> spaces</p>
+        <p class="where">🟣 Move first, then paint. Same loop, one extra job.</p>
+        <p class="where">✅ All three breads drift right — then leave the screen.</p>
+      </div>
+      <div>
+        <div class="viz viz-reassign">
+          <div class="ra-code">
+            <div class="ra-line">b['x'] = 600</div>
+            <div class="ra-line">b['x'] = b['x'] + 2</div>
+            <div class="ra-line">b['x'] = b['x'] + 2</div>
+            <div class="ra-line">b['x'] = b['x'] + 2</div>
+          </div>
+          <div class="ra-box">
+            <span class="ra-name">b['x']</span>
+            <span class="ra-vals"><span>600</span><span>602</span><span>604</span><span>606</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 89 · STEP 36 bounce right -->
+  <div class="slide center-all">
+    <div class="vstep"><span>v10</span><span class="on">v11</span><span>v12</span><span>★</span></div>
+    <div class="pill">STEP 36 / 40 · turn at the right wall</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">        b[<span class="str">'x'</span>] = b[<span class="str">'x'</span>] + b[<span class="str">'speed'</span>]</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">        b[<span class="str">'x'</span>] = b[<span class="str">'x'</span>] + b[<span class="str">'speed'</span>]
+        <span class="kw">if</span> b[<span class="str">'x'</span>] &gt; WIDTH - b[<span class="str">'w'</span>]:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>b['x'] = b['x'] + b['speed']</code></p>
+    <p class="where">📍 Under that line · <code>if</code> at <b>8</b>, the flip at <b>12</b></p>
+    <p class="where">🟣 The same wall trick as v1 — too far, turn around.</p>
+    <p class="where">✅ The breads bounce off the right edge and come back.</p>
+  </div>
+
+  <!-- 90 · STEP 37 bounce left -->
+  <div class="slide">
+    <div class="vstep"><span>v10</span><span class="on">v11</span><span>v12</span><span>★</span></div>
+    <div class="pill">STEP 37 / 40 · turn at the left wall</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">        <span class="kw">if</span> b[<span class="str">'x'</span>] &gt; WIDTH - b[<span class="str">'w'</span>]:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">        <span class="kw">if</span> b[<span class="str">'x'</span>] &gt; WIDTH - b[<span class="str">'w'</span>]:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]
+        <span class="kw">if</span> b[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]</pre></div>
+        <p class="where">🔍 FIND <code>b['speed'] = -b['speed']</code></p>
+        <p class="where">📍 Under that line · <code>if</code> at <b>8</b>, the flip at <b>12</b></p>
+        <p class="where">🟣 A minus flips the direction. Two walls, two flips.</p>
+        <p class="where">✅ The breads slide left and right forever. <b>v11 done.</b></p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>b['x']</th><th>which if</th><th>speed after</th></tr>
+          <tr><td>604</td><td>neither</td><td>2</td></tr>
+          <tr><td>772</td><td>right</td><td>−2</td></tr>
+          <tr><td>−2</td><td>left</td><td>2</td></tr>
+        </table>
+        <div class="readout">minus = <b>other way</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 91 · STEP 38 gold runs faster -->
+  <div class="slide">
+    <div class="vstep"><span>v10</span><span class="on">v11</span><span>v12</span><span>★</span></div>
+    <div class="pill">STEP 38 / 40 · the gold one is quick</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>, <span class="str">'colour'</span>: GOLD, <span class="str">'speed'</span>: <span class="num">2</span>},</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    {<span class="str">'x'</span>: <span class="num">400</span>, <span class="str">'y'</span>: <span class="num">100</span>, <span class="str">'w'</span>: <span class="num">30</span>, <span class="str">'h'</span>: <span class="num">30</span>, <span class="str">'points'</span>: <span class="num">5</span>, <span class="str">'colour'</span>: GOLD, <span class="str">'speed'</span>: <span class="num">6</span>},</pre></div>
+        <p class="where">🔍 FIND <code>'colour': GOLD</code></p>
+        <p class="where">📍 On that line, change <code>'speed': 2</code> to <code>'speed': 6</code> · indent <b>4</b></p>
+        <p class="where">🟣 Worth more, harder to catch. One number does both.</p>
+        <p class="where">✅ The gold bread streaks across. The pink ones crawl.</p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>bread</th><th>points</th><th>speed</th></tr>
+          <tr><td>[0] pink</td><td>1</td><td>2</td></tr>
+          <tr><td>[1] pink</td><td>1</td><td>2</td></tr>
+          <tr><td>[2] gold</td><td>5</td><td>6</td></tr>
+        </table>
+        <div class="readout">3× faster · <b>5× the points</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 92 · debug: no minus -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Bug hunt 🐛 · 12</div>
+    <h2>The bread never comes back</h2>
+    <div class="debug-card">
+      <div class="err">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if b['x'] &gt; WIDTH - b['w']:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b['speed'] = b['speed']</div>
+      <details><summary>One character short 🔍</summary>
+        <p class="line" style="margin-top:.3em">No minus. The speed is set to what it already was, so the bread keeps going and never turns.</p>
+      </details>
+    </div>
+    <div class="compare-row" style="margin-top:.5em">
+      <div class="col bad"><span class="tag">✗ broken</span><pre>b['speed'] = b['speed']</pre></div>
+      <div class="col good"><span class="tag">✓ fixed</span><pre>b['speed'] = -b['speed']</pre></div>
+    </div>
+  </div>
+
+  <!-- 93 · quiz speed -->
+  <div class="slide mcq" data-correct="3" data-explain="A minus in front flips 2 into −2, so the bread travels the other way.">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Quiz</div>
+    <div class="q"><code>b['speed']</code> is <code>2</code>. After <code>b['speed'] = -b['speed']</code>?</div>
+    <div class="opts">
+      <button class="opt">0</button>
+      <button class="opt">2</button>
+      <button class="opt">4</button>
+      <button class="opt">−2</button>
+    </div>
+    <div class="qfeedback"></div>
+  </div>
+
+  <!-- ============ PART 9 · v12 — you win ============ -->
+
+  <!-- 94 · concept: two endings -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="vstep"><span>v11 done</span><span class="on">v12 win</span><span>★</span><span>★★</span></div>
+    <h2>Two endings, one screen</h2>
+    <div class="viz viz-if">
+      <div class="if-input">
+        <span class="case case-a">score = 23</span>
+        <span class="case case-b">score = 8</span>
+      </div>
+      <div class="if-cond">score &gt;= 20</div>
+      <div class="if-branches">
+        <div class="if-branch true">paste YOU WIN</div>
+        <div class="if-branch false">paste nothing</div>
+      </div>
+      <div class="if-output">
+        <div class="out-label">▸ the screen</div>
+        <div class="out-line out-a">YOU WIN</div>
+        <div class="out-line out-b">(just the score)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 95 · STEP 39 win picture -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="vstep"><span>v11</span><span class="on">v12</span><span>★</span><span>★★</span></div>
+    <div class="pill">STEP 39 / 40 · make the win picture</div>
+    <div style="max-width:48em;width:100%;text-align:left">
+      <div class="tag-old">OLD</div>
+      <div class="was"><pre class="tiny">    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)
+        screen.blit(over, (<span class="num">180</span>, <span class="num">340</span>))</pre></div>
+      <div class="tag-new">NEW</div>
+      <div class="now"><pre class="tiny">    <span class="kw">if</span> time_left &lt;= <span class="num">0</span>:
+        over = big_font.render(<span class="str">"GAME OVER"</span>, <span class="kw">True</span>, RED)
+        screen.blit(over, (<span class="num">180</span>, <span class="num">340</span>))
+    <span class="kw">if</span> score &gt;= <span class="num">20</span>:
+        win = big_font.render(<span class="str">"YOU WIN"</span>, <span class="kw">True</span>, GOLD)</pre></div>
+    </div>
+    <p class="where">🔍 FIND <code>screen.blit(over, (180, 340))</code></p>
+    <p class="where">📍 Under that line · <code>if</code> at <b>4</b>, <code>win =</code> at <b>8</b></p>
+    <p class="where">🟣 <code>&gt;=</code> means 20 counts as a win too.</p>
+    <p class="where">✅ Run — no error. Still nothing pasted.</p>
+  </div>
+
+  <!-- 96 · STEP 40 win blit -->
+  <div class="slide">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="vstep"><span>v11</span><span class="on">v12</span><span>★</span><span>★★</span></div>
+    <div class="pill">STEP 40 / 40 · paste YOU WIN</div>
+    <div class="two wide-left">
+      <div>
+        <div class="tag-old">OLD</div>
+        <div class="was"><pre class="tiny">    <span class="kw">if</span> score &gt;= <span class="num">20</span>:
+        win = big_font.render(<span class="str">"YOU WIN"</span>, <span class="kw">True</span>, GOLD)</pre></div>
+        <div class="tag-new">NEW</div>
+        <div class="now"><pre class="tiny">    <span class="kw">if</span> score &gt;= <span class="num">20</span>:
+        win = big_font.render(<span class="str">"YOU WIN"</span>, <span class="kw">True</span>, GOLD)
+        screen.blit(win, (<span class="num">220</span>, <span class="num">200</span>))</pre></div>
+        <p class="where">🔍 FIND <code>win = big_font.render(</code></p>
+        <p class="where">📍 Under that line · indent <b>8</b> spaces, inside the <code>if</code></p>
+        <p class="where">🟣 Above the middle, so GAME OVER still has its own space.</p>
+        <p class="where">✅ Hit 20 — gold YOU WIN appears. <b>v12 done.</b></p>
+      </div>
+      <div>
+        <table class="vt">
+          <tr><th>message</th><th>x</th><th>y</th></tr>
+          <tr><td>YOU WIN</td><td>220</td><td>200</td></tr>
+          <tr><td>GAME OVER</td><td>180</td><td>340</td></tr>
+        </table>
+        <div class="readout">140 apart · <b>no overlap</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 97 · full loop check -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill">Check your loop</div>
+<pre class="tiny">    <span class="kw">if</span> time_left &gt; <span class="num">0</span>:
+        <span class="kw">for</span> b <span class="kw">in</span> breads:
+            bread_rect = pygame.Rect(b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>])
+            <span class="kw">if</span> dario_rect.colliderect(bread_rect):
+                score = score + b[<span class="str">'points'</span>]
+                <span class="fn">print</span>(<span class="str">"yum"</span>, score)
+                b[<span class="str">'x'</span>] = random.randint(<span class="num">0</span>, WIDTH - b[<span class="str">'w'</span>])
+                b[<span class="str">'y'</span>] = random.randint(<span class="num">0</span>, HEIGHT - b[<span class="str">'h'</span>])
+
+    <span class="com"># -------- 3. RENDERING LAYER --------</span>
+    <span class="com"># ... screen.fill and Dario's rect stay as they are ...</span>
+    <span class="kw">for</span> b <span class="kw">in</span> breads:
+        b[<span class="str">'x'</span>] = b[<span class="str">'x'</span>] + b[<span class="str">'speed'</span>]
+        <span class="kw">if</span> b[<span class="str">'x'</span>] &gt; WIDTH - b[<span class="str">'w'</span>]:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]
+        <span class="kw">if</span> b[<span class="str">'x'</span>] &lt; <span class="num">0</span>:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]
+        pygame.draw.rect(screen, b[<span class="str">'colour'</span>], (b[<span class="str">'x'</span>], b[<span class="str">'y'</span>], b[<span class="str">'w'</span>], b[<span class="str">'h'</span>]))
+    <span class="com"># ... the three blits and the two endings follow, unchanged ...</span></pre>
+    <p class="quiet" style="margin-top:.3em">Count the spaces on every line against this.</p>
+  </div>
+
+  <!-- 98 · stretch -->
+  <div class="slide center-all">
+    <span class="activity-tag">OPTIONAL</span>
+    <div class="pill purple">Stretch · pick one</div>
+    <div class="stretch-list" style="max-width:42em">
+      <div class="item"><span class="lvl">★</span> Make a <b>second</b> gold bread. One line, two keys changed.</div>
+      <div class="item"><span class="lvl">★★</span> Give the gold bread <code>'points': 10</code> and <code>'speed': 10</code>.</div>
+      <div class="item"><span class="lvl">★★★</span> Fill the blanks — bread that slides <b>down</b>, not across:</div>
+    </div>
+    <div class="skel" style="max-width:42em">
+<pre class="tiny">        b[<span class="blank">???</span>] = b[<span class="blank">???</span>] + b[<span class="str">'speed'</span>]
+        <span class="kw">if</span> b[<span class="blank">???</span>] &gt; HEIGHT - b[<span class="str">'h'</span>]:
+            b[<span class="str">'speed'</span>] = -b[<span class="str">'speed'</span>]</pre></div>
+    <p class="where">📍 Inside the draw <code>for b in breads:</code> · indent <b>8</b> and <b>12</b></p>
+  </div>
+
+  <!-- 99 · exit ticket -->
+  <div class="slide center-all">
+    <div class="pill">Exit ticket 🎟</div>
+    <div class="exit" style="max-width:40em">
+      <div class="label">Answer without looking</div>
+      <p class="line">The gold bread says <code>'points': 5</code>.<br>Which line reads that <b>5</b>?</p>
+      <details style="margin-top:.4em"><summary>Show answer</summary>
+        <div class="ans"><code>score = score + b['points']</code> — inside the <code>colliderect</code> <code>if</code>.</div></details>
+    </div>
+  </div>
+
+  <!-- 100 · close -->
+  <div class="slide center-all">
+    <div class="emoji">🥇</div>
+    <p class="line big">One gold bread. Three runners. One clock.</p>
+    <p class="line" style="margin-top:.4em">Next: bread that <b>chases Dario</b>.</p>
+  </div>
+
+  <div class="nav">
+    <button id="prev">‹</button><span class="counter" id="counter">1 / 100</span><button id="next">›</button>
+  </div>
+</div>
+<script src="../../assets/deck.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var SKY = '#87cde1', DARIO = '#e33', BREAD = '#ffc0cb', RED = '#ff5555', AMB = '#ffb86c';
+
+  /* ---------- slide 3: the y axis ---------- */
+  (function () {
+    var c = $('yaxC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 56, T = 16, SZ = c.width - L - 14, S = SZ / 800;
+    function draw() {
+      var y = +$('yaxS').value;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      ctx.font = '11px monospace'; ctx.textAlign = 'right';
+      [0, 200, 400, 600, 800].forEach(function (v) {
+        var py = T + v * S;
+        ctx.strokeStyle = '#8a97b8'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(L - 6, py); ctx.lineTo(L, py); ctx.stroke();
+        ctx.fillStyle = (v === 0) ? AMB : '#8a97b8';
+        ctx.fillText(String(v), L - 9, py + 4);
+      });
+      ctx.strokeStyle = AMB; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(30, T + 4); ctx.lineTo(30, T + SZ - 6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(24, T + SZ - 18); ctx.lineTo(30, T + SZ - 6); ctx.lineTo(36, T + SZ - 18); ctx.stroke();
+      ctx.save(); ctx.translate(15, T + SZ / 2); ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center'; ctx.fillStyle = AMB; ctx.font = 'bold 12px monospace';
+      ctx.fillText('y gets bigger', 0, 0); ctx.restore();
+      ctx.fillStyle = BREAD; ctx.fillRect(L + 600 * S, T + 600 * S, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(L + 120 * S, T + y * S, 40 * S, 40 * S);
+      ctx.textAlign = 'left'; ctx.fillStyle = '#123'; ctx.font = 'bold 12px monospace';
+      ctx.fillText('y = 0  ← TOP', L + 6, T + 14);
+      ctx.fillText('y = 800  BOTTOM', L + 6, T + SZ - 6);
+      $('yaxO').textContent = y; $('yaxB').textContent = y;
+    }
+    $('yaxS').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- edge minis: same y-axis motif on all four ---------- */
+  function edgeMini(id, which) {
+    var c = $(id); if (!c) return;
+    var ctx = c.getContext('2d'), L = 32, T = 20, SZ = c.width - L - 12, S = SZ / 800;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+    /* y arrow — every wall slide carries it */
+    ctx.strokeStyle = AMB; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(16, T + 2); ctx.lineTo(16, T + SZ - 5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(12, T + SZ - 13); ctx.lineTo(16, T + SZ - 5); ctx.lineTo(20, T + SZ - 13); ctx.stroke();
+    ctx.fillStyle = AMB; ctx.font = 'bold 9px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('y=0', 16, T - 7);
+    ctx.save(); ctx.translate(9, T + SZ / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('y bigger', 0, 0); ctx.restore();
+    var d = { x: 380, y: 380 }, lab = '';
+    ctx.lineWidth = 5; ctx.strokeStyle = RED; ctx.beginPath();
+    if (which === 'left')   { d = { x: 0,   y: 380 }; ctx.moveTo(L, T);           ctx.lineTo(L, T + SZ);           lab = 'x = 0'; }
+    if (which === 'right')  { d = { x: 760, y: 380 }; ctx.moveTo(L + SZ, T);      ctx.lineTo(L + SZ, T + SZ);      lab = 'x = 760'; }
+    if (which === 'top')    { d = { x: 380, y: 0   }; ctx.moveTo(L, T);           ctx.lineTo(L + SZ, T);           lab = 'y = 0'; }
+    if (which === 'bottom') { d = { x: 380, y: 760 }; ctx.moveTo(L, T + SZ);      ctx.lineTo(L + SZ, T + SZ);      lab = 'y = 760'; }
+    ctx.stroke();
+    ctx.fillStyle = DARIO; ctx.fillRect(L + d.x * S, T + d.y * S, 40 * S, 40 * S);
+    ctx.fillStyle = RED; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(lab, L + SZ / 2, T + SZ + 16);
+  }
+  edgeMini('e1', 'left'); edgeMini('e2', 'right');
+  edgeMini('e3', 'top');  edgeMini('e4', 'bottom');
+
+  /* ---------- slide 6: walls on / off ---------- */
+  (function () {
+    var c = $('waC'); if (!c) return;
+    var ctx = c.getContext('2d'), walls = false;
+    function draw() {
+      var xin = +$('waX').value, S = c.width / 800, maxX = 760;
+      var x = walls ? Math.max(0, Math.min(maxX, xin)) : xin;
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(0, 0, c.width, c.height);
+      if (walls) {
+        ctx.strokeStyle = (xin !== x) ? RED : '#1f7f2f';
+        ctx.lineWidth = 5; ctx.strokeRect(2, 2, c.width - 4, c.height - 4);
+      }
+      ctx.fillStyle = BREAD; ctx.fillRect(600 * S, 120, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(x * S, 70, 40 * S, 40 * S);
+      $('waXO').textContent = xin;
+      if (!walls) $('waMsg').textContent = 'no walls — he can leave';
+      else if (xin > maxX) $('waMsg').textContent = xin + ' is too far → put back to 760';
+      else $('waMsg').textContent = 'inside — the wall does nothing';
+    }
+    $('waX').addEventListener('input', draw);
+    $('waT').addEventListener('click', function () {
+      walls = !walls; this.textContent = 'walls: ' + (walls ? 'ON' : 'OFF');
+      draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- debug 1: half out ---------- */
+  (function () {
+    var c = $('d1C'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 12, T = 14, SZ = c.width - 60, S = SZ / 800;
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = RED; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(L + SZ, T); ctx.lineTo(L + SZ, T + SZ); ctx.stroke();
+    ctx.fillStyle = DARIO; ctx.fillRect(L + 800 * S, T + 300 * S, 40 * S, 40 * S);
+    ctx.fillStyle = 'rgba(227,51,51,.3)'; ctx.fillRect(L + 760 * S, T + 300 * S, 40 * S, 40 * S);
+    ctx.fillStyle = RED; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('x = 800', L + SZ / 2, T + SZ + 16);
+  })();
+
+  /* ---------- slide 14: the bigger bread ---------- */
+  (function () {
+    var c = $('brC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 10, T = 10, SZ = c.width - 20, S = SZ / 800;
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+    ctx.fillStyle = 'rgba(255,192,203,.35)'; ctx.fillRect(L + 320 * S, T + 300 * S, 15 * S, 20 * S);
+    ctx.fillStyle = BREAD; ctx.fillRect(L + 600 * S, T + 600 * S, 30 * S, 30 * S);
+    ctx.fillStyle = DARIO; ctx.fillRect(L + 20 * S, T + 100 * S, 40 * S, 40 * S);
+    ctx.fillStyle = '#123'; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('old', L + 320 * S - 4, T + 300 * S - 4);
+    ctx.fillText('new 600,600', L + 600 * S - 46, T + 600 * S - 5);
+  })();
+
+  /* ---------- slide 15: two boxes touching ---------- */
+  (function () {
+    var c = $('rectC'); if (!c) return;
+    var ctx = c.getContext('2d'), S = c.width / 800, BX = 520, BY = 60, BW = 30, BH = 30;
+    function draw() {
+      var x = +$('rcX').value, y = 60;
+      ctx.fillStyle = SKY; ctx.fillRect(0, 0, c.width, c.height);
+      var hit = (x < BX + BW) && (x + 40 > BX) && (y < BY + BH) && (y + 40 > BY);
+      ctx.fillStyle = BREAD; ctx.fillRect(BX * S, BY * S + 40, BW * S, BH * S);
+      ctx.strokeStyle = hit ? '#1f7f2f' : '#123'; ctx.lineWidth = 2;
+      ctx.strokeRect(BX * S, BY * S + 40, BW * S, BH * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(x * S, y * S + 40, 40 * S, 40 * S);
+      ctx.strokeRect(x * S, y * S + 40, 40 * S, 40 * S);
+      $('rcO').textContent = x;
+      $('rcMsg').textContent = hit ? 'colliderect → True 🍞' : 'colliderect → False';
+    }
+    $('rcX').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- slide 20: respawn ---------- */
+  (function () {
+    var c = $('rndC'); if (!c) return;
+    var ctx = c.getContext('2d'), L = 8, T = 8, SZ = c.width - 16, S = SZ / 800;
+    var b = { x: 600, y: 600 }, score = 0;
+    function draw() {
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      ctx.fillStyle = BREAD; ctx.fillRect(L + b.x * S, T + b.y * S, 30 * S, 30 * S);
+      ctx.fillStyle = DARIO; ctx.fillRect(L + 40 * S, T + 40 * S, 40 * S, 40 * S);
+      $('rndS').textContent = score;
+    }
+    $('rndB').addEventListener('click', function () {
+      b.x = Math.floor(Math.random() * 771);
+      b.y = Math.floor(Math.random() * 771);
+      score++; draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ================= PART 2-5 visuals (2026-09-08 additions) ================= */
+
+  var BR3 = [{ x: 600, y: 600 }, { x: 120, y: 400 }, { x: 400, y: 100 }];
+
+  /* one reusable 800x800 board */
+  function board(id, o) {
+    var c = $(id); if (!c) return;
+    o = o || {};
+    var ctx = c.getContext('2d');
+    var L = o.axis ? 26 : 10, T = 12, SZ = c.width - L - 10, S = SZ / 800;
+    var F = Math.max(8, Math.round(SZ * 0.085));
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+    ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+    if (o.axis) {
+      ctx.strokeStyle = AMB; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(14, T + 2); ctx.lineTo(14, T + SZ - 5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(10, T + SZ - 13); ctx.lineTo(14, T + SZ - 5); ctx.lineTo(18, T + SZ - 13); ctx.stroke();
+      ctx.fillStyle = AMB; ctx.font = 'bold 9px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('y=0', 15, T - 4);
+      ctx.save(); ctx.translate(7, T + SZ / 2); ctx.rotate(-Math.PI / 2);
+      ctx.fillText('y bigger', 0, 0); ctx.restore();
+    }
+    if (o.ghosts) {
+      ctx.strokeStyle = '#5c6b8a'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+      o.ghosts.forEach(function (b) { ctx.strokeRect(L + b.x * S, T + b.y * S, 30 * S, 30 * S); });
+      ctx.setLineDash([]);
+    }
+    (o.breads || []).forEach(function (b, i) {
+      ctx.fillStyle = BREAD; ctx.fillRect(L + b.x * S, T + b.y * S, 30 * S, 30 * S);
+      if (o.rings && o.rings.indexOf(i) > -1) {
+        ctx.strokeStyle = '#1f7f2f'; ctx.lineWidth = 3;
+        ctx.strokeRect(L + b.x * S - 3, T + b.y * S - 3, 30 * S + 6, 30 * S + 6);
+      }
+      if (o.mark === i) {
+        ctx.strokeStyle = AMB; ctx.lineWidth = 3;
+        ctx.strokeRect(L + b.x * S - 4, T + b.y * S - 4, 30 * S + 8, 30 * S + 8);
+      }
+      if (o.idx) {
+        ctx.fillStyle = '#123'; ctx.font = 'bold ' + Math.max(8, Math.round(F * .8)) + 'px monospace';
+        ctx.textAlign = 'center'; ctx.fillText('[' + i + ']', L + b.x * S + 15 * S, T + b.y * S - 4);
+      }
+    });
+    if (o.dario) {
+      ctx.fillStyle = DARIO; ctx.fillRect(L + o.dario.x * S, T + o.dario.y * S, 40 * S, 40 * S);
+    }
+    ctx.textAlign = 'left'; ctx.font = 'bold ' + F + 'px monospace'; ctx.fillStyle = '#c1121f';
+    if (o.score != null) ctx.fillText('Score: ' + o.score, L + 10 * S, T + 10 * S + F);
+    if (o.time != null) ctx.fillText('Time: ' + o.time, L + 10 * S, T + 60 * S + F);
+    if (o.over) {
+      ctx.font = 'bold ' + Math.round(SZ * .105) + 'px monospace'; ctx.fillStyle = '#c1121f';
+      ctx.fillText('GAME OVER', L + 150 * S, T + 400 * S);
+    }
+    if (o.caption) {
+      ctx.textAlign = 'center'; ctx.fillStyle = AMB; ctx.font = 'bold 11px monospace';
+      ctx.fillText(o.caption, L + SZ / 2, T + SZ + 14);
+    }
+  }
+
+  /* ---------- 31: terminal vs window ---------- */
+  (function () {
+    var c = $('n31'); if (!c) return;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = '#05070c'; ctx.fillRect(6, 24, 150, 200);
+    ctx.strokeStyle = '#2bb673'; ctx.lineWidth = 2; ctx.strokeRect(6, 24, 150, 200);
+    ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('terminal', 10, 18);
+    ctx.fillStyle = '#6fe0a0'; ctx.font = '12px monospace';
+    ['yum 1', 'yum 2', 'yum 3', 'yum 4'].forEach(function (t, i) { ctx.fillText(t, 16, 50 + i * 20); });
+    ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace';
+    ctx.fillText('game window', 172, 18);
+    ctx.fillStyle = SKY; ctx.fillRect(168, 24, 152, 152);
+    ctx.strokeStyle = '#232b3a'; ctx.strokeRect(168, 24, 152, 152);
+    ctx.fillStyle = BREAD; ctx.fillRect(280, 130, 14, 14);
+    ctx.fillStyle = DARIO; ctx.fillRect(190, 60, 18, 18);
+    ctx.fillStyle = '#ff5555'; ctx.font = 'bold 12px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('no score here', 244, 196);
+    ctx.fillText('← nobody looks', 244, 214);
+  })();
+
+  /* ---------- 35: text -> picture -> screen ---------- */
+  (function () {
+    var c = $('n35'); if (!c) return;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    function step(y, lab, fn) {
+      ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+      ctx.fillText(lab, 8, y - 6);
+      fn(y);
+    }
+    step(24, '1. words in your code', function (y) {
+      ctx.fillStyle = '#f1fa8c'; ctx.font = '14px monospace';
+      ctx.fillText('"Score: " + str(score)', 14, y + 16);
+    });
+    step(78, '2. font.render → a picture', function (y) {
+      ctx.fillStyle = '#1b2130'; ctx.fillRect(14, y, 130, 26);
+      ctx.strokeStyle = AMB; ctx.lineWidth = 2; ctx.strokeRect(14, y, 130, 26);
+      ctx.fillStyle = '#ff5555'; ctx.font = 'bold 15px monospace'; ctx.fillText('Score: 3', 22, y + 19);
+      ctx.fillStyle = AMB; ctx.font = '11px monospace'; ctx.fillText('a picture, floating', 152, y + 18);
+    });
+    step(150, '3. screen.blit → pasted at (10, 10)', function (y) {
+      ctx.fillStyle = SKY; ctx.fillRect(14, y, 130, 62);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(14, y, 130, 62);
+      ctx.fillStyle = '#c1121f'; ctx.font = 'bold 13px monospace'; ctx.fillText('Score: 3', 19, y + 17);
+      ctx.fillStyle = DARIO; ctx.fillRect(60, y + 32, 16, 16);
+      ctx.fillStyle = BREAD; ctx.fillRect(110, y + 40, 12, 12);
+    });
+  })();
+
+  /* ---------- 36 / 37 / 45 / 46 / 50 / 52 / 62 / 70 / 72 ---------- */
+  board('n36', { dario: { x: 100, y: 300 }, breads: [BR3[0]], caption: 'no text yet' });
+  board('n37', { dario: { x: 100, y: 300 }, breads: [BR3[0]], score: 0, caption: 'Score: 0 at (10, 10)' });
+  board('n45', { dario: { x: 100, y: 300 }, breads: [BR3[0]], ghosts: [BR3[1], BR3[2]], score: 0, caption: 'dashed = in the list only' });
+  board('n46', { dario: { x: 100, y: 300 }, breads: BR3, rings: [0], idx: true, score: 0, caption: 'only [0] feeds him' });
+  board('n50', { dario: { x: 100, y: 300 }, breads: BR3, rings: [0, 1, 2], idx: true, score: 3, caption: 'all three feed him' });
+  board('n52', { dario: { x: 100, y: 300 }, breads: BR3, rings: [2], idx: true, caption: 'the if ran once, on [2]' });
+  board('n62', { dario: { x: 100, y: 300 }, breads: BR3, score: 2, time: 27, caption: 'score + clock' });
+  board('n70', { dario: { x: 100, y: 300 }, breads: BR3, score: 7, time: 0, over: true });
+  board('n72', { dario: { x: 100, y: 300 }, breads: BR3, score: 7, time: 0, over: true, caption: 'score stays 7' });
+  board('n43', { dario: { x: 80, y: 80 }, breads: BR3, idx: true, caption: 'breads = [ 0, 1, 2 ]' });
+  board('n56', { dario: { x: 100, y: 300 }, breads: BR3, score: 4, time: 22, caption: 'a number that only falls' });
+
+  /* ---------- 38: blit y slider, y axis reused ---------- */
+  (function () {
+    var c = $('n38'); if (!c) return;
+    function draw() {
+      var y = +$('n38s').value;
+      board('n38', { axis: true, dario: { x: 300, y: 300 }, breads: BR3, caption: 'blit y = ' + y });
+      var ctx = c.getContext('2d'), L = 26, T = 12, SZ = c.width - L - 10, S = SZ / 800;
+      var F = Math.max(8, Math.round(SZ * 0.085));
+      ctx.textAlign = 'left'; ctx.font = 'bold ' + F + 'px monospace'; ctx.fillStyle = '#c1121f';
+      ctx.fillText('Score: 3', L + 10 * S, T + y * S + F);
+      $('n38o').textContent = y; $('n38b').textContent = y;
+    }
+    $('n38s').addEventListener('input', draw);
+    draw();
+  })();
+
+  /* ---------- 40: paint order ---------- */
+  (function () {
+    var c = $('n40'); if (!c) return;
+    var ctx = c.getContext('2d'), good = false;
+    function draw() {
+      var L = 10, T = 12, SZ = c.width - 20, S = SZ / 800, F = Math.round(SZ * .085);
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      ctx.fillStyle = DARIO; ctx.fillRect(L + 300 * S, T + 300 * S, 40 * S, 40 * S);
+      ctx.fillStyle = BREAD; ctx.fillRect(L + 600 * S, T + 600 * S, 30 * S, 30 * S);
+      ctx.textAlign = 'left'; ctx.font = 'bold ' + F + 'px monospace';
+      if (good) { ctx.fillStyle = '#c1121f'; ctx.fillText('Score: 3', L + 10 * S, T + 10 * S + F); }
+      ctx.textAlign = 'center'; ctx.font = 'bold 12px monospace';
+      ctx.fillStyle = good ? '#1f7f2f' : '#ff5555';
+      ctx.fillText(good ? 'fill, then blit ✓' : 'blit, then fill ✗', L + SZ / 2, T + SZ + 14);
+    }
+    $('n40b').addEventListener('click', function () {
+      good = !good; this.textContent = 'order: ' + (good ? 'RIGHT' : 'WRONG'); draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- 44: the numbered shelf ---------- */
+  (function () {
+    var c = $('n44'); if (!c) return;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.textAlign = 'center';
+    [0, 1, 2].forEach(function (i) {
+      var x = 20 + i * 90;
+      ctx.fillStyle = '#141a26'; ctx.fillRect(x, 34, 74, 74);
+      ctx.strokeStyle = AMB; ctx.lineWidth = 2; ctx.strokeRect(x, 34, 74, 74);
+      ctx.fillStyle = BREAD; ctx.fillRect(x + 25, 58, 24, 24);
+      ctx.fillStyle = AMB; ctx.font = 'bold 14px monospace';
+      ctx.fillText('[' + i + ']', x + 37, 26);
+      ctx.fillStyle = '#8a97b8'; ctx.font = '11px monospace';
+      ctx.fillText('breads[' + i + ']', x + 37, 124);
+    });
+  })();
+
+  /* ---------- 47: one frame per bread (mandatory iteration visual) ---------- */
+  (function () {
+    if (!$('it0')) return;
+    var pos = [{ x: 100, y: 100 }, { x: 590, y: 610 }], p = 0;
+    function hit(d, b) {
+      return d.x < b.x + 30 && d.x + 40 > b.x && d.y < b.y + 30 && d.y + 40 > b.y;
+    }
+    function draw() {
+      var d = pos[p];
+      [0, 1, 2].forEach(function (i) {
+        board('it' + i, { dario: d, breads: BR3, mark: i, idx: true });
+        var h = hit(d, BR3[i]);
+        var m = $('it' + i + 'm');
+        m.innerHTML = h ? '<b>✓ touching → yum</b>' : '✗ not touching';
+      });
+    }
+    $('itB').addEventListener('click', function () {
+      p = 1 - p; this.textContent = p ? 'move Dario away 🔴' : 'move Dario onto [0] 🔴';
+      draw(); this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- 57: 60 frames = 1 second ---------- */
+  (function () {
+    var c = $('n57'); if (!c) return;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+    for (var i = 0; i < 60; i++) {
+      var x = 10 + (i % 30) * 9.4, y = 30 + Math.floor(i / 30) * 24;
+      ctx.fillStyle = AMB; ctx.fillRect(x, y, 5, 14);
+    }
+    ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace'; ctx.textAlign = 'left';
+    ctx.fillText('60 turns of the loop', 10, 20);
+    ctx.strokeStyle = '#2bb673'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(150, 86); ctx.lineTo(150, 100); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(144, 94); ctx.lineTo(150, 100); ctx.lineTo(156, 94); ctx.stroke();
+    ctx.fillStyle = '#6fe0a0'; ctx.font = 'bold 16px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('1 second', 150, 122);
+  })();
+
+  /* ---------- 60: the countdown ---------- */
+  (function () {
+    var c = $('n60'); if (!c) return;
+    var ctx = c.getContext('2d'), t = 1800, timer = null;
+    function draw() {
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = '#141a26'; ctx.fillRect(10, 20, c.width - 20, 26);
+      ctx.fillStyle = AMB; ctx.fillRect(10, 20, (c.width - 20) * (t / 1800), 26);
+      ctx.textAlign = 'center'; ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace';
+      ctx.fillText('frames left', c.width / 2, 14);
+      ctx.fillStyle = AMB; ctx.font = 'bold 34px monospace';
+      ctx.fillText(String(t), c.width / 2, 92);
+      ctx.fillStyle = '#8a97b8'; ctx.font = 'bold 11px monospace';
+      ctx.fillText('time_left // 60', c.width / 2, 122);
+      ctx.fillStyle = '#c1121f'; ctx.font = 'bold 40px monospace';
+      ctx.fillText('Time: ' + Math.floor(t / 60), c.width / 2, 168);
+      $('n60r').textContent = t; $('n60s').textContent = Math.floor(t / 60);
+    }
+    $('n60b').addEventListener('click', function () {
+      if (timer) return;
+      var n = 0;
+      timer = setInterval(function () {
+        if (t > 0) t -= 1;
+        n++; draw();
+        if (n >= 60) { clearInterval(timer); timer = null; }
+      }, 16);
+      this.blur();
+    });
+    draw();
+  })();
+
+  /* ---------- 67: paint layers ---------- */
+  (function () {
+    var c = $('n67'); if (!c) return;
+    var ctx = c.getContext('2d'), step = 0;
+    var names = ['1. screen.fill', '2. Dario + breads', '3. blit score + time', '4. blit GAME OVER'];
+    function draw() {
+      var L = 8, T = 8, SZ = c.width - 16, S = SZ / 800, F = Math.round(SZ * .085);
+      ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = SKY; ctx.fillRect(L, T, SZ, SZ);
+      ctx.strokeStyle = '#232b3a'; ctx.lineWidth = 2; ctx.strokeRect(L, T, SZ, SZ);
+      if (step >= 1) {
+        ctx.fillStyle = DARIO; ctx.fillRect(L + 300 * S, T + 300 * S, 40 * S, 40 * S);
+        BR3.forEach(function (b) { ctx.fillStyle = BREAD; ctx.fillRect(L + b.x * S, T + b.y * S, 30 * S, 30 * S); });
+      }
+      if (step >= 2) {
+        ctx.textAlign = 'left'; ctx.fillStyle = '#c1121f'; ctx.font = 'bold ' + F + 'px monospace';
+        ctx.fillText('Score: 7', L + 10 * S, T + 10 * S + F);
+        ctx.fillText('Time: 0', L + 10 * S, T + 60 * S + F);
+      }
+      if (step >= 3) {
+        ctx.textAlign = 'left'; ctx.fillStyle = '#c1121f';
+        ctx.font = 'bold ' + Math.round(SZ * .105) + 'px monospace';
+        ctx.fillText('GAME OVER', L + 150 * S, T + 400 * S);
+      }
+      $('n67m').textContent = names[step];
+    }
+    $('n67b').addEventListener('click', function () { step = (step + 1) % 4; draw(); this.blur(); });
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>
